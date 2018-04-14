@@ -39,3 +39,10 @@ To start the server locally in development mode use:
 ```
 yarn start
 ```
+
+## Run Tests
+
+To run the Uint Tests
+```
+yarn run test
+```
