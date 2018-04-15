@@ -1,17 +1,18 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { reducer } from './reducer';
+import chopReducer from './chop-reducer';
+import Chop from './chop';
 
-const store = createStore(reducer);
-
-const greeting = (name: string): string =>
-  `Hello ${name}!`;
+const store = createStore(chopReducer);
 
 store.subscribe(() =>
-ReactDOM.render((
-    <h1>{greeting(store.getState().name)}</h1>
-  ), document.body)
+ReactDOM.render(
+  <Provider store={store}>
+    <Chop />
+  </Provider>,
+  document.getElementById('content'))
 );
 
 

@@ -10,6 +10,10 @@ module.exports = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.html$/,
+        use: 'html-loader'
       }
     ]
   },
@@ -20,7 +24,9 @@ module.exports = {
     contentBase: './dist'
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: './assets/index.html'
+    })
   ],
   output: {
     filename: 'bundle.js',

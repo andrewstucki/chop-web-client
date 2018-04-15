@@ -2,7 +2,7 @@ type stateType = { name: string }
 type actionType = { type: string }
 const defaultState: stateType = { name: 'World'}
 
-const reducer = (state: stateType = defaultState, action?: actionType): stateType => {
+const chopReducer = (state: stateType = defaultState, action?: actionType): stateType => {
   if (!action || !action.type) {
     return state;
   }
@@ -12,4 +12,4 @@ const reducer = (state: stateType = defaultState, action?: actionType): stateTyp
   }
 }
 
-export { reducer, stateType };
+export default chopReducer;
