@@ -1,6 +1,8 @@
+// @flow
+
 import * as React from 'react';
 
-const Chop: React.SFC<void> = ()  => (
+const Chop = ()  => (
   <div>
     Hello
   </div>
