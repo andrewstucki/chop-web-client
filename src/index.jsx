@@ -11,13 +11,11 @@ const store = createStore(chopReducer);
 const content = document.getElementById('content');
 
 if (content) {
-  store.subscribe(() =>
   ReactDOM.render(
     <Provider store={store}>
       <Chop />
     </Provider>,
-    content)
-  );
+    content);
 }
 
 

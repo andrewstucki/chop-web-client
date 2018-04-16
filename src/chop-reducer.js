@@ -7,7 +7,7 @@ type Action = {
 }
 const defaultState: State = { name: 'World'}
 
-const chopReducer = (state: State = defaultState, action?: Action) => {
+const chopReducer = (state: State = defaultState, action?: Action): State => {
   if (!action || !action.type) {
     return state;
   }
