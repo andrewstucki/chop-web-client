@@ -1,4 +1,6 @@
 // @flow
+import { fromJS } from 'immutable';
+
 type State = {
   name: string
 }
