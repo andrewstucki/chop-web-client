@@ -1,10 +1,10 @@
 // @flow
-
 import * as React from 'react';
+import Button from './components/button'
 
 const Chop = ()  => (
   <div>
-    Hello
+    <Button click={function() { console.log("Hi")}} text="Hello World!" />
   </div>
 );
 
