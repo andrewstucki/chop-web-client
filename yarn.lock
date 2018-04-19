@@ -3363,10 +3363,6 @@ eslint-plugin-flowtype@^2.46.2:
   dependencies:
     lodash "^4.15.0"
 
-eslint-plugin-jest@^21.15.0:
-  version "21.15.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.15.0.tgz#645a3f560d3e61d99611b215adc80b4f31e6d896"
-
 eslint-scope@^3.7.1, eslint-scope@~3.7.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-3.7.1.tgz#3d63c3edfda02e06e01a452ad88caacc7cdcb6e8"
@@ -4208,6 +4204,10 @@ got@^8.2.0:
 graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
+
+graphql.js@^0.4.20:
+  version "0.4.20"
+  resolved "https://registry.yarnpkg.com/graphql.js/-/graphql.js-0.4.20.tgz#bf64b6a90d50db4cd51234adfac86ea6bf4ddf0f"
 
 grouped-queue@^0.3.3:
   version "0.3.3"
