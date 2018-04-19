@@ -1,11 +1,10 @@
 // @flow
-
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Provider } from 'react-redux';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { createStore } from 'redux';
-import chopReducer from './chop-reducer';
+import { Provider } from 'react-redux';
 import Chop from './chop';
+import chopReducer from './chop-reducer';
 
 const store = createStore(chopReducer);
 const content = document.getElementById('content');

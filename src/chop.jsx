@@ -6,6 +6,6 @@ const Chop = ()  => (
   <div>
     Hello
   </div>
-)
+);
 
 export default Chop;
