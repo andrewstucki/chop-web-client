@@ -1,5 +1,5 @@
 import Adapter from 'enzyme-adapter-react-16';
-import Button from '../../src/components/button';
+import Button from '../../../src/components/button';
 import Enzyme from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
