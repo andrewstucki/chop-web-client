@@ -4,7 +4,7 @@ The Chat allows users to create messages and send them. It does not display the
 messages, that is done in the feed. The current channel is updated but a
 current channel control.
 
-## State
+## State ✓ 
 ```
   message: {
     id: string, // unique ID
@@ -21,10 +21,10 @@ current channel control.
   }
 ```
 
-## Actions
+## Actions ✓
 Sends
-- UPDATE_INPUT
-- ADD_MESSAGE_TO_CHANNEL
+✓ UPDATE_INPUT
+✓ ADD_MESSAGE_TO_CHANNEL
 Listens to
 - CHANGE_CHANNEL
 
@@ -33,15 +33,13 @@ Listens to
 - Button
 
 ## Selectors
-- charaterCount
+✓ charaterCount
   returns the charater count of the currentInput
-- inputValue
+✓ inputValue
   highlight @ mentions
 
-## Dispatchers
-- sendMessage
-  add to current channel
-  send to PubNub
+## Async Actions
+send to PubNub
 
 ## IO
 - PubNub
