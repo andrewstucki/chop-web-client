@@ -3,14 +3,15 @@
 import { UPDATE_INPUT, ADD_MESSAGE_TO_CHANNEL } from './action-types';
 
 type UpdateInputAction = {
-  type: string,
+  type: "UPDATE_INPUT",
   value: string
 }
 
 type AddMessageToChannelAction = {
-  type: string,
+  type: "ADD_MESSAGE_TO_CHANNEL",
   text: string
 }
+
 
 type ChatActions = 
   | UpdateInputAction
