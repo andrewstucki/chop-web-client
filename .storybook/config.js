@@ -1,9 +1,9 @@
 import { configure } from '@storybook/react';
-import 'loki/configure-react';
 
 function loadStories() {
-  require('../stories/index.js');
-  // You can require as many stories as you need.
+  require('../stories/button.jsx');
+  require('../stories/text-field.jsx');
+  require('../stories/chat.jsx');
 }
 
 configure(loadStories, module);
