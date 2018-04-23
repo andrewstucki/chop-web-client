@@ -12,7 +12,9 @@ type AddMessageToChannelAction = {
   text: string
 }
 
-type ChatActions = UpdateInputAction | AddMessageToChannelAction;
+type ChatActions = 
+  | UpdateInputAction
+  | AddMessageToChannelAction;
 
 const updateInput = (value: string): UpdateInputAction => (
   {

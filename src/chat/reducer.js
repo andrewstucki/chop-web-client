@@ -30,7 +30,10 @@ const reducer = (state: ChatState = defaultState, action?: ChatActions): ChatSta
   }
   switch (action.type) {
   case UPDATE_INPUT:
-    return state;
+    return {
+            ...state,
+            currentInput: action.value.substring(0, 100)
+            };
   case ADD_MESSAGE_TO_CHANNEL:
     return state;
   default:

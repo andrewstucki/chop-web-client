@@ -33,14 +33,15 @@ Listens to
 - Button
 
 ## Selectors
-- charaterCount: int
-  returns the charater count of the currentInput 
+- charaterCount
+  returns the charater count of the currentInput
+- inputValue
+  highlight @ mentions
 
-## Commands
-- inputTyped(value: string)
-  count charaters, limit length, remove formating, highlight @ mentions
+## Dispatchers
 - sendMessage
-  create message, add to channel, send to PubNub 
+  add to current channel
+  send to PubNub
 
 ## IO
 - PubNub
