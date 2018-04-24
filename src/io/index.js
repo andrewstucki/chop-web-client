@@ -9,4 +9,6 @@ const getStuff = graph(
         }
       }`)
 
-export getStuff;
+const sendMessage = (message) => message
+      
+export { getStuff, sendMessage };

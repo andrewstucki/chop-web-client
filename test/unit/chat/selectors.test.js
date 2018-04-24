@@ -1,7 +1,7 @@
 // @flow
 
-import { charaterCount, inputValue } from '../../../src/chat/selectors';
-import type { ChatState } from '../../../src/chat/reducer';
+import { charaterCount, inputValue } from '../../../src/chat/ducks';
+import type { ChatState } from '../../../src/chat/ducks';
 
 test('Test Chat charaterCount', () => {
   const state: ChatState = {

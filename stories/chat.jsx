@@ -5,5 +5,5 @@ import Chat from '../src/chat';
 
 storiesOf('Chat', module)
   .add('basic', () => (
-    <Chat />
+    <Chat buttonText="Click Me" textValue="Type Something" />
   ))

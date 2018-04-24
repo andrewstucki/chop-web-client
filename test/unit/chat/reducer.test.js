@@ -1,6 +1,6 @@
 // @flow
-import reducer from '../../../src/chat/reducer';
-import { UPDATE_INPUT } from '../../../src/chat/action-types';
+import reducer from '../../../src/chat/ducks';
+import { UPDATE_INPUT } from '../../../src/chat/ducks';
 
 test('Chat charaterCount', () => {
   expect(reducer(

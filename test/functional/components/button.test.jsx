@@ -13,7 +13,7 @@ test('Button has correct text', () => {
 
 test('Button clickable', () => {
   const onButtonClick = sinon.spy();
-  const wrapper = Enzyme.shallow(<Button click={onButtonClick} />);
+  const wrapper = Enzyme.shallow(<Button onClick={onButtonClick} />);
   wrapper.find('button').simulate('click');
   expect(onButtonClick.calledOnce).toEqual(true);
 });

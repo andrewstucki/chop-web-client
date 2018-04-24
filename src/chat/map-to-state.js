@@ -6,8 +6,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTodoClick: id => {
-      dispatch(toggleTodo(id))
+    textOnInput: value => {
+      dispatch(updateInput(value))
+    },
+    buttonOnClick: value => {
+      dispatch(sendMessage(value))
     }
   }
 }
