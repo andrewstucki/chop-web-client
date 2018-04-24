@@ -18,7 +18,8 @@
     },
     "plugins": [
         "react",
-        "flowtype"
+        "flowtype",
+        "import"
     ],
     "rules": {
         "arrow-body-style": [
@@ -82,7 +83,7 @@
         "no-const-assign" : [
             "error"
         ],
-        "no-duplicate-imports" : [
+        "import/no-duplicates" : [
             "error"
         ],
         "no-iterator": [

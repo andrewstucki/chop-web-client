@@ -1,25 +1,26 @@
-const mapStateToProps = state => {
-  return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
-  }
-}
+import { connect } from 'react-redux';
+import Chat, { inputValue, updateInput, sendMessage } from './ducks';
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapStateToProps = state => (
+  {
+    textValue: inputValue(state),
+  }
+);
+
+const mapDispatchToProps = dispatch => (
+  {
     textOnInput: value => {
-      dispatch(updateInput(value))
+      dispatch(updateInput(value));
     },
     buttonOnClick: value => {
-      dispatch(sendMessage(value))
-    }
+      dispatch(sendMessage(value));
+    },
   }
-}
+);
 
-import { connect } from 'react-redux'
-​
-const VisibleTodoList = connect(
+const VisibleChat = connect(
   mapStateToProps,
   mapDispatchToProps
-)(TodoList)
-​
-export default VisibleTodoList
+)(Chat);
+
+export default VisibleChat;

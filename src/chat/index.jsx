@@ -2,10 +2,10 @@ import React from 'react';
 import Button from '../components/button';
 import TextField from '../components/text-field';
 
-const Chat = ({buttonOnClick, buttonText, textOnInput, textValue }) => (
+const Chat = ({buttonOnClick, textOnInput, textValue }) => (
   <div>
     <TextField onInput={textOnInput} value={textValue} />
-    <Button onClick={buttonOnClick} text={buttonText} />
+    <Button onClick={buttonOnClick} text="Send" />
   </div>
 );
 

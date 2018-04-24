@@ -4,7 +4,6 @@ import TextField from '../../src/components/text-field';
 import Chat from '../../src/chat';
 import Enzyme from 'enzyme';
 import React from 'react';
-import sinon from 'sinon';
 
 Enzyme.configure({ adapter: new Adapter() });
 

@@ -12,11 +12,11 @@ test('TextField keyup on typeing', () => {
   const event = { target: { value: 'Love' } };
   const input = wrapper.find('input');
   input.simulate('keyup', event);
-  expect(onKeyUp.calledWith()).toBeTruthy()
+  expect(onKeyUp.calledWith()).toBeTruthy();
 });
 
 test('TextField has value', () => {
   const wrapper = Enzyme.shallow(<TextField value="Love" />);
   const input = wrapper.find('input');
-  expect(input.props().value).toEqual("Love");
+  expect(input.props().value).toEqual('Love');
 });

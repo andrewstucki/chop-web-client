@@ -1,14 +1,14 @@
 import graphql from 'graphql.js';
 
-let graph = graphql("/graphql");
+const graph = graphql('/graphql');
 
 const getStuff = graph(
-    `query {
-        hero {
-          name
-        }
-      }`)
+  `query {
+      hero {
+        name
+      }
+    }`);
 
-const sendMessage = (message) => message
+const sendMessage = message => message;
       
 export { getStuff, sendMessage };

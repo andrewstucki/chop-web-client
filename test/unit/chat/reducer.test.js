@@ -1,21 +1,20 @@
 // @flow
-import reducer from '../../../src/chat/ducks';
-import { UPDATE_INPUT } from '../../../src/chat/ducks';
+import reducer, { UPDATE_INPUT }  from '../../../src/chat/ducks';
 
 test('Chat charaterCount', () => {
   expect(reducer(
     {
-      currentInput: "",
-      currentChannel: "",
-      channels: {}
+      currentInput: '',
+      currentChannel: '',
+      channels: {},
     },
     {
       type: UPDATE_INPUT,
-      value: '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789'
+      value: '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
     })).toEqual(
-  {
-    currentInput: '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
-    currentChannel: "",
-    channels: {}
-  });
+    {
+      currentInput: '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
+      currentChannel: '',
+      channels: {},
+    });
 });

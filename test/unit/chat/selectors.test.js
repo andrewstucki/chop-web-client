@@ -7,8 +7,8 @@ test('Test Chat charaterCount', () => {
   const state: ChatState = {
     currentInput: 'Kenny is great!',
     currentChannel: '',
-    channels: {}
-  }
+    channels: {},
+  };
   expect(charaterCount(state)).toEqual(15);
 });
 
@@ -16,7 +16,7 @@ test('Test Chat inputValue', () => {
   const state: ChatState = {
     currentInput: '@kenny you rock!',
     currentChannel: '',
-    channels: {}
-  }
+    channels: {},
+  };
   expect(inputValue(state)).toEqual('<b>@kenny</b> you rock!');
 });
