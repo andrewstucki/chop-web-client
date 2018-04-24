@@ -7,3 +7,4 @@ initStoryshots(
     {
       storybookUrl: 'http://localhost:9001'
     })});
+
