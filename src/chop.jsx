@@ -1,10 +1,9 @@
 // @flow
-
 import * as React from 'react';
 
 const Chop = ()  => (
   <div>
-    Hello
+    <h1>Life.Church Online</h1>
   </div>
 );
 
