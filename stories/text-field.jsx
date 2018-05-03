@@ -5,7 +5,7 @@ import TextField from '../src/components/text-field';
 
 storiesOf('TextField', module)
   .add('blank', () => (
-    <TextField onKeyUp={action('clicked')} />
+    <TextField onInput={action('typed')} />
   )).add('with text', () => (
-    <TextField onKeyUp={action('clicked')} value="Hello TextField" />
+    <TextField onInput={action('typed')} value="Hello TextField" />
   ))
