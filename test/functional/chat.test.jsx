@@ -1,7 +1,7 @@
 import Adapter from 'enzyme-adapter-react-16';
 import Button from '../../src/components/button';
 import TextField from '../../src/components/text-field';
-import Chat from '../../src/chat';
+import Chat from '../../src/chat/chat';
 import Enzyme from 'enzyme';
 import React from 'react';
 

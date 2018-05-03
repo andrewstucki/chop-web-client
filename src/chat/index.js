@@ -1,5 +1,7 @@
+// @flow
+import Chat from './chat';
 import { connect } from 'react-redux';
-import Chat, { inputValue, updateInput, sendMessage } from './ducks';
+import { inputValue, updateInput, sendMessage } from './ducks';
 
 const mapStateToProps = state => (
   {
@@ -9,12 +11,8 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = dispatch => (
   {
-    textOnInput: value => {
-      dispatch(updateInput(value));
-    },
-    buttonOnClick: value => {
-      dispatch(sendMessage(value));
-    },
+    textOnInput: value => dispatch(updateInput(value)),
+    buttonOnClick: value => sendMessage(value),
   }
 );
 

@@ -8,6 +8,7 @@ test('Test Chat charaterCount', () => {
     currentInput: 'Kenny is great!',
     currentChannel: '',
     channels: {},
+    user: 'kenny',
   };
   expect(charaterCount(state)).toEqual(15);
 });
@@ -17,6 +18,7 @@ test('Test Chat inputValue', () => {
     currentInput: '@kenny you rock!',
     currentChannel: '',
     channels: {},
+    user: 'kenny',
   };
   expect(inputValue(state)).toEqual('<b>@kenny</b> you rock!');
 });

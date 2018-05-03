@@ -7,6 +7,7 @@ test('Chat charaterCount', () => {
       currentInput: '',
       currentChannel: '',
       channels: {},
+      user: 'kenny',
     },
     {
       type: UPDATE_INPUT,
@@ -16,5 +17,6 @@ test('Chat charaterCount', () => {
       currentInput: '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
       currentChannel: '',
       channels: {},
+      user: 'kenny',
     });
 });

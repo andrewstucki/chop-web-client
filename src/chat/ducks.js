@@ -1,5 +1,6 @@
 // @flow
 import io from '../io';
+import type { Dispatch as ReduxDispatch } from 'redux';
 
 // Action Types
 const UPDATE_INPUT = 'chop/chat/UPDATE_INPUT';
@@ -32,15 +33,16 @@ type MessageType = {
   message: string
 }
 
-type MessagesType = [ MessageType ];
-
 type ChatState = {
   currentInput: string,
   currentChannel: string,
   channels: {
-    [string]: MessagesType
-  }
+    [string]: Array<MessageType>
+  },
+  user: string
 }
+
+type MyDispatch = ReduxDispatch<ChatState, ChatActions>;
 
 // Action Creators
 const createUid = () => {
@@ -85,7 +87,7 @@ const sendMessageSuccess = data => data;
 const messageValidationFailed = error => error;
 
 const sendMessage = (text: string) => (
-  (dispatch, getState) => {
+  (dispatch: MyDispatch, getState: () => ChatState): void => {
     const { user } = getState();
     const message = createMessage(text, user);
     dispatch(addMessageToChannel(message));
@@ -106,6 +108,7 @@ const defaultState = {
   currentInput: '',
   currentChannel: '',
   channels: {},
+  user: '',
 };
 
 // Reducer
@@ -120,19 +123,29 @@ const reducer = (state: ChatState = defaultState, action?: ChatActions): ChatSta
       currentInput: action.value.substring(0, 100),
     };
   case ADD_MESSAGE_TO_CHANNEL:
-    return state;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [state.currentChannel]: [
+          ...state.channels[state.currentChannel],
+          action.message,
+        ],
+      },
+    };
   default:
     return state;
   }
 };
 
 // Selectors
-const atMention = /@\w*/g;
+
 
 const charaterCount = (chatState: ChatState): number =>
   chatState.currentInput.length;
 
 const inputValue = (chatState: ChatState): string => {
+  const atMention = /@\w*/g;
   const wrappInBold = match =>
     `<b>${match}</b>`;
 
@@ -149,7 +162,6 @@ export type {
   AddMessageToChannelAction, 
   ChatActions, 
   MessageType, 
-  MessagesType, 
   ChatState,
 };
 export { 
