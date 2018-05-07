@@ -1,8 +1,29 @@
+// @flow
 import React from 'react';
 import { textfield } from './style.css';
 
-const TextField = ({onInput, value}) => (
-  <input className={textfield} type="text" onKeyUp={onInput} value={value} />
+type TextFieldProps = {
+  onInput?: any,
+  onFocus?: any,
+  onBlur?: any,
+  value?: string
+}
+
+const TextField =
+(
+  {onInput,
+    onFocus,
+    onBlur,
+    value
+  }: TextFieldProps) =>
+(
+  <input
+    className={textfield}
+    type="text"
+    onKeyUp={onInput}
+    onFocus={onFocus}
+    onBlur={onBlur}
+    value={value} />
 );
 
 export default TextField;

@@ -63,6 +63,16 @@ behaviour of React UI.
 yarn run test:func
 ```
 
+To run a specific Unit or Functional test.
+```
+yarn run test -t <Name of Test>
+```
+Where <Name of Test> is replaced with the string in the describe or test function.
+i.e.
+```
+yarn test -t "TextField tests"
+```
+
 To run the Snapshot and Visual Regression Tests. Snapshop tests create a copy of
 the markup created by React UI and compare it to the previous copy and validate
 there are no differences. Visual Regession tests take a screenshot of each
