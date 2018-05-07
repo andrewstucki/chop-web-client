@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
+import TextField from '../components/text-field';
 
 const ChopContainer = ()  => (
   <div>
-    <h1>Life.Church Online</h1>
+    <TextField />
   </div>
 );
 
