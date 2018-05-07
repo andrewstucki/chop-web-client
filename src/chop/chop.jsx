@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react';
 
-const Chop = ()  => (
+const ChopContainer = ()  => (
   <div>
     <h1>Life.Church Online</h1>
   </div>
 );
 
-export default Chop;
+export default ChopContainer;
