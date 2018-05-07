@@ -9,7 +9,10 @@ module.exports = {
           'style-loader',
           { 
             loader: 'css-loader',
-            options: { importLoaders: 1 }
+            options: {
+              module: true,
+              importLoaders: 1 
+            }
           },
           { 
             loader: 'postcss-loader', 
