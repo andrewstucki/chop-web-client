@@ -1,22 +1,24 @@
 // @flow
+/* global SyntheticKeyboardEvent, SyntheticFocusEvent */
 import React from 'react';
 import { textfield } from './style.css';
 
 type TextFieldProps = {
-  onInput?: any,
-  onFocus?: any,
-  onBlur?: any,
+  onInput?: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
+  onFocus?: (event: SyntheticFocusEvent<HTMLInputElement>) => void,
+  onBlur?: (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   value?: string
 }
 
 const TextField =
 (
-  {onInput,
+  {
+    onInput,
     onFocus,
     onBlur,
-    value
-  }: TextFieldProps) =>
-(
+    value,
+  }: TextFieldProps
+) => (
   <input
     className={textfield}
     type="text"

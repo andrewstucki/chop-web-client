@@ -1,3 +1,4 @@
+// @flow
 import Adapter from 'enzyme-adapter-react-16';
 import Button from '../../../src/components/button';
 import Enzyme from 'enzyme';
@@ -7,13 +8,13 @@ import sinon from 'sinon';
 Enzyme.configure({ adapter: new Adapter() });
 
 test('Button has correct text', () => {
-  const wrapper = Enzyme.shallow(<Button text="Maranatha" />);
+  const wrapper = Enzyme.shallow(<Button text="Maranatha" onClick={function () {}} />);
   expect(wrapper.text()).toEqual('Maranatha');
 });
 
 test('Button clickable', () => {
   const onButtonClick = sinon.spy();
-  const wrapper = Enzyme.shallow(<Button onClick={onButtonClick} />);
+  const wrapper = Enzyme.shallow(<Button text="Love" onClick={onButtonClick} />);
   wrapper.find('button').simulate('click');
   expect(onButtonClick.calledOnce).toEqual(true);
 });

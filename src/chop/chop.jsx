@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react';
-import TextField from '../components/text-field';
+import Chat from '../chat';
 
 const ChopContainer = ()  => (
   <div>
-    <TextField />
+    <Chat />
   </div>
 );
 

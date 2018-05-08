@@ -7,8 +7,7 @@ import sinon from 'sinon';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("TextField tests", () => {
-
+describe('TextField tests', () => {
   test('keyup on typeing', () => {
     const onKeyUp = sinon.spy();
     const wrapper = Enzyme.shallow(
@@ -45,5 +44,4 @@ describe("TextField tests", () => {
     input.simulate('blur', event);
     expect(onBlur.calledWith(event)).toBeTruthy();
   });
-
 });

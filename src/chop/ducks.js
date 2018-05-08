@@ -1,8 +1,9 @@
 // @flow
-// import { combineReducers } from 'redux';
+import chatReducer from '../chat/ducks'
+import { combineReducers } from 'redux';
 
-// const reducer = combineReducers({
-//   chat: chatReducer
-// });
+const reducer = combineReducers({
+  chat: chatReducer
+});
 
-export default () => {};
+export default reducer;

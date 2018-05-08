@@ -1,8 +1,25 @@
+// @flow
+/* global SyntheticMouseEvent */
 import React from 'react';
 import { button } from './style.css';
 
-const Button = ({onClick, text}) => (
-  <button className={button} onClick={onClick}>{text}</button>
+type ButtonType = {
+  onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  text: string,
+}
+
+const Button =
+(
+  {
+    onClick,
+    text,
+  }: ButtonType
+) => (
+  <button
+    className={button}
+    onClick={onClick}>
+    {text}
+  </button>
 );
 
 export default Button;
