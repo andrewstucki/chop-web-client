@@ -1,18 +1,35 @@
 // @flow
-import reducer, { CHAT_INPUT }  from '../../../src/chat/ducks';
+import reducer, { CHAT_INPUT, createMessage }  from '../../../src/chat/ducks';
 
-test('Chat charaterCount', () => {
-  const result = reducer(
-    {
-      currentInput: '',
-    },
-    {
-      type: CHAT_INPUT,
-      value: 'L',
-    });
+describe('Chat', () => {
+  test('reducer with no values', () => {
+    const result = reducer();
+    expect(result).toEqual(
+      {
+        currentInput: '',
+      }
+    )
+  });
 
-  expect(result).toEqual(
-    {
-      currentInput: 'L',
-    });
+  test('reducer CHAT_INPUT', () => {
+    const result = reducer(
+      {
+        currentInput: '',
+      },
+      {
+        type: CHAT_INPUT,
+        value: 'Love',
+      });
+
+    expect(result).toEqual(
+      {
+        currentInput: 'Love',
+      });
+  });
+
+  test('createMessage', () => {
+    const message = createMessage("I like cookies!");
+    expect(message.message).toEqual("I like cookies!");
+    expect(message.id.length).toEqual(36);
+  });
 });

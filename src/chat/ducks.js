@@ -59,7 +59,7 @@ const createUid = () => {
   let seed = new Date().getTime(); // Used to insure more randomness
   const regEx = /[xy]/g;
   const replacer = char => {
-    const randomNumber = (seed + Math.random() * 16);
+    const randomNumber = (seed + Math.random() * 16) % 16 | 0;
     seed = Math.floor(seed / 16); // Update Seed
     return (char === 'x' ? randomNumber : (randomNumber & 0x3 | 0x8)).toString(16);
   };
@@ -79,7 +79,12 @@ const defaultState = {
 };
 
 // Reducer
-const reducer = (state: ChatState = defaultState, action?: ChatInputAction): ChatState => {
+const reducer =
+(
+  state: ChatState = defaultState,
+  action?: ChatInputAction
+): ChatState =>
+{
   if (!action || !action.type) {
     return state;
   }
