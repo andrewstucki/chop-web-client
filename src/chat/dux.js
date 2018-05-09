@@ -89,8 +89,7 @@ const reducer =
 (
   state: ChatState = defaultState,
   action?: ChatActions
-): ChatState =>
-{
+): ChatState => {
   if (!action || !action.type) {
     return state;
   }
@@ -104,12 +103,12 @@ const reducer =
     return {
       ...state,
       focused: action.focus,
-    }
+    };
   case ADD_TO_CURRENT_CHANNEL:
     return {
       ...state,
       currentInput: '',
-    }
+    };
   default:
     return state;
   }
@@ -118,7 +117,7 @@ const reducer =
 // Selectors
 
 const textEntered = (state: ChatState) => 
-  (!!state) ? state.currentInput.length > 0 : false;
+  (state) ? state.currentInput.length > 0 : false;
 
 // Exports
 export { 

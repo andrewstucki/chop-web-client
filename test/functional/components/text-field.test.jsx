@@ -50,5 +50,5 @@ describe('TextField tests', () => {
       <TextField placeholder="Chat" />);
     const input = wrapper.find('input');
     expect(input.props().placeholder).toEqual('Chat');
-  })
+  });
 });

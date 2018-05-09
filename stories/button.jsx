@@ -5,5 +5,5 @@ import Button from '../src/components/button';
 
 storiesOf('Button', module)
   .add('with text', () => (
-    <Button click={action('clicked')} text="Hello Button" />
+    <Button click={action('clicked')} text="↑" />
   ))

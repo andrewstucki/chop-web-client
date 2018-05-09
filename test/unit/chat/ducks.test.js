@@ -1,5 +1,5 @@
 // @flow
-import reducer, { CHAT_INPUT, TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL, createMessage, textEntered }  from '../../../src/chat/ducks';
+import reducer, { CHAT_INPUT, TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL, createMessage, textEntered }  from '../../../src/chat/dux';
 
 describe('Chat', () => {
   test('reducer with no values', () => {
@@ -9,7 +9,7 @@ describe('Chat', () => {
         currentInput: '',
         focused: false,
       }
-    )
+    );
   });
 
   test('reducer CHAT_INPUT', () => {
@@ -31,20 +31,20 @@ describe('Chat', () => {
   });
 
   test('createMessage', () => {
-    const message = createMessage("I like cookies!");
-    expect(message.message).toEqual("I like cookies!");
+    const message = createMessage('I like cookies!');
+    expect(message.message).toEqual('I like cookies!');
     expect(message.id.length).toEqual(36);
   });
 
   test('textEntered', () => {
-    let state =       {
+    const state =       {
       currentInput: '',
       focused: false,
-    }
+    };
     expect(textEntered(state)).toBeFalsy();
     state.currentInput = 'Hello';
     expect(textEntered(state)).toBeTruthy();
-  })
+  });
 
   test('chat focus', () => {
     const result = reducer(
@@ -61,7 +61,7 @@ describe('Chat', () => {
         currentInput: '',
         focused: true,
       }
-    )
+    );
 
     const result2 = reducer(
       {
@@ -77,8 +77,8 @@ describe('Chat', () => {
         currentInput: '',
         focused: false,
       }
-    )
-  })
+    );
+  });
 
   test('message added', () => {
     const result = reducer(
@@ -90,7 +90,7 @@ describe('Chat', () => {
         type: ADD_TO_CURRENT_CHANNEL,
         message: {
           id: '12345',
-          message: 'Hi everyone!'
+          message: 'Hi everyone!',
         },
       });
     expect(result).toEqual(
@@ -98,6 +98,6 @@ describe('Chat', () => {
         currentInput: '',
         focused: false,
       }
-    )
-  })
+    );
+  });
 });
