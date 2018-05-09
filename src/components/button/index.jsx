@@ -1,7 +1,7 @@
 // @flow
 /* global SyntheticMouseEvent */
 import React from 'react';
-import { button } from './style.css';
+import button from './style.css';
 
 type ButtonType = {
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -16,7 +16,7 @@ const Button =
   }: ButtonType
 ) => (
   <button
-    className={button}
+    className={button.icon}
     onClick={onClick}>
     {text}
   </button>

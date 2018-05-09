@@ -3,6 +3,7 @@
 import React from 'react';
 import Button from '../components/button';
 import TextField from '../components/text-field';
+import chatStyle from './style.css';
 
 type ChatProps = {
   buttonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -10,6 +11,8 @@ type ChatProps = {
   textOnBlur:  (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   textOnFocus:  (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   textValue: string,
+  textEntered: boolean,
+  focused: boolean,
 }
 
 const Chat =
@@ -20,18 +23,27 @@ const Chat =
     textOnBlur,
     textOnFocus,
     textValue,
+    textEntered = false,
+    focused = false,
   }: ChatProps
-) => (
-  <div>
-    <TextField
-      onInput={textOnInput}
-      onBlur={textOnBlur}
-      onFocus={textOnFocus}
-      value={textValue} />
-    <Button
-      onClick={buttonOnClick}
-      text="Send" />
-  </div>
-);
+) => {
+  const style = focused ? chatStyle.focused : chatStyle.default;
+
+  return (
+    <div className={style}>
+      <TextField
+        onInput={textOnInput}
+        onBlur={textOnBlur}
+        onFocus={textOnFocus}
+        value={textValue}
+        placeholder="Chat" />
+      {textEntered &&
+        <Button
+          onClick={buttonOnClick}
+          text="↑" />
+      }
+    </div>
+  );
+};
 
 export default Chat;

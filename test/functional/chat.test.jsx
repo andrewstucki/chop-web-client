@@ -16,8 +16,24 @@ describe('Chat tests', () => {
         textOnInput={function () {}}
         textOnBlur={function () {}}
         textOnFocus={function () {}}
-        buttonOnClick={function () {}} />);
+        buttonOnClick={function () {}}
+        focused={true}
+        textEntered={true} />);
     expect(wrapper.find(TextField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(1);
+  });
+
+  test('has a TextField and Button', () => {
+    const wrapper = Enzyme.shallow(
+      <Chat
+        textValue=""
+        textOnInput={function () {}}
+        textOnBlur={function () {}}
+        textOnFocus={function () {}}
+        buttonOnClick={function () {}}
+        focused={false}
+        textEntered={false} />);
+    expect(wrapper.find(TextField).length).toBe(1);
+    expect(wrapper.find(Button).length).toBe(0);
   });
 });

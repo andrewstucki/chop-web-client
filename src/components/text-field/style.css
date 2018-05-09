@@ -1,6 +1,15 @@
 @import url('../../../assets/theme.css');
 
 .textfield {
-  border: 1px solid var(--primaryColor);
-  border-radius: var(--borderRadius);
+  border: none;
+  color: var(--textColor);
+  height: 20px;
+  flex: 1;
+  background-color: transparent;
+  /* TODO: This is specificly for Chat and we need a better way to add the
+           spacing in Chat without applying this style everywhere */
+  margin-right: 8px;
+}
+.textfield::placeholder {
+  color: var(--disabledTextColor);
 }

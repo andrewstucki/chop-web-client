@@ -44,4 +44,11 @@ describe('TextField tests', () => {
     input.simulate('blur', event);
     expect(onBlur.calledWith(event)).toBeTruthy();
   });
+
+  test('Placeholder text', () => {
+    const wrapper = Enzyme.shallow(
+      <TextField placeholder="Chat" />);
+    const input = wrapper.find('input');
+    expect(input.props().placeholder).toEqual('Chat');
+  })
 });

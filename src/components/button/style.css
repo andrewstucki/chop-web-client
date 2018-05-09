@@ -1,5 +1,10 @@
-.button {
-  min-width: 100px;
-  min-height: 30px;
-  background: blue;
+@import url('../../../assets/theme.css');
+
+.icon {
+  width: 36px;
+  height: 36px;
+  color: var(--backgroundColor);
+  background: var(--primaryColor);
+  border-radius: var(--borderRadius);
+  border: none;
 }
