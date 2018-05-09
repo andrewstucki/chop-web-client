@@ -1,20 +1,30 @@
 // @flow
 import Chat from './chat';
 import { connect } from 'react-redux';
-import { chatInput, toggleChatFocus, addToCurrentChannel, createMessage } from './ducks';
+import { chatInput, toggleChatFocus, addToCurrentChannel, createMessage, textEntered } from './ducks';
 
-const mapStateToProps = state => (
-  {
-    textValue: state.currentInput,
+const mapStateToProps = state => {
+  const chatState = state.chat;
+  return {
+    textValue: chatState.currentInput,
+    focused: chatState.focused,
+    textEntered: textEntered(chatState),
   }
-);
+};
 
-const mapDispatchToProps = dispatch => (
+const sendMessage = () => {
+  return (dispatch, getState) => {
+    const messageText = getState().chat.currentInput;
+    dispatch(addToCurrentChannel(createMessage(messageText)));
+  }
+}
+
+const mapDispatchToProps = (dispatch) => (
   {
-    textOnInput: value => dispatch(chatInput(value)),
-    textOnBlue: () => dispatch(toggleChatFocus(false)),
+    textOnInput: event => dispatch(chatInput(event.target.value)),
+    textOnBlur: () => dispatch(toggleChatFocus(false)),
     textOnFocus: () => dispatch(toggleChatFocus(true)),
-    buttonOnClick: value => dispatch(addToCurrentChannel(createMessage(value))),
+    buttonOnClick: () => dispatch(sendMessage()),
   }
 );
 

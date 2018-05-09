@@ -21,6 +21,11 @@ type AddToCurrentChannelAction = {
   message: MessageType
 }
 
+type ChatActions =
+  | ChatInputAction
+  | ToggleChatFocusAction
+  | AddToCurrentChannelAction
+
 type MessageType = {
   id: string,
   message: string
@@ -76,13 +81,14 @@ const createMessage = (message: string): MessageType => (
 // Default State
 const defaultState = {
   currentInput: '',
+  focused: false,
 };
 
 // Reducer
 const reducer =
 (
   state: ChatState = defaultState,
-  action?: ChatInputAction
+  action?: ChatActions
 ): ChatState =>
 {
   if (!action || !action.type) {
@@ -92,8 +98,18 @@ const reducer =
   case CHAT_INPUT:
     return {
       ...state,
-      currentInput: action.value.substring(0, 100),
+      currentInput: action.value,
     };
+  case TOGGLE_CHAT_FOCUS:
+    return {
+      ...state,
+      focused: action.focus,
+    }
+  case ADD_TO_CURRENT_CHANNEL:
+    return {
+      ...state,
+      currentInput: '',
+    }
   default:
     return state;
   }
@@ -101,6 +117,8 @@ const reducer =
 
 // Selectors
 
+const textEntered = (state: ChatState) => 
+  (!!state) ? state.currentInput.length > 0 : false;
 
 // Exports
 export { 
@@ -120,5 +138,6 @@ export {
   toggleChatFocus,
   addToCurrentChannel,
   createMessage,
+  textEntered,
 };
 export default reducer;

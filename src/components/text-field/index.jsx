@@ -24,7 +24,7 @@ const TextField =
   <input
     className={textfield}
     type="text"
-    onKeyUp={onInput}
+    onChange={onInput}
     onFocus={onFocus}
     onBlur={onBlur}
     value={value}

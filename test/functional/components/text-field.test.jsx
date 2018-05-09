@@ -14,7 +14,7 @@ describe('TextField tests', () => {
       <TextField onInput={onKeyUp} />);
     const event = { target: { value: 'Love' } };
     const input = wrapper.find('input');
-    input.simulate('keyup', event);
+    input.simulate('change', event);
     expect(onKeyUp.calledWith(event)).toBeTruthy();
   });
 
