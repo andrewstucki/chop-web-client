@@ -34,7 +34,12 @@ yarn
 
 To build code to the dist folder ready for production use:
 ```
-yarn run build
+yarn build
+```
+
+To start the production server run
+```
+yarn server
 ```
 
 ## Local Development
@@ -54,23 +59,37 @@ yarn storybook
 To run the Uint Tests. Unit tests validate code logic without
 interactive with UI.
 ```
-yarn run test:unit
+yarn test:unit
 ```
 
 To run the Functional Tests. Functional tests validate state and
 behaviour of React UI.
 ```
-yarn run test:func
+yarn test:func
 ```
 
 To run a specific Unit or Functional test.
 ```
-yarn run test -t <Name of Test>
+yarn test -t <Name of Test>
 ```
 Where <Name of Test> is replaced with the string in the describe or test function.
 i.e.
 ```
-yarn test -t "TextField tests"
+yarn -t "TextField tests"
+```
+
+To have the tests watch for file changes and re-run once you've edited and saved
+a file you can run the tests with the watch command.
+```
+yarn test --watch
+```
+or
+```
+yarn test:unit --watch
+```
+or
+```
+yarn test:func --watch
 ```
 
 To run the Snapshot and Visual Regression Tests. Snapshop tests create a copy of
@@ -79,26 +98,32 @@ there are no differences. Visual Regession tests take a screenshot of each
 componet and compare it to the last screenshot. Both of these types of tests
 need the Storybook server running (see above). 
 ```
-yarn run test:snap
+yarn test:snap
+```
+If there is a diffrence in the snapshots you can compare them to see the delta.
+Then if it is a bug fix it, or if it is an accepted change you can update the
+saved snapshots to reflect the new state.
+```
+yarn test:snap -u
 ```
 
 To run all our tests (unit, func and snap). Note: for the snap tests the
 Storybook server must be running.
 ```
-yarn run test
+yarn test
 ```
 
 To run the Linter (eslint)
 ```
-yarn run test:lint
+yarn lint
 ```
 
 To run the Flow type-checker
 ```
-yarn run test:flow
+yarn flow
 ```
 
 To run all the validation (test, flow and lint)
 ```
-yarn run test:validate
+yarn validate
 ```
