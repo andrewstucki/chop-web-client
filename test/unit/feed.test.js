@@ -6,9 +6,9 @@ describe('Feed', () => {
     const result = reducer();
     expect(result).toEqual({
       channels: {
-        default: []
+        default: [],
       },
-      currentChannel: 'default'
+      currentChannel: 'default',
     });
   });
 
@@ -16,17 +16,17 @@ describe('Feed', () => {
     const result = reducer(
       {
         channels: {
-          default: []
+          default: [],
         },
-        currentChannel: 'default'
+        currentChannel: 'default',
       },
       changeChannel('host')
     );
     expect(result).toEqual({
       channels: {
-        default: []
+        default: [],
       },
-      currentChannel: 'host'
+      currentChannel: 'host',
     });
   });
 });

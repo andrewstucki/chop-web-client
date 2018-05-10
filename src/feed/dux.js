@@ -30,16 +30,16 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
     type: CHANGE_CHANNEL,
     channel: newChannel,
   }
-)
+);
 
 // Default State
 
 const defaultState = {
   channels: {
-    default: []
+    default: [],
   },
-  currentChannel: 'default'
-}
+  currentChannel: 'default',
+};
 
 // Reducer
 
@@ -51,24 +51,24 @@ const reducer =
     return state;
   }
   switch (action.type) {
-    case CHANGE_CHANNEL:
-      return {
-        ...state,
-        currentChannel: action.channel
-      }
-    default:
-      return state;
+  case CHANGE_CHANNEL:
+    return {
+      ...state,
+      currentChannel: action.channel,
+    };
+  default:
+    return state;
   }
-}
+};
 
 // Exports
 
 export {
   CHANGE_CHANNEL,
-}
+};
 export {
   changeChannel,
-}
+};
 export type {
   MomentType,
 };
