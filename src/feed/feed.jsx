@@ -3,7 +3,7 @@ import React from 'react';
 import type {MomentType} from './dux';
 
 type FeedProps = {
-  moments?: MomentType
+  moments?: Array<MomentType>
 }
 
 const Feed = ({moments}:FeedProps) => {
