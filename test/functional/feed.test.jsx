@@ -20,5 +20,6 @@ describe('Feed tests', () => {
     );
     expect(wrapper.find('ul').children().length).toBe(1);
     expect(wrapper.find('ul').childAt(0).type()).toEqual('li');
+    expect(wrapper.find('li').text()).toEqual('This is a message');
   });
 });
