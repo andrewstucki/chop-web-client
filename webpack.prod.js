@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var CompressionPlugin = require('compression-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
@@ -14,6 +15,9 @@ module.exports = merge(common, {
       sourceMap: true
     }),
     new CompressionPlugin(),
+    new CopyWebpackPlugin([
+      { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
+    ]),
   ]
 });
 

@@ -1,0 +1,14 @@
+{
+  "name": "Life.Church Online",
+  "short_name": "Life.Church",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#2993e5",
+  "orientation": "portrait",
+  "description": "Church Online at Life.Church is a community of people all over the world experiencing God and connecting with one another through online chat.",
+  "icons": [{
+    "src": "images/touch/homescreen48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  }]
+}
