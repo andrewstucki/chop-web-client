@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import type {MomentType} from './dux';
-
+import feedStyles from './styles.css';
 type FeedProps = {
   moments?: Array<MomentType>
 }
@@ -15,7 +15,7 @@ const Feed = ({moments}:FeedProps) => {
   }
 
   return (
-    <ul>
+    <ul className={feedStyles.feed}>
       {listItems}
     </ul>
   );

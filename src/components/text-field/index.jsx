@@ -19,12 +19,14 @@ const TextField =
     onBlur,
     value,
     placeholder,
+    enterDetect,
   }: TextFieldProps
 ) => (
   <input
     className={textfield}
     type="text"
     onChange={onInput}
+    onKeyPress={enterDetect}
     onFocus={onFocus}
     onBlur={onBlur}
     value={value}
