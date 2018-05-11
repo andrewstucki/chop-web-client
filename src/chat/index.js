@@ -25,6 +25,11 @@ const mapDispatchToProps = dispatch => (
     textOnBlur: () => dispatch(toggleChatFocus(false)),
     textOnFocus: () => dispatch(toggleChatFocus(true)),
     buttonOnClick: () => dispatch(sendMessage()),
+    enterDetect: event => {
+      if (event.charCode === 13) {
+        return dispatch(sendMessage());
+      }
+    }
   }
 );
 

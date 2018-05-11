@@ -25,6 +25,7 @@ const Chat =
     textValue,
     textEntered = false,
     focused = false,
+    enterDetect,
   }: ChatProps
 ) => {
   const style = focused ? chatStyle.focused : chatStyle.default;
@@ -36,7 +37,8 @@ const Chat =
         onBlur={textOnBlur}
         onFocus={textOnFocus}
         value={textValue}
-        placeholder="Chat" />
+        placeholder="Chat"
+        enterDetect={enterDetect} />
       {textEntered &&
         <Button
           onClick={buttonOnClick}

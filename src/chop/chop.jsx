@@ -1,10 +1,13 @@
 // @flow
 import * as React from 'react';
 import Chat from '../chat';
-import 'reset-css';
+import Feed from '../feed';
+import '../../assets/global.css';
+import chopStyles from './styles.css';
 
 const ChopContainer = ()  => (
-  <div>
+  <div className={chopStyles.chop}>
+    <Feed />
     <Chat />
   </div>
 );
