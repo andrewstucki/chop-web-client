@@ -1,0 +1,16 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: cwc
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: cwc
+    spec:
+      containers:
+      - name: chop-web-client
+        image: gcr.io/open-network-194320/chop-web-client:0.2.0
+        ports:
+        - containerPort: 8080
