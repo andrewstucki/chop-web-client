@@ -43,7 +43,7 @@ type RemoveChannelType = {
 type FeedActionTypes =
   | ChangeChannelType
   | AddToCurrentChannelAction
-  | AddtoChannelType
+  | AddToChannelType
   | AddChannelType
   | RemoveChannelType
 
@@ -135,9 +135,9 @@ const reducer = (
       channels: {
         ...state.channels,
         [action.channel]: [],
-      }
+      },
     };
-  case REMOVE_CHANNEL:
+  case REMOVE_CHANNEL: {
     if (action.channel === 'default') {
       return state;
     }
@@ -147,6 +147,7 @@ const reducer = (
     }
     delete stateCopy.channels[action.channel];
     return stateCopy;
+  }
   default:
     return state;
   }
@@ -154,7 +155,7 @@ const reducer = (
 
 // Selectors
 
-const feedContents = (state) => (
+const feedContents = (state: FeedType): Array<MessageType> => (
   state.channels[state.currentChannel]
 );
 

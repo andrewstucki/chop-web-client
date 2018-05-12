@@ -29,7 +29,7 @@ const mapDispatchToProps = dispatch => (
       if (event.charCode === 13) {
         return dispatch(sendMessage());
       }
-    }
+    },
   }
 );
 

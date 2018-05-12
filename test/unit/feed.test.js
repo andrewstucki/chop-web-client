@@ -140,7 +140,7 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'default',
@@ -155,7 +155,7 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'default',
@@ -233,7 +233,7 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'default',
@@ -244,7 +244,7 @@ describe('Feed', () => {
         {
           id: '12345',
           message: 'I like socks',
-        }
+        },
       ]
     );
   });
@@ -258,7 +258,7 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'host',
@@ -269,7 +269,7 @@ describe('Feed', () => {
         {
           id: '12345',
           message: 'I like socks',
-        }
+        },
       ]
     );
   });
