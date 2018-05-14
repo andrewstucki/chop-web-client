@@ -85,8 +85,9 @@ const defaultState = {
     default: [],
   },
   currentChannel: 'default',
+  offset: 0,
 };
-
+const UPDATE_OFFSET = 'UPDATE_OFFSET';
 // Reducer
 
 const reducer = (
@@ -104,14 +105,19 @@ const reducer = (
       ...state,
       currentChannel: action.channel,
     };
+  case UPDATE_OFFSET:
+    return {
+      ...state,
+      offset: action.offset,
+    };
   case ADD_TO_CURRENT_CHANNEL:
     return {
       ...state,
       channels: {
         ...state.channels,
         [state.currentChannel]: [
-          action.message,
           ...state.channels[state.currentChannel],
+          action.message,
         ],
       },
     };
@@ -121,8 +127,8 @@ const reducer = (
       channels: {
         ...state.channels,
         [action.channel]: [
-          action.message,
           ...state.channels[action.channel],
+          action.message,
         ],
       },
     };

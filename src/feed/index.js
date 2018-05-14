@@ -9,6 +9,7 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     moments: feedContents(feedState),
+    offset: feedState.offset,
   };
 };
 

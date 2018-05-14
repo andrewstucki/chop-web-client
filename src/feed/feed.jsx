@@ -8,20 +8,25 @@ type FeedProps = {
   moments?: Array<MomentType>
 }
 
-const Feed = ({moments}:FeedProps) => {
+const Feed = ({moments, offset}:FeedProps) => {
   let listItems = [];
   if (moments) {
     listItems = moments.map(moment => 
-      <li key={moment.id}>
+      <li id={moment.id} key={moment.id}>
         <Message message={moment.message} />
       </li>
     );
   }
+  const translate = 'translateY(' + offset + 'px)'
 
   return (
-    <ul className={feedStyles.feed}>
-      {listItems}
-    </ul>
+    <div className={feedStyles.wrapper}>
+      <ul
+        style={{transform: 'translateY(' + offset + 'px)'}}
+        className={feedStyles.feed}>
+        {listItems}
+      </ul>
+    </div>
   );
 };
 
