@@ -9,28 +9,22 @@ type MessagePropsType = {
   wrapperDiv: HTMLDivElement,
 }
 
-type MessagePropsState = {
-  
-}
-
 class Message extends React.Component<MessagePropsType> {
-
-  constructor(props: MessagePropsType) {
+  constructor (props: MessagePropsType) {
     super(props);
     this.wrapperDiv = React.createRef();
   }
 
-  componentDidMount() {
-    const { id } = this.props;
+  componentDidMount () {
     const el = this.wrapperDiv.current;
     const { onMount } = this.props;
-    let height = el.getBoundingClientRect().height;
+    let { height } = el.getBoundingClientRect();
     height += parseInt(window.getComputedStyle(el)['margin-top'], 10);
     height += parseInt(window.getComputedStyle(el)['margin-bottom'], 10);
     onMount(-height);
   }
 
-  render() {
+  render () {
     const { id, message } = this.props;
     return (
       <div ref={this.wrapperDiv} id={id} className={messageStyles.wrapper}>
@@ -42,8 +36,8 @@ class Message extends React.Component<MessagePropsType> {
         </div>
       </div>
     );
-  };
-};
+  }
+}
 
 
 export default Message;

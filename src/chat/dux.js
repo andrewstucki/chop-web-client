@@ -18,7 +18,7 @@ type ToggleChatFocusAction = {
 
 type AddToCurrentChannelAction = {
   type: 'ADD_TO_CURRENT_CHANNEL',
-  message: MessageType
+  id: string
 }
 
 type ChatActions =
@@ -52,10 +52,10 @@ const toggleChatFocus = (focus: boolean): ToggleChatFocusAction => (
   }
 );
 
-const addToCurrentChannel = (message: MessageType): AddToCurrentChannelAction => (
+const addToCurrentChannel = (): AddToCurrentChannelAction => (
   {
     type: ADD_TO_CURRENT_CHANNEL,
-    message,
+    id: createUid(),
   }
 );
 
@@ -71,9 +71,9 @@ const createUid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
 
-const createMessage = (message: string): MessageType => (
+const createMessage = (id: string, message: string): MessageType => (
   {
-    id: createUid(),
+    id,
     message,
   }
 );
@@ -138,5 +138,6 @@ export {
   addToCurrentChannel,
   createMessage,
   textEntered,
+  createUid,
 };
 export default reducer;

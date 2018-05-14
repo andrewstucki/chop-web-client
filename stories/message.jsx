@@ -6,5 +6,5 @@ import '../assets/global.css';
 
 storiesOf('Message', module)
   .add('simple', () => (
-    <Message message="Maecenas sed diam eget risus varius blandit sit amet non magna." />
+    <Message onMount={action('mounted')} message="Maecenas sed diam eget risus varius blandit sit amet non magna." />
   ))

@@ -10,14 +10,14 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Feed tests', () => {
   test('has an empty feed', () => {
     const wrapper = Enzyme.shallow(
-      <Feed offset={0} onMessageRender={function() {}} />
+      <Feed offset={0} onMessageRender={function () {}} />
     );
     expect(wrapper.find('ul').children().length).toBe(0);
   });
   test('has a single message', () => {
     const moments = [{ id: 'string', message: 'This is a message' }];
     const wrapper = Enzyme.mount(
-      <Feed offset={0} moments={moments} onMessageRender={function() {}} />
+      <Feed offset={0} moments={moments} onMessageRender={function () {}} />
     );
     expect(wrapper.find('ul').children().length).toBe(1);
     expect(wrapper.find('ul').childAt(0).type()).toEqual('li');

@@ -19,7 +19,6 @@ const Feed = ({moments, offset, onMessageRender}:FeedProps) => {
       </li>
     );
   }
-  const translate = 'translateY(' + offset + 'px)'
 
   return (
     <div className={feedStyles.wrapper}>
