@@ -12,21 +12,12 @@ const mapStateToProps = state => {
   };
 };
 
-const sendMessage = () => 
+const sendMessage = () =>
   (dispatch, getState) => {
     const messageText = getState().chat.currentInput;
     const message = createMessage(messageText);
-    dispatch(addToCurrentChannel(message));
-    setTimeout(() => {
-      const el = document.getElementById(message.id);
-      const height = el.getBoundingClientRect().height;
-      return dispatch({
-        type: 'UPDATE_OFFSET',
-        offset: getState().feed.offset - (height + 18),
-      });
-    }, 100);
-  };
-
+    dispatch(addToCurrentChannel(message))
+};
 
 const mapDispatchToProps = dispatch => (
   {

@@ -7,6 +7,7 @@ const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_TO_CHANNEL = 'ADD_TO_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
+const UPDATE_OFFSET = 'UPDATE_OFFSET';
 
 // Flow Type Definitions
 type MomentType =
@@ -40,12 +41,18 @@ type RemoveChannelType = {
   channel: string,
 }
 
+type UpdateOffset = {
+  type: 'UPDATE_OFFSET',
+  offset: number,
+}
+
 type FeedActionTypes =
   | ChangeChannelType
   | AddToCurrentChannelAction
   | AddToChannelType
   | AddChannelType
   | RemoveChannelType
+  | UpdateOffset
 
 // Action Creators
 
@@ -78,6 +85,13 @@ const removeChannel = (channel: string): RemoveChannelType => (
   }
 );
 
+const updateOffset = (offset: number): UpdateOffset => (
+  {
+    type: UPDATE_OFFSET,
+    offset,
+  }
+)
+
 // Default State
 
 const defaultState = {
@@ -87,7 +101,7 @@ const defaultState = {
   currentChannel: 'default',
   offset: 0,
 };
-const UPDATE_OFFSET = 'UPDATE_OFFSET';
+
 // Reducer
 
 const reducer = (
@@ -172,6 +186,7 @@ export {
   ADD_TO_CHANNEL,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
+  UPDATE_OFFSET,
 };
 export {
   changeChannel,
@@ -179,6 +194,7 @@ export {
   addChannel,
   removeChannel,
   feedContents,
+  updateOffset,
 };
 export type {
   MomentType,

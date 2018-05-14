@@ -5,15 +5,17 @@ import Message from '../components/message';
 import feedStyles from './styles.css';
 
 type FeedProps = {
-  moments?: Array<MomentType>
+  moments?: Array<MomentType>,
+  offset: number,
+  onMessageRender: (offset: number) => void,
 }
 
-const Feed = ({moments, offset}:FeedProps) => {
+const Feed = ({moments, offset, onMessageRender}:FeedProps) => {
   let listItems = [];
   if (moments) {
     listItems = moments.map(moment => 
-      <li id={moment.id} key={moment.id}>
-        <Message message={moment.message} />
+      <li key={moment.id}>
+        <Message id={moment.id} message={moment.message} onMount={onMessageRender} />
       </li>
     );
   }
