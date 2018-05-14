@@ -5,14 +5,15 @@ import reducer, {
   addChannel,
   removeChannel,
   feedContents,
+  updateOffset,
 } from '../../src/feed/dux';
 
 import {
   addToCurrentChannel,
-  createMessage,
+  chatInput,
 } from '../../src/chat/dux';
 
-describe('Feed', () => {
+describe('Feed tests', () => {
   test('default state', () => {
     const result = reducer();
     expect(result).toEqual({
@@ -20,6 +21,8 @@ describe('Feed', () => {
         default: [],
       },
       currentChannel: 'default',
+      offset: 0,
+      chatInput: '',
     });
   });
 
@@ -31,6 +34,8 @@ describe('Feed', () => {
           host: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       },
       changeChannel('host')
     );
@@ -40,6 +45,8 @@ describe('Feed', () => {
         host: [],
       },
       currentChannel: 'host',
+      offset: 0,
+      chatInput: '',
     });
   });
 
@@ -50,6 +57,8 @@ describe('Feed', () => {
           default: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       },
       changeChannel('host')
     );
@@ -58,6 +67,8 @@ describe('Feed', () => {
         default: [],
       },
       currentChannel: 'default',
+      offset: 0,
+      chatInput: '',
     });
   });
 
@@ -68,8 +79,10 @@ describe('Feed', () => {
           default: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: 'this is a message',
       },
-      addToCurrentChannel(createMessage('this is a message'))
+      addToCurrentChannel(),
     );
     expect(result.channels.default.length).toEqual(1);
     expect(result.channels.default[0].message).toEqual('this is a message');
@@ -84,8 +97,10 @@ describe('Feed', () => {
           host: [],
         },
         currentChannel: 'host',
+        offset: 0,
+        chatInput: 'this is a string',
       },
-      addToCurrentChannel(createMessage('this is a string'))
+      addToCurrentChannel()
     );
     expect(result.channels.default.length).toEqual(0);
     expect(result.channels.host.length).toEqual(1);
@@ -101,8 +116,10 @@ describe('Feed', () => {
           host: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: 'this is a string',
       },
-      addToChannel('host', createMessage('this is a string'))
+      addToChannel('host')
     );
     expect(result.channels.default.length).toEqual(0);
     expect(result.channels.host.length).toEqual(1);
@@ -117,6 +134,8 @@ describe('Feed', () => {
           default: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       },
       addChannel('host')
     );
@@ -127,6 +146,8 @@ describe('Feed', () => {
           host: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       }
     );
   });
@@ -140,10 +161,12 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       },
       addChannel('host')
     );
@@ -155,10 +178,12 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       }
     );
   });
@@ -171,6 +196,8 @@ describe('Feed', () => {
           host: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       },
       removeChannel('host')
     );
@@ -180,6 +207,8 @@ describe('Feed', () => {
           default: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       }
     );
   });
@@ -191,6 +220,8 @@ describe('Feed', () => {
           default: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       },
       removeChannel('default')
     );
@@ -200,6 +231,8 @@ describe('Feed', () => {
           default: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       }
     );
   });
@@ -212,6 +245,8 @@ describe('Feed', () => {
           host: [],
         },
         currentChannel: 'host',
+        offset: 0,
+        chatInput: '',
       },
       removeChannel('host')
     );
@@ -221,6 +256,8 @@ describe('Feed', () => {
           default: [],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       }
     );
   });
@@ -233,10 +270,12 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
       }
     );
     expect(result).toEqual(
@@ -244,7 +283,7 @@ describe('Feed', () => {
         {
           id: '12345',
           message: 'I like socks',
-        }
+        },
       ]
     );
   });
@@ -258,10 +297,12 @@ describe('Feed', () => {
             {
               id: '12345',
               message: 'I like socks',
-            }
+            },
           ],
         },
         currentChannel: 'host',
+        offset: 0,
+        chatInput: '',
       }
     );
     expect(result).toEqual(
@@ -269,8 +310,56 @@ describe('Feed', () => {
         {
           id: '12345',
           message: 'I like socks',
-        }
+        },
       ]
+    );
+  });
+
+  test('Feed listens to message input', () => {
+    const result = reducer(
+      {
+        channels: {
+          default: [],
+        },
+        currentChannel: 'default',
+        offset: 0,
+        chatInput: '',
+      },
+      chatInput('Hello'),
+    );
+    expect(result).toEqual(
+      {
+        channels: {
+          default: [],
+        },
+        currentChannel: 'default',
+        offset: 0,
+        chatInput: 'Hello',
+      }
+    );
+  });
+
+  test('Feed update offset', () => {
+    const result = reducer(
+      {
+        channels: {
+          default: [],
+        },
+        currentChannel: 'default',
+        offset: -50,
+        chatInput: '',
+      },
+      updateOffset(-50),
+    );
+    expect(result).toEqual(
+      {
+        channels: {
+          default: [],
+        },
+        currentChannel: 'default',
+        offset: -100,
+        chatInput: '',
+      }
     );
   });
 });

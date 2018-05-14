@@ -13,6 +13,7 @@ type ChatProps = {
   textValue: string,
   textEntered: boolean,
   focused: boolean,
+  enterDetect: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
 }
 
 const Chat =

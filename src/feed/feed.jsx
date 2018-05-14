@@ -1,23 +1,33 @@
 // @flow
 import React from 'react';
 import type {MomentType} from './dux';
+import Message from '../components/message';
 import feedStyles from './styles.css';
+
 type FeedProps = {
-  moments?: Array<MomentType>
+  moments?: Array<MomentType>,
+  offset: number,
+  onMessageRender: (offset: number) => void,
 }
 
-const Feed = ({moments}:FeedProps) => {
+const Feed = ({moments, offset, onMessageRender}:FeedProps) => {
   let listItems = [];
   if (moments) {
     listItems = moments.map(moment => 
-      <li key={moment.id}>{moment.message}</li>
+      <li key={moment.id}>
+        <Message id={moment.id} message={moment.message} onMount={onMessageRender} />
+      </li>
     );
   }
 
   return (
-    <ul className={feedStyles.feed}>
-      {listItems}
-    </ul>
+    <div className={feedStyles.wrapper}>
+      <ul
+        style={{transform: 'translateY(' + offset + 'px)'}}
+        className={feedStyles.feed}>
+        {listItems}
+      </ul>
+    </div>
   );
 };
 

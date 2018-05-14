@@ -18,7 +18,8 @@ describe('Chat tests', () => {
         textOnFocus={function () {}}
         buttonOnClick={function () {}}
         focused={true}
-        textEntered={true} />);
+        textEntered={true}
+        enterDetect={function () {}} />);
     expect(wrapper.find(TextField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(1);
   });
@@ -32,7 +33,8 @@ describe('Chat tests', () => {
         textOnFocus={function () {}}
         buttonOnClick={function () {}}
         focused={false}
-        textEntered={false} />);
+        textEntered={false}
+        enterDetect={function () {}} />);
     expect(wrapper.find(TextField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(0);
   });

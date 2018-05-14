@@ -9,6 +9,7 @@ type TextFieldProps = {
   onBlur?: (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   value?: string,
   placeholder?: string,
+  enterDetect?: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
 }
 
 const TextField =

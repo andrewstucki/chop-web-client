@@ -1,5 +1,5 @@
 // @flow
-import reducer, { CHAT_INPUT, TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL, createMessage, textEntered }  from '../../../src/chat/dux';
+import reducer, { CHAT_INPUT, TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL, createMessage, textEntered }  from '../../src/chat/dux';
 
 describe('Chat', () => {
   test('reducer with no values', () => {
@@ -31,9 +31,9 @@ describe('Chat', () => {
   });
 
   test('createMessage', () => {
-    const message = createMessage('I like cookies!');
+    const message = createMessage('12345', 'I like cookies!');
     expect(message.message).toEqual('I like cookies!');
-    expect(message.id.length).toEqual(36);
+    expect(message.id.length).toEqual(5);
   });
 
   test('textEntered', () => {
@@ -88,11 +88,9 @@ describe('Chat', () => {
       },
       {
         type: ADD_TO_CURRENT_CHANNEL,
-        message: {
-          id: '12345',
-          message: 'Hi everyone!',
-        },
-      });
+        id: '12345',
+      },
+    );
     expect(result).toEqual(
       {
         currentInput: '',
