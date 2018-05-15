@@ -3,7 +3,7 @@ import NavBar from './navBar';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
-  const { navBarState } = state;
+  const navBarState = state.navBar;
   return {
     channels: navBarState.channels,
     currentChannel: navBarState.currentChannel,
