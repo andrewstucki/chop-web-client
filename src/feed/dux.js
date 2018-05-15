@@ -20,33 +20,33 @@ type FeedType = {
   currentChannel: string,
   offset: number,
   chatInput: string,
-}
+};
 
 type ChangeChannelType = {
   type: 'CHANGE_CHANNEL',
   channel: string
-}
+};
 
 type AddToChannelType = {
   type: 'ADD_TO_CHANNEL',
   id: string,
   channel: string,
-}
+};
 
 type AddChannelType = {
   type: 'ADD_CHANNEL',
   channel: string,
-}
+};
 
 type RemoveChannelType = {
   type: 'REMOVE_CHANNEL',
   channel: string,
-}
+};
 
 type UpdateOffset = {
   type: 'UPDATE_OFFSET',
   offset: number,
-}
+};
 
 type FeedActionTypes =
   | ChangeChannelType
@@ -207,6 +207,7 @@ export {
 };
 export type {
   MomentType,
+  ChangeChannelType,
 };
 
 export default reducer;

@@ -8,7 +8,7 @@ type FeedProps = {
   moments?: Array<MomentType>,
   offset: number,
   onMessageRender: (offset: number) => void,
-}
+};
 
 const Feed = ({moments, offset, onMessageRender}:FeedProps) => {
   let listItems = [];
