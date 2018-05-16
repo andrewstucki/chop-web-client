@@ -19,6 +19,7 @@ describe('Feed tests', () => {
     expect(result).toEqual({
       channels: {
         default: [],
+        host: [],
       },
       currentChannel: 'default',
       offset: 0,

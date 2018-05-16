@@ -9,17 +9,17 @@ const ADD_TO_CURRENT_CHANNEL = 'ADD_TO_CURRENT_CHANNEL';
 type ChatInputAction = {
   type: 'CHAT_INPUT',
   value: string
-}
+};
 
 type ToggleChatFocusAction = {
   type: 'TOGGLE_CHAT_FOCUS',
   focus: boolean
-}
+};
 
 type AddToCurrentChannelAction = {
   type: 'ADD_TO_CURRENT_CHANNEL',
   id: string
-}
+};
 
 type ChatActions =
   | ChatInputAction
@@ -29,11 +29,11 @@ type ChatActions =
 type MessageType = {
   id: string,
   message: string
-}
+};
 
 type ChatState = {
   currentInput: string
-}
+};
 
 
 // Action Creators

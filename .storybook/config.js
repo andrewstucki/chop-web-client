@@ -6,6 +6,7 @@ function loadStories() {
   require('../stories/chat.jsx');
   require('../stories/feed.jsx');
   require('../stories/message.jsx');
+  require('../stories/navBar.jsx');
 }
 
 configure(loadStories, module);

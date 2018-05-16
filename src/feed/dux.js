@@ -100,6 +100,7 @@ const updateOffset = (offset: number): UpdateOffset => (
 const defaultState = {
   channels: {
     default: [],
+    host: [],
   },
   currentChannel: 'default',
   offset: 0,

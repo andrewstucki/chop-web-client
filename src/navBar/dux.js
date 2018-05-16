@@ -5,22 +5,26 @@ import { CHANGE_CHANNEL } from '../feed/dux';
 // Flow Type Definitions
 
 type NavBarType = {
-  channels: [
-    string,
-    string,
-  ],
+  channels: Array<string>,
   currentChannel: string,
 };
 
 type NavBarActionTypes =
   | ChangeChannelType;
 
+type ChannelType = {
+  channel: string,
+  isCurrent: boolean,
+};
+
+type ChannelsListType = Array<ChannelType>;
+
 // Default State
 
 const defaultState = {
   channels: [
-    'Default',
-    'Host',
+    'default',
+    'host',
   ],
   currentChannel: 'default',
 };
@@ -44,6 +48,22 @@ const reducer = (
   }
 };
 
+// Selectors
+
+const getChannels = (state: NavBarType): ChannelsListType => (
+  state.channels.map(channel => ({
+    channel,
+    isCurrent: state.currentChannel === channel,
+  }))
+);
+
 // Exports
+
+export {
+  getChannels,
+};
+export type {
+  ChannelType,
+};
 
 export default reducer;

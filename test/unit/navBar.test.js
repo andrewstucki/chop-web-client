@@ -1,15 +1,15 @@
 // @flow
 import { changeChannel } from '../../src/feed/dux';
 
-import reducer from '../../src/navBar/dux';
+import reducer, { getChannels } from '../../src/navBar/dux';
 
 describe('NavBar tests', () => {
   test('default state', () => {
     const result = reducer();
     expect(result).toEqual({
       channels: [
-        'Default',
-        'Host',
+        'default',
+        'host',
       ],
       currentChannel: 'default',
     });
@@ -19,8 +19,8 @@ describe('NavBar tests', () => {
     const result = reducer(
       {
         channels: [
-          'Default',
-          'Host',
+          'default',
+          'host',
         ],
         currentChannel: 'default',
       },
@@ -28,10 +28,32 @@ describe('NavBar tests', () => {
     );
     expect(result).toEqual({
       channels: [
-        'Default',
-        'Host',
+        'default',
+        'host',
       ],
       currentChannel: 'host',
     });
+  });
+
+  test('channel selector test', () => {
+    const result = getChannels(
+      {
+        channels: [
+          'default',
+          'host',
+        ],
+        currentChannel: 'default',
+      }
+    );
+    expect(result).toEqual([
+      {
+        channel: 'default',
+        isCurrent: true,
+      },
+      {
+        channel: 'host',
+        isCurrent: false,
+      }
+    ]);
   });
 });

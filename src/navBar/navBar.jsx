@@ -1,23 +1,35 @@
 // @flow
+/* global SyntheticMouseEvent */
 import React from 'react';
+import type { ChannelType } from './dux';
 import navBarStyles from './styles.css';
 
 type NavBarProps = {
-  channels: [
-    string,
-    string,
-  ],
-  currentChannel: string,
+  channels: Array<ChannelType>,
+  onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const NavBar = ({channels, currentChannel}:NavBarProps) => (
+const NavBar = ({channels, onClick}:NavBarProps) => (
   <div className={navBarStyles.navBar}>
+    <div className={navBarStyles.hamburger}>
+      <div className={navBarStyles.line}></div>
+      <div className={navBarStyles.line}></div>
+      <div className={navBarStyles.line}></div>
+    </div>
     {
-      channels.map(channel => (
-        <div key={channel} className={navBarStyles.channels}>
-          <a href={channel} />
-        </div>
-      ))
+      channels.map(channel => {
+        const style = channel.isCurrent ? navBarStyles.selected : navBarStyles.default;
+        return (
+          <div
+            key={channel.channel}
+            className={style}
+            value={channel.channel}
+            onClick={onClick}
+          >
+            {channel.channel}
+          </div>
+        );
+      })
     }
   </div>
 );

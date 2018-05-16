@@ -1,0 +1,45 @@
+@import url('../../assets/theme.css');
+
+:root {
+  --wrapper: {
+    display: inline-block;
+    align-items: center;
+    padding: 16px 24px 0 0;
+    font-size: 16px;
+    font-family: ProximaNova-Semibold, sans-serif;
+    color: #ffffff;
+  }
+}
+
+.navBar {
+  display: flex;
+  background-color: #1e1f23;
+  height: 48px;
+  width: 100%;
+}
+
+.hamburger {
+  display: inline-block;
+  width: 24px;
+  padding: 16px 24px 0 16px;
+}
+
+.line {
+  width: 100%;
+  padding-bottom: 2px;
+  margin-bottom: 4px;
+  border-bottom: 2px;
+  background-color: #ffffff;
+  opacity: .5;
+  border-radius: 20px;
+}
+
+.default {
+  @apply --wrapper;
+  opacity: .5;
+}
+
+.selected {
+  @apply --wrapper;
+  text-decoration: underline;
+}
