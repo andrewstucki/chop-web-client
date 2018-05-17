@@ -11,11 +11,6 @@ type NavBarProps = {
 
 const NavBar = ({channels, onClick}:NavBarProps) => (
   <div className={navBarStyles.navBar}>
-    <div className={navBarStyles.hamburger}>
-      <div className={navBarStyles.line}></div>
-      <div className={navBarStyles.line}></div>
-      <div className={navBarStyles.line}></div>
-    </div>
     {
       channels.map(channel => {
         const style = channel.isCurrent ? navBarStyles.selected : navBarStyles.default;
