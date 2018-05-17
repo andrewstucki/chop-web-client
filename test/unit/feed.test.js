@@ -5,6 +5,7 @@ import reducer, {
   addChannel,
   removeChannel,
   feedContents,
+  getOffset,
   updateOffset,
 } from '../../src/feed/dux';
 
@@ -313,6 +314,34 @@ describe('Feed tests', () => {
         },
       ]
     );
+  });
+
+  test('Get offset', () => {
+    const result = getOffset(
+      {
+        channels: {
+          default: {messages: [], offset: 5},
+          host: {messages: [], offset: 0},
+        },
+        currentChannel: 'default',
+        chatInput: '',
+      }
+    );
+    expect(result).toEqual(5);
+  });
+
+  test('Get offset not default channel', () => {
+    const result = getOffset(
+      {
+        channels: {
+          default: {messages: [], offset: 0},
+          host: {messages: [], offset: 5},
+        },
+        currentChannel: 'host',
+        chatInput: '',
+      }
+    );
+    expect(result).toEqual(5);
   });
 
   test('Feed listens to message input', () => {

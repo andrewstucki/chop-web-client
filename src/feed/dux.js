@@ -206,6 +206,10 @@ const feedContents = (state: FeedType): Array<MessageType> => (
   state.channels[state.currentChannel].messages
 );
 
+const getOffset = (state: FeedType): number => (
+  state.channels[state.currentChannel].offset
+);
+
 // Exports
 
 export {
@@ -222,6 +226,7 @@ export {
   removeChannel,
   feedContents,
   updateOffset,
+  getOffset,
 };
 export type {
   MomentType,
