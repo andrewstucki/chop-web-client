@@ -15,7 +15,8 @@ type MomentType =
 
 type FeedType = {
   channels: {
-    [string]: Array<MomentType>
+    default: {messages: Array<MomentType>, offset: number},
+    host: {messages: Array<MomentType>, offset: number},
   },
   currentChannel: string,
   offset: number,
@@ -100,8 +101,8 @@ const updateOffset = (offset: number, id:string): UpdateOffset => (
 
 const defaultState = {
   channels: {
-    default: [],
-    host: [],
+    default: {messages: [], offset: 0},
+    host: {messages: [], offset: 0},
   },
   currentChannel: 'default',
   offset: 0,
@@ -128,10 +129,13 @@ const reducer = (
   case UPDATE_OFFSET: {
     const stateCopy = { ...state };
     stateCopy.offset += action.offset;
-    stateCopy.channels[state.currentChannel].find(elem => elem.id === action.id).neverRendered = false;
+    stateCopy.channels[state.currentChannel].messages.find(elem => elem.id === action.id).neverRendered = false;
     return {
       ...state,
-      offset: state.offset + action.offset,
+      channels: {
+        ...state.channels,
+        [state.currentChannel]: {offset: state.offset + action.offset},
+      },
     };
   }
   case ADD_TO_CURRENT_CHANNEL:
@@ -139,10 +143,12 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: [
-          ...state.channels[state.currentChannel],
-          createMessage(action.id, state.chatInput),
-        ],
+        [state.currentChannel]: {
+          ...state.channels[state.currentChannel].messages,
+          messages: [
+            createMessage(action.id, state.chatInput),
+          ],
+        },
       },
     };
   case ADD_TO_CHANNEL:
@@ -150,10 +156,12 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: [
-          ...state.channels[action.channel],
-          createMessage(action.id, state.chatInput),
-        ],
+        [action.channel]: {
+          ...state.channels[action.channel].messages,
+          messages: [
+            createMessage(action.id, state.chatInput),
+          ],
+        },
       },
     };
   case ADD_CHANNEL:
@@ -191,7 +199,7 @@ const reducer = (
 // Selectors
 
 const feedContents = (state: FeedType): Array<MessageType> => (
-  state.channels[state.currentChannel]
+  state.channels[state.currentChannel].messages
 );
 
 // Exports

@@ -18,8 +18,8 @@ describe('Feed tests', () => {
     const result = reducer();
     expect(result).toEqual({
       channels: {
-        default: [],
-        host: [],
+        default: {messages: [], offset: 0},
+        host: {messages: [], offset: 0},
       },
       currentChannel: 'default',
       offset: 0,
@@ -31,8 +31,8 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
-          host: [],
+          default: {messages: [], offset: 0},
+          host: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -42,8 +42,8 @@ describe('Feed tests', () => {
     );
     expect(result).toEqual({
       channels: {
-        default: [],
-        host: [],
+        default: {messages: [], offset: 0},
+        host: {messages: [], offset: 0},
       },
       currentChannel: 'host',
       offset: 0,
@@ -55,7 +55,7 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -65,7 +65,7 @@ describe('Feed tests', () => {
     );
     expect(result).toEqual({
       channels: {
-        default: [],
+        default: {messages: [], offset: 0},
       },
       currentChannel: 'default',
       offset: 0,
@@ -77,7 +77,7 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -85,7 +85,7 @@ describe('Feed tests', () => {
       },
       addToCurrentChannel(),
     );
-    expect(result.channels.default.length).toEqual(1);
+    expect(result.channels.default.messages.length).toEqual(1);
     expect(result.channels.default[0].message).toEqual('this is a message');
     expect(result.channels.default[0].id.length).toEqual(36);
   });
@@ -94,8 +94,8 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
-          host: [],
+          default: {messages: [], offset: 0},
+          host: {messages: [], offset: 0},
         },
         currentChannel: 'host',
         offset: 0,
@@ -113,8 +113,8 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
-          host: [],
+          default: {messages: [], offset: 0},
+          host: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -132,7 +132,7 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -143,8 +143,8 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: [],
-          host: [],
+          default: {messages: [], offset: 0},
+          host: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -157,13 +157,16 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
-          host: [
-            {
-              id: '12345',
-              message: 'I like socks',
-            },
-          ],
+          default: {messages: [], offset: 0},
+          host: {
+            messages: [
+              {
+                id: '12345',
+                message: 'I like socks',
+              },
+            ],
+            offset:0
+          },
         },
         currentChannel: 'default',
         offset: 0,
@@ -175,12 +178,15 @@ describe('Feed tests', () => {
       {
         channels: {
           default: [],
-          host: [
-            {
-              id: '12345',
-              message: 'I like socks',
-            },
-          ],
+          host: {
+            messages: [
+              {
+                id: '12345',
+                message: 'I like socks',
+              },
+            ],
+            offset: 0,
+          },
         },
         currentChannel: 'default',
         offset: 0,
@@ -193,8 +199,8 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
-          host: [],
+          default: {messages: [], offset: 0},
+          host: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -205,7 +211,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -218,7 +224,7 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -229,7 +235,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -242,8 +248,8 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
-          host: [],
+          default: {messages: [], offset: 0},
+          host: {messages: [], offset: 0},
         },
         currentChannel: 'host',
         offset: 0,
@@ -254,7 +260,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -267,12 +273,15 @@ describe('Feed tests', () => {
     const result = feedContents(
       {
         channels: {
-          default: [
-            {
-              id: '12345',
-              message: 'I like socks',
-            },
-          ],
+          default: {
+            messages: [
+              {
+                id: '12345',
+                message: 'I like socks',
+              },
+            ],
+            offset: 0
+          },
         },
         currentChannel: 'default',
         offset: 0,
@@ -280,12 +289,14 @@ describe('Feed tests', () => {
       }
     );
     expect(result).toEqual(
-      [
-        {
-          id: '12345',
-          message: 'I like socks',
-        },
-      ]
+      {
+        messages:[
+          {
+            id: '12345',
+            message: 'I like socks',
+          },
+        ]
+      }
     );
   });
 
@@ -293,13 +304,16 @@ describe('Feed tests', () => {
     const result = feedContents(
       {
         channels: {
-          default: [],
-          host: [
-            {
-              id: '12345',
-              message: 'I like socks',
-            },
-          ],
+          default: {messages: [], offset: 0},
+          host: {
+            messages: [
+              {
+                id: '12345',
+                message: 'I like socks',
+              },
+            ],
+            offset: 0,
+          },
         },
         currentChannel: 'host',
         offset: 0,
@@ -307,12 +321,14 @@ describe('Feed tests', () => {
       }
     );
     expect(result).toEqual(
-      [
-        {
-          id: '12345',
-          message: 'I like socks',
-        },
-      ]
+      {
+        messages: [
+          {
+            id: '12345',
+            message: 'I like socks',
+          },
+        ]
+      }
     );
   });
 
@@ -320,7 +336,7 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -331,7 +347,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: 0,
@@ -344,7 +360,7 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: -50,
@@ -355,7 +371,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: [],
+          default: {messages: [], offset: 0},
         },
         currentChannel: 'default',
         offset: -100,
