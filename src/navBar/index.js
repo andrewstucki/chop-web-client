@@ -3,18 +3,18 @@ import NavBar from './navBar';
 import { connect } from 'react-redux';
 
 import { changeChannel } from '../feed/dux';
+import { getChannels } from '../navBar/dux';
 
 const mapStateToProps = state => {
   const navBarState = state.navBar;
   return {
-    channels: navBarState.channels,
-    currentChannel: navBarState.currentChannel,
+    channels: getChannels(navBarState),
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    onClick: event => dispatch(changeChannel(event.target.value)),
+    onClick: event => dispatch(changeChannel(event.target.getAttribute('value'))),
   }
 );
 

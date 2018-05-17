@@ -88,10 +88,11 @@ const removeChannel = (channel: string): RemoveChannelType => (
   }
 );
 
-const updateOffset = (offset: number): UpdateOffset => (
+const updateOffset = (offset: number, id:string): UpdateOffset => (
   {
     type: UPDATE_OFFSET,
     offset,
+    id,
   }
 );
 
@@ -124,11 +125,15 @@ const reducer = (
       ...state,
       currentChannel: action.channel,
     };
-  case UPDATE_OFFSET:
+  case UPDATE_OFFSET: {
+    const stateCopy = { ...state };
+    stateCopy.offset += action.offset;
+    stateCopy.channels[state.currentChannel].find(elem => elem.id === action.id).neverRendered = false;
     return {
       ...state,
       offset: state.offset + action.offset,
     };
+  }
   case ADD_TO_CURRENT_CHANNEL:
     return {
       ...state,

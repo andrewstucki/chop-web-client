@@ -16,7 +16,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    onMessageRender: offset => dispatch(updateOffset(offset)),
+    onMessageRender: (offset, id) => dispatch(updateOffset(offset, id)),
   }
 );
 
