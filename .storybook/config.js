@@ -7,6 +7,7 @@ function loadStories() {
   require('../stories/feed.jsx');
   require('../stories/message.jsx');
   require('../stories/navBar.jsx');
+  require('../stories/videoFeed.jsx');
 }
 
 configure(loadStories, module);

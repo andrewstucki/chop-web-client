@@ -7,15 +7,15 @@ storiesOf('NavBar', module)
   .add('default', () => (
     <NavBar
       channels={[
-        {channel: 'DEFAULT', isCurrent: true},
-        {channel: 'HOST', isCurrent: false},
+        {channel: 'default', isCurrent: true},
+        {channel: 'host', isCurrent: false},
       ]}
       onClick={action('clicked')}
     />
   )).add('host', () => (
     <NavBar
       channels={[
-        {channel: 'DEFAULT', isCurrent: false},
+        {channel: 'default', isCurrent: false},
         {channel: 'HOST', isCurrent: true},
       ]}
       onClick={action('clicked')}
