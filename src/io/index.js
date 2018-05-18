@@ -1,14 +1,5 @@
-import graphql from 'graphql.js';
+// @flow
 
-const graph = graphql('/graphql');
+const IO = {};
 
-const getStuff = graph(
-  `query {
-      hero {
-        name
-      }
-    }`);
-
-const sendMessage = message => message;
-      
-export { getStuff, sendMessage };
+export default IO;
