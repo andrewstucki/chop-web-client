@@ -8,17 +8,16 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "build": "webpack --config config/webpack.prod.js",
+    "start": "webpack-dev-server --open --config config/webpack.dev.js",
     "server": "http-server ./dist --gzip",
-    "test": "jest",
     "test:unit": "jest test/unit/",
     "test:func": "jest test/functional/",
-    "test:code": "jest test/functional/ && jest test/unit/",
-    "test:snap": "jest test/snapshots",
+    "test": "jest test/functional/ && jest test/unit/",
+    "snap": "jest test/snapshots",
     "flow": "flow",
-    "storybook": "start-storybook -p 9001 -c .storybook",
-    "lint": "eslint --ext .jsx,.js src/ test/functional/ test/unit/",
+    "storybook": "start-storybook -p 9001 -c config/.storybook",
+    "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/functional/ test/unit/",
     "validate": "yarn test && yarn flow && yarn lint"
   },
   "jest": {
@@ -69,6 +68,7 @@
     "webpack-merge": "^4.1.2"
   },
   "dependencies": {
+    "chat-engine": "^0.9.5",
     "http-server": "^0.11.1",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",

@@ -114,12 +114,16 @@ describe('Feed tests', () => {
         currentChannel: 'default',
         chatInput: 'this is a string',
       },
-      addToChannel('host')
+      addToChannel('host', {
+        id: '12345',
+        message: 'Hello there',
+        neverRendered: true,
+      })
     );
     expect(result.channels.default.messages.length).toEqual(0);
     expect(result.channels.host.messages.length).toEqual(1);
-    expect(result.channels.host.messages[0].message).toEqual('this is a string');
-    expect(result.channels.host.messages[0].id.length).toEqual(36);
+    expect(result.channels.host.messages[0].message).toEqual('Hello there');
+    expect(result.channels.host.messages[0].id.length).toEqual(5);
   });
 
   test('add a channel', () => {
