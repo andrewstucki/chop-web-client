@@ -3,7 +3,7 @@
 import React from 'react';
 import Button from '../components/button';
 import TextField from '../components/text-field';
-import chatStyle from './style.css';
+import chatStyle from './styles.css';
 
 type ChatProps = {
   buttonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -14,7 +14,7 @@ type ChatProps = {
   textEntered: boolean,
   focused: boolean,
   enterDetect: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
-}
+};
 
 const Chat =
 (

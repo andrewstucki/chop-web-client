@@ -15,38 +15,41 @@ type MomentType =
 
 type FeedType = {
   channels: {
-    [string]: Array<MomentType>
+    [string]: {
+      messages: Array<MessageType>,
+      offset: number,
+    }
   },
   currentChannel: string,
-  offset: number,
   chatInput: string,
-}
+};
 
 type ChangeChannelType = {
   type: 'CHANGE_CHANNEL',
   channel: string
-}
+};
 
 type AddToChannelType = {
   type: 'ADD_TO_CHANNEL',
   id: string,
   channel: string,
-}
+};
 
 type AddChannelType = {
   type: 'ADD_CHANNEL',
   channel: string,
-}
+};
 
 type RemoveChannelType = {
   type: 'REMOVE_CHANNEL',
   channel: string,
-}
+};
 
 type UpdateOffset = {
   type: 'UPDATE_OFFSET',
   offset: number,
-}
+  id: string,
+};
 
 type FeedActionTypes =
   | ChangeChannelType
@@ -88,10 +91,11 @@ const removeChannel = (channel: string): RemoveChannelType => (
   }
 );
 
-const updateOffset = (offset: number): UpdateOffset => (
+const updateOffset = (offset: number, id:string): UpdateOffset => (
   {
     type: UPDATE_OFFSET,
     offset,
+    id,
   }
 );
 
@@ -99,10 +103,10 @@ const updateOffset = (offset: number): UpdateOffset => (
 
 const defaultState = {
   channels: {
-    default: [],
+    default: {messages: [], offset: 0},
+    host: {messages: [], offset: 0},
   },
   currentChannel: 'default',
-  offset: 0,
   chatInput: '',
 };
 
@@ -123,20 +127,31 @@ const reducer = (
       ...state,
       currentChannel: action.channel,
     };
-  case UPDATE_OFFSET:
-    return {
-      ...state,
-      offset: state.offset + action.offset,
-    };
+  case UPDATE_OFFSET: {
+    const { id } = action;
+    const stateCopy = { ...state };
+    const message = stateCopy.channels[state.currentChannel].messages
+      .find(elem => elem.id === id);
+    if (message) {
+      message.neverRendered = false;
+    }
+    stateCopy.channels[state.currentChannel].offset = 
+      stateCopy.channels[state.currentChannel].offset +
+      action.offset;
+    return stateCopy;
+  }
   case ADD_TO_CURRENT_CHANNEL:
     return {
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: [
+        [state.currentChannel]: {
           ...state.channels[state.currentChannel],
-          createMessage(action.id, state.chatInput),
-        ],
+          messages: [
+            ...state.channels[state.currentChannel].messages,
+            createMessage(action.id, state.chatInput),
+          ],
+        },
       },
     };
   case ADD_TO_CHANNEL:
@@ -144,10 +159,13 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: [
+        [action.channel]: {
           ...state.channels[action.channel],
-          createMessage(action.id, state.chatInput),
-        ],
+          messages: [
+            ...state.channels[action.channel].messages,
+            createMessage(action.id, state.chatInput),
+          ],
+        },
       },
     };
   case ADD_CHANNEL:
@@ -158,7 +176,7 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: [],
+        [action.channel]: {messages: [], offset: 0},
       },
     };
   case REMOVE_CHANNEL: {
@@ -185,7 +203,11 @@ const reducer = (
 // Selectors
 
 const feedContents = (state: FeedType): Array<MessageType> => (
-  state.channels[state.currentChannel]
+  state.channels[state.currentChannel].messages
+);
+
+const getOffset = (state: FeedType): number => (
+  state.channels[state.currentChannel].offset
 );
 
 // Exports
@@ -204,9 +226,11 @@ export {
   removeChannel,
   feedContents,
   updateOffset,
+  getOffset,
 };
 export type {
   MomentType,
+  ChangeChannelType,
 };
 
 export default reducer;

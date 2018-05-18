@@ -3,6 +3,7 @@ import Feed from './feed';
 import { connect } from 'react-redux';
 import {
   feedContents,
+  getOffset,
   updateOffset,
 } from './dux';
 
@@ -10,13 +11,13 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     moments: feedContents(feedState),
-    offset: feedState.offset,
+    offset: getOffset(feedState),
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    onMessageRender: offset => dispatch(updateOffset(offset)),
+    onMessageRender: (offset, id) => dispatch(updateOffset(offset, id)),
   }
 );
 
