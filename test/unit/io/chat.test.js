@@ -1,9 +1,231 @@
 // @flow
 //import getReducer from '../../../src/io/chat/dux';
 import Chat from '../../../src/io/chat/chat';
+import getReducer, { setChatKeys, setUser, addChat } from '../../../src/io/chat/dux';
+import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
+import { changeChannel } from '../../../src/feed/dux';
 
 describe('Chat IO reducer test', () => {
-  test('initializes with a chatEngine', () => {
+  let chat;
+  let reducer;
+
+  beforeEach(() => {
+    chat = {
+      setKeys: jest.fn(),
+      setUser: jest.fn(),
+      addChat: jest.fn(),
+      publish: jest.fn(),
+    };
+
+    const mock = (mockObject: any): Chat => mockObject;
+
+    reducer = getReducer(mock(chat));
+  });
+
+  test('set chat keys', () => {
+    const result = reducer(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {},
+        chatInput: '',
+        currentChannel: 'default',
+      },
+      setChatKeys('12345', '67890')
+    );
+    expect(result).toEqual(
+      {
+        publishKey: '12345',
+        subscribeKey: '67890',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {},
+        chatInput: '',
+        currentChannel: 'default',
+      }
+    );
+    expect(chat.setKeys.mock.calls.length).toBe(1);
+    expect(chat.setKeys.mock.calls[0][0]).toEqual('12345');
+    expect(chat.setKeys.mock.calls[0][1]).toEqual('67890');
+  });
+
+  test('set user', () => {
+    const result = reducer(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {},
+        chatInput: '',
+        currentChannel: 'default',
+      },
+      setUser('12345', 'Billy Bob')
+    );
+    expect(result).toEqual(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        },
+        chats: {},
+        chatInput: '',
+        currentChannel: 'default',
+      }
+    );
+    expect(chat.setUser.mock.calls.length).toBe(1);
+    expect(chat.setUser.mock.calls[0][0]).toEqual('12345');
+    expect(chat.setUser.mock.calls[0][1]).toEqual('Billy Bob');
+  });
+
+  test('add chat', () => {
+    const result = reducer(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {},
+        chatInput: '',
+        currentChannel: 'default',
+      },
+      addChat('default', '12345')
+    );
+    expect(result).toEqual(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {
+          default: '12345',
+        },
+        chatInput: '',
+        currentChannel: 'default',
+      }
+    );
+    expect(chat.addChat.mock.calls.length).toBe(1);
+    expect(chat.addChat.mock.calls[0][0]).toEqual('default');
+    expect(chat.addChat.mock.calls[0][1]).toEqual('12345');
+  });
+
+  test('chat input', () => {
+    const result = reducer(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {},
+        chatInput: '',
+        currentChannel: 'default',
+      },
+      chatInput('Hello buddy'),
+    );
+    expect(result).toEqual(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {},
+        chatInput: 'Hello buddy',
+        currentChannel: 'default',
+      }
+    );
+  });
+
+  test('change current channel', () => {
+    const result = reducer(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {
+          default: '12345',
+          host: '67890',
+        },
+        chatInput: 'Hello buddy',
+        currentChannel: 'default',
+      },
+      changeChannel('host'),
+    );
+    expect(result).toEqual(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {
+          default: '12345',
+          host: '67890',
+        },
+        chatInput: 'Hello buddy',
+        currentChannel: 'host',
+      }
+    );
+  });
+
+  test('add to current channel', () => {
+    const result = reducer(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {
+          default: '12345',
+          host: '67890',
+        },
+        chatInput: 'Hello buddy',
+        currentChannel: 'default',
+      },
+      addToCurrentChannel(),
+    );
+    expect(result).toEqual(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {
+          default: '12345',
+          host: '67890',
+        },
+        chatInput: '',
+        currentChannel: 'default',
+      }
+    );
+    expect(chat.publish.mock.calls.length).toBe(1);
+    expect(chat.publish.mock.calls[0][0]).toEqual('default');
+    expect(chat.publish.mock.calls[0][1].message).toEqual('Hello buddy');
   });
 });
 
@@ -15,29 +237,29 @@ describe('Chat IO Interface test', () => {
   let ch;
 
   beforeEach(() => {
-    
     ch = {
       emit: jest.fn(),
       on: jest.fn(),
-    }
+    };
     me = {
     };
     ce = {
       connect: jest.fn().mockReturnValue(me),
       Chat: jest.fn().mockReturnValue(ch),
-    }
+      on: jest.fn(),
+    };
     engine = {
       create: jest.fn().mockReturnValue(ce),
     };
   });
 
   test('initializes with a chatEngine', () => {
-    const chat = new Chat(engine, function () {});
+    const chat = new Chat(engine, () => {});
     expect(chat.chatEngineCore).toBe(engine);
   });
 
   test('set keys', () => {
-    const chat = new Chat(engine, function () {});
+    const chat = new Chat(engine, () => {});
     chat.setKeys('12345', '67890');
     expect(engine.create.mock.calls.length).toBe(1);
     expect(engine.create.mock.calls[0][0]).toEqual(
@@ -49,28 +271,26 @@ describe('Chat IO Interface test', () => {
   });
 
   test('set user does not work unless keys are set', () => {
-    const chat = new Chat(engine, function () {});
+    const chat = new Chat(engine, () => {});
     chat.setUser('12345', 'Billy Bob');
     expect(ce.connect.mock.calls.length).toBe(0);
   });
 
   test('set user', () => {
-    const chat = new Chat(engine, function () {});
+    const chat = new Chat(engine, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('12345', 'Billy Bob');
     expect(ce.connect.mock.calls.length).toBe(1);
-    expect(chat.me).toBe(me);
   });
 
-  test('add chat does not work unless keys and user', () => {
-    const chat = new Chat(engine, function () {});
-    chat.setKeys('12345', '67890');
+  test('add chat does not work unless keys', () => {
+    const chat = new Chat(engine, () => {});
     chat.addChat('default', '12345');
     expect(ce.Chat.mock.calls.length).toBe(0);
   });
 
   test('add chat', () => {
-    const chat = new Chat(engine, function () {});
+    const chat = new Chat(engine, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('12345', 'Billy Bob');
     chat.addChat('default', '12345');
@@ -79,38 +299,38 @@ describe('Chat IO Interface test', () => {
   });
 
   test('publish dose not work without chat, engine or user', () => {
-    const chat = new Chat(engine, function () {});
+    const chat = new Chat(engine, () => {});
 
     chat.publish('default', {
       id: '12345',
       message: 'Hello, world!',
-    })
+    });
     expect(ch.emit.mock.calls.length).toBe(0);
 
     chat.setKeys('12345', '67890');
     chat.publish('default', {
       id: '12345',
       message: 'Hello, world!',
-    })
+    });
     expect(ch.emit.mock.calls.length).toBe(0);
 
     chat.setUser('12345', 'Billy Bob');
     chat.publish('default', {
       id: '12345',
       message: 'Hello, world!',
-    })
+    });
     expect(ch.emit.mock.calls.length).toBe(0);
   });
 
   test('publish', () => {
-    const chat = new Chat(engine, function () {});
+    const chat = new Chat(engine, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('12345', 'Billy Bob');
     chat.addChat('default', '12345');
     chat.publish('default', {
       id: '12345',
       message: 'Hello, world!',
-    })
+    });
     expect(ch.emit.mock.calls.length).toBe(1);
     expect(ch.emit.mock.calls[0][0]).toEqual('message');
     expect(ch.emit.mock.calls[0][1]).toEqual(
@@ -125,20 +345,25 @@ describe('Chat IO Interface test', () => {
     const addToChannel = jest.fn();
     const chat = new Chat(engine, addToChannel);
     chat.setKeys('12345', '67890');
-    chat.setUser('12345', 'Billy Bob');
+    chat.setUser('bb', 'Billy Bob');
 
-    let cb = (event, payload) => {};
+    
+    let cb = payload => {}; /* eslint-disable-line no-unused-vars */
     ch.on = (event, callback) => {
       cb = callback;
     };
 
-    chat.addChat('default', '12345');
+    chat.addChat('default', '67890');
     
     cb(
-      'message',
       {
-        id: '12345',
-        message: 'Hello, world!',
+        sender: {
+          uuid: 'jj',
+        },
+        data: {
+          id: '77777',
+          message: 'Hello, world!',
+        },
       }
     );
 
@@ -146,7 +371,7 @@ describe('Chat IO Interface test', () => {
     expect(addToChannel.mock.calls[0][0]).toEqual('default');
     expect(addToChannel.mock.calls[0][1]).toEqual(
       {
-        id: '12345',
+        id: '77777',
         message: 'Hello, world!',
       }
     );

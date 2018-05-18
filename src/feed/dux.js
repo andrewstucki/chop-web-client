@@ -1,6 +1,6 @@
 // @flow
 import type { MessageType, AddToCurrentChannelAction, ChatInputAction} from '../chat/dux';
-import { ADD_TO_CURRENT_CHANNEL, CHAT_INPUT, createUid, createMessage} from '../chat/dux';
+import { ADD_TO_CURRENT_CHANNEL, CHAT_INPUT, createMessage} from '../chat/dux';
 
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
@@ -29,8 +29,8 @@ type ChangeChannelType = {
 
 type AddToChannelType = {
   type: 'ADD_TO_CHANNEL',
-  id: string,
   channel: string,
+  message: MessageType,
 }
 
 type AddChannelType = {
@@ -66,11 +66,11 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const addToChannel = (channel: string): AddToChannelType => (
+const addToChannel = (channel: string, message: MessageType): AddToChannelType => (
   {
     type: ADD_TO_CHANNEL,
     channel,
-    id: createUid(),
+    message,
   }
 );
 
@@ -146,7 +146,7 @@ const reducer = (
         ...state.channels,
         [action.channel]: [
           ...state.channels[action.channel],
-          createMessage(action.id, state.chatInput),
+          createMessage(action.message.id, action.message.message),
         ],
       },
     };
@@ -207,6 +207,8 @@ export {
 };
 export type {
   MomentType,
+  AddToChannelType,
+  ChangeChannelType,
 };
 
 export default reducer;

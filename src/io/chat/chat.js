@@ -10,7 +10,6 @@ type ChatType = {
   on: (
     event: string,
     cb: (
-      event: string,
       payload: Object,
     ) => void
   ) => void,
@@ -25,7 +24,8 @@ type ChatEngine = {
     uuid: string,
     state: Object,
   ) => Me,
-  Chat: (channel: string) => ChatType
+  Chat: (channel: string) => ChatType,
+  on: (event: string, (data: Object) => void) => void
 }
 
 type ChatEngineCore = {
@@ -46,6 +46,7 @@ class Chat {
     channelId: string,
     message: MessageType
   ) => void
+  userId: string
 
   constructor (
     engine: ChatEngineCore,
@@ -70,22 +71,28 @@ class Chat {
 
   setUser (id: string, nickname: string): void {
     if (!this.chatEngine) return;
-    this.me = this.chatEngine.connect(id, {
+    this.userId = id;
+    this.chatEngine.on ('$.ready', data => {
+      this.me = data.me;
+    });
+    this.chatEngine.connect(id, {
       nickname,
     });
   }
 
-  receive (channelId: string, event: string, payload: Object): void {
-    this.addToChannel(channelId, payload);
+  receive (channelId: string, message: MessageType): void {
+    this.addToChannel(channelId, message);
   }
 
   addChat (channelId: string, channelToken: string): void {
-    if (!this.chatEngine || !this.me) return;
+    if (!this.chatEngine /*|| !this.me*/) return;
     const chat = this.chatEngine.Chat(channelToken);
     chat.on(
       'message',
-      (event, payload) => {
-        this.receive(channelId, event, payload);
+      payload => {
+        if (payload.sender.uuid !== this.userId) {
+          this.receive(channelId, payload.data);
+        }
       }
     );
     this.chats[channelId] = chat;
@@ -93,10 +100,10 @@ class Chat {
 
   publish (channel: string, message: MessageType): void {
     if (!this.chatEngine ||
-      !this.me ||
+      // !this.me ||
       !this.chats[channel]) {
-        return;
-      }
+      return;
+    }
     this.chats[channel].emit('message', message);
   }
 }
