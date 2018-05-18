@@ -5,7 +5,7 @@ import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 // Type Definitions
 
 type VideoFeedType = {
-  chatIsFocused: boolean,
+  isVideoHidden: boolean,
 };
 
 type VideoFeedActionTypes =
@@ -14,7 +14,7 @@ type VideoFeedActionTypes =
 // Default State
 
 const defaultState = {
-  chatIsFocused: false,
+  isVideoHidden: false,
 };
 
 // Reducer
@@ -28,7 +28,7 @@ const reducer = (
   switch (action.type) {
   case TOGGLE_CHAT_FOCUS:
     return {
-      chatIsFocused: action.focus,
+      isVideoHidden: action.focus,
     };
   default:
     return state;
@@ -38,7 +38,7 @@ const reducer = (
 // Selectors
 
 const getChatFocus = (state: VideoFeedType): boolean => (
-  state.chatIsFocused
+  state.isVideoHidden
 );
 
 // Exports

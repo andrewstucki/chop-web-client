@@ -9,14 +9,14 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('VideoFeed tests', () => {
   test('VideoFeed shows video', () => {
     const wrapper = Enzyme.shallow(
-      <VideoFeed isChatFocused={false} />
+      <VideoFeed isVideoHidden={false} />
     );
     expect(wrapper.find('.showVideo').type()).toEqual('div');
   });
 
   test('VideoFeed hides video', () => {
     const wrapper = Enzyme.shallow(
-      <VideoFeed isChatFocused={true} />
+      <VideoFeed isVideoHidden={true} />
     );
     expect(wrapper.find('.hideVideo').type()).toEqual('div');
   });

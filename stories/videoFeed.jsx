@@ -4,7 +4,7 @@ import VideoFeed from '../src/videoFeed/videoFeed';
 
 storiesOf('VideoFeed', module)
   .add('VideoFeed chat not focused', () => (
-    <VideoFeed isChatFocused={false} />
+    <VideoFeed isVideoHidden={false} />
   )).add('VideoFeed chat focused', () => (
-    <VideoFeed isChatFocused={true} />
+    <VideoFeed isVideoHidden={true} />
   ));

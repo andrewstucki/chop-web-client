@@ -7,7 +7,7 @@ import { getChatFocus } from './dux';
 const mapStateToProps = state => {
   const videoFeedState = state.videoFeed;
   return {
-    isChatFocused: getChatFocus(videoFeedState),
+    isVideoHidden: getChatFocus(videoFeedState),
   };
 };
 

@@ -3,11 +3,11 @@ import React from 'react';
 import videoFeedStyles from './styles.css';
 
 type VideoFeedProps = {
-  isChatFocused: boolean,
+  isVideoHidden: boolean,
 };
 
-const VideoFeed = ({isChatFocused}: VideoFeedProps) => {
-  const style = isChatFocused ? videoFeedStyles.hideVideo : videoFeedStyles.showVideo;
+const VideoFeed = ({isVideoHidden}: VideoFeedProps) => {
+  const style = isVideoHidden ? videoFeedStyles.hideVideo : videoFeedStyles.showVideo;
   return (
     <div className={style}></div>
   );
