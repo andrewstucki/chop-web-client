@@ -8,14 +8,14 @@ type FeedProps = {
   moments?: Array<MomentType>,
   offset: number,
   onMessageRender: (offset: number) => void,
-}
+};
 
 const Feed = ({moments, offset, onMessageRender}:FeedProps) => {
   let listItems = [];
   if (moments) {
     listItems = moments.map(moment => 
       <li key={moment.id}>
-        <Message id={moment.id} message={moment.message} onMount={onMessageRender} />
+        <Message id={moment.id} message={moment.message} onMount={onMessageRender} neverRendered={moment.neverRendered} />
       </li>
     );
   }
