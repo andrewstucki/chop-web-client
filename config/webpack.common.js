@@ -21,7 +21,14 @@ module.exports = {
               importLoaders: 1 
             }
           },
-          'postcss-loader'
+          {
+            loader: 'postcss-loader',
+            options: {
+              config: {
+                path: 'config/postcss.config.js'
+              }
+            }
+          }
         ]
       },
       {
@@ -40,6 +47,6 @@ module.exports = {
   ],
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, '../dist')
   }
 };
