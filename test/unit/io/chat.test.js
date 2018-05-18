@@ -342,6 +342,7 @@ describe('Chat IO Interface test', () => {
       {
         id: '12345',
         message: 'Hello, world!',
+        neverRendered: true,
       }
     );
   });

@@ -16,4 +16,10 @@
   channelId: 'default',
   channelToken: 'public',
 }
+
+{
+  type: 'ADD_CHAT',
+  channelId: 'host',
+  channelToken: 'host',
+}
 ```
