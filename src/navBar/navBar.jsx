@@ -9,7 +9,7 @@ type NavBarProps = {
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const NavBar = ({channels, onClick}:NavBarProps) => (
+const NavBar = ({channels, onClick}: NavBarProps) => (
   <div className={navBarStyles.navBar}>
     {
       channels.map(channel => {

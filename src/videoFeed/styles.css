@@ -1,0 +1,20 @@
+@import url('../../assets/theme.css');
+
+:root {
+  --wrapper: {
+    width: 100%;
+    height: 208px;
+    background-color: pink;
+    transition: transform .5s;
+  }
+}
+
+.showVideo {
+  @apply --wrapper;
+  transform: translateY(0);
+}
+
+.hideVideo {
+  @apply --wrapper;
+  transform: translateY(-208px);
+}
