@@ -53,7 +53,7 @@ describe('NavBar tests', () => {
       {
         channel: 'host',
         isCurrent: false,
-      }
+      },
     ]);
   });
 });

@@ -28,7 +28,8 @@ type ChatActions =
 
 type MessageType = {
   id: string,
-  message: string
+  message: string,
+  neverRendered: boolean,
 };
 
 type ChatState = {
@@ -75,6 +76,7 @@ const createMessage = (id: string, message: string): MessageType => (
   {
     id,
     message,
+    neverRendered: true,
   }
 );
 

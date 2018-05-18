@@ -15,7 +15,7 @@ describe('Feed tests', () => {
     expect(wrapper.find('ul').children().length).toBe(0);
   });
   test('has a single message', () => {
-    const moments = [{ id: 'string', message: 'This is a message' }];
+    const moments = [{ id: 'string', message: 'This is a message', neverRendered: true }];
     const wrapper = Enzyme.mount(
       <Feed offset={0} moments={moments} onMessageRender={function () {}} />
     );
