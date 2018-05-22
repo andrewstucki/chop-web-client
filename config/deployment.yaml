@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: cwc
@@ -11,6 +11,6 @@ spec:
     spec:
       containers:
       - name: chop-web-client
-        image: gcr.io/open-network-194320/chop-web-client:0.2.0
+        image: gcr.io/open-network-194320/chop-web-client:0.5.0
         ports:
         - containerPort: 8080
