@@ -1,0 +1,24 @@
+@import url('../../../assets/theme.css');
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  background-color:rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.container {
+  height: 100%;
+  margin-right: 48px;
+  background-color: var(--backgroundColor);
+}
+
+.closeButton {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--textColor);
+  font-size: 48px;
+}
