@@ -9,11 +9,12 @@ Enzyme.configure({ adapter: new Adapter() });
 
 test('Button has correct text', () => {
   const wrapper = Enzyme.shallow(
-  <Button
-    text="Maranatha"
-    onClick={function () {}}
-    type="default"
-  />);
+    <Button
+      text="Maranatha"
+      onClick={function () {}}
+      type="default"
+    />
+  );
   expect(wrapper.text()).toEqual('Maranatha');
 });
 
@@ -31,22 +32,24 @@ test('Button clickable', () => {
 
 test('Button default type', () => {
   const wrapper = Enzyme.shallow(
-  <Button
-    text="Click Me"
-    onClick={function () {}}
-    type="default"
-  />);
+    <Button
+      text="Click Me"
+      onClick={function () {}}
+      type="default"
+    />
+  );
   expect(wrapper.find('button').props().className)
     .toEqual('default');
 });
 
 test('Button icon type', () => {
   const wrapper = Enzyme.shallow(
-  <Button
-    text="Click Me"
-    onClick={function () {}}
-    type="icon"
-  />);
+    <Button
+      text="Click Me"
+      onClick={function () {}}
+      type="icon"
+    />
+  );
   expect(wrapper.find('button').props().className)
     .toEqual('icon');
 });

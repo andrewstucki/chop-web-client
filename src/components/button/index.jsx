@@ -17,10 +17,7 @@ const Button =
     type,
   }: ButtonType
 ) => {
-  let style = styles[type];
-  if (style === "undefined") {
-    style = styles.default;
-  }
+  const style = styles[type];
   return (
     <button
       className={style}

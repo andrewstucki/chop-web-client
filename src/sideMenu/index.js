@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => (
   {
     close: () => dispatch(closeMenu()),
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
   }
 );
 
