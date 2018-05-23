@@ -12,4 +12,3 @@ initStoryshots(
     configPath: 'config/.storybook'
   }
 );
-
