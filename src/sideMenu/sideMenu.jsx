@@ -1,7 +1,8 @@
 // @flow
+/* global SyntheticMouseEvent */
 import React from 'react';
-import SideMenuComponent from '../components/sideMenu'
-import Button from '../components/button'
+import SideMenuComponent from '../components/sideMenu';
+import Button from '../components/button';
 
 type SideMenuType = {
   logout: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -21,6 +22,6 @@ const SideMenu = ({logout, close, isClosed}: SideMenuType) => (
       onClick={logout}
       text="Log out" />
   </SideMenuComponent>
-)
+);
 
 export default SideMenu;
