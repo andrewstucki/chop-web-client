@@ -3,8 +3,13 @@ import initStoryshots, { imageSnapshot } from '@storybook/addon-storyshots';
 initStoryshots(
   {
     suite: 'Image storyshots',
-    test: imageSnapshot(
-    {
-      storybookUrl: 'http://localhost:9001'
-    })});
+    test: imageSnapshot
+    (
+      {
+        storybookUrl: 'http://localhost:9001'
+      }
+    ),
+    configPath: 'config/.storybook'
+  }
+);
 

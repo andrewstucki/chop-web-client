@@ -33,7 +33,11 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        use: 'html-loader'
+        use: 'html-loader',
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader?classPrefix',
       }
     ]
   },
