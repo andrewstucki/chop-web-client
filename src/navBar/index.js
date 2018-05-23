@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { changeChannel } from '../feed/dux';
 import { getChannels } from '../navBar/dux';
+import { openMenu } from '../sideMenu/dux';
 
 const mapStateToProps = state => {
   const navBarState = state.navBar;
@@ -15,6 +16,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => (
   {
     onClick: event => dispatch(changeChannel(event.target.getAttribute('value'))),
+    openMenu: () => dispatch(openMenu()),
   }
 );
 

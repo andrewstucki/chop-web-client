@@ -1,10 +1,3 @@
-<svg viewBox="0 0 100 100" width="77" height="77" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
- <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
- <g>
-  <title>Layer 1</title>
-  <g id="svg_5">
-   <line stroke-linecap="round" id="svg_2" y2="75.79962" x2="77.38139" y1="1.58175" x1="0" stroke-width="5" stroke="#000000" fill="none"/>
-   <line transform="rotate(90, 38.6907, 38.6907)" id="svg_4" stroke-linecap="round" y2="75.79962" x2="77.38139" y1="1.58176" x1="0" stroke-width="5" stroke="#000000" fill="none"/>
-  </g>
- </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+    <path fill="#9F9FA0" fill-rule="evenodd" d="M12.414 11l9.293-9.293A.999.999 0 1 0 20.293.293L11 9.586 1.707.293A.999.999 0 1 0 .293 1.707L9.586 11 .293 20.293a.999.999 0 1 0 1.414 1.414L11 12.414l9.293 9.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L12.414 11z"/>
 </svg>

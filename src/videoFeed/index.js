@@ -12,7 +12,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => (
-  dispatch
+  {
+    dispatch: dispatch
+  }
 );
 
 const VisibleVideoFeed = connect(

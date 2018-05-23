@@ -1,3 +1,7 @@
+.wrapper {
+  height: 100%;
+}
+
 .chop {
   display: flex;
   flex-direction: column;

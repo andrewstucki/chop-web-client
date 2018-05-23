@@ -4,8 +4,9 @@
   --wrapper: {
     height: 100%;
     width: 100%;
-    background-color:rgba(0, 0, 0, 0);
-    position: relative;
+    background-color: rgb(30, 31, 35, 0.75);
+    position: absolute;
+    z-index: 5;
     transition: transform 300ms ease;
   }
 }
@@ -37,8 +38,7 @@
   top: 0px;
   right: 0px;
   border: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: var(--textColor);
+  background-color: transparent;
   height: 48px;
   width: 48px;
 }
