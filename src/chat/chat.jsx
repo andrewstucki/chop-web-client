@@ -43,7 +43,8 @@ const Chat =
       {textEntered &&
         <Button
           onClick={buttonOnClick}
-          text="↑" />
+          text="↑"
+          type="icon" />
       }
     </div>
   );

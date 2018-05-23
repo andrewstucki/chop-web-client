@@ -17,6 +17,7 @@ const SideMenu = ({logout, close, isClosed}: SideMenuType) => (
     close={close}
     isClosed={isClosed}>
     <a
+      className={styles.link}
       href="https://live.life.church/">
       Switch to guest experience
       <span
@@ -26,7 +27,9 @@ const SideMenu = ({logout, close, isClosed}: SideMenuType) => (
     </a>
     <Button
       onClick={logout}
-      text="Log out" />
+      text="Log out"
+      type="default"
+    />
   </SideMenuComponent>
 );
 

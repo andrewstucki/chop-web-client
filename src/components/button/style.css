@@ -8,3 +8,11 @@
   border-radius: var(--borderRadius);
   border: none;
 }
+
+.default {
+  height: 36px;
+  border-radius: 2px;
+  border: solid 1px #d8d8d9;
+  background-color: var(--backgroundColor);
+  color: var(--textColor);
+}

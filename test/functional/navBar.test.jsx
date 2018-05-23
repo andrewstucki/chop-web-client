@@ -16,6 +16,7 @@ describe('NavBar tests', () => {
           {channel: 'Host', isCurrent: false},
         ]}
         onClick={function () {}}
+        openMenu={() => {}}
       />
     );
     expect(wrapper.find('.navBar').type()).toEqual('div');
@@ -29,11 +30,12 @@ describe('NavBar tests', () => {
           {channel: 'Host', isCurrent: false},
         ]}
         onClick={function () {}}
+        openMenu={() => {}}
       />
     );
-    expect(wrapper.find('.navBar>div').length).toBe(2);
-    expect(wrapper.find('.navBar>div').at(0).text()).toBe('Default');
-    expect(wrapper.find('.navBar>div').at(1).text()).toBe('Host');
+    expect(wrapper.find('.navBar>a').length).toBe(3);
+    expect(wrapper.find('.navBar>a').at(1).text()).toBe('Default');
+    expect(wrapper.find('.navBar>a').at(2).text()).toBe('Host');
   });
 
   test('onClick function works', () => {
@@ -45,9 +47,10 @@ describe('NavBar tests', () => {
           {channel: 'Host', isCurrent: false},
         ]}
         onClick={onClick}
+        openMenu={() => {}}
       />
     );
-    wrapper.find('.navBar>div').at(0).simulate('click', {target: {value: 'Default'}});
+    wrapper.find('.navBar>a').at(1).simulate('click', {target: {value: 'Default'}});
     expect(onClick.calledOnce).toEqual(true);
     expect(onClick.getCall(0).args[0].target.value).toEqual('Default');
   });
@@ -60,9 +63,10 @@ describe('NavBar tests', () => {
           {channel: 'Host', isCurrent: false},
         ]}
         onClick={function () {}}
+        openMenu={() => {}}
       />
     );
-    expect(wrapper.find('.navBar>div').at(0).props().className).toBe('selected');
-    expect(wrapper.find('.navBar>div').at(1).props().className).toBe('default');
+    expect(wrapper.find('.navBar>a').at(1).props().className).toBe('selected');
+    expect(wrapper.find('.navBar>a').at(2).props().className).toBe('default');
   });
 });
