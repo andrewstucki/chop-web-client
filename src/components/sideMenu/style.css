@@ -6,17 +6,18 @@
     width: 100%;
     background-color:rgba(0, 0, 0, 0);
     position: relative;
+    transition: transform 300ms ease;
   }
 }
 
 .closed {
   @apply --wrapper;
-
+  transform: translateX(-100%);
 }
 
 .open {
   @apply --wrapper;
-
+  transform: translateX(0px);
 }
 
 .container {

@@ -1,23 +1,30 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import SideMenu from '../src/components/sideMenu';
+import SideMenuComponent from '../src/components/sideMenu';
+import SideMenu from '../src/sideMenu/sideMenu'
 
 storiesOf('SideMenu', module)
-  .add('Basic', () => (
-    <SideMenu close={action('clicked')} isClosed={false}>
+  .add('Basic Component', () => (
+    <SideMenuComponent close={action('clicked')} isClosed={false}>
       Hello
-    </SideMenu>
+    </SideMenuComponent>
   ))
-  .add('Closed', () => (
-    <SideMenu close={action('clicked')} isClosed={true}>
+  .add('Closed Component', () => (
+    <SideMenuComponent close={action('clicked')} isClosed={true}>
       Hello
-    </SideMenu>
+    </SideMenuComponent>
   ))
-  .add('links', () => (
-    <SideMenu close={action('clicked')} isClosed={false}>
+  .add('links Component', () => (
+    <SideMenuComponent close={action('clicked')} isClosed={false}>
       <a href="life.church">Live.Church</a>
       <a href="google.com">Google</a>
       <a href="yahoo.com">yahoo</a>
-    </SideMenu>
+    </SideMenuComponent>
+  ))
+  .add('Control', () => (
+    <SideMenu
+      logout={action('logout')}
+      close={action('close')}
+      isClosed={false} />
   ))
