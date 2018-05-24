@@ -11,15 +11,8 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    dispatch: dispatch,
-  }
-);
-
 const VisibleVideoFeed = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(VideoFeed);
 
 export default VisibleVideoFeed;
