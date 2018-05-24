@@ -38,7 +38,7 @@
   margin: 0 8px;
   height: 2px;
   bottom: 8px;
-  width: 100%;
+  width: calc(100% - 16px);
   background-color: var(--backgroundColor);
 }
 
