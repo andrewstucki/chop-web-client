@@ -24,6 +24,10 @@ module.exports = {
           }
         ],
         include: path.resolve(__dirname, "../../")
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader?classPrefix',
       }
     ]
   }

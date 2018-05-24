@@ -1,0 +1,13 @@
+@import url('../../assets/theme.css');
+
+.link {
+  color: var(--primaryColor);
+  margin-bottom: 24px;
+}
+
+.externalLinkIcon {
+  width: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+}

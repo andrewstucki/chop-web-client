@@ -1,0 +1,44 @@
+@import url('../../../assets/theme.css');
+
+:root {
+  --wrapper: {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(30, 31, 35, 0.75);
+    position: absolute;
+    z-index: 5;
+    transition: transform 300ms ease;
+  }
+}
+
+.closed {
+  @apply --wrapper;
+  transform: translateX(-100%);
+}
+
+.open {
+  @apply --wrapper;
+  transform: translateX(0px);
+}
+
+.container {
+  height: 100%;
+  box-sizing: border-box;
+  margin-right: 48px;
+  padding: 32px 0;
+  background-color: var(--backgroundColor);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border: none;
+  background-color: transparent;
+  height: 48px;
+  width: 48px;
+}

@@ -1,7 +1,7 @@
 @import url('../../assets/theme.css');
 
 :root {
-  --wrapper: {
+  --link: {
     display: flex;
     align-items: center;
     padding-right: 24px;
@@ -20,12 +20,6 @@
   z-index: 1;
 }
 
-.hamburger {
-  display: inline-block;
-  width: 24px;
-  padding: 16px 24px 0 16px;
-}
-
 .line {
   width: 100%;
   padding-bottom: 2px;
@@ -37,11 +31,17 @@
 }
 
 .default {
-  @apply --wrapper;
+  @apply --link;
   opacity: .5;
 }
 
 .selected {
-  @apply --wrapper;
+  @apply --link;
   text-decoration: underline;
+}
+
+.hamburger {
+  @apply --link;
+  width:21px;
+  padding-left: 16px;
 }

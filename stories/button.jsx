@@ -4,6 +4,17 @@ import { action } from '@storybook/addon-actions';
 import Button from '../src/components/button';
 
 storiesOf('Button', module)
-  .add('with text', () => (
-    <Button onClick={action('clicked')} text="↑" />
+  .add('default', () => (
+    <Button
+      onClick={action('clicked')}
+      text="Click Me"
+      type="default"
+    />
+  ))
+  .add('icon', () => (
+    <Button
+      onClick={action('clicked')}
+      text="↑"
+      type="icon"
+    />
   ))
