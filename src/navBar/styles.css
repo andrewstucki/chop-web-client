@@ -4,11 +4,12 @@
   --link: {
     display: flex;
     align-items: center;
-    padding-right: 24px;
+    margin-right: 24px;
     font-size: 16px;
     font-family: ProximaNova-Semibold, sans-serif;
     color: #ffffff;
     text-transform: uppercase;
+    text-decoration: none;
   }
 }
 
@@ -27,11 +28,28 @@
 
 .selected {
   @apply --link;
+  position: relative;
+}
+
+.selected:after {
   text-decoration: underline;
+  content: "";
+  position: absolute;
+  margin: 0 8px;
+  height: 2px;
+  bottom: 8px;
+  width: calc(100% - 16px);
+  background-color: var(--backgroundColor);
 }
 
 .hamburger {
   @apply --link;
   width:21px;
+  /*height: 15px;*/
   padding-left: 16px;
+}
+
+.hamburger svg {
+  width:21px;
+  height: 15px;
 }
