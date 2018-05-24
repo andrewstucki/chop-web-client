@@ -5,7 +5,7 @@ import styles from './style.css';
 import closeX from '../../../assets/closeX.svg';
 
 type SideMenuType = {
-  children: any,
+  children?: Array<React$Element<any>>,
   close: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   isClosed: boolean,
 }
