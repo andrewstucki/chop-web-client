@@ -144,7 +144,7 @@ const reducer = (
         ...state.channels,
         [state.currentChannel]: [
           ...state.channels[state.currentChannel],
-          createMessage(action.id, state.chatInput),
+          createMessage(action.id, state.chatInput, state.currentUser),
         ],
       }
     };
@@ -155,7 +155,7 @@ const reducer = (
         ...state.channels,
         [action.channel]: [
           ...state.channels[action.channel],
-          createMessage(action.message.id, action.message.message),
+          action.message,
         ],
       },
     };
@@ -167,7 +167,7 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: {messages: [], offset: 0},
+        [action.channel]: [],
       },
     };
   case REMOVE_CHANNEL: {
@@ -189,8 +189,8 @@ const reducer = (
   case SET_USER: 
     return {
       ...state,
-      user: {
-        ...state.user,
+      currentUser: {
+        ...state.currentUser,
         id: action.id,
         nickname: action.nickname,
       },

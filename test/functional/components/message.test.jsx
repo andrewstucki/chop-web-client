@@ -14,25 +14,7 @@ describe('Message', () => {
       <Message
         id="1234"
         message="Go west young man!"
-        onMount={messageMount}
-        neverRendered={true}
       />);
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
-    expect(messageMount.calledOnce).toEqual(true);
-    // NOTE: We cannot test the rendering height of the Message
-    // without actule rendering in the browser.
-  });
-
-  test('has correct text', () => {
-    const messageMount = sinon.spy();
-    const wrapper = Enzyme.mount(
-      <Message
-        id="1234"
-        message="Go west young man!"
-        onMount={messageMount}
-        neverRendered={false}
-      />);
-    expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
-    expect(messageMount.calledOnce).toEqual(false);
   });
 });

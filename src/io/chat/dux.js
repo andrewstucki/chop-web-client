@@ -129,7 +129,7 @@ const getReducer = (chatIO: Chat) => (
     case ADD_TO_CURRENT_CHANNEL:
       chatIO.publish(
         state.currentChannel,
-        createMessage(action.id, state.chatInput));
+        createMessage(action.id, state.chatInput, state.user));
       return {
         ...state,
         chatInput: '',

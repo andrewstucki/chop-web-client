@@ -30,7 +30,7 @@ type ChatActions =
 type MessageType = {
   id: string,
   message: string,
-  currentUser: UserType,
+  user: UserType,
 };
 
 type ChatState = {

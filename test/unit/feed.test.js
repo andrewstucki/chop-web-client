@@ -43,12 +43,11 @@ describe('Feed tests', () => {
       },
       addToCurrentChannel(),
     );
-    expect(result.channels.default.messages.length).toEqual(1);
-    expect(result.channels.default.offset).toEqual(0);
-    expect(result.channels.default.messages[0].message).toEqual('this is a message');
-    expect(result.channels.host.messages[0].currentUser.id).toEqual('12345');
-    expect(result.channels.host.messages[0].currentUser.nickname).toEqual('Billy Bob');
-    expect(result.channels.default.messages[0].id.length).toEqual(36);
+    expect(result.channels.default.length).toEqual(1);
+    expect(result.channels.default[0].message).toEqual('this is a message');
+    expect(result.channels.default[0].user.id).toEqual('12345');
+    expect(result.channels.default[0].user.nickname).toEqual('Billy Bob');
+    expect(result.channels.default[0].id.length).toEqual(36);
   });
 
   test('adds a message to current channel not default from current user', () => {
@@ -64,12 +63,12 @@ describe('Feed tests', () => {
       },
       addToCurrentChannel()
     );
-    expect(result.channels.default.messages.length).toEqual(0);
-    expect(result.channels.host.messages.length).toEqual(1);
-    expect(result.channels.host.messages[0].message).toEqual('this is a string');
-    expect(result.channels.host.messages[0].currentUser.id).toEqual('12345');
-    expect(result.channels.host.messages[0].currentUser.nickname).toEqual('Billy Bob');
-    expect(result.channels.host.messages[0].id.length).toEqual(36);
+    expect(result.channels.default.length).toEqual(0);
+    expect(result.channels.host.length).toEqual(1);
+    expect(result.channels.host[0].message).toEqual('this is a string');
+    expect(result.channels.host[0].user.id).toEqual('12345');
+    expect(result.channels.host[0].user.nickname).toEqual('Billy Bob');
+    expect(result.channels.host[0].id.length).toEqual(36);
   });
 
   test('adds a message to not current channel', () => {
@@ -89,21 +88,21 @@ describe('Feed tests', () => {
         }
       })
     );
-    expect(result.channels.default.messages.length).toEqual(0);
-    expect(result.channels.host.messages.length).toEqual(1);
-    expect(result.channels.host.messages[0].message).toEqual('Hello there');
-    expect(result.channels.host.messages[0].id.length).toEqual(5);
+    expect(result.channels.default.length).toEqual(0);
+    expect(result.channels.host.length).toEqual(1);
+    expect(result.channels.host[0].message).toEqual('Hello there');
+    expect(result.channels.host[0].id.length).toEqual(5);
   });
 
   test('add a channel', () => {
     const result = reducer(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -113,12 +112,12 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: {messages: [], offset: 0},
-          host: {messages: [], offset: 0},
+          default: [],
+          host: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -130,25 +129,22 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: {messages: [], offset: 0},
-          host: {
-            messages: [
-              {
+          default: [],
+          host: 
+          [
+            {
+              id: '12345',
+              message: 'I like socks',
+              user: {
                 id: '12345',
-                message: 'I like socks',
-                neverRendered: true,
-                user: {
-                  id: '12345',
-                  nickname: 'Billy Bob',
-                }
-              },
-            ],
-            offset:0,
-          },
+                nickname: 'Billy Bob',
+              }
+            },
+          ],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -158,25 +154,22 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: {messages: [], offset: 0},
-          host: {
-            messages: [
-              {
+          default: [],
+          host:
+          [
+            {
+              id: '12345',
+              message: 'I like socks',
+              user: {
                 id: '12345',
-                message: 'I like socks',
-                neverRendered: true,
-                user: {
-                  id: '12345',
-                  nickname: 'Billy Bob',
-                }
-              },
-            ],
-            offset: 0,
-          },
+                nickname: 'Billy Bob',
+              }
+            },
+          ],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -188,12 +181,12 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: {messages: [], offset: 0},
-          host: {messages: [], offset: 0},
+          default: [],
+          host: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -203,11 +196,11 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -219,11 +212,11 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -233,11 +226,11 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -249,12 +242,12 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: {messages: [], offset: 0},
-          host: {messages: [], offset: 0},
+          default: [],
+          host: [],
         },
         currentChannel: 'host',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -264,11 +257,11 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -280,24 +273,21 @@ describe('Feed tests', () => {
     const result = feedContents(
       {
         channels: {
-          default: {
-            messages: [
-              {
+          default: 
+          [
+            {
+              id: '12345',
+              message: 'I like socks',
+              user: {
                 id: '12345',
-                message: 'I like socks',
-                neverRendered: true,
-                user: {
-                  id: '12345',
-                  nickname: 'Billy Bob',
-                }
-              },
-            ],
-            offset: 0,
-          },
+                nickname: 'Billy Bob',
+              }
+            },
+          ],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -308,7 +298,6 @@ describe('Feed tests', () => {
         {
           id: '12345',
           message: 'I like socks',
-          neverRendered: true,
           user: {
             id: '12345',
             nickname: 'Billy Bob',
@@ -322,25 +311,22 @@ describe('Feed tests', () => {
     const result = feedContents(
       {
         channels: {
-          default: {messages: [], offset: 0},
-          host: {
-            messages: [
-              {
+          default: [],
+          host: 
+          [
+            {
+              id: '12345',
+              message: 'I like socks',
+              user: {
                 id: '12345',
-                message: 'I like socks',
-                neverRendered: true,
-                user: {
-                  id: '12345',
-                  nickname: 'Billy Bob',
-                }
-              },
-            ],
-            offset: 0,
-          },
+                nickname: 'Billy Bob',
+              }
+            },
+          ],
         },
         currentChannel: 'host',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -351,7 +337,6 @@ describe('Feed tests', () => {
         {
           id: '12345',
           message: 'I like socks',
-          neverRendered: true,
           user: {
             id: '12345',
             nickname: 'Billy Bob',
@@ -361,51 +346,15 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Get offset', () => {
-    const result = getOffset(
-      {
-        channels: {
-          default: {messages: [], offset: 5},
-          host: {messages: [], offset: 0},
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        user: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      }
-    );
-    expect(result).toEqual(5);
-  });
-
-  test('Get offset not default channel', () => {
-    const result = getOffset(
-      {
-        channels: {
-          default: {messages: [], offset: 0},
-          host: {messages: [], offset: 5},
-        },
-        currentChannel: 'host',
-        chatInput: '',
-        user: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      }
-    );
-    expect(result).toEqual(5);
-  });
-
   test('Feed listens to message input', () => {
     const result = reducer(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -415,61 +364,11 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: 'Hello',
-        user: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      }
-    );
-  });
-
-  test('Feed update offset', () => {
-    const result = reducer(
-      {
-        channels: {
-          default: {messages: [
-            {
-              id: '12345',
-              message: 'Hello',
-              neverRendered: true,
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
-              }
-            },
-          ], offset: -50},
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        user: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      },
-      updateOffset(-50, '12345'),
-    );
-    expect(result).toEqual(
-      {
-        channels: {
-          default: {messages: [
-            {
-              id: '12345',
-              message: 'Hello',
-              neverRendered: false,
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
-              }
-            },
-          ], offset: -100},
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
@@ -481,11 +380,11 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '',
           nickname: '',
         }
@@ -495,11 +394,11 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         channels: {
-          default: {messages: [], offset: 0},
+          default: [],
         },
         currentChannel: 'default',
         chatInput: '',
-        user: {
+        currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         }
