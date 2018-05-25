@@ -8,6 +8,7 @@ const mapStateToProps = state => {
   const videoFeedState = state.videoFeed;
   return {
     isVideoHidden: getChatFocus(videoFeedState),
+    url: videoFeedState.url,
   };
 };
 

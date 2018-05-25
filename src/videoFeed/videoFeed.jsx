@@ -4,18 +4,19 @@ import styles from './styles.css';
 
 type VideoFeedProps = {
   isVideoHidden: boolean,
+  url: string,
 };
 
-const VideoFeed = ({isVideoHidden}: VideoFeedProps) => {
+const VideoFeed = ({isVideoHidden, url}: VideoFeedProps) => {
   const style = isVideoHidden ? styles.hideVideo : styles.showVideo;
   return (
     <div className={style}>
       <iframe
         className={styles.frame}
-        src="https://www.youtube.com/embed/bz2kN31m_S0?rel=0"
+        src={url}
         width="550"
         height="281"
-        frameborder="0"
+        frameBorder="0"
       ></iframe>
     </div>
   );
