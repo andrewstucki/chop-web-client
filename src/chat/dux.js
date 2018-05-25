@@ -31,7 +31,7 @@ type MessageType = {
   id: string,
   message: string,
   neverRendered: boolean,
-  currentUser: UserType,
+  user: UserType,
 };
 
 type ChatState = {

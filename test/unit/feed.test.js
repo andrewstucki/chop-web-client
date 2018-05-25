@@ -47,8 +47,8 @@ describe('Feed tests', () => {
     expect(result.channels.default.messages.length).toEqual(1);
     expect(result.channels.default.offset).toEqual(0);
     expect(result.channels.default.messages[0].message).toEqual('this is a message');
-    expect(result.channels.host.messages[0].currentUser.id).toEqual('12345');
-    expect(result.channels.host.messages[0].currentUser.nickname).toEqual('Billy Bob');
+    expect(result.channels.host.messages[0].user.id).toEqual('12345');
+    expect(result.channels.host.messages[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.default.messages[0].id.length).toEqual(36);
   });
 

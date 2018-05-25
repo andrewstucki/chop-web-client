@@ -162,7 +162,7 @@ const reducer = (
           ...state.channels[state.currentChannel],
           messages: [
             ...state.channels[state.currentChannel].messages,
-            createMessage(action.id, state.chatInput),
+            createMessage(action.id, state.chatInput, state.currentUser),
           ],
         },
       },
@@ -211,8 +211,8 @@ const reducer = (
   case SET_USER: 
     return {
       ...state,
-      user: {
-        ...state.user,
+      currentUser: {
+        ...state.currentUser,
         id: action.id,
         nickname: action.nickname,
       },
