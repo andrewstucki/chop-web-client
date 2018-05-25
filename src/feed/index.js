@@ -12,6 +12,7 @@ const mapStateToProps = state => {
   return {
     moments: feedContents(feedState),
     offset: getOffset(feedState),
+    channel: feedState.currentChannel,
   };
 };
 

@@ -10,17 +10,39 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Feed tests', () => {
   test('has an empty feed', () => {
     const wrapper = Enzyme.shallow(
-      <Feed offset={0} onMessageRender={function () {}} />
+      <Feed
+        offset={0}
+        onMessageRender={function () {}}
+        channel="default"
+      />
     );
     expect(wrapper.find('ul').children().length).toBe(0);
   });
+
   test('has a single message', () => {
     const moments = [{ id: 'string', message: 'This is a message', neverRendered: true }];
     const wrapper = Enzyme.mount(
-      <Feed offset={0} moments={moments} onMessageRender={function () {}} />
+      <Feed
+        offset={0}
+        moments={moments}
+        onMessageRender={function () {}}
+        channel="default"
+      />
     );
     expect(wrapper.find('ul').children().length).toBe(1);
     expect(wrapper.find('ul').childAt(0).type()).toEqual('li');
     expect(wrapper.find(Message).find('div').last().text()).toEqual('This is a message');
+  });
+
+  test('check for key prop', () => {
+    const wrapper = Enzyme.shallow(
+      <Feed
+        offset={0}
+        moments={[]}
+        onMessageRender={function () {}}
+        channel="default"
+      />
+    );
+    expect(wrapper.find('ul').key()).toEqual('default');
   });
 });

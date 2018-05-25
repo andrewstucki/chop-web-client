@@ -8,9 +8,10 @@ type FeedProps = {
   moments?: Array<MomentType>,
   offset: number,
   onMessageRender: (offset: number) => void,
+  channel: string,
 };
 
-const Feed = ({moments, offset, onMessageRender}:FeedProps) => {
+const Feed = ({moments, offset, onMessageRender, channel}:FeedProps) => {
   let listItems = [];
   if (moments) {
     listItems = moments.map(moment => 
@@ -23,6 +24,7 @@ const Feed = ({moments, offset, onMessageRender}:FeedProps) => {
   return (
     <div className={feedStyles.wrapper}>
       <ul
+        key={channel}
         style={{transform: 'translateY(' + offset + 'px)'}}
         className={feedStyles.feed}>
         {listItems}
