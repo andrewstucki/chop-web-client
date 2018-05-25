@@ -31,9 +31,18 @@ describe('Chat', () => {
   });
 
   test('createMessage', () => {
-    const message = createMessage('12345', 'I like cookies!');
+    const message = createMessage(
+      '12345',
+      'I like cookies!',
+      {
+        id: '12345',
+        nickname:'Billy Bob',
+      }
+    );
     expect(message.message).toEqual('I like cookies!');
     expect(message.id.length).toEqual(5);
+    expect(message.user.nickname).toEqual('Billy Bob');
+    expect(message.user.id.length).toEqual(5);
   });
 
   test('textEntered', () => {
