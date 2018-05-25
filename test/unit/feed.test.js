@@ -5,7 +5,6 @@ import reducer, {
   addChannel,
   removeChannel,
   feedContents,
-  getOffset,
   updateOffset,
 } from '../../src/feed/dux';
 

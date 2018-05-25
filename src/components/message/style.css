@@ -3,6 +3,17 @@
 .wrapper {
   display: flex;
   margin-top: 18px;
+  animation-duration: 300ms;
+  animation-name: message-slide;
+}
+
+@keyframes message-slide {
+  from {
+    margin-bottom: -100%;
+  }
+  to {
+    margin-bottom: 0%;
+  }
 }
 
 .icon {
@@ -38,7 +49,4 @@
   position: relative;
   bottom: 2px;
   left: 2px;
-}
-
-.message {
 }

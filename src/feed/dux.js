@@ -15,10 +15,7 @@ type MomentType =
 
 type FeedType = {
   channels: {
-    [string]: {
-      messages: Array<MessageType>,
-      offset: number,
-    }
+    [string]: Array<MessageType>,
   },
   currentChannel: string,
   chatInput: string,
@@ -103,8 +100,8 @@ const updateOffset = (offset: number, id:string): UpdateOffset => (
 
 const defaultState = {
   channels: {
-    default: {messages: [], offset: 0},
-    host: {messages: [], offset: 0},
+    default: [],
+    host: [],
   },
   currentChannel: 'default',
   chatInput: '',
@@ -127,45 +124,26 @@ const reducer = (
       ...state,
       currentChannel: action.channel,
     };
-  case UPDATE_OFFSET: {
-    const { id } = action;
-    const stateCopy = { ...state };
-    const message = stateCopy.channels[state.currentChannel].messages
-      .find(elem => elem.id === id);
-    if (message) {
-      message.neverRendered = false;
-    }
-    stateCopy.channels[state.currentChannel].offset = 
-      stateCopy.channels[state.currentChannel].offset +
-      action.offset;
-    return stateCopy;
-  }
   case ADD_TO_CURRENT_CHANNEL:
     return {
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: {
+        [state.currentChannel]: [
           ...state.channels[state.currentChannel],
-          messages: [
-            ...state.channels[state.currentChannel].messages,
-            createMessage(action.id, state.chatInput),
-          ],
-        },
-      },
+          createMessage(action.id, state.chatInput),
+        ],
+      }
     };
   case ADD_TO_CHANNEL:
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: {
+        [action.channel]: [
           ...state.channels[action.channel],
-          messages: [
-            ...state.channels[action.channel].messages,
-            createMessage(action.message.id, action.message.message),
-          ],
-        },
+          createMessage(action.message.id, action.message.message),
+        ],
       },
     };
   case ADD_CHANNEL:
@@ -203,11 +181,7 @@ const reducer = (
 // Selectors
 
 const feedContents = (state: FeedType): Array<MessageType> => (
-  state.channels[state.currentChannel].messages
-);
-
-const getOffset = (state: FeedType): number => (
-  state.channels[state.currentChannel].offset
+  state.channels[state.currentChannel]
 );
 
 // Exports
@@ -226,7 +200,6 @@ export {
   removeChannel,
   feedContents,
   updateOffset,
-  getOffset,
 };
 export type {
   MomentType,
