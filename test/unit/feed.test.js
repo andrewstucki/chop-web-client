@@ -7,6 +7,7 @@ import reducer, {
   feedContents,
   getOffset,
   updateOffset,
+  defaultState,
 } from '../../src/feed/dux';
 
 import {
@@ -14,103 +15,68 @@ import {
   chatInput,
 } from '../../src/chat/dux';
 
+import { setUser } from '../../src/io/chat/dux';
+
 describe('Feed tests', () => {
   test('default state', () => {
     const result = reducer();
-    expect(result).toEqual({
-      channels: {
-        default: {messages: [], offset: 0},
-        host: {messages: [], offset: 0},
-      },
-      currentChannel: 'default',
-      chatInput: '',
-    });
+    expect(result).toEqual(defaultState);
   });
 
   test('change current channel', () => {
-    const result = reducer(
-      {
-        channels: {
-          default: {messages: [], offset: 0},
-          host: {messages: [], offset: 0},
-        },
-        currentChannel: 'default',
-        chatInput: '',
-      },
-      changeChannel('host')
-    );
-    expect(result).toEqual({
-      channels: {
-        default: {messages: [], offset: 0},
-        host: {messages: [], offset: 0},
-      },
+    const result = reducer(defaultState, changeChannel('host'));
+    expect(result).toEqual(
+    {
+      ...defaultState,
       currentChannel: 'host',
-      chatInput: '',
     });
   });
 
-  test('change current channel', () => {
+  test('adds a message to current channel from current user', () => {
     const result = reducer(
       {
-        channels: {
-          default: {messages: [], offset: 0},
-        },
-        currentChannel: 'default',
-        chatInput: '',
-      },
-      changeChannel('host')
-    );
-    expect(result).toEqual({
-      channels: {
-        default: {messages: [], offset: 0},
-      },
-      currentChannel: 'default',
-      chatInput: '',
-    });
-  });
-
-  test('adds a message to current channel', () => {
-    const result = reducer(
-      {
-        channels: {
-          default: {messages: [], offset: 0},
-        },
-        currentChannel: 'default',
+        ...defaultState,
         chatInput: 'this is a message',
+        currentUser: {
+          id: '12345',
+          nickname: 'Billy Bob'
+        }
       },
       addToCurrentChannel(),
     );
     expect(result.channels.default.messages.length).toEqual(1);
     expect(result.channels.default.offset).toEqual(0);
     expect(result.channels.default.messages[0].message).toEqual('this is a message');
+    expect(result.channels.host.messages[0].currentUser.id).toEqual('12345');
+    expect(result.channels.host.messages[0].currentUser.nickname).toEqual('Billy Bob');
     expect(result.channels.default.messages[0].id.length).toEqual(36);
   });
 
-  test('adds a message to current channel not default', () => {
+  test('adds a message to current channel not default from current user', () => {
     const result = reducer(
       {
-        channels: {
-          default: {messages: [], offset: 0},
-          host: {messages: [], offset: 0},
-        },
+        ...defaultState,
         currentChannel: 'host',
         chatInput: 'this is a string',
+        currentUser: {
+          id: '12345',
+          nickname: 'Billy Bob'
+        }
       },
       addToCurrentChannel()
     );
     expect(result.channels.default.messages.length).toEqual(0);
     expect(result.channels.host.messages.length).toEqual(1);
     expect(result.channels.host.messages[0].message).toEqual('this is a string');
+    expect(result.channels.host.messages[0].currentUser.id).toEqual('12345');
+    expect(result.channels.host.messages[0].currentUser.nickname).toEqual('Billy Bob');
     expect(result.channels.host.messages[0].id.length).toEqual(36);
   });
 
   test('adds a message to not current channel', () => {
     const result = reducer(
       {
-        channels: {
-          default: {messages: [], offset: 0},
-          host: {messages: [], offset: 0},
-        },
+        ...defaultState,
         currentChannel: 'default',
         chatInput: 'this is a string',
       },
@@ -118,6 +84,10 @@ describe('Feed tests', () => {
         id: '12345',
         message: 'Hello there',
         neverRendered: true,
+        user: {
+          id: '',
+          nickname: '',
+        }
       })
     );
     expect(result.channels.default.messages.length).toEqual(0);
@@ -134,6 +104,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       },
       addChannel('host')
     );
@@ -145,6 +119,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
   });
@@ -160,6 +138,10 @@ describe('Feed tests', () => {
                 id: '12345',
                 message: 'I like socks',
                 neverRendered: true,
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                }
               },
             ],
             offset:0,
@@ -167,6 +149,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       },
       addChannel('host')
     );
@@ -180,6 +166,10 @@ describe('Feed tests', () => {
                 id: '12345',
                 message: 'I like socks',
                 neverRendered: true,
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                }
               },
             ],
             offset: 0,
@@ -187,6 +177,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
   });
@@ -200,6 +194,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       },
       removeChannel('host')
     );
@@ -210,6 +208,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
   });
@@ -222,6 +224,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       },
       removeChannel('default')
     );
@@ -232,6 +238,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
   });
@@ -245,6 +255,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       },
       removeChannel('host')
     );
@@ -255,6 +269,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
   });
@@ -269,6 +287,10 @@ describe('Feed tests', () => {
                 id: '12345',
                 message: 'I like socks',
                 neverRendered: true,
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                }
               },
             ],
             offset: 0,
@@ -276,6 +298,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
     expect(result).toEqual(
@@ -284,6 +310,10 @@ describe('Feed tests', () => {
           id: '12345',
           message: 'I like socks',
           neverRendered: true,
+          user: {
+            id: '12345',
+            nickname: 'Billy Bob',
+          }
         },
       ],
     );
@@ -300,6 +330,10 @@ describe('Feed tests', () => {
                 id: '12345',
                 message: 'I like socks',
                 neverRendered: true,
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                }
               },
             ],
             offset: 0,
@@ -307,6 +341,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
     expect(result).toEqual(
@@ -315,6 +353,10 @@ describe('Feed tests', () => {
           id: '12345',
           message: 'I like socks',
           neverRendered: true,
+          user: {
+            id: '12345',
+            nickname: 'Billy Bob',
+          }
         },
       ]
     );
@@ -329,6 +371,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
     expect(result).toEqual(5);
@@ -343,6 +389,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
     expect(result).toEqual(5);
@@ -356,6 +406,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       },
       chatInput('Hello'),
     );
@@ -366,6 +420,10 @@ describe('Feed tests', () => {
         },
         currentChannel: 'default',
         chatInput: 'Hello',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
   });
@@ -379,11 +437,19 @@ describe('Feed tests', () => {
               id: '12345',
               message: 'Hello',
               neverRendered: true,
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              }
             },
           ], offset: -50},
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       },
       updateOffset(-50, '12345'),
     );
@@ -395,11 +461,49 @@ describe('Feed tests', () => {
               id: '12345',
               message: 'Hello',
               neverRendered: false,
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              }
             },
           ], offset: -100},
         },
         currentChannel: 'default',
         chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
+      }
+    );
+  });
+
+  test('Accepts a user', () => {
+    const result = reducer(
+      {
+        channels: {
+          default: {messages: [], offset: 0},
+        },
+        currentChannel: 'default',
+        chatInput: '',
+        user: {
+          id: '',
+          nickname: '',
+        }
+      },
+      setUser('12345', 'Billy Bob'),
+    );
+    expect(result).toEqual(
+      {
+        channels: {
+          default: {messages: [], offset: 0},
+        },
+        currentChannel: 'default',
+        chatInput: '',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        }
       }
     );
   });

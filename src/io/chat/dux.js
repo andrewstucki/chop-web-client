@@ -30,19 +30,19 @@ type SetChatKeys = {
   type: 'SET_CHAT_KEYS',
   publishKey: string,
   subscribeKey: string,
-}
+};
 
 type SetUser = {
   type: 'SET_USER',
   id: string,
   nickname: string,
-}
+};
 
 type AddChat = {
   type: 'ADD_CHAT',
   channelId: string,
   channelToken: string,
-}
+};
 
 type IOChatActionTypes =
   | SetChatKeys
@@ -152,6 +152,20 @@ const getReducer = (chatIO: Chat) => (
     }
   }
 );
+// Exports
+
+export type {
+  SetUser,
+};
+
+export {
+  SET_USER,
+};
+
+export {
+  setChatKeys,
+  setUser,
+  addChat,
+};
 
 export default getReducer;
-export { setChatKeys, setUser, addChat };

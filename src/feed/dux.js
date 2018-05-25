@@ -1,6 +1,8 @@
 // @flow
-import type { MessageType, AddToCurrentChannelAction, ChatInputAction} from '../chat/dux';
-import { ADD_TO_CURRENT_CHANNEL, CHAT_INPUT, createMessage} from '../chat/dux';
+import type { MessageType, AddToCurrentChannelAction, ChatInputAction } from '../chat/dux';
+import type { SetUser } from '../io/chat/dux';
+import { ADD_TO_CURRENT_CHANNEL, CHAT_INPUT, createMessage } from '../chat/dux';
+import { SET_USER } from '../io/chat/dux';
 
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
@@ -11,7 +13,12 @@ const UPDATE_OFFSET = 'UPDATE_OFFSET';
 
 // Flow Type Definitions
 type MomentType =
-  | MessageType
+  | MessageType;
+
+type UserType = {
+  id: string,
+  nickname: string,
+};
 
 type FeedType = {
   channels: {
@@ -22,6 +29,7 @@ type FeedType = {
   },
   currentChannel: string,
   chatInput: string,
+  currentUser: UserType
 };
 
 type ChangeChannelType = {
@@ -59,6 +67,7 @@ type FeedActionTypes =
   | RemoveChannelType
   | UpdateOffset
   | ChatInputAction
+  | SetUser;
 
 // Action Creators
 
@@ -108,6 +117,10 @@ const defaultState = {
   },
   currentChannel: 'default',
   chatInput: '',
+  currentUser: {
+    id: '',
+    nickname: '',
+  },
 };
 
 // Reducer
@@ -195,6 +208,15 @@ const reducer = (
       ...state,
       chatInput: action.value,
     };
+  case SET_USER: 
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        id: action.id,
+        nickname: action.nickname,
+      },
+    };
   default:
     return state;
   }
@@ -227,11 +249,13 @@ export {
   feedContents,
   updateOffset,
   getOffset,
+  defaultState,
 };
 export type {
   MomentType,
   AddToChannelType,
   ChangeChannelType,
+  UserType,
 };
 
 export default reducer;
