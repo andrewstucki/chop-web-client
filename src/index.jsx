@@ -34,6 +34,13 @@ if (content) {
 // Our services are ready, enjoy
 store.dispatch(
   {
+    type: 'SET_VIDEO_URL',
+    url: 'https://www.youtube.com/embed/bz2kN31m_S0?rel=0&autoplay=1',
+  }
+)
+
+store.dispatch(
+  {
     type: 'SET_CHAT_KEYS',
     publishKey: 'pub-c-09e2a65a-062e-46ae-a169-34368baf04ca',
     subscribeKey: 'sub-c-a0ba8ad8-5854-11e8-8e44-e61bc5f8fbda',
