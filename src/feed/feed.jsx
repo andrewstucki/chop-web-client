@@ -14,7 +14,7 @@ const Feed = ({moments, channel}:FeedProps) => {
   if (moments) {
     listItems = moments.map(moment => 
       <li key={moment.id}>
-        <Message id={moment.id} message={moment.message} />
+        <Message message={moment} />
       </li>
     );
   }

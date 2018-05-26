@@ -9,7 +9,6 @@ const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_TO_CHANNEL = 'ADD_TO_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
-const UPDATE_OFFSET = 'UPDATE_OFFSET';
 
 // Flow Type Definitions
 type MomentType =
@@ -50,19 +49,12 @@ type RemoveChannelType = {
   channel: string,
 };
 
-type UpdateOffset = {
-  type: 'UPDATE_OFFSET',
-  offset: number,
-  id: string,
-};
-
 type FeedActionTypes =
   | ChangeChannelType
   | AddToCurrentChannelAction
   | AddToChannelType
   | AddChannelType
   | RemoveChannelType
-  | UpdateOffset
   | ChatInputAction
   | SetUser;
 
@@ -94,14 +86,6 @@ const removeChannel = (channel: string): RemoveChannelType => (
   {
     type: REMOVE_CHANNEL,
     channel,
-  }
-);
-
-const updateOffset = (offset: number, id:string): UpdateOffset => (
-  {
-    type: UPDATE_OFFSET,
-    offset,
-    id,
   }
 );
 
@@ -146,7 +130,7 @@ const reducer = (
           ...state.channels[state.currentChannel],
           createMessage(action.id, state.chatInput, state.currentUser),
         ],
-      }
+      },
     };
   case ADD_TO_CHANNEL:
     return {
@@ -213,7 +197,6 @@ export {
   ADD_TO_CHANNEL,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
-  UPDATE_OFFSET,
 };
 export {
   changeChannel,
@@ -221,7 +204,6 @@ export {
   addChannel,
   removeChannel,
   feedContents,
-  updateOffset,
   defaultState,
 };
 export type {

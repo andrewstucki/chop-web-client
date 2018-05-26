@@ -5,7 +5,6 @@ import reducer, {
   addChannel,
   removeChannel,
   feedContents,
-  updateOffset,
   defaultState,
 } from '../../src/feed/dux';
 
@@ -25,10 +24,11 @@ describe('Feed tests', () => {
   test('change current channel', () => {
     const result = reducer(defaultState, changeChannel('host'));
     expect(result).toEqual(
-    {
-      ...defaultState,
-      currentChannel: 'host',
-    });
+      {
+        ...defaultState,
+        currentChannel: 'host',
+      }
+    );
   });
 
   test('adds a message to current channel from current user', () => {
@@ -38,8 +38,8 @@ describe('Feed tests', () => {
         chatInput: 'this is a message',
         currentUser: {
           id: '12345',
-          nickname: 'Billy Bob'
-        }
+          nickname: 'Billy Bob',
+        },
       },
       addToCurrentChannel(),
     );
@@ -58,8 +58,8 @@ describe('Feed tests', () => {
         chatInput: 'this is a string',
         currentUser: {
           id: '12345',
-          nickname: 'Billy Bob'
-        }
+          nickname: 'Billy Bob',
+        },
       },
       addToCurrentChannel()
     );
@@ -85,7 +85,7 @@ describe('Feed tests', () => {
         user: {
           id: '',
           nickname: '',
-        }
+        },
       })
     );
     expect(result.channels.default.length).toEqual(0);
@@ -105,7 +105,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       },
       addChannel('host')
     );
@@ -120,8 +120,8 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
-      }
+        },
+      },
     );
   });
 
@@ -138,7 +138,7 @@ describe('Feed tests', () => {
               user: {
                 id: '12345',
                 nickname: 'Billy Bob',
-              }
+              },
             },
           ],
         },
@@ -147,7 +147,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       },
       addChannel('host')
     );
@@ -163,7 +163,7 @@ describe('Feed tests', () => {
               user: {
                 id: '12345',
                 nickname: 'Billy Bob',
-              }
+              },
             },
           ],
         },
@@ -172,8 +172,8 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
-      }
+        },
+      },
     );
   });
 
@@ -189,7 +189,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       },
       removeChannel('host')
     );
@@ -203,8 +203,8 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
-      }
+        },
+      },
     );
   });
 
@@ -219,7 +219,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       },
       removeChannel('default')
     );
@@ -233,8 +233,8 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
-      }
+        },
+      },
     );
   });
 
@@ -250,7 +250,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       },
       removeChannel('host')
     );
@@ -264,8 +264,8 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
-      }
+        },
+      },
     );
   });
 
@@ -281,7 +281,7 @@ describe('Feed tests', () => {
               user: {
                 id: '12345',
                 nickname: 'Billy Bob',
-              }
+              },
             },
           ],
         },
@@ -290,7 +290,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       }
     );
     expect(result).toEqual(
@@ -301,7 +301,7 @@ describe('Feed tests', () => {
           user: {
             id: '12345',
             nickname: 'Billy Bob',
-          }
+          },
         },
       ],
     );
@@ -320,7 +320,7 @@ describe('Feed tests', () => {
               user: {
                 id: '12345',
                 nickname: 'Billy Bob',
-              }
+              },
             },
           ],
         },
@@ -329,7 +329,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       }
     );
     expect(result).toEqual(
@@ -340,7 +340,7 @@ describe('Feed tests', () => {
           user: {
             id: '12345',
             nickname: 'Billy Bob',
-          }
+          },
         },
       ]
     );
@@ -357,7 +357,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       },
       chatInput('Hello'),
     );
@@ -371,7 +371,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       }
     );
   });
@@ -387,7 +387,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '',
           nickname: '',
-        }
+        },
       },
       setUser('12345', 'Billy Bob'),
     );
@@ -401,7 +401,7 @@ describe('Feed tests', () => {
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       }
     );
   });

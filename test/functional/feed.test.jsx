@@ -28,8 +28,8 @@ describe('Feed tests', () => {
         user: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
-      }
+        },
+      },
     ];
     const wrapper = Enzyme.mount(
       <Feed

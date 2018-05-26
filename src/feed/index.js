@@ -3,7 +3,6 @@ import Feed from './feed';
 import { connect } from 'react-redux';
 import {
   feedContents,
-  updateOffset,
 } from './dux';
 
 const mapStateToProps = state => {

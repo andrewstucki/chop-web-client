@@ -40,11 +40,41 @@ store.dispatch(
   }
 );
 
+const charaters = [
+  'George Jettson',
+  'Judy Jettson',
+  'Jane Jettson',
+  'Astro',
+  'Elroy Jettson',
+  'Rosie',
+  'Orbitty',
+  'Cosmo Spacely',
+  'Fred Flintstone',
+  'Wilma Flintstone',
+  'Pebbles FlintStone',
+  'Barney Rubble',
+  'Betty Rubble',
+  'Bamm-Bamm Rubble',
+  'Mr. Slate',
+  'Dino',
+  'Yogi Bear',
+  'Boo Boo Bear',
+  'Ranger Smith',
+  'Atom Ant',
+  'Snagglepuss',
+  'Dick Dastardly',
+  'Penelope Pitstop',
+  'Space Ghost',
+  'Huckleberry Hound',
+];
+
+const charaterName = charaters[Math.floor(Math.random() * charaters.length)];
+
 store.dispatch(
   {
     type: 'SET_USER',
     id: new Date().getTime(),
-    nickname: 'Billy Bob',
+    nickname: charaterName,
   }
 );
 

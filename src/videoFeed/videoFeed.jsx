@@ -15,7 +15,7 @@ const VideoFeed = ({isVideoHidden}: VideoFeedProps) => {
         src="https://www.youtube.com/embed/bz2kN31m_S0?rel=0"
         width="550"
         height="281"
-        frameborder="0"
+        frameBorder="0"
       ></iframe>
     </div>
   );

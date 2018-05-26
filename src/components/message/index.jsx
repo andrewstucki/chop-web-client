@@ -1,19 +1,25 @@
 // @flow
 import React from 'react';
 import styles from './style.css';
+import type { MessageType } from '../../chat/dux';
+import { getFirstInitial, getAvatarColor } from '../../util';
 
 type MessagePropsType = {
-  id: string,
-  message: string
+  message: MessageType,
 };
 
-const Message = ({ id, message }: MessagePropsType) => (
-  <div id={id} className={styles.wrapper}>
-    <div className={styles.icon}>B</div>
+const Message = ({ message }: MessagePropsType) => (
+  <div className={styles.wrapper}>
+    <div
+      className={styles.icon} 
+      style={{backgroundColor: getAvatarColor(message.user.nickname)}}
+    >
+      {getFirstInitial(message.user.nickname)}
+    </div>
     <div className={styles.body}>
-      <strong className={styles.name}>Billy Bob</strong>
+      <strong className={styles.name}>{message.user.nickname}</strong>
       <span className={styles.role}>Host</span>
-      <div>{message}</div>
+      <div>{message.message}</div>
     </div>
   </div>
 );

@@ -1,5 +1,5 @@
 // @flow
-/* global SyntheticMouseEvent */
+/* global SyntheticMouseEvent, React$Node */
 import React from 'react';
 import styles from './style.css';
 import closeX from '../../../assets/closeX.svg';
