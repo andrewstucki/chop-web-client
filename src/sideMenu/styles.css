@@ -3,6 +3,7 @@
 .link {
   color: var(--primaryColor);
   margin-bottom: 24px;
+  text-decoration: none;
 }
 
 .externalLinkIcon {

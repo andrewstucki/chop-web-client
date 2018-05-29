@@ -7,7 +7,7 @@ type ButtonType = {
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   text: string,
   type: string,
-}
+};
 
 const Button =
 (
