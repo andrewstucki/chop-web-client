@@ -241,10 +241,7 @@ Each control saves the data in the state in a format that best servers that cont
 
 ```javascript
 channels: {
-  [string]: {
-    messages: Array<MessageType>,
-    offset: number,
-  }
+  [string]: Array<MessageType>,
 },
 currentChannel: string,
 ```

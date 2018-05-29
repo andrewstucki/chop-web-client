@@ -12,8 +12,22 @@ storiesOf('Feed', module)
     <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
       <Feed moments={
         [
-          {id:'1', message:'Hello, World!'},
-          {id:'1', message:'Goodbye'}
+          {
+            id: '1',
+            message: 'Hello',
+            user: {
+              id: 'a',
+              nickname: 'Billy Bob',
+            }
+          },
+          {
+            id: '2',
+            message: 'Goodbye',
+            user: {
+              id: 'b',
+              nickname: 'Joe Joe',
+            }
+          }
         ]}
         offset={-500}
         onMessageRender={action('message mounted')} />

@@ -3,13 +3,23 @@
 .wrapper {
   display: flex;
   margin-top: 18px;
+  animation-duration: 300ms;
+  animation-name: message-slide;
+}
+
+@keyframes message-slide {
+  from {
+    margin-bottom: -100%;
+  }
+  to {
+    margin-bottom: 0%;
+  }
 }
 
 .icon {
   border-radius: var(--borderRadius);
   height: 36px;
   width: 36px;
-  background-color: #2cccc4;
   color: var(--backgroundColor);
   text-align: center;
   line-height: 36px;
@@ -38,7 +48,4 @@
   position: relative;
   bottom: 2px;
   left: 2px;
-}
-
-.message {
 }
