@@ -1,45 +1,27 @@
-// Flow does not work for this file until support for createRef is added
+// @flow
 import React from 'react';
-import messageStyles from './style.css';
+import styles from './style.css';
+import type { MessageType } from '../../chat/dux';
+import { getFirstInitial, getAvatarColor } from '../../util';
 
 type MessagePropsType = {
-  id: string,
-  message: string,
-  onMount: (offset: number) => {},
-  wrapperDiv: HTMLDivElement,
+  message: MessageType,
 };
 
-class Message extends React.Component<MessagePropsType> {
-  constructor (props: MessagePropsType) {
-    super(props);
-    this.wrapperDiv = React.createRef();
-  }
-
-  componentDidMount () {
-    if (this.props.neverRendered) {
-      const el = this.wrapperDiv.current;
-      const { onMount } = this.props;
-      let { height } = el.getBoundingClientRect();
-      height += parseInt(window.getComputedStyle(el)['margin-top'], 10);
-      height += parseInt(window.getComputedStyle(el)['margin-bottom'], 10);
-      onMount(-height, this.props.id);
-    }
-  }
-
-  render () {
-    const { id, message } = this.props;
-    return (
-      <div ref={this.wrapperDiv} id={id} className={messageStyles.wrapper}>
-        <div className={messageStyles.icon}>B</div>
-        <div className={messageStyles.body}>
-          <strong className={messageStyles.name}>Billy Bob</strong>
-          <span className={messageStyles.role}>Host</span>
-          <div className={messageStyles.message}>{message}</div>
-        </div>
-      </div>
-    );
-  }
-}
-
+const Message = ({ message }: MessagePropsType) => (
+  <div className={styles.wrapper}>
+    <div
+      className={styles.icon} 
+      style={{backgroundColor: getAvatarColor(message.user.nickname)}}
+    >
+      {getFirstInitial(message.user.nickname)}
+    </div>
+    <div className={styles.body}>
+      <strong className={styles.name}>{message.user.nickname}</strong>
+      <span className={styles.role}>Host</span>
+      <div>{message.message}</div>
+    </div>
+  </div>
+);
 
 export default Message;

@@ -18,7 +18,8 @@
     "flow": "flow",
     "storybook": "start-storybook -p 9001 -c config/.storybook",
     "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/functional/ test/unit/",
-    "validate": "yarn test && yarn flow && yarn lint"
+    "validate": "yarn test && yarn flow && yarn lint && yarn plato",
+    "plato": "es6-plato -r -d ./report src"
   },
   "jest": {
     "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.jsx?$",
@@ -44,6 +45,7 @@
     "css-loader": "^0.28.11",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "es6-plato": "^1.0.18",
     "eslint": "^4.19.1",
     "eslint-plugin-flowtype": "^2.46.2",
     "eslint-plugin-import": "^2.11.0",

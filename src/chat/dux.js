@@ -1,4 +1,5 @@
 // @flow
+import type { UserType } from '../feed/dux';
 
 // Action Types
 const CHAT_INPUT = 'CHAT_INPUT';
@@ -29,7 +30,7 @@ type ChatActions =
 type MessageType = {
   id: string,
   message: string,
-  neverRendered: boolean,
+  user: UserType,
 };
 
 type ChatState = {
@@ -72,11 +73,11 @@ const createUid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
 
-const createMessage = (id: string, message: string): MessageType => (
+const createMessage = (id: string, message: string, user: UserType): MessageType => (
   {
     id,
     message,
-    neverRendered: true,
+    user,
   }
 );
 

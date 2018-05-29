@@ -20,7 +20,17 @@ describe('Feed tests', () => {
   });
 
   test('has a single message', () => {
-    const moments = [{ id: 'string', message: 'This is a message', neverRendered: true }];
+    const moments = [
+      {
+        id: 'string',
+        message: 'This is a message',
+        neverRendered: true,
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        },
+      },
+    ];
     const wrapper = Enzyme.mount(
       <Feed
         offset={0}
