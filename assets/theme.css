@@ -6,4 +6,10 @@
   --textColor:         #404041;
   --disabledTextColor: #9f9fa0;
   --borderRadius:      24px;
+
+  /* Animation */
+  --ease-in:            cubic-bezier(0.6, 0, 0.8, 0.3);
+  --ease-out:           cubic-bezier(0.2, 0.7, 0.4, 1);
+  --ease-in-out:        cubic-bezier(0.7, 0, 0.3, 1);
+  --animation-duration: 300ms;
 }
