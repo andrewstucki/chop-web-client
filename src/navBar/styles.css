@@ -32,7 +32,7 @@
 }
 
 .selected:after {
-  text-decoration: underline;
+  display: flex;
   content: "";
   position: absolute;
   margin: 0 8px;
@@ -45,11 +45,10 @@
 .hamburger {
   @apply --link;
   width:21px;
-  /*height: 15px;*/
   padding-left: 16px;
 }
 
 .hamburger svg {
-  width:21px;
+  width: 21px;
   height: 15px;
 }
