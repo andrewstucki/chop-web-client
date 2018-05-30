@@ -5,23 +5,39 @@ import styles from './style.css';
 
 type ButtonType = {
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
-  text: string,
-  type: string,
-}
+  text?: string,
+  image?: any,
+  buttonType?: string,
+  imageType?: string,
+};
 
 const Button =
 (
   {
     onClick,
     text,
-    type,
+    image,
+    buttonType,
+    imageType,
   }: ButtonType
 ) => {
-  const style = styles[type];
+  const style = styles[buttonType];
+  const imageStyle = styles[imageType];
+  if (image) {
+    return (
+      <button
+        className={style}
+        onClick={onClick}
+      >
+        <div dangerouslySetInnerHTML={{ __html: image }} className={imageStyle}></div>
+      </button>
+    );
+  }
   return (
     <button
       className={style}
-      onClick={onClick}>
+      onClick={onClick}
+    >
       {text}
     </button>
   );

@@ -9,6 +9,11 @@
   border: none;
 }
 
+.arrow {
+  width: 16px;
+  margin: 2px auto 0 auto;
+}
+
 .default {
   height: 36px;
   border-radius: 2px;
