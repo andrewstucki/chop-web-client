@@ -14,10 +14,10 @@ const SideMenu = ({children, close, isClosed}: SideMenuType) => {
   const wrapperClass = isClosed ? styles.closed : styles.open;
   return (
     <div className={wrapperClass}>
-      <button
-        className={styles.closeButton}
+      <div
         onClick={close}
-        dangerouslySetInnerHTML={{ __html: closeX }} />
+        className={styles.overlay}
+      ></div>
       <div className={styles.container}>
         {children}
       </div>
