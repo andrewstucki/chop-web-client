@@ -6,6 +6,7 @@
     max-height: 281px;
     overflow: hidden;
     display: flex;
+    background-color: #1e1f23;
   }
 }
 
@@ -21,4 +22,11 @@
 
 .frame {
   width: 100%;
+}
+
+@media only screen and (min-width: 550px) {
+  .frame {
+    max-width: 550px;
+    margin: 0 auto 0 auto;
+  }
 }

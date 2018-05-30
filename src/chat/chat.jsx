@@ -3,6 +3,7 @@
 import React from 'react';
 import Button from '../components/button';
 import TextField from '../components/text-field';
+import UpArrow from '../../assets/large-arrow-up.svg';
 import chatStyle from './styles.css';
 
 type ChatProps = {
@@ -39,12 +40,15 @@ const Chat =
         onFocus={textOnFocus}
         value={textValue}
         placeholder="Chat"
-        enterDetect={enterDetect} />
+        enterDetect={enterDetect}
+      />
       {textEntered &&
         <Button
           onClick={buttonOnClick}
-          text="↑"
-          type="icon" />
+          image={UpArrow}
+          buttonType="icon"
+          imageType="arrow"
+        />
       }
     </div>
   );
