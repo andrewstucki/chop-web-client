@@ -9,15 +9,26 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('VideoFeed tests', () => {
   test('VideoFeed shows video', () => {
     const wrapper = Enzyme.shallow(
-      <VideoFeed isVideoHidden={false} />
+      <VideoFeed isVideoHidden={false} url="" />
     );
     expect(wrapper.find('.showVideo').type()).toEqual('div');
   });
 
   test('VideoFeed hides video', () => {
     const wrapper = Enzyme.shallow(
-      <VideoFeed isVideoHidden={true} />
+      <VideoFeed isVideoHidden={true} url="" />
     );
     expect(wrapper.find('.hideVideo').type()).toEqual('div');
+  });
+
+  test('VideoFeed hides video', () => {
+    const wrapper = Enzyme.mount(
+      <VideoFeed
+        isVideoHidden={false}
+        url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      />
+    );
+    expect(wrapper.find('iframe').props().src)
+      .toEqual('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
   });
 });
