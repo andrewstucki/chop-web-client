@@ -10,7 +10,7 @@ type SideMenuType = {
   logout: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   close: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   isClosed: boolean,
-}
+};
 
 const SideMenu = ({logout, close, isClosed}: SideMenuType) => (
   <SideMenuComponent
