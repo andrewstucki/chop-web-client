@@ -14,6 +14,7 @@ const mapDispatchToProps = dispatch => (
   {
     close: () => dispatch(closeMenu()),
     logout: () => dispatch(logout()),
+    onSwipe: direction => { if (direction === 'left') return dispatch(closeMenu()); },
   }
 );
 
