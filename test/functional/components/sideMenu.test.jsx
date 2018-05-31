@@ -4,6 +4,7 @@ import SideMenu from '../../../src/components/sideMenu';
 import Enzyme from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
+import ReactTouchEvents from "react-touch-events";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -14,19 +15,37 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('div').at(1).text()).toEqual('Hello');
+    expect(wrapper.find('div').at(2).text()).toEqual('Hello');
   });
 
-  test('close button', () => {
+  test('close', () => {
     const closeButton = sinon.spy();
     const wrapper = Enzyme.mount(
       <SideMenu close={closeButton} isClosed={false}>
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('button').text()).toEqual('SVG');
-    wrapper.find('button').simulate('click');
+    wrapper.find('div').at(1).simulate('click');
     expect(closeButton.calledOnce).toEqual(true);
+  });
+
+  test('swipe close', () => {
+    const swipeFunction = sinon.spy();
+    const wrapper = Enzyme.mount(
+      <SideMenu
+        close={() => {}}
+        isClosed={false}
+        swipe={swipeFunction}>
+        Hello
+      </SideMenu>
+    );
+    wrapper.find(ReactTouchEvents).simulate('touchStart',
+      { touches: [{ clientX: 100, clientY: 0 }]});
+    wrapper.find(ReactTouchEvents).simulate('touchMove',
+      { touches: [{ clientX: 50, clientY: 0 }]});
+    wrapper.find(ReactTouchEvents).simulate('touchEnd',
+      { touches: [{ clientX: 0, clientY: 0 }]});
+    expect(swipeFunction.calledOnce).toEqual(true);
   });
 
   test('closed', () => {

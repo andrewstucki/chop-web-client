@@ -8493,6 +8493,12 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.3.1:
     prop-types "^15.6.0"
     react-is "^16.3.1"
 
+react-touch-events@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-touch-events/-/react-touch-events-2.1.0.tgz#e1c93a328996344cd919537538d67b5fbf2b2ddf"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-transition-group@^2.0.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.3.1.tgz#31d611b33e143a5e0f2d94c348e026a0f3b474b6"

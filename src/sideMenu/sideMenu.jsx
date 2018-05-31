@@ -10,12 +10,20 @@ type SideMenuType = {
   logout: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   close: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   isClosed: boolean,
+  onSwipe?: (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
 };
 
-const SideMenu = ({logout, close, isClosed}: SideMenuType) => (
+const SideMenu = (
+  {
+    logout,
+    close,
+    isClosed,
+    onSwipe,
+  }: SideMenuType) => (
   <SideMenuComponent
     close={close}
-    isClosed={isClosed}>
+    isClosed={isClosed}
+    swipe={onSwipe}>
     <a
       className={styles.link}
       href="https://live.life.church/">

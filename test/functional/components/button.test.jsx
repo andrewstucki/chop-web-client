@@ -35,7 +35,7 @@ test('Button default type', () => {
     <Button
       text="Click Me"
       onClick={function () {}}
-      type="default"
+      buttonType="default"
     />
   );
   expect(wrapper.find('button').props().className)
@@ -47,7 +47,7 @@ test('Button icon type', () => {
     <Button
       text="Click Me"
       onClick={function () {}}
-      type="icon"
+      buttonType="icon"
     />
   );
   expect(wrapper.find('button').props().className)

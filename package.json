@@ -78,6 +78,7 @@
     "react-dom": "^16.3.1",
     "react-fastclick": "^3.0.2",
     "react-redux": "^5.0.7",
+    "react-touch-events": "^2.1.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "reset-css": "^3.0.0"
