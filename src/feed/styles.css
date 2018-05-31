@@ -4,11 +4,13 @@
   position: relative;
   margin: 0 8px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .overflow {
   overflow: auto;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .feed {
