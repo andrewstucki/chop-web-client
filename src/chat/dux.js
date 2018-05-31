@@ -1,5 +1,6 @@
 // @flow
-import type { UserType } from '../feed/dux';
+import type { UserType, ChangeChannelType } from '../feed/dux';
+import { CHANGE_CHANNEL } from '../feed/dux';
 
 // Action Types
 const CHAT_INPUT = 'CHAT_INPUT';
@@ -26,6 +27,7 @@ type ChatActions =
   | ChatInputAction
   | ToggleChatFocusAction
   | AddToCurrentChannelAction
+  | ChangeChannelType;
 
 type MessageType = {
   id: string,
@@ -33,8 +35,16 @@ type MessageType = {
   user: UserType,
 };
 
+type PlaceholderType = {
+  [string]: string,
+};
+
 type ChatState = {
-  currentInput: string
+  currentInput: string,
+  focused: boolean,
+  placeholders: PlaceholderType,
+  currentChannel: string,
+  currentPlaceholder: string,
 };
 
 
@@ -85,6 +95,12 @@ const createMessage = (id: string, message: string, user: UserType): MessageType
 const defaultState = {
   currentInput: '',
   focused: false,
+  placeholders: {
+    default: 'Chat',
+    host: 'Chat with hosts'
+  },
+  currentChannel: '',
+  currentPlaceholder: '',
 };
 
 // Reducer
@@ -112,6 +128,11 @@ const reducer =
       ...state,
       currentInput: '',
     };
+  case CHANGE_CHANNEL:
+    return {
+      ...state,
+      currentChannel: action.channel,
+    };
   default:
     return state;
   }
@@ -122,12 +143,17 @@ const reducer =
 const textEntered = (state: ChatState) => 
   (state) ? state.currentInput.length > 0 : false;
 
+const getPlaceholder = (state: ChatState) => {
+  return state.placeholders[state.currentChannel];
+};
+
 // Exports
 export { 
   CHAT_INPUT,
   TOGGLE_CHAT_FOCUS,
   ADD_TO_CURRENT_CHANNEL,
 };
+
 export type { 
   ChatInputAction, 
   ToggleChatFocusAction, 
@@ -135,6 +161,7 @@ export type {
   MessageType, 
   ChatState,
 };
+
 export { 
   chatInput, 
   toggleChatFocus,
@@ -142,5 +169,8 @@ export {
   createMessage,
   textEntered,
   createUid,
+  defaultState,
+  getPlaceholder,
 };
+
 export default reducer;

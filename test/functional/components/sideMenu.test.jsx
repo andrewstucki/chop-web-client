@@ -14,19 +14,7 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('div').at(1).text()).toEqual('Hello');
-  });
-
-  test('close button', () => {
-    const closeButton = sinon.spy();
-    const wrapper = Enzyme.mount(
-      <SideMenu close={closeButton} isClosed={false}>
-        Hello
-      </SideMenu>
-    );
-    expect(wrapper.find('button').text()).toEqual('SVG');
-    wrapper.find('button').simulate('click');
-    expect(closeButton.calledOnce).toEqual(true);
+    expect(wrapper.find('div').at(2).text()).toEqual('Hello');
   });
 
   test('closed', () => {
