@@ -1,13 +1,22 @@
 @import url('../../assets/theme.css');
 
+.background {
+  background-color: rgba(255, 255, 255, 0.95);
+  width:100%;
+  position: absolute;
+  left:0px;
+  bottom:0px;
+}
+
 :root {
   --wrapper: {
+    background-color: rgb(255, 255, 255);
     min-height: 36px;
-    display: flex;
-    align-items: center;
-    margin: 8px;
+    margin: 16px 8px 8px 8px;
     padding: 6px 6px 6px 24px;
     border-radius: var(--borderRadius);
+    display: flex;
+    align-items: center;
   }
 }
 

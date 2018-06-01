@@ -7,9 +7,10 @@
   flex: 1;
   background-color: transparent;
   outline: none;
+  padding: 0px;
   /* TODO: This is specificly for Chat and we need a better way to add the
            spacing in Chat without applying this style everywhere */
-  margin-right: 8px;
+  margin: 0 8px 0 0;
 }
 .textfield::placeholder {
   color: var(--disabledTextColor);

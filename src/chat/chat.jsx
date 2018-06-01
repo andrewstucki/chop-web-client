@@ -4,7 +4,7 @@ import React from 'react';
 import Button from '../components/button';
 import TextField from '../components/text-field';
 import UpArrow from '../../assets/large-arrow-up.svg';
-import chatStyle from './styles.css';
+import styles from './styles.css';
 
 type ChatProps = {
   buttonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -32,26 +32,28 @@ const Chat =
     currentPlaceholder,
   }: ChatProps
 ) => {
-  const style = focused ? chatStyle.focused : chatStyle.default;
+  const style = focused ? styles.focused : styles.default;
 
   return (
-    <div className={style}>
-      <TextField
-        onInput={textOnInput}
-        onBlur={textOnBlur}
-        onFocus={textOnFocus}
-        value={textValue}
-        placeholder={currentPlaceholder}
-        enterDetect={enterDetect}
-      />
-      {textEntered &&
-        <Button
-          onClick={buttonOnClick}
-          image={UpArrow}
-          buttonType="icon"
-          imageType="arrow"
+    <div className={styles.background}>
+      <div className={style}>
+        <TextField
+          onInput={textOnInput}
+          onBlur={textOnBlur}
+          onFocus={textOnFocus}
+          value={textValue}
+          placeholder={currentPlaceholder}
+          enterDetect={enterDetect}
         />
-      }
+        {textEntered &&
+          <Button
+            onClick={buttonOnClick}
+            image={UpArrow}
+            buttonType="icon"
+            imageType="arrow"
+          />
+        }
+      </div>
     </div>
   );
 };
