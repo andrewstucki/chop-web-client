@@ -28,9 +28,8 @@ const Button =
       <button
         className={style}
         onClick={onClick}
-      >
-        <div dangerouslySetInnerHTML={{ __html: image }} className={imageStyle}></div>
-      </button>
+        dangerouslySetInnerHTML={{ __html: image }}
+      />
     );
   }
   return (

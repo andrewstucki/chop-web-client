@@ -19,7 +19,7 @@ const Message = ({ message }: MessagePropsType) => (
     <div className={styles.body}>
       <strong className={styles.name}>{message.user.nickname}</strong>
       <span className={styles.role}>Host</span>
-      <div>{message.message}</div>
+      <div className={styles.message}>{message.message}</div>
     </div>
   </div>
 );

@@ -7,8 +7,16 @@
   background: var(--primaryColor);
   border-radius: var(--borderRadius);
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
+.icon svg {
+  width: 16px;
+  /* needed for iOS because the button's
+  border radius pushes the svg to the side */
+  position: absolute;
+}
 .arrow {
   width: 16px;
   margin: 2px auto 0 auto;
