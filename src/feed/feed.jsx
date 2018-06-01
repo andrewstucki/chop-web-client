@@ -23,8 +23,10 @@ const Feed = ({moments, channel}:FeedProps) => {
     <div className={styles.wrapper}>
       <div className={styles.overflow}>
         <ul
+          id="moments"
           key={channel}
-          className={styles.feed}>
+          className={styles.feed}
+        >
           {listItems}
         </ul>
       </div>

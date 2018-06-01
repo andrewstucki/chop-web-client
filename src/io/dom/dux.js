@@ -1,10 +1,11 @@
 // @flow
-import type { ToggleChatFocusAction } from '../../chat/dux';
-import { TOGGLE_CHAT_FOCUS } from '../../chat/dux';
+import type { ToggleChatFocusAction, AddToCurrentChannelAction } from '../../chat/dux';
+import { TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL } from '../../chat/dux';
 
 type DomStateType = {};
 type DomActionType = 
-  | ToggleChatFocusAction;
+  | ToggleChatFocusAction
+  | AddToCurrentChannelAction;
 
 const defaultState = {};
 
@@ -31,12 +32,18 @@ const reducer = (
       }
     }
     return state;
+  case ADD_TO_CURRENT_CHANNEL:
+    if (action.id) {
+      document.getElementById('moments').scrollTo(0, 1000);
+    }
+    return state;
   default:
     return state;
   }
 };
 
-export default reducer;
 export {
   defaultState,
 };
+
+export default reducer;
