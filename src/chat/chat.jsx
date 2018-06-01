@@ -15,6 +15,7 @@ type ChatProps = {
   textEntered: boolean,
   focused: boolean,
   enterDetect: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
+  currentPlaceholder: string,
 };
 
 const Chat =
@@ -28,6 +29,7 @@ const Chat =
     textEntered = false,
     focused = false,
     enterDetect,
+    currentPlaceholder,
   }: ChatProps
 ) => {
   const style = focused ? styles.focused : styles.default;
@@ -40,7 +42,7 @@ const Chat =
           onBlur={textOnBlur}
           onFocus={textOnFocus}
           value={textValue}
-          placeholder="Chat"
+          placeholder={currentPlaceholder}
           enterDetect={enterDetect}
         />
         {textEntered &&

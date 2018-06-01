@@ -19,7 +19,10 @@ describe('Chat tests', () => {
         buttonOnClick={function () {}}
         focused={true}
         textEntered={true}
-        enterDetect={function () {}} />);
+        enterDetect={function () {}}
+        currentPlaceholder=""
+      />
+    );
     expect(wrapper.find(TextField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(1);
   });
@@ -34,7 +37,10 @@ describe('Chat tests', () => {
         buttonOnClick={function () {}}
         focused={false}
         textEntered={false}
-        enterDetect={function () {}} />);
+        enterDetect={function () {}}
+        currentPlaceholder=""
+      />
+    );
     expect(wrapper.find(TextField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(0);
   });
