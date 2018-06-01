@@ -1,6 +1,14 @@
 // @flow
-import reducer, { CHAT_INPUT, TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL, createMessage, textEntered, defaultState }  from '../../src/chat/dux';
-import { getPlaceholder }  from '../../src/chat/dux';
+import reducer,
+{
+  CHAT_INPUT,
+  TOGGLE_CHAT_FOCUS,
+  ADD_TO_CURRENT_CHANNEL,
+  createMessage,
+  textEntered,
+  defaultState,
+  getPlaceholder,
+}  from '../../src/chat/dux';
 
 describe('Chat', () => {
   test('reducer with no values', () => {

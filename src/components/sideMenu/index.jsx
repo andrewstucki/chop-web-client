@@ -1,8 +1,8 @@
 // @flow
-/* global SyntheticMouseEvent, React$Node */
+/* global SyntheticMouseEvent, React$Node, SyntheticTouchEvent */
 import React from 'react';
 import styles from './style.css';
-import ReactTouchEvents from "react-touch-events";
+import ReactTouchEvents from 'react-touch-events';
 
 type SideMenuType = {
   children?: React$Node | Array<React$Node>,

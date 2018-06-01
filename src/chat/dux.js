@@ -97,7 +97,7 @@ const defaultState = {
   focused: false,
   placeholders: {
     default: 'Chat',
-    host: 'Chat with hosts'
+    host: 'Chat with hosts',
   },
   currentChannel: 'default',
   currentPlaceholder: '',
@@ -143,9 +143,9 @@ const reducer =
 const textEntered = (state: ChatState) => 
   (state) ? state.currentInput.length > 0 : false;
 
-const getPlaceholder = (state: ChatState) => {
-  return state.placeholders[state.currentChannel];
-};
+const getPlaceholder = (state: ChatState) => (
+  state.placeholders[state.currentChannel]
+);
 
 // Exports
 export { 

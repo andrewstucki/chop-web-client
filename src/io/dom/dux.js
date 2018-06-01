@@ -30,7 +30,7 @@ const reducer = (
         document.body.scrollTop = 0;
       }
     }
-    break;
+    return state;
   default:
     return state;
   }

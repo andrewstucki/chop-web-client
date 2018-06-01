@@ -1,5 +1,5 @@
 // @flow
-/* global SyntheticMouseEvent */
+/* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React from 'react';
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';

@@ -15,7 +15,7 @@ const reducer = (
   switch (action.type) {
   case LOGOUT:
     window.location.assign('https://live.life.church/sessions/sign_out');
-    break;
+    return state;
   default:
     return state;
   }
