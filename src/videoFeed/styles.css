@@ -2,7 +2,7 @@
 
 :root {
   --wrapper: {
-    transition: flex 300ms;
+    transition: flex var(--animation-duration);
     max-height: 281px;
     overflow: hidden;
     display: flex;
@@ -13,11 +13,13 @@
 .showVideo {
   @apply --wrapper;
   flex: 1;
+  transition-timing-function: var(--ease-in);
 }
 
 .hideVideo {
   @apply --wrapper;
   flex: 0;
+  transition-timing-function: var(--ease-out);
 }
 
 .frame {
