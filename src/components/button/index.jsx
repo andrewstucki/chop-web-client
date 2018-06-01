@@ -8,7 +8,6 @@ type ButtonType = {
   text?: string,
   image?: any,
   buttonType?: string,
-  imageType?: string,
 };
 
 const Button =
@@ -18,11 +17,9 @@ const Button =
     text,
     image,
     buttonType,
-    imageType,
   }: ButtonType
 ) => {
   const style = styles[buttonType];
-  const imageStyle = styles[imageType];
   if (image) {
     return (
       <button

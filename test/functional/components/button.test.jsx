@@ -12,7 +12,7 @@ test('Button has correct text', () => {
     <Button
       text="Maranatha"
       onClick={function () {}}
-      type="default"
+      buttonType="default"
     />
   );
   expect(wrapper.text()).toEqual('Maranatha');
@@ -24,7 +24,7 @@ test('Button clickable', () => {
     <Button
       text="Love"
       onClick={onButtonClick}
-      type="default"
+      buttonType="default"
     />);
   wrapper.find('button').simulate('click');
   expect(onButtonClick.calledOnce).toEqual(true);

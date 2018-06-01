@@ -12,13 +12,13 @@ const reducer = (
   if (!action || !action.type) {
     return state;
   }
-  switch(action.type) {
+  switch (action.type) {
   case LOGOUT:
     window.location.assign('https://live.life.church/sessions/sign_out');
+    return state;
   default:
     return state;
   }
-
-}
+};
 
 export default reducer;

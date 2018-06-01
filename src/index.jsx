@@ -35,9 +35,14 @@ if (content) {
 store.dispatch(
   {
     type: 'SET_VIDEO_URL',
-    url: 'https://www.youtube.com/embed/bz2kN31m_S0?rel=0&autoplay=1',
+    url: 
+`https://www.youtube.com/embed/bz2kN31m_S0?
+rel=0&
+autoplay=1&
+fs=0&
+playsinline=1`,
   }
-)
+);
 
 store.dispatch(
   {
