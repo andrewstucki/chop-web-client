@@ -2,10 +2,11 @@
 
 :root {
   --wrapper: {
-    transition: flex 300ms;
-    max-height: 281px;
+    transition: flex var(--animation-duration);
     overflow: hidden;
     display: flex;
+    flex-basis: auto;
+    height: auto;
     background-color: #1e1f23;
   }
 }
@@ -13,20 +14,22 @@
 .showVideo {
   @apply --wrapper;
   flex: 1;
+  transition-timing-function: var(--ease-in);
 }
 
 .hideVideo {
   @apply --wrapper;
   flex: 0;
+  transition-timing-function: var(--ease-out);
 }
 
 .frame {
   width: 100%;
 }
 
-@media only screen and (min-width: 550px) {
+@media only screen and (min-width: 720px) {
   .frame {
-    max-width: 550px;
+    max-width: 720px;
     margin: 0 auto 0 auto;
   }
 }

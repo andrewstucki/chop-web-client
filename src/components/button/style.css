@@ -17,10 +17,6 @@
   border radius pushes the svg to the side */
   position: absolute;
 }
-.arrow {
-  width: 16px;
-  margin: 2px auto 0 auto;
-}
 
 .default {
   height: 36px;

@@ -99,6 +99,16 @@ Storybook server must be running.
 yarn test
 ```
 
+To view code coverage.
+```
+yarn coverage
+```
+
+To generate updated code quality and complexity report
+```
+yarn plato
+```
+
 To run the Snapshot and Visual Regression Tests. Snapshop tests create a copy of
 the markup created by React UI and compare it to the previous copy and validate
 there are no differences. Visual Regession tests take a screenshot of each
@@ -124,7 +134,7 @@ To run the Flow type-checker
 yarn flow
 ```
 
-To run all the validation (test, flow and lint)
+To run all the validation (test, snap, flow and lint)
 ```
 yarn validate
 ```

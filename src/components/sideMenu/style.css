@@ -33,7 +33,7 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    transition: transform 800ms;
+    transition: transform;
     transition-duration: var(--animation-duration);
   }
 }

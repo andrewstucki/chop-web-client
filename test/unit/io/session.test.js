@@ -10,7 +10,7 @@ describe('Session', () => {
 
   test('logout', () => {
     window.location.assign = jest.fn();
-    const result = reducer(
+    reducer(
       {},
       logout()
     );

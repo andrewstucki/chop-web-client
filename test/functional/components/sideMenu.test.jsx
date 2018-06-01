@@ -4,7 +4,7 @@ import SideMenu from '../../../src/components/sideMenu';
 import Enzyme from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
-import ReactTouchEvents from "react-touch-events";
+import ReactTouchEvents from 'react-touch-events';
 
 Enzyme.configure({ adapter: new Adapter() });
 
