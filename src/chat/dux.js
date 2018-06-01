@@ -99,7 +99,7 @@ const defaultState = {
     default: 'Chat',
     host: 'Chat with hosts'
   },
-  currentChannel: '',
+  currentChannel: 'default',
   currentPlaceholder: '',
 };
 
