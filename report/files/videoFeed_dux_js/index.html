@@ -47,11 +47,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">73.80</p>
+      <p class="stat">72.67</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">51</p>
+      <p class="stat">77</p>
     </div>
   </div>
   <div class="row historical">
@@ -65,11 +65,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">22.29</p>
+      <p class="stat">27.63</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.12</p>
+      <p class="stat">0.20</p>
     </div>
   </div>
 </div>
@@ -96,20 +96,38 @@
 import type { ToggleChatFocusAction } from &#039;../chat/dux&#039;;
 import { TOGGLE_CHAT_FOCUS } from &#039;../chat/dux&#039;;
 
+const SET_VIDEO_URL = &#039;SET_VIDEO_URL&#039;;
+
 // Type Definitions
 
 type VideoFeedType = {
   isVideoHidden: boolean,
+  url: string,
 };
 
+type SetVideoUrl = {
+  type: &#039;SET_VIDEO_URL&#039;,
+  url: string,
+}
+
 type VideoFeedActionTypes =
-  | ToggleChatFocusAction;
+  | ToggleChatFocusAction
+  | SetVideoUrl;
 
 // Default State
 
 const defaultState = {
   isVideoHidden: false,
+  url: &#039;&#039;,
 };
+
+// Action Creators
+const setVideoUrl = (url: string): SetVideoUrl =&gt; (
+  {
+    type: SET_VIDEO_URL,
+    url,
+  }
+);
 
 // Reducer
 
@@ -122,7 +140,13 @@ const reducer = (
   switch (action.type) {
   case TOGGLE_CHAT_FOCUS:
     return {
+      ...state,
       isVideoHidden: action.focus,
+    };
+  case SET_VIDEO_URL:
+    return {
+      ...state,
+      url: action.url,
     };
   default:
     return state;
@@ -139,6 +163,8 @@ const getChatFocus = (state: VideoFeedType): boolean =&gt; (
 
 export {
   getChatFocus,
+  defaultState,
+  setVideoUrl,
 };
 
 export default reducer;

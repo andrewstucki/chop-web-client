@@ -3,9 +3,10 @@
 :root {
   --wrapper: {
     transition: flex var(--animation-duration);
-    max-height: 281px;
     overflow: hidden;
     display: flex;
+    flex-basis: auto;
+    height: auto;
     background-color: #1e1f23;
   }
 }
@@ -26,9 +27,9 @@
   width: 100%;
 }
 
-@media only screen and (min-width: 550px) {
+@media only screen and (min-width: 720px) {
   .frame {
-    max-width: 550px;
+    max-width: 720px;
     margin: 0 auto 0 auto;
   }
 }

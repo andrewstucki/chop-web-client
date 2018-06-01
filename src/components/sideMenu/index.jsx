@@ -2,7 +2,6 @@
 /* global SyntheticMouseEvent, React$Node */
 import React from 'react';
 import styles from './style.css';
-import closeX from '../../../assets/closeX.svg';
 
 type SideMenuType = {
   children?: React$Node | Array<React$Node>,

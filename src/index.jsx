@@ -42,7 +42,7 @@ autoplay=1&
 fs=0&
 playsinline=1`,
   }
-)
+);
 
 store.dispatch(
   {

@@ -14,8 +14,7 @@ const VideoFeed = ({isVideoHidden, url}: VideoFeedProps) => {
       <iframe
         className={styles.frame}
         src={url}
-        width="550"
-        height="281"
+        width="100%"
         frameBorder="0"
       ></iframe>
     </div>

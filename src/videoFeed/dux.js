@@ -33,7 +33,7 @@ const setVideoUrl = (url: string): SetVideoUrl => (
     type: SET_VIDEO_URL,
     url,
   }
-)
+);
 
 // Reducer
 
@@ -53,7 +53,7 @@ const reducer = (
     return {
       ...state,
       url: action.url,
-    }
+    };
   default:
     return state;
   }

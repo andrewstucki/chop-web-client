@@ -14,7 +14,7 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('div').at(1).text()).toEqual('Hello');
+    expect(wrapper.find('div').at(2).text()).toEqual('Hello');
   });
 
   test('close button', () => {
@@ -24,8 +24,7 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('button').text()).toEqual('SVG');
-    wrapper.find('button').simulate('click');
+    wrapper.find('div').at(1).simulate('click');
     expect(closeButton.calledOnce).toEqual(true);
   });
 
