@@ -3,7 +3,7 @@
 .wrapper {
   display: flex;
   margin-top: 18px;
-  animation-duration: 300ms;
+  animation-duration: var(--animation-duration);
   animation-name: message-slide;
 }
 

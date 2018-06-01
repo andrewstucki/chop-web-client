@@ -1,7 +1,7 @@
 // @flow
 import Chat from './chat';
 import { connect } from 'react-redux';
-import { chatInput, toggleChatFocus, addToCurrentChannel, textEntered } from './dux';
+import { chatInput, toggleChatFocus, addToCurrentChannel, textEntered, getPlaceholder } from './dux';
 
 const mapStateToProps = state => {
   const chatState = state.chat;
@@ -9,6 +9,7 @@ const mapStateToProps = state => {
     textValue: chatState.currentInput,
     focused: chatState.focused,
     textEntered: textEntered(chatState),
+    currentPlaceholder: getPlaceholder(chatState),
   };
 };
 

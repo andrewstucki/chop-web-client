@@ -1,23 +1,16 @@
 // @flow
-import reducer, { CHAT_INPUT, TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL, createMessage, textEntered }  from '../../src/chat/dux';
+import reducer, { CHAT_INPUT, TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL, createMessage, textEntered, defaultState }  from '../../src/chat/dux';
+import { getPlaceholder }  from '../../src/chat/dux';
 
 describe('Chat', () => {
   test('reducer with no values', () => {
     const result = reducer();
-    expect(result).toEqual(
-      {
-        currentInput: '',
-        focused: false,
-      }
-    );
+    expect(result).toEqual(defaultState);
   });
 
   test('reducer CHAT_INPUT', () => {
     const result = reducer(
-      {
-        currentInput: '',
-        focused: false,
-      },
+      defaultState,
       {
         type: CHAT_INPUT,
         value: 'Love',
@@ -25,8 +18,8 @@ describe('Chat', () => {
 
     expect(result).toEqual(
       {
+        ...defaultState,
         currentInput: 'Love',
-        focused: false,
       });
   });
 
@@ -46,10 +39,7 @@ describe('Chat', () => {
   });
 
   test('textEntered', () => {
-    const state =       {
-      currentInput: '',
-      focused: false,
-    };
+    const state = defaultState;
     expect(textEntered(state)).toBeFalsy();
     state.currentInput = 'Hello';
     expect(textEntered(state)).toBeTruthy();
@@ -57,54 +47,54 @@ describe('Chat', () => {
 
   test('chat focus', () => {
     const result = reducer(
-      {
-        currentInput: '',
-        focused: false,
-      },
+      defaultState,
       {
         type: TOGGLE_CHAT_FOCUS,
         focus: true,
       });
     expect(result).toEqual(
       {
-        currentInput: '',
+        ...defaultState,
         focused: true,
       }
     );
 
     const result2 = reducer(
       {
-        currentInput: '',
+        ...defaultState,
         focused: true,
       },
       {
         type: TOGGLE_CHAT_FOCUS,
         focus: false,
       });
-    expect(result2).toEqual(
-      {
-        currentInput: '',
-        focused: false,
-      }
-    );
+    expect(result2).toEqual(defaultState);
   });
 
   test('message added', () => {
     const result = reducer(
       {
+        ...defaultState,
         currentInput: 'Hi everyone!',
-        focused: false,
       },
       {
         type: ADD_TO_CURRENT_CHANNEL,
         id: '12345',
       },
     );
-    expect(result).toEqual(
+    expect(result).toEqual({
+      ...defaultState,
+      currentInput: '',
+    });
+  });
+
+  test('get placeholder', () => {
+    const result = getPlaceholder(
       {
-        currentInput: '',
-        focused: false,
-      }
+        ...defaultState,
+        currentChannel: 'host',
+      },
     );
+    expect(result).toEqual('Chat with hosts');
   });
 });

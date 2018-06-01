@@ -36,7 +36,7 @@ const SideMenu = (
     <Button
       onClick={logout}
       text="Log out"
-      type="default"
+      buttonType="default"
     />
   </SideMenuComponent>
 );
