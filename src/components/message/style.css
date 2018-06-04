@@ -1,9 +1,19 @@
 @import '../../../assets/theme.css';
 
-.wrapper {
-  display: flex;
-  margin-top: 18px;
+:root {
+  --wrapper: {
+    display: flex;
+    margin-top: 18px;
+  }
+}
+
+.appending {
+  @apply --wrapper;
   animation: message-slide var(--animation-duration) var(--ease-out);
+}
+
+.notAppending {
+  @apply --wrapper;
 }
 
 @keyframes message-slide {
