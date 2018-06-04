@@ -21,13 +21,21 @@ const reducer = (
       setTimeout(() => {
         if (document.body) {
           document.body.style.height = window.innerHeight + 'px';
-          document.body.scrollTop = 0;
+          document.documentElement.style.height = window.innerHeight + 'px';
+          window.scroll({
+            top: 0,
+            behavior: "instant",
+          });
         }
-      }, 150);
+      }, 200);
     } else {
       if (document.body) {
         document.body.style.height = '100%';
-        document.body.scrollTop = 0;
+        document.documentElement.style.height = '100%';
+        window.scroll({
+          top: 0,
+          behavior: "instant",
+        });
       }
     }
     return state;
