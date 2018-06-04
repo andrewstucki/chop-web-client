@@ -2,7 +2,6 @@
 
 :root {
   --wrapper: {
-    transition: flex var(--animation-duration);
     overflow: hidden;
     display: flex;
     flex-basis: auto;
@@ -15,12 +14,14 @@
   @apply --wrapper;
   flex: 1;
   transition-timing-function: var(--ease-in);
+  transition: flex var(--animation-duration);
 }
 
 .hideVideo {
   @apply --wrapper;
   flex: 0;
   transition-timing-function: var(--ease-out);
+  transition: flex var(--animation-duration);
 }
 
 .frame {
