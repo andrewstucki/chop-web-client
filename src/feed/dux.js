@@ -125,17 +125,21 @@ const reducer = (
       currentChannel: action.channel,
     };
   case ADD_TO_CURRENT_CHANNEL:
-    return {
-      ...state,
-      appendingMessage: true,
-      channels: {
-        ...state.channels,
-        [state.currentChannel]: [
-          ...state.channels[state.currentChannel],
-          createMessage(action.id, state.chatInput, state.currentUser),
-        ],
-      },
-    };
+    if ([state.chatInput].toString().length > 0) {
+      return {
+        ...state,
+        appendingMessage: true,
+        channels: {
+          ...state.channels,
+          [state.currentChannel]: [
+            ...state.channels[state.currentChannel],
+            createMessage(action.id, state.chatInput, state.currentUser),
+          ],
+        },
+        chatInput: '',
+      };
+    }
+  return state;
   case ADD_TO_CHANNEL:
     return {
       ...state,

@@ -33,6 +33,11 @@ describe('Feed tests', () => {
     );
   });
 
+  test("doesn't add message if chatInput is empty", () => {
+    const result = reducer(defaultState, addToCurrentChannel());
+    expect(result).toEqual(defaultState);
+  });
+
   test('adds a message to current channel from current user', () => {
     const result = reducer(
       {
