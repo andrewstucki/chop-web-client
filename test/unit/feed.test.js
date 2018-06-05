@@ -6,6 +6,7 @@ import reducer, {
   removeChannel,
   feedContents,
   defaultState,
+  appendMessage,
 } from '../../src/feed/dux';
 
 import {
@@ -27,8 +28,14 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         currentChannel: 'host',
+        appendingMessage: false,
       }
     );
+  });
+
+  test("doesn't add message if chatInput is empty", () => {
+    const result = reducer(defaultState, addToCurrentChannel());
+    expect(result).toEqual(defaultState);
   });
 
   test('adds a message to current channel from current user', () => {
@@ -48,6 +55,7 @@ describe('Feed tests', () => {
     expect(result.channels.default[0].user.id).toEqual('12345');
     expect(result.channels.default[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.default[0].id.length).toEqual(36);
+    expect(result.appendingMessage).toBe(true);
   });
 
   test('adds a message to current channel not default from current user', () => {
@@ -69,6 +77,7 @@ describe('Feed tests', () => {
     expect(result.channels.host[0].user.id).toEqual('12345');
     expect(result.channels.host[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.host[0].id.length).toEqual(36);
+    expect(result.appendingMessage).toBe(true);
   });
 
   test('adds a message to not current channel', () => {
@@ -92,117 +101,42 @@ describe('Feed tests', () => {
     expect(result.channels.host.length).toEqual(1);
     expect(result.channels.host[0].message).toEqual('Hello there');
     expect(result.channels.host[0].id.length).toEqual(5);
+    expect(result.appendingMessage).toBe(true);
   });
 
   test('add a channel', () => {
     const result = reducer(
       {
+        ...defaultState,
         channels: {
           default: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
         },
       },
       addChannel('host')
     );
     expect(result).toEqual(
       {
+        ...defaultState,
         channels: {
           default: [],
           host: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
         },
       },
     );
   });
 
   test('add a channel that already exsists', () => {
-    const result = reducer(
-      {
-        channels: {
-          default: [],
-          host: 
-          [
-            {
-              id: '12345',
-              message: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
-              },
-            },
-          ],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
-      },
-      addChannel('host')
-    );
-    expect(result).toEqual(
-      {
-        channels: {
-          default: [],
-          host:
-          [
-            {
-              id: '12345',
-              message: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
-              },
-            },
-          ],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
-      },
-    );
+    const result = reducer(defaultState, addChannel('host'));
+    expect(result).toEqual(defaultState);
   });
 
   test('remove channel', () => {
-    const result = reducer(
-      {
-        channels: {
-          default: [],
-          host: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
-      },
-      removeChannel('host')
-    );
+    const result = reducer(defaultState, removeChannel('host'));
     expect(result).toEqual(
       {
+        ...defaultState,
         channels: {
           default: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
         },
       },
     );
@@ -211,28 +145,18 @@ describe('Feed tests', () => {
   test('remove default', () => {
     const result = reducer(
       {
+        ...defaultState,
         channels: {
           default: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
         },
       },
       removeChannel('default')
     );
     expect(result).toEqual(
       {
+        ...defaultState,
         channels: {
           default: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
         },
       },
     );
@@ -241,30 +165,18 @@ describe('Feed tests', () => {
   test('remove current channel', () => {
     const result = reducer(
       {
-        channels: {
-          default: [],
-          host: [],
-        },
+        ...defaultState,
         currentChannel: 'host',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
       },
       removeChannel('host')
     );
     expect(result).toEqual(
       {
+        ...defaultState,
         channels: {
           default: [],
         },
         currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
       },
     );
   });
@@ -272,6 +184,7 @@ describe('Feed tests', () => {
   test('Feed contents', () => {
     const result = feedContents(
       {
+        ...defaultState,
         channels: {
           default: 
           [
@@ -286,7 +199,6 @@ describe('Feed tests', () => {
           ],
         },
         currentChannel: 'default',
-        chatInput: '',
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
@@ -310,6 +222,7 @@ describe('Feed tests', () => {
   test('Feed contents not default', () => {
     const result = feedContents(
       {
+        ...defaultState,
         channels: {
           default: [],
           host: 
@@ -325,7 +238,6 @@ describe('Feed tests', () => {
           ],
         },
         currentChannel: 'host',
-        chatInput: '',
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
@@ -347,27 +259,20 @@ describe('Feed tests', () => {
   });
 
   test('Feed listens to message input', () => {
-    const result = reducer(
-      {
-        channels: {
-          default: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
-      },
-      chatInput('Hello'),
-    );
+    const result = reducer(defaultState, chatInput('Hello'));
     expect(result).toEqual(
       {
-        channels: {
-          default: [],
-        },
-        currentChannel: 'default',
+        ...defaultState,
         chatInput: 'Hello',
+      }
+    );
+  });
+
+  test('Accepts a user', () => {
+    const result = reducer(defaultState, setUser('12345', 'Billy Bob'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
@@ -376,33 +281,11 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Accepts a user', () => {
-    const result = reducer(
-      {
-        channels: {
-          default: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '',
-          nickname: '',
-        },
-      },
-      setUser('12345', 'Billy Bob'),
-    );
-    expect(result).toEqual(
-      {
-        channels: {
-          default: [],
-        },
-        currentChannel: 'default',
-        chatInput: '',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
-      }
-    );
+  test('Appends a message', () => {
+    const result = appendMessage({
+      ...defaultState,
+      appendingMessage: true,
+    });
+    expect(result).toEqual(true);
   });
 });
