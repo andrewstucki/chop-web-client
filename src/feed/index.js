@@ -3,6 +3,7 @@ import Feed from './feed';
 import { connect } from 'react-redux';
 import {
   feedContents,
+  appendMessage,
 } from './dux';
 
 const mapStateToProps = state => {
@@ -10,6 +11,7 @@ const mapStateToProps = state => {
   return {
     moments: feedContents(feedState),
     channel: feedState.currentChannel,
+    appendingMessage: appendMessage(feedState),
   };
 };
 

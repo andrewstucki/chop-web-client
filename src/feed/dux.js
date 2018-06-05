@@ -25,7 +25,8 @@ type FeedType = {
   },
   currentChannel: string,
   chatInput: string,
-  currentUser: UserType
+  currentUser: UserType,
+  appendingMessage: boolean,
 };
 
 type ChangeChannelType = {
@@ -102,6 +103,7 @@ const defaultState = {
     id: '',
     nickname: '',
   },
+  appendingMessage: false,
 };
 
 // Reducer
@@ -119,12 +121,14 @@ const reducer = (
     }
     return {
       ...state,
+      appendingMessage: false,
       currentChannel: action.channel,
     };
   case ADD_TO_CURRENT_CHANNEL:
     if ([state.chatInput].toString().length > 0) {
       return {
         ...state,
+        appendingMessage: true,
         channels: {
           ...state.channels,
           [state.currentChannel]: [
@@ -139,6 +143,7 @@ const reducer = (
   case ADD_TO_CHANNEL:
     return {
       ...state,
+      appendingMessage: true,
       channels: {
         ...state.channels,
         [action.channel]: [
@@ -194,6 +199,10 @@ const feedContents = (state: FeedType): Array<MessageType> => (
   state.channels[state.currentChannel]
 );
 
+const appendMessage = (state: FeedType) => (
+  state.appendingMessage
+);
+
 // Exports
 
 export {
@@ -209,6 +218,7 @@ export {
   removeChannel,
   feedContents,
   defaultState,
+  appendMessage,
 };
 export type {
   MomentType,
