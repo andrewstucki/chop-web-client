@@ -45,8 +45,8 @@
 .hamburger {
   @apply --link;
   width:21px;
-  padding-left: 16px;
-  margin-left:0px;
+  padding: 0 12px 0 16px;
+  margin:0px;
 }
 
 .hamburger svg {
