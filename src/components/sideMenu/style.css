@@ -47,7 +47,6 @@
 .open {
   @apply --wrapper;
   width: 100%;
-  transition-delay: 0ms;
 }
 
 .closed .overlay {

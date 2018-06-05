@@ -4,7 +4,7 @@
   --link: {
     display: flex;
     align-items: center;
-    margin-right: 24px;
+    margin: 0 12px;
     color: #ffffff;
     text-transform: uppercase;
     text-decoration: none;
@@ -27,6 +27,7 @@
 .selected {
   @apply --link;
   position: relative;
+  font-weight: 500;
 }
 
 .selected:after {
@@ -38,12 +39,14 @@
   bottom: 8px;
   width: calc(100% - 16px);
   background-color: var(--backgroundColor);
+  border-radius: 2px;
 }
 
 .hamburger {
   @apply --link;
   width:21px;
   padding-left: 16px;
+  margin-left:0px;
 }
 
 .hamburger svg {
