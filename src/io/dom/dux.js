@@ -1,10 +1,12 @@
 // @flow
-import type { ToggleChatFocusAction } from '../../chat/dux';
-import { TOGGLE_CHAT_FOCUS } from '../../chat/dux';
+import type { ToggleChatFocusAction, AddToCurrentChannelAction } from '../../chat/dux';
+import { TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL } from '../../chat/dux';
+import { CHANGE_CHANNEL } from '../../feed/dux';
 
 type DomStateType = {};
 type DomActionType = 
-  | ToggleChatFocusAction;
+  | ToggleChatFocusAction
+  | AddToCurrentChannelAction;
 
 const defaultState = {};
 
@@ -39,12 +41,35 @@ const reducer = (
       }
     }
     return state;
+  case ADD_TO_CURRENT_CHANNEL:
+    setTimeout(() => {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.scroll({
+          top: chatBox.scrollHeight,
+          behavior: "smooth"
+        });
+      },
+      300
+    );
+    return state;
+  case CHANGE_CHANNEL:
+    setTimeout(() => {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.scroll({
+          top: chatBox.scrollHeight,
+          behavior: "instant"
+        });
+      },
+      .5
+    );
+    return state;
   default:
     return state;
   }
 };
 
-export default reducer;
 export {
   defaultState,
 };
+
+export default reducer;

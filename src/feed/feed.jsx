@@ -7,24 +7,32 @@ import styles from './styles.css';
 type FeedProps = {
   moments?: Array<MomentType>,
   channel: string,
+  appendingMessage: boolean,
 };
 
-const Feed = ({moments, channel}:FeedProps) => {
+const Feed = ({ moments, channel, appendingMessage }:FeedProps) => {
   let listItems = [];
   if (moments) {
-    listItems = moments.map(moment => 
-      <li key={moment.id}>
-        <Message message={moment} />
-      </li>
-    );
+    listItems = moments.map((moment, index) => {
+      const appendMessage = appendingMessage && index === moments.length - 1;
+      return (
+        <li key={moment.id}>
+          <Message
+            message={moment}
+            appendingMessage={appendMessage}
+          />
+        </li>
+      );
+    });
   }
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.overflow}>
+      <div id="chat-box" className={styles.overflow}>
         <ul
           key={channel}
-          className={styles.feed}>
+          className={styles.feed}
+        >
           {listItems}
         </ul>
       </div>
