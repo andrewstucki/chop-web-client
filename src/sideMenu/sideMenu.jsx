@@ -27,7 +27,7 @@ const SideMenu = (
     swipe={onSwipe}>
     <a
       id="feedback"
-      className={styles.link}
+      className={styles.feedbackLink}
       href="https://lifechurch.formstack.com/forms/host_mobile_feedback"
     >
       Give feedback
@@ -38,7 +38,7 @@ const SideMenu = (
     </a>
     <a
       id="guest-experience"
-      className={styles.link}
+      className={styles.guestLink}
       href="https://live.life.church/"
     >
       Switch to guest experience
