@@ -14,6 +14,7 @@ describe('Feed tests', () => {
         offset={0}
         onMessageRender={function () {}}
         channel="default"
+        appendingMessage={false}
       />
     );
     expect(wrapper.find('ul').children().length).toBe(0);
@@ -37,6 +38,7 @@ describe('Feed tests', () => {
         moments={moments}
         onMessageRender={function () {}}
         channel="default"
+        appendingMessage={false}
       />
     );
     expect(wrapper.find('ul').children().length).toBe(1);
@@ -51,6 +53,7 @@ describe('Feed tests', () => {
         moments={[]}
         onMessageRender={function () {}}
         channel="default"
+        appendingMessage={false}
       />
     );
     expect(wrapper.find('ul').key()).toEqual('default');

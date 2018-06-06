@@ -7,8 +7,6 @@ import Chop from './chop';
 import reducer from './chop/dux';
 import thunk from 'redux-thunk';
 import {setStore} from './io/chat';
-import initReactFastclick from 'react-fastclick';
-initReactFastclick();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -31,14 +29,16 @@ if (content) {
 }
 
 if (document.body) {
-  document.body.addEventListener('touchstart', e => {
-    const nodeType = e.target.nodeName;
+  document.body.addEventListener('touchstart', (event: Event) => {
+    const targetElement = event.target;
     if (
-      nodeType != 'INPUT' &&
-      nodeType != 'A' &&
-      nodeType != 'BUTTON'
-      ){
-      document.activeElement.blur();
+      !(targetElement instanceof HTMLInputElement ||
+      targetElement instanceof HTMLAnchorElement ||
+      targetElement instanceof HTMLButtonElement)
+    ) {
+      if (document.activeElement) {
+        document.activeElement.blur();
+      }
     }
   });
 }

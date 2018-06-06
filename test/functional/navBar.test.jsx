@@ -17,6 +17,8 @@ describe('NavBar tests', () => {
         ]}
         onClick={function () {}}
         openMenu={() => {}}
+        barWidth={100}
+        barX={50}
       />
     );
     expect(wrapper.find('.navBar').type()).toEqual('div');
@@ -31,6 +33,8 @@ describe('NavBar tests', () => {
         ]}
         onClick={function () {}}
         openMenu={() => {}}
+        barWidth={100}
+        barX={50}
       />
     );
     expect(wrapper.find('.navBar>a').length).toBe(3);
@@ -48,6 +52,8 @@ describe('NavBar tests', () => {
         ]}
         onClick={onClick}
         openMenu={() => {}}
+        barWidth={100}
+        barX={50}
       />
     );
     wrapper.find('.navBar>a').at(1).simulate('click', {target: {value: 'Default'}});
@@ -64,6 +70,8 @@ describe('NavBar tests', () => {
         ]}
         onClick={function () {}}
         openMenu={() => {}}
+        barWidth={100}
+        barX={50}
       />
     );
     expect(wrapper.find('.navBar>a').at(1).props().className).toBe('selected');

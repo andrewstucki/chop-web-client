@@ -8,8 +8,8 @@
     height: 100%;
     width: 100%;
     z-index: 5;
-    transition: width;
-    transition-duration: 0ms;
+    transform: translateX(-100%);
+    overflow: visible;
   }
   --overlay: {
     position: absolute;
@@ -17,15 +17,15 @@
     left:0px;
     height: 100%;
     width: 100%;
-    transition: opacity;
-    transition-duration: var(--animation-duration);
     background-color: rgb(30, 31, 35, 0.75);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
   --container: {
     position: absolute;
     top:0px;
     height: 100%;
-    width: 327px;
+    width: calc(100% - 35px);
+    max-width:400px;
     box-sizing: border-box;
     padding: 32px 0;
     background-color: var(--backgroundColor);
@@ -33,43 +33,40 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    transition: transform;
-    transition-duration: var(--animation-duration);
+    transition: transform var(--animation-duration);
   }
 }
 
 .closed {
   @apply --wrapper;
-  width: 0%;
-  transition-delay: var(--animation-duration);
 }
 
 .open {
   @apply --wrapper;
-  width: 100%;
-  transition-delay: 0ms;
 }
 
 .closed .overlay {
   @apply --overlay;
   opacity: 0;
-  transition-timing-function:  var(--ease-in);
+  transform: translateX(0%);
+  transition: opacity var(--animation-duration) var(--ease-in) 0ms, transform 0ms linear var(--animation-duration);
 }
 
 .open .overlay {
   @apply --overlay;
   opacity: 1;
-  transition-timing-function: var(--ease-out);
+  transition: opacity var(--animation-duration) var(--ease-out) 0ms, transform 0ms linear 0ms;
+  transform: translateX(100%);
 }
 
 .closed .container {
   @apply --container;
-  transform: translateX(-100%);
+  transform: translateX(0%);
   transition-timing-function:  var(--ease-in);
 }
 
 .open .container {
   @apply --container;
-  transform: translateX(0%);
+  transform: translateX(100%);
   transition-timing-function: var(--ease-out);
 }

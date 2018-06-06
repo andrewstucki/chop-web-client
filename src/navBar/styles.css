@@ -4,7 +4,7 @@
   --link: {
     display: flex;
     align-items: center;
-    margin-right: 24px;
+    margin: 0 12px;
     color: #ffffff;
     text-transform: uppercase;
     text-decoration: none;
@@ -17,6 +17,7 @@
   height: 48px;
   width: 100%;
   z-index: 1;
+  position: relative;
 }
 
 .default {
@@ -27,23 +28,25 @@
 .selected {
   @apply --link;
   position: relative;
+  font-weight: 500;
 }
 
-.selected:after {
+.bar {
   display: flex;
   content: "";
   position: absolute;
-  margin: 0 8px;
   height: 2px;
   bottom: 8px;
-  width: calc(100% - 16px);
   background-color: var(--backgroundColor);
+  border-radius: 2px;
+  transition: width var(--animation-duration) var(--ease-out), left var(--animation-duration) var(--ease-out);
 }
 
 .hamburger {
   @apply --link;
   width:21px;
-  padding-left: 16px;
+  padding: 0 12px 0 16px;
+  margin:0px;
 }
 
 .hamburger svg {
