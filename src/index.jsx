@@ -28,6 +28,19 @@ if (content) {
     content);
 }
 
+if (document.body) {
+  document.body.addEventListener('touchstart', e => {
+    const nodeType = e.target.nodeName;
+    if (
+      nodeType != 'INPUT' &&
+      nodeType != 'A' &&
+      nodeType != 'BUTTON'
+      ){
+      document.activeElement.blur();
+    }
+  });
+}
+
 // All this is a hacety Hack to get chat working before 
 // Our services are ready, enjoy
 store.dispatch(

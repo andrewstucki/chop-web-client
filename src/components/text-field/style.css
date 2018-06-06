@@ -3,7 +3,7 @@
 .textfield {
   border: none;
   color: var(--textColor);
-  height: 20px;
+  height: 24px;
   flex: 1;
   background-color: transparent;
   outline: none;
