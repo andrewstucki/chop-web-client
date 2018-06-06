@@ -9,7 +9,7 @@ type SideMenuType = {
   close: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   isClosed: boolean,
   swipe?:  (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
-}
+};
 
 const SideMenu = (
   {
