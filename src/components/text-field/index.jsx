@@ -10,7 +10,7 @@ type TextFieldProps = {
   value?: string,
   placeholder?: string,
   enterDetect?: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
-}
+};
 
 const TextField =
 (
@@ -31,7 +31,8 @@ const TextField =
     onFocus={onFocus}
     onBlur={onBlur}
     value={value}
-    placeholder={placeholder} />
+    placeholder={placeholder}
+  />
 );
 
 export default TextField;
