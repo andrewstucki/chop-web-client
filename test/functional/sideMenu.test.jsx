@@ -23,19 +23,34 @@ describe('SideBar tests', () => {
     expect(wrapper.find(SideMenuComponent).props().close).toBe(closeFunction);
   });
 
-  test('SideBar has link to guest experiance', () => {
+  test('SideBar has link to guest experience', () => {
     const wrapper = Enzyme.shallow(
       <SideMenu
         logout={() => {}}
         close={() => {}}
         isClosed={false} />
     );
-    expect(wrapper.find('a').length)
+    expect(wrapper.find('#guest-experience').length)
       .toBe(1);
-    expect(wrapper.find('a').text())
+    expect(wrapper.find('#guest-experience').text())
       .toBe('Switch to guest experience');
-    expect(wrapper.find('a').props().href)
+    expect(wrapper.find('#guest-experience').props().href)
       .toBe('https://live.life.church/');
+  });
+
+  test('SideBar has link to give feedback', () => {
+    const wrapper = Enzyme.shallow(
+      <SideMenu
+        logout={() => {}}
+        close={() => {}}
+        isClosed={false} />
+    );
+    expect(wrapper.find('#feedback').length)
+      .toBe(1);
+    expect(wrapper.find('#feedback').text())
+      .toBe('Give feedback');
+    expect(wrapper.find('#feedback').props().href)
+      .toBe('https://lifechurch.formstack.com/forms/host_mobile_feedback');
   });
 
   test('SideBar has logout button', () => {

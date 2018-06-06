@@ -3,7 +3,8 @@
 import React from 'react';
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';
-import externalLink from '../../assets/external-link.svg';
+import GuestExperienceLink from '../../assets/guest-experience-link.svg';
+import FeedbackLink from '../../assets/feedback-link.svg';
 import styles from './styles.css';
 
 type SideMenuType = {
@@ -25,12 +26,25 @@ const SideMenu = (
     isClosed={isClosed}
     swipe={onSwipe}>
     <a
+      id="feedback"
       className={styles.link}
-      href="https://live.life.church/">
+      href="https://lifechurch.formstack.com/forms/host_mobile_feedback"
+    >
+      Give feedback
+      <span
+        className={styles.externalLinkIcon}
+        dangerouslySetInnerHTML={{ __html: FeedbackLink }}
+      />
+    </a>
+    <a
+      id="guest-experience"
+      className={styles.link}
+      href="https://live.life.church/"
+    >
       Switch to guest experience
       <span
         className={styles.externalLinkIcon}
-        dangerouslySetInnerHTML={{ __html: externalLink }}
+        dangerouslySetInnerHTML={{ __html: GuestExperienceLink }}
       />
     </a>
     <Button
