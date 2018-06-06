@@ -33,7 +33,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test("doesn't add message if chatInput is empty", () => {
+  test('does not add message if chatInput is empty', () => {
     const result = reducer(defaultState, addToCurrentChannel());
     expect(result).toEqual(defaultState);
   });

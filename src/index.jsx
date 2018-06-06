@@ -29,14 +29,16 @@ if (content) {
 }
 
 if (document.body) {
-  document.body.addEventListener('touchstart', e => {
-    const nodeType = e.target.nodeName;
+  document.body.addEventListener('touchstart', (event: Event) => {
+    const targetElement = event.target;
     if (
-      nodeType != 'INPUT' &&
-      nodeType != 'A' &&
-      nodeType != 'BUTTON'
-      ){
-      document.activeElement.blur();
+      !(targetElement instanceof HTMLInputElement ||
+      targetElement instanceof HTMLAnchorElement ||
+      targetElement instanceof HTMLButtonElement)
+    ) {
+      if (document.activeElement) {
+        document.activeElement.blur();
+      }
     }
   });
 }

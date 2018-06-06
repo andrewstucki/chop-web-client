@@ -139,7 +139,7 @@ const reducer = (
         chatInput: '',
       };
     }
-  return state;
+    return state;
   case ADD_TO_CHANNEL:
     return {
       ...state,

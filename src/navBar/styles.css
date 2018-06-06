@@ -17,6 +17,7 @@
   height: 48px;
   width: 100%;
   z-index: 1;
+  position: relative;
 }
 
 .default {
@@ -30,16 +31,15 @@
   font-weight: 500;
 }
 
-.selected:after {
+.bar {
   display: flex;
   content: "";
   position: absolute;
-  margin: 0 8px;
   height: 2px;
   bottom: 8px;
-  width: calc(100% - 16px);
   background-color: var(--backgroundColor);
   border-radius: 2px;
+  transition: width var(--animation-duration) var(--ease-out), left var(--animation-duration) var(--ease-out);
 }
 
 .hamburger {
