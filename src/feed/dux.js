@@ -9,6 +9,7 @@ const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_TO_CHANNEL = 'ADD_TO_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
+const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
 
 // Flow Type Definitions
 type MomentType =
@@ -27,6 +28,7 @@ type FeedType = {
   chatInput: string,
   currentUser: UserType,
   appendingMessage: boolean,
+  messageTrayOpen: boolean,
 };
 
 type ChangeChannelType = {
@@ -50,6 +52,10 @@ type RemoveChannelType = {
   channel: string,
 };
 
+type OpenMessageTrayType = {
+  type: 'OPEN_MESSAGE_TRAY',
+};
+
 type FeedActionTypes =
   | ChangeChannelType
   | AddToCurrentChannelAction
@@ -57,7 +63,8 @@ type FeedActionTypes =
   | AddChannelType
   | RemoveChannelType
   | ChatInputAction
-  | SetUser;
+  | SetUser
+  | OpenMessageTrayType;
 
 // Action Creators
 
@@ -90,6 +97,12 @@ const removeChannel = (channel: string): RemoveChannelType => (
   }
 );
 
+const openMessageTray = () => (
+  {
+    type: OPEN_MESSAGE_TRAY,
+  }
+);
+
 // Default State
 
 const defaultState = {
@@ -104,6 +117,7 @@ const defaultState = {
     nickname: '',
   },
   appendingMessage: false,
+  messageTrayOpen: false,
 };
 
 // Reducer
@@ -188,6 +202,11 @@ const reducer = (
         nickname: action.nickname,
       },
     };
+  case OPEN_MESSAGE_TRAY: 
+    return {
+      ...state,
+      messageTrayOpen: true,
+    };
   default:
     return state;
   }
@@ -201,6 +220,10 @@ const feedContents = (state: FeedType): Array<MessageType> => (
 
 const appendMessage = (state: FeedType) => (
   state.appendingMessage
+);
+
+const getTrayStatus = (state: FeedType) => (
+  state.messageTrayOpen
 );
 
 // Exports
@@ -219,6 +242,8 @@ export {
   feedContents,
   defaultState,
   appendMessage,
+  openMessageTray,
+  getTrayStatus,
 };
 export type {
   MomentType,

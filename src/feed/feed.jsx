@@ -1,4 +1,5 @@
 // @flow
+/* global SyntheticMouseEvent */
 import React from 'react';
 import type {MomentType} from './dux';
 import Message from '../components/message';
@@ -8,9 +9,10 @@ type FeedProps = {
   moments?: Array<MomentType>,
   channel: string,
   appendingMessage: boolean,
+  trayButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const Feed = ({ moments, channel, appendingMessage }:FeedProps) => {
+const Feed = ({ moments, channel, appendingMessage, trayButtonOnClick }:FeedProps) => {
   let listItems = [];
   if (moments) {
     listItems = moments.map((moment, index) => {
@@ -20,6 +22,7 @@ const Feed = ({ moments, channel, appendingMessage }:FeedProps) => {
           <Message
             message={moment}
             appendingMessage={appendMessage}
+            trayButtonOnClick={trayButtonOnClick}
           />
         </li>
       );

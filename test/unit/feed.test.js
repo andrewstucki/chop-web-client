@@ -7,6 +7,8 @@ import reducer, {
   feedContents,
   defaultState,
   appendMessage,
+  openMessageTray,
+  getTrayStatus,
 } from '../../src/feed/dux';
 
 import {
@@ -285,6 +287,22 @@ describe('Feed tests', () => {
     const result = appendMessage({
       ...defaultState,
       appendingMessage: true,
+    });
+    expect(result).toEqual(true);
+  });
+
+  test('Opens message tray', () => {
+    const result = reducer(defaultState, openMessageTray());
+    expect(result).toEqual({
+      ...defaultState,
+      messageTrayOpen: true,
+    });
+  });
+
+  test('Get message tray status', () => {
+    const result = getTrayStatus({
+      ...defaultState,
+      messageTrayOpen: true,
     });
     expect(result).toEqual(true);
   });

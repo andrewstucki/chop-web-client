@@ -11,10 +11,10 @@ import styles from './style.css';
 type MessagePropsType = {
   message: MessageType,
   appendingMessage: boolean,
-  menuButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  trayButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const Message = ({ message, appendingMessage, onClick }: MessagePropsType) => {
+const Message = ({ message, appendingMessage, onClick, trayButtonOnClick }: MessagePropsType) => {
   const style = appendingMessage ? styles.appending : styles.notAppending;
   return (
     <div className={style}>
@@ -32,7 +32,7 @@ const Message = ({ message, appendingMessage, onClick }: MessagePropsType) => {
       <button
         className={styles.openTrayButton}
         dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
-        // onClick={menuButtonOnClick}
+        onClick={trayButtonOnClick}
       />
     </div>
   );
