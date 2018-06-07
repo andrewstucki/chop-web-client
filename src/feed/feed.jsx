@@ -9,10 +9,9 @@ type FeedProps = {
   moments?: Array<MomentType>,
   channel: string,
   appendingMessage: boolean,
-  trayButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const Feed = ({ moments, channel, appendingMessage, trayButtonOnClick }:FeedProps) => {
+const Feed = ({ moments, channel, appendingMessage }:FeedProps) => {
   let listItems = [];
   if (moments) {
     listItems = moments.map((moment, index) => {
@@ -22,7 +21,6 @@ const Feed = ({ moments, channel, appendingMessage, trayButtonOnClick }:FeedProp
           <Message
             message={moment}
             appendingMessage={appendMessage}
-            trayButtonOnClick={trayButtonOnClick}
           />
         </li>
       );

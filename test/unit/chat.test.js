@@ -4,11 +4,12 @@ import reducer,
   CHAT_INPUT,
   TOGGLE_CHAT_FOCUS,
   ADD_TO_CURRENT_CHANNEL,
-  createMessage,
   textEntered,
   defaultState,
   getPlaceholder,
 }  from '../../src/chat/dux';
+
+import { createMessage } from '../../src/components/message/dux';
 
 describe('Chat', () => {
   test('reducer with no values', () => {
@@ -38,7 +39,8 @@ describe('Chat', () => {
       {
         id: '12345',
         nickname:'Billy Bob',
-      }
+      },
+      false
     );
     expect(message.message).toEqual('I like cookies!');
     expect(message.id.length).toEqual(5);

@@ -2,7 +2,7 @@
 /* global SyntheticMouseEvent */
 import React from 'react';
 
-import type { MessageType } from '../../chat/dux';
+import type { MessageType } from './dux';
 import { getFirstInitial, getAvatarColor } from '../../util';
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
 
@@ -14,7 +14,7 @@ type MessagePropsType = {
   trayButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const Message = ({ message, appendingMessage, onClick, trayButtonOnClick }: MessagePropsType) => {
+const Message = ({ message, appendingMessage, trayButtonOnClick }: MessagePropsType) => {
   const style = appendingMessage ? styles.appending : styles.notAppending;
   return (
     <div className={style}>

@@ -7,8 +7,6 @@ import reducer, {
   feedContents,
   defaultState,
   appendMessage,
-  openMessageTray,
-  getTrayStatus,
 } from '../../src/feed/dux';
 
 import {
@@ -97,6 +95,7 @@ describe('Feed tests', () => {
           id: '',
           nickname: '',
         },
+        messageTrayOpen: false,
       })
     );
     expect(result.channels.default.length).toEqual(0);
@@ -197,6 +196,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 nickname: 'Billy Bob',
               },
+              messageTrayOpen: false,
             },
           ],
         },
@@ -216,6 +216,7 @@ describe('Feed tests', () => {
             id: '12345',
             nickname: 'Billy Bob',
           },
+          messageTrayOpen: false,
         },
       ],
     );
@@ -236,6 +237,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 nickname: 'Billy Bob',
               },
+              messageTrayOpen: false,
             },
           ],
         },
@@ -255,6 +257,7 @@ describe('Feed tests', () => {
             id: '12345',
             nickname: 'Billy Bob',
           },
+          messageTrayOpen: false,
         },
       ]
     );
@@ -287,22 +290,6 @@ describe('Feed tests', () => {
     const result = appendMessage({
       ...defaultState,
       appendingMessage: true,
-    });
-    expect(result).toEqual(true);
-  });
-
-  test('Opens message tray', () => {
-    const result = reducer(defaultState, openMessageTray());
-    expect(result).toEqual({
-      ...defaultState,
-      messageTrayOpen: true,
-    });
-  });
-
-  test('Get message tray status', () => {
-    const result = getTrayStatus({
-      ...defaultState,
-      messageTrayOpen: true,
     });
     expect(result).toEqual(true);
   });

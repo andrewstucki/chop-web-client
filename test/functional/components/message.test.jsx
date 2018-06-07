@@ -8,7 +8,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Message', () => {
   test('has correct text', () => {
-    const wrapper = Enzyme.mount(
+    const wrapper = Enzyme.shallow(
       <Message 
         message={
           {
@@ -27,7 +27,7 @@ describe('Message', () => {
   });
 
   test('has a menu button', () => {
-    const wrapper = Enzyme.mount(
+    const wrapper = Enzyme.shallow(
       <Message 
         message={
             {

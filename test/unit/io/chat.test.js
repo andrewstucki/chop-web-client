@@ -309,6 +309,7 @@ describe('Chat IO Interface test', () => {
         id: '12345',
         nickname: 'Billy Bob',
       },
+      messageTrayOpen: false,
     });
     expect(ch.emit.mock.calls.length).toBe(0);
 
@@ -321,6 +322,7 @@ describe('Chat IO Interface test', () => {
         id: '12345',
         nickname: 'Billy Bob',
       },
+      messageTrayOpen: false,
     });
     expect(ch.emit.mock.calls.length).toBe(0);
 
@@ -333,6 +335,7 @@ describe('Chat IO Interface test', () => {
         id: '12345',
         nickname: 'Billy Bob',
       },
+      messageTrayOpen: false,
     });
     expect(ch.emit.mock.calls.length).toBe(0);
   });
@@ -350,6 +353,7 @@ describe('Chat IO Interface test', () => {
         id: '12345',
         nickname: 'Billy Bob',
       },
+      messageTrayOpen: false,
     });
     expect(ch.emit.mock.calls.length).toBe(1);
     expect(ch.emit.mock.calls[0][0]).toEqual('message');
@@ -362,6 +366,7 @@ describe('Chat IO Interface test', () => {
           id: '12345',
           nickname: 'Billy Bob',
         },
+        messageTrayOpen: false,
       },
     );
   });

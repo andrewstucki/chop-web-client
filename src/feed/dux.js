@@ -1,7 +1,20 @@
 // @flow
-import type { MessageType, AddToCurrentChannelAction, ChatInputAction } from '../chat/dux';
+import type {
+  AddToCurrentChannelAction,
+  ChatInputAction,
+} from '../chat/dux';
+
+import type { MessageType } from '../components/message/dux';
+
 import type { SetUser } from '../io/chat/dux';
-import { ADD_TO_CURRENT_CHANNEL, CHAT_INPUT, createMessage } from '../chat/dux';
+
+import {
+  ADD_TO_CURRENT_CHANNEL,
+  CHAT_INPUT,
+} from '../chat/dux';
+
+import { createMessage } from '../components/message/dux';
+
 import { SET_USER } from '../io/chat/dux';
 
 // Action Types
@@ -9,7 +22,6 @@ const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_TO_CHANNEL = 'ADD_TO_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
-const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
 
 // Flow Type Definitions
 type MomentType =
@@ -28,7 +40,6 @@ type FeedType = {
   chatInput: string,
   currentUser: UserType,
   appendingMessage: boolean,
-  messageTrayOpen: boolean,
 };
 
 type ChangeChannelType = {
@@ -52,10 +63,6 @@ type RemoveChannelType = {
   channel: string,
 };
 
-type OpenMessageTrayType = {
-  type: 'OPEN_MESSAGE_TRAY',
-};
-
 type FeedActionTypes =
   | ChangeChannelType
   | AddToCurrentChannelAction
@@ -63,8 +70,7 @@ type FeedActionTypes =
   | AddChannelType
   | RemoveChannelType
   | ChatInputAction
-  | SetUser
-  | OpenMessageTrayType;
+  | SetUser;
 
 // Action Creators
 
@@ -97,12 +103,6 @@ const removeChannel = (channel: string): RemoveChannelType => (
   }
 );
 
-const openMessageTray = () => (
-  {
-    type: OPEN_MESSAGE_TRAY,
-  }
-);
-
 // Default State
 
 const defaultState = {
@@ -117,7 +117,6 @@ const defaultState = {
     nickname: '',
   },
   appendingMessage: false,
-  messageTrayOpen: false,
 };
 
 // Reducer
@@ -147,7 +146,7 @@ const reducer = (
           ...state.channels,
           [state.currentChannel]: [
             ...state.channels[state.currentChannel],
-            createMessage(action.id, state.chatInput, state.currentUser),
+            createMessage(action.id, state.chatInput, state.currentUser, false),
           ],
         },
         chatInput: '',
@@ -202,11 +201,6 @@ const reducer = (
         nickname: action.nickname,
       },
     };
-  case OPEN_MESSAGE_TRAY: 
-    return {
-      ...state,
-      messageTrayOpen: true,
-    };
   default:
     return state;
   }
@@ -220,10 +214,6 @@ const feedContents = (state: FeedType): Array<MessageType> => (
 
 const appendMessage = (state: FeedType) => (
   state.appendingMessage
-);
-
-const getTrayStatus = (state: FeedType) => (
-  state.messageTrayOpen
 );
 
 // Exports
@@ -242,14 +232,13 @@ export {
   feedContents,
   defaultState,
   appendMessage,
-  openMessageTray,
-  getTrayStatus,
 };
 export type {
   MomentType,
   AddToChannelType,
   ChangeChannelType,
   UserType,
+  FeedType
 };
 
 export default reducer;
