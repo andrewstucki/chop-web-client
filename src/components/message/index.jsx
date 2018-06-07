@@ -1,15 +1,20 @@
 // @flow
+/* global SyntheticMouseEvent */
 import React from 'react';
-import styles from './style.css';
+
 import type { MessageType } from '../../chat/dux';
 import { getFirstInitial, getAvatarColor } from '../../util';
+import OpenTrayButton from '../../../assets/open-tray-button.svg';
+
+import styles from './style.css';
 
 type MessagePropsType = {
   message: MessageType,
   appendingMessage: boolean,
+  menuButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const Message = ({ message, appendingMessage }: MessagePropsType) => {
+const Message = ({ message, appendingMessage, onClick }: MessagePropsType) => {
   const style = appendingMessage ? styles.appending : styles.notAppending;
   return (
     <div className={style}>
@@ -24,6 +29,11 @@ const Message = ({ message, appendingMessage }: MessagePropsType) => {
         <span className={styles.role}>Host</span>
         <div className={styles.message}>{message.message}</div>
       </div>
+      <button
+        className={styles.openTrayButton}
+        dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
+        // onClick={menuButtonOnClick}
+      />
     </div>
   );
 };

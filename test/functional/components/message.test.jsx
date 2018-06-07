@@ -21,7 +21,27 @@ describe('Message', () => {
           }
         }
         appendingMessage={false}
-      />);
+      />
+    );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
+  });
+
+  test('has a menu button', () => {
+    const wrapper = Enzyme.mount(
+      <Message 
+        message={
+            {
+              id: '1234',
+              message: 'Go west young man!',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+            }
+          }
+        appendingMessage={false}
+      />
+    );
+    expect(wrapper.find('button').length).toBe(1);
   });
 });
