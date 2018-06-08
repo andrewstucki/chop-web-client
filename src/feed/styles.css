@@ -1,24 +1,17 @@
+@import url('../../assets/theme.css');
+
 .wrapper {
   display: flex;
   flex: 1;
+  margin: 0 8px 74px 8px;
   position: relative;
-  margin: 0 8px;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.overflow {
-  overflow: auto;
-  width: 100%;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
 
 .feed {
   margin: 0;
-  justify-content: flex-end;
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  padding-bottom: 74px;
-  box-sizing: border-box;
+  position: absolute;
+  top:100%;
+  transition: top var(--animation-duration) var(--ease-out) 0ms;
 }

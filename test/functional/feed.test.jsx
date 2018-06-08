@@ -11,8 +11,7 @@ describe('Feed tests', () => {
   test('has an empty feed', () => {
     const wrapper = Enzyme.shallow(
       <Feed
-        offset={0}
-        onMessageRender={function () {}}
+        moments={[]}
         channel="default"
         appendingMessage={false}
       />
