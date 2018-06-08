@@ -3,7 +3,7 @@ import reducer, {
   defaultState,
   getTrayStatus,
   openMessageTray,
-} from '../../../src/components/message/dux';
+} from '../../src/message/dux';
 
 describe('Message tests', () => {
   test('default state', () => {

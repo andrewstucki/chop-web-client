@@ -1,6 +1,6 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
-import Message from '../../../src/components/message/message';
+import Message from '../../src/message/message';
 import Enzyme from 'enzyme';
 import React from 'react';
 

@@ -9,7 +9,7 @@ import reducer,
   getPlaceholder,
 }  from '../../src/chat/dux';
 
-import { createMessage } from '../../src/components/message/dux';
+import { createMessage } from '../../src/message/dux';
 
 describe('Chat', () => {
   test('reducer with no values', () => {

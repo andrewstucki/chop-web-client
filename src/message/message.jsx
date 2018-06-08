@@ -3,8 +3,8 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
-import { getFirstInitial, getAvatarColor } from '../../util';
-import OpenTrayButton from '../../../assets/open-tray-button.svg';
+import { getFirstInitial, getAvatarColor } from '../util';
+import OpenTrayButton from '../../assets/open-tray-button.svg';
 
 import styles from './style.css';
 

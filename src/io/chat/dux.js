@@ -14,7 +14,7 @@ import {
   ADD_TO_CURRENT_CHANNEL,
   CHAT_INPUT,
 } from '../../../src/chat/dux';
-import { createMessage } from '../../../src/components/message/dux';
+import { createMessage } from '../../../src/message/dux';
 import { CHANGE_CHANNEL } from '../../../src/feed/dux';
 
 // Actions

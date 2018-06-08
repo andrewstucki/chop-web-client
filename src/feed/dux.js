@@ -4,7 +4,7 @@ import type {
   ChatInputAction,
 } from '../chat/dux';
 
-import type { MessageType } from '../components/message/dux';
+import type { MessageType } from '../message/dux';
 
 import type { SetUser } from '../io/chat/dux';
 
@@ -13,7 +13,7 @@ import {
   CHAT_INPUT,
 } from '../chat/dux';
 
-import { createMessage } from '../components/message/dux';
+import { createMessage } from '../message/dux';
 
 import { SET_USER } from '../io/chat/dux';
 

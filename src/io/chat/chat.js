@@ -1,5 +1,5 @@
 // @flow
-import type { MessageType } from '../../components/message/dux';
+import type { MessageType } from '../../message/dux';
 
 
 type ChatType = {

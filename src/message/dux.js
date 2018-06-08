@@ -1,5 +1,5 @@
 // @flow
-import type { UserType } from '../../feed/dux';
+import type { UserType } from '../feed/dux';
 
 // Action Types
 
