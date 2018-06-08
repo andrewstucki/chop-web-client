@@ -7,7 +7,7 @@ import type {
 
 import type {
   AddToChannelType,
-  ChangeChannelType
+  ChangeChannelType,
 } from '../../../src/feed/dux';
 
 import {

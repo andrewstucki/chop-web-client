@@ -1,5 +1,5 @@
 // @flow
-import type { UserType, ChangeChannelType } from '../feed/dux';
+import type { ChangeChannelType } from '../feed/dux';
 import { CHANGE_CHANNEL } from '../feed/dux';
 
 // Action Types

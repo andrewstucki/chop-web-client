@@ -1,5 +1,4 @@
 // @flow
-/* global SyntheticMouseEvent */
 import React from 'react';
 import type {MomentType} from './dux';
 import Message from '../components/message';

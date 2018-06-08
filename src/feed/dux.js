@@ -238,7 +238,7 @@ export type {
   AddToChannelType,
   ChangeChannelType,
   UserType,
-  FeedType
+  FeedType,
 };
 
 export default reducer;

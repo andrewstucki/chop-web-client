@@ -1,7 +1,6 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
 import Feed from '../../src/feed/feed';
-import Message from '../../src/components/message';
 import Enzyme from 'enzyme';
 import React from 'react';
 
@@ -53,7 +52,7 @@ describe('Feed tests', () => {
           nickname: 'Billy Bob',
         },
         messageTrayOpen: false,
-      }
+      },
     });
   });
 

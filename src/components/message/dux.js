@@ -1,7 +1,5 @@
 // @flow
-import type { UserType, FeedType } from '../../feed/dux';
-import type { AddToCurrentChannelAction } from '../../chat/dux';
-import { ADD_TO_CURRENT_CHANNEL } from '../../chat/dux';
+import type { UserType } from '../../feed/dux';
 
 // Action Types
 
@@ -21,8 +19,7 @@ type OpenMessageTrayType = {
 };
 
 type MessageActionTypes =
-  | OpenMessageTrayType
-  | AddToCurrentChannelAction;
+  | OpenMessageTrayType;
 
 // Action Creators
 
@@ -67,13 +64,13 @@ const reducer = (
     return state;
   }
   switch (action.type) {
-    default:
-      return state;
   case OPEN_MESSAGE_TRAY: 
     return {
       ...state,
       messageTrayOpen: true,
     };
+  default:
+    return state;
   }
 };
 

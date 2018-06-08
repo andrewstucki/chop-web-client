@@ -1,6 +1,6 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
-import Message from '../../../src/components/message';
+import Message from '../../../src/components/message/message';
 import Enzyme from 'enzyme';
 import React from 'react';
 
@@ -18,9 +18,11 @@ describe('Message', () => {
               id: '12345',
               nickname: 'Billy Bob',
             },
+            messageTrayOpen: false,
           }
         }
         appendingMessage={false}
+        trayButtonOnClick={() => {}}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
@@ -30,16 +32,18 @@ describe('Message', () => {
     const wrapper = Enzyme.shallow(
       <Message 
         message={
-            {
-              id: '1234',
-              message: 'Go west young man!',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
-              },
-            }
+          {
+            id: '1234',
+            message: 'Go west young man!',
+            user: {
+              id: '12345',
+              nickname: 'Billy Bob',
+            },
+            messageTrayOpen: false,
           }
+        }
         appendingMessage={false}
+        trayButtonOnClick={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
