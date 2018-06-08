@@ -31,16 +31,6 @@ const openMessageTray = (id: string) => (
   }
 );
 
-// {
-//   id: '',
-//   text: '',
-//   user: {
-//     id: '',
-//     nickname: '',
-//   },
-//   messageTrayOpen: false,
-// };
-
 // Action Creators
 
 const createMessage = (

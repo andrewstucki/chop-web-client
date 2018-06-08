@@ -10,10 +10,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  trayButtonOnClick: e => {
-    console.log(e.target.getAttribute('data-messageid'))
-    return dispatch(openMessageTray(e.target.getAttribute('data-messageid'))
-  )},
+  trayButtonOnClick: e => dispatch(
+    openMessageTray(e.target.getAttribute('data-messageid'))
+  ),
 });
 
 const VisibleMessage = connect(

@@ -21,7 +21,6 @@ const Message = (
     trayButtonOnClick,
   }: MessagePropsType) => {
   const style = appendingMessage ? styles.appending : styles.notAppending;
-  console.log(message.messageTrayOpen);
 
   return (
     <div className={style}>

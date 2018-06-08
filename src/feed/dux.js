@@ -219,7 +219,10 @@ const reducer = (
             if (message.id === id) {
               message.messageTrayOpen = true;
             }
-            return message;
+            return {
+              ...message,
+              message
+            };
           }
         ),
       },
