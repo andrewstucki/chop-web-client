@@ -14,8 +14,15 @@ type MessagePropsType = {
   trayButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const Message = ({ message, appendingMessage, trayButtonOnClick }: MessagePropsType) => {
+const Message = (
+  {
+    message,
+    appendingMessage,
+    trayButtonOnClick,
+  }: MessagePropsType) => {
   const style = appendingMessage ? styles.appending : styles.notAppending;
+  console.log(message.messageTrayOpen);
+
   return (
     <div className={style}>
       <div
@@ -27,13 +34,17 @@ const Message = ({ message, appendingMessage, trayButtonOnClick }: MessagePropsT
       <div className={styles.body}>
         <strong className={styles.name}>{message.user.nickname}</strong>
         <span className={styles.role}>Host</span>
-        <div className={styles.message}>{message.message}</div>
+        <div className={styles.message}>{message.text}</div>
       </div>
       <button
+        data-messageid={message.id}
         className={styles.openTrayButton}
         dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
         onClick={trayButtonOnClick}
       />
+      {
+        message.messageTrayOpen && <div>Hello</div>
+      }
     </div>
   );
 };

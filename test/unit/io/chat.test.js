@@ -225,7 +225,7 @@ describe('Chat IO reducer test', () => {
     );
     expect(chat.publish.mock.calls.length).toBe(1);
     expect(chat.publish.mock.calls[0][0]).toEqual('default');
-    expect(chat.publish.mock.calls[0][1].message).toEqual('Hello buddy');
+    expect(chat.publish.mock.calls[0][1].text).toEqual('Hello buddy');
   });
 });
 
@@ -303,7 +303,7 @@ describe('Chat IO Interface test', () => {
 
     chat.publish('default', {
       id: '12345',
-      message: 'Hello, world!',
+      text: 'Hello, world!',
       neverRendered: true,
       user: {
         id: '12345',
@@ -316,7 +316,7 @@ describe('Chat IO Interface test', () => {
     chat.setKeys('12345', '67890');
     chat.publish('default', {
       id: '12345',
-      message: 'Hello, world!',
+      text: 'Hello, world!',
       neverRendered: true,
       user: {
         id: '12345',
@@ -329,7 +329,7 @@ describe('Chat IO Interface test', () => {
     chat.setUser('12345', 'Billy Bob');
     chat.publish('default', {
       id: '12345',
-      message: 'Hello, world!',
+      text: 'Hello, world!',
       neverRendered: true,
       user: {
         id: '12345',
@@ -347,7 +347,7 @@ describe('Chat IO Interface test', () => {
     chat.addChat('default', '12345');
     chat.publish('default', {
       id: '12345',
-      message: 'Hello, world!',
+      text: 'Hello, world!',
       neverRendered: true,
       user: {
         id: '12345',
@@ -360,7 +360,7 @@ describe('Chat IO Interface test', () => {
     expect(ch.emit.mock.calls[0][1]).toEqual(
       {
         id: '12345',
-        message: 'Hello, world!',
+        text: 'Hello, world!',
         neverRendered: true,
         user: {
           id: '12345',

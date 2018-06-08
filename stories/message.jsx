@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import Message from '../src/components/message';
+import Message from '../src/message/message';
 import '../assets/global.css';
 
 storiesOf('Message', module)

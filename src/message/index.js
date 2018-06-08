@@ -3,18 +3,17 @@ import { connect } from 'react-redux';
 import Message from './message';
 import {
   openMessageTray,
-  getTrayStatus,
 } from './dux';
 
 const mapStateToProps = state => {
-  const messageState = state.message;
-  return {
-    messageTrayOpen: getTrayStatus(messageState),
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => ({
-  trayButtonOnClick: () => dispatch(openMessageTray()),
+  trayButtonOnClick: e => {
+    console.log(e.target.getAttribute('data-messageid'))
+    return dispatch(openMessageTray(e.target.getAttribute('data-messageid'))
+  )},
 });
 
 const VisibleMessage = connect(

@@ -13,7 +13,7 @@ describe('Message', () => {
         message={
           {
             id: '1234',
-            message: 'Go west young man!',
+            text: 'Go west young man!',
             user: {
               id: '12345',
               nickname: 'Billy Bob',
@@ -34,7 +34,7 @@ describe('Message', () => {
         message={
           {
             id: '1234',
-            message: 'Go west young man!',
+            text: 'Go west young man!',
             user: {
               id: '12345',
               nickname: 'Billy Bob',

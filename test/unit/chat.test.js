@@ -42,7 +42,7 @@ describe('Chat', () => {
       },
       false
     );
-    expect(message.message).toEqual('I like cookies!');
+    expect(message.text).toEqual('I like cookies!');
     expect(message.id.length).toEqual(5);
     expect(message.user.nickname).toEqual('Billy Bob');
     expect(message.user.id.length).toEqual(5);

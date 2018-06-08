@@ -23,7 +23,7 @@ describe('Feed tests', () => {
     const moments = [
       {
         id: 'string',
-        message: 'This is a message',
+        text: 'This is a message',
         user: {
           id: '12345',
           nickname: 'Billy Bob',
@@ -46,7 +46,7 @@ describe('Feed tests', () => {
       appendingMessage: false,
       message: {
         id: 'string',
-        message: 'This is a message',
+        text: 'This is a message',
         user: {
           id: '12345',
           nickname: 'Billy Bob',

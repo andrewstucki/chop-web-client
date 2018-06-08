@@ -4,7 +4,10 @@ import type {
   ChatInputAction,
 } from '../chat/dux';
 
-import type { MessageType } from '../message/dux';
+import type {
+  MessageType,
+  OpenMessageTrayType,
+} from '../message/dux';
 
 import type { SetUser } from '../io/chat/dux';
 
@@ -13,7 +16,10 @@ import {
   CHAT_INPUT,
 } from '../chat/dux';
 
-import { createMessage } from '../message/dux';
+import {
+  createMessage,
+  OPEN_MESSAGE_TRAY,
+} from '../message/dux';
 
 import { SET_USER } from '../io/chat/dux';
 
@@ -70,7 +76,8 @@ type FeedActionTypes =
   | AddChannelType
   | RemoveChannelType
   | ChatInputAction
-  | SetUser;
+  | SetUser
+  | OpenMessageTrayType;
 
 // Action Creators
 
@@ -201,6 +208,23 @@ const reducer = (
         nickname: action.nickname,
       },
     };
+  case OPEN_MESSAGE_TRAY: {
+    const { id } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [state.currentChannel]: state.channels[state.currentChannel].map(
+          message => {
+            if (message.id === id) {
+              message.messageTrayOpen = true;
+            }
+            return message;
+          }
+        ),
+      },
+    };
+  }
   default:
     return state;
   }

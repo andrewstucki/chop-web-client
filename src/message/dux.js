@@ -9,13 +9,14 @@ const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
 
 type MessageType = {
   id: string,
-  message: string,
+  text: string,
   user: UserType,
   messageTrayOpen: boolean,
 };
 
 type OpenMessageTrayType = {
   type: 'OPEN_MESSAGE_TRAY',
+  id: string,
 };
 
 type MessageActionTypes =
@@ -23,74 +24,65 @@ type MessageActionTypes =
 
 // Action Creators
 
-const openMessageTray = () => (
+const openMessageTray = (id: string) => (
   {
     type: OPEN_MESSAGE_TRAY,
+    id,
   }
 );
 
-// Default State
-
-const defaultState = {
-  id: '',
-  message: '',
-  user: {
-    id: '',
-    nickname: '',
-  },
-  messageTrayOpen: false,
-};
+// {
+//   id: '',
+//   text: '',
+//   user: {
+//     id: '',
+//     nickname: '',
+//   },
+//   messageTrayOpen: false,
+// };
 
 // Action Creators
 
 const createMessage = (
   id: string,
-  message: string,
+  text: string,
   user: UserType,
   messageTrayOpen: boolean
 ): MessageType => (
   {
     id,
-    message,
+    text,
     user,
     messageTrayOpen,
   }
 );
 
 const reducer = (
-  state: MessageType = defaultState,
-  action?: MessageActionTypes): MessageType => {
+  state: Object = {},
+  action?: MessageActionTypes) => {
   if (!action || !action.type) {
     return state;
   }
   switch (action.type) {
-  case OPEN_MESSAGE_TRAY: 
-    return {
-      ...state,
-      messageTrayOpen: true,
-    };
   default:
     return state;
   }
 };
 
-// Selectors
-
-const getTrayStatus = (state: MessageType) => (
-  state.messageTrayOpen
-);
-
 // Exports
 
 export {
-  defaultState,
+  OPEN_MESSAGE_TRAY,
+};
+
+export {
   createMessage,
   openMessageTray,
-  getTrayStatus,
 };
 
 export type {
   MessageType,
+  OpenMessageTrayType,
 };
 
 export default reducer;
