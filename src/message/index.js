@@ -5,9 +5,9 @@ import {
   openMessageTray,
 } from './dux';
 
-const mapStateToProps = state => {
-  return {};
-};
+const mapStateToProps = () => (
+  {}
+);
 
 const mapDispatchToProps = dispatch => (
   {

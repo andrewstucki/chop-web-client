@@ -1,45 +1,53 @@
 // @flow
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import Feed from '../src/feed/feed';
 
+const store = createStore(() => {});
+
 storiesOf('Feed', module)
   .add('blank', () => (
-    <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
-      <Feed
-        channel="default"
-        appendingMessage={false}
-        channel="default"
-      />
-    </div>
+    <Provider store={store}>
+      <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
+        <Feed
+          channel="default"
+          appendingMessage={false}
+          channel="default"
+        />
+      </div>
+    </Provider>
   )).add('with messages', () => (
-    <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
-      <Feed
-        appendingMessage={false}
-        channel="default"
-        moments={
-          [
-            {
-              id: '1',
-              text: 'Hello',
-              user: {
-                id: 'a',
-                nickname: 'Billy Bob',
+    <Provider store={store}>
+      <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
+        <Feed
+          appendingMessage={false}
+          channel="default"
+          moments={
+            [
+              {
+                id: '1',
+                text: 'Hello',
+                user: {
+                  id: 'a',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
               },
-              messageTrayOpen: false,
-            },
-            {
-              id: '2',
-              text: 'Goodbye',
-              user: {
-                id: 'b',
-                nickname: 'Joe Joe',
+              {
+                id: '2',
+                text: 'Goodbye',
+                user: {
+                  id: 'b',
+                  nickname: 'Joe Joe',
+                },
+                messageTrayOpen: false,
               },
-              messageTrayOpen: false,
-            },
-          ]
-        }
-      />
-    </div>
+            ]
+          }
+        />
+      </div>
+    </Provider>
   ))
