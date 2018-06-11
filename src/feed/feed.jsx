@@ -33,35 +33,57 @@ class Feed extends React.Component<FeedProps, FeedState> {
     };
   }
 
+  scrollUntilDone (shouldKeepScrolling) {
+    const prom = new Promise(resolve => {
+      const scroll = () => {
+        this.wrapperRef.current.scrollBy(0, 4);
+        if (shouldKeepScrolling()) {
+          window.requestAnimationFrame(scroll);
+        } else {
+          resolve();
+        }
+      };
+      scroll();
+    });
+    return prom;
+  }
+
+
   componentDidUpdate () {
     const listHeight = this.listRef.current.scrollHeight;
     const wrapper = this.wrapperRef.current;
     const wrapperHeight = Math.ceil(wrapper.getBoundingClientRect().height);
     if (listHeight !== this.state.height &&
         wrapperHeight !== this.state.height) {
-      if (listHeight > wrapperHeight) {
-        this.setState(
-          {
-            height: wrapperHeight,
-            top: '0px',
-          }
-        );
-      } else {
-        this.setState(
-          {
-            height: listHeight,
-            top: `calc(100% - ${listHeight}px)`,
-          }
-        );
-      }
-    } else if (this.state.top === '0px') {
-      const callback = () => {
-        wrapper.scrollBy(0, 4);
-        if (wrapper.scrollHeight - wrapperHeight > wrapper.scrollTop) {
-          window.requestAnimationFrame(callback);
+      this.scrollUntilDone(
+        () => (wrapper.scrollHeight - wrapperHeight > wrapper.scrollTop)
+      ).then(() => {
+        if (listHeight > wrapperHeight) {
+          this.setState(
+            {
+              height: wrapperHeight,
+              top: '0px',
+            }
+          );
+        } else {
+          this.setState(
+            {
+              height: listHeight,
+              top: `calc(100% - ${listHeight}px)`,
+            }
+          );
         }
-      };
-      window.requestAnimationFrame(callback);
+      }
+      );
+    } else if (this.state.top === '0px') {
+      const self = this;
+      window.requestAnimationFrame(
+        () => {
+          self.scrollUntilDone(
+            () => (wrapper.scrollHeight - wrapperHeight > wrapper.scrollTop)
+          );
+        }
+      );
     }
   }
 
