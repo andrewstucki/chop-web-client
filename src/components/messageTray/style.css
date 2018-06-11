@@ -1,0 +1,35 @@
+@import url('../../../assets/theme.css');
+
+:root {
+  --button {
+    font-size: 13px;
+    color: var(--primaryColor);
+    border: none;
+    background-color: inherit;
+    flex-grow: 1;
+  }
+}
+
+.messageTray {
+  background-color: var(--disabledColor);
+  display: flex;
+}
+
+.directChatButton,
+.deleteButton,
+.muteButton {
+  @apply --button;
+}
+
+.muteButton {
+  color: var(--dangerTextColor);
+}
+
+.directChatImage svg,
+.muteImage svg {
+  width: 15px;
+}
+
+.deleteImage svg {
+  width: 13px;
+}
