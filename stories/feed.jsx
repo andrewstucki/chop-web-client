@@ -7,7 +7,11 @@ import Feed from '../src/feed/feed';
 storiesOf('Feed', module)
   .add('blank', () => (
     <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
-      <Feed appendingMessage={false} channel="default" />
+      <Feed
+        channel="default"
+        appendingMessage={false}
+        channel="default"
+      />
     </div>
   )).add('with messages', () => (
     <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
@@ -36,8 +40,6 @@ storiesOf('Feed', module)
             },
           ]
         }
-        offset={-500}
-        onMessageRender={action('message mounted')}
       />
     </div>
   ))

@@ -9,7 +9,7 @@ storiesOf('Message', module)
     <Message message={
       {
         id: '1234',
-        message: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
+        text: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
         user: {
           id: '12345',
           nickname: 'Billy Bob',

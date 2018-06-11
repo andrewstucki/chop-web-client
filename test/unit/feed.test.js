@@ -296,7 +296,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(true);
   });
 
-  test('Open message tray updates the right message default channel', () => {
+  test('Opens only the correct message tray default channel', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -337,7 +337,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Open message tray updates the right message not default channel', () => {
+  test('Opens only the correct message tray not default channel', () => {
     const result = reducer(
       {
         ...defaultState,

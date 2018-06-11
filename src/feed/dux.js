@@ -215,15 +215,12 @@ const reducer = (
       channels: {
         ...state.channels,
         [state.currentChannel]: state.channels[state.currentChannel].map(
-          message => {
-            if (message.id === id) {
-              message.messageTrayOpen = true;
-            }
-            return {
+          message => (
+            {
               ...message,
-              message
-            };
-          }
+              messageTrayOpen: message.id === id,
+            }
+          )
         ),
       },
     };

@@ -1,5 +1,4 @@
 // @flow
-/* global SyntheticMouseEvent */
 import React from 'react';
 
 import type { MessageType } from './dux';
@@ -11,7 +10,7 @@ import styles from './style.css';
 type MessagePropsType = {
   message: MessageType,
   appendingMessage: boolean,
-  trayButtonOnClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  trayButtonOnClick: (id: string) => void,
 };
 
 const Message = (
@@ -36,13 +35,14 @@ const Message = (
         <div className={styles.message}>{message.text}</div>
       </div>
       <button
-        data-messageid={message.id}
         className={styles.openTrayButton}
         dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
-        onClick={trayButtonOnClick}
+        onClick={() => {
+          trayButtonOnClick(message.id);
+        }}
       />
       {
-        message.messageTrayOpen && <div>Hello</div>
+        message.messageTrayOpen && <div>Tray Open</div>
       }
     </div>
   );
