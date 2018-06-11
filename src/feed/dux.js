@@ -1,7 +1,26 @@
 // @flow
-import type { MessageType, AddToCurrentChannelAction, ChatInputAction } from '../chat/dux';
+import type {
+  AddToCurrentChannelAction,
+  ChatInputAction,
+} from '../chat/dux';
+
+import type {
+  MessageType,
+  OpenMessageTrayType,
+} from '../message/dux';
+
 import type { SetUser } from '../io/chat/dux';
-import { ADD_TO_CURRENT_CHANNEL, CHAT_INPUT, createMessage } from '../chat/dux';
+
+import {
+  ADD_TO_CURRENT_CHANNEL,
+  CHAT_INPUT,
+} from '../chat/dux';
+
+import {
+  createMessage,
+  OPEN_MESSAGE_TRAY,
+} from '../message/dux';
+
 import { SET_USER } from '../io/chat/dux';
 
 // Action Types
@@ -57,7 +76,8 @@ type FeedActionTypes =
   | AddChannelType
   | RemoveChannelType
   | ChatInputAction
-  | SetUser;
+  | SetUser
+  | OpenMessageTrayType;
 
 // Action Creators
 
@@ -133,7 +153,7 @@ const reducer = (
           ...state.channels,
           [state.currentChannel]: [
             ...state.channels[state.currentChannel],
-            createMessage(action.id, state.chatInput, state.currentUser),
+            createMessage(action.id, state.chatInput, state.currentUser, false),
           ],
         },
         chatInput: '',
@@ -188,6 +208,23 @@ const reducer = (
         nickname: action.nickname,
       },
     };
+  case OPEN_MESSAGE_TRAY: {
+    const { id } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [state.currentChannel]: state.channels[state.currentChannel].map(
+          message => (
+            {
+              ...message,
+              messageTrayOpen: message.id === id,
+            }
+          )
+        ),
+      },
+    };
+  }
   default:
     return state;
   }
@@ -225,6 +262,7 @@ export type {
   AddToChannelType,
   ChangeChannelType,
   UserType,
+  FeedType,
 };
 
 export default reducer;

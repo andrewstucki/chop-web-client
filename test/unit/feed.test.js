@@ -9,6 +9,8 @@ import reducer, {
   appendMessage,
 } from '../../src/feed/dux';
 
+import { openMessageTray } from '../../src/message/dux';
+
 import {
   addToCurrentChannel,
   chatInput,
@@ -51,7 +53,7 @@ describe('Feed tests', () => {
       addToCurrentChannel(),
     );
     expect(result.channels.default.length).toEqual(1);
-    expect(result.channels.default[0].message).toEqual('this is a message');
+    expect(result.channels.default[0].text).toEqual('this is a message');
     expect(result.channels.default[0].user.id).toEqual('12345');
     expect(result.channels.default[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.default[0].id.length).toEqual(36);
@@ -73,7 +75,7 @@ describe('Feed tests', () => {
     );
     expect(result.channels.default.length).toEqual(0);
     expect(result.channels.host.length).toEqual(1);
-    expect(result.channels.host[0].message).toEqual('this is a string');
+    expect(result.channels.host[0].text).toEqual('this is a string');
     expect(result.channels.host[0].user.id).toEqual('12345');
     expect(result.channels.host[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.host[0].id.length).toEqual(36);
@@ -89,17 +91,18 @@ describe('Feed tests', () => {
       },
       addToChannel('host', {
         id: '12345',
-        message: 'Hello there',
+        text: 'Hello there',
         neverRendered: true,
         user: {
           id: '',
           nickname: '',
         },
+        messageTrayOpen: false,
       })
     );
     expect(result.channels.default.length).toEqual(0);
     expect(result.channels.host.length).toEqual(1);
-    expect(result.channels.host[0].message).toEqual('Hello there');
+    expect(result.channels.host[0].text).toEqual('Hello there');
     expect(result.channels.host[0].id.length).toEqual(5);
     expect(result.appendingMessage).toBe(true);
   });
@@ -190,11 +193,12 @@ describe('Feed tests', () => {
           [
             {
               id: '12345',
-              message: 'I like socks',
+              text: 'I like socks',
               user: {
                 id: '12345',
                 nickname: 'Billy Bob',
               },
+              messageTrayOpen: false,
             },
           ],
         },
@@ -209,11 +213,12 @@ describe('Feed tests', () => {
       [
         {
           id: '12345',
-          message: 'I like socks',
+          text: 'I like socks',
           user: {
             id: '12345',
             nickname: 'Billy Bob',
           },
+          messageTrayOpen: false,
         },
       ],
     );
@@ -229,11 +234,12 @@ describe('Feed tests', () => {
           [
             {
               id: '12345',
-              message: 'I like socks',
+              text: 'I like socks',
               user: {
                 id: '12345',
                 nickname: 'Billy Bob',
               },
+              messageTrayOpen: false,
             },
           ],
         },
@@ -248,11 +254,12 @@ describe('Feed tests', () => {
       [
         {
           id: '12345',
-          message: 'I like socks',
+          text: 'I like socks',
           user: {
             id: '12345',
             nickname: 'Billy Bob',
           },
+          messageTrayOpen: false,
         },
       ]
     );
@@ -287,5 +294,89 @@ describe('Feed tests', () => {
       appendingMessage: true,
     });
     expect(result).toEqual(true);
+  });
+
+  test('Opens only the correct message tray default channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+            },
+          ],
+        },
+      },
+      openMessageTray('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Opens only the correct message tray not default channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          host: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+            },
+          ],
+        },
+        currentChannel: 'host',
+      },
+      openMessageTray('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          host: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+            },
+          ],
+        },
+        currentChannel: 'host',
+      }
+    );
   });
 });

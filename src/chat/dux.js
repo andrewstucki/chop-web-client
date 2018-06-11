@@ -1,5 +1,5 @@
 // @flow
-import type { UserType, ChangeChannelType } from '../feed/dux';
+import type { ChangeChannelType } from '../feed/dux';
 import { CHANGE_CHANNEL } from '../feed/dux';
 
 // Action Types
@@ -28,12 +28,6 @@ type ChatActions =
   | ToggleChatFocusAction
   | AddToCurrentChannelAction
   | ChangeChannelType;
-
-type MessageType = {
-  id: string,
-  message: string,
-  user: UserType,
-};
 
 type PlaceholderType = {
   [string]: string,
@@ -82,14 +76,6 @@ const createUid = () => {
   };
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
-
-const createMessage = (id: string, message: string, user: UserType): MessageType => (
-  {
-    id,
-    message,
-    user,
-  }
-);
 
 // Default State
 const defaultState = {
@@ -157,8 +143,7 @@ export {
 export type { 
   ChatInputAction, 
   ToggleChatFocusAction, 
-  AddToCurrentChannelAction, 
-  MessageType, 
+  AddToCurrentChannelAction,  
   ChatState,
 };
 
@@ -166,7 +151,6 @@ export {
   chatInput, 
   toggleChatFocus,
   addToCurrentChannel,
-  createMessage,
   textEntered,
   createUid,
   defaultState,
