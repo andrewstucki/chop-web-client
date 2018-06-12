@@ -13,16 +13,26 @@
 .messageTray {
   background-color: var(--disabledColor);
   display: flex;
+  width: 100%;
+  height: 54px;
 }
 
 .directChatButton,
 .deleteButton,
-.muteButton {
+.muteButton,
+.closeMessageTray {
   @apply --button;
 }
 
 .muteButton {
   color: var(--dangerTextColor);
+}
+
+.closeMessageTray {
+  background-color: #fff;
+  width: 49px;
+  height: 100%;
+  flex-grow: 0;
 }
 
 .directChatImage svg,
@@ -32,4 +42,8 @@
 
 .deleteImage svg {
   width: 13px;
+}
+
+.closeTrayImage svg {
+  width: 8px;
 }

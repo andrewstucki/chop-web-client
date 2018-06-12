@@ -4,6 +4,7 @@ import type { UserType } from '../feed/dux';
 // Action Types
 
 const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
+const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
 
 // Flow Type Definitions
 
@@ -19,8 +20,14 @@ type OpenMessageTrayType = {
   id: string,
 };
 
+type CloseMessageTrayType = {
+  type: 'CLOSE_MESSAGE_TRAY',
+  id: string,
+};
+
 type MessageActionTypes =
-  | OpenMessageTrayType;
+  | OpenMessageTrayType
+  | CloseMessageTrayType;
 
 // Action Creators
 
@@ -31,7 +38,12 @@ const openMessageTray = (id: string) => (
   }
 );
 
-// Action Creators
+const closeMessageTray = (id: string) => (
+  {
+    type: CLOSE_MESSAGE_TRAY,
+    id,
+  }
+);
 
 const createMessage = (
   id: string,
@@ -46,6 +58,8 @@ const createMessage = (
     messageTrayOpen,
   }
 );
+
+// Reducer
 
 const reducer = (
   state: Object = {},
@@ -63,16 +77,19 @@ const reducer = (
 
 export {
   OPEN_MESSAGE_TRAY,
+  CLOSE_MESSAGE_TRAY,
 };
 
 export {
   createMessage,
   openMessageTray,
+  closeMessageTray,
 };
 
 export type {
   MessageType,
   OpenMessageTrayType,
+  CloseMessageTrayType,
 };
 
 export default reducer;

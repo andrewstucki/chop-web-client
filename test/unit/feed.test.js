@@ -9,7 +9,10 @@ import reducer, {
   appendMessage,
 } from '../../src/feed/dux';
 
-import { openMessageTray } from '../../src/message/dux';
+import {
+  openMessageTray,
+  closeMessageTray,
+} from '../../src/message/dux';
 
 import {
   addToCurrentChannel,
@@ -376,6 +379,47 @@ describe('Feed tests', () => {
           ],
         },
         currentChannel: 'host',
+      }
+    );
+  });
+
+  test('Closes only the correct message tray default channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+            },
+          ],
+        },
+      },
+      closeMessageTray('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+            },
+          ],
+        },
       }
     );
   });

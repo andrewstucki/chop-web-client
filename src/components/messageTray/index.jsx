@@ -4,13 +4,18 @@ import React from 'react';
 import DirectChatButton from '../../../assets/direct-chat-button.svg';
 import DeleteButton from '../../../assets/delete-button.svg';
 import MuteButton from '../../../assets/mute-button.svg';
+import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
 import styles from './style.css';
+
+type MessageTrayPropsType = {
+  trayButtonOnClick: (id: string) => void,
+};
 
 const trayButton = (
   buttonType: string,
   imageType: string,
   image,
-  text: string
+  text: string,
 ) => (
   <button
     className={buttonType}
@@ -23,8 +28,17 @@ const trayButton = (
   </button>
 );
 
-const MessageTray = () => (
+const MessageTray = ({ trayButtonOnClick }: MessageTrayPropsType) => (
   <div className={styles.messageTray}>
+    <button
+      className={styles.closeMessageTray}
+      onClick={trayButtonOnClick}
+    >
+      <span 
+        dangerouslySetInnerHTML={{ __html: CloseMessageTray }}
+        className={styles.closeTrayImage}
+      />
+    </button>
     {
       trayButton(
         styles.directChatButton,
