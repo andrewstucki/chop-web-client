@@ -33,7 +33,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     };
   }
 
-  scrollUntilDone (shouldKeepScrolling) {
+  scrollUntilDone (shouldKeepScrolling: () => boolean): Promise<void> {
     const prom = new Promise(resolve => {
       const scroll = () => {
         this.wrapperRef.current.scrollBy(0, 4);
