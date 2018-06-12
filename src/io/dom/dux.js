@@ -1,6 +1,6 @@
 // @flow
 import type { ToggleChatFocusAction, AddToCurrentChannelAction } from '../../chat/dux';
-import { TOGGLE_CHAT_FOCUS, ADD_TO_CURRENT_CHANNEL } from '../../chat/dux';
+import { TOGGLE_CHAT_FOCUS } from '../../chat/dux';
 import { CHANGE_CHANNEL } from '../../feed/dux';
 import type { ChangeChannelType } from '../../feed/dux';
 
@@ -49,20 +49,6 @@ const reducer = (
         });
       }
     }
-    return state;
-  case ADD_TO_CURRENT_CHANNEL:
-    setTimeout(() => {
-      const chatBox = document.getElementById('chat-box');
-      if (chatBox) {
-        // $FlowFixMe
-        chatBox.scroll({
-          top: chatBox.scrollHeight,
-          behavior: 'smooth',
-        });
-      }
-    },
-    300
-    );
     return state;
   case CHANGE_CHANNEL: {
     setTimeout(() => {
