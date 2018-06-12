@@ -5,6 +5,7 @@ import ioReducer from '../io/dux';
 import navBarReducer from '../navBar/dux';
 import videoFeedReducer from '../videoFeed/dux';
 import sideMenuReducer from '../sideMenu/dux';
+import messageReducer from '../message/dux';
 import { combineReducers } from 'redux';
 
 const reducer = combineReducers({
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   navBar: navBarReducer,
   videoFeed: videoFeedReducer,
   sideMenu: sideMenuReducer,
+  message: messageReducer,
 });
 
 export default reducer;

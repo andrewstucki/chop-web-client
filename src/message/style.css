@@ -1,4 +1,4 @@
-@import '../../../assets/theme.css';
+@import '../../assets/theme.css';
 
 :root {
   --wrapper: {
@@ -60,5 +60,16 @@
 
 .message {
   line-height: 19.2px;
-  padding-top: 2px;
+  word-break: break-all;
+}
+
+.openTrayButton {
+  line-height: 0;
+  padding: 0 8px;
+  border: none;
+  background-color: #fff;
+}
+
+.openTrayButton svg {
+  width: 15px;
 }

@@ -1,8 +1,20 @@
 // @flow
 import type { Chat } from './chat';
-import { ADD_TO_CURRENT_CHANNEL, CHAT_INPUT, createMessage } from '../../../src/chat/dux';
-import type { AddToCurrentChannelAction, ChatInputAction } from '../../../src/chat/dux';
-import type { AddToChannelType, ChangeChannelType } from '../../../src/feed/dux';
+import type {
+  AddToCurrentChannelAction,
+  ChatInputAction,
+} from '../../../src/chat/dux';
+
+import type {
+  AddToChannelType,
+  ChangeChannelType,
+} from '../../../src/feed/dux';
+
+import {
+  ADD_TO_CURRENT_CHANNEL,
+  CHAT_INPUT,
+} from '../../../src/chat/dux';
+import { createMessage } from '../../../src/message/dux';
 import { CHANGE_CHANNEL } from '../../../src/feed/dux';
 
 // Actions
@@ -129,7 +141,7 @@ const getReducer = (chatIO: Chat) => (
     case ADD_TO_CURRENT_CHANNEL:
       chatIO.publish(
         state.currentChannel,
-        createMessage(action.id, state.chatInput, state.user));
+        createMessage(action.id, state.chatInput, state.user, false));
       return {
         ...state,
         chatInput: '',

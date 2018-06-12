@@ -1,7 +1,6 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
 import Feed from '../../src/feed/feed';
-import Message from '../../src/components/message';
 import Enzyme from 'enzyme';
 import React from 'react';
 
@@ -23,15 +22,15 @@ describe('Feed tests', () => {
     const moments = [
       {
         id: 'string',
-        message: 'This is a message',
-        neverRendered: true,
+        text: 'This is a message',
         user: {
           id: '12345',
           nickname: 'Billy Bob',
         },
+        messageTrayOpen: false,
       },
     ];
-    const wrapper = Enzyme.mount(
+    const wrapper = Enzyme.shallow(
       <Feed
         offset={0}
         moments={moments}
@@ -40,9 +39,20 @@ describe('Feed tests', () => {
         appendingMessage={false}
       />
     );
+    
     expect(wrapper.find('ul').children().length).toBe(1);
-    expect(wrapper.find('ul').childAt(0).type()).toEqual('li');
-    expect(wrapper.find(Message).find('div').last().text()).toEqual('This is a message');
+    expect(wrapper.find('li').at(0).childAt(0).props()).toEqual({
+      appendingMessage: false,
+      message: {
+        id: 'string',
+        text: 'This is a message',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        },
+        messageTrayOpen: false,
+      },
+    });
   });
 
   test('check for key prop', () => {
