@@ -23,7 +23,7 @@ const Message = (
     messageButtonOnClick,
     trayButtonOnClick,
   }: MessagePropsType) => {
-  const style = appendingMessage ? styles.appending : styles.notAppending;
+  const messageStyle = appendingMessage ? styles.appending : styles.notAppending;
 
   return (
     <ReactTouchEvents
@@ -31,7 +31,7 @@ const Message = (
         if (direction === 'left') return messageButtonOnClick(message.id);
       }}
     >
-      <div className={style}>
+      <div className={messageStyle}>
         <div
           className={styles.icon} 
           style={{backgroundColor: getAvatarColor(message.user.nickname)}}
@@ -51,10 +51,9 @@ const Message = (
           }}
         />
           <MessageTray
+            messageId={message.id}
             messageTrayOpen={message.messageTrayOpen}
-            trayButtonOnClick={() => {
-              trayButtonOnClick(message.id);
-            }}
+            trayButtonOnClick={trayButtonOnClick}
           />
       </div>
     </ReactTouchEvents>
