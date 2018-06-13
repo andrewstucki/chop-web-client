@@ -16,6 +16,7 @@ storiesOf('Feed', module)
           channel="default"
           appendingMessage={false}
           channel="default"
+          moments={[]}
         />
       </div>
     </Provider>

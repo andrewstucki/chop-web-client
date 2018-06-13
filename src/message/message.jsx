@@ -50,11 +50,11 @@ const Message = (
             messageButtonOnClick(message.id);
           }}
         />
-          <MessageTray
-            messageId={message.id}
-            messageTrayOpen={message.messageTrayOpen}
-            trayButtonOnClick={trayButtonOnClick}
-          />
+        <MessageTray
+          messageId={message.id}
+          messageTrayOpen={message.messageTrayOpen}
+          trayButtonOnClick={trayButtonOnClick}
+        />
       </div>
     </ReactTouchEvents>
   );

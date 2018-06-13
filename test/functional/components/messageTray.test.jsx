@@ -14,6 +14,7 @@ describe('MessageTray tests', () => {
       <MessageTray 
         trayButtonOnClick={() => {}}
         messageTrayOpen={false}
+        messageId="123"
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('closed');
@@ -28,6 +29,7 @@ describe('MessageTray tests', () => {
       <MessageTray 
         trayButtonOnClick={() => {}}
         messageTrayOpen={true}
+        messageId="123"
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('open');
@@ -39,6 +41,7 @@ describe('MessageTray tests', () => {
       <MessageTray
         trayButtonOnClick={onButtonClick}
         messageTrayOpen={true}
+        messageId="123"
       />
     );
     wrapper.find('button').at(0).simulate('click');
