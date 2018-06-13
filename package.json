@@ -1,6 +1,6 @@
 {
   "name": "chop-web-client",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Church Online Platform (ChOP) web client",
   "main": "index.tsx",
   "repository": "git@in.thewardro.be:kenny.heaton/chop-web-client.git",
