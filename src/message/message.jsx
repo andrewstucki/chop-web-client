@@ -22,7 +22,7 @@ const Message = (
   const style = appendingMessage ? styles.appending : styles.notAppending;
 
   return (
-    <div className={style}>
+    <div data-component="message" className={style}>
       <div
         className={styles.icon} 
         style={{backgroundColor: getAvatarColor(message.user.nickname)}}
@@ -32,7 +32,7 @@ const Message = (
       <div className={styles.body}>
         <strong className={styles.name}>{message.user.nickname}</strong>
         <span className={styles.role}>Host</span>
-        <div className={styles.message}>{message.text}</div>
+        <div data-node="text" className={styles.message}>{message.text}</div>
       </div>
       <button
         className={styles.openTrayButton}

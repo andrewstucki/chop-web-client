@@ -1,8 +1,9 @@
+/* global module */
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import SideMenuComponent from '../src/components/sideMenu';
-import SideMenu from '../src/sideMenu/sideMenu'
+import SideMenu from '../src/sideMenu/sideMenu';
 
 storiesOf('SideMenu', module)
   .add('Basic Component', () => (
@@ -27,4 +28,4 @@ storiesOf('SideMenu', module)
       logout={action('logout')}
       close={action('close')}
       isClosed={false} />
-  ))
+  ));

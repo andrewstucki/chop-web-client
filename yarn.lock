@@ -1757,6 +1757,10 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+bezier-easing@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bezier-easing/-/bezier-easing-2.1.0.tgz#c04dfe8b926d6ecaca1813d69ff179b7c2025d86"
+
 big-integer@^1.6.17:
   version "1.6.28"
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.28.tgz#8cef0fda3ccde8759c2c66efcfacc35aea658283"
@@ -8401,10 +8405,6 @@ react-dom@^16.3.1:
 react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
-
-react-fastclick@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/react-fastclick/-/react-fastclick-3.0.2.tgz#2994c60088cda90b0b2cbfac4b6e7c6bc73d6a3a"
 
 react-fuzzy@^0.5.2:
   version "0.5.2"

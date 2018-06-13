@@ -1,6 +1,6 @@
+/* global module */
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
 import Chat from '../src/chat/chat';
 
 storiesOf('Chat', module)
@@ -15,4 +15,4 @@ storiesOf('Chat', module)
   ))
   .add('text entered', () => (
     <Chat textValue="Hello my peeps" focused={false} textEntered={true} />
-  ))
+  ));
