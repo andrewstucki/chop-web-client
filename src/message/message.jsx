@@ -24,37 +24,32 @@ const Message = (
   }: MessagePropsType) => {
   const style = appendingMessage ? styles.appending : styles.notAppending;
 
-  if (!message.messageTrayOpen) {
-    return (
-      <div className={style}>
-        <div
-          className={styles.icon} 
-          style={{backgroundColor: getAvatarColor(message.user.nickname)}}
-        >
-          {getFirstInitial(message.user.nickname)}
-        </div>
-        <div className={styles.body}>
-          <strong className={styles.name}>{message.user.nickname}</strong>
-          <span className={styles.role}>Host</span>
-          <div className={styles.message}>{message.text}</div>
-        </div>
-        <button
-          className={styles.openTrayButton}
-          dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
-          onClick={() => {
-            messageButtonOnClick(message.id);
-          }}
-        />
-      </div>
-    );
-  }
   return (
     <div className={style}>
-      <MessageTray
-        trayButtonOnClick={() => {
-          trayButtonOnClick(message.id);
+      <div
+        className={styles.icon} 
+        style={{backgroundColor: getAvatarColor(message.user.nickname)}}
+      >
+        {getFirstInitial(message.user.nickname)}
+      </div>
+      <div className={styles.body}>
+        <strong className={styles.name}>{message.user.nickname}</strong>
+        <span className={styles.role}>Host</span>
+        <div className={styles.message}>{message.text}</div>
+      </div>
+      <button
+        className={styles.openTrayButton}
+        dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
+        onClick={() => {
+          messageButtonOnClick(message.id);
         }}
       />
+        <MessageTray
+          messageTrayOpen={message.messageTrayOpen}
+          trayButtonOnClick={() => {
+            trayButtonOnClick(message.id);
+          }}
+        />
     </div>
   );
 };

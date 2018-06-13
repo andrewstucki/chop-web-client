@@ -3,7 +3,9 @@
 :root {
   --wrapper: {
     display: flex;
-    margin-top: 18px;
+    margin: 8px 0;
+    position: relative;
+    min-height: 54px;
   }
 }
 

@@ -15,6 +15,7 @@
 
 .feed {
   margin: 0;
+  background-color: #fff;
   justify-content: flex-end;
   display: flex;
   flex-direction: column;
