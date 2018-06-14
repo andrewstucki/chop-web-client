@@ -13,9 +13,9 @@ const mapStateToProps = () => (
 
 const mapDispatchToProps = dispatch => (
   {
-    openButtonOnClick: id => dispatch(openMessageTray(id)),
-    closeButtonOnClick: id => dispatch(closeMessageTray(id)),
-    deleteButtonOnClick: id => dispatch(deleteMessage(id)),
+    openMessageTray: id => dispatch(openMessageTray(id)),
+    closeMessageTray: id => dispatch(closeMessageTray(id)),
+    deleteMessage: id => dispatch(deleteMessage(id)),
   }
 );
 

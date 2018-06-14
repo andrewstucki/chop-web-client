@@ -9,8 +9,8 @@ import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
 import styles from './style.css';
 
 type MessageTrayPropsType = {
-  closeButtonOnClick: (id: string) => void,
-  deleteButtonOnClick: (id: string) => void,
+  closeMessageTray: (id: string) => void,
+  deleteMessage: (id: string) => void,
   messageTrayOpen: boolean,
   messageId: string,
 };
@@ -36,8 +36,8 @@ const trayButton = (
 
 const MessageTray = (
   {
-    closeButtonOnClick,
-    deleteButtonOnClick,
+    closeMessageTray,
+    deleteMessage,
     messageTrayOpen,
     messageId,
   }: MessageTrayPropsType
@@ -47,14 +47,14 @@ const MessageTray = (
   return (
     <ReactTouchEvents
       onSwipe={direction => {
-        if (direction === 'right') return closeButtonOnClick(messageId);
+        if (direction === 'right') return closeMessageTray(messageId);
       }}
     >
       <div className={trayStyle}>
         <button
           className={styles.closeMessageTray}
           onClick={() => {
-            closeButtonOnClick(messageId);
+            closeMessageTray(messageId);
           }}
         >
           <span 
@@ -76,7 +76,7 @@ const MessageTray = (
             styles.deleteImage,
             DeleteButton,
             'Delete message',
-            deleteButtonOnClick
+            deleteMessage
           )
         }
         {
