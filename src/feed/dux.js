@@ -251,7 +251,9 @@ const reducer = (
   case DELETE_MESSAGE: {
     const { id } = action;
     const { channels, currentChannel } = state;
-    const messageIndex = channels[currentChannel].indexOf(id);
+    const messageIndex = channels[currentChannel].findIndex(el => (
+      el.id === id
+    ));
     return {
       ...state,
       channels: {
