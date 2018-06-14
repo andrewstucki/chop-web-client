@@ -12,7 +12,7 @@ describe('MessageTray tests', () => {
   test('MessageTray has buttons', () => {
     const wrapper = Enzyme.shallow(
       <MessageTray 
-        trayButtonOnClick={() => {}}
+        closeMessageTray={() => {}}
         messageTrayOpen={false}
         messageId="123"
       />
@@ -27,7 +27,7 @@ describe('MessageTray tests', () => {
   test('MessageTray opens', () => {
     const wrapper = Enzyme.shallow(
       <MessageTray 
-        trayButtonOnClick={() => {}}
+        closeMessageTray={() => {}}
         messageTrayOpen={true}
         messageId="123"
       />
@@ -39,7 +39,7 @@ describe('MessageTray tests', () => {
     const onButtonClick = sinon.spy();
     const wrapper = Enzyme.shallow(
       <MessageTray
-        trayButtonOnClick={onButtonClick}
+        closeMessageTray={onButtonClick}
         messageTrayOpen={true}
         messageId="123"
       />

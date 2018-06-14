@@ -23,8 +23,8 @@ describe('Message', () => {
           }
         }
         appendingMessage={false}
-        trayButtonOnClick={() => {}}
-        messageButtonOnClick={() => {}}
+        closeMessageTray={() => {}}
+        openMessageTray={() => {}}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
@@ -46,8 +46,8 @@ describe('Message', () => {
           }
         }
         appendingMessage={false}
-        trayButtonOnClick={() => {}}
-        messageButtonOnClick={onClick}
+        closeMessageTray={() => {}}
+        openMessageTray={onClick}
       />
     );
     expect(wrapper.find('button').length).toBe(1);

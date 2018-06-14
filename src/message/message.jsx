@@ -12,23 +12,23 @@ import styles from './style.css';
 type MessagePropsType = {
   message: MessageType,
   appendingMessage: boolean,
-  messageButtonOnClick: (id: string) => void,
-  trayButtonOnClick: (id: string) => void,
+  openMessageTray: (id: string) => void,
+  closeMessageTray: (id: string) => void,
 };
 
 const Message = (
   {
     message,
     appendingMessage,
-    messageButtonOnClick,
-    trayButtonOnClick,
+    openMessageTray,
+    closeMessageTray,
   }: MessagePropsType) => {
   const messageStyle = appendingMessage ? styles.appending : styles.notAppending;
 
   return (
     <ReactTouchEvents
       onSwipe={direction => {
-        if (direction === 'left') return messageButtonOnClick(message.id);
+        if (direction === 'left') return openMessageTray(message.id);
       }}
     >
       <div className={messageStyle}>
@@ -47,13 +47,13 @@ const Message = (
           className={styles.openTrayButton}
           dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
           onClick={() => {
-            messageButtonOnClick(message.id);
+            openMessageTray(message.id);
           }}
         />
         <MessageTray
           messageId={message.id}
           messageTrayOpen={message.messageTrayOpen}
-          trayButtonOnClick={trayButtonOnClick}
+          closeMessageTray={closeMessageTray}
         />
       </div>
     </ReactTouchEvents>
