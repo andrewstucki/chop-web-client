@@ -1,9 +1,9 @@
 // @flow
+/* global module */
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
 import Feed from '../src/feed/feed';
 
 const store = createStore(() => {});
@@ -13,9 +13,9 @@ storiesOf('Feed', module)
     <Provider store={store}>
       <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
         <Feed
+          moments={[]}
           channel="default"
           appendingMessage={false}
-          channel="default"
         />
       </div>
     </Provider>
@@ -50,4 +50,4 @@ storiesOf('Feed', module)
         />
       </div>
     </Provider>
-  ))
+  ));

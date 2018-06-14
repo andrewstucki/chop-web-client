@@ -63,15 +63,6 @@ const reducer = (
     },
     0
     );
-    const link = document.getElementById('nav-' + action.channel);
-    if (link) {
-      const boundingRec = link.getBoundingClientRect();
-      return {
-        ...state,
-        linkXPos: boundingRec.left,
-        linkWidth: boundingRec.width,
-      };
-    }
     return state;
   }
   default:
@@ -79,19 +70,8 @@ const reducer = (
   }
 };
 
-// Selector
-const getBarX = (state: DomStateType) => (
-  state.linkXPos + 8
-);
-
-const getBarWidth = (state: DomStateType) => (
-  state.linkWidth - 16
-);
-
 export {
   defaultState,
-  getBarX,
-  getBarWidth,
 };
 
 export default reducer;

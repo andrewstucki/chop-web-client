@@ -2,8 +2,6 @@
 import reducer,
 {
   defaultState,
-  getBarX,
-  getBarWidth,
 } from '../../../src/io/dom/dux';
 import { toggleChatFocus } from '../../../src/chat/dux';
 import { changeChannel } from '../../../src/feed/dux';
@@ -69,23 +67,5 @@ describe('DOM tests', () => {
     );
     expect(result.linkXPos).toEqual(50);
     expect(result.linkWidth).toEqual(100);
-  });
-
-  test('getBarX', () => {
-    expect(getBarX(
-      {
-        ...defaultState,
-        linkXPos: 50,
-      }
-    )).toBe(58);
-  });
-
-  test('getBarWidth', () => {
-    expect(getBarWidth(
-      {
-        ...defaultState,
-        linkWidth: 100,
-      }
-    )).toBe(84);
   });
 });
