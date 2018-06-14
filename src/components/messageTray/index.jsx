@@ -9,7 +9,7 @@ import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
 import styles from './style.css';
 
 type MessageTrayPropsType = {
-  trayButtonOnClick: (id: string) => void,
+  closeButtonOnClick: (id: string) => void,
   deleteButtonOnClick: (id: string) => void,
   messageTrayOpen: boolean,
   messageId: string,
@@ -36,7 +36,7 @@ const trayButton = (
 
 const MessageTray = (
   {
-    trayButtonOnClick,
+    closeButtonOnClick,
     deleteButtonOnClick,
     messageTrayOpen,
     messageId,
@@ -47,14 +47,14 @@ const MessageTray = (
   return (
     <ReactTouchEvents
       onSwipe={direction => {
-        if (direction === 'right') return trayButtonOnClick(messageId);
+        if (direction === 'right') return closeButtonOnClick(messageId);
       }}
     >
       <div className={trayStyle}>
         <button
           className={styles.closeMessageTray}
           onClick={() => {
-            trayButtonOnClick(messageId);
+            closeButtonOnClick(messageId);
           }}
         >
           <span 

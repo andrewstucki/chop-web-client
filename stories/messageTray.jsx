@@ -10,6 +10,7 @@ storiesOf('MessageTray', module)
     <MessageTray
       messageId='123'
       messageTrayOpen={true}
-      trayButtonOnClick={() => {}}
+      closeButtonOnClick={() => {}}
+      deleteButtonOnClick={() => {}}
     />
   ))
