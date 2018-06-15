@@ -18,6 +18,7 @@ type NavBarState = {
 
 const Underline = props => (
   <div
+    id="nav-underline"
     className={styles.bar}
     style={
       {
@@ -64,7 +65,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       openMenu,
     } = this.props;
     return (
-      <div className={styles.navBar}>
+      <div id="nav-bar" className={styles.navBar}>
         <a
           href="javascript:void(0)"
           onClick={openMenu}
