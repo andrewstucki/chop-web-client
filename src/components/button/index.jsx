@@ -26,6 +26,7 @@ const Button =
         id="chat-button"
         className={style}
         onClick={onClick}
+        onTouchStart={onClick}
         dangerouslySetInnerHTML={{ __html: image }}
       />
     );
