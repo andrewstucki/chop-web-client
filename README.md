@@ -1,46 +1,50 @@
-# CWC
-### (ChOP (Church Online Platform) Web Client)
+# CWC -- ChOP (Church Online Platform) Web Client
 
-## Installing
+A Progressive Web App for experiencing church online.
 
-### Install `nvm`
-Go to this URL and follow the instructions
-https://github.com/creationix/nvm#installation
+## Getting Started
 
-### Install the correft version of `node`
-After verifying run this command to install the version of node.js specificed in the .nvmrc file:
+### Prerequisites
+
+- nvm : https://github.com/creationix/nvm#installation
+- yarn : https://yarnpkg.com/lang/en/docs/install
+
+NOTE: We use yarn because of the added security benefits as well as other features. Because yarn using yarn.lock and npm using package.lock we need to be consistent about using the same package tool within a project.
+
+If you are going to deploy production releases you will also need these to install the following. You will need to have permissions to our GKE project as well.
+
+- docker : https://www.docker.com/community-edition#/download
+- gcloud : https://cloud.google.com/sdk/install
+- kubectl : run `gcloud components install kubectl`
+- setup gcloud :
+  - `gcloud config set project open-network-194320`
+  - `gcloud container clusters get-credentials chop-web-client`
+  - `gcloud auth configure-docker`
+
+### Installing
+
+In order to ensure that you have the correct version of node installed use nvm to match our .nvmrc file. Our tests will not work with the latest version of node. We use the Node LTS (Long Term Support which is 8.11.2 as of the time of this writing) version. From withing the project directory run:
+
 ```bash
-nvm install $(cat .nvmrc)
+nvm install
 ```
-Or if you've already install that version
+
+Once installed you will need to tell nvm to use that version each time you open a new terminal in the cwc project.
+
 ```bash
-nvm use $(cat .nvmrc)
+nvm use
 ```
 
-### Install `yarn`
-Go to this URL and follow the
-https://yarnpkg.com/en/docs/install
+You can see what version you have with
 
-Because yarn using yarn.lock and npm using package.lock we need to be consistent
-about using the same package tool within a project. We use yarn because of the
-added security benifits as well as other features.
+```
+nvm version
+```
 
-### Install packages
-Run the following command to install the remaining node packages.
+Run yarn to install the remaining node packages.
+
 ```
 yarn
-```
-
-## Production Build
-
-To build code to the dist folder ready for production use:
-```
-yarn build
-```
-
-To start the production server run
-```
-yarn server
 ```
 
 ## Local Development
@@ -55,16 +59,16 @@ To start the Storybook server to view components.
 yarn storybook
 ```
 
-## Run Tests
+## Running the tests
 
-To run the Uint Tests. Unit tests validate code logic without
+To run the Unit Tests. Unit tests validate code logic without
 interactive with UI.
 ```
 yarn test:unit
 ```
 
 To run the Functional Tests. Functional tests validate state and
-behaviour of React UI.
+behavior of React UI.
 ```
 yarn test:func
 ```
@@ -109,15 +113,15 @@ To generate updated code quality and complexity report
 yarn plato
 ```
 
-To run the Snapshot and Visual Regression Tests. Snapshop tests create a copy of
+To run the Snapshot and Visual Regression Tests. Snapshot tests create a copy of
 the markup created by React UI and compare it to the previous copy and validate
-there are no differences. Visual Regession tests take a screenshot of each
-componet and compare it to the last screenshot. Both of these types of tests
+there are no differences. Visual Regression tests take a screenshot of each
+component and compare it to the last screenshot. Both of these types of tests
 need the Storybook server running (see above). 
 ```
 yarn snap
 ```
-If there is a diffrence in the snapshots you can compare them to see the delta.
+If there is a difference in the snapshots you can compare them to see the delta.
 Then if it is a bug fix it, or if it is an accepted change you can update the
 saved snapshots to reflect the new state.
 ```
@@ -139,126 +143,68 @@ To run all the validation (test, snap, flow and lint)
 yarn validate
 ```
 
-## Architecture
+## Production Build
 
-### Technologies
-
-The CWC is a single page client application that runs in the browser.
-It is built with many technologies but primarily based on Redux and
-React. The follow resources should help you if your not familure with
-any of the technologies we use.
-
-JavaScript -- The language
-https://www.ecma-international.org/ecma-262/8.0/index.html
-https://developer.mozilla.org/en-US/docs/Web/JavaScript
-
-Redux -- The core of our application, manages state and messaging
-between controls and compnents.
-https://redux.js.org/
-https://egghead.io/courses/getting-started-with-redux
-
-React -- Our UI library that uses JSX as a templating engine
-https://reactjs.org/
-https://reactjs.org/docs/introducing-jsx.html
-
-Jest -- Our testing framework (we practice TDD)
-https://facebook.github.io/jest/
-
-Enzyme -- Helps test React UI
-http://airbnb.io/enzyme/docs/api/
-
-sinon -- Creating spies, stubs and mocks for UI testing
-http://sinonjs.org/
-
-Flow -- Static type checking for JavaScript
-https://flow.org/
-
-Webpack -- Build manager and resource bundling
-https://webpack.js.org/
-
-Babel -- JavaScript Transpiling
-https://babeljs.io/
-
-PostCSS -- CSS Transpiling
-https://postcss.org/
-
-CSSnext -- PostCSS plugin that allows us to use future CSS features
-http://cssnext.io/
-
-Storybook -- Component testing site
-https://storybook.js.org/
-
-Docker -- Container for packaging and deploying app
-https://www.docker.com/
-
-Kubernetes -- Container scaling, deployment and managment
-https://kubernetes.io/
-https://www.youtube.com/watch?v=4ht22ReBjno
-
-node.js -- JavaScript environment. We mainly use it for a build and
-development tool but also it runs our static server for production
-https://nodejs.org/en/
-
-yarn -- package manager (we use yarn instead of npm)
-https://yarnpkg.com/en/
-* please don't use npm *
-
-nvm -- manage node versions
-https://github.com/creationix/nvm
-
-esLint -- Static analysis tool for JavaScript (linter) 
-https://eslint.org/
-
-
-### Layout
-
-All our source code is in the src file. This has one index.jsx file
-which is the entry point into the applicaiton. There is a components
-folder and then a fold for every control.
-
-Components are simple UI modules that have no internal state or reducer. These normally just have one JSX file and a CSS file. And example would be a button.
-
-Controls are more complex modules that require both state and a reducer. Controls are sometimes called container components. The will have four main files
-
-- CSS for styles
-- a JSX file that renders that UI
-- a dux.js file that holds all the logic; reducer, defautl state, selectors, action creators, action types.
-- index.jsx which is the outword facing interface for the control and binds together the UI (*.jsx) and logic (dux.js)
-
-Learn about the dux (or ducks) pattern
-https://github.com/erikras/ducks-modular-redux
-
-
-Test code goes in the test folder. There are three main types of tests.
-
-functional -- Testing interaction
-snapshot -- Testing visual regression
-unit -- Testing pure logic
-
-The assets folder holds additional assets used by the appication.
-
-The final code after transpiling and bundling is copied into the dist folder. The assets are also copied into dist. The dist folder is server but the production HTTP server.
-
-### Design
-
-CWC is built out of controls that are independant of each other. They in theroy could each live in a seprate repo and be pulled in as a dependacy and may move that way in the furture if needed.
-
-These controls each have their over state, reducer and communicate with each other over messages (redux actions). Even those Redux has a single store each control uses a sub branch of the store for itself. They don't depend on anything another controls store. So if both controls Feed and Chat need the value of 'chatInput' and it is set with the action 'CHAT_INPUT' both Feed and Chat will have a reducer that will respond to 'CHAT_INPUT' and store the value it their own branch of the store.
-
-Some controls dispatch actions and don't respond to them. They are letting everyone else know that this happened. Some listen to an action that they don't dispatch. Some both respond and dispatch an action. Some actions are shared and some are only used by one controls. The action is defined in the control that dispatches it, not the ones that listen to it.
-
-Each control saves the data in the state in a format that best servers that control. So just because two controls respond to the same action doesn't mean their state is similar. For example both Feed and NavBar respond to ADD_CHANNEL and CHANGE_CHANNEL. But Feed stores the state like this:
-
-```javascript
-channels: {
-  [string]: Array<MessageType>,
-},
-currentChannel: string,
+To build code to the dist folder ready for production use:
+```
+yarn build
 ```
 
-And NavBar stores it like this:
-
-```javascript
-channels: Array<string>,
-currentChannel: string,
+To start the production server run
 ```
+yarn server
+```
+
+## Deployment
+
+Before deploying you will need permissions to our GKE project and to install the deployment prerequisites.
+
+Update the version in the project.json and config/deployment.yaml files as well as set the git tag.
+
+You can update the package.json and the git tag together.
+
+```
+yarn version --minor
+```
+
+NOTE: Until we reach MVP we are leaving the major version 0 and just updating the minor version. We are doing this because almost ever release has breaking changes. Once we reach MVP we will be at 1.0.0 and will follow strict semantic versioning form that point on.
+
+You will have to manually update the tag on config/deployment.yaml on this line to match the new version.
+
+```
+image: gcr.io/open-network-194320/chop-web-client:0.13.0
+```
+
+Build your docker container replacing <version> with the correct version:
+
+```
+docker build -f config/Dockerfile -t gcr.io/open-network-194320/chop-web-client:<version> .
+```
+
+Push the container to Google's Container Registry
+
+```
+docker push gcr.io/open-network-194320/chop-web-client:<version>
+```
+
+Deploy the  new container to GKE
+
+```
+kubectl apply -f config/deployment.yaml
+```
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://in.thewardro.be/io/opennetwork/chop-web-client/tags). 
+
+## Authors
+
+See also the list of [maintainers](MAINTAINERS) who participated n this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

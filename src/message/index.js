@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Message from './message';
 import {
   openMessageTray,
+  closeMessageTray,
+  deleteMessage,
 } from './dux';
 
 const mapStateToProps = () => (
@@ -11,7 +13,9 @@ const mapStateToProps = () => (
 
 const mapDispatchToProps = dispatch => (
   {
-    trayButtonOnClick: id => dispatch(openMessageTray(id)),
+    openMessageTray: id => dispatch(openMessageTray(id)),
+    closeMessageTray: id => dispatch(closeMessageTray(id)),
+    deleteMessage: id => dispatch(deleteMessage(id)),
   }
 );
 

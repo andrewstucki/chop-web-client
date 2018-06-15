@@ -9,7 +9,11 @@ import reducer, {
   appendMessage,
 } from '../../src/feed/dux';
 
-import { openMessageTray } from '../../src/message/dux';
+import {
+  openMessageTray,
+  closeMessageTray,
+  deleteMessage,
+} from '../../src/message/dux';
 
 import {
   addToCurrentChannel,
@@ -377,6 +381,116 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       }
+    );
+  });
+
+  test('Closes only the correct message tray default channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+            },
+          ],
+        },
+      },
+      closeMessageTray('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can delete a message', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+            },
+            {
+              id: '189',
+              text: 'Hello Billy Bob',
+              user: {
+                id: '14543',
+                nickname: 'Jenny Jane',
+              },
+              messageTrayOpen: true,
+            },
+            {
+              id: '204',
+              text: 'George is very angry',
+              user: {
+                id: '18475',
+                nickname: 'George Costanza',
+              },
+              messageTrayOpen: true,
+            },
+          ],
+        },
+      },
+      deleteMessage('123')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          default: 
+          [
+            {
+              id: '189',
+              text: 'Hello Billy Bob',
+              user: {
+                id: '14543',
+                nickname: 'Jenny Jane',
+              },
+              messageTrayOpen: true,
+            },
+            {
+              id: '204',
+              text: 'George is very angry',
+              user: {
+                id: '18475',
+                nickname: 'George Costanza',
+              },
+              messageTrayOpen: true,
+            },
+          ],
+        },
+      },
     );
   });
 });

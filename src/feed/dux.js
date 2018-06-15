@@ -7,6 +7,8 @@ import type {
 import type {
   MessageType,
   OpenMessageTrayType,
+  CloseMessageTrayType,
+  DeleteMessageType,
 } from '../message/dux';
 
 import type { SetUser } from '../io/chat/dux';
@@ -19,6 +21,8 @@ import {
 import {
   createMessage,
   OPEN_MESSAGE_TRAY,
+  CLOSE_MESSAGE_TRAY,
+  DELETE_MESSAGE,
 } from '../message/dux';
 
 import { SET_USER } from '../io/chat/dux';
@@ -77,7 +81,9 @@ type FeedActionTypes =
   | RemoveChannelType
   | ChatInputAction
   | SetUser
-  | OpenMessageTrayType;
+  | OpenMessageTrayType
+  | CloseMessageTrayType
+  | DeleteMessageType;
 
 // Action Creators
 
@@ -222,6 +228,40 @@ const reducer = (
             }
           )
         ),
+      },
+    };
+  }
+  case CLOSE_MESSAGE_TRAY: {
+    const { id } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [state.currentChannel]: state.channels[state.currentChannel].map(
+          message => (
+            {
+              ...message,
+              messageTrayOpen: message.id === id ? false : null,
+            }
+          )
+        ),
+      },
+    };
+  }
+  case DELETE_MESSAGE: {
+    const { id } = action;
+    const { channels, currentChannel } = state;
+    const messageIndex = channels[currentChannel].findIndex(el => (
+      el.id === id
+    ));
+    return {
+      ...state,
+      channels: {
+        ...channels,
+        [currentChannel]: [
+          ...channels[currentChannel].slice(0, messageIndex),
+          ...channels[currentChannel].slice(messageIndex + 1),
+        ],
       },
     };
   }
