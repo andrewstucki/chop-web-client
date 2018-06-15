@@ -88,7 +88,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       const marginTop = parseInt(window.getComputedStyle(newestMessage)['margin-top'], 10);
       const messageTotalHeight = messageHeight + marginTop;
 
-      if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) > 5) {
+      if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) > wrapper.scrollTop) {
         wrapper.scroll({
           top: wrapper.scrollHeight - (wrapperHeight + messageTotalHeight),
           behavior: 'instant',
