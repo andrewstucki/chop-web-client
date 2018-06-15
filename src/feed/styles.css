@@ -11,7 +11,9 @@
 
 .feed {
   margin: 0;
+  background-color: #fff;
   position: absolute;
   top:100%;
   transition: top var(--animation-duration) var(--ease-out) 0ms;
+  width: 100%;
 }

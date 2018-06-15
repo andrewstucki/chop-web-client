@@ -1,0 +1,67 @@
+@import url('../../../assets/theme.css');
+
+:root {
+  --button {
+    font-size: 13px;
+    color: var(--primaryColor);
+    border: none;
+    background-color: inherit;
+    flex-grow: 1;
+  }
+  --tray {
+    position: absolute;
+    display: flex;
+    background-color: var(--disabledColor);
+    height: 100%;
+    width: 0;
+    z-index: 10;
+    right: 0;
+    top: 0;
+    overflow: hidden;
+    transition: var(--animation-duration);
+  }
+}
+
+.open {
+  @apply --tray;
+  width: 100%;
+  transition-timing-function: var(--ease-in);
+}
+
+.closed {
+  @apply --tray;
+  transition-timing-function: var(--ease-out);
+}
+
+.directChatButton,
+.deleteButton,
+.muteButton,
+.closeMessageTray {
+  @apply --button;
+}
+
+.muteButton {
+  color: var(--dangerTextColor);
+}
+
+.closeMessageTray {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  width: 49px;
+  height: 100%;
+  flex-grow: 0;
+}
+
+.directChatImage svg,
+.muteImage svg {
+  width: 15px;
+}
+
+.deleteImage svg {
+  width: 13px;
+}
+
+.closeTrayImage svg {
+  width: 8px;
+}
