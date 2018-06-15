@@ -3,6 +3,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import Message from '../../src/message/message';
 import Enzyme from 'enzyme';
 import React from 'react';
+import sinon from 'sinon';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -22,13 +23,15 @@ describe('Message', () => {
           }
         }
         appendingMessage={false}
-        trayButtonOnClick={() => {}}
+        closeMessageTray={() => {}}
+        openMessageTray={() => {}}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
   });
 
-  test('has a menu button', () => {
+  test('has a menu button and it can be clicked', () => {
+    const onClick = sinon.spy();
     const wrapper = Enzyme.shallow(
       <Message 
         message={
@@ -43,9 +46,12 @@ describe('Message', () => {
           }
         }
         appendingMessage={false}
-        trayButtonOnClick={() => {}}
+        closeMessageTray={() => {}}
+        openMessageTray={onClick}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
+    wrapper.find('button').at(0).simulate('click');
+    expect(onClick.calledOnce).toEqual(true);
   });
 });

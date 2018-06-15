@@ -9,6 +9,7 @@ function loadStories() {
   require('../../stories/navBar.jsx');
   require('../../stories/videoFeed.jsx');
   require('../../stories/sideMenu.jsx');
+  require('../../stories/messageTray.jsx');
 }
 
 configure(loadStories, module);
