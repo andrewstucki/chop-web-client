@@ -23,6 +23,7 @@ const Button =
   if (image) {
     return (
       <button
+        id="chat-button"
         className={style}
         onClick={onClick}
         dangerouslySetInnerHTML={{ __html: image }}

@@ -1,3 +1,4 @@
+/* global module */
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import VideoFeed from '../src/videoFeed/videoFeed';

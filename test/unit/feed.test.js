@@ -108,7 +108,7 @@ describe('Feed tests', () => {
     expect(result.channels.host.length).toEqual(1);
     expect(result.channels.host[0].text).toEqual('Hello there');
     expect(result.channels.host[0].id.length).toEqual(5);
-    expect(result.appendingMessage).toBe(true);
+    expect(result.appendingMessage).toBe(false);
   });
 
   test('add a channel', () => {

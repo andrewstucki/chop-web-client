@@ -24,6 +24,7 @@ const TextField =
   }: TextFieldProps
 ) => (
   <input
+    id="chat"
     className={textfield}
     type="text"
     onChange={onInput}

@@ -1,6 +1,6 @@
+/* global module */
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
 import Message from '../src/message/message';
 import '../assets/global.css';
 
@@ -13,7 +13,7 @@ storiesOf('Message', module)
         user: {
           id: '12345',
           nickname: 'Billy Bob',
-        }
+        },
       }
     } />
-  ))
+  ));

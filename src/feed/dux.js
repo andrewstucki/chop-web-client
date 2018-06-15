@@ -169,7 +169,7 @@ const reducer = (
   case ADD_TO_CHANNEL:
     return {
       ...state,
-      appendingMessage: true,
+      appendingMessage: false,
       channels: {
         ...state.channels,
         [action.channel]: [
