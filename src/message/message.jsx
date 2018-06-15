@@ -14,6 +14,7 @@ type MessagePropsType = {
   appendingMessage: boolean,
   openMessageTray: (id: string) => void,
   closeMessageTray: (id: string) => void,
+  deleteMessage: (id: string) => void,
 };
 
 const Message = (
@@ -22,6 +23,7 @@ const Message = (
     appendingMessage,
     openMessageTray,
     closeMessageTray,
+    deleteMessage,
   }: MessagePropsType) => {
   const messageStyle = appendingMessage ? styles.appending : styles.notAppending;
 
@@ -54,6 +56,9 @@ const Message = (
           messageId={message.id}
           messageTrayOpen={message.messageTrayOpen}
           closeMessageTray={closeMessageTray}
+          deleteMessage={() => {
+            deleteMessage(message.id);
+          }}
         />
       </div>
     </ReactTouchEvents>

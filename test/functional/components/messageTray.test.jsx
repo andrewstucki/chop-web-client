@@ -13,6 +13,7 @@ describe('MessageTray tests', () => {
     const wrapper = Enzyme.shallow(
       <MessageTray 
         closeMessageTray={() => {}}
+        deleteMessage={() => {}}
         messageTrayOpen={false}
         messageId="123"
       />
@@ -28,6 +29,7 @@ describe('MessageTray tests', () => {
     const wrapper = Enzyme.shallow(
       <MessageTray 
         closeMessageTray={() => {}}
+        deleteMessage={() => {}}
         messageTrayOpen={true}
         messageId="123"
       />
@@ -40,6 +42,7 @@ describe('MessageTray tests', () => {
     const wrapper = Enzyme.shallow(
       <MessageTray
         closeMessageTray={onButtonClick}
+        deleteMessage={onButtonClick}
         messageTrayOpen={true}
         messageId="123"
       />

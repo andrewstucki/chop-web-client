@@ -25,6 +25,7 @@ describe('Message', () => {
         appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={() => {}}
+        deleteMessage={() => {}}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
@@ -48,6 +49,7 @@ describe('Message', () => {
         appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={onClick}
+        deleteMessage={onClick}
       />
     );
     expect(wrapper.find('button').length).toBe(1);

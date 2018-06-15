@@ -11,5 +11,6 @@ storiesOf('MessageTray', module)
       messageId='123'
       messageTrayOpen={true}
       closeMessageTray={() => {}}
+      deleteMessage={() => {}}
     />
   ))

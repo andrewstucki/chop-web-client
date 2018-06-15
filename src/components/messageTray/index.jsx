@@ -10,6 +10,7 @@ import styles from './style.css';
 
 type MessageTrayPropsType = {
   closeMessageTray: (id: string) => void,
+  deleteMessage: (id: string) => void,
   messageTrayOpen: boolean,
   messageId: string,
 };
@@ -19,9 +20,11 @@ const trayButton = (
   imageType: string,
   image,
   text: string,
+  onClick?,
 ) => (
   <button
     className={buttonType}
+    onClick={onClick}
   >
     <span
       className={imageType}
@@ -34,6 +37,7 @@ const trayButton = (
 const MessageTray = (
   {
     closeMessageTray,
+    deleteMessage,
     messageTrayOpen,
     messageId,
   }: MessageTrayPropsType
@@ -71,7 +75,8 @@ const MessageTray = (
             styles.deleteButton,
             styles.deleteImage,
             DeleteButton,
-            'Delete message'
+            'Delete message',
+            deleteMessage
           )
         }
         {
