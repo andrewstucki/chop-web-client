@@ -29,7 +29,7 @@ const Message = (
   const messageContainerStyle = appendingMessage ? styles.appending : styles.notAppending;
   const messageStyle = messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
-  const renderTrayButtons = () => {
+  const renderMessageButtons = () => {
     if (messageTrayOpen) {
       return (
         <button
@@ -73,7 +73,7 @@ const Message = (
           <span className={styles.role}>Host</span>
           <div data-node="text" className={styles.text}>{message.text}</div>
         </div>
-        {renderTrayButtons()}
+        {renderMessageButtons()}
       </div>
 
     </div>
