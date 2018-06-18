@@ -17,7 +17,7 @@
   background-color: var(--disabledColor);
   height: 56px;
   width: 249px;
-  z-index: 0;
+  align-self: center;
 }
 
 .directChatButton,

@@ -5,6 +5,7 @@
     margin: 8px 0;
     position: relative;
     min-height: 54px;
+    display: flex;
   }
 
   --button {
@@ -18,9 +19,7 @@
     width: 100%;
     min-height: 56px;
     display: flex;
-    z-index: 1;
     background: #fff;
-    position: absolute;
     overflow: hidden;
     transition: transform var(--animation-duration);
   }
