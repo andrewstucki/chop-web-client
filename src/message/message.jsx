@@ -27,7 +27,7 @@ const Message = (
   }: MessagePropsType) => {
   const { messageTrayOpen } = message;
   const messageContainerStyle = appendingMessage ? styles.appending : styles.notAppending;
-  const messageStyle = message.messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
+  const messageStyle = messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
   const renderTrayButtons = () => {
     if (messageTrayOpen) {
