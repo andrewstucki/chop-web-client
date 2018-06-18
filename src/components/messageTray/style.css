@@ -12,7 +12,7 @@
     position: absolute;
     display: flex;
     background-color: var(--disabledColor);
-    height: 100%;
+    height: 56px;
     width: 0;
     z-index: 10;
     right: 0;
