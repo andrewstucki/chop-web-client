@@ -25,7 +25,7 @@ const Message = (
     closeMessageTray,
     deleteMessage,
   }: MessagePropsType) => {
-  const messageTrayOpen = message.messageTrayOpen;
+  const { messageTrayOpen } = message;
   const messageContainerStyle = appendingMessage ? styles.appending : styles.notAppending;
   const messageStyle = message.messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
@@ -50,13 +50,12 @@ const Message = (
         }}
       />
     );
-  }
+  };
 
   return (
     <div data-component="messageContainer" className={messageContainerStyle}>
     
       <MessageTray
-        closeMessageTray={closeMessageTray}
         deleteMessage={() => {
           deleteMessage(message.id);
         }}

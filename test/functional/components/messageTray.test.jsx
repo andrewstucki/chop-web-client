@@ -12,42 +12,23 @@ describe('MessageTray tests', () => {
   test('MessageTray has buttons', () => {
     const wrapper = Enzyme.shallow(
       <MessageTray 
-        closeMessageTray={() => {}}
         deleteMessage={() => {}}
-        messageTrayOpen={false}
-        messageId="123"
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('closed');
-    expect(wrapper.find('button').at(0).props().className).toEqual('closeMessageTray');
-    expect(wrapper.find('button').at(1).props().className).toEqual('directChatButton');
-    expect(wrapper.find('button').at(2).props().className).toEqual('deleteButton');
-    expect(wrapper.find('button').at(3).props().className).toEqual('muteButton');
+    expect(wrapper.find('div').at(0).props().className).toEqual('tray');
+    expect(wrapper.find('button').at(0).props().className).toEqual('directChatButton');
+    expect(wrapper.find('button').at(1).props().className).toEqual('deleteButton');
+    expect(wrapper.find('button').at(2).props().className).toEqual('muteButton');
   });
 
-  test('MessageTray opens', () => {
+  test('Can click delete', () => {
+    const deleteMessage = sinon.spy();
     const wrapper = Enzyme.shallow(
       <MessageTray 
-        closeMessageTray={() => {}}
-        deleteMessage={() => {}}
-        messageTrayOpen={true}
-        messageId="123"
+        deleteMessage={deleteMessage}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('open');
-  });
-
-  test('Close button clickable', () => {
-    const onButtonClick = sinon.spy();
-    const wrapper = Enzyme.shallow(
-      <MessageTray
-        closeMessageTray={onButtonClick}
-        deleteMessage={onButtonClick}
-        messageTrayOpen={true}
-        messageId="123"
-      />
-    );
-    wrapper.find('button').at(0).simulate('click');
-    expect(onButtonClick.calledOnce).toEqual(true);
+    wrapper.find('button').at(1).simulate('click');
+    expect(deleteMessage.calledOnce).toEqual(true);
   });
 });

@@ -7,7 +7,6 @@ import MuteButton from '../../../assets/mute-button.svg';
 import styles from './style.css';
 
 type MessageTrayPropsType = {
-  closeMessageTray: (id: string) => void,
   deleteMessage: (id: string) => void,
 };
 
@@ -32,40 +31,37 @@ const trayButton = (
 
 const MessageTray = (
   {
-    closeMessageTray,
     deleteMessage,
   }: MessageTrayPropsType
-) => {
-  return (
-    <div className={styles.tray}>
-      
-      {
-        trayButton(
-          styles.directChatButton,
-          styles.directChatImage,
-          DirectChatButton,
-          'Chat'
-        )
-      }
-      {
-        trayButton(
-          styles.deleteButton,
-          styles.deleteImage,
-          DeleteButton,
-          'Delete message',
-          deleteMessage
-        )
-      }
-      {
-        trayButton(
-          styles.muteButton,
-          styles.muteImage,
-          MuteButton,
-          'Mute'
-        )
-      }
-    </div>
-  );
-};
+) => (
+  <div className={styles.tray}>
+    
+    {
+      trayButton(
+        styles.directChatButton,
+        styles.directChatImage,
+        DirectChatButton,
+        'Chat'
+      )
+    }
+    {
+      trayButton(
+        styles.deleteButton,
+        styles.deleteImage,
+        DeleteButton,
+        'Delete message',
+        deleteMessage
+      )
+    }
+    {
+      trayButton(
+        styles.muteButton,
+        styles.muteImage,
+        MuteButton,
+        'Mute'
+      )
+    }
+  </div>
+);
 
 export default MessageTray;
