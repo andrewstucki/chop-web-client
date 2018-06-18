@@ -4,6 +4,7 @@ import React from 'react';
 import type { MessageType } from './dux';
 import { getFirstInitial, getAvatarColor } from '../util';
 import OpenTrayButton from '../../assets/open-tray-button.svg';
+import CloseMessageTray from '../../assets/close-message-tray-button.svg';
 import MessageTray from '../components/messageTray';
 
 import styles from './style.css';
@@ -24,21 +25,23 @@ const Message = (
     closeMessageTray,
     deleteMessage,
   }: MessagePropsType) => {
-  const messageStyle = appendingMessage ? styles.appending : styles.notAppending;
+  const messageTrayOpen = message.messageTrayOpen;
+  const messageContainerStyle = appendingMessage ? styles.appending : styles.notAppending;
+  const messageStyle = message.messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
-  return (
-    <div data-component="message" className={messageStyle}>
-      <div
-        className={styles.icon} 
-        style={{backgroundColor: getAvatarColor(message.user.nickname)}}
-      >
-        {getFirstInitial(message.user.nickname)}
-      </div>
-      <div className={styles.body}>
-        <strong className={styles.name}>{message.user.nickname}</strong>
-        <span className={styles.role}>Host</span>
-        <div data-node="text" className={styles.message}>{message.text}</div>
-      </div>
+  const renderTrayButtons = () => {
+    if (messageTrayOpen) {
+      return (
+        <button
+          className={styles.closeTrayButton}
+          dangerouslySetInnerHTML={{ __html: CloseMessageTray }}
+          onClick={() => {
+            closeMessageTray(message.id);
+          }}
+        />
+      );
+    }
+    return (
       <button
         className={styles.openTrayButton}
         dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
@@ -46,14 +49,34 @@ const Message = (
           openMessageTray(message.id);
         }}
       />
+    );
+  }
+
+  return (
+    <div data-component="messageContainer" className={messageContainerStyle}>
+    
       <MessageTray
-        messageId={message.id}
-        messageTrayOpen={message.messageTrayOpen}
         closeMessageTray={closeMessageTray}
         deleteMessage={() => {
           deleteMessage(message.id);
         }}
       />
+
+      <div className={messageStyle}>
+        <div
+          className={styles.icon} 
+          style={{backgroundColor: getAvatarColor(message.user.nickname)}}
+        >
+          {getFirstInitial(message.user.nickname)}
+        </div>
+        <div className={styles.body}>
+          <strong className={styles.name}>{message.user.nickname}</strong>
+          <span className={styles.role}>Host</span>
+          <div data-node="text" className={styles.text}>{message.text}</div>
+        </div>
+        {renderTrayButtons()}
+      </div>
+
     </div>
   );
 };
