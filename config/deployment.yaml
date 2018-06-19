@@ -11,6 +11,6 @@ spec:
     spec:
       containers:
       - name: chop-web-client
-        image: gcr.io/open-network-194320/chop-web-client:0.15.0
+        image: gcr.io/open-network-194320/chop-web-client:0.16.0
         ports:
         - containerPort: 8080
