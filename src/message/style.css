@@ -2,10 +2,26 @@
 
 :root {
   --wrapper: {
-    display: flex;
     margin: 8px 0;
     position: relative;
     min-height: 54px;
+    display: flex;
+  }
+
+  --button {
+    line-height: 0;
+    padding: 0 8px;
+    border: none;
+    background-color: #fff;
+  }
+
+  --message {
+    width: 100%;
+    min-height: 56px;
+    display: flex;
+    background: #fff;
+    overflow: hidden;
+    transition: transform var(--animation-duration);
   }
 }
 
@@ -60,18 +76,37 @@
   left: 4px;
 }
 
-.message {
-  line-height: 19.2px;
-  word-break: break-all;
+.moveMessageLeft {
+  @apply --message;
+  transition-timing-function: var(--ease-out);
+  transform: translateX(-249px);
 }
 
+.moveMessageRight {
+  @apply --message;
+  transition-timing-function: var(--ease-in);
+  transform: translateX(0);
+}
+
+.closeTrayButton,
 .openTrayButton {
-  line-height: 0;
-  padding: 0 8px;
-  border: none;
-  background-color: #fff;
+  @apply --button;
+}
+
+.closeTrayButton {
+  padding: 0 24px;
+}
+
+.closeTrayButton svg {
+  width: 8px;
 }
 
 .openTrayButton svg {
   width: 15px;
 }
+
+.text {
+  line-height: 19.2px;
+  word-break: break-all;
+}
+

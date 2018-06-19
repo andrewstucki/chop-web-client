@@ -31,8 +31,8 @@ describe('Message', () => {
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
   });
 
-  test('has a menu button and it can be clicked', () => {
-    const onClick = sinon.spy();
+  test('has a tray open button and it can be clicked', () => {
+    const openTray = sinon.spy();
     const wrapper = Enzyme.shallow(
       <Message 
         message={
@@ -48,12 +48,38 @@ describe('Message', () => {
         }
         appendingMessage={false}
         closeMessageTray={() => {}}
-        openMessageTray={onClick}
-        deleteMessage={onClick}
+        openMessageTray={openTray}
+        deleteMessage={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
     wrapper.find('button').at(0).simulate('click');
-    expect(onClick.calledOnce).toEqual(true);
+    expect(openTray.calledOnce).toEqual(true);
+  });
+
+  test('has a tray close button and it can be clicked', () => {
+    const closeTray = sinon.spy();
+    const wrapper = Enzyme.shallow(
+      <Message 
+        message={
+          {
+            id: '1234',
+            text: 'Go west young man!',
+            user: {
+              id: '12345',
+              nickname: 'Billy Bob',
+            },
+            messageTrayOpen: true,
+          }
+        }
+        appendingMessage={false}
+        closeMessageTray={closeTray}
+        openMessageTray={() => {}}
+        deleteMessage={() => {}}
+      />
+    );
+    expect(wrapper.find('button').length).toBe(1);
+    wrapper.find('button').at(0).simulate('click');
+    expect(closeTray.calledOnce).toEqual(true);
   });
 });
