@@ -5,19 +5,14 @@ import { CHANGE_CHANNEL } from '../../feed/dux';
 import type { ChangeChannelType } from '../../feed/dux';
 
 
-type DomStateType = {
-  linkXPos: number,
-  linkWidth: number,
-};
+type DomStateType = {};
+
 type DomActionType = 
   | ToggleChatFocusAction
   | AddToCurrentChannelAction
   | ChangeChannelType;
 
-const defaultState = {
-  linkXPos: 0,
-  linkWidth: 0,
-};
+const defaultState = {};
 
 const reducer = (
   state: DomStateType = defaultState,

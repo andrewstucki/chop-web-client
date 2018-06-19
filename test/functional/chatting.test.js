@@ -34,18 +34,18 @@ describe('Chat Functional', () => {
     await page.type('#chat', 'Hello');
     await page.click('#chat-button');
 
-    await page.waitForSelector('[data-component="message"]');
+    await page.waitForSelector('[data-component="messageContainer"]');
 
-    const top = await page.$eval('[data-component=message]', element => element.getBoundingClientRect().top);
+    const top = await page.$eval('[data-component=messageContainer]', element => element.getBoundingClientRect().top);
 
-    const text = await page.$eval('[data-component=message] [data-node="text"]', element => element.innerText);
+    const text = await page.$eval('[data-component=messageContainer] [data-node="text"]', element => element.innerText);
     expect(text).toBe('Hello');
 
     await page.click('#chat');
     await page.type('#chat', 'Goodbye');
     await page.click('#chat-button');
 
-    const top2 = await page.$eval('[data-component=message]:first-child', element => element.getBoundingClientRect().top);
+    const top2 = await page.$eval('[data-component=messageContainer]:first-child', element => element.getBoundingClientRect().top);
     expect(top > top2).toBe(true);
   }, 16000);
 });

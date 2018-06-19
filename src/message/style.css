@@ -93,6 +93,10 @@
   @apply --button;
 }
 
+.closeTrayButton {
+  padding: 0 24px;
+}
+
 .closeTrayButton svg {
   width: 8px;
 }
