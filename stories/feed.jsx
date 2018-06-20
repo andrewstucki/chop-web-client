@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
 import Feed from '../src/feed/feed';
+import { createMessage } from '../src/moment';
 
 const store = createStore(() => {});
 
@@ -27,24 +28,24 @@ storiesOf('Feed', module)
           channel="default"
           moments={
             [
-              {
-                id: '1',
-                text: 'Hello',
-                user: {
+              createMessage(
+                '1',
+                'Hello',
+                {
                   id: 'a',
                   nickname: 'Billy Bob',
                 },
-                messageTrayOpen: false,
-              },
-              {
-                id: '2',
-                text: 'Goodbye',
-                user: {
+                false,
+              ),
+              createMessage(
+                '2',
+                'Goodbye',
+                {
                   id: 'b',
                   nickname: 'Joe Joe',
                 },
-                messageTrayOpen: false,
-              },
+                false,
+              ),
             ]
           }
         />

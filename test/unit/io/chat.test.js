@@ -4,6 +4,7 @@ import Chat from '../../../src/io/chat/chat';
 import getReducer, { setChatKeys, setUser, addChat } from '../../../src/io/chat/dux';
 import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
 import { changeChannel } from '../../../src/feed/dux';
+import { MESSAGE } from '../../../src/moment/dux';
 
 describe('Chat IO reducer test', () => {
   let chat;
@@ -302,6 +303,7 @@ describe('Chat IO Interface test', () => {
     const chat = new Chat(engine, () => {});
 
     chat.publish('default', {
+      type: MESSAGE,
       id: '12345',
       text: 'Hello, world!',
       neverRendered: true,
@@ -315,6 +317,7 @@ describe('Chat IO Interface test', () => {
 
     chat.setKeys('12345', '67890');
     chat.publish('default', {
+      type: MESSAGE,
       id: '12345',
       text: 'Hello, world!',
       neverRendered: true,
@@ -328,6 +331,7 @@ describe('Chat IO Interface test', () => {
 
     chat.setUser('12345', 'Billy Bob');
     chat.publish('default', {
+      type: MESSAGE,
       id: '12345',
       text: 'Hello, world!',
       neverRendered: true,
@@ -346,6 +350,7 @@ describe('Chat IO Interface test', () => {
     chat.setUser('12345', 'Billy Bob');
     chat.addChat('default', '12345');
     chat.publish('default', {
+      type: MESSAGE,
       id: '12345',
       text: 'Hello, world!',
       neverRendered: true,
@@ -371,7 +376,7 @@ describe('Chat IO Interface test', () => {
     );
   });
 
-  test('recive', () => {
+  test('receive', () => {
     const addToChannel = jest.fn();
     const chat = new Chat(engine, addToChannel);
     chat.setKeys('12345', '67890');

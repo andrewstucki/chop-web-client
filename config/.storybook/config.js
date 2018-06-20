@@ -5,7 +5,7 @@ function loadStories() {
   require('../../stories/text-field.jsx');
   require('../../stories/chat.jsx');
   require('../../stories/feed.jsx');
-  require('../../stories/message.jsx');
+  require('../../stories/moment.jsx');
   require('../../stories/navBar.jsx');
   require('../../stories/videoFeed.jsx');
   require('../../stories/sideMenu.jsx');

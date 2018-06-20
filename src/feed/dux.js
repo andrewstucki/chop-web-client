@@ -9,7 +9,7 @@ import type {
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
-} from '../message/dux';
+} from '../moment';
 
 import type { SetUser } from '../io/chat/dux';
 
@@ -23,7 +23,7 @@ import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
-} from '../message/dux';
+} from '../moment';
 
 import { SET_USER } from '../io/chat/dux';
 
