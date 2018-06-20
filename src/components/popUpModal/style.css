@@ -1,13 +1,5 @@
 @import url('../../../assets/theme.css');
 
-:root {
-  --button {
-    border: none;
-    padding: 0 16px;
-    color: var(--primaryColor);
-  }
-}
-
 .popUpModal {
   display: flex;
   align-items: center;
@@ -24,15 +16,9 @@
   border-radius: 4px;
 }
 
-.alertText {
-  display: inline-block;
+.children {
   line-height: 20px;
-  padding: 16px 4px 16px 16px;
-}
-
-.nickname {
-  font-weight: bold;
-  padding-right: 16px;
+  padding: 16px;
 }
 
 .actionContainer {
@@ -41,7 +27,8 @@
   padding-bottom: 16px;
 }
 
-.actionOne,
-.actionTwo {
-  @apply --button;
+.action {
+  border: none;
+  padding: 0 16px;
+  color: var(--primaryColor);
 }

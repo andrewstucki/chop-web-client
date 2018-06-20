@@ -9,11 +9,13 @@ import '../assets/global.css';
 storiesOf('PopUpModal', module)
   .add('Modal', () => (
     <PopUpModal
-      alertText="Are you sure you want to end your chat with"
-      nickname="Fred"
-      actionOne={() => {}}
-      actionTwo={() => {}}
+      actionOne={action('clicked')}
+      actionTwo={action('clicked')}
       actionOneDescription="Leave"
       actionTwoDescription="Stay"
-    />
+    >
+      <div>
+        Are you sure you want to end your chat with <strong>Fred</strong>?
+      </div>
+    </PopUpModal>
   ))

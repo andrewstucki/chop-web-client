@@ -1,46 +1,40 @@
 // @flow
+/* global React$Node */
 import React from 'react';
 
 import styles from './style.css';
 
 type PopUpModalPropsType = {
-  alertText: string,
-  nickname?: string,
+  children?: React$Node | Array<React$Node>,
   actionOneDescription: string,
   actionTwoDescription: string,
   actionOne: () => void,
   actionTwo: () => void,
 };
 
-const questionMarkStyle = {fontWeight: 'normal'};
-
 const PopUpModal = (
   {
-    alertText,
-    nickname,
     actionOneDescription,
     actionTwoDescription,
     actionOne,
     actionTwo,
+    children,
   }: PopUpModalPropsType
 ) => (
   <div className={styles.popUpModal}>
     <div className={styles.alert}>
-      <div className={styles.alertText}>{alertText}</div>
-      <strong className={styles.nickname}>
-        {nickname}
-        <span style={questionMarkStyle}>?</span>
-      </strong>
-
+      <div className={styles.children}>
+        {children}
+      </div>
       <div className={styles.actionContainer}>
         <button
-          className={styles.actionOne}
+          className={styles.action}
           onClick={actionOne}
         >
           {actionOneDescription}
         </button>
         <button
-          className={styles.actionTwo}
+          className={styles.action}
           onClick={actionTwo}
         >
           {actionTwoDescription}
