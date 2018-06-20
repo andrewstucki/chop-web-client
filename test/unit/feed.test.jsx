@@ -1,6 +1,7 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
 import Feed from '../../src/feed/feed';
+import { MESSAGE } from '../../src/moment/dux';
 import Enzyme from 'enzyme';
 import React from 'react';
 
@@ -21,6 +22,7 @@ describe('Feed tests', () => {
   test('has a single message', () => {
     const moments = [
       {
+        type: MESSAGE,
         id: 'string',
         text: 'This is a message',
         user: {
@@ -41,9 +43,8 @@ describe('Feed tests', () => {
     );
     
     expect(wrapper.find('ul').children().length).toBe(1);
-    expect(wrapper.find('li').at(0).childAt(0).props()).toEqual({
-      appendingMessage: false,
-      message: {
+    expect(wrapper.find('li').at(0).childAt(0).props().data).toEqual(
+      {
         id: 'string',
         text: 'This is a message',
         user: {
@@ -51,8 +52,8 @@ describe('Feed tests', () => {
           nickname: 'Billy Bob',
         },
         messageTrayOpen: false,
-      },
-    });
+      }
+    );
   });
 
   test('check for key prop', () => {
