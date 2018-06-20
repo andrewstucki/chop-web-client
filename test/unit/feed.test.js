@@ -13,7 +13,9 @@ import {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
-} from '../../src/message/dux';
+} from '../../src/moment';
+
+import { MESSAGE } from '../../src/moment/dux';
 
 import {
   addToCurrentChannel,
@@ -94,6 +96,7 @@ describe('Feed tests', () => {
         chatInput: 'this is a string',
       },
       addToChannel('host', {
+        type: MESSAGE,
         id: '12345',
         text: 'Hello there',
         neverRendered: true,
@@ -132,7 +135,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('add a channel that already exsists', () => {
+  test('add a channel that already exists', () => {
     const result = reducer(defaultState, addChannel('host'));
     expect(result).toEqual(defaultState);
   });
@@ -196,6 +199,7 @@ describe('Feed tests', () => {
           default: 
           [
             {
+              type: MESSAGE,
               id: '12345',
               text: 'I like socks',
               user: {
@@ -237,6 +241,7 @@ describe('Feed tests', () => {
           host: 
           [
             {
+              type: MESSAGE,
               id: '12345',
               text: 'I like socks',
               user: {
@@ -308,6 +313,7 @@ describe('Feed tests', () => {
           default: 
           [
             {
+              type: MESSAGE,
               id: '123',
               text: 'I like socks',
               user: {
@@ -349,6 +355,7 @@ describe('Feed tests', () => {
           host: 
           [
             {
+              type: MESSAGE,
               id: '123',
               text: 'I like socks',
               user: {
@@ -392,6 +399,7 @@ describe('Feed tests', () => {
           default: 
           [
             {
+              type: MESSAGE,
               id: '123',
               text: 'I like socks',
               user: {
@@ -433,6 +441,7 @@ describe('Feed tests', () => {
           default: 
           [
             {
+              type: MESSAGE,
               id: '123',
               text: 'I like socks',
               user: {
@@ -442,6 +451,7 @@ describe('Feed tests', () => {
               messageTrayOpen: true,
             },
             {
+              type: MESSAGE,
               id: '189',
               text: 'Hello Billy Bob',
               user: {
@@ -451,6 +461,7 @@ describe('Feed tests', () => {
               messageTrayOpen: true,
             },
             {
+              type: MESSAGE,
               id: '204',
               text: 'George is very angry',
               user: {

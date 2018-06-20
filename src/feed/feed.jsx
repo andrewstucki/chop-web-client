@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import type {MomentType} from './dux';
-import Message from '../message';
+import Moment from '../moment/moment';
 import styles from './styles.css';
 import BezierEasing from 'bezier-easing';
 
@@ -107,20 +107,13 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   render () {
-    let listItems = [];
-    if (this.props.moments) {
-      listItems = this.props.moments.map((moment, index) => {
-        const appendMessage = this.props.appendingMessage && index === this.props.moments.length - 1;
-        return (
-          <li key={moment.id}>
-            <Message
-              message={moment}
-              appendingMessage={appendMessage}
-            />
-          </li>
-        );
-      });
-    }
+    const listItems = this.props.moments.map(moment => (
+      <li key={moment.id}>
+        <Moment
+          data={moment}
+        />
+      </li>
+    ));
 
     return (
       <div

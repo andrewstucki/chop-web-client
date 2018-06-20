@@ -2,16 +2,15 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
-import { getFirstInitial, getAvatarColor } from '../util';
-import OpenTrayButton from '../../assets/open-tray-button.svg';
-import CloseMessageTray from '../../assets/close-message-tray-button.svg';
-import MessageTray from '../components/messageTray';
+import { getFirstInitial, getAvatarColor } from '../../util';
+import OpenTrayButton from '../../../assets/open-tray-button.svg';
+import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
+import MessageTray from '../../components/messageTray';
 
 import styles from './style.css';
 
 type MessagePropsType = {
   message: MessageType,
-  appendingMessage: boolean,
   openMessageTray: (id: string) => void,
   closeMessageTray: (id: string) => void,
   deleteMessage: (id: string) => void,
@@ -20,13 +19,11 @@ type MessagePropsType = {
 const Message = (
   {
     message,
-    appendingMessage,
     openMessageTray,
     closeMessageTray,
     deleteMessage,
   }: MessagePropsType) => {
   const { messageTrayOpen } = message;
-  const messageContainerStyle = appendingMessage ? styles.appending : styles.notAppending;
   const messageStyle = messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
   const renderMessageButtons = () => {
@@ -53,7 +50,7 @@ const Message = (
   };
 
   return (
-    <div data-component="messageContainer" className={messageContainerStyle}>
+    <div data-component="messageContainer" className={styles.wrapper}>
     
       <MessageTray
         deleteMessage={() => {

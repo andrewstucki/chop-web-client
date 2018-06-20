@@ -1,6 +1,7 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
-import Message from '../../src/message/message';
+import Message from '../../src/moment/message/message';
+import { MESSAGE } from '../../src/moment/message/dux';
 import Enzyme from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
@@ -13,6 +14,7 @@ describe('Message', () => {
       <Message 
         message={
           {
+            type: MESSAGE,
             id: '1234',
             text: 'Go west young man!',
             user: {
@@ -37,6 +39,7 @@ describe('Message', () => {
       <Message 
         message={
           {
+            type: MESSAGE,
             id: '1234',
             text: 'Go west young man!',
             user: {
@@ -63,6 +66,7 @@ describe('Message', () => {
       <Message 
         message={
           {
+            type: MESSAGE,
             id: '1234',
             text: 'Go west young man!',
             user: {

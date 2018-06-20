@@ -1,5 +1,5 @@
 // @flow
-import type { UserType } from '../feed/dux';
+import type { UserType } from '../../feed/dux';
 
 // Action Types
 
@@ -7,9 +7,12 @@ const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
 const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 
+const MESSAGE = 'MESSAGE';
+
 // Flow Type Definitions
 
 type MessageType = {
+  type: 'MESSAGE',
   id: string,
   text: string,
   user: UserType,
@@ -59,6 +62,7 @@ const createMessage = (
   messageTrayOpen: boolean
 ): MessageType => (
   {
+    type: MESSAGE,
     id,
     text,
     user,
@@ -100,6 +104,7 @@ export {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
+  MESSAGE,
 };
 
 export type {
@@ -108,5 +113,4 @@ export type {
   CloseMessageTrayType,
   DeleteMessageType,
 };
-
 export default reducer;
