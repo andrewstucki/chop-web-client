@@ -10,6 +10,7 @@ function loadStories() {
   require('../../stories/videoFeed.jsx');
   require('../../stories/sideMenu.jsx');
   require('../../stories/messageTray.jsx');
+  require('../../stories/popUpModal.jsx');
 }
 
 configure(loadStories, module);
