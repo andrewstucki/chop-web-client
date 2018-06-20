@@ -4,6 +4,7 @@
   --button {
     border: none;
     padding: 0 16px;
+    color: var(--primaryColor);
   }
 }
 
@@ -43,5 +44,4 @@
 .actionOne,
 .actionTwo {
   @apply --button;
-  color: var(--primaryColor)
 }
