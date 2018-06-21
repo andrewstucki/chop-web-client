@@ -8,10 +8,10 @@ describe('NavBar tests', () => {
     const result = reducer();
     expect(result).toEqual({
       channels: [
-        'default',
+        'public',
         'host',
       ],
-      currentChannel: 'default',
+      currentChannel: 'public',
     });
   });
 
@@ -19,16 +19,16 @@ describe('NavBar tests', () => {
     const result = reducer(
       {
         channels: [
-          'default',
+          'public',
           'host',
         ],
-        currentChannel: 'default',
+        currentChannel: 'public',
       },
       changeChannel('host')
     );
     expect(result).toEqual({
       channels: [
-        'default',
+        'public',
         'host',
       ],
       currentChannel: 'host',
@@ -39,15 +39,15 @@ describe('NavBar tests', () => {
     const result = getChannels(
       {
         channels: [
-          'default',
+          'public',
           'host',
         ],
-        currentChannel: 'default',
+        currentChannel: 'public',
       }
     );
     expect(result).toEqual([
       {
-        channel: 'default',
+        channel: 'public',
         isCurrent: true,
       },
       {

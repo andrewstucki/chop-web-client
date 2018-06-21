@@ -37,7 +37,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     this.selectedLink = React.createRef();
     this.state = {
       left: 69,
-      width: 53,
+      width: 35,
     };
   }
 
@@ -87,7 +87,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                   value={channel.channel}
                   onClick={onClick}
                 >
-                  {channel.channel}
+                  {channel.channel === 'public' ? 'event' : channel.channel}
                 </a>
               );
             } else {
@@ -100,7 +100,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                   value={channel.channel}
                   onClick={onClick}
                 >
-                  {channel.channel}
+                  {channel.channel === 'public' ? 'event' : channel.channel}
                 </a>
               );
             }

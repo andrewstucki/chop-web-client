@@ -376,6 +376,22 @@ describe('Chat IO Interface test', () => {
     );
   });
 
+  test('validate message', () => {
+    const chat = new Chat(engine, () => {});
+    expect(chat.validMessage(
+      {
+        type: 'MESSAGE',
+        id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+        text: 'Hello, world!',
+        user: {
+          id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+          nickname: 'Billy Bob',
+        },
+        messageTrayOpen: false,
+      }
+    )).toBe(true);
+  });
+
   test('receive', () => {
     const addToChannel = jest.fn();
     const chat = new Chat(engine, addToChannel);
@@ -388,27 +404,68 @@ describe('Chat IO Interface test', () => {
       cb = callback;
     };
 
-    chat.addChat('default', '67890');
+    chat.addChat('public', '67890');
     
     cb(
       {
         sender: {
-          uuid: 'jj',
+          uuid: '599465b0-23c2-42a7-b837-298e8a51c94a',
         },
         data: {
-          id: '77777',
-          message: 'Hello, world!',
+          type: 'MESSAGE',
+          id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+          text: 'Hello, world!',
+          user: {
+            id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+            nickname: 'Billy Bob',
+          },
+          messageTrayOpen: false,
         },
       }
     );
 
     expect(addToChannel.mock.calls.length).toBe(1);
-    expect(addToChannel.mock.calls[0][0]).toEqual('default');
+    expect(addToChannel.mock.calls[0][0]).toEqual('public');
     expect(addToChannel.mock.calls[0][1]).toEqual(
       {
-        id: '77777',
-        message: 'Hello, world!',
+        type: 'MESSAGE',
+        id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+        text: 'Hello, world!',
+        user: {
+          id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+          nickname: 'Billy Bob',
+        },
+        messageTrayOpen: false,
       }
     );
+  });
+
+  test('receive malformed message', () => {
+    const addToChannel = jest.fn();
+    const chat = new Chat(engine, addToChannel);
+    chat.setKeys('12345', '67890');
+    chat.setUser('bb', 'Billy Bob');
+
+    
+    let cb = payload => {}; /* eslint-disable-line no-unused-vars */
+    ch.on = (event, callback) => {
+      cb = callback;
+    };
+
+    chat.addChat('public', '67890');
+    
+    cb(
+      {
+        sender: {
+          uuid: '599465b0-23c2-42a7-b837-298e8a51c94a',
+        },
+        data: {
+          hey: 'I am not a message',
+          reject: true,
+        },
+      }
+    );
+
+    expect(addToChannel.mock.calls.length).toBe(0);
   });
 });
