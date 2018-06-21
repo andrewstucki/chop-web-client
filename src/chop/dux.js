@@ -5,7 +5,7 @@ import ioReducer from '../io/dux';
 import navBarReducer from '../navBar/dux';
 import videoFeedReducer from '../videoFeed/dux';
 import sideMenuReducer from '../sideMenu/dux';
-import momentReducer from '../moment';
+import momentReducer from '../moment/dux';
 import { combineReducers } from 'redux';
 
 const reducer = combineReducers({

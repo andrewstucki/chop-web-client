@@ -1,17 +1,17 @@
 // @flow
 import type { Chat } from './chat';
 import type {
-  AddToCurrentChannelAction,
+  PublishMessageAction,
   ChatInputAction,
 } from '../../../src/chat/dux';
 
 import type {
-  AddToChannelType,
+  ReceiveMessageType,
   ChangeChannelType,
 } from '../../../src/feed/dux';
 
 import {
-  ADD_TO_CURRENT_CHANNEL,
+  PUBLISH_MESSAGE,
   CHAT_INPUT,
 } from '../../../src/chat/dux';
 import { createMessage } from '../../../src/moment';
@@ -61,8 +61,8 @@ type IOChatActionTypes =
   | SetUser
   | AddChat
   | ChatInputAction
-  | AddToCurrentChannelAction
-  | AddToChannelType
+  | PublishMessageAction
+  | ReceiveMessageType
   | ChangeChannelType;
 
 // Action Creators
@@ -99,7 +99,7 @@ const defaultState = {
     nickname: '',
   },
   chats: {},
-  currentChannel: 'default',
+  currentChannel: 'public',
   chatInput: '',
 };
 
@@ -138,7 +138,7 @@ const getReducer = (chatIO: Chat) => (
           [action.channelId]: action.channelToken,
         },
       };
-    case ADD_TO_CURRENT_CHANNEL:
+    case PUBLISH_MESSAGE:
       chatIO.publish(
         state.currentChannel,
         createMessage(action.id, state.chatInput, state.user, false));

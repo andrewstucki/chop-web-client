@@ -8,7 +8,7 @@ storiesOf('NavBar', module)
   .add('default', () => (
     <NavBar
       channels={[
-        {channel: 'default', isCurrent: true},
+        {channel: 'public', isCurrent: true},
         {channel: 'host', isCurrent: false},
       ]}
       onClick={action('clicked')}
@@ -16,8 +16,8 @@ storiesOf('NavBar', module)
   )).add('host', () => (
     <NavBar
       channels={[
-        {channel: 'default', isCurrent: false},
-        {channel: 'HOST', isCurrent: true},
+        {channel: 'public', isCurrent: false},
+        {channel: 'host', isCurrent: true},
       ]}
       onClick={action('clicked')}
     />

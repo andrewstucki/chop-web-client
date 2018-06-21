@@ -3,7 +3,7 @@ import reducer,
 {
   CHAT_INPUT,
   TOGGLE_CHAT_FOCUS,
-  ADD_TO_CURRENT_CHANNEL,
+  PUBLISH_MESSAGE,
   textEntered,
   defaultState,
   getPlaceholder,
@@ -88,7 +88,7 @@ describe('Chat', () => {
         currentInput: 'Hi everyone!',
       },
       {
-        type: ADD_TO_CURRENT_CHANNEL,
+        type: PUBLISH_MESSAGE,
         id: '12345',
       },
     );
