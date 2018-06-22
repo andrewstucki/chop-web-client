@@ -1,5 +1,6 @@
 // @flow
 import type { MessageType } from '../../moment';
+import { MESSAGE } from '../../moment';
 
 
 type ChatType = {
@@ -80,8 +81,42 @@ class Chat {
     });
   }
 
-  receive (channelId: string, message: MessageType): void {
-    this.addToChannel(channelId, message);
+  isString (str: string): boolean {
+    return typeof(str) === 'string' || str instanceof String;
+  }
+
+  validMessage (message: MessageType): boolean {
+    return message.type === MESSAGE &&
+      this.isString(message.text) &&
+      message.text.length > 0 &&
+      this.isString(message.id) &&
+      message.id.length === 36 &&
+      message.user instanceof Object &&
+      this.isString(message.user.id) &&
+      // FIXME: when we connect to real users
+      // our fake users have the wrong length id
+      //message.user.id.length === 36 &&
+      this.isString(message.user.nickname) &&
+      message.user.nickname.length > 0;
+  }
+
+  validCommand (data: Object): boolean {
+    return data instanceof Object;
+  }
+
+  receiveMessage (channelId: string, message: MessageType): void {
+    if (this.validMessage(message)) {
+      this.addToChannel(channelId, message);
+    }
+  }
+
+  receiveCommand (channelId: string, data: Object): void {
+    if (this.validCommand(data)) {
+      switch (data.type) {
+      default:
+        //do nothing
+      }
+    }
   }
 
   addChat (channelId: string, channelToken: string): void {
@@ -91,7 +126,11 @@ class Chat {
       'message',
       payload => {
         if (payload.sender.uuid !== this.userId) {
-          this.receive(channelId, payload.data);
+          if (channelId === 'public') {
+            this.receiveMessage(channelId, payload.data);
+          } else {
+            this.receiveCommand(channelId, payload.data);
+          }
         }
       }
     );

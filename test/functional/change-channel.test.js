@@ -33,7 +33,7 @@ describe('Change Channel Functional', () => {
     const left = await page.$eval('#nav-underline', element => element.getBoundingClientRect().left);
     const width = await page.$eval('#nav-underline', element => element.getBoundingClientRect().width);
     expect(left).toBe(69);
-    expect(width).toBe(53);
+    expect(width).toBe(35);
 
     await page.click('#nav-host');
 
@@ -41,7 +41,7 @@ describe('Change Channel Functional', () => {
 
     const left2 = await page.$eval('#nav-underline', element => element.getBoundingClientRect().left);
     const width2 = await page.$eval('#nav-underline', element => element.getBoundingClientRect().width);
-    expect(Math.round(left2)).toBe(161);
+    expect(Math.round(left2)).toBe(143);
     expect(Math.round(width2)).toBe(28);
   }, 16000); 
 });

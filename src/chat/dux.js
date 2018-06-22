@@ -5,7 +5,7 @@ import { CHANGE_CHANNEL } from '../feed/dux';
 // Action Types
 const CHAT_INPUT = 'CHAT_INPUT';
 const TOGGLE_CHAT_FOCUS = 'TOGGLE_CHAT_FOCUS';
-const ADD_TO_CURRENT_CHANNEL = 'ADD_TO_CURRENT_CHANNEL';
+const PUBLISH_MESSAGE = 'PUBLISH_MESSAGE';
 
 // Flow Type Definitions
 type ChatInputAction = {
@@ -18,15 +18,15 @@ type ToggleChatFocusAction = {
   focus: boolean
 };
 
-type AddToCurrentChannelAction = {
-  type: 'ADD_TO_CURRENT_CHANNEL',
+type PublishMessageAction = {
+  type: 'PUBLISH_MESSAGE',
   id: string
 };
 
 type ChatActions =
   | ChatInputAction
   | ToggleChatFocusAction
-  | AddToCurrentChannelAction
+  | PublishMessageAction
   | ChangeChannelType;
 
 type PlaceholderType = {
@@ -58,9 +58,9 @@ const toggleChatFocus = (focus: boolean): ToggleChatFocusAction => (
   }
 );
 
-const addToCurrentChannel = (): AddToCurrentChannelAction => (
+const addToCurrentChannel = (): PublishMessageAction => (
   {
-    type: ADD_TO_CURRENT_CHANNEL,
+    type: PUBLISH_MESSAGE,
     id: createUid(),
   }
 );
@@ -82,10 +82,10 @@ const defaultState = {
   currentInput: '',
   focused: false,
   placeholders: {
-    default: 'Chat',
+    public: 'Chat',
     host: 'Chat with hosts',
   },
-  currentChannel: 'default',
+  currentChannel: 'public',
   currentPlaceholder: '',
 };
 
@@ -109,7 +109,7 @@ const reducer =
       ...state,
       focused: action.focus,
     };
-  case ADD_TO_CURRENT_CHANNEL:
+  case PUBLISH_MESSAGE:
     return {
       ...state,
       currentInput: '',
@@ -137,13 +137,13 @@ const getPlaceholder = (state: ChatState) => (
 export { 
   CHAT_INPUT,
   TOGGLE_CHAT_FOCUS,
-  ADD_TO_CURRENT_CHANNEL,
+  PUBLISH_MESSAGE,
 };
 
 export type { 
   ChatInputAction, 
   ToggleChatFocusAction, 
-  AddToCurrentChannelAction,  
+  PublishMessageAction,  
   ChatState,
 };
 
