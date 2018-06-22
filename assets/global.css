@@ -23,3 +23,7 @@ input {
 button {
   @apply --font;
 }
+
+strong {
+  font-weight: bold;
+}

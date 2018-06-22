@@ -3,7 +3,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import Moment from '../../src/moment/moment';
-import { Message, createMessage } from '../../src/moment';
+import { Message, Notification, createMessage } from '../../src/moment';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -27,8 +27,7 @@ describe('Moment tests', () => {
     expect(wrapper.find(Message).length).toBe(1);
   });
 
-
-  test('Moment renders', () => {
+  test('Message renders', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
