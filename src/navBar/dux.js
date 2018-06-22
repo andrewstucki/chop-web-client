@@ -1,5 +1,5 @@
 // @flow
-import type { ChangeChannelType } from '../feed/dux';
+import type { ChangeChannelType, FeedType } from '../feed/dux';
 import { CHANGE_CHANNEL } from '../feed/dux';
 
 // Flow Type Definitions
@@ -13,8 +13,9 @@ type NavBarActionTypes =
   | ChangeChannelType;
 
 type ChannelType = {
-  channel: string,
+  id: string,
   isCurrent: boolean,
+  hasActions: boolean,
 };
 
 type ChannelsListType = Array<ChannelType>;
@@ -50,10 +51,13 @@ const reducer = (
 
 // Selectors
 
-const getChannels = (state: NavBarType): ChannelsListType => (
-  state.channels.map(channel => ({
-    channel,
-    isCurrent: state.currentChannel === channel,
+const getChannels = (state: FeedType): ChannelsListType => (
+  Object.keys(state.channels).map(id => ({
+    id,
+    isCurrent: state.currentChannel === id,
+    hasActions: state.channels[id].filter(moment => (
+      moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
+    )).length > 0,
   }))
 );
 

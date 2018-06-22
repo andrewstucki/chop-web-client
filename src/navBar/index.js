@@ -15,7 +15,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    onClick: event => dispatch(changeChannel(event.target.getAttribute('value'))),
+    onClick: id => dispatch(changeChannel(id)),
     openMenu: () => dispatch(openMenu()),
   }
 );
