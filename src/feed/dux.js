@@ -1,6 +1,6 @@
 // @flow
 import type {
-  AddToCurrentChannelAction,
+  PublishMessageAction,
   ChatInputAction,
 } from '../chat/dux';
 
@@ -14,7 +14,7 @@ import type {
 import type { SetUser } from '../io/chat/dux';
 
 import {
-  ADD_TO_CURRENT_CHANNEL,
+  PUBLISH_MESSAGE,
   CHAT_INPUT,
 } from '../chat/dux';
 
@@ -29,7 +29,7 @@ import { SET_USER } from '../io/chat/dux';
 
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
-const ADD_TO_CHANNEL = 'ADD_TO_CHANNEL';
+const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';//RECEIVE
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 
@@ -42,9 +42,11 @@ type UserType = {
   nickname: string,
 };
 
+type MessageTypeList = Array<MessageType>;
+
 type FeedType = {
   channels: {
-    [string]: Array<MessageType>,
+    [string]: MessageTypeList,
   },
   currentChannel: string,
   chatInput: string,
@@ -57,8 +59,8 @@ type ChangeChannelType = {
   channel: string
 };
 
-type AddToChannelType = {
-  type: 'ADD_TO_CHANNEL',
+type ReceiveMessageType = {
+  type: 'RECEIVE_MESSAGE',
   channel: string,
   message: MessageType,
 };
@@ -75,8 +77,8 @@ type RemoveChannelType = {
 
 type FeedActionTypes =
   | ChangeChannelType
-  | AddToCurrentChannelAction
-  | AddToChannelType
+  | PublishMessageAction
+  | ReceiveMessageType
   | AddChannelType
   | RemoveChannelType
   | ChatInputAction
@@ -94,9 +96,9 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const addToChannel = (channel: string, message: MessageType): AddToChannelType => (
+const receiveMessage = (channel: string, message: MessageType): ReceiveMessageType => (
   {
-    type: ADD_TO_CHANNEL,
+    type: RECEIVE_MESSAGE,
     channel,
     message,
   }
@@ -120,10 +122,10 @@ const removeChannel = (channel: string): RemoveChannelType => (
 
 const defaultState = {
   channels: {
-    default: [],
+    public: [],
     host: [],
   },
-  currentChannel: 'default',
+  currentChannel: 'public',
   chatInput: '',
   currentUser: {
     id: '',
@@ -150,7 +152,7 @@ const reducer = (
       appendingMessage: false,
       currentChannel: action.channel,
     };
-  case ADD_TO_CURRENT_CHANNEL:
+  case PUBLISH_MESSAGE:
     if ([state.chatInput].toString().length > 0) {
       return {
         ...state,
@@ -166,7 +168,7 @@ const reducer = (
       };
     }
     return state;
-  case ADD_TO_CHANNEL:
+  case RECEIVE_MESSAGE:
     return {
       ...state,
       appendingMessage: false,
@@ -190,12 +192,13 @@ const reducer = (
       },
     };
   case REMOVE_CHANNEL: {
-    if (action.channel === 'default') {
+    if (action.channel === 'public' ||
+      action.channel === 'host') {
       return state;
     }
     const stateCopy = {...state};
     if (action.channel === state.currentChannel) {
-      stateCopy.currentChannel = 'default';
+      stateCopy.currentChannel = 'public';
     }
     delete stateCopy.channels[action.channel];
     return stateCopy;
@@ -284,13 +287,13 @@ const appendMessage = (state: FeedType) => (
 
 export {
   CHANGE_CHANNEL,
-  ADD_TO_CHANNEL,
+  RECEIVE_MESSAGE,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
 };
 export {
   changeChannel,
-  addToChannel,
+  receiveMessage,
   addChannel,
   removeChannel,
   feedContents,
@@ -299,7 +302,7 @@ export {
 };
 export type {
   MomentType,
-  AddToChannelType,
+  ReceiveMessageType,
   ChangeChannelType,
   UserType,
   FeedType,

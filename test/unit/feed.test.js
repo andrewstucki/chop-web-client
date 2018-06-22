@@ -1,7 +1,7 @@
 // @flow
 import reducer, {
   changeChannel,
-  addToChannel,
+  receiveMessage,
   addChannel,
   removeChannel,
   feedContents,
@@ -58,15 +58,15 @@ describe('Feed tests', () => {
       },
       addToCurrentChannel(),
     );
-    expect(result.channels.default.length).toEqual(1);
-    expect(result.channels.default[0].text).toEqual('this is a message');
-    expect(result.channels.default[0].user.id).toEqual('12345');
-    expect(result.channels.default[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.default[0].id.length).toEqual(36);
+    expect(result.channels.public.length).toEqual(1);
+    expect(result.channels.public[0].text).toEqual('this is a message');
+    expect(result.channels.public[0].user.id).toEqual('12345');
+    expect(result.channels.public[0].user.nickname).toEqual('Billy Bob');
+    expect(result.channels.public[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
   });
 
-  test('adds a message to current channel not default from current user', () => {
+  test('adds a message to current channel not public from current user', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -79,7 +79,7 @@ describe('Feed tests', () => {
       },
       addToCurrentChannel()
     );
-    expect(result.channels.default.length).toEqual(0);
+    expect(result.channels.public.length).toEqual(0);
     expect(result.channels.host.length).toEqual(1);
     expect(result.channels.host[0].text).toEqual('this is a string');
     expect(result.channels.host[0].user.id).toEqual('12345');
@@ -92,10 +92,10 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         ...defaultState,
-        currentChannel: 'default',
+        currentChannel: 'public',
         chatInput: 'this is a string',
       },
-      addToChannel('host', {
+      receiveMessage('host', {
         type: MESSAGE,
         id: '12345',
         text: 'Hello there',
@@ -107,7 +107,7 @@ describe('Feed tests', () => {
         messageTrayOpen: false,
       })
     );
-    expect(result.channels.default.length).toEqual(0);
+    expect(result.channels.public.length).toEqual(0);
     expect(result.channels.host.length).toEqual(1);
     expect(result.channels.host[0].text).toEqual('Hello there');
     expect(result.channels.host[0].id.length).toEqual(5);
@@ -119,7 +119,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          default: [],
+          public: [],
         },
       },
       addChannel('host')
@@ -128,7 +128,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          default: [],
+          public: [],
           host: [],
         },
       },
@@ -141,32 +141,34 @@ describe('Feed tests', () => {
   });
 
   test('remove channel', () => {
-    const result = reducer(defaultState, removeChannel('host'));
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          default: [],
-        },
-      },
-    );
-  });
-
-  test('remove default', () => {
     const result = reducer(
       {
         ...defaultState,
         channels: {
-          default: [],
+          public: [],
+          host: [],
+          other: [],
         },
       },
-      removeChannel('default')
+      removeChannel('other'));
+    expect(result).toEqual(defaultState);
+  });
+
+  test('remove public', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: [],
+        },
+      },
+      removeChannel('public')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          default: [],
+          public: [],
         },
       },
     );
@@ -176,19 +178,15 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         ...defaultState,
-        currentChannel: 'host',
-      },
-      removeChannel('host')
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
         channels: {
-          default: [],
+          ...defaultState.channels,
+          other: [],
         },
-        currentChannel: 'default',
+        currentChannel: 'other',
       },
+      removeChannel('other')
     );
+    expect(result).toEqual(defaultState);
   });
 
   test('Feed contents', () => {
@@ -196,7 +194,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          default: 
+          public: 
           [
             {
               type: MESSAGE,
@@ -210,7 +208,7 @@ describe('Feed tests', () => {
             },
           ],
         },
-        currentChannel: 'default',
+        currentChannel: 'public',
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
@@ -232,12 +230,12 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Feed contents not default', () => {
+  test('Feed contents not public', () => {
     const result = feedContents(
       {
         ...defaultState,
         channels: {
-          default: [],
+          public: [],
           host: 
           [
             {
@@ -305,12 +303,12 @@ describe('Feed tests', () => {
     expect(result).toEqual(true);
   });
 
-  test('Opens only the correct message tray default channel', () => {
+  test('Opens only the correct message tray public channel', () => {
     const result = reducer(
       {
         ...defaultState,
         channels: {
-          default: 
+          public: 
           [
             {
               type: MESSAGE,
@@ -330,7 +328,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          default: 
+          public: 
           [
             {
               id: '123',
@@ -347,7 +345,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Opens only the correct message tray not default channel', () => {
+  test('Opens only the correct message tray not public channel', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -391,12 +389,12 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Closes only the correct message tray default channel', () => {
+  test('Closes only the correct message tray public channel', () => {
     const result = reducer(
       {
         ...defaultState,
         channels: {
-          default: 
+          public: 
           [
             {
               type: MESSAGE,
@@ -416,7 +414,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          default: 
+          public: 
           [
             {
               id: '123',
@@ -438,7 +436,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          default: 
+          public: 
           [
             {
               type: MESSAGE,
@@ -479,7 +477,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          default: 
+          public: 
           [
             {
               id: '189',

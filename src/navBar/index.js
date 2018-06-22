@@ -7,9 +7,9 @@ import { getChannels } from '../navBar/dux';
 import { openMenu } from '../sideMenu/dux';
 
 const mapStateToProps = state => {
-  const navBarState = state.navBar;
+  const stateState = state.feed;
   return {
-    channels: getChannels(navBarState),
+    channels: getChannels(stateState),
   };
 };
 

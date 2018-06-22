@@ -37,7 +37,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     this.selectedLink = React.createRef();
     this.state = {
       left: 69,
-      width: 53,
+      width: 35,
     };
   }
 
@@ -90,7 +90,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                   ? <span className={styles.pip}></span>
                   : null }
                 <span className={style}>
-                  {channel.id}
+                  {channel.id === 'public' ? 'event' : channel.id}
                 </span>
               </a>
             );

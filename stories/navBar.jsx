@@ -8,32 +8,32 @@ storiesOf('NavBar', module)
   .add('default', () => (
     <NavBar
       channels={[
-        {channel: 'default', isCurrent: true, hasActions: false},
-        {channel: 'host', isCurrent: false, hasActions: false},
+        {id: 'public', isCurrent: true, hasActions: false},
+        {id: 'host', isCurrent: false, hasActions: false},
       ]}
       onClick={action('clicked')}
     />
   )).add('host', () => (
     <NavBar
       channels={[
-        {channel: 'default', isCurrent: false, hasActions: false},
-        {channel: 'HOST', isCurrent: true, hasActions: false},
+        {id: 'default', isCurrent: false, hasActions: false},
+        {id: 'HOST', isCurrent: true, hasActions: false},
       ]}
       onClick={action('clicked')}
     />
   )).add('host pip', () => (
     <NavBar
       channels={[
-        {channel: 'default', isCurrent: true, hasActions: false},
-        {channel: 'host', isCurrent: false, hasActions: true},
+        {id: 'default', isCurrent: true, hasActions: false},
+        {id: 'host', isCurrent: false, hasActions: true},
       ]}
       onClick={action('clicked')}
     />
   )).add('default pip', () => (
     <NavBar
       channels={[
-        {channel: 'default', isCurrent: true, hasActions: true},
-        {channel: 'host', isCurrent: false, hasActions: false},
+        {id: 'default', isCurrent: true, hasActions: true},
+        {id: 'host', isCurrent: false, hasActions: false},
       ]}
       onClick={action('clicked')}
     />

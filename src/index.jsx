@@ -65,7 +65,7 @@ store.dispatch(
   }
 );
 
-const charaters = [
+const characters = [
   'George Jettson',
   'Judy Jettson',
   'Jane Jettson',
@@ -93,13 +93,13 @@ const charaters = [
   'Huckleberry Hound',
 ];
 
-const charaterName = charaters[Math.floor(Math.random() * charaters.length)];
+const characterName = characters[Math.floor(Math.random() * characters.length)];
 
 store.dispatch(
   {
     type: 'SET_USER',
-    id: new Date().getTime(),
-    nickname: charaterName,
+    id: new Date().getTime().toString(),
+    nickname: characterName,
   }
 );
 
@@ -107,7 +107,7 @@ setTimeout(() => {
   store.dispatch(
     {
       type: 'ADD_CHAT',
-      channelId: 'default',
+      channelId: 'public',
       channelToken: 'public',
     }
   );
@@ -117,6 +117,22 @@ setTimeout(() => {
       type: 'ADD_CHAT',
       channelId: 'host',
       channelToken: 'host',
+    }
+  );
+
+  store.dispatch(
+    {
+      type: 'ADD_CHAT',
+      channelId: 'request',
+      channelToken: 'request',
+    }
+  );
+
+  store.dispatch(
+    {
+      type: 'ADD_CHAT',
+      channelId: 'command',
+      channelToken: 'command',
     }
   );
 }, 2000);

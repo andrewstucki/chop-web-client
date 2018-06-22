@@ -24,10 +24,10 @@ type ChannelsListType = Array<ChannelType>;
 
 const defaultState = {
   channels: [
-    'default',
+    'public',
     'host',
   ],
-  currentChannel: 'default',
+  currentChannel: 'public',
 };
 
 // Reducer
