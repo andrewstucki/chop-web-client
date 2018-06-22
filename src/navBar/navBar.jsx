@@ -7,7 +7,7 @@ import hamburger from '../../assets/hamburger.svg';
 
 type NavBarProps = {
   channels: Array<ChannelType>,
-  onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  onClick: (id: string) => void,
   openMenu: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
@@ -42,7 +42,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
   }
 
   componentDidUpdate () {
-    if (this.selectedLink) {
+    if (this.selectedLink && this.selectedLink.current) {
       const {
         left,
         width,
@@ -74,36 +74,26 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         />
         {
           channels.map(channel => {
-            const style = channel.isCurrent ? styles.selected : styles.default;
-            if (channel.isCurrent) {
-              return (
-                <a
-                  // $FlowFixMe
-                  ref={this.selectedLink}
-                  id={'nav-' + channel.channel}
-                  href="javascript:void(0)"
-                  key={channel.channel}
-                  className={style}
-                  value={channel.channel}
-                  onClick={onClick}
-                >
-                  {channel.channel === 'public' ? 'event' : channel.channel}
-                </a>
-              );
-            } else {
-              return (
-                <a
-                  id={'nav-' + channel.channel}
-                  href="javascript:void(0)"
-                  key={channel.channel}
-                  className={style}
-                  value={channel.channel}
-                  onClick={onClick}
-                >
-                  {channel.channel === 'public' ? 'event' : channel.channel}
-                </a>
-              );
-            }
+            const selectedLink = channel.isCurrent ? this.selectedLink : null;
+            const style = channel.isCurrent ? null : styles.unselected;
+            return (
+              <a
+                // $FlowFixMe
+                ref={selectedLink}
+                id={'nav-' + channel.id}
+                href="javascript:void(0)"
+                key={channel.id}
+                className={styles.link}
+                onClick={() => onClick(channel.id)}
+              >
+                { channel.hasActions
+                  ? <span className={styles.pip}></span>
+                  : null }
+                <span className={style}>
+                  {channel.id === 'public' ? 'event' : channel.id}
+                </span>
+              </a>
+            );
           })
         }
         <Underline left={this.state.left} width={this.state.width} />
