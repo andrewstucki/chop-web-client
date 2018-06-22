@@ -1,16 +1,7 @@
 // @flow
-import type { ChangeChannelType, FeedType } from '../feed/dux';
-import { CHANGE_CHANNEL } from '../feed/dux';
+import type { FeedType } from '../feed/dux';
 
 // Flow Type Definitions
-
-type NavBarType = {
-  channels: Array<string>,
-  currentChannel: string,
-};
-
-type NavBarActionTypes =
-  | ChangeChannelType;
 
 type ChannelType = {
   id: string,
@@ -19,35 +10,6 @@ type ChannelType = {
 };
 
 type ChannelsListType = Array<ChannelType>;
-
-// Default State
-
-const defaultState = {
-  channels: [
-    'public',
-    'host',
-  ],
-  currentChannel: 'public',
-};
-
-// Reducer
-
-const reducer = (
-  state: NavBarType = defaultState,
-  action?: NavBarActionTypes): NavBarType => {
-  if (!action || !action.type) {
-    return state;
-  }
-  switch (action.type) {
-  case CHANGE_CHANNEL:
-    return {
-      ...state,
-      currentChannel: action.channel,
-    };
-  default:
-    return state;
-  }
-};
 
 // Selectors
 
@@ -69,5 +31,3 @@ export {
 export type {
   ChannelType,
 };
-
-export default reducer;
