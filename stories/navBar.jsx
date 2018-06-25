@@ -8,16 +8,32 @@ storiesOf('NavBar', module)
   .add('default', () => (
     <NavBar
       channels={[
-        {channel: 'public', isCurrent: true},
-        {channel: 'host', isCurrent: false},
+        {id: 'public', isCurrent: true, hasActions: false},
+        {id: 'host', isCurrent: false, hasActions: false},
       ]}
       onClick={action('clicked')}
     />
   )).add('host', () => (
     <NavBar
       channels={[
-        {channel: 'public', isCurrent: false},
-        {channel: 'host', isCurrent: true},
+        {id: 'public', isCurrent: false, hasActions: false},
+        {id: 'HOST', isCurrent: true, hasActions: false},
+      ]}
+      onClick={action('clicked')}
+    />
+  )).add('host pip', () => (
+    <NavBar
+      channels={[
+        {id: 'public', isCurrent: true, hasActions: false},
+        {id: 'host', isCurrent: false, hasActions: true},
+      ]}
+      onClick={action('clicked')}
+    />
+  )).add('default pip', () => (
+    <NavBar
+      channels={[
+        {id: 'public', isCurrent: true, hasActions: true},
+        {id: 'host', isCurrent: false, hasActions: false},
       ]}
       onClick={action('clicked')}
     />

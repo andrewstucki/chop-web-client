@@ -1,15 +1,22 @@
 @import url('../../assets/theme.css');
 
 :root {
-  --link: {
+  --link-base: {
     display: flex;
     align-items: center;
     margin: 0 12px;
     color: #ffffff;
     text-transform: uppercase;
     text-decoration: none;
+    position: relative;
+    font-weight: 500;
   }
 }
+
+.link {
+  @apply --link-base;
+}
+
 
 .navBar {
   display: flex;
@@ -20,15 +27,8 @@
   position: relative;
 }
 
-.default {
-  @apply --link;
+.unselected {
   opacity: .5;
-}
-
-.selected {
-  @apply --link;
-  position: relative;
-  font-weight: 500;
 }
 
 .bar {
@@ -43,7 +43,7 @@
 }
 
 .hamburger {
-  @apply --link;
+  @apply --link-base;
   width:21px;
   padding: 0 12px 0 16px;
   margin:0px;
@@ -52,4 +52,14 @@
 .hamburger svg {
   width: 21px;
   height: 15px;
+}
+
+.pip {
+  height:8px;
+  width:8px;
+  border-radius: 50%;
+  background-color: #2993E5;
+  position: absolute;
+  top: 6px;
+  right: -8px;
 }

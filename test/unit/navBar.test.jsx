@@ -12,8 +12,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {channel: 'Default', isCurrent: true},
-          {channel: 'Host', isCurrent: false},
+          {id: 'public', isCurrent: true, hasActions: false},
+          {id: 'host', isCurrent: false, hasActions: false},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -28,8 +28,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {channel: 'Default', isCurrent: true},
-          {channel: 'Host', isCurrent: false},
+          {id: 'public', isCurrent: true, hasActions: false},
+          {id: 'host', isCurrent: false, hasActions: false},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -38,8 +38,8 @@ describe('NavBar tests', () => {
       />
     );
     expect(wrapper.find('.navBar>a').length).toBe(3);
-    expect(wrapper.find('.navBar>a').at(1).text()).toBe('Default');
-    expect(wrapper.find('.navBar>a').at(2).text()).toBe('Host');
+    expect(wrapper.find('.navBar>a').at(1).text()).toBe('event');
+    expect(wrapper.find('.navBar>a').at(2).text()).toBe('host');
   });
 
   test('onClick function works', () => {
@@ -47,8 +47,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {channel: 'Default', isCurrent: true},
-          {channel: 'Host', isCurrent: false},
+          {id: 'public', isCurrent: true, hasActions: false},
+          {id: 'host', isCurrent: false, hasActions: false},
         ]}
         onClick={onClick}
         openMenu={() => {}}
@@ -56,17 +56,17 @@ describe('NavBar tests', () => {
         barX={50}
       />
     );
-    wrapper.find('.navBar>a').at(1).simulate('click', {target: {value: 'Default'}});
+    wrapper.find('.navBar>a').at(1).simulate('click', 'public');
     expect(onClick.calledOnce).toEqual(true);
-    expect(onClick.getCall(0).args[0].target.value).toEqual('Default');
+    expect(onClick.getCall(0).args[0]).toEqual('public');
   });
 
-  test('onClick updates className', () => {
+  test('displaying pip on public', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {channel: 'Default', isCurrent: true},
-          {channel: 'Host', isCurrent: false},
+          {id: 'public', isCurrent: true, hasActions: true},
+          {id: 'host', isCurrent: false, hasActions: false},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -74,7 +74,24 @@ describe('NavBar tests', () => {
         barX={50}
       />
     );
-    expect(wrapper.find('.navBar>a').at(1).props().className).toBe('selected');
-    expect(wrapper.find('.navBar>a').at(2).props().className).toBe('default');
+    expect(wrapper.find('#nav-public span.pip').length).toBe(1);
+    expect(wrapper.find('#nav-host span.pip').length).toBe(0);
+  });
+
+  test('displaying pip on host', () => {
+    const wrapper = Enzyme.shallow(
+      <NavBar
+        channels={[
+          {id: 'public', isCurrent: true, hasActions: false},
+          {id: 'host', isCurrent: false, hasActions: true},
+        ]}
+        onClick={function () {}}
+        openMenu={() => {}}
+        barWidth={100}
+        barX={50}
+      />
+    );
+    expect(wrapper.find('#nav-public span.pip').length).toBe(0);
+    expect(wrapper.find('#nav-host span.pip').length).toBe(1);
   });
 });
