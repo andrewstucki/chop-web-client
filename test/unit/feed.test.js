@@ -15,9 +15,7 @@ import {
   deleteMessage,
 } from '../../src/moment';
 
-import {
-  MESSAGE,
-} from '../../src/moment/dux';
+import { MESSAGE } from '../../src/moment/dux';
 
 import {
   publishPrayerNotification,

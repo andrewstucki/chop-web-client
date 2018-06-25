@@ -3,19 +3,6 @@ import {
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../dux';
 
-// Function we got from stackoveflow
-
-const formatAMPM = (date: Date) => {
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  const ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  const strTime = hours + ':' + minutes + ampm;
-  return strTime;
-};
-
 // Type Definitions
 
 const NOTIFICATION = 'NOTIFICATION';
@@ -51,6 +38,17 @@ type PrayerNotificationType = {
 };
 
 // Action Creators
+
+const formatAMPM = (date: Date) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  const strTime = hours + ':' + minutes + ampm;
+  return strTime;
+};
 
 const publishPrayerNotification = (host: string, guest: string) => (
   {
