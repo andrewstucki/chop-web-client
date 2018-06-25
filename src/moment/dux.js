@@ -8,12 +8,6 @@ import { combineReducers } from 'redux';
 
 const PUBLISH_MOMENT_TO_CHANNEL = 'PUBLISH_MOMENT_TO_CHANNEL';
 
-type PublishMomentToChannelType = {
-  type: 'PUBLISH_MOMENT_TO_CHANNEL',
-  channel: string,
-  moment: MomentType,
-};
-
 type MomentType =
   | MessageType
   | NotificationType;

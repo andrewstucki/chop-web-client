@@ -1,21 +1,20 @@
 // @flow
-/* global React$Node */
 import {
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../dux';
 
 // Function we got from stackoveflow
 
-function formatAMPM(date) {
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
+const formatAMPM = (date: Date) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'pm' : 'am';
   hours = hours % 12;
   hours = hours ? hours : 12;
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ampm;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  const strTime = hours + ':' + minutes + ampm;
   return strTime;
-}
+};
 
 // Type Definitions
 
@@ -62,12 +61,12 @@ const publishPrayerNotification = (host: string, guest: string) => (
     channel: 'host',
     moment: {
       type: NOTIFICATION,
-      subType: PRAYER,
+      notificationType: PRAYER,
       host,
       guest,
-      timeStamp: formatAMPM(new Date()),
+      timeStamp: formatAMPM(new Date),
       isEndingChat: false,
-    }
+    },
   }
 );
 
@@ -77,11 +76,11 @@ const publishLeftChatNotification = (name: string, channel: string) => (
     channel,
     moment: {
       type: NOTIFICATION,
-      subType: LEFT_CHAT,
+      notificationType: LEFT_CHAT,
       name,
       timeStamp: formatAMPM(new Date()),
       isEndingChat: true,
-    }
+    },
   }
 );
 
@@ -91,11 +90,11 @@ const publishJoinedChatNotification = (name: string, channel: string) => (
     channel,
     moment: {
       type: NOTIFICATION,
-      subType: JOINED_CHAT,
+      notificationType: JOINED_CHAT,
       name,
       timeStamp: formatAMPM(new Date()),
       isEndingChat: false,
-    }
+    },
   }
 );
 

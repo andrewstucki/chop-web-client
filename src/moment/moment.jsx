@@ -1,16 +1,16 @@
-// flow
+// @flow
 import React from 'react';
 
 import {
   Message,
   MESSAGE,
   Notification,
-  NOTIFICATION,
 } from './index';
+
+import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
 
 import type {
   MomentType,
-  NotificationType,
 } from './dux';
 
 type MomentPropType = {
@@ -25,11 +25,10 @@ const Moment = ({data}: MomentPropType) => {
         message={data}
       />
     );
-  case NOTIFICATION:
+  case PUBLISH_MOMENT_TO_CHANNEL:
     return (
       <Notification
-        timeStamp={data.timeStamp}
-        text={data.text}
+        notification={data.moment}
       />
     );
   }

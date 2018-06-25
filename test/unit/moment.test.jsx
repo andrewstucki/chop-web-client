@@ -1,9 +1,16 @@
 // @flow
+import React from 'react';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+
 import Moment from '../../src/moment/moment';
 import { Message, Notification, createMessage } from '../../src/moment';
+import {
+  formatAMPM,
+  publishPrayerNotification,
+  publishJoinedChatNotification,
+  publishLeftChatNotification,
+} from '../../src/moment/notification/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -53,6 +60,102 @@ describe('Moment tests', () => {
           nickname: 'Bob',
         },
         messageTrayOpen: false,
+      }
+    );
+  });
+
+  test('Prayer notification renders', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          publishPrayerNotification('Billy', 'Bobby')
+        }
+      />
+    );
+    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+      {
+        type: 'NOTIFICATION',
+        notificationType: 'PRAYER',
+        host: 'Billy',
+        guest: 'Bobby',
+        timeStamp: formatAMPM(new Date),
+        isEndingChat: false,
+      }
+    );
+  });
+
+  test('Joined chat notification renders public', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          publishJoinedChatNotification('Billy', 'public')
+        }
+      />
+    );
+    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+      {
+        type: 'NOTIFICATION',
+        notificationType: 'JOINED_CHAT',
+        name: 'Billy',
+        timeStamp: formatAMPM(new Date),
+        isEndingChat: false,
+      }
+    );
+  });
+
+  test('Joined chat notification renders host', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          publishJoinedChatNotification('Billy', 'host')
+        }
+      />
+    );
+    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+      {
+        type: 'NOTIFICATION',
+        notificationType: 'JOINED_CHAT',
+        name: 'Billy',
+        timeStamp: formatAMPM(new Date),
+        isEndingChat: false,
+      }
+    );
+  });
+
+  test('Left chat notification renders public', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          publishLeftChatNotification('Billy', 'public')
+        }
+      />
+    );
+    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+      {
+        type: 'NOTIFICATION',
+        notificationType: 'LEFT_CHAT',
+        name: 'Billy',
+        timeStamp: formatAMPM(new Date),
+        isEndingChat: true,
+      }
+    );
+  });
+
+  test('Left chat notification renders host', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          publishLeftChatNotification('Billy', 'host')
+        }
+      />
+    );
+    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+      {
+        type: 'NOTIFICATION',
+        notificationType: 'LEFT_CHAT',
+        name: 'Billy',
+        timeStamp: formatAMPM(new Date),
+        isEndingChat: true,
       }
     );
   });

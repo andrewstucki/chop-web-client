@@ -1,5 +1,4 @@
 // @flow
-/* global React$Node */
 import React from 'react';
 
 import {
@@ -20,7 +19,7 @@ import EndChatNotification from '../../../assets/end-chat-notification.svg';
 import styles from './style.css';
 
 type NotificationPropsType = {
-  notificationObj: NotificationType,
+  notification: NotificationType,
 };
 
 const prayerNotificationText = (
@@ -31,23 +30,19 @@ const prayerNotificationText = (
     isEndingChat,
   }: PrayerNotificationType
 ) => (
-  <div>
+  <div className={styles.notification}>
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
         { __html: isEndingChat ? EndChatNotification : ChatNotification }
       }
     />
-
-    <strong>
-      {host}
-    </strong>
-    started a live prayer with
-    <strong>
-      {guest}
-    </strong>
-
-    <div className={styles.timeStamp}>{timeStamp}</div>
+    <div>
+      <div>
+        <strong>{host} </strong>started a live prayer with<strong> {guest}</strong>
+      </div>
+      <div className={styles.timeStamp}>{timeStamp}</div>
+    </div>
   </div>
 );
 
@@ -58,15 +53,19 @@ const joinedChatNotificationText = (
     isEndingChat,
   }: JoinedChatNotificationType
 ) => (
-  <div>
+  <div className={styles.notification}>
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
         { __html: isEndingChat ? EndChatNotification : ChatNotification }
       }
     />
-    <strong>{name}</strong>has joined the chat
-    <div className={styles.timeStamp}>{timeStamp}</div>
+    <div>
+      <div>
+        <strong>{name} </strong>has joined the chat
+      </div>
+      <div className={styles.timeStamp}>{timeStamp}</div>
+    </div>
   </div>
 );
 
@@ -77,35 +76,37 @@ const leftChatNotificationText = (
     isEndingChat,
   }: LeftChatNotificationType
 ) => (
-  <div>
+  <div className={styles.notification}>
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
         { __html: isEndingChat ? EndChatNotification : ChatNotification }
       }
     />
-    <strong>{name}</strong>has left the chat
-    <div className={styles.timeStamp}>{timeStamp}</div>
+    <div>
+      <div>
+        <strong>{name} </strong>has left the chat
+      </div>
+      <div className={styles.timeStamp}>{timeStamp}</div>
+    </div>
   </div>
 );
 
-const getNotificationText = notificationObj => {
-  switch (notificationObj.notificationType) {
+const getNotificationText = notification => {
+  switch (notification.notificationType) {
   case PRAYER:
-    return prayerNotificationText(notificationObj);
+    return prayerNotificationText(notification);
   case JOINED_CHAT:
-    return joinedChatNotificationText(notificationObj);
+    return joinedChatNotificationText(notification);
   case LEFT_CHAT:
-    return leftChatNotificationText(notificationObj);
+    return leftChatNotificationText(notification);
   }
 };
 
-const Notification = ({ notificationObj }: NotificationPropsType) => {
-  return (
-    <div className={styles.notification}>
-      {getNotificationText(notificationObj)}
-    </div>
-  );
-};
+const Notification = ({ notification }: NotificationPropsType) => (
+  <div>
+    {getNotificationText(notification)}
+  </div>
+);
 
 export default Notification;

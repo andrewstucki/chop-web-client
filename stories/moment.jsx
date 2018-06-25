@@ -1,11 +1,19 @@
+// @flow
 /* global module */
 import React from 'react';
-import { storiesOf } from '@storybook/react';
-import Moment from '../src/moment/moment';
-import '../assets/global.css';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { storiesOf } from '@storybook/react';
+
 import { createMessage } from '../src/moment';
+import {
+  publishPrayerNotification,
+  publishJoinedChatNotification,
+  publishLeftChatNotification,
+} from '../src/moment/notification/dux';
+
+import Moment from '../src/moment/moment';
+import '../assets/global.css';
 
 const store = createStore(() => {});
 
@@ -40,6 +48,33 @@ storiesOf('Moment', module)
             },
             true,
           )
+        }
+      />
+    </Provider>
+  ))
+  .add('Live prayer notification', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          publishPrayerNotification('Billyboy', 'Jilliejoy')
+        }
+      />
+    </Provider>
+  ))
+  .add('Joined chat notification', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          publishJoinedChatNotification('Billyboy', 'public')
+        }
+      />
+    </Provider>
+  ))
+  .add('Left chat notification', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          publishLeftChatNotification('Billyboy', 'public')
         }
       />
     </Provider>

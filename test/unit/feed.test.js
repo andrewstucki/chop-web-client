@@ -21,6 +21,8 @@ import {
 
 import {
   publishPrayerNotification,
+  publishJoinedChatNotification,
+  publishLeftChatNotification,
   formatAMPM,
 } from '../../src/moment/notification/dux';
 
@@ -520,8 +522,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [
-            // ...defaultState.channels.public,
+          host: [
+            ...defaultState.channels.host,
             {
               type: 'NOTIFICATION',
               notificationType: 'PRAYER',
@@ -529,7 +531,107 @@ describe('Feed tests', () => {
               guest: 'Beefie',
               timeStamp: formatAMPM(new Date()),
               isEndingChat: false,
-            }
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a joined chat notification public', () => {
+    const result = reducer(
+      defaultState,
+      publishJoinedChatNotification('Boofie', 'public')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Boofie',
+              timeStamp: formatAMPM(new Date()),
+              isEndingChat: false,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a joined chat notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishJoinedChatNotification('Boofie', 'host')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Boofie',
+              timeStamp: formatAMPM(new Date()),
+              isEndingChat: false,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a left chat notification public', () => {
+    const result = reducer(
+      defaultState,
+      publishLeftChatNotification('Boofie', 'public')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Boofie',
+              timeStamp: formatAMPM(new Date()),
+              isEndingChat: true,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a left chat notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishLeftChatNotification('Boofie', 'host')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Boofie',
+              timeStamp: formatAMPM(new Date()),
+              isEndingChat: true,
+            },
           ],
         },
       }

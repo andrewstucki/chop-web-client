@@ -1,7 +1,6 @@
 // @flow
 import  {
   getFirstInitial,
-  parseUserNames,
 } from '../../src/util';
 
 describe('Util tests', () => {

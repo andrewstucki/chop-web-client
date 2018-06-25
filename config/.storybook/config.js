@@ -11,7 +11,6 @@ function loadStories() {
   require('../../stories/sideMenu.jsx');
   require('../../stories/messageTray.jsx');
   require('../../stories/popUpModal.jsx');
-  require('../../stories/passiveNotification.jsx');
 }
 
 configure(loadStories, module);
