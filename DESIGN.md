@@ -143,3 +143,30 @@ The UX layer is the visible code and is built out of JSX and CSS. We strive to k
 Logic is the Redux layer of actions, action creators and reducers. All business logic should go here.
 
 The IO layer is where any network or other external related calls are made. Within the IO layer we still use reducers to respond to actions and they will often cache values in state, but their main job is to respond to actions by making external calls. There is one io reducer called dom which interacts with the dom certain ways redux doesn't normally allow. This should be avoided when you can.
+
+## The Feed and Moments
+
+The Feed and Moments are one of the core features of CWC. The Feed is an area that can display a list of Moments in order. Moments are any small piece of UI that can go into the Feed. That sounds a little abstract so here are some examples:
+
+- A Chat Message is a Moment and if the only thing in the Feed is Chat Messages then you may start to think of the Feed as the message display of the Chat.
+- Notifications an be Moments when displayed inline in the Feed.
+- Invitations to Give, for Prayer, to Raise your hand signaling you would like to receive Christ as your savior, all can be types of Moments.
+
+Think of the Feed as a scrolling, ordered list of bits of information and Moments are those bits of information.
+
+A Moment has one property `data`. The `data` prop has the required parameter `type`. The `type parameter defines the type of Moment it is. This is a similar pattern Redux uses for Actions in the reducer. Each action has a type which tells the reducer how to handle it. For Moments, each one has a type which tells the Moment JSX which component to render.
+
+To build a new Moment type:
+
+- Create a new sub-director here: https://in.thewardro.be/io/opennetwork/chop-web-client/tree/master/src/moment. Name it after your new moment type. This is where you'll put all the files related to it.
+- Moments types will often have a dux and index file along with the JSX file. But they don't need a reducer unless there is some state you want to track that applies to all Moments of that type.
+- Add your new type here: https://in.thewardro.be/io/opennetwork/chop-web-client/blob/master/src/moment/moment.jsx updating the switch statement to render it correctly.
+- If you have a reducer you'll need to add it in the moment/dux file.
+- Expose any selectors and the main component in moment/index
+
+Don't forget to write all the necessary tests and add to the moment story.
+
+You'll also need to make a new action creator. You can use the action types:
+
+- PUBLISH_MOMENT_TO_CHANNEL - to add a moment to a channel and publish it across the WebSocket
+- RECEIVE_MESSAGE - when you receive a moment over the WebSocket and need to act on it
