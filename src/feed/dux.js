@@ -11,6 +11,10 @@ import type {
   DeleteMessageType,
 } from '../moment';
 
+import type {
+  PrayerNotificationType,
+} from '../moment/notification/dux';
+
 import type { SetUser } from '../io/chat/dux';
 
 import {
@@ -23,7 +27,13 @@ import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
+  PUBLISH_MOMENT_TO_CHANNEL,
 } from '../moment';
+
+import {
+  PRAYER,
+  publishPrayerNotification,
+} from '../moment/notification/dux';
 
 import { SET_USER } from '../io/chat/dux';
 
@@ -267,6 +277,20 @@ const reducer = (
         ],
       },
     };
+  }
+  case PUBLISH_MOMENT_TO_CHANNEL: {
+    if (action.notificationType === PRAYER) {
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [action.channel]: [
+            ...state.channels[action.channel],
+            publishPrayerNotification(action.host, action.guest)
+          ],
+        }
+      };
+    }
   }
   default:
     return state;

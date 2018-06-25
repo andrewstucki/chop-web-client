@@ -17,7 +17,7 @@ type MomentPropType = {
   data: MomentType,
 };
 
-const Moment = ({data}:MomentPropType) => {
+const Moment = ({data}: MomentPropType) => {
   switch (data.type) {
   case MESSAGE:
     return (

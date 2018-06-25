@@ -8,17 +8,25 @@ import Notification from '../../src/moment/notification';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Notification test', () => {
-  test('Notification renders', () => {
+  test('Prayer notification renders', () => {
     const wrapper = Enzyme.shallow(
       <Notification
-        text="@yablby started a direct chat with @cookietree"
-        timeStamp="9:33pm"
+        notification={
+          {
+            type: 'NOTIFICATION',
+            notificationType: 'PRAYER',
+            host: 'yablby',
+            guest: 'cookietree',
+            timeStamp: '9:33pm',
+            isEndingChat: false,
+          }
+        }
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('notification');
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
     expect(wrapper.find('div').at(1).text()).toEqual(
-      'Yablby started a direct chat with Cookietree'
+      'yablby started a live prayer with cookietree'
     );
     expect(wrapper.find('div').at(2).text()).toEqual('9:33pm');
   });

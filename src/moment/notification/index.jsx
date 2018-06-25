@@ -2,37 +2,110 @@
 /* global React$Node */
 import React from 'react';
 
+import {
+  PRAYER,
+  JOINED_CHAT,
+  LEFT_CHAT,
+} from './dux';
+
+import type {
+  PrayerNotificationType,
+  JoinedChatNotificationType,
+  LeftChatNotificationType,
+  NotificationType,
+} from './dux';
+
 import ChatNotification from '../../../assets/chat-notification.svg';
 import EndChatNotification from '../../../assets/end-chat-notification.svg';
-import parseUserNames from '../../util';
 import styles from './style.css';
 
 type NotificationPropsType = {
-  text: string,
-  timeStamp: string,
+  notificationObj: NotificationType,
 };
 
-const notificationImage = () => {
-  //TODO set up logic for determining when to use the right icon
-  const endChat = false;
-  if (endChat) {
-    return EndChatNotification;
-  }
-  return ChatNotification;
-};
-
-
-const Notification = ({ text, timeStamp }: NotificationPropsType) => (
-  <div className={styles.notification}>
+const prayerNotificationText = (
+  {
+    host,
+    guest,
+    timeStamp,
+    isEndingChat,
+  }: PrayerNotificationType
+) => (
+  <div>
     <span
       className={styles.icon}
-      dangerouslySetInnerHTML={{ __html: notificationImage() }}
+      dangerouslySetInnerHTML={
+        { __html: isEndingChat ? EndChatNotification : ChatNotification }
+      }
     />
-    <div>
-      {parseUserNames(text)}
-      <div className={styles.timeStamp}>{timeStamp}</div>
-    </div>
+
+    <strong>
+      {host}
+    </strong>
+    started a live prayer with
+    <strong>
+      {guest}
+    </strong>
+
+    <div className={styles.timeStamp}>{timeStamp}</div>
   </div>
 );
+
+const joinedChatNotificationText = (
+  {
+    name,
+    timeStamp,
+    isEndingChat,
+  }: JoinedChatNotificationType
+) => (
+  <div>
+    <span
+      className={styles.icon}
+      dangerouslySetInnerHTML={
+        { __html: isEndingChat ? EndChatNotification : ChatNotification }
+      }
+    />
+    <strong>{name}</strong>has joined the chat
+    <div className={styles.timeStamp}>{timeStamp}</div>
+  </div>
+);
+
+const leftChatNotificationText = (
+  {
+    name,
+    timeStamp,
+    isEndingChat,
+  }: LeftChatNotificationType
+) => (
+  <div>
+    <span
+      className={styles.icon}
+      dangerouslySetInnerHTML={
+        { __html: isEndingChat ? EndChatNotification : ChatNotification }
+      }
+    />
+    <strong>{name}</strong>has left the chat
+    <div className={styles.timeStamp}>{timeStamp}</div>
+  </div>
+);
+
+const getNotificationText = notificationObj => {
+  switch (notificationObj.notificationType) {
+  case PRAYER:
+    return prayerNotificationText(notificationObj);
+  case JOINED_CHAT:
+    return joinedChatNotificationText(notificationObj);
+  case LEFT_CHAT:
+    return leftChatNotificationText(notificationObj);
+  }
+};
+
+const Notification = ({ notificationObj }: NotificationPropsType) => {
+  return (
+    <div className={styles.notification}>
+      {getNotificationText(notificationObj)}
+    </div>
+  );
+};
 
 export default Notification;

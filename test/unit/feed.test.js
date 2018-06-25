@@ -15,7 +15,14 @@ import {
   deleteMessage,
 } from '../../src/moment';
 
-import { MESSAGE } from '../../src/moment/dux';
+import {
+  MESSAGE,
+} from '../../src/moment/dux';
+
+import {
+  publishPrayerNotification,
+  formatAMPM,
+} from '../../src/moment/notification/dux';
 
 import {
   addToCurrentChannel,
@@ -500,6 +507,32 @@ describe('Feed tests', () => {
           ],
         },
       },
+    );
+  });
+
+  test('Can publish a prayer notification', () => {
+    const result = reducer(
+      defaultState,
+      publishPrayerNotification('Boofie', 'Beefie')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            // ...defaultState.channels.public,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'PRAYER',
+              host: 'Boofie',
+              guest: 'Beefie',
+              timeStamp: formatAMPM(new Date()),
+              isEndingChat: false,
+            }
+          ],
+        },
+      }
     );
   });
 });

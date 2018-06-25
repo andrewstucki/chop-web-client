@@ -14,9 +14,4 @@ describe('Util tests', () => {
     const result = getFirstInitial('joe-joe');
     expect(result).toBe('J');
   });
-
-  test('parseUserNames', () => {
-    const result = parseUserNames('[[Biffle]] started chat with [[Baffle]]');
-    expect(result).toBe('Biffle started chat with Baffle');
-  });
 });
