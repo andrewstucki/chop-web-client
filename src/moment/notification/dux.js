@@ -33,7 +33,6 @@ type LeftChatNotificationType = {
   notificationType: 'LEFT_CHAT',
   name: string,
   timeStamp: string,
-  isEndingChat: boolean,
 };
 
 type JoinedChatNotificationType = {
@@ -41,7 +40,6 @@ type JoinedChatNotificationType = {
   notificationType: 'JOINED_CHAT',
   name: string,
   timeStamp: string,
-  isEndingChat: boolean,
 };
 
 type PrayerNotificationType = {
@@ -50,7 +48,6 @@ type PrayerNotificationType = {
   host: string,
   guest: string,
   timeStamp: string,
-  isEndingChat: boolean,
 };
 
 // Action Creators
@@ -65,7 +62,6 @@ const publishPrayerNotification = (host: string, guest: string) => (
       host,
       guest,
       timeStamp: formatAMPM(new Date),
-      isEndingChat: false,
     },
   }
 );
@@ -79,7 +75,6 @@ const publishLeftChatNotification = (name: string, channel: string) => (
       notificationType: LEFT_CHAT,
       name,
       timeStamp: formatAMPM(new Date()),
-      isEndingChat: true,
     },
   }
 );
@@ -93,7 +88,6 @@ const publishJoinedChatNotification = (name: string, channel: string) => (
       notificationType: JOINED_CHAT,
       name,
       timeStamp: formatAMPM(new Date()),
-      isEndingChat: false,
     },
   }
 );

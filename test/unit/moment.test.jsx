@@ -79,7 +79,6 @@ describe('Moment tests', () => {
         host: 'Billy',
         guest: 'Bobby',
         timeStamp: formatAMPM(new Date),
-        isEndingChat: false,
       }
     );
   });
@@ -98,7 +97,6 @@ describe('Moment tests', () => {
         notificationType: 'JOINED_CHAT',
         name: 'Billy',
         timeStamp: formatAMPM(new Date),
-        isEndingChat: false,
       }
     );
   });
@@ -117,7 +115,6 @@ describe('Moment tests', () => {
         notificationType: 'JOINED_CHAT',
         name: 'Billy',
         timeStamp: formatAMPM(new Date),
-        isEndingChat: false,
       }
     );
   });
@@ -136,7 +133,6 @@ describe('Moment tests', () => {
         notificationType: 'LEFT_CHAT',
         name: 'Billy',
         timeStamp: formatAMPM(new Date),
-        isEndingChat: true,
       }
     );
   });
@@ -155,7 +151,6 @@ describe('Moment tests', () => {
         notificationType: 'LEFT_CHAT',
         name: 'Billy',
         timeStamp: formatAMPM(new Date),
-        isEndingChat: true,
       }
     );
   });

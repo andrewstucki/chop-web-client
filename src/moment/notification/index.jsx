@@ -27,14 +27,13 @@ const prayerNotificationText = (
     host,
     guest,
     timeStamp,
-    isEndingChat,
   }: PrayerNotificationType
 ) => (
   <div className={styles.notification}>
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
-        { __html: isEndingChat ? EndChatNotification : ChatNotification }
+        { __html: ChatNotification }
       }
     />
     <div>
@@ -50,14 +49,13 @@ const joinedChatNotificationText = (
   {
     name,
     timeStamp,
-    isEndingChat,
   }: JoinedChatNotificationType
 ) => (
   <div className={styles.notification}>
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
-        { __html: isEndingChat ? EndChatNotification : ChatNotification }
+        { __html: ChatNotification }
       }
     />
     <div>
@@ -73,14 +71,13 @@ const leftChatNotificationText = (
   {
     name,
     timeStamp,
-    isEndingChat,
   }: LeftChatNotificationType
 ) => (
   <div className={styles.notification}>
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
-        { __html: isEndingChat ? EndChatNotification : ChatNotification }
+        { __html: EndChatNotification }
       }
     />
     <div>
