@@ -154,7 +154,7 @@ The Feed and Moments are one of the core features of CWC. The Feed is an area th
 
 Think of the Feed as a scrolling, ordered list of bits of information and Moments are those bits of information.
 
-A Moment has one property `data`. The `data` prop has the required parameter `type`. The `type parameter defines the type of Moment it is. This is a similar pattern Redux uses for Actions in the reducer. Each action has a type which tells the reducer how to handle it. For Moments, each one has a type which tells the Moment JSX which component to render.
+A Moment has one property `data`. The `data` prop has the required parameter `type`. The `type` parameter defines the type of Moment it is. This is a similar pattern Redux uses for Actions in the reducer. Each action has a type which tells the reducer how to handle it. For Moments, each one has a type which tells the Moment JSX which component to render.
 
 To build a new Moment type:
 
