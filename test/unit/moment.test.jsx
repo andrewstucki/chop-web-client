@@ -2,15 +2,20 @@
 import React from 'react';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import sinon from 'sinon';
 
 import Moment from '../../src/moment/moment';
-import { Message, Notification, createMessage } from '../../src/moment';
+import { Message, Notification, ActionableNotification, createMessage } from '../../src/moment';
 import {
   formatAMPM,
   publishPrayerNotification,
   publishJoinedChatNotification,
   publishLeftChatNotification,
 } from '../../src/moment/notification/dux';
+
+import {
+  publishPrayerRequestNotification,
+} from '../../src/moment/actionableNotification/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -149,6 +154,24 @@ describe('Moment tests', () => {
       {
         type: 'NOTIFICATION',
         notificationType: 'LEFT_CHAT',
+        name: 'Billy',
+        timeStamp: formatAMPM(new Date),
+      }
+    );
+  });
+
+  test('Prayer request notification renders', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          publishPrayerRequestNotification('Billy')
+        }
+      />
+    );
+    expect(wrapper.find(ActionableNotification).at(0).props().notification).toEqual(
+      {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
         name: 'Billy',
         timeStamp: formatAMPM(new Date),
       }

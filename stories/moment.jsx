@@ -12,6 +12,10 @@ import {
   publishLeftChatNotification,
 } from '../src/moment/notification/dux';
 
+import {
+  publishPrayerRequestNotification,
+} from '../src/moment/actionableNotification/dux';
+
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
@@ -75,6 +79,15 @@ storiesOf('Moment', module)
       <Moment
         data={
           publishLeftChatNotification('Billyboy', 'public')
+        }
+      />
+    </Provider>
+  ))
+  .add('Prayer request notification', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          publishPrayerRequestNotification('Billyboy')
         }
       />
     </Provider>

@@ -19,3 +19,8 @@
 .timeStamp {
   font-size: 10.24px;
 }
+
+.text {
+  /* TODO need to figure out the width of the text on all sizes */
+  width: 232px;
+}

@@ -1,6 +1,7 @@
 // flow
 import type { MessageType } from './message/dux';
 import type { NotificationType } from './notification/dux';
+import type { ActionableNotificationType } from './actionableNotification/dux';
 import messageReducer from './message/dux';
 import { combineReducers } from 'redux';
 
@@ -10,7 +11,8 @@ const PUBLISH_MOMENT_TO_CHANNEL = 'PUBLISH_MOMENT_TO_CHANNEL';
 
 type MomentType =
   | MessageType
-  | NotificationType;
+  | NotificationType
+  | ActionableNotificationType;
 
 // Reducer
 
@@ -24,7 +26,6 @@ const reducer = combineReducers(
 
 export type {
   MomentType,
-  NotificationType,
 };
 
 export {

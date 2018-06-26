@@ -18,7 +18,6 @@ describe('Notification test', () => {
             host: 'yablby',
             guest: 'cookietree',
             timeStamp: '9:33pm',
-            isEndingChat: false,
           }
         }
       />
@@ -40,7 +39,6 @@ describe('Notification test', () => {
             notificationType: 'JOINED_CHAT',
             name: 'cookietree',
             timeStamp: '9:33pm',
-            isEndingChat: false,
           }
         }
       />
@@ -62,7 +60,6 @@ describe('Notification test', () => {
             notificationType: 'LEFT_CHAT',
             name: 'cookietree',
             timeStamp: '9:33pm',
-            isEndingChat: true,
           }
         }
       />
