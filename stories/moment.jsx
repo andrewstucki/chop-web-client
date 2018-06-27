@@ -7,15 +7,13 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { createMessage } from '../src/moment';
+import { publishPrayerRequestNotification } from '../src/moment/actionableNotification/dux';
 import {
   publishPrayerNotification,
   publishJoinedChatNotification,
   publishLeftChatNotification,
 } from '../src/moment/notification/dux';
 
-import {
-  publishPrayerRequestNotification,
-} from '../src/moment/actionableNotification/dux';
 
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
