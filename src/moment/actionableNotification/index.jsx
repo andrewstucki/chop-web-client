@@ -28,15 +28,15 @@ const prayerRequestNotificationText = (
         { __html: ChatNotification }
       }
     />
-    <div>
-      <div className={styles.text}>
+    <div className={styles.text}>
+      <div>
         <strong>{name} </strong>has requested prayer
       </div>
       <div className={styles.timeStamp}>{timeStamp}</div>
     </div>
     <button
       className={styles.acceptButton}
-      onClick={() => {console.log('Howdy')}}
+      onClick={() => {console.log('We need to build this action')}}
     >
       Accept
     </button>

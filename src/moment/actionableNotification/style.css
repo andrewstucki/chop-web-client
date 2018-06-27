@@ -3,5 +3,6 @@
 .acceptButton {
   color: var(--primaryColor);
   border: none;
-  margin-left: 16px;
+  margin-right: 16px;
+  padding: 0;
 }

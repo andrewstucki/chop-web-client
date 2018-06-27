@@ -23,25 +23,26 @@ type MomentPropType = {
 
 const Moment = ({data}: MomentPropType) => {
   switch (data.type) {
-    case MESSAGE:
-      return (
-        <Message
-          message={data}
-        />
-      );
+  case MESSAGE:
+    return (
+      <Message
+        message={data}
+      />
+    );
     case PUBLISH_MOMENT_TO_CHANNEL: {
-      if (data.moment.type === NOTIFICATION) {
+      switch (data.moment.type) {
+      case NOTIFICATION:
         return (
           <Notification
             notification={data.moment}
           />
         );
-      } else if (data.moment.type === ACTIONABLE_NOTIFICATION) {
+      case ACTIONABLE_NOTIFICATION:
         return (
           <ActionableNotification
             notification={data.moment}
           />
-        );
+        ); 
       }
     }
   };
