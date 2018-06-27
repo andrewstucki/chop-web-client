@@ -15,11 +15,19 @@ type PrayerRequestNotificationType = {
   notificationType: 'PRAYER_REQUEST',
   name: string,
   timeStamp: string,
+  active: boolean,
+  action: () => void,
 };
 
 // Action Creators
 
-const publishPrayerRequestNotification = (name: string) => (
+const acceptPrayerRequest = () => (
+  {
+    // TODO build this action
+  }
+);
+
+const publishPrayerRequestNotification = (name: string, active: boolean) => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel: 'host',
@@ -27,7 +35,9 @@ const publishPrayerRequestNotification = (name: string) => (
       type: ACTIONABLE_NOTIFICATION,
       notificationType: PRAYER_REQUEST,
       name,
+      active,
       timeStamp: formatAMPM(new Date),
+      action: acceptPrayerRequest,
     },
   }
 );
@@ -41,6 +51,7 @@ export type {
 
 export {
   publishPrayerRequestNotification,
+  acceptPrayerRequest,
 };
 
 export {

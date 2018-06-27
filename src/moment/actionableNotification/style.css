@@ -1,8 +1,24 @@
 @import url('../notification/style');
 
+.actionableNotification {
+  @apply --notification;
+  background-color: var(--disabledColor);
+}
+
 .acceptButton {
   color: var(--primaryColor);
   border: none;
   margin-right: 16px;
   padding: 0;
+  background-color: var(--disabledColor);
+}
+
+.showText {
+  display: initial;
+  font-size: 16px;
+  margin-right: 16px;
+}
+
+.hideText {
+  display: none;
 }

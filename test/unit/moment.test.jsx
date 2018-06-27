@@ -2,7 +2,6 @@
 import React from 'react';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import sinon from 'sinon';
 
 import Moment from '../../src/moment/moment';
 import { Message, Notification, ActionableNotification, createMessage } from '../../src/moment';
@@ -15,6 +14,7 @@ import {
 
 import {
   publishPrayerRequestNotification,
+  acceptPrayerRequest,
 } from '../../src/moment/actionableNotification/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -164,7 +164,7 @@ describe('Moment tests', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
-          publishPrayerRequestNotification('Billy')
+          publishPrayerRequestNotification('Billy', true)
         }
       />
     );
@@ -174,6 +174,8 @@ describe('Moment tests', () => {
         notificationType: 'PRAYER_REQUEST',
         name: 'Billy',
         timeStamp: formatAMPM(new Date),
+        active: true,
+        action: acceptPrayerRequest,
       }
     );
   });

@@ -4,6 +4,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
 import { createMessage } from '../src/moment';
 import {
@@ -83,12 +84,22 @@ storiesOf('Moment', module)
       />
     </Provider>
   ))
-  .add('Prayer request notification', () => (
+  .add('Prayer request notification active', () => (
     <Provider store={store}>
       <Moment
         data={
-          publishPrayerRequestNotification('Billyboy')
+          publishPrayerRequestNotification('Billyboy', true)
         }
+      />
+    </Provider>
+  ))
+  .add('Prayer request notification inactive', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          publishPrayerRequestNotification('Billyboy', false)
+        }
+        // TODO add an action for the onClick
       />
     </Provider>
   ));
