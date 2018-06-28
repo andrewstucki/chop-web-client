@@ -4,12 +4,19 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import Moment from '../../src/moment/moment';
-import { Message, Notification, ActionableNotification, createMessage } from '../../src/moment';
+import {
+  Message,
+  Notification,
+  ActionableNotification,
+  createMessage
+} from '../../src/moment';
+
 import {
   publishPrayerNotification,
   publishJoinedChatNotification,
   publishLeftChatNotification,
 } from '../../src/moment/notification/dux';
+
 import { mockDate } from '../testUtils';
 
 import {
