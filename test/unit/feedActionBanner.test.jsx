@@ -25,6 +25,7 @@ describe('FeedActionBanner test', () => {
     expect(wrapper.find('button').at(0).props().className).toEqual('action');
     expect(wrapper.find('button').at(0).text()).toEqual('Leave');
     // TODO simulate a button click
+    // TODO find a way to add a channel other than host or public and remove it in a test
   });
 
   test('Cancel direct chat banner renders', () => {
