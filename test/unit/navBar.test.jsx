@@ -37,9 +37,9 @@ describe('NavBar tests', () => {
         barX={50}
       />
     );
-    expect(wrapper.find('.navBar>a').length).toBe(3);
-    expect(wrapper.find('.navBar>a').at(1).text()).toBe('event');
-    expect(wrapper.find('.navBar>a').at(2).text()).toBe('host');
+    expect(wrapper.find('.navBar a').length).toBe(3);
+    expect(wrapper.find('.navBar a').at(1).text()).toBe('event');
+    expect(wrapper.find('.navBar a').at(2).text()).toBe('host');
   });
 
   test('onClick function works', () => {
@@ -56,7 +56,7 @@ describe('NavBar tests', () => {
         barX={50}
       />
     );
-    wrapper.find('.navBar>a').at(1).simulate('click', 'public');
+    wrapper.find('.navBar a').at(1).simulate('click', 'public');
     expect(onClick.calledOnce).toEqual(true);
     expect(onClick.getCall(0).args[0]).toEqual('public');
   });
@@ -93,5 +93,24 @@ describe('NavBar tests', () => {
     );
     expect(wrapper.find('#nav-public span.pip').length).toBe(0);
     expect(wrapper.find('#nav-host span.pip').length).toBe(1);
+  });
+
+  test('direct chat', () => {
+    const wrapper = Enzyme.shallow(
+      <NavBar
+        channels={[
+          {id: 'public', isCurrent: true, hasActions: false},
+          {id: 'host', isCurrent: false, hasActions: false},
+          {id: 'direct1', isCurrent: false, hasActions: false, directChatParticipant: 'bob'},
+          {id: 'direct2', isCurrent: false, hasActions: false, directChatParticipant: 'dave'},
+        ]}
+        onClick={function () {}}
+        openMenu={() => {}}
+        barWidth={100}
+        barX={50}
+      />
+    );
+    expect(wrapper.find('#nav-direct1').text()).toEqual('B');
+    expect(wrapper.find('#nav-direct2').text()).toEqual('D');
   });
 });

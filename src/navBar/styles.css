@@ -4,7 +4,7 @@
   --link-base: {
     display: flex;
     align-items: center;
-    margin: 0 12px;
+    padding: 0 12px;
     color: #ffffff;
     text-transform: uppercase;
     text-decoration: none;
@@ -17,13 +17,18 @@
   @apply --link-base;
 }
 
-
 .navBar {
   display: flex;
   background-color: #1e1f23;
   height: 48px;
   width: 100%;
   z-index: 1;
+}
+
+.channelLinks {
+  overflow-x: auto;
+  flex: 1;
+  display: flex;
   position: relative;
 }
 
@@ -39,7 +44,7 @@
   bottom: 8px;
   background-color: var(--backgroundColor);
   border-radius: 2px;
-  transition: width var(--animation-duration) var(--ease-out), left var(--animation-duration) var(--ease-out);
+  transition: width var(--animation-duration) var(--ease-out), left var(--animation-duration) var(--ease-out), opacity var(--animation-duration) var(--ease-out);
 }
 
 .hamburger {
@@ -61,5 +66,15 @@
   background-color: #2993E5;
   position: absolute;
   top: 6px;
-  right: -8px;
+  right: 3px;
+}
+
+.avatar {
+  border-radius: var(--borderRadius);
+  height: 28px;
+  width: 28px;
+  font-size: 12px;
+  color: var(--backgroundColor);
+  text-align: center;
+  line-height: 28px;
 }
