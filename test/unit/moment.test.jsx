@@ -10,19 +10,11 @@ import {
   publishJoinedChatNotification,
   publishLeftChatNotification,
 } from '../../src/moment/notification/dux';
+import { mockDate } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Moment tests', () => {
-  const RealDate = Date;
-  const mockDate = date => {
-    global.Date = class extends RealDate {
-      constructor () {
-        super();
-        return new RealDate(date);
-      }
-    };
-  };
   mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
 
   test('Moment renders', () => {
