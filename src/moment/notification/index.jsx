@@ -101,9 +101,7 @@ const getNotificationText = notification => {
 };
 
 const Notification = ({ notification }: NotificationPropsType) => (
-  <div>
-    {getNotificationText(notification)}
-  </div>
+  getNotificationText(notification)
 );
 
 export default Notification;

@@ -21,7 +21,6 @@ import {
   publishPrayerNotification,
   publishJoinedChatNotification,
   publishLeftChatNotification,
-  formatAMPM,
 } from '../../src/moment/notification/dux';
 
 import {
@@ -30,8 +29,11 @@ import {
 } from '../../src/chat/dux';
 
 import { setUser } from '../../src/io/chat/dux';
+import { mockDate } from '../testUtils';
 
 describe('Feed tests', () => {
+  mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
+
   test('default state', () => {
     const result = reducer();
     expect(result).toEqual(defaultState);
@@ -527,7 +529,7 @@ describe('Feed tests', () => {
               notificationType: 'PRAYER',
               host: 'Boofie',
               guest: 'Beefie',
-              timeStamp: formatAMPM(new Date()),
+              timeStamp: '4:53pm',
             },
           ],
         },
@@ -551,7 +553,7 @@ describe('Feed tests', () => {
               type: 'NOTIFICATION',
               notificationType: 'JOINED_CHAT',
               name: 'Boofie',
-              timeStamp: formatAMPM(new Date()),
+              timeStamp: '4:53pm',
             },
           ],
         },
@@ -575,7 +577,7 @@ describe('Feed tests', () => {
               type: 'NOTIFICATION',
               notificationType: 'JOINED_CHAT',
               name: 'Boofie',
-              timeStamp: formatAMPM(new Date()),
+              timeStamp: '4:53pm',
             },
           ],
         },
@@ -599,7 +601,7 @@ describe('Feed tests', () => {
               type: 'NOTIFICATION',
               notificationType: 'LEFT_CHAT',
               name: 'Boofie',
-              timeStamp: formatAMPM(new Date()),
+              timeStamp: '4:53pm',
             },
           ],
         },
@@ -623,7 +625,7 @@ describe('Feed tests', () => {
               type: 'NOTIFICATION',
               notificationType: 'LEFT_CHAT',
               name: 'Boofie',
-              timeStamp: formatAMPM(new Date()),
+              timeStamp: '4:53pm',
             },
           ],
         },
