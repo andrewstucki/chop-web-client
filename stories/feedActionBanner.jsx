@@ -5,9 +5,23 @@ import { action } from '@storybook/addon-actions';
 import FeedActionBanner from '../src/feed/feedActionBanner';
 
 storiesOf('FeedActionBanner', module)
-  .add('default', () => (
+  .add('Leave direct chat', () => (
     <FeedActionBanner
-      text="Leave"
-      action={action('clicked')}
+      data={
+        {
+          type: 'LEAVE_DIRECT_CHAT',
+          channel: 'host',
+        }
+      }
+    />
+  ))
+  .add('Cancel direct chat', () => (
+    <FeedActionBanner
+      data={
+        {
+          type: 'CANCEL_DIRECT_CHAT',
+          channel: 'host',
+        }
+      }
     />
   ));
