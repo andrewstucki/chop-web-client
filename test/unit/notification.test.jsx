@@ -18,7 +18,6 @@ describe('Notification test', () => {
             host: 'yablby',
             guest: 'cookietree',
             timeStamp: '9:33pm',
-            isEndingChat: false,
           }
         }
       />

@@ -4,9 +4,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
 import { createMessage } from '../src/moment';
-
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
@@ -96,6 +96,46 @@ storiesOf('Moment', module)
               notificationType: 'LEFT_CHAT',
               name: 'Pickle',
               timeStamp: '9:33pm',
+            },
+          }
+        }
+      />
+    </Provider>
+  ))
+  .add('Prayer request notification active', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'ACTIONABLE_NOTIFICATION',
+              notificationType: 'PRAYER_REQUEST',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+              active: true,
+              action: action('clicked'),
+            },
+          }
+        }
+      />
+    </Provider>
+  ))
+  .add('Prayer request notification inactive', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'ACTIONABLE_NOTIFICATION',
+              notificationType: 'PRAYER_REQUEST',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+              active: false,
+              action: action('clicked'),
             },
           }
         }

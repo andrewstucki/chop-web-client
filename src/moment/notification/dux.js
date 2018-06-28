@@ -1,7 +1,5 @@
 // @flow
-import {
-  PUBLISH_MOMENT_TO_CHANNEL,
-} from '../dux';
+import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 
 // Type Definitions
 
@@ -110,4 +108,5 @@ export {
   PRAYER,
   JOINED_CHAT,
   LEFT_CHAT,
+  NOTIFICATION,
 };

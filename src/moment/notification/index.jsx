@@ -36,7 +36,7 @@ const prayerNotificationText = (
         { __html: ChatNotification }
       }
     />
-    <div>
+    <div className={styles.text}>
       <div>
         <strong>{host} </strong>started a live prayer with<strong> {guest}</strong>
       </div>
@@ -58,7 +58,7 @@ const joinedChatNotificationText = (
         { __html: ChatNotification }
       }
     />
-    <div>
+    <div className={styles.text}>
       <div>
         <strong>{name} </strong>has joined the chat
       </div>
@@ -80,7 +80,7 @@ const leftChatNotificationText = (
         { __html: EndChatNotification }
       }
     />
-    <div>
+    <div className={styles.text}>
       <div>
         <strong>{name} </strong>has left the chat
       </div>
