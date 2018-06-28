@@ -18,13 +18,22 @@ import {
 import { MESSAGE } from '../../src/moment/dux';
 
 import {
+  publishPrayerNotification,
+  publishJoinedChatNotification,
+  publishLeftChatNotification,
+} from '../../src/moment/notification/dux';
+
+import {
   addToCurrentChannel,
   chatInput,
 } from '../../src/chat/dux';
 
 import { setUser } from '../../src/io/chat/dux';
+import { mockDate } from '../testUtils';
 
 describe('Feed tests', () => {
+  mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
+
   test('default state', () => {
     const result = reducer();
     expect(result).toEqual(defaultState);
@@ -500,6 +509,127 @@ describe('Feed tests', () => {
           ],
         },
       },
+    );
+  });
+
+  test('Can publish a prayer notification', () => {
+    const result = reducer(
+      defaultState,
+      publishPrayerNotification('Boofie', 'Beefie')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'PRAYER',
+              host: 'Boofie',
+              guest: 'Beefie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a joined chat notification public', () => {
+    const result = reducer(
+      defaultState,
+      publishJoinedChatNotification('Boofie', 'public')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a joined chat notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishJoinedChatNotification('Boofie', 'host')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a left chat notification public', () => {
+    const result = reducer(
+      defaultState,
+      publishLeftChatNotification('Boofie', 'public')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a left chat notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishLeftChatNotification('Boofie', 'host')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
     );
   });
 });

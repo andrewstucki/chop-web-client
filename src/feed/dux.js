@@ -25,6 +25,10 @@ import {
   DELETE_MESSAGE,
 } from '../moment';
 
+import {
+  PUBLISH_MOMENT_TO_CHANNEL,
+} from '../moment/dux';
+
 import { SET_USER } from '../io/chat/dux';
 
 // Action Types
@@ -264,6 +268,18 @@ const reducer = (
         [currentChannel]: [
           ...channels[currentChannel].slice(0, messageIndex),
           ...channels[currentChannel].slice(messageIndex + 1),
+        ],
+      },
+    };
+  }
+  case PUBLISH_MOMENT_TO_CHANNEL: {
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: [
+          ...state.channels[action.channel],
+          action.moment,
         ],
       },
     };

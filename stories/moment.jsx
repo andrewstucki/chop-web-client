@@ -1,11 +1,14 @@
+// @flow
 /* global module */
 import React from 'react';
-import { storiesOf } from '@storybook/react';
-import Moment from '../src/moment/moment';
-import '../assets/global.css';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { storiesOf } from '@storybook/react';
+
 import { createMessage } from '../src/moment';
+
+import Moment from '../src/moment/moment';
+import '../assets/global.css';
 
 const store = createStore(() => {});
 
@@ -40,6 +43,61 @@ storiesOf('Moment', module)
             },
             true,
           )
+        }
+      />
+    </Provider>
+  ))
+  .add('Live prayer notification', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'NOTIFICATION',
+              notificationType: 'PRAYER',
+              host: 'Pickle',
+              guest: 'Cucumber',
+              timeStamp: '9:33pm',
+            },
+          }
+        }
+      />
+    </Provider>
+  ))
+  .add('Joined chat notification', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+            },
+          }
+        }
+      />
+    </Provider>
+  ))
+  .add('Left chat notification', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+            },
+          }
         }
       />
     </Provider>
