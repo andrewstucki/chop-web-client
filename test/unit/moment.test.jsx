@@ -180,14 +180,16 @@ describe('Moment tests', () => {
         }
       />
     );
-    expect(wrapper.find(ActionableNotification).at(0).props().notification).toEqual(
+    expect(wrapper.find(ActionableNotification).at(0).props()).toEqual(
       {
-        type: 'ACTIONABLE_NOTIFICATION',
-        notificationType: 'PRAYER_REQUEST',
-        name: 'Billy',
-        timeStamp: formatAMPM(new Date),
-        active: true,
-        action: acceptPrayerRequest,
+        notification: {
+          type: 'ACTIONABLE_NOTIFICATION',
+          notificationType: 'PRAYER_REQUEST',
+          name: 'Billy',
+          timeStamp: '4:53pm',
+          active: true,
+          action: acceptPrayerRequest,
+        },
       }
     );
   });

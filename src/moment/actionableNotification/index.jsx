@@ -7,13 +7,12 @@ import type {
   ActionableNotificationType,
   PrayerRequestNotificationType,
 } from './dux';
+import ChatNotification from '../../../assets/chat-notification.svg';
+import styles from './style.css';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
 };
-
-import ChatNotification from '../../../assets/chat-notification.svg';
-import styles from './style.css';
 
 const prayerRequestNotificationText = (
   {
@@ -66,10 +65,10 @@ const getNotificationText = notification => {
   }
 };
 
-const ActionableNotification = ({ notification }: ActionableNotificationPropsType) => (
-  <div>
-    {getNotificationText(notification)}
-  </div>
+const ActionableNotification = (
+  { notification }: ActionableNotificationPropsType
+) => (
+  getNotificationText(notification)
 );
 
 export default ActionableNotification;

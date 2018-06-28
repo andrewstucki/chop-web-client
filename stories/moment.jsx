@@ -7,8 +7,6 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { createMessage } from '../src/moment';
-
-
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
@@ -108,7 +106,18 @@ storiesOf('Moment', module)
     <Provider store={store}>
       <Moment
         data={
-          publishPrayerRequestNotification('Billyboy', true)
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'ACTIONABLE_NOTIFICATION',
+              notificationType: 'PRAYER_REQUEST',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+              active: true,
+              action: action('clicked'),
+            },
+          }
         }
       />
     </Provider>
@@ -117,9 +126,19 @@ storiesOf('Moment', module)
     <Provider store={store}>
       <Moment
         data={
-          publishPrayerRequestNotification('Billyboy', false)
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'ACTIONABLE_NOTIFICATION',
+              notificationType: 'PRAYER_REQUEST',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+              active: false,
+              action: action('clicked'),
+            },
+          }
         }
-        // TODO add an action for the onClick
       />
     </Provider>
   ));

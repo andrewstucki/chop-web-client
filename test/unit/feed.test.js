@@ -24,6 +24,11 @@ import {
 } from '../../src/moment/notification/dux';
 
 import {
+  publishPrayerRequestNotification,
+  acceptPrayerRequest,
+} from '../../src/moment/actionableNotification/dux';
+
+import {
   addToCurrentChannel,
   chatInput,
 } from '../../src/chat/dux';
@@ -626,6 +631,32 @@ describe('Feed tests', () => {
               notificationType: 'LEFT_CHAT',
               name: 'Boofie',
               timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a prayer request notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishPrayerRequestNotification('Boofie', true)
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'ACTIONABLE_NOTIFICATION',
+              notificationType: 'PRAYER_REQUEST',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+              active: true,
+              action: acceptPrayerRequest,
             },
           ],
         },
