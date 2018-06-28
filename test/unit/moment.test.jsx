@@ -6,7 +6,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import Moment from '../../src/moment/moment';
 import { Message, Notification, createMessage } from '../../src/moment';
 import {
-  formatAMPM,
   publishPrayerNotification,
   publishJoinedChatNotification,
   publishLeftChatNotification,
@@ -15,6 +14,17 @@ import {
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Moment tests', () => {
+  const RealDate = Date;
+  const mockDate = date => {
+    global.Date = class extends RealDate {
+      constructor () {
+        super();
+        return new RealDate(date);
+      }
+    };
+  };
+  mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
+
   test('Moment renders', () => {
     const wrapper = Enzyme.shallow(
       <Moment
@@ -72,13 +82,15 @@ describe('Moment tests', () => {
         }
       />
     );
-    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+    expect(wrapper.find(Notification).at(0).props()).toEqual(
       {
-        type: 'NOTIFICATION',
-        notificationType: 'PRAYER',
-        host: 'Billy',
-        guest: 'Bobby',
-        timeStamp: formatAMPM(new Date),
+        notification: {
+          type: 'NOTIFICATION',
+          notificationType: 'PRAYER',
+          host: 'Billy',
+          guest: 'Bobby',
+          timeStamp: '4:53pm',
+        },
       }
     );
   });
@@ -91,12 +103,14 @@ describe('Moment tests', () => {
         }
       />
     );
-    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+    expect(wrapper.find(Notification).at(0).props()).toEqual(
       {
-        type: 'NOTIFICATION',
-        notificationType: 'JOINED_CHAT',
-        name: 'Billy',
-        timeStamp: formatAMPM(new Date),
+        notification: {
+          type: 'NOTIFICATION',
+          notificationType: 'JOINED_CHAT',
+          name: 'Billy',
+          timeStamp: '4:53pm',
+        },
       }
     );
   });
@@ -109,12 +123,14 @@ describe('Moment tests', () => {
         }
       />
     );
-    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+    expect(wrapper.find(Notification).at(0).props()).toEqual(
       {
-        type: 'NOTIFICATION',
-        notificationType: 'JOINED_CHAT',
-        name: 'Billy',
-        timeStamp: formatAMPM(new Date),
+        notification: {
+          type: 'NOTIFICATION',
+          notificationType: 'JOINED_CHAT',
+          name: 'Billy',
+          timeStamp: '4:53pm',
+        },
       }
     );
   });
@@ -127,12 +143,14 @@ describe('Moment tests', () => {
         }
       />
     );
-    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+    expect(wrapper.find(Notification).at(0).props()).toEqual(
       {
-        type: 'NOTIFICATION',
-        notificationType: 'LEFT_CHAT',
-        name: 'Billy',
-        timeStamp: formatAMPM(new Date),
+        notification: {
+          type: 'NOTIFICATION',
+          notificationType: 'LEFT_CHAT',
+          name: 'Billy',
+          timeStamp: '4:53pm',
+        },
       }
     );
   });
@@ -145,12 +163,14 @@ describe('Moment tests', () => {
         }
       />
     );
-    expect(wrapper.find(Notification).at(0).props().notification).toEqual(
+    expect(wrapper.find(Notification).at(0).props()).toEqual(
       {
-        type: 'NOTIFICATION',
-        notificationType: 'LEFT_CHAT',
-        name: 'Billy',
-        timeStamp: formatAMPM(new Date),
+        notification: {
+          type: 'NOTIFICATION',
+          notificationType: 'LEFT_CHAT',
+          name: 'Billy',
+          timeStamp: '4:53pm',
+        },
       }
     );
   });

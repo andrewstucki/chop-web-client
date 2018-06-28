@@ -23,12 +23,12 @@ describe('Notification test', () => {
         }
       />
     );
-    expect(wrapper.find('div').at(1).props().className).toEqual('notification');
+    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(3).text()).toEqual(
+    expect(wrapper.find('div').at(2).text()).toEqual(
       'yablby started a live prayer with cookietree'
     );
-    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
+    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
   });
 
   test('Joined chat notification renders', () => {
@@ -40,20 +40,19 @@ describe('Notification test', () => {
             notificationType: 'JOINED_CHAT',
             name: 'cookietree',
             timeStamp: '9:33pm',
-            isEndingChat: false,
           }
         }
       />
     );
-    expect(wrapper.find('div').at(1).props().className).toEqual('notification');
+    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(3).text()).toEqual(
+    expect(wrapper.find('div').at(2).text()).toEqual(
       'cookietree has joined the chat'
     );
-    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
+    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
   });
 
-  test('Joined chat notification renders', () => {
+  test('Left chat notification renders', () => {
     const wrapper = Enzyme.shallow(
       <Notification
         notification={
@@ -62,16 +61,15 @@ describe('Notification test', () => {
             notificationType: 'LEFT_CHAT',
             name: 'cookietree',
             timeStamp: '9:33pm',
-            isEndingChat: true,
           }
         }
       />
     );
-    expect(wrapper.find('div').at(1).props().className).toEqual('notification');
+    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(3).text()).toEqual(
+    expect(wrapper.find('div').at(2).text()).toEqual(
       'cookietree has left the chat'
     );
-    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
+    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
   });
 });

@@ -6,11 +6,6 @@ import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
 
 import { createMessage } from '../src/moment';
-import {
-  publishPrayerNotification,
-  publishJoinedChatNotification,
-  publishLeftChatNotification,
-} from '../src/moment/notification/dux';
 
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
@@ -56,7 +51,17 @@ storiesOf('Moment', module)
     <Provider store={store}>
       <Moment
         data={
-          publishPrayerNotification('Billyboy', 'Jilliejoy')
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'NOTIFICATION',
+              notificationType: 'PRAYER',
+              host: 'Pickle',
+              guest: 'Cucumber',
+              timeStamp: '9:33pm',
+            },
+          }
         }
       />
     </Provider>
@@ -65,7 +70,16 @@ storiesOf('Moment', module)
     <Provider store={store}>
       <Moment
         data={
-          publishJoinedChatNotification('Billyboy', 'public')
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+            },
+          }
         }
       />
     </Provider>
@@ -74,7 +88,16 @@ storiesOf('Moment', module)
     <Provider store={store}>
       <Moment
         data={
-          publishLeftChatNotification('Billyboy', 'public')
+          {
+            type: 'PUBLISH_MOMENT_TO_CHANNEL',
+            channel: 'host',
+            moment: {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Pickle',
+              timeStamp: '9:33pm',
+            },
+          }
         }
       />
     </Provider>
