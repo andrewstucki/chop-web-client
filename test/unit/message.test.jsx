@@ -22,6 +22,7 @@ describe('Message', () => {
               nickname: 'Billy Bob',
             },
             messageTrayOpen: false,
+            closeTrayButtonRendered: false,
           }
         }
         appendingMessage={false}
@@ -47,6 +48,7 @@ describe('Message', () => {
               nickname: 'Billy Bob',
             },
             messageTrayOpen: false,
+            closeTrayButtonRendered: false,
           }
         }
         appendingMessage={false}
@@ -74,6 +76,7 @@ describe('Message', () => {
               nickname: 'Billy Bob',
             },
             messageTrayOpen: true,
+            closeTrayButtonRendered: true,
           }
         }
         appendingMessage={false}

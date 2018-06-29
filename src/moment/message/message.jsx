@@ -2,7 +2,11 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
+
 import { getFirstInitial, getAvatarColor } from '../../util';
+
+import { renderCloseTrayButton } from './dux';
+
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
 import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
 import MessageTray from '../../components/messageTray';
@@ -22,12 +26,14 @@ const Message = (
     openMessageTray,
     closeMessageTray,
     deleteMessage,
-  }: MessagePropsType) => {
-  const { messageTrayOpen } = message;
+  }: MessagePropsType
+) => {
+  const { messageTrayOpen, closeTrayButtonRendered } = message;
   const messageStyle = messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
-  const renderMessageButtons = () => {
-    if (messageTrayOpen) {
+  const renderMessageButtons = (boolean) => {
+    console.log(boolean)
+    if (boolean) {
       return (
         <button
           className={styles.closeTrayButton}
@@ -58,7 +64,10 @@ const Message = (
         }}
       />
 
-      <div className={messageStyle}>
+      <div
+        className={messageStyle}
+        onTransitionEnd={() => (renderCloseTrayButton(message.id))}
+      >
         <div
           className={styles.icon} 
           style={{backgroundColor: getAvatarColor(message.user.nickname)}}
@@ -70,7 +79,7 @@ const Message = (
           <span className={styles.role}>Host</span>
           <div data-node="text" className={styles.text}>{message.text}</div>
         </div>
-        {renderMessageButtons()}
+        {renderMessageButtons(closeTrayButtonRendered)}
       </div>
 
     </div>

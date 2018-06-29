@@ -13,6 +13,7 @@ import {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
+  renderCloseTrayButton,
 } from '../../src/moment';
 
 import { MESSAGE } from '../../src/moment/dux';
@@ -438,6 +439,94 @@ describe('Feed tests', () => {
                 nickname: 'Billy Bob',
               },
               messageTrayOpen: false,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Render closeTrayButton', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              type: MESSAGE,
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+              closeTrayButtonRendered: false
+            },
+          ],
+        },
+      },
+      renderCloseTrayButton('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+              closeTrayButtonRendered: true,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Render openTrayButton', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              type: MESSAGE,
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+              closeTrayButtonRendered: true
+            },
+          ],
+        },
+      },
+      renderCloseTrayButton('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+              closeTrayButtonRendered: false,
             },
           ],
         },
