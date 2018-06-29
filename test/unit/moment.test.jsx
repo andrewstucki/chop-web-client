@@ -8,7 +8,7 @@ import {
   Message,
   Notification,
   ActionableNotification,
-  createMessage
+  createMessage,
 } from '../../src/moment';
 
 import {

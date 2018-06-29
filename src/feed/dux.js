@@ -322,6 +322,7 @@ export type {
   ChangeChannelType,
   UserType,
   FeedType,
+  RemoveChannelType,
 };
 
 export default reducer;
