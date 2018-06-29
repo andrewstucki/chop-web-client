@@ -91,7 +91,8 @@ type FeedActionTypes =
   | SetUser
   | OpenMessageTrayType
   | CloseMessageTrayType
-  | DeleteMessageType;
+  | DeleteMessageType
+  | RenderCloseTrayButtonType;
 
 // Action Creators
 

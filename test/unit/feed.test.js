@@ -462,7 +462,7 @@ describe('Feed tests', () => {
                 nickname: 'Billy Bob',
               },
               messageTrayOpen: true,
-              closeTrayButtonRendered: false
+              closeTrayButtonRendered: false,
             },
           ],
         },
@@ -506,7 +506,7 @@ describe('Feed tests', () => {
                 nickname: 'Billy Bob',
               },
               messageTrayOpen: false,
-              closeTrayButtonRendered: true
+              closeTrayButtonRendered: true,
             },
           ],
         },
