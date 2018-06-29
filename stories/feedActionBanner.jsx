@@ -7,21 +7,13 @@ import FeedActionBanner from '../src/feed/feedActionBanner';
 storiesOf('FeedActionBanner', module)
   .add('Leave direct chat', () => (
     <FeedActionBanner
-      data={
-        {
-          type: 'LEAVE_DIRECT_CHAT',
-          channel: 'host',
-        }
-      }
+      text="Leave"
+      action={action('clicked')}
     />
   ))
   .add('Cancel direct chat', () => (
     <FeedActionBanner
-      data={
-        {
-          type: 'CANCEL_DIRECT_CHAT',
-          channel: 'host',
-        }
-      }
+      text="Cancel"
+      action={action('clicked')}
     />
   ));
