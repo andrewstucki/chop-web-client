@@ -24,7 +24,7 @@ import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
-  RENDER_CLOSE_TRAY_BUTTON,
+  TOGGLE_CLOSE_TRAY_BUTTON,
 } from '../moment';
 
 import {
@@ -258,7 +258,7 @@ const reducer = (
       },
     };
   }
-  case RENDER_CLOSE_TRAY_BUTTON: {
+  case TOGGLE_CLOSE_TRAY_BUTTON: {
     const { id } = action;
     return {
       ...state,
