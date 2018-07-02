@@ -25,6 +25,7 @@ storiesOf('Moment', module)
               nickname: 'Billy Bob',
             },
             false,
+            false,
           )
         }
       />
@@ -41,6 +42,7 @@ storiesOf('Moment', module)
               id: '12345',
               nickname: 'Billy Bob',
             },
+            true,
             true,
           )
         }

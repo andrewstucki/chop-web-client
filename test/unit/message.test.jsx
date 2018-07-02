@@ -22,12 +22,14 @@ describe('Message', () => {
               nickname: 'Billy Bob',
             },
             messageTrayOpen: false,
+            closeTrayButtonRendered: false,
           }
         }
         appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
+        toggleCloseTrayButton={() => {}}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
@@ -47,12 +49,14 @@ describe('Message', () => {
               nickname: 'Billy Bob',
             },
             messageTrayOpen: false,
+            closeTrayButtonRendered: false,
           }
         }
         appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={openTray}
         deleteMessage={() => {}}
+        toggleCloseTrayButton={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
@@ -74,12 +78,14 @@ describe('Message', () => {
               nickname: 'Billy Bob',
             },
             messageTrayOpen: true,
+            closeTrayButtonRendered: true,
           }
         }
         appendingMessage={false}
         closeMessageTray={closeTray}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
+        toggleCloseTrayButton={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);

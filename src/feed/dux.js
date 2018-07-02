@@ -9,6 +9,7 @@ import type {
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
+  ToggleCloseTrayButtonType,
 } from '../moment';
 
 import type { SetUser } from '../io/chat/dux';
@@ -23,6 +24,7 @@ import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
+  TOGGLE_CLOSE_TRAY_BUTTON,
 } from '../moment';
 
 import {
@@ -89,7 +91,8 @@ type FeedActionTypes =
   | SetUser
   | OpenMessageTrayType
   | CloseMessageTrayType
-  | DeleteMessageType;
+  | DeleteMessageType
+  | ToggleCloseTrayButtonType;
 
 // Action Creators
 
@@ -165,7 +168,7 @@ const reducer = (
           ...state.channels,
           [state.currentChannel]: [
             ...state.channels[state.currentChannel],
-            createMessage(action.id, state.chatInput, state.currentUser, false),
+            createMessage(action.id, state.chatInput, state.currentUser, false, false),
           ],
         },
         chatInput: '',
@@ -249,6 +252,23 @@ const reducer = (
             {
               ...message,
               messageTrayOpen: message.id === id ? false : null,
+            }
+          )
+        ),
+      },
+    };
+  }
+  case TOGGLE_CLOSE_TRAY_BUTTON: {
+    const { id } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [state.currentChannel]: state.channels[state.currentChannel].map(
+          message => (
+            {
+              ...message,
+              closeTrayButtonRendered: message.id === id ? !message.closeTrayButtonRendered : null,
             }
           )
         ),
