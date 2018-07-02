@@ -31,12 +31,26 @@ describe('Feed tests', () => {
   });
 
   test('change current channel', () => {
-    const result = reducer(defaultState, changeChannel('host'));
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [],
+          host: [],
+        },
+        currentChannel: 'pubic',
+      }
+      , changeChannel('host'));
     expect(result).toEqual(
       {
         ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [],
+          host: [],
+        },
         currentChannel: 'host',
-        appendingMessage: false,
       }
     );
   });
@@ -50,6 +64,11 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [],
+        },
+        currentChannel: 'public',
         chatInput: 'this is a message',
         currentUser: {
           id: '12345',
@@ -66,32 +85,15 @@ describe('Feed tests', () => {
     expect(result.appendingMessage).toBe(true);
   });
 
-  test('adds a message to current channel not public from current user', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        currentChannel: 'host',
-        chatInput: 'this is a string',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
-      },
-      addToCurrentChannel()
-    );
-    expect(result.channels.public.length).toEqual(0);
-    expect(result.channels.host.length).toEqual(1);
-    expect(result.channels.host[0].text).toEqual('this is a string');
-    expect(result.channels.host[0].user.id).toEqual('12345');
-    expect(result.channels.host[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.host[0].id.length).toEqual(36);
-    expect(result.appendingMessage).toBe(true);
-  });
-
   test('adds a message to not current channel', () => {
     const result = reducer(
       {
         ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [],
+          host: [],
+        },
         currentChannel: 'public',
         chatInput: 'this is a string',
       },
@@ -136,8 +138,24 @@ describe('Feed tests', () => {
   });
 
   test('add a channel that already exists', () => {
-    const result = reducer(defaultState, addChannel('host'));
-    expect(result).toEqual(defaultState);
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [],
+        },
+      }
+      , addChannel('public'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [],
+        },
+      }
+    );
   });
 
   test('remove channel', () => {
@@ -145,33 +163,12 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: [],
-          host: [],
+          ...defaultState.channels,
           other: [],
         },
       },
       removeChannel('other'));
     expect(result).toEqual(defaultState);
-  });
-
-  test('remove public', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        channels: {
-          public: [],
-        },
-      },
-      removeChannel('public')
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          public: [],
-        },
-      },
-    );
   });
 
   test('remove current channel', () => {
