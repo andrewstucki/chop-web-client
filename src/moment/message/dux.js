@@ -36,7 +36,7 @@ type DeleteMessageType = {
   id: string,
 };
 
-type RenderCloseTrayButtonType = {
+type ToggleCloseTrayButtonType = {
   type: 'RENDER_CLOSE_TRAY_BUTTON',
   id: string,
 };
@@ -62,7 +62,7 @@ const closeMessageTray = (id: string) => (
   }
 );
 
-const renderCloseTrayButton = (id: string) => (
+const toggleCloseTrayButton = (id: string) => (
   {
     type: RENDER_CLOSE_TRAY_BUTTON,
     id,
@@ -122,7 +122,7 @@ export {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
-  renderCloseTrayButton,
+  toggleCloseTrayButton,
 };
 
 export type {
@@ -130,6 +130,6 @@ export type {
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
-  RenderCloseTrayButtonType,
+  ToggleCloseTrayButtonType,
 };
 export default reducer;

@@ -13,7 +13,7 @@ import {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
-  renderCloseTrayButton,
+  toggleCloseTrayButton,
 } from '../../src/moment';
 
 import { MESSAGE } from '../../src/moment/dux';
@@ -446,7 +446,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Render closeTrayButton', () => {
+  test('Render closeTrayButton after the tray opens', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -467,7 +467,7 @@ describe('Feed tests', () => {
           ],
         },
       },
-      renderCloseTrayButton('123'));
+      toggleCloseTrayButton('123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -490,7 +490,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Render openTrayButton', () => {
+  test('Render openTrayButton after the tray closes', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -511,7 +511,7 @@ describe('Feed tests', () => {
           ],
         },
       },
-      renderCloseTrayButton('123'));
+      toggleCloseTrayButton('123'));
     expect(result).toEqual(
       {
         ...defaultState,

@@ -9,7 +9,7 @@ import type {
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
-  RenderCloseTrayButtonType,
+  ToggleCloseTrayButtonType,
 } from '../moment';
 
 import type { SetUser } from '../io/chat/dux';
@@ -92,7 +92,7 @@ type FeedActionTypes =
   | OpenMessageTrayType
   | CloseMessageTrayType
   | DeleteMessageType
-  | RenderCloseTrayButtonType;
+  | ToggleCloseTrayButtonType;
 
 // Action Creators
 
