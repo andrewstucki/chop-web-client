@@ -7,6 +7,7 @@ type ChannelType = {
   id: string,
   isCurrent: boolean,
   hasActions: boolean,
+  directChatParticipant?: string,
 };
 
 type ChannelsListType = Array<ChannelType>;
