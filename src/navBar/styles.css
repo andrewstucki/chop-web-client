@@ -78,7 +78,3 @@
   text-align: center;
   line-height: 28px;
 }
-
-.unselected .avatar {
-    filter: grayscale(100%);
-}

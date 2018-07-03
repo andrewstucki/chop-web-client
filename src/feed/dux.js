@@ -122,6 +122,8 @@ const removeChannel = (channel: string): RemoveChannelType => (
 
 const defaultState = {
   channels: {
+    public: [],
+    host: [],
   },
   currentChannel: 'public',
   chatInput: '',
@@ -190,6 +192,10 @@ const reducer = (
       },
     };
   case REMOVE_CHANNEL: {
+    if (action.channel === 'public' ||
+      action.channel === 'host') {
+      return state;
+    }
     const stateCopy = {...state};
     if (action.channel === state.currentChannel) {
       stateCopy.currentChannel = 'public';
