@@ -4,7 +4,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 
-import AnchorMoment from '../../src/moment/anchorMoment/anchorMoment';
+import AnchorMoment from '../../src/placeHolder/anchorMoment/anchorMoment';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -12,9 +12,15 @@ describe('AnchorMoment tests', () => {
   test('AnchorMoment renders 1 hand raised banner', () => {
     const wrapper = Enzyme.shallow(
       <AnchorMoment
-        text="Would you like to give your life to Christ?"
-        raisedHandCount="1"
-        showReleaseButton={true}
+        anchorMoment={
+          {
+            type: 'CALL_TO_CHRIST',
+            text: "Would you like to give your life to Christ?",
+            subText: "hand raised",
+            showReleaseAnchorButton: true,
+          }
+        }
+        raisedHandCount={1}
         releaseAnchorMoment={() => {}}
       />
     );
@@ -28,9 +34,15 @@ describe('AnchorMoment tests', () => {
   test('AnchorMoment renders multiple hands raised banner', () => {
     const wrapper = Enzyme.shallow(
       <AnchorMoment
-        text="Would you like to give your life to Christ?"
-        raisedHandCount="4"
-        showReleaseButton={true}
+        anchorMoment={
+          {
+            type: 'CALL_TO_CHRIST',
+            text: "Would you like to give your life to Christ?",
+            subText: "hands raised",
+            showReleaseAnchorButton: true,
+          }
+        }
+        raisedHandCount={4}
         releaseAnchorMoment={() => {}}
       />
     );
@@ -45,9 +57,15 @@ describe('AnchorMoment tests', () => {
     const releaseAnchorMoment = sinon.spy();
     const wrapper = Enzyme.shallow(
       <AnchorMoment
-        text="Would you like to give your life to Christ?"
-        raisedHandCount="4"
-        showReleaseButton={true}
+        anchorMoment={
+          {
+            type: 'CALL_TO_CHRIST',
+            text: "Would you like to give your life to Christ?",
+            subText: "hands raised",
+            showReleaseAnchorButton: true,
+          }
+        }
+        raisedHandCount={4}
         releaseAnchorMoment={releaseAnchorMoment}
       />
     );
