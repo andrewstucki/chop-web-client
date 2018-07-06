@@ -3,7 +3,7 @@ import reducer, {
   defaultState,
   getRaisedHandCount,
   publishCallToChrist,
-} from '../../src/placeHolder/dux';
+} from '../../src/placeholder/dux';
 
 describe('PlaceHolder tests', () => {
   test('Default state', () => {

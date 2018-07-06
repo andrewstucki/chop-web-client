@@ -4,7 +4,6 @@
 
 const CALL_TO_CHRIST = 'CALL_TO_CHRIST';
 const SET_ANCHOR_MOMENT = 'SET_ANCHOR_MOMENT';
-const ANCHOR_MOMENT = 'ANCHOR_MOMENT';
 
 type AnchorMomentType = 
 | CallToChristType;
@@ -13,11 +12,12 @@ type CallToChristType = {
   type: 'CALL_TO_CHRIST',
   text: string,
   subText: string,
+  action: () => void,
   showReleaseAnchorButton: boolean,
 };
 
-type AnchorMomentStateType = {
-  renderAnchorMoment: boolean,
+type PlaceHolderType = {
+  renderPlaceHolder: boolean,
   raisedHandCount: number,
 };
 
@@ -52,16 +52,16 @@ const publishCallToChrist = (
 // Default State
 
 const defaultState = {
-  renderAnchorMoment: false,
+  renderPlaceHolder: false,
   raisedHandCount: 0,
 };
 
 // Reducer
 
 const reducer = (
-  state: AnchorMomentStateType = defaultState,
+  state: PlaceHolderType = defaultState,
   action?: AnchorMomentActionType
-): AnchorMomentStateType => {
+): PlaceHolderType => {
   if (!action || !action.type) {
     return state;
   }
@@ -73,7 +73,7 @@ const reducer = (
 
 // Selectors
 
-const getRaisedHandCount = (state: AnchorMomentStateType) => (
+const getRaisedHandCount = (state: PlaceHolderType) => (
   state.raisedHandCount
 );
 
@@ -81,13 +81,14 @@ const getRaisedHandCount = (state: AnchorMomentStateType) => (
 
 export type {
   AnchorMomentType,
-  AnchorMomentStateType,
+  PlaceHolderType,
   AnchorMomentActionType,
   PublishCallToChristType,
   CallToChristType,
 };
 
 export {
+  SET_ANCHOR_MOMENT,
   CALL_TO_CHRIST,
 };
 

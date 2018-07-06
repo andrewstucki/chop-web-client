@@ -10,17 +10,16 @@ import styles from './style.css';
 type AnchorMomentPropsType = {
   anchorMoment: AnchorMomentType,
   raisedHandCount: number,
-  releaseAnchorMoment: () => void,
 };
 
 const callToChristAnchorMoment = (
   {
     text,
     subText,
+    action,
     showReleaseAnchorButton,
   }: CallToChristType,
-  count,
-  action
+  count
 ) => (
   <div className={styles.anchorMoment}>
     {
@@ -40,10 +39,10 @@ const callToChristAnchorMoment = (
   </div>
 );
 
-const getAnchorMomentContent = (anchorMoment, count, action) => {
+const getAnchorMomentContent = (anchorMoment, count) => {
   switch (anchorMoment.type) {
     case CALL_TO_CHRIST:
-      return callToChristAnchorMoment(anchorMoment, count, action)
+      return callToChristAnchorMoment(anchorMoment, count)
   }
 };
 
@@ -51,10 +50,9 @@ const AnchorMoment = (
   {
     anchorMoment,
     raisedHandCount,
-    releaseAnchorMoment,
   }: AnchorMomentPropsType
 ) => (
-  getAnchorMomentContent(anchorMoment, raisedHandCount, releaseAnchorMoment)
+  getAnchorMomentContent(anchorMoment, raisedHandCount)
 );
 
 export default AnchorMoment;
