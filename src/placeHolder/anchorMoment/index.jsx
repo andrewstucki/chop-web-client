@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 
-import type { AnchorMomentType, CallToChristType } from './dux';
-import { CALL_TO_CHRIST } from './dux';
+import type { AnchorMomentType, CallToChristType } from '../dux';
+import { CALL_TO_CHRIST } from '../dux';
 
 import ReleaseAnchorButton from '../../../assets/release-anchor-button.svg';
 import styles from './style.css';

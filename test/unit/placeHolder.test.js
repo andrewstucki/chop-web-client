@@ -3,9 +3,9 @@ import reducer, {
   defaultState,
   getRaisedHandCount,
   publishCallToChrist,
-} from '../../src/placeHolder/anchorMoment/dux';
+} from '../../src/placeHolder/dux';
 
-describe('AnchorMoment tests', () => {
+describe('PlaceHolder tests', () => {
   test('Default state', () => {
     const result = reducer(defaultState);
     expect(result).toEqual(defaultState);

@@ -66,23 +66,6 @@ const reducer = (
     return state;
   }
   switch (action.type) {
-    // case SET_ANCHOR_MOMENT: {
-    //   switch (action.moment.type) {
-    //     case CALL_TO_CHRIST: {
-    //       const callText = 'Would you like to give your life to Christ?';
-    //       const callSubText = 
-    //         state.raisedHandCount === 1 ? 'hand raised' : 'hands raised';
-    //       return {
-    //         ...state,
-    //         renderAnchorMoment: true,
-    //         moment: {
-    //           ...state.moment,
-    //           publishCallToChrist(callText, callSubText, true)
-    //         },
-    //       };
-    //     };
-    //   }
-    // }
     default:
       return state;
   }

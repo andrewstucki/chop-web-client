@@ -4,7 +4,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 
-import AnchorMoment from '../../src/placeHolder/anchorMoment/anchorMoment';
+import AnchorMoment from '../../src/placeHolder/anchorMoment';
 
 Enzyme.configure({ adapter: new Adapter() });
 
