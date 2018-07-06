@@ -1,3 +1,33 @@
+@import url('../../../assets/theme.css');
+
+.anchorMoment {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background-color: #F6F6F6;
+}
+
+.releaseAnchorButton {
+  border: none;
+  background-color: inherit;
+  padding-right: 23.5px;
+  padding-left: 22.5px;
+}
+
+.textContainer {
+
+}
+
 .releaseAnchorButton svg {
   width: 11px;
+}
+
+.text,
+.subText {
+  line-height: 20px;
+}
+
+.subText {
+  color: var(--disabledTextColor);
+  font-size: 12.8px;
 }

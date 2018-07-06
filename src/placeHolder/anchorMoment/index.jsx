@@ -30,11 +30,13 @@ const callToChristAnchorMoment = (
           onClick={action}
         />
     }
-    <div className={styles.text}>
-      {text}
-    </div>
-    <div className={styles.subText}>
-      {count} {subText}
+    <div className={styles.textContainer}>
+      <div className={styles.text}>
+        {text}
+      </div>
+      <div className={styles.subText}>
+        {count} {subText}
+      </div>
     </div>
   </div>
 );

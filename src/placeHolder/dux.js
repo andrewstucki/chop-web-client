@@ -23,7 +23,6 @@ type PlaceHolderType = {
 
 type PublishCallToChristType = {
   type: 'SET_ANCHOR_MOMENT',
-  channel: string,
   moment: AnchorMomentType,
 };
 
@@ -39,7 +38,6 @@ const publishCallToChrist = (
 ) => (
   {
     type: SET_ANCHOR_MOMENT,
-    channel: 'event',
     moment: {
       type: CALL_TO_CHRIST,
       text,
