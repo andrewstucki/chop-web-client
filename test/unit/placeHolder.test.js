@@ -2,8 +2,9 @@
 import reducer, {
   defaultState,
   getRaisedHandCount,
-  publishCallToChrist,
 } from '../../src/placeholder/dux';
+
+import { publishCallToChrist } from '../../src/placeholder/anchorMoment/dux';
 
 describe('PlaceHolder tests', () => {
   test('Default state', () => {
@@ -21,28 +22,14 @@ describe('PlaceHolder tests', () => {
     expect(result).toEqual(1);
   });
 
-  // test('Publish a call to Christ 1 hand raised', () => {
-  //   const result = reducer(
-  //     {
-  //       ...defaultState,
-  //       raisedHandCount: 1,
-  //     },
-  //     publishCallToChrist(
-  //       'Would you like to give your life to Chirst?',
-  //       'hand raised',
-  //       true
-  //     ));
-  //   expect(result).toEqual(
-  //     {
-  //       ...defaultState,
-  //       raisedHandCount: 1,
-  //       moment: {
-  //         type: 'CALL_TO_CHRIST',
-  //         text: 'Would you like to give your life to Chirst?',
-  //         subText: 'hand raised',
-  //         showReleaseAnchorButton: true,
-  //       },
-  //     }
-  //   );
-  // });
+  test('Sets call to Christ anchor moment', () => {
+    const result = reducer(defaultState, publishCallToChrist('1 hand raised'));
+    expect(result.renderPlaceholder).toBe(true);
+    expect(result.placeholder.length).toBe(1);
+    expect(result.placeholder[0].text).toBe(
+      'Would you like to give your life to Christ?'
+    );
+    expect(result.placeholder[0].subText).toBe('1 hand raised');
+    expect(result.placeholder[0].showReleaseAnchorButton).toBe(true);
+  });
 });

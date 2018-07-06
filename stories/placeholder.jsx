@@ -13,17 +13,18 @@ const store = createStore(() => {});
 
 storiesOf('Placeholder', module)
   .add('Call to Christ anchor moment', () => (
-    <Placeholder
-      data={
-        {
-          type: 'CALL_TO_CHRIST',
-          text: 'Would you like to give your life to Christ?',
-          subText: 'hand raised',
-          action: action('clicked'),
-          showReleaseAnchorButton: true,
+    <Provider store={store}>
+      <Placeholder
+        data={
+          {
+            type: 'CALL_TO_CHRIST',
+            text: 'Would you like to give your life to Christ?',
+            subText: '1 hand raised',
+            showReleaseAnchorButton: true,
+          }
         }
-      }
-      renderPlaceholder={true}
-      raisedHandCount={1}
-    />
+        releaseAnchorMoment={action('clicked')}
+        renderPlaceholder={true}
+      />
+    </Provider>
   ));

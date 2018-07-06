@@ -9,48 +9,25 @@ import AnchorMoment from '../../src/placeHolder/anchorMoment';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('AnchorMoment tests', () => {
-  test('AnchorMoment renders 1 hand raised banner', () => {
+  test('AnchorMoment renders call to Christ', () => {
     const wrapper = Enzyme.shallow(
       <AnchorMoment
         anchorMoment={
           {
             type: 'CALL_TO_CHRIST',
-            text: "Would you like to give your life to Christ?",
-            subText: "hand raised",
+            text: 'Would you like to give your life to Christ?',
+            subText: '1 hand raised',
             showReleaseAnchorButton: true,
           }
         }
-        raisedHandCount={1}
         releaseAnchorMoment={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('anchorMoment');
-    expect(wrapper.find('div').at(1).text()).toEqual(
+    expect(wrapper.find('div').at(2).text()).toEqual(
       'Would you like to give your life to Christ?'
     );
-    expect(wrapper.find('div').at(2).text()).toEqual('1 hand raised');
-  });
-
-  test('AnchorMoment renders multiple hands raised banner', () => {
-    const wrapper = Enzyme.shallow(
-      <AnchorMoment
-        anchorMoment={
-          {
-            type: 'CALL_TO_CHRIST',
-            text: "Would you like to give your life to Christ?",
-            subText: "hands raised",
-            showReleaseAnchorButton: true,
-          }
-        }
-        raisedHandCount={4}
-        releaseAnchorMoment={() => {}}
-      />
-    );
-    expect(wrapper.find('div').at(0).props().className).toEqual('anchorMoment');
-    expect(wrapper.find('div').at(1).text()).toEqual(
-      'Would you like to give your life to Christ?'
-    );
-    expect(wrapper.find('div').at(2).text()).toEqual('4 hands raised');
+    expect(wrapper.find('div').at(3).text()).toEqual('1 hand raised');
   });
 
   test('AnchorMoment has a close button and it can be clicked', () => {
@@ -60,12 +37,11 @@ describe('AnchorMoment tests', () => {
         anchorMoment={
           {
             type: 'CALL_TO_CHRIST',
-            text: "Would you like to give your life to Christ?",
-            subText: "hands raised",
+            text: 'Would you like to give your life to Christ?',
+            subText: '4 hands raised',
             showReleaseAnchorButton: true,
           }
         }
-        raisedHandCount={4}
         releaseAnchorMoment={releaseAnchorMoment}
       />
     );

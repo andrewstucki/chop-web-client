@@ -1,45 +1,35 @@
 // @flow
 import React from 'react';
 
-import type { AnchorMomentType } from './dux';
-import { CALL_TO_CHRIST } from './dux';
+import type { AnchorMomentType } from './anchorMoment/dux';
+import { CALL_TO_CHRIST } from './anchorMoment/dux';
 
 import AnchorMoment from './anchorMoment';
-import styles from './style.css';
 
 type PlaceHolderPropsType = {
   data: AnchorMomentType,
   renderPlaceholder: boolean,
-  raisedHandCount: number,
+  releaseAnchorMoment: () => void,
 };
 
 const Placeholder = (
   {
     data,
     renderPlaceholder,
-    raisedHandCount,
+    releaseAnchorMoment,
   }: PlaceHolderPropsType
 ) => {
-  const placeholderStyle =
-    renderPlaceholder ? styles.showPlaceholder : styles.hidePlaceholder;
-
-  const getPlaceholderContent = () => {
+  if (renderPlaceholder) {
     switch (data.type) {
-      case CALL_TO_CHRIST:
-        return (
-          <AnchorMoment
-            anchorMoment={data}
-            raisedHandCount={raisedHandCount}
-          />
-        );
-    };
-  };
-
-  return (
-    <div className={placeholderStyle}>
-      {getPlaceholderContent()}
-    </div>
-  );
+    case CALL_TO_CHRIST:
+      return (
+        <AnchorMoment
+          anchorMoment={data}
+          releaseAnchorMoment={releaseAnchorMoment}
+        />
+      );
+    }
+  }
 };
 
 export default Placeholder;
