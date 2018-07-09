@@ -4,7 +4,10 @@ import type {
   AnchorMomentType,
 } from './anchorMoment/dux';
 
-import { CALL_TO_CHRIST } from './anchorMoment/dux';
+import {
+  CALL_TO_CHRIST,
+  RELEASE_ANCHOR_MOMENT,
+} from './anchorMoment/dux';
 
 // Type Definitions
 
@@ -43,7 +46,7 @@ const reducer = (
     if (!action.anchorMoment.type) {
       return state;
     }
-    switch (action.anchorMoment.type) {
+    switch (action.anchorMoment.anchorMomentType) {
     case CALL_TO_CHRIST:
       return {
         ...state,
@@ -58,6 +61,12 @@ const reducer = (
     // but I'm not 100% positive it's what we need...tests are passing still
     return { ...state };
   }
+  case RELEASE_ANCHOR_MOMENT:
+    return {
+      ...state,
+      renderPlaceholder: false,
+      placeholder: [],
+    };
   default:
     return state;
   }

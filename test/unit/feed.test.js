@@ -35,6 +35,9 @@ import {
 } from '../../src/chat/dux';
 
 import { setUser } from '../../src/io/chat/dux';
+
+import { releaseAnchorMoment } from '../../src/placeholder/anchorMoment/dux';
+
 import { mockDate } from '../testUtils';
 
 describe('Feed tests', () => {
@@ -746,6 +749,41 @@ describe('Feed tests', () => {
               timeStamp: '4:53pm',
               active: true,
               action: acceptPrayerRequest,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish an anchor moment as a moment', () => {
+    const result = reducer(
+      defaultState,
+      releaseAnchorMoment(
+        {
+          type: 'ANCHOR_MOMENT',
+          anchorMomentType: 'CALL_TO_CHRIST',
+          id: '12345',
+          text: 'Would you like to give your life to Christ?',
+          subText: '1 hand raised',
+          showReleaseAnchorButton: true,
+        }
+      )
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'ANCHOR_MOMENT',
+              anchorMomentType: 'CALL_TO_CHRIST',
+              id: '12345',
+              text: 'Would you like to give your life to Christ?',
+              subText: '1 hand raised',
+              showReleaseAnchorButton: false,
             },
           ],
         },

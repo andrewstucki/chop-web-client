@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import type {MomentType} from './dux';
+import type { MomentType } from '../moment/dux';
 import Moment from '../moment/moment';
 import styles from './styles.css';
 import BezierEasing from 'bezier-easing';

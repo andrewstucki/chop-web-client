@@ -10,6 +10,7 @@ import type {
   CloseMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
+  MomentType,
 } from '../moment';
 
 import type { SetUser } from '../io/chat/dux';
@@ -33,6 +34,8 @@ import {
 
 import { SET_USER } from '../io/chat/dux';
 
+import { RELEASE_ANCHOR_MOMENT } from '../placeholder/anchorMoment/dux';
+
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';//RECEIVE
@@ -40,19 +43,17 @@ const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 
 // Flow Type Definitions
-type MomentType =
-  | MessageType;
 
 type UserType = {
   id: string,
   nickname: string,
 };
 
-type MessageTypeList = Array<MessageType>;
+type MomentTypeList = Array<MomentType>;
 
 type FeedType = {
   channels: {
-    [string]: MessageTypeList,
+    [string]: MomentTypeList,
   },
   currentChannel: string,
   chatInput: string,
@@ -304,6 +305,18 @@ const reducer = (
       },
     };
   }
+  case RELEASE_ANCHOR_MOMENT:
+    action.anchorMoment.showReleaseAnchorButton = false;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: [
+          ...state.channels[action.channel],
+          action.anchorMoment,
+        ],
+      },
+    };
   default:
     return state;
   }
@@ -337,7 +350,6 @@ export {
   appendMessage,
 };
 export type {
-  MomentType,
   ReceiveMessageType,
   ChangeChannelType,
   UserType,

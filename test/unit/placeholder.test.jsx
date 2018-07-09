@@ -14,7 +14,9 @@ describe('Placeholder tests', () => {
       <Placeholder
         data={
           {
-            type: 'CALL_TO_CHRIST',
+            type: 'ANCHOR_MOMENT',
+            anchorMomentType: 'CALL_TO_CHRIST',
+            id: '12345',
             text: 'Would you like to give your life to Christ?',
             subText: 'hand raised',
             showReleaseAnchorButton: true,
@@ -27,7 +29,9 @@ describe('Placeholder tests', () => {
     expect(wrapper.find(AnchorMoment).length).toBe(1);
     expect(wrapper.find(AnchorMoment).at(0).props().anchorMoment).toEqual(
       {
-        type: 'CALL_TO_CHRIST',
+        type: 'ANCHOR_MOMENT',
+        anchorMomentType: 'CALL_TO_CHRIST',
+        id: '12345',
         text: 'Would you like to give your life to Christ?',
         subText: 'hand raised',
         showReleaseAnchorButton: true,

@@ -2,7 +2,7 @@
 import React from 'react';
 
 import type { AnchorMomentType } from './anchorMoment/dux';
-import { CALL_TO_CHRIST } from './anchorMoment/dux';
+import { ANCHOR_MOMENT } from './anchorMoment/dux';
 
 import AnchorMoment from './anchorMoment';
 
@@ -21,7 +21,7 @@ const Placeholder = (
 ) => {
   if (renderPlaceholder) {
     switch (data.type) {
-    case CALL_TO_CHRIST:
+    case ANCHOR_MOMENT:
       return (
         <AnchorMoment
           anchorMoment={data}
