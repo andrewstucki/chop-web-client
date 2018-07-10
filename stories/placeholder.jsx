@@ -18,7 +18,6 @@ storiesOf('Placeholder', module)
         data={
           {
             type: 'ANCHOR_MOMENT',
-            anchorMomentType: 'CALL_TO_CHRIST',
             id: '12345',
             text: 'Would you like to give your life to Christ?',
             subText: '1 hand raised',

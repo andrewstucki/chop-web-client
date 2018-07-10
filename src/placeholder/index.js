@@ -17,7 +17,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    releaseAnchorMoment: anchorMoment => dispatch(releaseAnchorMoment(anchorMoment)),
+    releaseAnchorMoment: () => dispatch(releaseAnchorMoment()),
   }
 );
 

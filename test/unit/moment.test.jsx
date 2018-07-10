@@ -11,6 +11,8 @@ import {
   createMessage,
 } from '../../src/moment';
 
+import AnchorMoment from '../../src/placeholder/anchorMoment';
+
 import {
   publishPrayerNotification,
   publishJoinedChatNotification,
@@ -196,6 +198,33 @@ describe('Moment tests', () => {
           timeStamp: '4:53pm',
           active: true,
           action: acceptPrayerRequest,
+        },
+      }
+    );
+  });
+
+  test('Salvation anchor moment renders', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'Would you like to give your life to Christ?',
+            subText: '1 hand raised',
+            showReleaseAnchorButton: false,
+          }
+        }
+      />
+    );
+    expect(wrapper.find(AnchorMoment).at(0).props()).toEqual(
+      {
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'Would you like to give your life to Christ?',
+          subText: '1 hand raised',
+          showReleaseAnchorButton: false,
         },
       }
     );

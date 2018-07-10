@@ -11,6 +11,10 @@ import { NOTIFICATION } from './notification/dux';
 import { ACTIONABLE_NOTIFICATION } from './actionableNotification/dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
 
+import AnchorMoment from '../placeholder/anchorMoment';
+
+import { ANCHOR_MOMENT } from '../placeholder/anchorMoment/dux';
+
 import type { MomentType } from './dux';
 
 type MomentPropType = {
@@ -40,6 +44,14 @@ const Moment = ({data}: MomentPropType) => {
         />
       ); 
     }
+    break;
+  }
+  case ANCHOR_MOMENT: {
+    return (
+      <AnchorMoment
+        anchorMoment={data}
+      />
+    );
   }
   }
 };

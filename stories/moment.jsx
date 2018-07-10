@@ -143,4 +143,19 @@ storiesOf('Moment', module)
         }
       />
     </Provider>
+  ))
+  .add('Salvation count', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'Would you like to give your life to Christ?',
+            subText: '1 hand raised',
+            showReleaseAnchorButton: false,
+          }
+        }
+      />
+    </Provider>
   ));

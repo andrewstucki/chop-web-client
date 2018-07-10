@@ -5,13 +5,11 @@ import type {
 } from './anchorMoment/dux';
 
 import {
-  CALL_TO_CHRIST,
+  SET_ANCHOR_MOMENT,
   RELEASE_ANCHOR_MOMENT,
 } from './anchorMoment/dux';
 
 // Type Definitions
-
-const SET_ANCHOR_MOMENT = 'SET_ANCHOR_MOMENT';
 
 type PlaceholderType = {
   renderPlaceholder: boolean,
@@ -46,20 +44,14 @@ const reducer = (
     if (!action.anchorMoment.type) {
       return state;
     }
-    switch (action.anchorMoment.anchorMomentType) {
-    case CALL_TO_CHRIST:
-      return {
-        ...state,
-        renderPlaceholder: true,
-        placeholder: [
-          ...state.placeholder,
-          action.anchorMoment,
-        ],
-      };
-    }
-    // KENNY I returned a copy of state here to satisfy the linter, 
-    // but I'm not 100% positive it's what we need...tests are passing still
-    return { ...state };
+    return {
+      ...state,
+      renderPlaceholder: true,
+      placeholder: [
+        ...state.placeholder,
+        action.anchorMoment,
+      ],
+    };
   }
   case RELEASE_ANCHOR_MOMENT:
     return {
@@ -83,10 +75,6 @@ const getRaisedHandCount = (state: PlaceholderType) => (
 export type {
   PlaceholderType,
   PlaceholderActionType,
-};
-
-export {
-  SET_ANCHOR_MOMENT,
 };
 
 export {

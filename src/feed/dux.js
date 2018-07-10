@@ -34,7 +34,10 @@ import {
 
 import { SET_USER } from '../io/chat/dux';
 
-import { RELEASE_ANCHOR_MOMENT } from '../placeholder/anchorMoment/dux';
+import {
+  RELEASE_ANCHOR_MOMENT,
+  SET_ANCHOR_MOMENT,
+} from '../placeholder/anchorMoment/dux';
 
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
@@ -59,6 +62,7 @@ type FeedType = {
   chatInput: string,
   currentUser: UserType,
   appendingMessage: boolean,
+  anchorMoment: Array<MomentType>,
 };
 
 type ChangeChannelType = {
@@ -140,6 +144,7 @@ const defaultState = {
     nickname: '',
   },
   appendingMessage: false,
+  anchorMoment: [],
 };
 
 // Reducer
@@ -305,17 +310,26 @@ const reducer = (
       },
     };
   }
-  case RELEASE_ANCHOR_MOMENT:
+  case SET_ANCHOR_MOMENT:
     action.anchorMoment.showReleaseAnchorButton = false;
+    return {
+      ...state,
+      anchorMoment: [
+        ...state.anchorMoment,
+        action.anchorMoment,
+      ],
+    };
+  case RELEASE_ANCHOR_MOMENT:
     return {
       ...state,
       channels: {
         ...state.channels,
         [action.channel]: [
           ...state.channels[action.channel],
-          action.anchorMoment,
+          state.anchorMoment[0],
         ],
       },
+      anchorMoment: [],
     };
   default:
     return state;

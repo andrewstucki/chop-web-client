@@ -1,10 +1,12 @@
 // flow
+import { combineReducers } from 'redux';
+
 import type { MessageType } from './message/dux';
 import type { NotificationType } from './notification/dux';
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 import type { ActionableNotificationType } from './actionableNotification/dux';
+
 import messageReducer from './message/dux';
-import { combineReducers } from 'redux';
 
 // Type Declarations
 

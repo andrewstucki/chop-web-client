@@ -36,7 +36,10 @@ import {
 
 import { setUser } from '../../src/io/chat/dux';
 
-import { releaseAnchorMoment } from '../../src/placeholder/anchorMoment/dux';
+import {
+  releaseAnchorMoment,
+  SET_ANCHOR_MOMENT,
+} from '../../src/placeholder/anchorMoment/dux';
 
 import { mockDate } from '../testUtils';
 
@@ -756,30 +759,61 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Can publish an anchor moment as a moment', () => {
+  test('Store anchorMoment from publishSalvation and set the boolean to false', () => {
     const result = reducer(
       defaultState,
-      releaseAnchorMoment(
-        {
+      {
+        type: SET_ANCHOR_MOMENT,
+        anchorMoment: {
           type: 'ANCHOR_MOMENT',
-          anchorMomentType: 'CALL_TO_CHRIST',
           id: '12345',
           text: 'Would you like to give your life to Christ?',
           subText: '1 hand raised',
           showReleaseAnchorButton: true,
-        }
-      )
+        },
+      },
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        anchorMoment: [
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'Would you like to give your life to Christ?',
+            subText: '1 hand raised',
+            showReleaseAnchorButton: false,
+          },
+        ],
+      }
+    );
+  });
+
+  test('Can publish an anchor moment as a moment and remove it from anchorMoment', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        anchorMoment: [
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'Would you like to give your life to Christ?',
+            subText: '1 hand raised',
+            showReleaseAnchorButton: false,
+          },
+        ],
+      },
+      releaseAnchorMoment()
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [
-            ...defaultState.channels.public,
+          host: [
+            ...defaultState.channels.host,
             {
               type: 'ANCHOR_MOMENT',
-              anchorMomentType: 'CALL_TO_CHRIST',
               id: '12345',
               text: 'Would you like to give your life to Christ?',
               subText: '1 hand raised',

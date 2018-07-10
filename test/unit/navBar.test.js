@@ -16,6 +16,7 @@ describe('NavBar tests', () => {
           nickname: 'bob',
         },
         appendingMessage: false,
+        anchorMoment: [],
       }
     );
     expect(result).toEqual([
@@ -51,6 +52,7 @@ describe('NavBar tests', () => {
           nickname: 'bob',
         },
         appendingMessage: false,
+        anchorMoment: [],
       }
     );
     expect(result).toEqual([
@@ -91,6 +93,7 @@ describe('NavBar tests', () => {
           nickname: 'bob',
         },
         appendingMessage: false,
+        anchorMoment: [],
       }
     );
     expect(result).toEqual([

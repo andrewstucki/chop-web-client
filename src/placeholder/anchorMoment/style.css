@@ -14,8 +14,8 @@
   padding-left: 22.5px;
 }
 
-.textContainer {
-
+.withoutButton {
+  margin-left: 16px;
 }
 
 .releaseAnchorButton svg {
