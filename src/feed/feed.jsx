@@ -9,6 +9,7 @@ type FeedProps = {
   moments: Array<MomentType>,
   channel: string,
   appendingMessage: boolean,
+  renderingAnchorMoment: boolean,
 };
 
 type RefObject = { current: any };
@@ -16,7 +17,7 @@ type RefObject = { current: any };
 type FeedState = {
   height: number,
   top: string,
-}
+};
 
 class Feed extends React.Component<FeedProps, FeedState> {
   listRef: RefObject
@@ -62,8 +63,11 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const rangeEnd = end - start;
     if (listHeight !== this.state.height &&
         wrapperHeight !== this.state.height) {
+      // if rendering an anchorMoment don't run this code
+      // run the instant code instead
       this.scrollUntilDone(
         () => ((wrapper.scrollTop - start) / rangeEnd)
+        // going to need this no matter what
       ).then(() => {
         if (listHeight > wrapperHeight) {
           this.setState(
@@ -87,14 +91,16 @@ class Feed extends React.Component<FeedProps, FeedState> {
       const messageHeight = Math.ceil(newestMessage.getBoundingClientRect().height);
       const marginTop = parseInt(window.getComputedStyle(newestMessage)['margin-top'], 10);
       const messageTotalHeight = messageHeight + marginTop;
-
-      if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) > wrapper.scrollTop) {
+      // check if a user has scrolled manually
+      // if user has scrolled when you add anchor moment don't scroll at all
+      if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) >
+        wrapper.scrollTop) {
         wrapper.scroll({
           top: wrapper.scrollHeight - (wrapperHeight + messageTotalHeight),
           behavior: 'instant',
         });
       }
-
+      // don't do this if anchorMoment
       const self = this;
       window.requestAnimationFrame(
         () => {
@@ -137,3 +143,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
 }
 
 export default Feed;
+
+// end goal is to not run an animation if rendering an anchorMoment in the feed
+// and don't scroll to the anchorMoment if user has scrolled manually

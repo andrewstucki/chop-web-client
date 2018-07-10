@@ -76,6 +76,7 @@ describe('Feed tests', () => {
           id: '12345',
           nickname: 'Billy Bob',
         },
+        renderingAnchorMoment: true,
       },
       addToCurrentChannel(),
     );
@@ -85,6 +86,7 @@ describe('Feed tests', () => {
     expect(result.channels.public[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.public[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
+    expect(result.renderingAnchorMoment).toBe(false);
   });
 
   test('adds a message to current channel not public from current user', () => {
@@ -115,6 +117,7 @@ describe('Feed tests', () => {
         ...defaultState,
         currentChannel: 'public',
         chatInput: 'this is a string',
+        renderingAnchorMoment: true,
       },
       receiveMessage('host', {
         type: MESSAGE,
@@ -133,6 +136,7 @@ describe('Feed tests', () => {
     expect(result.channels.host[0].text).toEqual('Hello there');
     expect(result.channels.host[0].id.length).toEqual(5);
     expect(result.appendingMessage).toBe(false);
+    expect(result.renderingAnchorMoment).toBe(false);
   });
 
   test('add a channel', () => {
@@ -802,6 +806,7 @@ describe('Feed tests', () => {
             showReleaseAnchorButton: false,
           },
         ],
+        renderingAnchorMoment: false,
       },
       releaseAnchorMoment()
     );
@@ -821,6 +826,7 @@ describe('Feed tests', () => {
             },
           ],
         },
+        renderingAnchorMoment: true,
       }
     );
   });

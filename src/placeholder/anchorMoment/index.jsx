@@ -17,14 +17,15 @@ const AnchorMoment = (
     releaseAnchorMoment,
   }: AnchorMomentPropsType
 ) => {
+  const { text, subText, showReleaseAnchorButton } = anchorMoment;
   const textContainerStyle =
-    anchorMoment.showReleaseAnchorButton ? styles.withButton : styles.withoutButton;
+    showReleaseAnchorButton ? styles.withButton : styles.withoutButton;
     // KENNY flow was unhappy about about the optional action here so I ran FlowFixMe
     // Let me know if there is a better way to handle this
   return (
     <div className={styles.anchorMoment}>
       {
-        anchorMoment.showReleaseAnchorButton &&
+        showReleaseAnchorButton &&
           <button
             className={styles.releaseAnchorButton}
             dangerouslySetInnerHTML={{ __html: ReleaseAnchorButton }}
@@ -36,10 +37,10 @@ const AnchorMoment = (
       }
       <div className={textContainerStyle}>
         <div className={styles.text}>
-          {anchorMoment.text}
+          {text}
         </div>
         <div className={styles.subText}>
-          {anchorMoment.subText}
+          {subText}
         </div>
       </div>
     </div>

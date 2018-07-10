@@ -12,6 +12,7 @@ const mapStateToProps = state => {
     moments: feedContents(feedState),
     channel: feedState.currentChannel,
     appendingMessage: appendMessage(feedState),
+    renderingAnchorMoment: feedState.renderingAnchorMoment,
   };
 };
 

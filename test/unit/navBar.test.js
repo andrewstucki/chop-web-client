@@ -17,6 +17,7 @@ describe('NavBar tests', () => {
         },
         appendingMessage: false,
         anchorMoment: [],
+        renderingAnchorMoment: false,
       }
     );
     expect(result).toEqual([
@@ -53,6 +54,7 @@ describe('NavBar tests', () => {
         },
         appendingMessage: false,
         anchorMoment: [],
+        renderingAnchorMoment: false,
       }
     );
     expect(result).toEqual([
@@ -94,6 +96,7 @@ describe('NavBar tests', () => {
         },
         appendingMessage: false,
         anchorMoment: [],
+        renderingAnchorMoment: false,
       }
     );
     expect(result).toEqual([

@@ -63,6 +63,7 @@ type FeedType = {
   currentUser: UserType,
   appendingMessage: boolean,
   anchorMoment: Array<MomentType>,
+  renderingAnchorMoment: boolean,
 };
 
 type ChangeChannelType = {
@@ -145,6 +146,7 @@ const defaultState = {
   },
   appendingMessage: false,
   anchorMoment: [],
+  renderingAnchorMoment: false,
 };
 
 // Reducer
@@ -170,6 +172,7 @@ const reducer = (
       return {
         ...state,
         appendingMessage: true,
+        renderingAnchorMoment: false,
         channels: {
           ...state.channels,
           [state.currentChannel]: [
@@ -185,6 +188,7 @@ const reducer = (
     return {
       ...state,
       appendingMessage: false,
+      renderingAnchorMoment: false,
       channels: {
         ...state.channels,
         [action.channel]: [
@@ -322,6 +326,7 @@ const reducer = (
   case RELEASE_ANCHOR_MOMENT:
     return {
       ...state,
+      renderingAnchorMoment: true,
       channels: {
         ...state.channels,
         [action.channel]: [
