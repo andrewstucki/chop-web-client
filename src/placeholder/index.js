@@ -2,8 +2,17 @@
 import { connect } from 'react-redux';
 
 import { releaseAnchorMoment } from './anchorMoment/dux';
+import { placeholderContents } from './dux';
 
-import PlaceHolder from './placeholder';
+import Placeholder from './placeholder';
+
+const mapStateToProps = state => {
+  const placeholderState = state.placeholder;
+  return {
+    anchorMoment: placeholderContents(placeholderState),
+    renderPlaceholder: placeholderState.renderPlaceholder,
+  };
+};
 
 const mapDispatchToProps = dispatch => (
   {
@@ -11,9 +20,9 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-const VisiblePlaceHolder = connect(
-  mapDispatchToProps,
-  (PlaceHolder)
-);
+const VisiblePlaceholder = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Placeholder);
 
-export default VisiblePlaceHolder;
+export default VisiblePlaceholder;

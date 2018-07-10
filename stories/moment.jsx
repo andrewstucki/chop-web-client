@@ -144,7 +144,7 @@ storiesOf('Moment', module)
       />
     </Provider>
   ))
-  .add('Salvation count', () => (
+  .add('Salvation anchor moment as a moment', () => (
     <Provider store={store}>
       <Moment
         data={

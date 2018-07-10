@@ -780,15 +780,13 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        anchorMoment: [
-          {
-            type: 'ANCHOR_MOMENT',
-            id: '12345',
-            text: 'I commit my life to Christ.',
-            subText: '1 hand raised',
-            showReleaseAnchorButton: false,
-          },
-        ],
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+          showReleaseAnchorButton: true,
+        },
       }
     );
   });
@@ -797,15 +795,13 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         ...defaultState,
-        anchorMoment: [
-          {
-            type: 'ANCHOR_MOMENT',
-            id: '12345',
-            text: 'I commit my life to Christ.',
-            subText: '1 hand raised',
-            showReleaseAnchorButton: false,
-          },
-        ],
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+          showReleaseAnchorButton: true,
+        },
         renderingAnchorMoment: false,
       },
       releaseAnchorMoment()

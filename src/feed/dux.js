@@ -15,6 +15,8 @@ import type {
 
 import type { SetUser } from '../io/chat/dux';
 
+import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
+
 import {
   PUBLISH_MESSAGE,
   CHAT_INPUT,
@@ -37,6 +39,7 @@ import { SET_USER } from '../io/chat/dux';
 import {
   RELEASE_ANCHOR_MOMENT,
   SET_ANCHOR_MOMENT,
+  ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
 // Action Types
@@ -62,7 +65,7 @@ type FeedType = {
   chatInput: string,
   currentUser: UserType,
   appendingMessage: boolean,
-  anchorMoment: Array<MomentType>,
+  anchorMoment: AnchorMomentType,
   renderingAnchorMoment: boolean,
 };
 
@@ -145,7 +148,13 @@ const defaultState = {
     nickname: '',
   },
   appendingMessage: false,
-  anchorMoment: [],
+  anchorMoment: {
+    type: ANCHOR_MOMENT,
+    id: '',
+    text: '',
+    subText: '',
+    showReleaseAnchorButton: true,
+  },
   renderingAnchorMoment: false,
 };
 
@@ -315,15 +324,12 @@ const reducer = (
     };
   }
   case SET_ANCHOR_MOMENT:
-    action.anchorMoment.showReleaseAnchorButton = false;
     return {
       ...state,
-      anchorMoment: [
-        ...state.anchorMoment,
-        action.anchorMoment,
-      ],
+      anchorMoment: action.anchorMoment,
     };
   case RELEASE_ANCHOR_MOMENT:
+    state.anchorMoment.showReleaseAnchorButton = false;
     return {
       ...state,
       renderingAnchorMoment: true,
@@ -331,10 +337,16 @@ const reducer = (
         ...state.channels,
         [action.channel]: [
           ...state.channels[action.channel],
-          state.anchorMoment[0],
+          state.anchorMoment,
         ],
       },
-      anchorMoment: [],
+      anchorMoment: {
+        type: ANCHOR_MOMENT,
+        id: '',
+        text: '',
+        subText: '',
+        showReleaseAnchorButton: true,
+      },
     };
   default:
     return state;

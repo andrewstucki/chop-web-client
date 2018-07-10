@@ -5,27 +5,28 @@ import type { AnchorMomentType } from './anchorMoment/dux';
 
 import AnchorMoment from './anchorMoment';
 
-type PlaceHolderPropsType = {
-  data: AnchorMomentType,
+type PlaceholderPropsType = {
+  anchorMoment: AnchorMomentType,
   renderPlaceholder: boolean,
   releaseAnchorMoment: () => void,
 };
 
 const Placeholder = (
   {
-    data,
+    anchorMoment,
     renderPlaceholder,
     releaseAnchorMoment,
-  }: PlaceHolderPropsType
+  }: PlaceholderPropsType
 ) => {
   if (renderPlaceholder) {
     return (
       <AnchorMoment
-        anchorMoment={data}
+        anchorMoment={anchorMoment}
         releaseAnchorMoment={releaseAnchorMoment}
       />
     );
   }
+  return null;
 };
 
 export default Placeholder;

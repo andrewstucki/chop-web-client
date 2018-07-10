@@ -16,7 +16,13 @@ describe('NavBar tests', () => {
           nickname: 'bob',
         },
         appendingMessage: false,
-        anchorMoment: [],
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+          showReleaseAnchorButton: true,
+        },
         renderingAnchorMoment: false,
       }
     );
@@ -53,7 +59,13 @@ describe('NavBar tests', () => {
           nickname: 'bob',
         },
         appendingMessage: false,
-        anchorMoment: [],
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+          showReleaseAnchorButton: true,
+        },
         renderingAnchorMoment: false,
       }
     );
@@ -95,7 +107,13 @@ describe('NavBar tests', () => {
           nickname: 'bob',
         },
         appendingMessage: false,
-        anchorMoment: [],
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+          showReleaseAnchorButton: true,
+        },
         renderingAnchorMoment: false,
       }
     );

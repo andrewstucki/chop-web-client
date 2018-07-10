@@ -12,10 +12,10 @@ import '../assets/global.css';
 const store = createStore(() => {});
 
 storiesOf('Placeholder', module)
-  .add('Call to Christ anchor moment', () => (
+  .add('Salvation anchor moment', () => (
     <Provider store={store}>
       <Placeholder
-        data={
+        anchorMoment={
           {
             type: 'ANCHOR_MOMENT',
             id: '12345',

@@ -5,6 +5,7 @@ import Feed from '../feed';
 import NavBar from '../navBar';
 import VideoFeed from '../videoFeed';
 import SideMenu from '../sideMenu';
+import Placeholder from '../placeholder';
 import '../../assets/global.css';
 import chopStyles from './styles.css';
 
@@ -15,6 +16,7 @@ const ChopContainer = ()  => (
       <NavBar />
       <VideoFeed />
       <Feed />
+      <Placeholder />
       <Chat />
     </div>
   </div>

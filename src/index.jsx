@@ -7,6 +7,7 @@ import Chop from './chop';
 import reducer from './chop/dux';
 import thunk from 'redux-thunk';
 import {setStore} from './io/chat';
+import { publishSalvation } from './placeholder/anchorMoment/dux';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -135,4 +136,5 @@ setTimeout(() => {
       channelToken: 'command',
     }
   );
+  store.dispatch(publishSalvation(1));
 }, 2000);

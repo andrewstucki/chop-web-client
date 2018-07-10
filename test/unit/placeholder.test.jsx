@@ -12,7 +12,7 @@ describe('Placeholder tests', () => {
   test('Placeholder renders a salvation anchorMoment', () => {
     const wrapper = Enzyme.shallow(
       <Placeholder
-        data={
+        anchorMoment={
           {
             type: 'ANCHOR_MOMENT',
             id: '12345',

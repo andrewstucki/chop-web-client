@@ -65,27 +65,50 @@ class Feed extends React.Component<FeedProps, FeedState> {
         wrapperHeight !== this.state.height) {
       // if rendering an anchorMoment don't run this code
       // run the instant code instead
-      this.scrollUntilDone(
-        () => ((wrapper.scrollTop - start) / rangeEnd)
-        // going to need this no matter what
-      ).then(() => {
-        if (listHeight > wrapperHeight) {
-          this.setState(
-            {
-              height: wrapperHeight,
-              top: '0px',
-            }
-          );
-        } else {
-          this.setState(
-            {
-              height: listHeight,
-              top: `calc(100% - ${listHeight}px)`,
-            }
-          );
+      if (!this.props.renderingAnchorMoment) {
+        this.scrollUntilDone(
+          () => ((wrapper.scrollTop - start) / rangeEnd)
+          // going to need this no matter what
+        ).then(() => {
+          if (listHeight > wrapperHeight) {
+            this.setState(
+              {
+                height: wrapperHeight,
+                top: '0px',
+              }
+            );
+          } else {
+            this.setState(
+              {
+                height: listHeight,
+                top: `calc(100% - ${listHeight}px)`,
+              }
+            );
+          }
         }
+        );
       }
-      );
+      // wrapper.scroll({
+      //   top: wrapper.scrollHeight - (wrapperHeight + messageTotalHeight),
+      //   behavior: 'instant',
+      // }).then(() => {
+      //   if (listHeight > wrapperHeight) {
+      //     this.setState(
+      //       {
+      //         height: wrapperHeight,
+      //         top: '0px',
+      //       }
+      //     );
+      //   } else {
+      //     this.setState(
+      //       {
+      //         height: listHeight,
+      //         top: `calc(100% - ${listHeight}px)`,
+      //       }
+      //     );
+      //   }
+      // }
+      // );
     } else if (this.state.top === '0px' && this.props.appendingMessage) {
       const newestMessage = list.lastChild.firstChild;
       const messageHeight = Math.ceil(newestMessage.getBoundingClientRect().height);
@@ -101,14 +124,16 @@ class Feed extends React.Component<FeedProps, FeedState> {
         });
       }
       // don't do this if anchorMoment
-      const self = this;
-      window.requestAnimationFrame(
-        () => {
-          self.scrollUntilDone(
-            () => ((wrapper.scrollTop - start) / rangeEnd)
-          );
-        }
-      );
+      if (this.props.renderingAnchorMoment) {
+        const self = this;
+        window.requestAnimationFrame(
+          () => {
+            self.scrollUntilDone(
+              () => ((wrapper.scrollTop - start) / rangeEnd)
+            );
+          }
+        );
+      }
     }
   }
 

@@ -7,14 +7,14 @@ import type {
 import {
   SET_ANCHOR_MOMENT,
   RELEASE_ANCHOR_MOMENT,
+  ANCHOR_MOMENT,
 } from './anchorMoment/dux';
 
 // Type Definitions
 
 type PlaceholderType = {
   renderPlaceholder: boolean,
-  raisedHandCount: number,
-  placeholder: Array<AnchorMomentType>,
+  placeholder: AnchorMomentType,
 };
 
 type PlaceholderActionType =
@@ -26,8 +26,13 @@ type PlaceholderActionType =
 
 const defaultState = {
   renderPlaceholder: false,
-  raisedHandCount: 0,
-  placeholder: [],
+  placeholder: {
+    type: ANCHOR_MOMENT,
+    id: '',
+    text: '',
+    subText: '',
+    showReleaseAnchorButton: true,
+  },
 };
 
 // Reducer
@@ -47,22 +52,31 @@ const reducer = (
     return {
       ...state,
       renderPlaceholder: true,
-      placeholder: [
-        ...state.placeholder,
-        action.anchorMoment,
-      ],
+      placeholder: action.anchorMoment,
     };
   }
   case RELEASE_ANCHOR_MOMENT:
     return {
       ...state,
       renderPlaceholder: false,
-      placeholder: [],
+      placeholder: {
+        type: ANCHOR_MOMENT,
+        id: '',
+        text: '',
+        subText: '',
+        showReleaseAnchorButton: true,
+      },
     };
   default:
     return state;
   }
 };
+
+// Selectors
+
+const placeholderContents = (state: PlaceholderType) => (
+  state.placeholder
+);
 
 // Exports
 
@@ -73,6 +87,7 @@ export type {
 
 export {
   defaultState,
+  placeholderContents,
 };
 
 export default reducer;
