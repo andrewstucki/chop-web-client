@@ -106,33 +106,48 @@ store.dispatch(
 setTimeout(() => {
   store.dispatch(
     {
-      type: 'ADD_CHAT',
-      channelId: 'public',
-      channelToken: 'public',
+      type: 'ADD_CHANNEL',
+      channel: {
+        id: 'public',
+        name: 'public',
+      },
     }
   );
 
   store.dispatch(
     {
-      type: 'ADD_CHAT',
-      channelId: 'host',
-      channelToken: 'host',
+      type: 'ADD_CHANNEL',
+      channel: {
+        id: 'host',
+        name: 'host',
+      },
     }
   );
 
   store.dispatch(
     {
-      type: 'ADD_CHAT',
-      channelId: 'request',
-      channelToken: 'request',
+      type: 'ADD_CHANNEL',
+      channel: {
+        id: 'request',
+        name: 'request',
+      },
     }
   );
 
   store.dispatch(
     {
-      type: 'ADD_CHAT',
-      channelId: 'command',
-      channelToken: 'command',
+      type: 'ADD_CHANNEL',
+      channel: {
+        id: 'command',
+        name: 'command',
+      },
+    }
+  );
+
+  store.dispatch(
+    {
+      type: 'CHANGE_CHANNEL',
+      channel: 'public',
     }
   );
 }, 2000);

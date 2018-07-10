@@ -124,7 +124,7 @@ describe('Feed tests', () => {
           public: [],
         },
       },
-      addChannel('host')
+      addChannel('host', '12345')
     );
     expect(result).toEqual(
       {
@@ -146,7 +146,7 @@ describe('Feed tests', () => {
           public: [],
         },
       }
-      , addChannel('public'));
+      , addChannel('public', '12345'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -269,6 +269,10 @@ describe('Feed tests', () => {
     );
   });
 
+  test('feedContents works without a channel', () => {
+    expect(feedContents(defaultState)).toEqual([]);
+  });
+  
   test('Feed listens to message input', () => {
     const result = reducer(defaultState, chatInput('Hello'));
     expect(result).toEqual(
@@ -319,6 +323,7 @@ describe('Feed tests', () => {
             },
           ],
         },
+        currentChannel: 'public',
       },
       openMessageTray('123'));
     expect(result).toEqual(
@@ -338,6 +343,7 @@ describe('Feed tests', () => {
             },
           ],
         },
+        currentChannel: 'public',
       }
     );
   });
@@ -405,6 +411,7 @@ describe('Feed tests', () => {
             },
           ],
         },
+        currentChannel: 'public',
       },
       closeMessageTray('123'));
     expect(result).toEqual(
@@ -424,6 +431,7 @@ describe('Feed tests', () => {
             },
           ],
         },
+        currentChannel: 'public',
       }
     );
   });
@@ -467,6 +475,7 @@ describe('Feed tests', () => {
             },
           ],
         },
+        currentChannel: 'public',
       },
       deleteMessage('123')
     );
@@ -496,6 +505,7 @@ describe('Feed tests', () => {
             },
           ],
         },
+        currentChannel: 'public',
       },
     );
   });

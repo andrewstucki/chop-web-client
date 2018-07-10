@@ -1,9 +1,9 @@
 // @flow
 //import getReducer from '../../../src/io/chat/dux';
 import Chat from '../../../src/io/chat/chat';
-import getReducer, { setChatKeys, setUser, addChat } from '../../../src/io/chat/dux';
+import getReducer, { setChatKeys, setUser } from '../../../src/io/chat/dux';
 import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
-import { changeChannel } from '../../../src/feed/dux';
+import { changeChannel, addChannel } from '../../../src/feed/dux';
 import { MESSAGE } from '../../../src/moment/dux';
 
 describe('Chat IO reducer test', () => {
@@ -102,7 +102,7 @@ describe('Chat IO reducer test', () => {
         chatInput: '',
         currentChannel: 'default',
       },
-      addChat('default', '12345')
+      addChannel('default', '12345')
     );
     expect(result).toEqual(
       {

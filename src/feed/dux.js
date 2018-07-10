@@ -54,9 +54,14 @@ type FeedType = {
   appendingMessage: boolean,
 };
 
+type ChannelType = {
+  id: string,
+  name: string,
+}
+
 type ChangeChannelType = {
   type: 'CHANGE_CHANNEL',
-  channel: string
+  channel: string,
 };
 
 type ReceiveMessageType = {
@@ -67,7 +72,7 @@ type ReceiveMessageType = {
 
 type AddChannelType = {
   type: 'ADD_CHANNEL',
-  channel: string,
+  channel: ChannelType,
 };
 
 type RemoveChannelType = {
@@ -104,10 +109,13 @@ const receiveMessage = (channel: string, message: MessageType): ReceiveMessageTy
   }
 );
 
-const addChannel = (channel: string): AddChannelType => (
+const addChannel = (name: string, id: string): AddChannelType => (
   {
     type: ADD_CHANNEL,
-    channel,
+    channel: {
+      name,
+      id,
+    },
   }
 );
 
@@ -123,7 +131,7 @@ const removeChannel = (channel: string): RemoveChannelType => (
 const defaultState = {
   channels: {
   },
-  currentChannel: 'public',
+  currentChannel: '',
   chatInput: '',
   currentUser: {
     id: '',
@@ -179,14 +187,14 @@ const reducer = (
       },
     };
   case ADD_CHANNEL:
-    if (state.channels[action.channel]) {
+    if (state.channels[action.channel.name]) {
       return state;
     }
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: [],
+        [action.channel.name]: [],
       },
     };
   case REMOVE_CHANNEL: {
@@ -270,7 +278,7 @@ const reducer = (
 // Selectors
 
 const feedContents = (state: FeedType): Array<MessageType> => (
-  state.channels[state.currentChannel]
+  state.channels[state.currentChannel] || []
 );
 
 const appendMessage = (state: FeedType) => (
@@ -295,6 +303,7 @@ export {
   appendMessage,
 };
 export type {
+  AddChannelType,
   MomentType,
   ReceiveMessageType,
   ChangeChannelType,
