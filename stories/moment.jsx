@@ -151,7 +151,7 @@ storiesOf('Moment', module)
           {
             type: 'ANCHOR_MOMENT',
             id: '12345',
-            text: 'Would you like to give your life to Christ?',
+            text: 'I commit my life to Christ.',
             subText: '1 hand raised',
             showReleaseAnchorButton: false,
           }

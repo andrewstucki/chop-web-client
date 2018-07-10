@@ -9,14 +9,14 @@ import AnchorMoment from '../../src/placeholder/anchorMoment';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Placeholder tests', () => {
-  test('Placeholder renders a CallToChrist anchorMoment', () => {
+  test('Placeholder renders a salvation anchorMoment', () => {
     const wrapper = Enzyme.shallow(
       <Placeholder
         data={
           {
             type: 'ANCHOR_MOMENT',
             id: '12345',
-            text: 'Would you like to give your life to Christ?',
+            text: 'I commit my life to Christ.',
             subText: '1 hand raised',
             showReleaseAnchorButton: true,
           }
@@ -30,7 +30,7 @@ describe('Placeholder tests', () => {
       {
         type: 'ANCHOR_MOMENT',
         id: '12345',
-        text: 'Would you like to give your life to Christ?',
+        text: 'I commit my life to Christ.',
         subText: '1 hand raised',
         showReleaseAnchorButton: true,
       }

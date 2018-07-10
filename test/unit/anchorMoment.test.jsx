@@ -9,14 +9,14 @@ import AnchorMoment from '../../src/placeHolder/anchorMoment';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('AnchorMoment tests', () => {
-  test('AnchorMoment renders call to Christ', () => {
+  test('Salvation AnchorMoment renders', () => {
     const wrapper = Enzyme.shallow(
       <AnchorMoment
         anchorMoment={
           {
             type: 'ANCHOR_MOMENT',
             id: '12345',
-            text: 'Would you like to give your life to Christ?',
+            text: 'I commit my life to Christ.',
             subText: '1 hand raised',
             showReleaseAnchorButton: true,
           }
@@ -26,7 +26,7 @@ describe('AnchorMoment tests', () => {
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('anchorMoment');
     expect(wrapper.find('div').at(2).text()).toEqual(
-      'Would you like to give your life to Christ?'
+      'I commit my life to Christ.'
     );
     expect(wrapper.find('div').at(3).text()).toEqual('1 hand raised');
   });
@@ -39,7 +39,7 @@ describe('AnchorMoment tests', () => {
           {
             type: 'ANCHOR_MOMENT',
             id: '12345',
-            text: 'Would you like to give your life to Christ?',
+            text: 'I commit my life to Christ.',
             subText: '4 hands raised',
             showReleaseAnchorButton: true,
           }

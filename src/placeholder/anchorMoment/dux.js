@@ -48,7 +48,7 @@ const publishSalvation = (number: number) => (
     anchorMoment: {
       type: ANCHOR_MOMENT,
       id: createUid(),
-      text: 'Would you like to give your life to Christ?',
+      text: 'I commit my life to Christ.',
       subText: number === 1 ? `${number} hand raised` : `${number} hands raised`,
       showReleaseAnchorButton: true,
     },

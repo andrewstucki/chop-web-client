@@ -64,12 +64,6 @@ const reducer = (
   }
 };
 
-// Selectors
-
-const getRaisedHandCount = (state: PlaceholderType) => (
-  state.raisedHandCount
-);
-
 // Exports
 
 export type {
@@ -79,7 +73,6 @@ export type {
 
 export {
   defaultState,
-  getRaisedHandCount,
 };
 
 export default reducer;

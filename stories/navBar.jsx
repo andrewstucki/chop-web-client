@@ -17,7 +17,7 @@ storiesOf('NavBar', module)
     <NavBar
       channels={[
         {id: 'public', isCurrent: false, hasActions: false},
-        {id: 'HOST', isCurrent: true, hasActions: false},
+        {id: 'host', isCurrent: true, hasActions: false},
       ]}
       onClick={action('clicked')}
     />

@@ -1,8 +1,5 @@
 // @flow
-import reducer, {
-  defaultState,
-  getRaisedHandCount,
-} from '../../src/placeholder/dux';
+import reducer, { defaultState } from '../../src/placeholder/dux';
 
 import {
   publishSalvation,
@@ -15,22 +12,12 @@ describe('PlaceHolder tests', () => {
     expect(result).toEqual(defaultState);
   });
 
-  test('Raised hand count', () => {
-    const result = getRaisedHandCount(
-      {
-        ...defaultState,
-        raisedHandCount: 1,
-      }
-    );
-    expect(result).toEqual(1);
-  });
-
   test('Sets salvation anchor moment 1 hand raised', () => {
     const result = reducer(defaultState, publishSalvation(1));
     expect(result.renderPlaceholder).toBe(true);
     expect(result.placeholder.length).toBe(1);
     expect(result.placeholder[0].text).toBe(
-      'Would you like to give your life to Christ?'
+      'I commit my life to Christ.'
     );
     expect(result.placeholder[0].subText).toBe('1 hand raised');
     expect(result.placeholder[0].showReleaseAnchorButton).toBe(true);
@@ -41,7 +28,7 @@ describe('PlaceHolder tests', () => {
     expect(result.renderPlaceholder).toBe(true);
     expect(result.placeholder.length).toBe(1);
     expect(result.placeholder[0].text).toBe(
-      'Would you like to give your life to Christ?'
+      'I commit my life to Christ.'
     );
     expect(result.placeholder[0].subText).toBe('4 hands raised');
     expect(result.placeholder[0].showReleaseAnchorButton).toBe(true);
@@ -56,7 +43,7 @@ describe('PlaceHolder tests', () => {
           {
             type: 'ANCHOR_MOMENT',
             id: '12345',
-            text: 'Would you like to give your life to Christ?',
+            text: 'I commit my life to Christ.',
             subText: '1 hand raised',
             showReleaseAnchorButton: true,
           },

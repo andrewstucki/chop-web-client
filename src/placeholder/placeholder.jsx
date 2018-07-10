@@ -2,7 +2,6 @@
 import React from 'react';
 
 import type { AnchorMomentType } from './anchorMoment/dux';
-import { ANCHOR_MOMENT } from './anchorMoment/dux';
 
 import AnchorMoment from './anchorMoment';
 
@@ -20,15 +19,12 @@ const Placeholder = (
   }: PlaceHolderPropsType
 ) => {
   if (renderPlaceholder) {
-    switch (data.type) {
-    case ANCHOR_MOMENT:
-      return (
-        <AnchorMoment
-          anchorMoment={data}
-          releaseAnchorMoment={releaseAnchorMoment}
-        />
-      );
-    }
+    return (
+      <AnchorMoment
+        anchorMoment={data}
+        releaseAnchorMoment={releaseAnchorMoment}
+      />
+    );
   }
 };
 
