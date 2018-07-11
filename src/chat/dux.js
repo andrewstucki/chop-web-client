@@ -1,6 +1,5 @@
 // @flow
-import type { ChangeChannelType } from '../feed/dux';
-import { CHANGE_CHANNEL } from '../feed/dux';
+import type { FeedType } from '../feed/dux';
 
 // Action Types
 const CHAT_INPUT = 'CHAT_INPUT';
@@ -26,19 +25,12 @@ type PublishMessageAction = {
 type ChatActions =
   | ChatInputAction
   | ToggleChatFocusAction
-  | PublishMessageAction
-  | ChangeChannelType;
+  | PublishMessageAction;
 
-type PlaceholderType = {
-  [string]: string,
-};
 
 type ChatState = {
   currentInput: string,
   focused: boolean,
-  placeholders: PlaceholderType,
-  currentChannel: string,
-  currentPlaceholder: string,
 };
 
 
@@ -81,12 +73,6 @@ const createUid = () => {
 const defaultState = {
   currentInput: '',
   focused: false,
-  placeholders: {
-    public: 'Chat',
-    host: 'Chat with hosts',
-  },
-  currentChannel: 'public',
-  currentPlaceholder: '',
 };
 
 // Reducer
@@ -114,11 +100,6 @@ const reducer =
       ...state,
       currentInput: '',
     };
-  case CHANGE_CHANNEL:
-    return {
-      ...state,
-      currentChannel: action.channel,
-    };
   default:
     return state;
   }
@@ -129,9 +110,17 @@ const reducer =
 const textEntered = (state: ChatState) => 
   (state) ? state.currentInput.length > 0 : false;
 
-const getPlaceholder = (state: ChatState) => (
-  state.placeholders[state.currentChannel]
-);
+const getPlaceholder = (state: FeedType) => {
+  if (state.currentChannel === 'host') {
+    return 'Chat with hosts';
+  } else if (state.channels[state.currentChannel] &&
+      state.channels[state.currentChannel].participants &&
+      state.channels[state.currentChannel].participants.length) {
+    return `Chat with ${state.channels[state.currentChannel].participants[0].nickname}`;
+  } else {
+    return 'Chat';
+  }
+};
 
 // Exports
 export { 

@@ -129,7 +129,9 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
               );
             })
           }
-          <Underline left={this.state.left} width={this.state.width} opacity={this.state.opacity} />
+          {channels.length &&
+            <Underline left={this.state.left} width={this.state.width} opacity={this.state.opacity} static={this.state.first} />
+          }
         </div>
       </div>
     );

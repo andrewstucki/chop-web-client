@@ -91,6 +91,10 @@ const characters = [
   'Penelope Pitstop',
   'Space Ghost',
   'Huckleberry Hound',
+  'Bobby G.',
+  'Craig G.',
+  'Sam R.',
+  'Jerry H.',
 ];
 
 const characterName = characters[Math.floor(Math.random() * characters.length)];
