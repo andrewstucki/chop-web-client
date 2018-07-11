@@ -165,7 +165,7 @@ storiesOf('Moment', module)
         data={
           {
             type: 'BASIC_TEXT',
-            text: 'Chat request pending'
+            text: 'Chat request pending',
           }
         }
       />

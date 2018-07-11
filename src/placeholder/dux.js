@@ -48,9 +48,6 @@ const reducer = (
   }
   switch (action.type) {
   case SET_ANCHOR_MOMENT: {
-    if (!action.anchorMoment.type) {
-      return state;
-    }
     return {
       ...state,
       renderPlaceholder: true,

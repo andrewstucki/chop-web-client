@@ -763,7 +763,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Store anchorMoment from publishSalvation and set the boolean to false', () => {
+  test('Store anchorMoment from publishSalvation', () => {
     const result = reducer(
       defaultState,
       {
