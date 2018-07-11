@@ -8,6 +8,7 @@ import {
   Message,
   Notification,
   ActionableNotification,
+  Text,
   createMessage,
 } from '../../src/moment';
 
@@ -226,6 +227,20 @@ describe('Moment tests', () => {
           subText: '1 hand raised',
           showReleaseAnchorButton: false,
         },
+      }
+    );
+  });
+
+  test('Text renders', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={{type: 'BASIC_TEXT', text: 'Chat request pending'}}
+      />
+    );
+    expect(wrapper.find(Text).at(0).props().text).toEqual(
+      {
+        type: 'BASIC_TEXT',
+        text: 'Chat request pending',
       }
     );
   });
