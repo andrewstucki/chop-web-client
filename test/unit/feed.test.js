@@ -36,8 +36,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [],
-          host: [],
+          public: { moments: [] },
+          host:{ moments: [] },
         },
         currentChannel: 'pubic',
       }
@@ -47,8 +47,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [],
-          host: [],
+          public: { moments:[] },
+          host: { moments:[] },
         },
         currentChannel: 'host',
       }
@@ -66,7 +66,7 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [],
+          public: { moments: [] },
         },
         currentChannel: 'public',
         chatInput: 'this is a message',
@@ -77,11 +77,11 @@ describe('Feed tests', () => {
       },
       addToCurrentChannel(),
     );
-    expect(result.channels.public.length).toEqual(1);
-    expect(result.channels.public[0].text).toEqual('this is a message');
-    expect(result.channels.public[0].user.id).toEqual('12345');
-    expect(result.channels.public[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.public[0].id.length).toEqual(36);
+    expect(result.channels.public.moments.length).toEqual(1);
+    expect(result.channels.public.moments[0].text).toEqual('this is a message');
+    expect(result.channels.public.moments[0].user.id).toEqual('12345');
+    expect(result.channels.public.moments[0].user.nickname).toEqual('Billy Bob');
+    expect(result.channels.public.moments[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
   });
 
@@ -91,8 +91,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [],
-          host: [],
+          public: { moments: [] },
+          host: { moments: [] },
         },
         currentChannel: 'public',
         chatInput: 'this is a string',
@@ -109,10 +109,10 @@ describe('Feed tests', () => {
         messageTrayOpen: false,
       })
     );
-    expect(result.channels.public.length).toEqual(0);
-    expect(result.channels.host.length).toEqual(1);
-    expect(result.channels.host[0].text).toEqual('Hello there');
-    expect(result.channels.host[0].id.length).toEqual(5);
+    expect(result.channels.public.moments.length).toEqual(0);
+    expect(result.channels.host.moments.length).toEqual(1);
+    expect(result.channels.host.moments[0].text).toEqual('Hello there');
+    expect(result.channels.host.moments[0].id.length).toEqual(5);
     expect(result.appendingMessage).toBe(false);
   });
 
@@ -121,7 +121,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: [],
+          public: { moments: [] },
         },
       },
       addChannel('host', '12345')
@@ -130,8 +130,33 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: [],
-          host: [],
+          public: { moments: [] },
+          host: { moments: [] },
+        },
+      },
+    );
+  });
+
+  test('add a channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+      },
+      addChannel('direct', '12345', [{id: '12345', nickname: 'Bobby G.'}])
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bobby G.',
+              },
+            ],
+          },
         },
       },
     );
@@ -143,7 +168,7 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [],
+          public: { moments: [] },
         },
       }
       , addChannel('public', '12345'));
@@ -152,7 +177,7 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: [],
+          public: { moments: [] },
         },
       }
     );
@@ -164,7 +189,7 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          other: [],
+          other: { moments: [] },
         },
       },
       removeChannel('other'));
@@ -177,7 +202,7 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          other: [],
+          other: { moments: [] },
         },
         currentChannel: 'other',
       },
@@ -191,19 +216,21 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              type: MESSAGE,
-              id: '12345',
-              text: 'I like socks',
-              user: {
+          public: {
+            moments: 
+            [
+              {
+                type: MESSAGE,
                 id: '12345',
-                nickname: 'Billy Bob',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
               },
-              messageTrayOpen: false,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'public',
         currentUser: {
@@ -232,20 +259,22 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: [],
-          host: 
-          [
-            {
-              type: MESSAGE,
-              id: '12345',
-              text: 'I like socks',
-              user: {
+          public: { moments: [] },
+          host: {
+            moments: 
+            [
+              {
+                type: MESSAGE,
                 id: '12345',
-                nickname: 'Billy Bob',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
               },
-              messageTrayOpen: false,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'host',
         currentUser: {
@@ -309,19 +338,20 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              type: MESSAGE,
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            moments: [
+              {
+                type: MESSAGE,
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
               },
-              messageTrayOpen: false,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'public',
       },
@@ -353,19 +383,20 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          host: 
-          [
-            {
-              type: MESSAGE,
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          host: {
+            moments: [
+              {
+                type: MESSAGE,
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
               },
-              messageTrayOpen: false,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'host',
       },
@@ -397,19 +428,20 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              type: MESSAGE,
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            moments: [
+              {
+                type: MESSAGE,
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'public',
       },
@@ -441,39 +473,40 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              type: MESSAGE,
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            moments: [
+              {
+                type: MESSAGE,
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-            {
-              type: MESSAGE,
-              id: '189',
-              text: 'Hello Billy Bob',
-              user: {
-                id: '14543',
-                nickname: 'Jenny Jane',
+              {
+                type: MESSAGE,
+                id: '189',
+                text: 'Hello Billy Bob',
+                user: {
+                  id: '14543',
+                  nickname: 'Jenny Jane',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-            {
-              type: MESSAGE,
-              id: '204',
-              text: 'George is very angry',
-              user: {
-                id: '18475',
-                nickname: 'George Costanza',
+              {
+                type: MESSAGE,
+                id: '204',
+                text: 'George is very angry',
+                user: {
+                  id: '18475',
+                  nickname: 'George Costanza',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'public',
       },

@@ -42,11 +42,14 @@ type UserType = {
   nickname: string,
 };
 
-type MessageTypeList = Array<MessageType>;
+type ChannelType = {
+  moments: Array<MomentType>,
+  participants?: Array<UserType>,
+}
 
 type FeedType = {
   channels: {
-    [string]: MessageTypeList,
+    [string]: ChannelType,
   },
   currentChannel: string,
   chatInput: string,
@@ -54,7 +57,7 @@ type FeedType = {
   appendingMessage: boolean,
 };
 
-type ChannelType = {
+type AddChannelReturnType = {
   id: string,
   name: string,
   participants?: Array<UserType>,
@@ -73,7 +76,7 @@ type ReceiveMessageType = {
 
 type AddChannelType = {
   type: 'ADD_CHANNEL',
-  channel: ChannelType,
+  channel: AddChannelReturnType,
 };
 
 type RemoveChannelType = {
@@ -167,10 +170,13 @@ const reducer = (
         appendingMessage: true,
         channels: {
           ...state.channels,
-          [state.currentChannel]: [
+          [state.currentChannel]: {
             ...state.channels[state.currentChannel],
-            createMessage(action.id, state.chatInput, state.currentUser, false),
-          ],
+            moments: [
+              ...state.channels[state.currentChannel].moments,
+              createMessage(action.id, state.chatInput, state.currentUser, false),
+            ],
+          },
         },
         chatInput: '',
       };
@@ -182,10 +188,13 @@ const reducer = (
       appendingMessage: false,
       channels: {
         ...state.channels,
-        [action.channel]: [
-          ...state.channels[action.channel],
-          action.message,
-        ],
+        [action.channel]: {
+          ...state.channels[state.currentChannel],
+          moments: [
+            ...state.channels[state.currentChannel].moments,
+            action.message,
+          ],
+        },
       },
     };
   case ADD_CHANNEL:
@@ -196,7 +205,10 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel.name]: [],
+        [action.channel.name]: {
+          moments: [],
+          participants: action.channel.participants,
+        },
       },
     };
   case REMOVE_CHANNEL: {
@@ -231,7 +243,7 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: state.channels[state.currentChannel].map(
+        [state.currentChannel]: state.channels[state.currentChannel].moments.map(
           message => (
             {
               ...message,
@@ -248,7 +260,7 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: state.channels[state.currentChannel].map(
+        [state.currentChannel]: state.channels[state.currentChannel].moments.map(
           message => (
             {
               ...message,
@@ -262,7 +274,7 @@ const reducer = (
   case DELETE_MESSAGE: {
     const { id } = action;
     const { channels, currentChannel } = state;
-    const messageIndex = channels[currentChannel].findIndex(el => (
+    const messageIndex = channels[currentChannel].moments.findIndex(el => (
       el.id === id
     ));
     return {
@@ -270,8 +282,8 @@ const reducer = (
       channels: {
         ...channels,
         [currentChannel]: [
-          ...channels[currentChannel].slice(0, messageIndex),
-          ...channels[currentChannel].slice(messageIndex + 1),
+          ...channels[currentChannel].moments.slice(0, messageIndex),
+          ...channels[currentChannel].moments.slice(messageIndex + 1),
         ],
       },
     };
@@ -284,7 +296,9 @@ const reducer = (
 // Selectors
 
 const feedContents = (state: FeedType): Array<MessageType> => (
-  state.channels[state.currentChannel] || []
+  state.channels[state.currentChannel] && state.channels[state.currentChannel].moments ?
+    state.channels[state.currentChannel].moments :
+    []
 );
 
 const appendMessage = (state: FeedType) => (

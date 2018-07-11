@@ -150,8 +150,8 @@ setTimeout(() => {
     {
       type: 'ADD_CHANNEL',
       channel: {
-        id: 'command',
-        name: 'command',
+        id: 'direct',
+        name: 'direct',
         participants: [
           {
             id: new Date().getTime().toString(),

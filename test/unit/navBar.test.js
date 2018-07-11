@@ -1,13 +1,14 @@
 // @flow
 import { getChannels } from '../../src/navBar/dux';
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
 describe('NavBar tests', () => {
   test('channel selector test', () => {
     const result = getChannels(
       {
         channels: {
-          public: [],
-          host: [],
+          public: { moments: [] },
+          host: { moments: [] },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -36,13 +37,15 @@ describe('NavBar tests', () => {
     const result = getChannels(
       {
         channels: {
-          public: [
-            {
-              type: 'ACTIONABLE_NOTIFICATION',
-              active: true,
-            },
-          ],
-          host: [],
+          public: {
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                active: true,
+              },
+            ],
+          },
+          host: { moments: [] },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -71,18 +74,22 @@ describe('NavBar tests', () => {
     const result = getChannels(
       {
         channels: {
-          public: [
-            {
-              type: 'ACTIONABLE_NOTIFICATION',
-              active: false,
-            },
-          ],
-          host: [
-            {
-              type: 'ACTIONABLE_NOTIFICATION',
-              active: true,
-            },
-          ],
+          public: {
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                active: false,
+              },
+            ],
+          },
+          host: {
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                active: true,
+              },
+            ],
+          },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -105,5 +112,63 @@ describe('NavBar tests', () => {
         hasActions: true,
       },
     ]);
+  });
+
+  test('direct chat name', () => {
+    expect(getChannels(
+      {
+        ...defaultFeedState,
+        channels: {
+          ...defaultFeedState.channels,
+          direct: {
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bob',
+              },
+            ],
+          },
+        },
+      }
+    )).toEqual(
+      [
+        {
+          id: 'direct',
+          isCurrent: false,
+          hasActions: false,
+          directChatParticipant: 'Bob',
+        },
+      ]
+    );
+  });
+
+  test('do not display request or command channels', () => {
+    expect(getChannels(
+      {
+        ...defaultFeedState,
+        channels: {
+          ...defaultFeedState.channels,
+          request: {
+            moments: [],
+          },
+          command: {
+            moments: [],
+          },
+          public: {
+            moments: [],
+          },
+        },
+        currentChannel: 'public',
+      }
+    )).toEqual(
+      [
+        {
+          id: 'public',
+          isCurrent: true,
+          hasActions: false,
+        },
+      ]
+    );
   });
 });
