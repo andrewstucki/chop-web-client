@@ -57,6 +57,7 @@ type FeedType = {
 type ChannelType = {
   id: string,
   name: string,
+  participants?: Array<UserType>,
 }
 
 type ChangeChannelType = {
@@ -109,12 +110,13 @@ const receiveMessage = (channel: string, message: MessageType): ReceiveMessageTy
   }
 );
 
-const addChannel = (name: string, id: string): AddChannelType => (
+const addChannel = (name: string, id: string, participants?: Array<UserType>): AddChannelType => (
   {
     type: ADD_CHANNEL,
     channel: {
       name,
       id,
+      participants,
     },
   }
 );
@@ -200,7 +202,11 @@ const reducer = (
   case REMOVE_CHANNEL: {
     const stateCopy = {...state};
     if (action.channel === state.currentChannel) {
-      stateCopy.currentChannel = 'public';
+      if (state.channels.public) {
+        stateCopy.currentChannel = 'public';
+      } else {
+        stateCopy.currentChannel = '';
+      }
     }
     delete stateCopy.channels[action.channel];
     return stateCopy;
@@ -304,6 +310,7 @@ export {
 };
 export type {
   AddChannelType,
+  RemoveChannelType,
   MomentType,
   ReceiveMessageType,
   ChangeChannelType,

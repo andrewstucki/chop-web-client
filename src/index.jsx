@@ -144,6 +144,24 @@ setTimeout(() => {
     }
   );
 
+  const participantName = characters[Math.floor(Math.random() * characters.length)];
+
+  store.dispatch(
+    {
+      type: 'ADD_CHANNEL',
+      channel: {
+        id: 'command',
+        name: 'command',
+        participants: [
+          {
+            id: new Date().getTime().toString(),
+            nickname: participantName,
+          },
+        ],
+      },
+    }
+  );
+
   store.dispatch(
     {
       type: 'CHANGE_CHANNEL',

@@ -35,6 +35,7 @@ describe('Change Channel Functional', () => {
     expect(left).toBe(69);
     expect(width).toBe(35);
 
+    await page.waitForSelector('#nav-host');
     await page.click('#nav-host');
 
     await page.waitFor(2000);

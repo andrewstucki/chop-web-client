@@ -64,43 +64,33 @@ yarn storybook
 To run the Unit Tests. Unit tests validate code logic without
 interactive with UI.
 ```
-yarn test:unit
+yarn test
 ```
 
 To run the Functional Tests. Functional tests validate state and
 behavior of React UI.
 ```
-yarn test:func
+yarn functional
 ```
 
 To run a specific Unit or Functional test.
 ```
 yarn test -t <Name of Test>
 ```
+or
+```
+yarn functional -t <Name of Test>
+```
 Where <Name of Test> is replaced with the string in the describe or test function.
 i.e.
 ```
-yarn -t "TextField tests"
+yarn test -t "TextField tests"
 ```
 
 To have the tests watch for file changes and re-run once you've edited and saved
 a file you can run the tests with the watch command.
 ```
 yarn test --watch
-```
-or
-```
-yarn test:unit --watch
-```
-or
-```
-yarn test:func --watch
-```
-
-To run all our tests (unit, func and snap). Note: for the snap tests the
-Storybook server must be running.
-```
-yarn test
 ```
 
 To view code coverage.
@@ -138,7 +128,7 @@ To run the Flow type-checker
 yarn flow
 ```
 
-To run all the validation (test, snap, flow and lint)
+To run all the validation (test, functional, snap, flow and lint)
 ```
 yarn validate
 ```
