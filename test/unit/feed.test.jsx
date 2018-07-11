@@ -12,9 +12,10 @@ describe('Feed tests', () => {
     const wrapper = Enzyme.shallow(
       <Feed
         moments={[]}
-        channel="default"
+        currentChannel="default"
         appendingMessage={false}
         renderingAnchorMoment={false}
+        placeholderPresent={true}
       />
     );
     expect(wrapper.find('ul').children().length).toBe(0);
@@ -38,9 +39,10 @@ describe('Feed tests', () => {
         offset={0}
         moments={moments}
         onMessageRender={function () {}}
-        channel="default"
+        currentChannel="default"
         appendingMessage={false}
         renderingAnchorMoment={false}
+        placeholderPresent={true}
       />
     );
     
@@ -64,11 +66,57 @@ describe('Feed tests', () => {
         offset={0}
         moments={[]}
         onMessageRender={function () {}}
-        channel="default"
+        currentChannel="default"
         appendingMessage={false}
         renderingAnchorMoment={false}
+        placeholderPresent={true}
       />
     );
     expect(wrapper.find('ul').key()).toEqual('default');
+  });
+
+  test('Feed with placeholder present on host channel', () => {
+    const wrapper = Enzyme.shallow(
+      <Feed
+        offset={0}
+        moments={[]}
+        onMessageRender={function () {}}
+        currentChannel="host"
+        appendingMessage={false}
+        renderingAnchorMoment={false}
+        placeholderPresent={true}
+      />
+    );
+    expect(wrapper.find('div').at(0).props().className).toEqual('withPlaceholder');
+  });
+
+  test('Feed with placeholder present on event channel', () => {
+    const wrapper = Enzyme.shallow(
+      <Feed
+        offset={0}
+        moments={[]}
+        onMessageRender={function () {}}
+        currentChannel="public"
+        appendingMessage={false}
+        renderingAnchorMoment={false}
+        placeholderPresent={true}
+      />
+    );
+    expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
+  });
+
+  test('Feed without placeholder present on host channel', () => {
+    const wrapper = Enzyme.shallow(
+      <Feed
+        offset={0}
+        moments={[]}
+        onMessageRender={function () {}}
+        currentChannel="host"
+        appendingMessage={false}
+        renderingAnchorMoment={false}
+        placeholderPresent={false}
+      />
+    );
+    expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
   });
 });

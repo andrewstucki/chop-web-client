@@ -9,7 +9,7 @@ import AnchorMoment from '../../src/placeHolder/anchorMoment';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('AnchorMoment tests', () => {
-  test('Salvation AnchorMoment renders', () => {
+  test('Salvation AnchorMoment renders in placeholder', () => {
     const wrapper = Enzyme.shallow(
       <AnchorMoment
         anchorMoment={
@@ -18,13 +18,35 @@ describe('AnchorMoment tests', () => {
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '1 hand raised',
-            showReleaseAnchorButton: true,
+            anchorMomentAnchored: true,
           }
         }
         releaseAnchorMoment={() => {}}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('anchorMoment');
+    expect(wrapper.find('div').at(0).props().className).toEqual('anchored');
+    expect(wrapper.find('div').at(2).text()).toEqual(
+      'I commit my life to Christ.'
+    );
+    expect(wrapper.find('div').at(3).text()).toEqual('1 hand raised');
+  });
+
+  test('Salvation AnchorMoment renders in feed', () => {
+    const wrapper = Enzyme.shallow(
+      <AnchorMoment
+        anchorMoment={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'I commit my life to Christ.',
+            subText: '1 hand raised',
+            anchorMomentAnchored: false,
+          }
+        }
+        releaseAnchorMoment={() => {}}
+      />
+    );
+    expect(wrapper.find('div').at(0).props().className).toEqual('released');
     expect(wrapper.find('div').at(2).text()).toEqual(
       'I commit my life to Christ.'
     );
@@ -41,7 +63,7 @@ describe('AnchorMoment tests', () => {
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '4 hands raised',
-            showReleaseAnchorButton: true,
+            anchorMomentAnchored: true,
           }
         }
         releaseAnchorMoment={releaseAnchorMoment}

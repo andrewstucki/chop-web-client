@@ -18,11 +18,12 @@ describe('Placeholder tests', () => {
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '1 hand raised',
-            showReleaseAnchorButton: true,
+            anchorMomentAnchored: true,
           }
         }
         renderPlaceholder={true}
         releaseAnchorMoment={() => {}}
+        currentChannel="host"
       />
     );
     expect(wrapper.find(AnchorMoment).length).toBe(1);
@@ -32,7 +33,7 @@ describe('Placeholder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
-        showReleaseAnchorButton: true,
+        anchorMomentAnchored: true,
       }
     );
   });

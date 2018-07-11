@@ -4,6 +4,8 @@ import type {
   AnchorMomentType,
 } from './anchorMoment/dux';
 
+import type { FeedType } from '../feed/dux';
+
 import {
   SET_ANCHOR_MOMENT,
   RELEASE_ANCHOR_MOMENT,
@@ -31,7 +33,7 @@ const defaultState = {
     id: '',
     text: '',
     subText: '',
-    showReleaseAnchorButton: true,
+    anchorMomentAnchored: true,
   },
 };
 
@@ -64,7 +66,7 @@ const reducer = (
         id: '',
         text: '',
         subText: '',
-        showReleaseAnchorButton: true,
+        anchorMomentAnchored: true,
       },
     };
   default:
@@ -78,6 +80,10 @@ const placeholderContents = (state: PlaceholderType) => (
   state.placeholder
 );
 
+const getCurrentChannel = (state: FeedType) => (
+  state.currentChannel
+);
+
 // Exports
 
 export type {
@@ -88,6 +94,7 @@ export type {
 export {
   defaultState,
   placeholderContents,
+  getCurrentChannel,
 };
 
 export default reducer;

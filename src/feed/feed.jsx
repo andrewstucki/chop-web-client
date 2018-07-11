@@ -7,9 +7,10 @@ import BezierEasing from 'bezier-easing';
 
 type FeedProps = {
   moments: Array<MomentType>,
-  channel: string,
+  currentChannel: string,
   appendingMessage: boolean,
   renderingAnchorMoment: boolean,
+  placeholderPresent: boolean,
 };
 
 type RefObject = { current: any };
@@ -138,7 +139,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   render () {
-    const listItems = this.props.moments.map(moment => (
+    const { currentChannel, moments, placeholderPresent } = this.props;
+    const feedStyle =
+      currentChannel === 'host' && placeholderPresent ?
+        styles.withPlaceholder : styles.withoutPlaceholder;
+
+    const listItems = moments.map(moment => (
       <li key={moment.id}>
         <Moment
           data={moment}
@@ -151,13 +157,13 @@ class Feed extends React.Component<FeedProps, FeedState> {
         data-component="feed"
         // $FlowFixMe
         ref={this.wrapperRef}
-        className={styles.wrapper}
+        className={feedStyle}
       >
         <ul
           style={{top: this.state.top}}
           // $FlowFixMe
           ref={this.listRef}
-          key={this.props.channel}
+          key={currentChannel}
           className={styles.feed}
         >
           {listItems}

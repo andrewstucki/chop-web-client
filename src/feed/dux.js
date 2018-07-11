@@ -67,6 +67,7 @@ type FeedType = {
   appendingMessage: boolean,
   anchorMoment: AnchorMomentType,
   renderingAnchorMoment: boolean,
+  placeholderPresent: boolean,
 };
 
 type ChangeChannelType = {
@@ -153,9 +154,10 @@ const defaultState = {
     id: '',
     text: '',
     subText: '',
-    showReleaseAnchorButton: true,
+    anchorMomentAnchored: true,
   },
   renderingAnchorMoment: false,
+  placeholderPresent: false,
 };
 
 // Reducer
@@ -326,12 +328,14 @@ const reducer = (
   case SET_ANCHOR_MOMENT:
     return {
       ...state,
+      placeholderPresent: true,
       anchorMoment: action.anchorMoment,
     };
   case RELEASE_ANCHOR_MOMENT:
-    state.anchorMoment.showReleaseAnchorButton = false;
+    state.anchorMoment.anchorMomentAnchored = false;
     return {
       ...state,
+      placeholderPresent: false,
       renderingAnchorMoment: true,
       channels: {
         ...state.channels,
@@ -345,7 +349,7 @@ const reducer = (
         id: '',
         text: '',
         subText: '',
-        showReleaseAnchorButton: true,
+        anchorMomentAnchored: true,
       },
     };
   default:

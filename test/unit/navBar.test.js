@@ -21,9 +21,10 @@ describe('NavBar tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
         renderingAnchorMoment: false,
+        placeholderPresent: false,
       }
     );
     expect(result).toEqual([
@@ -64,9 +65,10 @@ describe('NavBar tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
         renderingAnchorMoment: false,
+        placeholderPresent: false,
       }
     );
     expect(result).toEqual([
@@ -112,9 +114,10 @@ describe('NavBar tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
         renderingAnchorMoment: false,
+        placeholderPresent: false,
       }
     );
     expect(result).toEqual([

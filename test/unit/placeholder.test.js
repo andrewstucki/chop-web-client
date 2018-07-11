@@ -1,5 +1,9 @@
 // @flow
-import reducer, { defaultState, placeholderContents } from '../../src/placeholder/dux';
+import reducer, {
+  defaultState,
+  placeholderContents,
+  getCurrentChannel,
+} from '../../src/placeholder/dux';
 
 import {
   publishSalvation,
@@ -33,7 +37,7 @@ describe('PlaceHolder tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
       }
     );
@@ -44,7 +48,7 @@ describe('PlaceHolder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
-        showReleaseAnchorButton: true,
+        anchorMomentAnchored: true,
       }
     );
   });
@@ -59,7 +63,7 @@ describe('PlaceHolder tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
       },
       releaseAnchorMoment()
@@ -77,7 +81,7 @@ describe('PlaceHolder tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
       }
     );
@@ -87,8 +91,36 @@ describe('PlaceHolder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
-        showReleaseAnchorButton: true,
+        anchorMomentAnchored: true,
       }
     );
+  });
+
+  test('Get current channel', () => {
+    const result = getCurrentChannel(
+      {
+        channels: {
+          public: [],
+          host: [],
+        },
+        currentChannel: 'host',
+        chatInput: '',
+        currentUser: {
+          id: '',
+          nickname: '',
+        },
+        appendingMessage: false,
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '',
+          text: '',
+          subText: '',
+          anchorMomentAnchored: true,
+        },
+        renderingAnchorMoment: false,
+        placeholderPresent: true,
+      }
+    );
+    expect(result).toEqual('host');
   });
 });

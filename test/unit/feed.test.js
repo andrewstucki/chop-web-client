@@ -773,7 +773,7 @@ describe('Feed tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
       },
     );
@@ -785,8 +785,9 @@ describe('Feed tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
+        placeholderPresent: true,
       }
     );
   });
@@ -800,9 +801,10 @@ describe('Feed tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          showReleaseAnchorButton: true,
+          anchorMomentAnchored: true,
         },
         renderingAnchorMoment: false,
+        placeholderPresent: true,
       },
       releaseAnchorMoment()
     );
@@ -818,11 +820,12 @@ describe('Feed tests', () => {
               id: '12345',
               text: 'I commit my life to Christ.',
               subText: '1 hand raised',
-              showReleaseAnchorButton: false,
+              anchorMomentAnchored: false,
             },
           ],
         },
         renderingAnchorMoment: true,
+        placeholderPresent: false,
       }
     );
   });

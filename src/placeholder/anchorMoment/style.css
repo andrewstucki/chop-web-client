@@ -1,10 +1,23 @@
 @import url('../../../assets/theme.css');
 
-.anchorMoment {
-  display: flex;
-  align-items: center;
-  height: 60px;
-  background-color: #F6F6F6;
+:root {
+  --anchorMoment {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    background-color: #F6F6F6;
+  }
+}
+
+.anchored {
+  @apply --anchorMoment;
+  position: absolute;
+  width: 100%;
+  bottom: 74px;
+}
+
+.released {
+  @apply --anchorMoment;
 }
 
 .releaseAnchorButton {

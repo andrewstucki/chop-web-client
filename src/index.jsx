@@ -136,5 +136,5 @@ setTimeout(() => {
       channelToken: 'command',
     }
   );
-  store.dispatch(publishSalvation(1));
+  store.dispatch(publishSalvation(2));
 }, 2000);

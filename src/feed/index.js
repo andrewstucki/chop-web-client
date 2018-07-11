@@ -10,9 +10,10 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     moments: feedContents(feedState),
-    channel: feedState.currentChannel,
+    currentChannel: feedState.currentChannel,
     appendingMessage: appendMessage(feedState),
     renderingAnchorMoment: feedState.renderingAnchorMoment,
+    placeholderPresent: feedState.placeholderPresent,
   };
 };
 

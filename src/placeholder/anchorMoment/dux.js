@@ -13,7 +13,7 @@ type SalvationType = {
   id: string,
   text: string,
   subText: string,
-  showReleaseAnchorButton: boolean,
+  anchorMomentAnchored: boolean,
 };
 
 type PublishSalvationType = {
@@ -50,7 +50,7 @@ const publishSalvation = (number: number) => (
       id: createUid(),
       text: 'I commit my life to Christ.',
       subText: number === 1 ? `${number} hand raised` : `${number} hands raised`,
-      showReleaseAnchorButton: true,
+      anchorMomentAnchored: true,
     },
   }
 );
