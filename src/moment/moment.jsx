@@ -6,9 +6,11 @@ import {
   MESSAGE,
   Notification,
   ActionableNotification,
+  Text
 } from './index';
 import { NOTIFICATION } from './notification/dux';
 import { ACTIONABLE_NOTIFICATION } from './actionableNotification/dux';
+import { BASIC_TEXT } from './text/dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
 
 import type { MomentType } from './dux';
@@ -41,6 +43,12 @@ const Moment = ({data}: MomentPropType) => {
       ); 
     }
   }
+  case BASIC_TEXT:
+    return (
+      <Text
+        text={data}
+      />
+    );
   }
 };
 

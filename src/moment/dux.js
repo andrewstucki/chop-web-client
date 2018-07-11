@@ -2,6 +2,7 @@
 import type { MessageType } from './message/dux';
 import type { NotificationType } from './notification/dux';
 import type { ActionableNotificationType } from './actionableNotification/dux';
+import type { TextType } from './text/dux';
 import messageReducer from './message/dux';
 import { combineReducers } from 'redux';
 
@@ -12,7 +13,8 @@ const PUBLISH_MOMENT_TO_CHANNEL = 'PUBLISH_MOMENT_TO_CHANNEL';
 type MomentType =
   | MessageType
   | NotificationType
-  | ActionableNotificationType;
+  | ActionableNotificationType
+  | TextType;
 
 // Reducer
 

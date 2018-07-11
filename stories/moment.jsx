@@ -143,4 +143,16 @@ storiesOf('Moment', module)
         }
       />
     </Provider>
+  ))
+  .add('Basic Text default', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'BASIC_TEXT',
+            text: 'Chat request pending'
+          }
+        }
+      />
+    </Provider>
   ));
