@@ -54,6 +54,19 @@ class Feed extends React.Component<FeedProps, FeedState> {
     return prom;
   }
 
+  scrollInstant (): Promise<void> {
+    const prom = new Promise(resolve => {
+      const wrapper = this.wrapperRef.current;
+      const wrapperHeight = Math.ceil(wrapper.getBoundingClientRect().height);
+      wrapper.scroll({
+        top: this.state.height,
+        behavior: 'instant',
+      });
+    resolve();
+    });
+    return prom;
+  }
+
   componentDidUpdate () {
     const list = this.listRef.current;
     const listHeight = list.scrollHeight;
@@ -64,13 +77,15 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const rangeEnd = end - start;
     if (listHeight !== this.state.height &&
         wrapperHeight !== this.state.height) {
-      // if rendering an anchorMoment don't run this code
-      // run the instant code instead
+      let promise;
       if (!this.props.renderingAnchorMoment) {
-        this.scrollUntilDone(
+        promise = this.scrollUntilDone(
           () => ((wrapper.scrollTop - start) / rangeEnd)
-          // going to need this no matter what
-        ).then(() => {
+        )
+      } else {
+        promise = this.scrollInstant()
+      }
+      promise.then(() => {
           if (listHeight > wrapperHeight) {
             this.setState(
               {
@@ -87,29 +102,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
             );
           }
         }
-        );
-      }
-      // wrapper.scroll({
-      //   top: wrapper.scrollHeight - (wrapperHeight + messageTotalHeight),
-      //   behavior: 'instant',
-      // }).then(() => {
-      //   if (listHeight > wrapperHeight) {
-      //     this.setState(
-      //       {
-      //         height: wrapperHeight,
-      //         top: '0px',
-      //       }
-      //     );
-      //   } else {
-      //     this.setState(
-      //       {
-      //         height: listHeight,
-      //         top: `calc(100% - ${listHeight}px)`,
-      //       }
-      //     );
-      //   }
-      // }
-      // );
+      );
     } else if (this.state.top === '0px' && this.props.appendingMessage) {
       const newestMessage = list.lastChild.firstChild;
       const messageHeight = Math.ceil(newestMessage.getBoundingClientRect().height);
@@ -125,7 +118,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         });
       }
       // don't do this if anchorMoment
-      if (this.props.renderingAnchorMoment) {
+      if (!this.props.renderingAnchorMoment) {
         const self = this;
         window.requestAnimationFrame(
           () => {
