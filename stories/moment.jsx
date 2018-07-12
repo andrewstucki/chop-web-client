@@ -170,4 +170,20 @@ storiesOf('Moment', module)
         }
       />
     </Provider>
+  ))
+  .add('AvatarMoment', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'AVATAR_MOMENT',
+            id: '12345',
+            user: {
+              id: '6789',
+              nickname: 'Madmartigan',
+            },
+          }
+        }
+      />
+    </Provider>
   ));

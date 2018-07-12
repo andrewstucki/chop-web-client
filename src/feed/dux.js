@@ -42,6 +42,8 @@ import {
   ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
+import { PUBLISH_AVATAR_MOMENT } from '../moment/avatarMoment/dux';
+
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';//RECEIVE
@@ -321,6 +323,18 @@ const reducer = (
         [action.channel]: [
           ...state.channels[action.channel],
           action.moment,
+        ],
+      },
+    };
+  }
+  case PUBLISH_AVATAR_MOMENT: {
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: [
+          ...state.channels[action.channel],
+          action.avatarMoment,
         ],
       },
     };

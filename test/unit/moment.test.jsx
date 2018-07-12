@@ -9,6 +9,7 @@ import {
   Notification,
   ActionableNotification,
   Text,
+  AvatarMoment,
   createMessage,
 } from '../../src/moment';
 
@@ -241,6 +242,35 @@ describe('Moment tests', () => {
       {
         type: 'BASIC_TEXT',
         text: 'Chat request pending',
+      }
+    );
+  });
+
+  test('AvatarMoment renders', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          {
+            type: 'AVATAR_MOMENT',
+            id: '12345',
+            user: {
+              id: '6789',
+              nickname: 'Madmartigan',
+            },
+          }
+        }
+      />
+    );
+    expect(wrapper.find(AvatarMoment).at(0).props()).toEqual(
+      {
+        avatarMoment: {
+          type: 'AVATAR_MOMENT',
+          id: '12345',
+          user: {
+            id: '6789',
+            nickname: 'Madmartigan',
+          },
+        },
       }
     );
   });

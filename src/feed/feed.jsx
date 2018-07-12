@@ -119,7 +119,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
       // is greater than the position the wrapper is scrolled to
       // checks to see how far above the wrapper and incoming messages the list goes
       // and if it's a greater number than where the user is scrolled to
-      console.log(wrapper.scrollHeight - (wrapperHeight + messageTotalHeight), wrapper.scrollTop);
       if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) >
         wrapper.scrollTop) {
         wrapper.scroll({
