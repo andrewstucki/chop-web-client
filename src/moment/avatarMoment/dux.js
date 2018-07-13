@@ -1,6 +1,6 @@
 // @flow
 import type { UserType } from '../../feed/dux';
-import { createUid } from '../../chat/dux';
+import { createUid } from '../../util';
 
 // Type Definitions
 
