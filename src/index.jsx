@@ -60,8 +60,8 @@ playsinline=1`,
 store.dispatch(
   {
     type: 'SET_CHAT_KEYS',
-    publishKey: 'pub-c-5d166bf0-07cf-4e5b-81e6-797b7f01bf83',
-    subscribeKey: 'sub-c-12f3b1fe-e04d-11e7-b7e7-02872c090099',
+    publishKey: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+    subscribeKey: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
   }
 );
 
