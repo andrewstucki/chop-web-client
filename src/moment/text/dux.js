@@ -3,15 +3,15 @@ const BASIC_TEXT = 'BASIC_TEXT';
 
 type TextType = {
   type: 'BASIC_TEXT',
-  text: string
+  text: string,
 };
 
 // Exports
 
 export type {
-  TextType
+  TextType,
 };
 
 export {
-  BASIC_TEXT
+  BASIC_TEXT,
 };

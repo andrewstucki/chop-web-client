@@ -10,9 +10,12 @@ import type {
   CloseMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
+  MomentType,
 } from '../moment';
 
 import type { SetUser } from '../io/chat/dux';
+
+import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 
 import {
   PUBLISH_MESSAGE,
@@ -33,6 +36,11 @@ import {
 
 import { SET_USER } from '../io/chat/dux';
 
+import {
+  RELEASE_ANCHOR_MOMENT,
+  SET_ANCHOR_MOMENT,
+} from '../placeholder/anchorMoment/dux';
+
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';//RECEIVE
@@ -40,24 +48,25 @@ const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 
 // Flow Type Definitions
-type MomentType =
-  | MessageType;
 
 type UserType = {
   id: string,
   nickname: string,
 };
 
-type MessageTypeList = Array<MessageType>;
+type MomentTypeList = Array<MomentType>;
 
 type FeedType = {
   channels: {
-    [string]: MessageTypeList,
+    [string]: MomentTypeList,
   },
   currentChannel: string,
   chatInput: string,
   currentUser: UserType,
   appendingMessage: boolean,
+  anchorMoment: AnchorMomentType | null,
+  animatingMoment: boolean,
+  placeholderPresent: boolean,
 };
 
 type ChangeChannelType = {
@@ -139,6 +148,9 @@ const defaultState = {
     nickname: '',
   },
   appendingMessage: false,
+  anchorMoment: null,
+  animatingMoment: true,
+  placeholderPresent: false,
 };
 
 // Reducer
@@ -164,6 +176,7 @@ const reducer = (
       return {
         ...state,
         appendingMessage: true,
+        animatingMoment: true,
         channels: {
           ...state.channels,
           [state.currentChannel]: [
@@ -179,6 +192,7 @@ const reducer = (
     return {
       ...state,
       appendingMessage: false,
+      animatingMoment: true,
       channels: {
         ...state.channels,
         [action.channel]: [
@@ -295,6 +309,7 @@ const reducer = (
   case PUBLISH_MOMENT_TO_CHANNEL: {
     return {
       ...state,
+      animatingMoment: true,
       channels: {
         ...state.channels,
         [action.channel]: [
@@ -304,6 +319,26 @@ const reducer = (
       },
     };
   }
+  case SET_ANCHOR_MOMENT:
+    return {
+      ...state,
+      placeholderPresent: true,
+      anchorMoment: action.anchorMoment,
+    };
+  case RELEASE_ANCHOR_MOMENT:
+    return {
+      ...state,
+      placeholderPresent: false,
+      animatingMoment: false,
+      channels: {
+        ...state.channels,
+        [action.channel]: [
+          ...state.channels[action.channel],
+          state.anchorMoment,
+        ],
+      },
+      anchorMoment: null,
+    };
   default:
     return state;
   }
@@ -337,7 +372,6 @@ export {
   appendMessage,
 };
 export type {
-  MomentType,
   ReceiveMessageType,
   ChangeChannelType,
   UserType,

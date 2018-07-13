@@ -9,8 +9,11 @@ import {
   Notification,
   ActionableNotification,
   Text,
+  AvatarMoment,
   createMessage,
 } from '../../src/moment';
+
+import AnchorMoment from '../../src/placeholder/anchorMoment';
 
 import {
   publishPrayerNotification,
@@ -202,6 +205,32 @@ describe('Moment tests', () => {
     );
   });
 
+  test('Salvation anchor moment renders', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'I commit my life to Christ',
+            subText: '1 hand raised',
+          }
+        }
+      />
+    );
+    expect(wrapper.find(AnchorMoment).at(0).props()).toEqual(
+      {
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ',
+          subText: '1 hand raised',
+        },
+        anchorMomentAnchored: false,
+      }
+    );
+  });
+
   test('Text renders', () => {
     const wrapper = Enzyme.shallow(
       <Moment
@@ -210,8 +239,37 @@ describe('Moment tests', () => {
     );
     expect(wrapper.find(Text).at(0).props().text).toEqual(
       {
-        type: "BASIC_TEXT",
-        text: 'Chat request pending'
+        type: 'BASIC_TEXT',
+        text: 'Chat request pending',
+      }
+    );
+  });
+
+  test('AvatarMoment renders', () => {
+    const wrapper = Enzyme.shallow(
+      <Moment
+        data={
+          {
+            type: 'AVATAR_MOMENT',
+            id: '12345',
+            user: {
+              id: '6789',
+              nickname: 'Madmartigan',
+            },
+          }
+        }
+      />
+    );
+    expect(wrapper.find(AvatarMoment).at(0).props()).toEqual(
+      {
+        avatarMoment: {
+          type: 'AVATAR_MOMENT',
+          id: '12345',
+          user: {
+            id: '6789',
+            nickname: 'Madmartigan',
+          },
+        },
       }
     );
   });

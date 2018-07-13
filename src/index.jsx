@@ -7,6 +7,7 @@ import Chop from './chop';
 import reducer from './chop/dux';
 import thunk from 'redux-thunk';
 import {setStore} from './io/chat';
+import { publishSalvation } from './placeholder/anchorMoment/dux';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -127,7 +128,6 @@ setTimeout(() => {
       channelToken: 'request',
     }
   );
-
   store.dispatch(
     {
       type: 'ADD_CHAT',
@@ -135,4 +135,5 @@ setTimeout(() => {
       channelToken: 'command',
     }
   );
+  store.dispatch(publishSalvation(2));
 }, 2000);

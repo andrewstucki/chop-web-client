@@ -15,8 +15,10 @@ storiesOf('Feed', module)
       <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
         <Feed
           moments={[]}
-          channel="default"
+          currentChannel="default"
           appendingMessage={false}
+          animatingMoment={false}
+          placeholderPresent={false}
         />
       </div>
     </Provider>
@@ -25,7 +27,7 @@ storiesOf('Feed', module)
       <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
         <Feed
           appendingMessage={false}
-          channel="default"
+          currentChannel="default"
           moments={
             [
               createMessage(
@@ -48,6 +50,8 @@ storiesOf('Feed', module)
               ),
             ]
           }
+          animatingMoment={false}
+          placeholderPresent={false}
         />
       </div>
     </Provider>

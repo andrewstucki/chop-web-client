@@ -1,14 +1,16 @@
 // @flow
 import React from 'react';
-import type {MomentType} from './dux';
+import type { MomentType } from '../moment/dux';
 import Moment from '../moment/moment';
 import styles from './styles.css';
 import BezierEasing from 'bezier-easing';
 
 type FeedProps = {
   moments: Array<MomentType>,
-  channel: string,
+  currentChannel: string,
   appendingMessage: boolean,
+  animatingMoment: boolean,
+  placeholderPresent: boolean,
 };
 
 type RefObject = { current: any };
@@ -16,7 +18,7 @@ type RefObject = { current: any };
 type FeedState = {
   height: number,
   top: string,
-}
+};
 
 class Feed extends React.Component<FeedProps, FeedState> {
   listRef: RefObject
@@ -28,6 +30,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
     this.listRef = React.createRef();
     // $FlowFixMe
     this.wrapperRef = React.createRef();
+    // if the list extends past the feed the height is wrapperHeight
+    // and top is 0
+    // if the list is smaller than the feedHeight then height is listHeight
+    // and top is 100% - listHeight
+    // top sets the ul's top & height is used to determine if the feed is full
+    // and if the list height extends past the feed
     this.state = {
       height: 0,
       top: '100%',
@@ -60,41 +68,48 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const start = wrapper.scrollTop;
     const end = wrapper.scrollHeight - wrapperHeight;
     const rangeEnd = end - start;
+    // if the list height doesn't extend past the feed and
+    // if the feed isn't full
     if (listHeight !== this.state.height &&
         wrapperHeight !== this.state.height) {
       this.scrollUntilDone(
-        () => ((wrapper.scrollTop - start) / rangeEnd)
-      ).then(() => {
-        if (listHeight > wrapperHeight) {
-          this.setState(
-            {
-              height: wrapperHeight,
-              top: '0px',
-            }
-          );
-        } else {
-          this.setState(
-            {
-              height: listHeight,
-              top: `calc(100% - ${listHeight}px)`,
-            }
-          );
-        }
-      }
-      );
+        () => (
+          (wrapper.scrollTop - start) / rangeEnd))
+        .then(() => {
+          // if the list extends past the feed 
+          if (listHeight > wrapperHeight) {
+            this.setState(
+              {
+                height: wrapperHeight,
+                top: '0px',
+              }
+            );
+          } else {
+            this.setState(
+              {
+                height: listHeight,
+                top: `calc(100% - ${listHeight}px)`,
+              }
+            );
+          }
+        });
+      // if the feed is full and you're publishing a message
     } else if (this.state.top === '0px' && this.props.appendingMessage) {
       const newestMessage = list.lastChild.firstChild;
       const messageHeight = Math.ceil(newestMessage.getBoundingClientRect().height);
       const marginTop = parseInt(window.getComputedStyle(newestMessage)['margin-top'], 10);
       const messageTotalHeight = messageHeight + marginTop;
-
-      if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) > wrapper.scrollTop) {
+      // if the wrapper's scrollable height - (the wrapper's visible height + the next message's total height)
+      // is greater than the position the wrapper is scrolled to
+      // checks to see how far above the wrapper and incoming messages the list goes
+      // and if it's a greater number than where the user is scrolled to
+      if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) >
+        wrapper.scrollTop) {
         wrapper.scroll({
           top: wrapper.scrollHeight - (wrapperHeight + messageTotalHeight),
           behavior: 'instant',
         });
       }
-
       const self = this;
       window.requestAnimationFrame(
         () => {
@@ -107,7 +122,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   render () {
-    const listItems = this.props.moments.map(moment => (
+    const { currentChannel, moments, placeholderPresent } = this.props;
+    const feedStyle =
+      currentChannel === 'host' && placeholderPresent ?
+        styles.withPlaceholder : styles.withoutPlaceholder;
+
+    const listItems = moments.map(moment => (
       <li key={moment.id}>
         <Moment
           data={moment}
@@ -120,13 +140,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
         data-component="feed"
         // $FlowFixMe
         ref={this.wrapperRef}
-        className={styles.wrapper}
+        className={feedStyle}
       >
         <ul
+          // top starts at 100% (the bottom) and gets smaller as list grows
           style={{top: this.state.top}}
           // $FlowFixMe
           ref={this.listRef}
-          key={this.props.channel}
+          key={currentChannel}
           className={styles.feed}
         >
           {listItems}
@@ -137,3 +158,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
 }
 
 export default Feed;
+
+// end goal is to not run an animation if rendering an anchorMoment in the feed
+// and don't scroll to the anchorMoment if user has scrolled manually

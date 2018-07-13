@@ -35,6 +35,12 @@ import {
 } from '../../src/chat/dux';
 
 import { setUser } from '../../src/io/chat/dux';
+
+import {
+  releaseAnchorMoment,
+  SET_ANCHOR_MOMENT,
+} from '../../src/placeholder/anchorMoment/dux';
+
 import { mockDate } from '../testUtils';
 
 describe('Feed tests', () => {
@@ -70,6 +76,7 @@ describe('Feed tests', () => {
           id: '12345',
           nickname: 'Billy Bob',
         },
+        animatingMoment: false,
       },
       addToCurrentChannel(),
     );
@@ -79,6 +86,7 @@ describe('Feed tests', () => {
     expect(result.channels.public[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.public[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
+    expect(result.animatingMoment).toBe(true);
   });
 
   test('adds a message to current channel not public from current user', () => {
@@ -109,6 +117,7 @@ describe('Feed tests', () => {
         ...defaultState,
         currentChannel: 'public',
         chatInput: 'this is a string',
+        animatingMoment: false,
       },
       receiveMessage('host', {
         type: MESSAGE,
@@ -127,6 +136,7 @@ describe('Feed tests', () => {
     expect(result.channels.host[0].text).toEqual('Hello there');
     expect(result.channels.host[0].id.length).toEqual(5);
     expect(result.appendingMessage).toBe(false);
+    expect(result.animatingMoment).toBe(true);
   });
 
   test('add a channel', () => {
@@ -633,12 +643,16 @@ describe('Feed tests', () => {
 
   test('Can publish a joined chat notification public', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishJoinedChatNotification('Boofie', 'public')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           public: [
@@ -657,12 +671,16 @@ describe('Feed tests', () => {
 
   test('Can publish a joined chat notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishJoinedChatNotification('Boofie', 'host')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: [
@@ -681,12 +699,16 @@ describe('Feed tests', () => {
 
   test('Can publish a left chat notification public', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishLeftChatNotification('Boofie', 'public')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           public: [
@@ -705,12 +727,16 @@ describe('Feed tests', () => {
 
   test('Can publish a left chat notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishLeftChatNotification('Boofie', 'host')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: [
@@ -727,14 +753,60 @@ describe('Feed tests', () => {
     );
   });
 
+  // TODO this won't go in event, but I don't know where else to put it right now
+  test('Can publish an AvatarMoment in event channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'AVATAR_MOMENT',
+          id: '12345',
+          user: {
+            id: '6789',
+            nickname: 'Madmartigan',
+          },
+        },
+      },
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        animatingMoment: true,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'AVATAR_MOMENT',
+              id: '12345',
+              user: {
+                id: '6789',
+                nickname: 'Madmartigan',
+              },
+            },
+          ],
+        },
+      }
+    );
+  });
+
   test('Can publish a prayer request notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishPrayerRequestNotification('Boofie', true)
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: [
@@ -749,6 +821,69 @@ describe('Feed tests', () => {
             },
           ],
         },
+      }
+    );
+  });
+
+  test('Store anchorMoment from publishSalvation', () => {
+    const result = reducer(
+      defaultState,
+      {
+        type: SET_ANCHOR_MOMENT,
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+      },
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+        placeholderPresent: true,
+      }
+    );
+  });
+
+  test('Can publish an anchor moment as a moment and remove it from anchorMoment', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+        animatingMoment: true,
+        placeholderPresent: true,
+      },
+      releaseAnchorMoment()
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'ANCHOR_MOMENT',
+              id: '12345',
+              text: 'I commit my life to Christ.',
+              subText: '1 hand raised',
+            },
+          ],
+        },
+        animatingMoment: false,
+        placeholderPresent: false,
       }
     );
   });

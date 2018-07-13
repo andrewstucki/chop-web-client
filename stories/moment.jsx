@@ -144,13 +144,44 @@ storiesOf('Moment', module)
       />
     </Provider>
   ))
+  .add('Salvation anchor moment as a moment', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'I commit my life to Christ.',
+            subText: '1 hand raised',
+            showReleaseAnchorButton: false,
+          }
+        }
+      />
+    </Provider>
+  ))
   .add('Basic Text default', () => (
     <Provider store={store}>
       <Moment
         data={
           {
             type: 'BASIC_TEXT',
-            text: 'Chat request pending'
+            text: 'Chat request pending',
+          }
+        }
+      />
+    </Provider>
+  ))
+  .add('AvatarMoment', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'AVATAR_MOMENT',
+            id: '12345',
+            user: {
+              id: '6789',
+              nickname: 'Madmartigan',
+            },
           }
         }
       />
