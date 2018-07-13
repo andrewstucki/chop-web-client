@@ -130,7 +130,11 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
             })
           }
           {channels.length &&
-            <Underline left={this.state.left} width={this.state.width} opacity={this.state.opacity} static={this.state.first} />
+            <Underline
+              left={this.state.left}
+              width={this.state.width}
+              opacity={this.state.opacity}
+            />
           }
         </div>
       </div>

@@ -131,7 +131,12 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           public: { moments: [] },
-          host: { moments: [] },
+          host: {
+            id: '12345',
+            moments: [],
+            name: 'host',
+            participants: undefined,
+          },
         },
       },
     );
@@ -149,7 +154,9 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           direct: {
+            id: '12345',
             moments: [],
+            name: 'direct',
             participants: [
               {
                 id: '12345',

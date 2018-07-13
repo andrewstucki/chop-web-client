@@ -43,6 +43,8 @@ type UserType = {
 };
 
 type ChannelType = {
+  id: string,
+  name: string,
   moments: Array<MomentType>,
   participants?: Array<UserType>,
 }
@@ -57,12 +59,6 @@ type FeedType = {
   appendingMessage: boolean,
 };
 
-type AddChannelReturnType = {
-  id: string,
-  name: string,
-  participants?: Array<UserType>,
-}
-
 type ChangeChannelType = {
   type: 'CHANGE_CHANNEL',
   channel: string,
@@ -76,7 +72,7 @@ type ReceiveMessageType = {
 
 type AddChannelType = {
   type: 'ADD_CHANNEL',
-  channel: AddChannelReturnType,
+  channel: ChannelType,
 };
 
 type RemoveChannelType = {
@@ -117,8 +113,9 @@ const addChannel = (name: string, id: string, participants?: Array<UserType>): A
   {
     type: ADD_CHANNEL,
     channel: {
-      name,
       id,
+      name,
+      moments: [],
       participants,
     },
   }
@@ -205,10 +202,7 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel.name]: {
-          moments: [],
-          participants: action.channel.participants,
-        },
+        [action.channel.name]:  action.channel,
       },
     };
   case REMOVE_CHANNEL: {
