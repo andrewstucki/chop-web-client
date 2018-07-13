@@ -61,8 +61,8 @@ playsinline=1`,
 store.dispatch(
   {
     type: 'SET_CHAT_KEYS',
-    publishKey: 'pub-c-09e2a65a-062e-46ae-a169-34368baf04ca',
-    subscribeKey: 'sub-c-a0ba8ad8-5854-11e8-8e44-e61bc5f8fbda',
+    publishKey: 'pub-c-5d166bf0-07cf-4e5b-81e6-797b7f01bf83',
+    subscribeKey: 'sub-c-12f3b1fe-e04d-11e7-b7e7-02872c090099',
   }
 );
 
