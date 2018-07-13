@@ -54,6 +54,7 @@ const Moment = ({data}: MomentPropType) => {
     return (
       <AnchorMoment
         anchorMoment={data}
+        anchorMomentAnchored={false}
       />
     );
   }

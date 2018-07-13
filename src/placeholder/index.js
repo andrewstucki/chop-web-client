@@ -2,7 +2,11 @@
 import { connect } from 'react-redux';
 
 import { releaseAnchorMoment } from './anchorMoment/dux';
-import { placeholderContents, getCurrentChannel } from './dux';
+import {
+  placeholderContents,
+  getCurrentChannel,
+  setAnchorMomentAnchored,
+} from './dux';
 
 import Placeholder from './placeholder';
 
@@ -13,6 +17,7 @@ const mapStateToProps = state => {
     anchorMoment: placeholderContents(placeholderState),
     renderPlaceholder: placeholderState.renderPlaceholder,
     currentChannel: getCurrentChannel(feedState),
+    anchorMomentAnchored: setAnchorMomentAnchored(placeholderState),
   };
 };
 

@@ -14,7 +14,7 @@ describe('Feed tests', () => {
         moments={[]}
         currentChannel="default"
         appendingMessage={false}
-        renderingAnchorMoment={false}
+        animatingMoment={false}
         placeholderPresent={true}
       />
     );
@@ -41,7 +41,7 @@ describe('Feed tests', () => {
         onMessageRender={function () {}}
         currentChannel="default"
         appendingMessage={false}
-        renderingAnchorMoment={false}
+        animatingMoment={true}
         placeholderPresent={true}
       />
     );
@@ -68,7 +68,7 @@ describe('Feed tests', () => {
         onMessageRender={function () {}}
         currentChannel="default"
         appendingMessage={false}
-        renderingAnchorMoment={false}
+        animatingMoment={false}
         placeholderPresent={true}
       />
     );
@@ -83,7 +83,7 @@ describe('Feed tests', () => {
         onMessageRender={function () {}}
         currentChannel="host"
         appendingMessage={false}
-        renderingAnchorMoment={false}
+        animatingMoment={false}
         placeholderPresent={true}
       />
     );
@@ -98,7 +98,7 @@ describe('Feed tests', () => {
         onMessageRender={function () {}}
         currentChannel="public"
         appendingMessage={false}
-        renderingAnchorMoment={false}
+        animatingMoment={false}
         placeholderPresent={true}
       />
     );
@@ -113,7 +113,7 @@ describe('Feed tests', () => {
         onMessageRender={function () {}}
         currentChannel="host"
         appendingMessage={false}
-        renderingAnchorMoment={false}
+        animatingMoment={false}
         placeholderPresent={false}
       />
     );

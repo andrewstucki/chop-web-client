@@ -9,7 +9,7 @@ import AnchorMoment from '../../src/placeholder/anchorMoment';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Placeholder tests', () => {
-  test('Placeholder renders a salvation anchorMoment', () => {
+  test('Placeholder renders a salvation AnchorMoment', () => {
     const wrapper = Enzyme.shallow(
       <Placeholder
         anchorMoment={
@@ -18,12 +18,12 @@ describe('Placeholder tests', () => {
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '1 hand raised',
-            anchorMomentAnchored: true,
           }
         }
         renderPlaceholder={true}
         releaseAnchorMoment={() => {}}
         currentChannel="host"
+        anchorMomentAnchored={true}
       />
     );
     expect(wrapper.find(AnchorMoment).length).toBe(1);
@@ -33,7 +33,6 @@ describe('Placeholder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
-        anchorMomentAnchored: true,
       }
     );
   });

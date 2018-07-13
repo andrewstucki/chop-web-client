@@ -10,6 +10,7 @@ type PlaceholderPropsType = {
   renderPlaceholder: boolean,
   releaseAnchorMoment: () => void,
   currentChannel: string,
+  anchorMomentAnchored: boolean,
 };
 
 const Placeholder = (
@@ -18,12 +19,14 @@ const Placeholder = (
     renderPlaceholder,
     releaseAnchorMoment,
     currentChannel,
+    anchorMomentAnchored,
   }: PlaceholderPropsType
 ) => {
   if (renderPlaceholder && currentChannel === 'host') {
     return (
       <AnchorMoment
         anchorMoment={anchorMoment}
+        anchorMomentAnchored={anchorMomentAnchored}
         releaseAnchorMoment={releaseAnchorMoment}
       />
     );

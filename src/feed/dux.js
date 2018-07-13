@@ -39,7 +39,6 @@ import { SET_USER } from '../io/chat/dux';
 import {
   RELEASE_ANCHOR_MOMENT,
   SET_ANCHOR_MOMENT,
-  ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
 import { PUBLISH_AVATAR_MOMENT } from '../moment/avatarMoment/dux';
@@ -67,8 +66,8 @@ type FeedType = {
   chatInput: string,
   currentUser: UserType,
   appendingMessage: boolean,
-  anchorMoment: AnchorMomentType,
-  renderingAnchorMoment: boolean,
+  anchorMoment: AnchorMomentType | null,
+  animatingMoment: boolean,
   placeholderPresent: boolean,
 };
 
@@ -151,14 +150,8 @@ const defaultState = {
     nickname: '',
   },
   appendingMessage: false,
-  anchorMoment: {
-    type: ANCHOR_MOMENT,
-    id: '',
-    text: '',
-    subText: '',
-    anchorMomentAnchored: true,
-  },
-  renderingAnchorMoment: false,
+  anchorMoment: null,
+  animatingMoment: true,
   placeholderPresent: false,
 };
 
@@ -185,7 +178,7 @@ const reducer = (
       return {
         ...state,
         appendingMessage: true,
-        renderingAnchorMoment: false,
+        animatingMoment: true,
         channels: {
           ...state.channels,
           [state.currentChannel]: [
@@ -201,7 +194,7 @@ const reducer = (
     return {
       ...state,
       appendingMessage: false,
-      renderingAnchorMoment: false,
+      animatingMoment: true,
       channels: {
         ...state.channels,
         [action.channel]: [
@@ -318,6 +311,7 @@ const reducer = (
   case PUBLISH_MOMENT_TO_CHANNEL: {
     return {
       ...state,
+      animatingMoment: true,
       channels: {
         ...state.channels,
         [action.channel]: [
@@ -346,11 +340,10 @@ const reducer = (
       anchorMoment: action.anchorMoment,
     };
   case RELEASE_ANCHOR_MOMENT:
-    state.anchorMoment.anchorMomentAnchored = false;
     return {
       ...state,
       placeholderPresent: false,
-      renderingAnchorMoment: true,
+      animatingMoment: false,
       channels: {
         ...state.channels,
         [action.channel]: [
@@ -358,13 +351,7 @@ const reducer = (
           state.anchorMoment,
         ],
       },
-      anchorMoment: {
-        type: ANCHOR_MOMENT,
-        id: '',
-        text: '',
-        subText: '',
-        anchorMomentAnchored: true,
-      },
+      anchorMoment: null,
     };
   default:
     return state;

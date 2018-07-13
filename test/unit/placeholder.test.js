@@ -3,6 +3,7 @@ import reducer, {
   defaultState,
   placeholderContents,
   getCurrentChannel,
+  setAnchorMomentAnchored,
 } from '../../src/placeholder/dux';
 
 import {
@@ -16,15 +17,17 @@ describe('PlaceHolder tests', () => {
     const result = reducer(defaultState);
     expect(result).toEqual(defaultState);
   });
-
+  // TODO learn how to mock createUid
   test('Publish salvation anchorMoment 1 hand raised', () => {
     const result = reducer(defaultState, publishSalvation(1));
-    expect(result.placeholder.subText).toBe('1 hand raised');
+    expect(result.placeholder ? result.placeholder.subText : '')
+      .toEqual('1 hand raised');
   });
 
   test('Publish salvation anchorMoment multiple hands raised', () => {
     const result = reducer(defaultState, publishSalvation(4));
-    expect(result.placeholder.subText).toBe('4 hands raised');
+    expect(result.placeholder ? result.placeholder.subText : '')
+      .toBe('4 hands raised');
   });
 
   test('Sets salvation anchor moment', () => {
@@ -37,7 +40,6 @@ describe('PlaceHolder tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          anchorMomentAnchored: true,
         },
       }
     );
@@ -48,7 +50,6 @@ describe('PlaceHolder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
-        anchorMomentAnchored: true,
       }
     );
   });
@@ -63,7 +64,6 @@ describe('PlaceHolder tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          anchorMomentAnchored: true,
         },
       },
       releaseAnchorMoment()
@@ -81,7 +81,6 @@ describe('PlaceHolder tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          anchorMomentAnchored: true,
         },
       }
     );
@@ -91,7 +90,6 @@ describe('PlaceHolder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
-        anchorMomentAnchored: true,
       }
     );
   });
@@ -110,17 +108,36 @@ describe('PlaceHolder tests', () => {
           nickname: '',
         },
         appendingMessage: false,
-        anchorMoment: {
-          type: 'ANCHOR_MOMENT',
-          id: '',
-          text: '',
-          subText: '',
-          anchorMomentAnchored: true,
-        },
-        renderingAnchorMoment: false,
+        anchorMoment: null,
+        animatingMoment: false,
         placeholderPresent: true,
       }
     );
     expect(result).toEqual('host');
+  });
+
+  test('Set anchor moment anchored true', () => {
+    const result = setAnchorMomentAnchored(
+      {
+        renderPlaceholder: false,
+        placeholder: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+      }
+    );
+    expect(result).toEqual(true);
+  });
+
+  test('Set anchor moment anchored false', () => {
+    const result = setAnchorMomentAnchored(
+      {
+        renderPlaceholder: false,
+        placeholder: null,
+      }
+    );
+    expect(result).toEqual(false);
   });
 });

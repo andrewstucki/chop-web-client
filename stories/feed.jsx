@@ -17,7 +17,7 @@ storiesOf('Feed', module)
           moments={[]}
           currentChannel="default"
           appendingMessage={false}
-          renderingAnchorMoment={false}
+          animatingMoment={false}
           placeholderPresent={false}
         />
       </div>
@@ -50,7 +50,7 @@ storiesOf('Feed', module)
               ),
             ]
           }
-          renderingAnchorMoment={false}
+          animatingMoment={false}
           placeholderPresent={false}
         />
       </div>
