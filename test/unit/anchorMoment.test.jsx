@@ -18,10 +18,10 @@ describe('AnchorMoment tests', () => {
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '1 hand raised',
-            anchorMomentAnchored: true,
           }
         }
         releaseAnchorMoment={() => {}}
+        anchorMomentAnchored={true}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('anchored');
@@ -40,10 +40,10 @@ describe('AnchorMoment tests', () => {
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '1 hand raised',
-            anchorMomentAnchored: false,
           }
         }
         releaseAnchorMoment={() => {}}
+        anchorMomentAnchored={false}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('released');
@@ -63,10 +63,10 @@ describe('AnchorMoment tests', () => {
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '4 hands raised',
-            anchorMomentAnchored: true,
           }
         }
         releaseAnchorMoment={releaseAnchorMoment}
+        anchorMomentAnchored={true}
       />
     );
     expect(wrapper.find('button').at(0).props().className).toEqual('releaseAnchorButton');

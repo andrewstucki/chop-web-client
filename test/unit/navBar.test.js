@@ -23,7 +23,7 @@ describe('NavBar tests', () => {
           subText: '1 hand raised',
           anchorMomentAnchored: true,
         },
-        renderingAnchorMoment: false,
+        animatingMoment: false,
         placeholderPresent: false,
       }
     );
@@ -67,7 +67,7 @@ describe('NavBar tests', () => {
           subText: '1 hand raised',
           anchorMomentAnchored: true,
         },
-        renderingAnchorMoment: false,
+        animatingMoment: false,
         placeholderPresent: false,
       }
     );
@@ -116,7 +116,7 @@ describe('NavBar tests', () => {
           subText: '1 hand raised',
           anchorMomentAnchored: true,
         },
-        renderingAnchorMoment: false,
+        animatingMoment: false,
         placeholderPresent: false,
       }
     );

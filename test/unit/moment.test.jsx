@@ -213,7 +213,6 @@ describe('Moment tests', () => {
             id: '12345',
             text: 'I commit my life to Christ',
             subText: '1 hand raised',
-            showReleaseAnchorButton: false,
           }
         }
       />
@@ -225,8 +224,8 @@ describe('Moment tests', () => {
           id: '12345',
           text: 'I commit my life to Christ',
           subText: '1 hand raised',
-          showReleaseAnchorButton: false,
         },
+        anchorMomentAnchored: false,
       }
     );
   });

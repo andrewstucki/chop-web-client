@@ -8,16 +8,18 @@ import styles from './style.css';
 
 type AnchorMomentPropsType = {
   anchorMoment: AnchorMomentType,
+  anchorMomentAnchored: boolean,
   releaseAnchorMoment?: () => void,
 };
 
 const AnchorMoment = (
   {
     anchorMoment,
+    anchorMomentAnchored,
     releaseAnchorMoment,
   }: AnchorMomentPropsType
 ) => {
-  const { text, subText, anchorMomentAnchored } = anchorMoment;
+  const { text, subText } = anchorMoment;
   const anchorMomentStyle =
     anchorMomentAnchored ? styles.anchored : styles.released;
 

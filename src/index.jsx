@@ -128,7 +128,6 @@ setTimeout(() => {
       channelToken: 'request',
     }
   );
-
   store.dispatch(
     {
       type: 'ADD_CHAT',

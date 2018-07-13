@@ -21,12 +21,12 @@ storiesOf('Placeholder', module)
             id: '12345',
             text: 'I commit my life to Christ.',
             subText: '1 hand raised',
-            anchorMomentAnchored: true,
           }
         }
         releaseAnchorMoment={action('clicked')}
         renderPlaceholder={true}
         currentChannel="host"
+        anchorMomentAnchored={true}
       />
     </Provider>
   ));

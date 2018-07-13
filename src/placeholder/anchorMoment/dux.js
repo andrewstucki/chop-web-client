@@ -1,5 +1,5 @@
 // @flow
-import { createUid } from '../../chat/dux';
+import { createUid } from '../../util';
 
 // Type Definitions
 
@@ -23,7 +23,6 @@ type AnchorMomentType = {
   id: string,
   text: string,
   subText: string,
-  anchorMomentAnchored: boolean,
 };
 
 type AnchorMomentActionType =
@@ -47,7 +46,6 @@ const publishSalvation = (number: number) => (
       id: createUid(),
       text: 'I commit my life to Christ.',
       subText: number === 1 ? `${number} hand raised` : `${number} hands raised`,
-      anchorMomentAnchored: true,
     },
   }
 );

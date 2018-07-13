@@ -9,32 +9,23 @@ import type { FeedType } from '../feed/dux';
 import {
   SET_ANCHOR_MOMENT,
   RELEASE_ANCHOR_MOMENT,
-  ANCHOR_MOMENT,
 } from './anchorMoment/dux';
 
 // Type Definitions
 
 type PlaceholderType = {
   renderPlaceholder: boolean,
-  placeholder: AnchorMomentType,
+  placeholder: AnchorMomentType | null,
 };
 
 type PlaceholderActionType =
   | AnchorMomentActionType;
 
-// Action Creators
-
 // Default State
 
 const defaultState = {
   renderPlaceholder: false,
-  placeholder: {
-    type: ANCHOR_MOMENT,
-    id: '',
-    text: '',
-    subText: '',
-    anchorMomentAnchored: true,
-  },
+  placeholder: null,
 };
 
 // Reducer
@@ -47,24 +38,17 @@ const reducer = (
     return state;
   }
   switch (action.type) {
-  case SET_ANCHOR_MOMENT: {
+  case SET_ANCHOR_MOMENT:
     return {
       ...state,
       renderPlaceholder: true,
       placeholder: action.anchorMoment,
     };
-  }
   case RELEASE_ANCHOR_MOMENT:
     return {
       ...state,
       renderPlaceholder: false,
-      placeholder: {
-        type: ANCHOR_MOMENT,
-        id: '',
-        text: '',
-        subText: '',
-        anchorMomentAnchored: true,
-      },
+      placeholder: null,
     };
   default:
     return state;
@@ -81,6 +65,10 @@ const getCurrentChannel = (state: FeedType) => (
   state.currentChannel
 );
 
+const setAnchorMomentAnchored = (state: PlaceholderType) => (
+  state.placeholder === null ? false : true
+);
+
 // Exports
 
 export type {
@@ -92,6 +80,7 @@ export {
   defaultState,
   placeholderContents,
   getCurrentChannel,
+  setAnchorMomentAnchored,
 };
 
 export default reducer;

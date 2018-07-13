@@ -76,7 +76,7 @@ describe('Feed tests', () => {
           id: '12345',
           nickname: 'Billy Bob',
         },
-        renderingAnchorMoment: true,
+        animatingMoment: false,
       },
       addToCurrentChannel(),
     );
@@ -86,7 +86,7 @@ describe('Feed tests', () => {
     expect(result.channels.public[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.public[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
-    expect(result.renderingAnchorMoment).toBe(false);
+    expect(result.animatingMoment).toBe(true);
   });
 
   test('adds a message to current channel not public from current user', () => {
@@ -117,7 +117,7 @@ describe('Feed tests', () => {
         ...defaultState,
         currentChannel: 'public',
         chatInput: 'this is a string',
-        renderingAnchorMoment: true,
+        animatingMoment: false,
       },
       receiveMessage('host', {
         type: MESSAGE,
@@ -136,7 +136,7 @@ describe('Feed tests', () => {
     expect(result.channels.host[0].text).toEqual('Hello there');
     expect(result.channels.host[0].id.length).toEqual(5);
     expect(result.appendingMessage).toBe(false);
-    expect(result.renderingAnchorMoment).toBe(false);
+    expect(result.animatingMoment).toBe(true);
   });
 
   test('add a channel', () => {
@@ -643,12 +643,16 @@ describe('Feed tests', () => {
 
   test('Can publish a joined chat notification public', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishJoinedChatNotification('Boofie', 'public')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           public: [
@@ -667,12 +671,16 @@ describe('Feed tests', () => {
 
   test('Can publish a joined chat notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishJoinedChatNotification('Boofie', 'host')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: [
@@ -691,12 +699,16 @@ describe('Feed tests', () => {
 
   test('Can publish a left chat notification public', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishLeftChatNotification('Boofie', 'public')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           public: [
@@ -715,12 +727,16 @@ describe('Feed tests', () => {
 
   test('Can publish a left chat notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishLeftChatNotification('Boofie', 'host')
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: [
@@ -739,12 +755,16 @@ describe('Feed tests', () => {
 
   test('Can publish a prayer request notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
       publishPrayerRequestNotification('Boofie', true)
     );
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: [
@@ -773,7 +793,6 @@ describe('Feed tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          anchorMomentAnchored: true,
         },
       },
     );
@@ -785,7 +804,6 @@ describe('Feed tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          anchorMomentAnchored: true,
         },
         placeholderPresent: true,
       }
@@ -801,9 +819,8 @@ describe('Feed tests', () => {
           id: '12345',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
-          anchorMomentAnchored: true,
         },
-        renderingAnchorMoment: false,
+        animatingMoment: true,
         placeholderPresent: true,
       },
       releaseAnchorMoment()
@@ -820,11 +837,10 @@ describe('Feed tests', () => {
               id: '12345',
               text: 'I commit my life to Christ.',
               subText: '1 hand raised',
-              anchorMomentAnchored: false,
             },
           ],
         },
-        renderingAnchorMoment: true,
+        animatingMoment: false,
         placeholderPresent: false,
       }
     );
