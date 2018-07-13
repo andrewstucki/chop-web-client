@@ -756,11 +756,14 @@ describe('Feed tests', () => {
   // TODO this won't go in event, but I don't know where else to put it right now
   test('Can publish an AvatarMoment in event channel', () => {
     const result = reducer(
-      defaultState,
       {
-        type: 'PUBLISH_AVATAR_MOMENT',
+        ...defaultState,
+        animatingMoment: false,
+      },
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
         channel: 'public',
-        avatarMoment: {
+        moment: {
           type: 'AVATAR_MOMENT',
           id: '12345',
           user: {
@@ -773,6 +776,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           public: [

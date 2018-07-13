@@ -1,11 +1,11 @@
 // @flow
 import type { UserType } from '../../feed/dux';
 import { createUid } from '../../util';
+import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 
 // Type Definitions
 
 const AVATAR_MOMENT = 'AVATAR_MOMENT';
-const PUBLISH_AVATAR_MOMENT = 'PUBLISH_AVATAR_MOMENT';
 
 type AvatarMomentType = {
   type: 'AVATAR_MOMENT',
@@ -26,9 +26,9 @@ type AvatarMomentActionTypes =
 
 const publishAvatarMoment = (user: UserType, channel: string) => (
   {
-    type: PUBLISH_AVATAR_MOMENT,
+    type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
-    avatarMoment: {
+    moment: {
       type: AVATAR_MOMENT,
       id: createUid(),
       user,
@@ -38,7 +38,6 @@ const publishAvatarMoment = (user: UserType, channel: string) => (
 
 export {
   AVATAR_MOMENT,
-  PUBLISH_AVATAR_MOMENT,
 };
 
 export {
