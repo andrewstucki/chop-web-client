@@ -753,6 +753,48 @@ describe('Feed tests', () => {
     );
   });
 
+  // TODO this won't go in event, but I don't know where else to put it right now
+  test('Can publish an AvatarMoment in event channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        animatingMoment: false,
+      },
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'AVATAR_MOMENT',
+          id: '12345',
+          user: {
+            id: '6789',
+            nickname: 'Madmartigan',
+          },
+        },
+      },
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        animatingMoment: true,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'AVATAR_MOMENT',
+              id: '12345',
+              user: {
+                id: '6789',
+                nickname: 'Madmartigan',
+              },
+            },
+          ],
+        },
+      }
+    );
+  });
+
   test('Can publish a prayer request notification host', () => {
     const result = reducer(
       {

@@ -7,10 +7,12 @@ import {
   Notification,
   ActionableNotification,
   Text,
+  AvatarMoment,
 } from './index';
 import { NOTIFICATION } from './notification/dux';
 import { ACTIONABLE_NOTIFICATION } from './actionableNotification/dux';
 import { BASIC_TEXT } from './text/dux';
+import { AVATAR_MOMENT } from './avatarMoment/dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
 
 import AnchorMoment from '../placeholder/anchorMoment';
@@ -23,7 +25,7 @@ type MomentPropType = {
   data: MomentType,
 };
 
-const Moment = ({data}: MomentPropType) => {
+const Moment = ({ data }: MomentPropType) => {
   switch (data.type) {
   case MESSAGE:
     return (
@@ -60,6 +62,12 @@ const Moment = ({data}: MomentPropType) => {
     return (
       <Text
         text={data}
+      />
+    );
+  case AVATAR_MOMENT:
+    return (
+      <AvatarMoment
+        avatarMoment={data}
       />
     );
   }

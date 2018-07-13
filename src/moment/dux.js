@@ -6,6 +6,7 @@ import type { NotificationType } from './notification/dux';
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 import type { ActionableNotificationType } from './actionableNotification/dux';
 import type { TextType } from './text/dux';
+import type { AvatarMomentType } from './avatarMoment/dux';
 import messageReducer from './message/dux';
 
 // Type Declarations
@@ -17,7 +18,8 @@ type MomentType =
   | NotificationType
   | ActionableNotificationType
   | TextType
-  | AnchorMomentType;
+  | AnchorMomentType
+  | AvatarMomentType;
 
 // Reducer
 
