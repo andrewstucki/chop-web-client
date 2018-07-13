@@ -9,7 +9,6 @@ import reducer, {
 import {
   publishSalvation,
   releaseAnchorMoment,
-  SET_ANCHOR_MOMENT,
 } from '../../src/placeholder/anchorMoment/dux';
 
 describe('PlaceHolder tests', () => {
@@ -34,7 +33,7 @@ describe('PlaceHolder tests', () => {
     const result = reducer(
       defaultState,
       {
-        type: SET_ANCHOR_MOMENT,
+        type: 'SET_ANCHOR_MOMENT',
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
           id: '12345',
