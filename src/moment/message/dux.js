@@ -6,6 +6,7 @@ import type { UserType } from '../../feed/dux';
 const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
 const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
+const TOGGLE_CLOSE_TRAY_BUTTON = 'TOGGLE_CLOSE_TRAY_BUTTON';
 
 const MESSAGE = 'MESSAGE';
 
@@ -17,6 +18,7 @@ type MessageType = {
   text: string,
   user: UserType,
   messageTrayOpen: boolean,
+  closeTrayButtonRendered: boolean,
 };
 
 type OpenMessageTrayType = {
@@ -31,6 +33,11 @@ type CloseMessageTrayType = {
 
 type DeleteMessageType = {
   type: 'DELETE_MESSAGE',
+  id: string,
+};
+
+type ToggleCloseTrayButtonType = {
+  type: 'TOGGLE_CLOSE_TRAY_BUTTON',
   id: string,
 };
 
@@ -55,11 +62,19 @@ const closeMessageTray = (id: string) => (
   }
 );
 
+const toggleCloseTrayButton = (id: string) => (
+  {
+    type: TOGGLE_CLOSE_TRAY_BUTTON,
+    id,
+  }
+);
+
 const createMessage = (
   id: string,
   text: string,
   user: UserType,
-  messageTrayOpen: boolean
+  messageTrayOpen: boolean,
+  closeTrayButtonRendered: boolean
 ): MessageType => (
   {
     type: MESSAGE,
@@ -67,6 +82,7 @@ const createMessage = (
     text,
     user,
     messageTrayOpen,
+    closeTrayButtonRendered,
   }
 );
 
@@ -97,6 +113,8 @@ export {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
+  TOGGLE_CLOSE_TRAY_BUTTON,
+  MESSAGE,
 };
 
 export {
@@ -104,7 +122,7 @@ export {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
-  MESSAGE,
+  toggleCloseTrayButton,
 };
 
 export type {
@@ -112,5 +130,6 @@ export type {
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
+  ToggleCloseTrayButtonType,
 };
 export default reducer;

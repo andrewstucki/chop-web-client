@@ -2,7 +2,9 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
+
 import { getFirstInitial, getAvatarColor } from '../../util';
+
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
 import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
 import MessageTray from '../../components/messageTray';
@@ -14,6 +16,7 @@ type MessagePropsType = {
   openMessageTray: (id: string) => void,
   closeMessageTray: (id: string) => void,
   deleteMessage: (id: string) => void,
+  toggleCloseTrayButton: (id: string) => void,
 };
 
 const Message = (
@@ -22,12 +25,15 @@ const Message = (
     openMessageTray,
     closeMessageTray,
     deleteMessage,
-  }: MessagePropsType) => {
-  const { messageTrayOpen } = message;
-  const messageStyle = messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
+    toggleCloseTrayButton,
+  }: MessagePropsType
+) => {
+  const { messageTrayOpen, closeTrayButtonRendered } = message;
+  const messageStyle = 
+    messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
   const renderMessageButtons = () => {
-    if (messageTrayOpen) {
+    if (closeTrayButtonRendered) {
       return (
         <button
           className={styles.closeTrayButton}
@@ -57,10 +63,14 @@ const Message = (
           deleteMessage(message.id);
         }}
       />
-
-      <div className={messageStyle}>
+      <div
+        className={messageStyle}
+        onTransitionEnd={() => {
+          toggleCloseTrayButton(message.id);
+        }}
+      >
         <div
-          className={styles.icon} 
+          className={styles.icon}
           style={{backgroundColor: getAvatarColor(message.user.nickname)}}
         >
           {getFirstInitial(message.user.nickname)}

@@ -13,9 +13,21 @@ import {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
+  toggleCloseTrayButton,
 } from '../../src/moment';
 
 import { MESSAGE } from '../../src/moment/dux';
+
+import {
+  publishPrayerNotification,
+  publishJoinedChatNotification,
+  publishLeftChatNotification,
+} from '../../src/moment/notification/dux';
+
+import {
+  publishPrayerRequestNotification,
+  acceptPrayerRequest,
+} from '../../src/moment/actionableNotification/dux';
 
 import {
   addToCurrentChannel,
@@ -23,8 +35,11 @@ import {
 } from '../../src/chat/dux';
 
 import { setUser } from '../../src/io/chat/dux';
+import { mockDate } from '../testUtils';
 
 describe('Feed tests', () => {
+  mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
+
   test('default state', () => {
     const result = reducer();
     expect(result).toEqual(defaultState);
@@ -51,6 +66,7 @@ describe('Feed tests', () => {
           host: { moments:[] },
         },
         currentChannel: 'host',
+        appendingMessage: false,
       }
     );
   });
@@ -85,7 +101,7 @@ describe('Feed tests', () => {
     expect(result.appendingMessage).toBe(true);
   });
 
-  test('adds a message to not current channel', () => {
+  test('adds a message to current channel not public from current user', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -94,6 +110,28 @@ describe('Feed tests', () => {
           public: { moments: [] },
           host: { moments: [] },
         },
+        currentChannel: 'host',
+        chatInput: 'this is a string',
+        currentUser: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        },
+      },
+      addToCurrentChannel()
+    );
+    expect(result.channels.public.length).toEqual(0);
+    expect(result.channels.host.length).toEqual(1);
+    expect(result.channels.host[0].text).toEqual('this is a string');
+    expect(result.channels.host[0].user.id).toEqual('12345');
+    expect(result.channels.host[0].user.nickname).toEqual('Billy Bob');
+    expect(result.channels.host[0].id.length).toEqual(36);
+    expect(result.appendingMessage).toBe(true);
+  });
+
+  test('adds a message to not current channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
         currentChannel: 'public',
         chatInput: 'this is a string',
       },
@@ -170,24 +208,8 @@ describe('Feed tests', () => {
   });
 
   test('add a channel that already exists', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        channels: {
-          ...defaultState.channels,
-          public: { moments: [] },
-        },
-      }
-      , addChannel('public', '12345'));
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          ...defaultState.channels,
-          public: { moments: [] },
-        },
-      }
-    );
+    const result = reducer(defaultState, addChannel('host'));
+    expect(result).toEqual(defaultState);
   });
 
   test('remove channel', () => {
@@ -195,12 +217,33 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          ...defaultState.channels,
-          other: { moments: [] },
+          other: { moment: [] },
         },
       },
       removeChannel('other'));
     expect(result).toEqual(defaultState);
+  });
+
+
+  test('remove public', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: [],
+        },
+      },
+      removeChannel('public')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: { moments: [] },
+        },
+      },
+    );
   });
 
   test('remove current channel', () => {
@@ -475,6 +518,94 @@ describe('Feed tests', () => {
     );
   });
 
+  test('Render closeTrayButton after the tray opens', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              type: MESSAGE,
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+              closeTrayButtonRendered: false,
+            },
+          ],
+        },
+      },
+      toggleCloseTrayButton('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: true,
+              closeTrayButtonRendered: true,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Render openTrayButton after the tray closes', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              type: MESSAGE,
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+              closeTrayButtonRendered: true,
+            },
+          ],
+        },
+      },
+      toggleCloseTrayButton('123'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          public: 
+          [
+            {
+              id: '123',
+              text: 'I like socks',
+              user: {
+                id: '12345',
+                nickname: 'Billy Bob',
+              },
+              messageTrayOpen: false,
+              closeTrayButtonRendered: false,
+            },
+          ],
+        },
+      }
+    );
+  });
+
   test('Can delete a message', () => {
     const result = reducer(
       {
@@ -547,6 +678,153 @@ describe('Feed tests', () => {
         },
         currentChannel: 'public',
       },
+    );
+  });
+
+  test('Can publish a prayer notification', () => {
+    const result = reducer(
+      defaultState,
+      publishPrayerNotification('Boofie', 'Beefie')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'PRAYER',
+              host: 'Boofie',
+              guest: 'Beefie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a joined chat notification public', () => {
+    const result = reducer(
+      defaultState,
+      publishJoinedChatNotification('Boofie', 'public')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a joined chat notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishJoinedChatNotification('Boofie', 'host')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'JOINED_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a left chat notification public', () => {
+    const result = reducer(
+      defaultState,
+      publishLeftChatNotification('Boofie', 'public')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: [
+            ...defaultState.channels.public,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a left chat notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishLeftChatNotification('Boofie', 'host')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'NOTIFICATION',
+              notificationType: 'LEFT_CHAT',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('Can publish a prayer request notification host', () => {
+    const result = reducer(
+      defaultState,
+      publishPrayerRequestNotification('Boofie', true)
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: [
+            ...defaultState.channels.host,
+            {
+              type: 'ACTIONABLE_NOTIFICATION',
+              notificationType: 'PRAYER_REQUEST',
+              name: 'Boofie',
+              timeStamp: '4:53pm',
+              active: true,
+              action: acceptPrayerRequest,
+            },
+          ],
+        },
+      }
     );
   });
 });

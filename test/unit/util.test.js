@@ -1,5 +1,7 @@
 // @flow
-import  { getFirstInitial } from '../../src/util';
+import  {
+  getFirstInitial,
+} from '../../src/util';
 
 describe('Util tests', () => {
   test('getFirstInitial', () => {

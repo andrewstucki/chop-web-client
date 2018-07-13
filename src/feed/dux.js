@@ -9,6 +9,7 @@ import type {
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
+  ToggleCloseTrayButtonType,
 } from '../moment';
 
 import type { SetUser } from '../io/chat/dux';
@@ -23,7 +24,12 @@ import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
+  TOGGLE_CLOSE_TRAY_BUTTON,
 } from '../moment';
+
+import {
+  PUBLISH_MOMENT_TO_CHANNEL,
+} from '../moment/dux';
 
 import { SET_USER } from '../io/chat/dux';
 
@@ -90,7 +96,8 @@ type FeedActionTypes =
   | SetUser
   | OpenMessageTrayType
   | CloseMessageTrayType
-  | DeleteMessageType;
+  | DeleteMessageType
+  | ToggleCloseTrayButtonType;
 
 // Action Creators
 
@@ -132,6 +139,8 @@ const removeChannel = (channel: string): RemoveChannelType => (
 
 const defaultState = {
   channels: {
+    public: [],
+    host: [],
   },
   currentChannel: '',
   chatInput: '',
@@ -171,7 +180,7 @@ const reducer = (
             ...state.channels[state.currentChannel],
             moments: [
               ...state.channels[state.currentChannel].moments,
-              createMessage(action.id, state.chatInput, state.currentUser, false),
+              createMessage(action.id, state.chatInput, state.currentUser, false, false),
             ],
           },
         },
@@ -206,6 +215,10 @@ const reducer = (
       },
     };
   case REMOVE_CHANNEL: {
+    if (action.channel === 'public' ||
+      action.channel === 'host') {
+      return state;
+    }
     const stateCopy = {...state};
     if (action.channel === state.currentChannel) {
       if (state.channels.public) {
@@ -265,6 +278,23 @@ const reducer = (
       },
     };
   }
+  case TOGGLE_CLOSE_TRAY_BUTTON: {
+    const { id } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [state.currentChannel]: state.channels[state.currentChannel].map(
+          message => (
+            {
+              ...message,
+              closeTrayButtonRendered: message.id === id ? !message.closeTrayButtonRendered : null,
+            }
+          )
+        ),
+      },
+    };
+  }
   case DELETE_MESSAGE: {
     const { id } = action;
     const { channels, currentChannel } = state;
@@ -278,6 +308,18 @@ const reducer = (
         [currentChannel]: [
           ...channels[currentChannel].moments.slice(0, messageIndex),
           ...channels[currentChannel].moments.slice(messageIndex + 1),
+        ],
+      },
+    };
+  }
+  case PUBLISH_MOMENT_TO_CHANNEL: {
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: [
+          ...state.channels[action.channel],
+          action.moment,
         ],
       },
     };
