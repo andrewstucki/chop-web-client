@@ -54,15 +54,11 @@ storiesOf('Moment', module)
       <Moment
         data={
           {
-            type: 'PUBLISH_MOMENT_TO_CHANNEL',
-            channel: 'host',
-            moment: {
-              type: 'NOTIFICATION',
-              notificationType: 'PRAYER',
-              host: 'Pickle',
-              guest: 'Cucumber',
-              timeStamp: '9:33pm',
-            },
+            type: 'NOTIFICATION',
+            notificationType: 'PRAYER',
+            host: 'Pickle',
+            guest: 'Cucumber',
+            timeStamp: '9:33pm',
           }
         }
       />
@@ -73,14 +69,10 @@ storiesOf('Moment', module)
       <Moment
         data={
           {
-            type: 'PUBLISH_MOMENT_TO_CHANNEL',
-            channel: 'host',
-            moment: {
-              type: 'NOTIFICATION',
-              notificationType: 'JOINED_CHAT',
-              name: 'Pickle',
-              timeStamp: '9:33pm',
-            },
+            type: 'NOTIFICATION',
+            notificationType: 'JOINED_CHAT',
+            name: 'Pickle',
+            timeStamp: '9:33pm',
           }
         }
       />
@@ -91,14 +83,10 @@ storiesOf('Moment', module)
       <Moment
         data={
           {
-            type: 'PUBLISH_MOMENT_TO_CHANNEL',
-            channel: 'host',
-            moment: {
-              type: 'NOTIFICATION',
-              notificationType: 'LEFT_CHAT',
-              name: 'Pickle',
-              timeStamp: '9:33pm',
-            },
+            type: 'NOTIFICATION',
+            notificationType: 'LEFT_CHAT',
+            name: 'Pickle',
+            timeStamp: '9:33pm',
           }
         }
       />
@@ -109,16 +97,12 @@ storiesOf('Moment', module)
       <Moment
         data={
           {
-            type: 'PUBLISH_MOMENT_TO_CHANNEL',
-            channel: 'host',
-            moment: {
-              type: 'ACTIONABLE_NOTIFICATION',
-              notificationType: 'PRAYER_REQUEST',
-              name: 'Pickle',
-              timeStamp: '9:33pm',
-              active: true,
-              action: action('clicked'),
-            },
+            type: 'ACTIONABLE_NOTIFICATION',
+            notificationType: 'PRAYER_REQUEST',
+            name: 'Pickle',
+            timeStamp: '9:33pm',
+            active: true,
+            action: action('clicked'),
           }
         }
       />
@@ -129,16 +113,27 @@ storiesOf('Moment', module)
       <Moment
         data={
           {
-            type: 'PUBLISH_MOMENT_TO_CHANNEL',
-            channel: 'host',
-            moment: {
-              type: 'ACTIONABLE_NOTIFICATION',
-              notificationType: 'PRAYER_REQUEST',
-              name: 'Pickle',
-              timeStamp: '9:33pm',
-              active: false,
-              action: action('clicked'),
-            },
+            type: 'ACTIONABLE_NOTIFICATION',
+            notificationType: 'PRAYER_REQUEST',
+            name: 'Pickle',
+            timeStamp: '9:33pm',
+            active: false,
+            action: action('clicked'),
+          }
+        }
+      />
+    </Provider>
+  ))
+  .add('Salvation anchor moment as a moment', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'I commit my life to Christ.',
+            subText: '1 hand raised',
+            showReleaseAnchorButton: false,
           }
         }
       />
@@ -150,7 +145,23 @@ storiesOf('Moment', module)
         data={
           {
             type: 'BASIC_TEXT',
-            text: 'Chat request pending'
+            text: 'Chat request pending',
+          }
+        }
+      />
+    </Provider>
+  ))
+  .add('AvatarMoment', () => (
+    <Provider store={store}>
+      <Moment
+        data={
+          {
+            type: 'AVATAR_MOMENT',
+            id: '12345',
+            user: {
+              id: '6789',
+              nickname: 'Madmartigan',
+            },
           }
         }
       />

@@ -12,6 +12,7 @@ function loadStories() {
   require('../../stories/messageTray.jsx');
   require('../../stories/popUpModal.jsx');
   require('../../stories/feedActionBanner.jsx');
+  require('../../stories/placeholder.jsx');
 }
 
 configure(loadStories, module);

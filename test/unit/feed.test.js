@@ -35,6 +35,12 @@ import {
 } from '../../src/chat/dux';
 
 import { setUser } from '../../src/io/chat/dux';
+
+import {
+  releaseAnchorMoment,
+  SET_ANCHOR_MOMENT,
+} from '../../src/placeholder/anchorMoment/dux';
+
 import { mockDate } from '../testUtils';
 
 describe('Feed tests', () => {
@@ -110,6 +116,7 @@ describe('Feed tests', () => {
           id: '12345',
           nickname: 'Billy Bob',
         },
+        animatingMoment: false,
       },
       addToCurrentChannel(),
     );
@@ -119,6 +126,7 @@ describe('Feed tests', () => {
     expect(result.channels.public.moments[0].user.nickname).toEqual('Billy Bob');
     expect(result.channels.public.moments[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
+    expect(result.animatingMoment).toBe(true);
   });
 
   test('adds a message to current channel not public from current user', () => {
@@ -170,6 +178,7 @@ describe('Feed tests', () => {
         },
         currentChannel: 'public',
         chatInput: 'this is a string',
+        animatingMoment: false,
       },
       receiveMessage('host', {
         type: MESSAGE,
@@ -188,6 +197,7 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments[0].text).toEqual('Hello there');
     expect(result.channels.host.moments[0].id.length).toEqual(5);
     expect(result.appendingMessage).toBe(false);
+    expect(result.animatingMoment).toBe(true);
   });
 
   test('add a channel', () => {
@@ -862,6 +872,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           public: {
             id: '12345',
@@ -899,6 +910,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           host: {
             id: '12345',
@@ -936,6 +948,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           public: {
             id: '12345',
@@ -974,6 +987,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: {
@@ -990,6 +1004,59 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'host',
+      }
+    );
+  });
+
+  // TODO this won't go in event, but I don't know where else to put it right now
+  test('Can publish an AvatarMoment in event channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+        },
+        currentChannel: 'public',
+      },
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'AVATAR_MOMENT',
+          id: '12345',
+          user: {
+            id: '6789',
+            nickname: 'Madmartigan',
+          },
+        },
+      },
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        animatingMoment: true,
+        channels: {
+          ...defaultState.channels,
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: 'AVATAR_MOMENT',
+                id: '12345',
+                user: {
+                  id: '6789',
+                  nickname: 'Madmartigan',
+                },
+              },
+            ],
+          },
+        },
+        currentChannel: 'public',
       }
     );
   });
@@ -1013,6 +1080,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
+        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: {
@@ -1032,6 +1100,80 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
+    );
+  });
+
+  test('Store anchorMoment from publishSalvation', () => {
+    const result = reducer(
+      defaultState,
+      {
+        type: SET_ANCHOR_MOMENT,
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+      },
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+        placeholderPresent: true,
+      }
+    );
+  });
+
+  test('Can publish an anchor moment as a moment and remove it from anchorMoment', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
+        },
+        currentChannel: 'host',
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+        animatingMoment: true,
+        placeholderPresent: true,
+      },
+      releaseAnchorMoment()
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ANCHOR_MOMENT',
+                id: '12345',
+                text: 'I commit my life to Christ.',
+                subText: '1 hand raised',
+              },
+            ],
+          },
+        },
+        animatingMoment: false,
+        placeholderPresent: false,
+        currentChannel: 'host',
+      }
     );
   });
 });

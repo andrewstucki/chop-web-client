@@ -7,6 +7,7 @@ import Chop from './chop';
 import reducer from './chop/dux';
 import thunk from 'redux-thunk';
 import {setStore} from './io/chat';
+import { publishSalvation } from './placeholder/anchorMoment/dux';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -60,8 +61,8 @@ playsinline=1`,
 store.dispatch(
   {
     type: 'SET_CHAT_KEYS',
-    publishKey: 'pub-c-09e2a65a-062e-46ae-a169-34368baf04ca',
-    subscribeKey: 'sub-c-a0ba8ad8-5854-11e8-8e44-e61bc5f8fbda',
+    publishKey: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+    subscribeKey: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
   }
 );
 
@@ -137,7 +138,6 @@ setTimeout(() => {
       },
     }
   );
-
   store.dispatch(
     {
       type: 'ADD_CHANNEL',
@@ -172,4 +172,5 @@ setTimeout(() => {
       channel: 'public',
     }
   );
+  store.dispatch(publishSalvation(2));
 }, 2000);

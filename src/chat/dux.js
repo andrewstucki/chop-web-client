@@ -1,5 +1,6 @@
 // @flow
 import type { FeedType } from '../feed/dux';
+import { createUid } from '../util';
 
 // Action Types
 const CHAT_INPUT = 'CHAT_INPUT';
@@ -56,18 +57,6 @@ const addToCurrentChannel = (): PublishMessageAction => (
     id: createUid(),
   }
 );
-
-// Helper Functions
-const createUid = () => {
-  let seed = new Date().getTime(); // Used to insure more randomness
-  const regEx = /[xy]/g;
-  const replacer = char => {
-    const randomNumber = (seed + Math.random() * 16) % 16 | 0;
-    seed = Math.floor(seed / 16); // Update Seed
-    return (char === 'x' ? randomNumber : (randomNumber & 0x3 | 0x8)).toString(16);
-  };
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
-};
 
 // Default State
 const defaultState = {
@@ -141,7 +130,6 @@ export {
   toggleChatFocus,
   addToCurrentChannel,
   textEntered,
-  createUid,
   defaultState,
   getPlaceholder,
 };

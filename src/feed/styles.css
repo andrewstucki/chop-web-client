@@ -1,18 +1,29 @@
 @import url('../../assets/theme.css');
 
-.wrapper {
-  display: flex;
-  flex: 1;
-  margin: 0 8px 74px 8px;
-  position: relative;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
+:root {
+  --wrapper {
+    display: flex;
+    flex: 1;
+    position: relative;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.withPlaceholder {
+  @apply --wrapper;
+  margin: 0 8px 134px;
+}
+
+.withoutPlaceholder {
+  @apply --wrapper;
+  margin: 0 8px 74px;
 }
 
 .feed {
   margin: 0;
   background-color: #fff;
   position: absolute;
-  top:100%;
+  top: 100%;
   width: 100%;
 }
