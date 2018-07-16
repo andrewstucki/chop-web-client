@@ -15,24 +15,11 @@ import {
 
 import AnchorMoment from '../../src/placeholder/anchorMoment';
 
-import {
-  publishPrayerNotification,
-  publishJoinedChatNotification,
-  publishLeftChatNotification,
-} from '../../src/moment/notification/dux';
-
-import { mockDate } from '../testUtils';
-
-import {
-  publishPrayerRequestNotification,
-  acceptPrayerRequest,
-} from '../../src/moment/actionableNotification/dux';
+import { acceptPrayerRequest } from '../../src/moment/actionableNotification/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Moment tests', () => {
-  mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
-
   test('Moment renders', () => {
     const wrapper = Enzyme.shallow(
       <Moment
@@ -86,7 +73,13 @@ describe('Moment tests', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
-          publishPrayerNotification('Billy', 'Bobby')
+          {
+            type: 'NOTIFICATION',
+            notificationType: 'PRAYER',
+            host: 'Billy',
+            guest: 'Bobby',
+            timeStamp: '4:53pm',
+          }
         }
       />
     );
@@ -103,11 +96,16 @@ describe('Moment tests', () => {
     );
   });
 
-  test('Joined chat notification renders public', () => {
+  test('Joined chat notification renders', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
-          publishJoinedChatNotification('Billy', 'public')
+          {
+            type: 'NOTIFICATION',
+            notificationType: 'JOINED_CHAT',
+            name: 'Billy',
+            timeStamp: '4:53pm',
+          }
         }
       />
     );
@@ -123,51 +121,16 @@ describe('Moment tests', () => {
     );
   });
 
-  test('Joined chat notification renders host', () => {
+  test('Left chat notification', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
-          publishJoinedChatNotification('Billy', 'host')
-        }
-      />
-    );
-    expect(wrapper.find(Notification).at(0).props()).toEqual(
-      {
-        notification: {
-          type: 'NOTIFICATION',
-          notificationType: 'JOINED_CHAT',
-          name: 'Billy',
-          timeStamp: '4:53pm',
-        },
-      }
-    );
-  });
-
-  test('Left chat notification renders public', () => {
-    const wrapper = Enzyme.shallow(
-      <Moment
-        data={
-          publishLeftChatNotification('Billy', 'public')
-        }
-      />
-    );
-    expect(wrapper.find(Notification).at(0).props()).toEqual(
-      {
-        notification: {
-          type: 'NOTIFICATION',
-          notificationType: 'LEFT_CHAT',
-          name: 'Billy',
-          timeStamp: '4:53pm',
-        },
-      }
-    );
-  });
-
-  test('Left chat notification renders host', () => {
-    const wrapper = Enzyme.shallow(
-      <Moment
-        data={
-          publishLeftChatNotification('Billy', 'host')
+          {
+            type: 'NOTIFICATION',
+            notificationType: 'LEFT_CHAT',
+            name: 'Billy',
+            timeStamp: '4:53pm',
+          }
         }
       />
     );
@@ -187,7 +150,14 @@ describe('Moment tests', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
-          publishPrayerRequestNotification('Billy', true)
+          {
+            type: 'ACTIONABLE_NOTIFICATION',
+            notificationType: 'PRAYER_REQUEST',
+            name: 'Billy',
+            timeStamp: '4:53pm',
+            active: true,
+            action: acceptPrayerRequest,
+          }
         }
       />
     );
@@ -234,13 +204,20 @@ describe('Moment tests', () => {
   test('Text renders', () => {
     const wrapper = Enzyme.shallow(
       <Moment
-        data={{type: 'BASIC_TEXT', text: 'Chat request pending'}}
+        data={
+          {
+            type: 'BASIC_TEXT',
+            text: 'Chat request pending',
+          }
+        }
       />
     );
-    expect(wrapper.find(Text).at(0).props().text).toEqual(
+    expect(wrapper.find(Text).at(0).props()).toEqual(
       {
-        type: 'BASIC_TEXT',
-        text: 'Chat request pending',
+        text: {
+          type: 'BASIC_TEXT',
+          text: 'Chat request pending',
+        },
       }
     );
   });
