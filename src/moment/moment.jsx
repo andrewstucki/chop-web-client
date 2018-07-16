@@ -6,12 +6,11 @@ import {
   MESSAGE,
   Notification,
   ActionableNotification,
-  Text
+  Text,
 } from './index';
 import { NOTIFICATION } from './notification/dux';
 import { ACTIONABLE_NOTIFICATION } from './actionableNotification/dux';
 import { BASIC_TEXT } from './text/dux';
-import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
 
 import type { MomentType } from './dux';
 
@@ -27,22 +26,18 @@ const Moment = ({data}: MomentPropType) => {
         message={data}
       />
     );
-  case PUBLISH_MOMENT_TO_CHANNEL: {
-    switch (data.moment.type) {
-    case NOTIFICATION:
-      return (
-        <Notification
-          notification={data.moment}
-        />
-      );
-    case ACTIONABLE_NOTIFICATION:
-      return (
-        <ActionableNotification
-          notification={data.moment}
-        />
-      ); 
-    }
-  }
+  case NOTIFICATION:
+    return (
+      <Notification
+        notification={data.moment}
+      />
+    );
+  case ACTIONABLE_NOTIFICATION:
+    return (
+      <ActionableNotification
+        notification={data.moment}
+      />
+    );
   case BASIC_TEXT:
     return (
       <Text

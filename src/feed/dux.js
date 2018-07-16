@@ -138,10 +138,7 @@ const removeChannel = (channel: string): RemoveChannelType => (
 // Default State
 
 const defaultState = {
-  channels: {
-    public: [],
-    host: [],
-  },
+  channels: {},
   currentChannel: '',
   chatInput: '',
   currentUser: {
@@ -211,7 +208,7 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel.name]:  action.channel,
+        [action.channel.name]: action.channel,
       },
     };
   case REMOVE_CHANNEL: {
@@ -219,7 +216,7 @@ const reducer = (
       action.channel === 'host') {
       return state;
     }
-    const stateCopy = {...state};
+    const stateCopy = { ...state };
     if (action.channel === state.currentChannel) {
       if (state.channels.public) {
         stateCopy.currentChannel = 'public';
@@ -230,12 +227,12 @@ const reducer = (
     delete stateCopy.channels[action.channel];
     return stateCopy;
   }
-  case CHAT_INPUT: 
+  case CHAT_INPUT:
     return {
       ...state,
       chatInput: action.value,
     };
-  case SET_USER: 
+  case SET_USER:
     return {
       ...state,
       currentUser: {
@@ -250,14 +247,17 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: state.channels[state.currentChannel].moments.map(
-          message => (
-            {
-              ...message,
-              messageTrayOpen: message.id === id,
-            }
-          )
-        ),
+        [state.currentChannel]: {
+          ...state.channels[state.currentChannel],
+          moments: state.channels[state.currentChannel].moments.map(
+            message => (
+              {
+                ...message,
+                messageTrayOpen: message.id === id,
+              }
+            )
+          ),
+        },
       },
     };
   }
@@ -267,14 +267,17 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: state.channels[state.currentChannel].moments.map(
-          message => (
-            {
-              ...message,
-              messageTrayOpen: message.id === id ? false : null,
-            }
-          )
-        ),
+        [state.currentChannel]: {
+          ...state.channels[state.currentChannel],
+          moments: state.channels[state.currentChannel].moments.map(
+            message => (
+              {
+                ...message,
+                messageTrayOpen: message.id === id ? false : null,
+              }
+            )
+          ),
+        },
       },
     };
   }
@@ -284,14 +287,17 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: state.channels[state.currentChannel].map(
-          message => (
-            {
-              ...message,
-              closeTrayButtonRendered: message.id === id ? !message.closeTrayButtonRendered : null,
-            }
-          )
-        ),
+        [state.currentChannel]: {
+          ...state.channels[state.currentChannel],
+          moments: state.channels[state.currentChannel].moments.map(
+            message => (
+              {
+                ...message,
+                closeTrayButtonRendered: message.id === id ? !message.closeTrayButtonRendered : null,
+              }
+            )
+          ),
+        },
       },
     };
   }
@@ -317,10 +323,13 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: [
+        [action.channel]: {
           ...state.channels[action.channel],
-          action.moment,
-        ],
+          moments: [
+            ...state.channels[action.channel].moments,
+            action.moment,
+          ],
+        },
       },
     };
   }

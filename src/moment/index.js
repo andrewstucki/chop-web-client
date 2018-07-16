@@ -8,5 +8,5 @@ export {
   Message,
   Notification,
   ActionableNotification,
-  Text
+  Text,
 };

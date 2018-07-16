@@ -7,8 +7,16 @@ describe('NavBar tests', () => {
     const result = getChannels(
       {
         channels: {
-          public: { moments: [] },
-          host: { moments: [] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -38,6 +46,8 @@ describe('NavBar tests', () => {
       {
         channels: {
           public: {
+            id: '12345',
+            name: 'public',
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -45,7 +55,11 @@ describe('NavBar tests', () => {
               },
             ],
           },
-          host: { moments: [] },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -75,6 +89,8 @@ describe('NavBar tests', () => {
       {
         channels: {
           public: {
+            id: '12345',
+            name: 'public',
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -83,6 +99,8 @@ describe('NavBar tests', () => {
             ],
           },
           host: {
+            id: '12345',
+            name: 'host',
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -121,6 +139,8 @@ describe('NavBar tests', () => {
         channels: {
           ...defaultFeedState.channels,
           direct: {
+            id: '12345',
+            name: 'direct',
             moments: [],
             participants: [
               {
@@ -150,12 +170,18 @@ describe('NavBar tests', () => {
         channels: {
           ...defaultFeedState.channels,
           request: {
+            id: '12345',
+            name: 'request',
             moments: [],
           },
           command: {
+            id: '12345',
+            name: 'command',
             moments: [],
           },
           public: {
+            id: '12345',
+            name: 'public',
             moments: [],
           },
         },

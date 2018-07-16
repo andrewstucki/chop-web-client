@@ -127,6 +127,8 @@ describe('Chat', () => {
         channels: {
           ...defaultFeedState.channels,
           direct: {
+            id: '12345',
+            name: 'direct',
             moments: [],
             participants: [
               {

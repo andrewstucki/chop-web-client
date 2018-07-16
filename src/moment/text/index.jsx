@@ -6,7 +6,7 @@ import styles from './styles.css';
 
 const Text = (
   {
-    text
+    text,
   }: TextType) => (
   <div>
     <div className={styles.text}>

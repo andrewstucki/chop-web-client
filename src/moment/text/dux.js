@@ -9,9 +9,9 @@ type TextType = {
 // Exports
 
 export type {
-  TextType
+  TextType,
 };
 
 export {
-  BASIC_TEXT
+  BASIC_TEXT,
 };

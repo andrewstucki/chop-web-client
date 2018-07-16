@@ -51,8 +51,16 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: { moments: [] },
-          host:{ moments: [] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'pubic',
       }
@@ -62,8 +70,16 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: { moments:[] },
-          host: { moments:[] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'host',
         appendingMessage: false,
@@ -82,7 +98,11 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: { moments: [] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
         },
         currentChannel: 'public',
         chatInput: 'this is a message',
@@ -107,8 +127,16 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: { moments: [] },
-          host: { moments: [] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
         },
         currentChannel: 'host',
         chatInput: 'this is a string',
@@ -119,12 +147,12 @@ describe('Feed tests', () => {
       },
       addToCurrentChannel()
     );
-    expect(result.channels.public.length).toEqual(0);
-    expect(result.channels.host.length).toEqual(1);
-    expect(result.channels.host[0].text).toEqual('this is a string');
-    expect(result.channels.host[0].user.id).toEqual('12345');
-    expect(result.channels.host[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.host[0].id.length).toEqual(36);
+    expect(result.channels.public.moments.length).toEqual(0);
+    expect(result.channels.host.moments.length).toEqual(1);
+    expect(result.channels.host.moments[0].text).toEqual('this is a string');
+    expect(result.channels.host.moments[0].user.id).toEqual('12345');
+    expect(result.channels.host.moments[0].user.nickname).toEqual('Billy Bob');
+    expect(result.channels.host.moments[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
   });
 
@@ -132,6 +160,14 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+        },
         currentChannel: 'public',
         chatInput: 'this is a string',
       },
@@ -159,7 +195,11 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: { moments: [] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
         },
       },
       addChannel('host', '12345')
@@ -168,7 +208,11 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: { moments: [] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
           host: {
             id: '12345',
             moments: [],
@@ -185,7 +229,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
       },
-      addChannel('direct', '12345', [{id: '12345', nickname: 'Bobby G.'}])
+      addChannel('direct', '12345', [{ id: '12345', nickname: 'Bobby G.' }])
     );
     expect(result).toEqual(
       {
@@ -208,8 +252,32 @@ describe('Feed tests', () => {
   });
 
   test('add a channel that already exists', () => {
-    const result = reducer(defaultState, addChannel('host'));
-    expect(result).toEqual(defaultState);
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
+        },
+      }
+      , addChannel('host', '12345'));
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
+        },
+      }
+    );
   });
 
   test('remove channel', () => {
@@ -217,7 +285,11 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          other: { moment: [] },
+          other: {
+            id: '12345',
+            name: 'other',
+            moments: [],
+          },
         },
       },
       removeChannel('other'));
@@ -230,7 +302,11 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: [],
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
         },
       },
       removeChannel('public')
@@ -240,7 +316,11 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          public: { moments: [] },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
         },
       },
     );
@@ -252,7 +332,11 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          other: { moments: [] },
+          other: {
+            id: '12345',
+            name: 'other',
+            moments: [],
+          },
         },
         currentChannel: 'other',
       },
@@ -267,19 +351,21 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           public: {
-            moments: 
-            [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                user: {
+            id: '12345',
+            name: 'public',
+            moments:
+              [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  text: 'I like socks',
+                  user: {
+                    id: '12345',
+                    nickname: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
                 },
-                messageTrayOpen: false,
-              },
-            ],
+              ],
           },
         },
         currentChannel: 'public',
@@ -309,21 +395,27 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: { moments: [] },
+          public: { 
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
           host: {
-            moments: 
-            [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                user: {
+            id: '12345',
+            name: 'host',
+            moments:
+              [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  text: 'I like socks',
+                  user: {
+                    id: '12345',
+                    nickname: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
                 },
-                messageTrayOpen: false,
-              },
-            ],
+              ],
           },
         },
         currentChannel: 'host',
@@ -351,7 +443,7 @@ describe('Feed tests', () => {
   test('feedContents works without a channel', () => {
     expect(feedContents(defaultState)).toEqual([]);
   });
-  
+
   test('Feed listens to message input', () => {
     const result = reducer(defaultState, chatInput('Hello'));
     expect(result).toEqual(
@@ -389,6 +481,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           public: {
+            id: '12345',
+            name: 'public',
             moments: [
               {
                 type: MESSAGE,
@@ -410,18 +504,21 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'public',
       }
@@ -434,6 +531,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           host: {
+            id: '12345',
+            name: 'host',
             moments: [
               {
                 type: MESSAGE,
@@ -455,18 +554,21 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          host: 
-          [
-            {
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'host',
       }
@@ -479,6 +581,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           public: {
+            id: '12345',
+            name: 'public',
             moments: [
               {
                 type: MESSAGE,
@@ -500,18 +604,21 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
               },
-              messageTrayOpen: false,
-            },
-          ],
+            ],
+          },
         },
         currentChannel: 'public',
       }
@@ -523,41 +630,49 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              type: MESSAGE,
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: MESSAGE,
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: true,
+                closeTrayButtonRendered: false,
               },
-              messageTrayOpen: true,
-              closeTrayButtonRendered: false,
-            },
-          ],
+            ],
+          },
         },
+        currentChannel: 'public',
       },
       toggleCloseTrayButton('123'));
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: true,
+                closeTrayButtonRendered: true,
               },
-              messageTrayOpen: true,
-              closeTrayButtonRendered: true,
-            },
-          ],
+            ],
+          },
         },
+        currentChannel: 'public',
       }
     );
   });
@@ -567,41 +682,49 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              type: MESSAGE,
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: MESSAGE,
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
+                closeTrayButtonRendered: true,
               },
-              messageTrayOpen: false,
-              closeTrayButtonRendered: true,
-            },
-          ],
+            ],
+          },
         },
+        currentChannel: 'public',
       },
       toggleCloseTrayButton('123'));
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              id: '123',
-              text: 'I like socks',
-              user: {
-                id: '12345',
-                nickname: 'Billy Bob',
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                id: '123',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  nickname: 'Billy Bob',
+                },
+                messageTrayOpen: false,
+                closeTrayButtonRendered: false,
               },
-              messageTrayOpen: false,
-              closeTrayButtonRendered: false,
-            },
-          ],
+            ],
+          },
         },
+        currentChannel: 'public',
       }
     );
   });
@@ -612,6 +735,8 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           public: {
+            id: '12345',
+            name: 'public',
             moments: [
               {
                 type: MESSAGE,
@@ -654,27 +779,27 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: 
-          [
-            {
-              id: '189',
-              text: 'Hello Billy Bob',
-              user: {
-                id: '14543',
-                nickname: 'Jenny Jane',
+          public:
+            [
+              {
+                id: '189',
+                text: 'Hello Billy Bob',
+                user: {
+                  id: '14543',
+                  nickname: 'Jenny Jane',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-            {
-              id: '204',
-              text: 'George is very angry',
-              user: {
-                id: '18475',
-                nickname: 'George Costanza',
+              {
+                id: '204',
+                text: 'George is very angry',
+                user: {
+                  id: '18475',
+                  nickname: 'George Costanza',
+                },
+                messageTrayOpen: true,
               },
-              messageTrayOpen: true,
-            },
-          ],
+            ],
         },
         currentChannel: 'public',
       },
@@ -683,104 +808,167 @@ describe('Feed tests', () => {
 
   test('Can publish a prayer notification', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
+        },
+        currentChannel: 'host',
+      },
       publishPrayerNotification('Boofie', 'Beefie')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          ...defaultState.channels,
-          host: [
-            ...defaultState.channels.host,
-            {
-              type: 'NOTIFICATION',
-              notificationType: 'PRAYER',
-              host: 'Boofie',
-              guest: 'Beefie',
-              timeStamp: '4:53pm',
-            },
-          ],
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'NOTIFICATION',
+                notificationType: 'PRAYER',
+                host: 'Boofie',
+                guest: 'Beefie',
+                timeStamp: '4:53pm',
+              },
+            ],
+          },
         },
+        currentChannel: 'host',
       }
     );
   });
 
   test('Can publish a joined chat notification public', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+        },
+        currentChannel: 'public',
+      },
       publishJoinedChatNotification('Boofie', 'public')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          ...defaultState.channels,
-          public: [
-            ...defaultState.channels.public,
-            {
-              type: 'NOTIFICATION',
-              notificationType: 'JOINED_CHAT',
-              name: 'Boofie',
-              timeStamp: '4:53pm',
-            },
-          ],
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: 'NOTIFICATION',
+                notificationType: 'JOINED_CHAT',
+                name: 'Boofie',
+                timeStamp: '4:53pm',
+              },
+            ],
+          },
         },
+        currentChannel: 'public',
       }
     );
   });
 
   test('Can publish a joined chat notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
+        },
+        currentChannel: 'host',
+      },
       publishJoinedChatNotification('Boofie', 'host')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          ...defaultState.channels,
-          host: [
-            ...defaultState.channels.host,
-            {
-              type: 'NOTIFICATION',
-              notificationType: 'JOINED_CHAT',
-              name: 'Boofie',
-              timeStamp: '4:53pm',
-            },
-          ],
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'NOTIFICATION',
+                notificationType: 'JOINED_CHAT',
+                name: 'Boofie',
+                timeStamp: '4:53pm',
+              },
+            ],
+          },
         },
+        currentChannel: 'host',
       }
     );
   });
 
   test('Can publish a left chat notification public', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+        },
+        currentChannel: 'public',
+      },
       publishLeftChatNotification('Boofie', 'public')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          ...defaultState.channels,
-          public: [
-            ...defaultState.channels.public,
-            {
-              type: 'NOTIFICATION',
-              notificationType: 'LEFT_CHAT',
-              name: 'Boofie',
-              timeStamp: '4:53pm',
-            },
-          ],
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: 'NOTIFICATION',
+                notificationType: 'LEFT_CHAT',
+                name: 'Boofie',
+                timeStamp: '4:53pm',
+              },
+            ],
+          },
         },
+        currentChannel: 'public',
       }
     );
   });
 
   test('Can publish a left chat notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        channels: {
+          host: {
+
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
+        },
+        currentChannel: 'host',
+      },
       publishLeftChatNotification('Boofie', 'host')
     );
     expect(result).toEqual(
@@ -788,23 +976,38 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          host: [
-            ...defaultState.channels.host,
-            {
-              type: 'NOTIFICATION',
-              notificationType: 'LEFT_CHAT',
-              name: 'Boofie',
-              timeStamp: '4:53pm',
-            },
-          ],
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'NOTIFICATION',
+                notificationType: 'LEFT_CHAT',
+                name: 'Boofie',
+                timeStamp: '4:53pm',
+              },
+            ],
+          },
         },
+        currentChannel: 'host',
       }
     );
   });
 
   test('Can publish a prayer request notification host', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        channels: {
+          host: {
+
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
+        },
+        currentChannel: 'host',
+      },
       publishPrayerRequestNotification('Boofie', true)
     );
     expect(result).toEqual(
@@ -812,19 +1015,23 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          host: [
-            ...defaultState.channels.host,
-            {
-              type: 'ACTIONABLE_NOTIFICATION',
-              notificationType: 'PRAYER_REQUEST',
-              name: 'Boofie',
-              timeStamp: '4:53pm',
-              active: true,
-              action: acceptPrayerRequest,
-            },
-          ],
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                name: 'Boofie',
+                timeStamp: '4:53pm',
+                active: true,
+                action: acceptPrayerRequest,
+              },
+            ],
+          },
         },
-      }
+        currentChannel: 'host',
+      },
     );
   });
 });

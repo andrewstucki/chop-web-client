@@ -210,8 +210,8 @@ describe('Moment tests', () => {
     );
     expect(wrapper.find(Text).at(0).props().text).toEqual(
       {
-        type: "BASIC_TEXT",
-        text: 'Chat request pending'
+        type: 'BASIC_TEXT',
+        text: 'Chat request pending',
       }
     );
   });
