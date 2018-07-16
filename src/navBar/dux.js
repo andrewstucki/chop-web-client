@@ -15,12 +15,15 @@ type ChannelsListType = Array<ChannelType>;
 // Selectors
 
 const getChannels = (state: FeedType): ChannelsListType => (
-  Object.keys(state.channels).map(id => ({
+  Object.keys(state.channels).filter(id => id !== 'request' && id !== 'command').map(id => ({
     id,
     isCurrent: state.currentChannel === id,
-    hasActions: state.channels[id].filter(moment => (
+    hasActions: state.channels[id].moments.filter(moment => (
       moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
     )).length > 0,
+    directChatParticipant: state.channels[id].participants && state.channels[id].participants[0].nickname ?
+      state.channels[id].participants[0].nickname :
+      undefined,
   }))
 );
 

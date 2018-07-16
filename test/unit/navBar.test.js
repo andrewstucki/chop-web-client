@@ -1,13 +1,22 @@
 // @flow
 import { getChannels } from '../../src/navBar/dux';
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
 describe('NavBar tests', () => {
   test('channel selector test', () => {
     const result = getChannels(
       {
         channels: {
-          public: [],
-          host: [],
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -45,13 +54,21 @@ describe('NavBar tests', () => {
     const result = getChannels(
       {
         channels: {
-          public: [
-            {
-              type: 'ACTIONABLE_NOTIFICATION',
-              active: true,
-            },
-          ],
-          host: [],
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                active: true,
+              },
+            ],
+          },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -89,18 +106,26 @@ describe('NavBar tests', () => {
     const result = getChannels(
       {
         channels: {
-          public: [
-            {
-              type: 'ACTIONABLE_NOTIFICATION',
-              active: false,
-            },
-          ],
-          host: [
-            {
-              type: 'ACTIONABLE_NOTIFICATION',
-              active: true,
-            },
-          ],
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                active: false,
+              },
+            ],
+          },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                active: true,
+              },
+            ],
+          },
         },
         currentChannel: 'public',
         chatInput: '',
@@ -132,5 +157,71 @@ describe('NavBar tests', () => {
         hasActions: true,
       },
     ]);
+  });
+
+  test('direct chat name', () => {
+    expect(getChannels(
+      {
+        ...defaultFeedState,
+        channels: {
+          ...defaultFeedState.channels,
+          direct: {
+            id: '12345',
+            name: 'direct',
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bob',
+              },
+            ],
+          },
+        },
+      }
+    )).toEqual(
+      [
+        {
+          id: 'direct',
+          isCurrent: false,
+          hasActions: false,
+          directChatParticipant: 'Bob',
+        },
+      ]
+    );
+  });
+
+  test('do not display request or command channels', () => {
+    expect(getChannels(
+      {
+        ...defaultFeedState,
+        channels: {
+          ...defaultFeedState.channels,
+          request: {
+            id: '12345',
+            name: 'request',
+            moments: [],
+          },
+          command: {
+            id: '12345',
+            name: 'command',
+            moments: [],
+          },
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+        },
+        currentChannel: 'public',
+      }
+    )).toEqual(
+      [
+        {
+          id: 'public',
+          isCurrent: true,
+          hasActions: false,
+        },
+      ]
+    );
   });
 });

@@ -9,6 +9,8 @@ import reducer,
   getPlaceholder,
 }  from '../../src/chat/dux';
 
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
+
 import { createMessage } from '../../src/moment';
 
 describe('Chat', () => {
@@ -98,13 +100,47 @@ describe('Chat', () => {
     });
   });
 
-  test('get placeholder', () => {
+  test('get placeholder for event', () => {
     const result = getPlaceholder(
       {
-        ...defaultState,
+        ...defaultFeedState,
+        currentChannel: 'public',
+      },
+    );
+    expect(result).toEqual('Chat');
+  });
+
+  test('get placeholder for host', () => {
+    const result = getPlaceholder(
+      {
+        ...defaultFeedState,
         currentChannel: 'host',
       },
     );
     expect(result).toEqual('Chat with hosts');
+  });
+
+  test('get placeholder for host', () => {
+    const result = getPlaceholder(
+      {
+        ...defaultFeedState,
+        channels: {
+          ...defaultFeedState.channels,
+          direct: {
+            id: '12345',
+            name: 'direct',
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bobby G.',
+              },
+            ],
+          },
+        },
+        currentChannel: 'direct',
+      },
+    );
+    expect(result).toEqual('Chat with Bobby G.');
   });
 });

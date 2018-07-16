@@ -8,6 +8,7 @@ import reducer from './chop/dux';
 import thunk from 'redux-thunk';
 import {setStore} from './io/chat';
 import { publishSalvation } from './placeholder/anchorMoment/dux';
+import { addChannel } from './feed/dux';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -92,6 +93,10 @@ const characters = [
   'Penelope Pitstop',
   'Space Ghost',
   'Huckleberry Hound',
+  'Bobby G.',
+  'Craig G.',
+  'Sam R.',
+  'Jerry H.',
 ];
 
 const characterName = characters[Math.floor(Math.random() * characters.length)];
@@ -105,34 +110,27 @@ store.dispatch(
 );
 
 setTimeout(() => {
-  store.dispatch(
+  store.dispatch(addChannel('public', 'public'));
+
+  store.dispatch(addChannel('host', 'host'));
+
+  store.dispatch(addChannel('request', 'request'));
+
+  store.dispatch(addChannel('public', 'public'));
+
+  const participantName = characters[Math.floor(Math.random() * characters.length)];
+
+  store.dispatch(addChannel('direct', 'direct',  [
     {
-      type: 'ADD_CHAT',
-      channelId: 'public',
-      channelToken: 'public',
-    }
-  );
+      id: new Date().getTime().toString(),
+      nickname: participantName,
+    },
+  ]));
 
   store.dispatch(
     {
-      type: 'ADD_CHAT',
-      channelId: 'host',
-      channelToken: 'host',
-    }
-  );
-
-  store.dispatch(
-    {
-      type: 'ADD_CHAT',
-      channelId: 'request',
-      channelToken: 'request',
-    }
-  );
-  store.dispatch(
-    {
-      type: 'ADD_CHAT',
-      channelId: 'command',
-      channelToken: 'command',
+      type: 'CHANGE_CHANNEL',
+      channel: 'public',
     }
   );
   store.dispatch(publishSalvation(2));

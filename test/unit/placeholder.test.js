@@ -97,8 +97,16 @@ describe('PlaceHolder tests', () => {
     const result = getCurrentChannel(
       {
         channels: {
-          public: [],
-          host: [],
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'host',
         chatInput: '',

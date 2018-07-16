@@ -8,6 +8,7 @@ import type {
 import type {
   ReceiveMessageType,
   ChangeChannelType,
+  AddChannelType,
 } from '../../../src/feed/dux';
 
 import {
@@ -15,12 +16,11 @@ import {
   CHAT_INPUT,
 } from '../../../src/chat/dux';
 import { createMessage } from '../../../src/moment';
-import { CHANGE_CHANNEL } from '../../../src/feed/dux';
+import { CHANGE_CHANNEL, ADD_CHANNEL } from '../../../src/feed/dux';
 
 // Actions
 const SET_CHAT_KEYS = 'SET_CHAT_KEYS';
 const SET_USER = 'SET_USER';
-const ADD_CHAT = 'ADD_CHAT';
 
 // Flow Types
 
@@ -50,16 +50,11 @@ type SetUser = {
   nickname: string,
 };
 
-type AddChat = {
-  type: 'ADD_CHAT',
-  channelId: string,
-  channelToken: string,
-};
 
 type IOChatActionTypes =
   | SetChatKeys
   | SetUser
-  | AddChat
+  | AddChannelType
   | ChatInputAction
   | PublishMessageAction
   | ReceiveMessageType
@@ -80,14 +75,6 @@ const setUser = (id: string, nickname: string): SetUser => (
     type: SET_USER,
     id,
     nickname,
-  }
-);
-
-const addChat = (channelId: string, channelToken: string): AddChat => (
-  {
-    type: ADD_CHAT,
-    channelId,
-    channelToken,
   }
 );
 
@@ -129,13 +116,13 @@ const getReducer = (chatIO: Chat) => (
           nickname: action.nickname,
         },
       };
-    case ADD_CHAT:
-      chatIO.addChat(action.channelId, action.channelToken);
+    case ADD_CHANNEL:
+      chatIO.addChat(action.channel.name, action.channel.id);
       return {
         ...state,
         chats: {
           ...state.chats,
-          [action.channelId]: action.channelToken,
+          [action.channel.name]: action.channel.id,
         },
       };
     case PUBLISH_MESSAGE:
@@ -177,7 +164,6 @@ export {
 export {
   setChatKeys,
   setUser,
-  addChat,
 };
 
 export default getReducer;

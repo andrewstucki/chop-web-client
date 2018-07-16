@@ -30,6 +30,9 @@ describe('Chat Functional', () => {
     await page.goto('http://0.0.0.0:8080/');
     await page.waitForSelector('#chat');
 
+    // wait for channel to be added
+    await page.waitForSelector('#nav-public');
+
     await page.click('#chat');
     await page.type('#chat', 'Hello');
     await page.click('#chat-button');

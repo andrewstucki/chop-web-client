@@ -13,11 +13,8 @@ import { NOTIFICATION } from './notification/dux';
 import { ACTIONABLE_NOTIFICATION } from './actionableNotification/dux';
 import { BASIC_TEXT } from './text/dux';
 import { AVATAR_MOMENT } from './avatarMoment/dux';
-
 import AnchorMoment from '../placeholder/anchorMoment';
-
 import { ANCHOR_MOMENT } from '../placeholder/anchorMoment/dux';
-
 import type { MomentType } from './dux';
 
 type MomentPropType = {

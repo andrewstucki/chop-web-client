@@ -4,7 +4,10 @@ import type { TextType } from './dux';
 
 import styles from './styles.css';
 
-const Text = ({ text }: TextType) => (
+const Text = (
+  {
+    text,
+  }: TextType) => (
   <div>
     <div className={styles.text}>
       {text.text}

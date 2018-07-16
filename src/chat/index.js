@@ -5,11 +5,12 @@ import { chatInput, toggleChatFocus, addToCurrentChannel, textEntered, getPlaceh
 
 const mapStateToProps = state => {
   const chatState = state.chat;
+  const feedState = state.feed;
   return {
     textValue: chatState.currentInput,
     focused: chatState.focused,
     textEntered: textEntered(chatState),
-    currentPlaceholder: getPlaceholder(chatState),
+    currentPlaceholder: getPlaceholder(feedState),
   };
 };
 
