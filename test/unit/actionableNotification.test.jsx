@@ -17,7 +17,11 @@ describe('Actionable notification test', () => {
           {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
-            name: 'yablby',
+            id: '12345',
+            user: {
+              id: '12345',
+              nickname: 'yablby',
+            },
             timeStamp: '9:33pm',
             active: true,
             action: acceptPrayerRequest,
@@ -43,7 +47,11 @@ describe('Actionable notification test', () => {
           {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
-            name: 'yablby',
+            id: '12345',
+            user: {
+              id: '12345',
+              nickname: 'yablby',
+            },
             timeStamp: '9:33pm',
             active: false,
             action: () => {},

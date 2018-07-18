@@ -18,16 +18,7 @@ import {
 
 import { MESSAGE } from '../../src/moment/dux';
 
-import {
-  publishPrayerNotification,
-  publishJoinedChatNotification,
-  publishLeftChatNotification,
-} from '../../src/moment/notification/dux';
-
-import {
-  publishPrayerRequestNotification,
-  acceptPrayerRequest,
-} from '../../src/moment/actionableNotification/dux';
+import { acceptPrayerRequest } from '../../src/moment/actionableNotification/dux';
 
 import {
   addToCurrentChannel,
@@ -829,7 +820,18 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishPrayerNotification('Boofie', 'Beefie')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'PRAYER',
+          id: '12345',
+          host: 'Boofie',
+          guest: 'Beefie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -842,6 +844,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'PRAYER',
+                id: '12345',
                 host: 'Boofie',
                 guest: 'Beefie',
                 timeStamp: '4:53pm',
@@ -867,7 +870,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'public',
       },
-      publishJoinedChatNotification('Boofie', 'public')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'JOINED_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -881,6 +894,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'JOINED_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -905,7 +919,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishJoinedChatNotification('Boofie', 'host')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'JOINED_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -919,6 +943,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'JOINED_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -943,7 +968,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'public',
       },
-      publishLeftChatNotification('Boofie', 'public')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'LEFT_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -957,6 +992,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'LEFT_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -982,7 +1018,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishLeftChatNotification('Boofie', 'host')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'LEFT_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -997,6 +1043,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'LEFT_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -1075,7 +1122,22 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishPrayerRequestNotification('Boofie', true)
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'ACTIONABLE_NOTIFICATION',
+          notificationType: 'PRAYER_REQUEST',
+          user: {
+            id: '5893',
+            nickname: 'Boofie',
+          },
+          id: '12345',
+          timeStamp: '4:53pm',
+          active: true,
+          action: acceptPrayerRequest,
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -1090,7 +1152,11 @@ describe('Feed tests', () => {
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
-                name: 'Boofie',
+                id: '12345',
+                user: {
+                  id: '5893',
+                  nickname: 'Boofie',
+                },
                 timeStamp: '4:53pm',
                 active: true,
                 action: acceptPrayerRequest,

@@ -56,6 +56,7 @@ storiesOf('Moment', module)
           {
             type: 'NOTIFICATION',
             notificationType: 'PRAYER',
+            id: '12345',
             host: 'Pickle',
             guest: 'Cucumber',
             timeStamp: '9:33pm',
@@ -71,6 +72,7 @@ storiesOf('Moment', module)
           {
             type: 'NOTIFICATION',
             notificationType: 'JOINED_CHAT',
+            id: '12345',
             name: 'Pickle',
             timeStamp: '9:33pm',
           }
@@ -85,6 +87,7 @@ storiesOf('Moment', module)
           {
             type: 'NOTIFICATION',
             notificationType: 'LEFT_CHAT',
+            id: '12345',
             name: 'Pickle',
             timeStamp: '9:33pm',
           }
@@ -99,7 +102,11 @@ storiesOf('Moment', module)
           {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
-            name: 'Pickle',
+            id: '12345',
+            user: {
+              id: '12345',
+              nickname: 'Pickle',
+            },
             timeStamp: '9:33pm',
             active: true,
             action: action('clicked'),
@@ -115,7 +122,11 @@ storiesOf('Moment', module)
           {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
-            name: 'Pickle',
+            id: '12345',
+            user: {
+              id: '12345',
+              nickname: 'Pickle',
+            },
             timeStamp: '9:33pm',
             active: false,
             action: action('clicked'),

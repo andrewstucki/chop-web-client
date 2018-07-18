@@ -16,7 +16,7 @@ type ActionableNotificationPropsType = {
 
 const prayerRequestNotificationText = (
   {
-    name,
+    user,
     timeStamp,
     active,
     action,
@@ -38,7 +38,7 @@ const prayerRequestNotificationText = (
       />
       <div className={styles.text}>
         <div>
-          <strong>{name} </strong>has requested prayer
+          <strong>{user.nickname} </strong>has requested prayer
         </div>
         <div className={styles.timeStamp}>{timeStamp}</div>
       </div>

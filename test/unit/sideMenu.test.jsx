@@ -13,6 +13,8 @@ describe('SideBar tests', () => {
   test('SideBar renders', () => {
     const closeFunction = () => {};
     const wrapper = Enzyme.shallow(
+      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // $FlowFixMe
       <SideMenu
         logout={() => {}}
         close={closeFunction}
@@ -25,6 +27,8 @@ describe('SideBar tests', () => {
 
   test('SideBar has link to guest experience', () => {
     const wrapper = Enzyme.shallow(
+      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // $FlowFixMe
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -40,6 +44,8 @@ describe('SideBar tests', () => {
 
   test('SideBar has link to give feedback', () => {
     const wrapper = Enzyme.shallow(
+      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // $FlowFixMe
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -56,6 +62,8 @@ describe('SideBar tests', () => {
   test('SideBar has logout button', () => {
     const logoutButton = sinon.spy();
     const wrapper = Enzyme.mount(
+      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // $FlowFixMe
       <SideMenu
         logout={logoutButton}
         close={() => {}}

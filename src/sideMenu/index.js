@@ -1,7 +1,10 @@
 // @flow
-import SideMenu from './sideMenu';
-import { closeMenu, logout } from './dux';
 import { connect } from 'react-redux';
+
+import { closeMenu, logout } from './dux';
+import { publishPrayerRequestNotification } from '../moment/actionableNotification/dux';
+
+import SideMenu from './sideMenu';
 
 const mapStateToProps = state => {
   const sideMenuState = state.sideMenu;
@@ -17,6 +20,9 @@ const mapDispatchToProps = dispatch => (
     onSwipe: direction => {
       if (direction === 'left') return dispatch(closeMenu());
     },
+    publishPrayerRequestNotification: (user, active) => dispatch(
+      publishPrayerRequestNotification(user, active)
+    ),
   }
 );
 

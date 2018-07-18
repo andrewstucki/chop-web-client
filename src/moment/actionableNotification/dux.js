@@ -1,6 +1,8 @@
 // @flow
+import type { UserType } from '../../feed/dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import { formatAMPM } from '../notification/dux';
+import { createUid } from '../../util';
 
 // Type Definitions
 
@@ -13,7 +15,8 @@ type ActionableNotificationType =
 type PrayerRequestNotificationType = {
   type: 'ACTIONABLE_NOTIFICATION',
   notificationType: 'PRAYER_REQUEST',
-  name: string,
+  id: string,
+  user: UserType,
   timeStamp: string,
   active: boolean,
   action: () => void,
@@ -27,14 +30,15 @@ const acceptPrayerRequest = () => (
   }
 );
 
-const publishPrayerRequestNotification = (name: string, active: boolean) => (
+const publishPrayerRequestNotification = (user: UserType, active: boolean) => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel: 'host',
     moment: {
       type: ACTIONABLE_NOTIFICATION,
       notificationType: PRAYER_REQUEST,
-      name,
+      id: createUid(),
+      user,
       active,
       timeStamp: formatAMPM(new Date),
       action: acceptPrayerRequest,

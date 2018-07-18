@@ -125,6 +125,7 @@ const getReducer = (chatIO: Chat) => (
           [action.channel.name]: action.channel.id,
         },
       };
+      // HOUSTON RECREATE THIS FOR PRAYER REQUESTS
     case PUBLISH_MESSAGE:
       chatIO.publish(
         state.currentChannel,

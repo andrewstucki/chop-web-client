@@ -1,10 +1,14 @@
 // @flow
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React from 'react';
+
+import type { UserType } from '../feed/dux';
+
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';
 import GuestExperienceLink from '../../assets/guest-experience-link.svg';
 import FeedbackLink from '../../assets/feedback-link.svg';
+
 import styles from './styles.css';
 
 type SideMenuType = {
@@ -12,6 +16,10 @@ type SideMenuType = {
   close: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   isClosed: boolean,
   onSwipe?: (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
+  publishPrayerRequestNotification: (
+    user: UserType,
+    active: boolean
+  ) => void,
 };
 
 const SideMenu = (
@@ -20,11 +28,33 @@ const SideMenu = (
     close,
     isClosed,
     onSwipe,
-  }: SideMenuType) => (
+    publishPrayerRequestNotification,
+  }: SideMenuType
+) => (
   <SideMenuComponent
     close={close}
     isClosed={isClosed}
-    swipe={onSwipe}>
+    swipe={onSwipe}
+  >
+    {
+      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+    }
+    <button
+      style={{marginBottom: '100px'}}
+      onClick={
+        () => {
+          publishPrayerRequestNotification(
+            {
+              id: '12345',
+              nickname: 'William',
+            },
+            true
+          );
+        }
+      }
+    >
+      I AM A PRAYER REQUEST!!!
+    </button>
     <a
       id="feedback"
       className={styles.feedbackLink}
