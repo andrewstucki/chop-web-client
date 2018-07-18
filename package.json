@@ -8,7 +8,7 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "webpack --config config/webpack.prod.js",
+    "build": "webpack --config config/webpack.prod.js && yarn export-storybook",
     "start": "webpack-dev-server --open --config config/webpack.dev.js",
     "server": "http-server ./dist --gzip",
     "functional": "jest --testRegex='/test/functional/.*\\.test\\.jsx?$'",
@@ -19,7 +19,8 @@
     "storybook": "start-storybook -p 9001 -c config/.storybook",
     "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/functional/ test/unit/",
     "validate": "yarn test && yarn functional && yarn flow && yarn lint && yarn snap",
-    "plato": "es6-plato -r -d ./report src"
+    "plato": "es6-plato -r -d ./report src",
+    "export-storybook": "build-storybook -c ./config/.storybook -o ./dist/storybook"
   },
   "jest": {
     "testRegex": "/test/unit/.*\\.test\\.jsx?$",
