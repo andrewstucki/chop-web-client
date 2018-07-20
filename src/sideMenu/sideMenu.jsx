@@ -37,10 +37,15 @@ const SideMenu = (
     swipe={onSwipe}
   >
     {
-      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // TODO: Remove this button after demo purposes
     }
     <button
-      style={{marginBottom: '100px'}}
+      style={
+        {
+          marginBottom: '100px',
+          border: '1px solid black',
+        }
+      }
       onClick={
         () => {
           publishPrayerRequestNotification(

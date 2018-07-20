@@ -6,15 +6,20 @@ import type {
 } from '../../../src/chat/dux';
 
 import type {
-  ReceiveMessageType,
+  ReceiveMomentType,
   ChangeChannelType,
   AddChannelType,
 } from '../../../src/feed/dux';
+
+import type { PublishMomentToChannelType } from '../../../src/moment/dux';
+
+import { PUBLISH_MOMENT_TO_CHANNEL } from '../../../src/moment/dux';
 
 import {
   PUBLISH_MESSAGE,
   CHAT_INPUT,
 } from '../../../src/chat/dux';
+
 import { createMessage } from '../../../src/moment';
 import { CHANGE_CHANNEL, ADD_CHANNEL } from '../../../src/feed/dux';
 
@@ -57,8 +62,9 @@ type IOChatActionTypes =
   | AddChannelType
   | ChatInputAction
   | PublishMessageAction
-  | ReceiveMessageType
-  | ChangeChannelType;
+  | ReceiveMomentType
+  | ChangeChannelType
+  | PublishMomentToChannelType;
 
 // Action Creators
 
@@ -125,7 +131,6 @@ const getReducer = (chatIO: Chat) => (
           [action.channel.name]: action.channel.id,
         },
       };
-      // HOUSTON RECREATE THIS FOR PRAYER REQUESTS
     case PUBLISH_MESSAGE:
       chatIO.publish(
         state.currentChannel,
@@ -134,6 +139,15 @@ const getReducer = (chatIO: Chat) => (
         ...state,
         chatInput: '',
       };
+    case PUBLISH_MOMENT_TO_CHANNEL: {
+      // $FlowFixMe
+      const { moment } = action;
+      chatIO.publish(
+        'request',
+        moment
+      );
+      return state;
+    }
     case CHAT_INPUT:
       return {
         ...state,
@@ -165,6 +179,7 @@ export {
 export {
   setChatKeys,
   setUser,
+  defaultState,
 };
 
 export default getReducer;

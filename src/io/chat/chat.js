@@ -1,6 +1,10 @@
 // @flow
-import type { MessageType } from '../../moment';
+import type { MomentType } from '../../moment';
 import { MESSAGE } from '../../moment';
+import {
+  PRAYER_REQUEST,
+  ACTIONABLE_NOTIFICATION,
+} from '../../moment/actionableNotification/dux';
 
 
 type ChatType = {
@@ -14,11 +18,11 @@ type ChatType = {
       payload: Object,
     ) => void
   ) => void,
-}
+};
 
 type Me = {
 
-}
+};
 
 type ChatEngine = {
   connect: (
@@ -27,7 +31,7 @@ type ChatEngine = {
   ) => Me,
   Chat: (channel: string) => ChatType,
   on: (event: string, (data: Object) => void) => void
-}
+};
 
 type ChatEngineCore = {
   create: (pnConfig: {
@@ -36,25 +40,26 @@ type ChatEngineCore = {
   }) => ChatEngine
 };
 
+type AddToChannel = (
+  channelId: string,
+  moment: MomentType
+) => void;
+
 class Chat {
+  // Type Definitions
   chatEngineCore: ChatEngineCore
   chatEngine: ChatEngine
   me: Me
   chats: {
     [string]: ChatType,
   }
-  addToChannel: (
-    channelId: string,
-    message: MessageType
-  ) => void
+  addToChannel: AddToChannel
   userId: string
+
 
   constructor (
     engine: ChatEngineCore,
-    addToChannel: (
-      channelId: string,
-      message: MessageType
-    ) => void
+    addToChannel: AddToChannel
   ) {
     this.chatEngineCore = engine;
     this.chats = {};
@@ -85,7 +90,7 @@ class Chat {
     return typeof(str) === 'string' || str instanceof String;
   }
 
-  validMessage (message: MessageType): boolean {
+  validMessage (message: MomentType): boolean {
     return message.type === MESSAGE &&
       this.isString(message.text) &&
       message.text.length > 0 &&
@@ -104,15 +109,21 @@ class Chat {
     return data instanceof Object;
   }
 
-  receiveMessage (channelId: string, message: MessageType): void {
+  receiveMessage (channelId: string, message: MomentType): void {
     if (this.validMessage(message)) {
       this.addToChannel(channelId, message);
     }
   }
 
-  receiveCommand (channelId: string, data: Object): void {
+  receiveCommand (channelId: string, data: MomentType): void {
     if (this.validCommand(data)) {
       switch (data.type) {
+      case ACTIONABLE_NOTIFICATION: {
+        if (data.notificationType === PRAYER_REQUEST) {
+          this.addToChannel('host', data);
+        }
+        return;
+      }
       default:
         //do nothing
       }
@@ -126,7 +137,8 @@ class Chat {
       'message',
       payload => {
         if (payload.sender.uuid !== this.userId) {
-          if (channelId === 'public') {
+          if (channelId === 'public' ||
+            channelId === 'host' || channelId === 'direct') {
             this.receiveMessage(channelId, payload.data);
           } else {
             this.receiveCommand(channelId, payload.data);
@@ -137,13 +149,13 @@ class Chat {
     this.chats[channelId] = chat;
   }
 
-  publish (channel: string, message: MessageType): void {
+  publish (channel: string, moment: MomentType): void {
     if (!this.chatEngine ||
       // !this.me ||
       !this.chats[channel]) {
       return;
     }
-    this.chats[channel].emit('message', message);
+    this.chats[channel].emit('message', moment);
   }
 }
 

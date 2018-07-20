@@ -1,7 +1,7 @@
 // @flow
 import reducer, {
   changeChannel,
-  receiveMessage,
+  receiveMoment,
   addChannel,
   removeChannel,
   feedContents,
@@ -155,7 +155,7 @@ describe('Feed tests', () => {
     expect(result.appendingMessage).toBe(true);
   });
 
-  test('adds a message to not current channel', () => {
+  test('receives a message and adds it to the appropriate channel', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -166,12 +166,18 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
           },
+          host: {
+            id: '67890',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'public',
         chatInput: 'this is a string',
         animatingMoment: false,
+        appeningMessage: true,
       },
-      receiveMessage('host', {
+      receiveMoment('host', {
         type: MESSAGE,
         id: '12345',
         text: 'Hello there',
@@ -187,6 +193,52 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('Hello there');
     expect(result.channels.host.moments[0].id.length).toEqual(5);
+    expect(result.appendingMessage).toBe(false);
+    expect(result.animatingMoment).toBe(true);
+  });
+
+  test('adds a prayer request to host', () => {
+    const action = () => {};
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '67890',
+            name: 'host',
+            moments: [],
+          },
+        },
+        currentChannel: 'public',
+        animatingMoment: false,
+        appendingMessage: true,
+      },
+      receiveMoment('host', {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
+        id: '12345',
+        user: {
+          id: '12345',
+          nickname: 'Herbert',
+        },
+        timeStamp: '4:53pm',
+        active: true,
+        action: action,
+      })
+    );
+    expect(result.channels.host.moments.length).toEqual(1);
+    expect(result.channels.host.moments[0].id.length).toEqual(5);
+    expect(result.channels.host.moments[0].user.id).toEqual('12345');
+    expect(result.channels.host.moments[0].user.nickname).toEqual('Herbert');
+    expect(result.channels.host.moments[0].timeStamp).toEqual('4:53pm');
+    expect(result.channels.host.moments[0].active).toEqual(true);
+    expect(result.channels.host.moments[0].action).toEqual(action);
     expect(result.appendingMessage).toBe(false);
     expect(result.animatingMoment).toBe(true);
   });

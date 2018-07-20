@@ -43,7 +43,7 @@ import {
 
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
-const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';//RECEIVE
+const RECEIVE_MOMENT = 'RECEIVE_MOMENT';//RECEIVE
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 
@@ -79,10 +79,10 @@ type ChangeChannelType = {
   channel: string,
 };
 
-type ReceiveMessageType = {
-  type: 'RECEIVE_MESSAGE',
+type ReceiveMomentType = {
+  type: 'RECEIVE_MOMENT',
   channel: string,
-  message: MessageType,
+  moment: MomentType,
 };
 
 type AddChannelType = {
@@ -98,7 +98,7 @@ type RemoveChannelType = {
 type FeedActionTypes =
   | ChangeChannelType
   | PublishMessageAction
-  | ReceiveMessageType
+  | ReceiveMomentType
   | AddChannelType
   | RemoveChannelType
   | ChatInputAction
@@ -117,11 +117,11 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const receiveMessage = (channel: string, message: MessageType): ReceiveMessageType => (
+const receiveMoment = (channel: string, moment: MomentType): ReceiveMomentType => (
   {
-    type: RECEIVE_MESSAGE,
+    type: RECEIVE_MOMENT,
     channel,
-    message,
+    moment,
   }
 );
 
@@ -198,22 +198,25 @@ const reducer = (
       };
     }
     return state;
-  case RECEIVE_MESSAGE:
-    return {
-      ...state,
-      appendingMessage: false,
-      animatingMoment: true,
-      channels: {
-        ...state.channels,
-        [action.channel]: {
-          ...state.channels[state.currentChannel],
-          moments: [
-            ...state.channels[state.currentChannel].moments,
-            action.message,
-          ],
+  case RECEIVE_MOMENT:
+    if (state.channels[action.channel]) {
+      return {
+        ...state,
+        appendingMessage: false,
+        animatingMoment: true,
+        channels: {
+          ...state.channels,
+          [action.channel]: {
+            ...state.channels[action.channel],
+            moments: [
+              ...state.channels[action.channel].moments,
+              action.moment,
+            ],
+          },
         },
-      },
-    };
+      };
+    }
+    return state;
   case ADD_CHANNEL:
     if (state.channels[action.channel.name]) {
       return state;
@@ -392,13 +395,13 @@ const appendMessage = (state: FeedType) => (
 
 export {
   CHANGE_CHANNEL,
-  RECEIVE_MESSAGE,
+  RECEIVE_MOMENT,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
 };
 export {
   changeChannel,
-  receiveMessage,
+  receiveMoment,
   addChannel,
   removeChannel,
   feedContents,
@@ -409,7 +412,7 @@ export type {
   AddChannelType,
   RemoveChannelType,
   MomentType,
-  ReceiveMessageType,
+  ReceiveMomentType,
   ChangeChannelType,
   UserType,
   FeedType,

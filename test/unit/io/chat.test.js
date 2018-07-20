@@ -1,7 +1,11 @@
 // @flow
-//import getReducer from '../../../src/io/chat/dux';
 import Chat from '../../../src/io/chat/chat';
-import getReducer, { setChatKeys, setUser } from '../../../src/io/chat/dux';
+import getReducer, {
+  setChatKeys,
+  setUser,
+  defaultState,
+} from '../../../src/io/chat/dux';
+
 import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
 import { changeChannel, addChannel } from '../../../src/feed/dux';
 import { MESSAGE } from '../../../src/moment/dux';
@@ -228,6 +232,46 @@ describe('Chat IO reducer test', () => {
     expect(chat.publish.mock.calls[0][0]).toEqual('default');
     expect(chat.publish.mock.calls[0][1].text).toEqual('Hello buddy');
   });
+
+  test('publish prayer request moment to channel', () => {
+    const action = () => {};
+    const result = reducer(
+      defaultState,
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'ACTIONABLE_NOTIFICATION',
+          notificationType: 'PRAYER_REQUEST',
+          id: '12345',
+          user: {
+            id: '12345',
+            nickname: 'Willaim Wallace',
+          },
+          active: true,
+          timeStamp: '4:53pm',
+          action: action,
+        },
+      }
+    );
+    expect(result).toEqual(defaultState);
+    expect(chat.publish.mock.calls.length).toBe(1);
+    expect(chat.publish.mock.calls[0][0]).toEqual('request');
+    expect(chat.publish.mock.calls[0][1]).toEqual(
+      {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
+        id: '12345',
+        user: {
+          id: '12345',
+          nickname: 'Willaim Wallace',
+        },
+        active: true,
+        timeStamp: '4:53pm',
+        action: action,
+      }
+    );
+  });
 });
 
 
@@ -344,7 +388,7 @@ describe('Chat IO Interface test', () => {
     expect(ch.emit.mock.calls.length).toBe(0);
   });
 
-  test('publish', () => {
+  test('publish message', () => {
     const chat = new Chat(engine, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('12345', 'Billy Bob');
@@ -376,6 +420,42 @@ describe('Chat IO Interface test', () => {
     );
   });
 
+  test('publish prayerRequestNotification', () => {
+    const action = () => {};
+    const chat = new Chat(engine, () => {});
+    chat.setKeys('12345', '67890');
+    chat.setUser('12345', 'William Wallace');
+    chat.addChat('request', '12345');
+    chat.publish('request', {
+      type: 'ACTIONABLE_NOTIFICATION',
+      notificationType: 'PRAYER_REQUEST',
+      id: '12345',
+      user: {
+        id: '12345',
+        nickname: 'William Wallace',
+      },
+      timeStamp: '4:53pm',
+      active: true,
+      action: action,
+    });
+    expect(ch.emit.mock.calls.length).toBe(1);
+    expect(ch.emit.mock.calls[0][0]).toEqual('message');
+    expect(ch.emit.mock.calls[0][1]).toEqual(
+      {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
+        id: '12345',
+        user: {
+          id: '12345',
+          nickname: 'William Wallace',
+        },
+        timeStamp: '4:53pm',
+        active: true,
+        action: action,
+      }
+    );
+  });
+
   test('validate message', () => {
     const chat = new Chat(engine, () => {});
     expect(chat.validMessage(
@@ -392,12 +472,11 @@ describe('Chat IO Interface test', () => {
     )).toBe(true);
   });
 
-  test('receive', () => {
+  test('receive message', () => {
     const addToChannel = jest.fn();
     const chat = new Chat(engine, addToChannel);
     chat.setKeys('12345', '67890');
     chat.setUser('bb', 'Billy Bob');
-
     
     let cb = payload => {}; /* eslint-disable-line no-unused-vars */
     ch.on = (event, callback) => {
@@ -439,6 +518,51 @@ describe('Chat IO Interface test', () => {
       }
     );
   });
+
+  // test('receive prayerRequestNotification', () => {
+  //   const action = () => {};
+  //   const addToChannel = jest.fn();
+  //   const chat = new Chat(engine, addToChannel);
+  //   chat.setKeys('12345', '67890');
+  //   chat.setUser('bb', 'Billy Bob');
+  //   chat.addChat('request', '67890');
+    
+  //   let cb = payload => payload; /* eslint-disable-line no-unused-vars */
+  //   ch.on('message', {
+  //     sender: {
+  //       uuid: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //     },
+  //     data: {
+  //       type: 'ACTIONABLE_NOTIFICATION',
+  //       notificationType: 'PRAYER_REQUEST',
+  //       id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+  //       user: {
+  //         id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //         nickname: 'Billy Bob',
+  //       },
+  //       timeStamp: '4:53pm',
+  //       active: true,
+  //       action: action,
+  //     },
+  //   });
+
+  //   expect(addToChannel.mock.calls.length).toBe(1);
+  //   expect(addToChannel.mock.calls[0][0]).toEqual('host');
+  //   expect(addToChannel.mock.calls[0][1]).toEqual(
+  //     {
+  //       type: 'ACTIONABLE_NOTIFICATION',
+  //       notificationType: 'PRAYER_REQUEST',
+  //       id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+  //       user: {
+  //         id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //         nickname: 'Billy Bob',
+  //       },
+  //       timeStamp: '4:53pm',
+  //       active: true,
+  //       action: action,
+  //     },
+  //   );
+  // });
 
   test('receive malformed message', () => {
     const addToChannel = jest.fn();
