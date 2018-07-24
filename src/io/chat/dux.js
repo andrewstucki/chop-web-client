@@ -9,6 +9,7 @@ import type {
   ReceiveMomentType,
   ChangeChannelType,
   AddChannelType,
+  InviteToChannelType,
 } from '../../../src/feed/dux';
 
 import type { PublishMomentToChannelType } from '../../../src/moment/dux';
@@ -21,7 +22,12 @@ import {
 } from '../../../src/chat/dux';
 
 import { createMessage } from '../../../src/moment';
-import { CHANGE_CHANNEL, ADD_CHANNEL } from '../../../src/feed/dux';
+
+import {
+  CHANGE_CHANNEL,
+  ADD_CHANNEL,
+  INVITE_TO_CHANNEL,
+} from '../../../src/feed/dux';
 
 // Actions
 const SET_CHAT_KEYS = 'SET_CHAT_KEYS';
@@ -64,7 +70,8 @@ type IOChatActionTypes =
   | PublishMessageAction
   | ReceiveMomentType
   | ChangeChannelType
-  | PublishMomentToChannelType;
+  | PublishMomentToChannelType
+  | InviteToChannelType;
 
 // Action Creators
 
@@ -161,6 +168,9 @@ const getReducer = (chatIO: Chat) => (
         ...state,
         currentChannel: action.channel,
       };
+    case INVITE_TO_CHANNEL:
+      chatIO.inviteToChannel(action.userId, action.channelName);
+      return state;
     default:
       return state;
     }

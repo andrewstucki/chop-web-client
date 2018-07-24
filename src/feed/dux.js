@@ -46,6 +46,7 @@ const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const RECEIVE_MOMENT = 'RECEIVE_MOMENT';//RECEIVE
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
+const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 
 // Flow Type Definitions
 
@@ -59,7 +60,7 @@ type ChannelType = {
   name: string,
   moments: Array<MomentType>,
   participants?: Array<UserType>,
-}
+};
 
 type FeedType = {
   channels: {
@@ -88,6 +89,12 @@ type ReceiveMomentType = {
 type AddChannelType = {
   type: 'ADD_CHANNEL',
   channel: ChannelType,
+};
+
+type InviteToChannelType = {
+  type: 'INVITE_TO_CHANNEL',
+  userId: string,
+  channelName: string,
 };
 
 type RemoveChannelType = {
@@ -136,6 +143,19 @@ const addChannel = (name: string, id: string, participants?: Array<UserType>): A
     },
   }
 );
+
+const inviteToChannel = (
+  userId: string,
+  channelName: string
+): InviteToChannelType => (
+  {
+    type: INVITE_TO_CHANNEL,
+    userId,
+    channelName,
+  }
+);
+
+// create inviteToChannel here as well (channelName, userId)
 
 const removeChannel = (channel: string): RemoveChannelType => (
   {
@@ -398,6 +418,7 @@ export {
   RECEIVE_MOMENT,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
+  INVITE_TO_CHANNEL,
 };
 export {
   changeChannel,
@@ -407,6 +428,7 @@ export {
   feedContents,
   defaultState,
   appendMessage,
+  inviteToChannel,
 };
 export type {
   AddChannelType,
@@ -416,6 +438,7 @@ export type {
   ChangeChannelType,
   UserType,
   FeedType,
+  InviteToChannelType,
 };
 
 export default reducer;

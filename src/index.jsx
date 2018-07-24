@@ -7,7 +7,9 @@ import Chop from './chop';
 import reducer from './chop/dux';
 import thunk from 'redux-thunk';
 import {setStore} from './io/chat';
+import { setUser } from './io/chat/dux';
 import { publishSalvation } from './placeholder/anchorMoment/dux';
+import { publishPrayerRequestNotification } from './moment/actionableNotification/dux';
 import { addChannel } from './feed/dux';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -116,7 +118,7 @@ setTimeout(() => {
 
   store.dispatch(addChannel('request', 'request'));
 
-  store.dispatch(addChannel('public', 'public'));
+  store.dispatch(addChannel('command', 'command'));
 
   const participantName = characters[Math.floor(Math.random() * characters.length)];
 
@@ -133,5 +135,6 @@ setTimeout(() => {
       channel: 'public',
     }
   );
+
   store.dispatch(publishSalvation(2));
 }, 2000);

@@ -2,7 +2,7 @@
 import getReducer, {  } from './dux';
 import Chat from './chat';
 import ChatEngineCore from 'chat-engine';
-import { receiveMoment } from '../../feed/dux';
+import { receiveMoment, addChannel } from '../../feed/dux';
 
 let _store;
 const setStore = (store: Store<any>): void => {
@@ -11,7 +11,9 @@ const setStore = (store: Store<any>): void => {
 
 const chat = new Chat(
   ChatEngineCore,
-  (channel, moment) => _store.dispatch(receiveMoment(channel, moment)));
+  (channel, moment) => _store.dispatch(receiveMoment(channel, moment)),
+  (channelName, channelId) => _store.dispatch(addChannel(channelName, channelId))
+);
 
 const reducer = getReducer(chat);
 

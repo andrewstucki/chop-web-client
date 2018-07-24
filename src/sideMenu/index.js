@@ -2,14 +2,20 @@
 import { connect } from 'react-redux';
 
 import { closeMenu, logout } from './dux';
-import { publishPrayerRequestNotification } from '../moment/actionableNotification/dux';
+// TODO: Remove publishPrayerRequestNotification after demo
+import {
+  publishPrayerRequestNotification,
+} from '../moment/actionableNotification/dux';
 
 import SideMenu from './sideMenu';
 
+// TODO remove currentUser and publishPrayerRequestNotification after demo
 const mapStateToProps = state => {
   const sideMenuState = state.sideMenu;
+  const feedState = state.feed;
   return {
     isClosed: sideMenuState.closed,
+    currentUser: feedState.currentUser,
   };
 };
 
@@ -20,8 +26,8 @@ const mapDispatchToProps = dispatch => (
     onSwipe: direction => {
       if (direction === 'left') return dispatch(closeMenu());
     },
-    publishPrayerRequestNotification: (user, active) => dispatch(
-      publishPrayerRequestNotification(user, active)
+    publishPrayerRequestNotification: user => dispatch(
+      publishPrayerRequestNotification(user)
     ),
   }
 );

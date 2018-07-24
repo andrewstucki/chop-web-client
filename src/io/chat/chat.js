@@ -18,52 +18,60 @@ type ChatType = {
       payload: Object,
     ) => void
   ) => void,
+  invite: MeType => void;
 };
 
-type Me = {
+type MeType = {
 
 };
 
-type ChatEngine = {
+type ChatEngineType = {
   connect: (
     uuid: string,
     state: Object,
-  ) => Me,
+  ) => MeType,
   Chat: (channel: string) => ChatType,
-  on: (event: string, (data: Object) => void) => void
+  on: (event: string, (data: Object) => void) => void,
+  global: {
+    users: {
+      [string]: MeType
+    }
+  }
 };
 
-type ChatEngineCore = {
+type ChatEngineCoreType = {
   create: (pnConfig: {
     publishKey: string,
     subscribeKey: string,
-  }) => ChatEngine
+  }) => ChatEngineType
 };
 
-type AddToChannel = (
+type AddToChannelType = (
   channelId: string,
   moment: MomentType
 ) => void;
 
 class Chat {
   // Type Definitions
-  chatEngineCore: ChatEngineCore
-  chatEngine: ChatEngine
-  me: Me
+  chatEngineCore: ChatEngineCoreType
+  chatEngine: ChatEngineType
+  me: MeType
   chats: {
     [string]: ChatType,
   }
-  addToChannel: AddToChannel
+  addToChannel: AddToChannelType
   userId: string
-
+  addChannel: (channelName: string, channelId: string) => void;
 
   constructor (
-    engine: ChatEngineCore,
-    addToChannel: AddToChannel
+    engine: ChatEngineCoreType,
+    addToChannel: AddToChannelType,
+    addChannel: (channelName: string, channelId: string) => void,
   ) {
     this.chatEngineCore = engine;
     this.chats = {};
     this.addToChannel = addToChannel;
+    this.addChannel = addChannel;
   }
 
   setKeys (publishKey: string, subscribeKey: string): void {
@@ -80,6 +88,9 @@ class Chat {
     this.userId = id;
     this.chatEngine.on ('$.ready', data => {
       this.me = data.me;
+      this.me.direct.on('$.invite', payload => {
+        this.addChannel(payload.data.channel, payload.data.channel);
+      });
     });
     this.chatEngine.connect(id, {
       nickname,
@@ -130,23 +141,43 @@ class Chat {
     }
   }
 
-  addChat (channelId: string, channelToken: string): void {
+  addChat (channelName: string, channelId: string): void {
     if (!this.chatEngine /*|| !this.me*/) return;
-    const chat = this.chatEngine.Chat(channelToken);
+    const chat = this.chatEngine.Chat(channelId);
     chat.on(
       'message',
       payload => {
         if (payload.sender.uuid !== this.userId) {
-          if (channelId === 'public' ||
-            channelId === 'host' || channelId === 'direct') {
-            this.receiveMessage(channelId, payload.data);
+          if (channelName === 'public' ||
+            channelName === 'host' || channelName === 'direct') {
+            this.receiveMessage(channelName, payload.data);
           } else {
-            this.receiveCommand(channelId, payload.data);
+            this.receiveCommand(channelName, payload.data);
           }
         }
       }
     );
-    this.chats[channelId] = chat;
+    this.chats[channelName] = chat;
+  }
+
+  inviteToChannel (userId: string, channelName: string): void {
+    /* chats: {
+        [channelName]: {
+          emit: func,
+          on: func,
+          invite: userId => (invite userId),
+        }
+      } */
+    const privateChat = this.chats[channelName];
+    /*  chatEngine: {
+          global: {
+            users: {
+              [userId]: {}
+            },
+          },
+        } */
+    const otherUser = this.chatEngine.global.users[userId];
+    privateChat.invite(otherUser);
   }
 
   publish (channel: string, moment: MomentType): void {
@@ -159,5 +190,6 @@ class Chat {
   }
 }
 
-export default Chat;
 export type { Chat };
+
+export default Chat;

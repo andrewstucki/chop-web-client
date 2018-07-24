@@ -109,7 +109,6 @@ storiesOf('Moment', module)
             },
             timeStamp: '9:33pm',
             active: true,
-            action: action('clicked'),
           }
         }
       />

@@ -4,11 +4,11 @@ import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import sinon from 'sinon';
 
-import ActionableNotification from '../../src/moment/actionableNotification';
+import ActionableNotification from '../../src/moment/actionableNotification/actionableNotification';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe('Actionable notification test', () => {
+describe('ActionableNotification tests', () => {
   test('Active prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
     const wrapper = Enzyme.shallow(
@@ -24,12 +24,14 @@ describe('Actionable notification test', () => {
             },
             timeStamp: '9:33pm',
             active: true,
-            action: acceptPrayerRequest,
           }
         }
+        acceptPrayerRequest={acceptPrayerRequest}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('actionableNotification');
+    expect(wrapper.find('div').at(0).props().className).toEqual(
+      'actionableNotification'
+    );
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
     expect(wrapper.find('div').at(2).text()).toEqual(
       'yablby has requested prayer'
@@ -54,9 +56,9 @@ describe('Actionable notification test', () => {
             },
             timeStamp: '9:33pm',
             active: false,
-            action: () => {},
           }
         }
+        acceptPrayerRequest={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('notification');

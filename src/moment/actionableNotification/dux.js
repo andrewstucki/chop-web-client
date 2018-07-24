@@ -19,18 +19,11 @@ type PrayerRequestNotificationType = {
   user: UserType,
   timeStamp: string,
   active: boolean,
-  action: () => void,
 };
 
 // Action Creators
 
-const acceptPrayerRequest = () => (
-  {
-    // TODO build this action
-  }
-);
-
-const publishPrayerRequestNotification = (user: UserType, active: boolean) => (
+const publishPrayerRequestNotification = (user: UserType) => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel: 'host',
@@ -39,12 +32,25 @@ const publishPrayerRequestNotification = (user: UserType, active: boolean) => (
       notificationType: PRAYER_REQUEST,
       id: createUid(),
       user,
-      active,
+      active: true,
       timeStamp: formatAMPM(new Date),
-      action: acceptPrayerRequest,
     },
   }
 );
+
+// Reducer
+
+const reducer = (
+  state: Object = {},
+  action?: ActionableNotificationType) => {
+  if (!action || !action.type) {
+    return state;
+  }
+  switch (action.type) {
+  default:
+    return state;
+  }
+};
 
 // Exports
 
@@ -55,10 +61,11 @@ export type {
 
 export {
   publishPrayerRequestNotification,
-  acceptPrayerRequest,
 };
 
 export {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
 };
+
+export default reducer;

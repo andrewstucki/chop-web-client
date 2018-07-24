@@ -20,6 +20,7 @@ type SideMenuType = {
     user: UserType,
     active: boolean
   ) => void,
+  currentUser: UserType,
 };
 
 const SideMenu = (
@@ -29,6 +30,7 @@ const SideMenu = (
     isClosed,
     onSwipe,
     publishPrayerRequestNotification,
+    currentUser,
   }: SideMenuType
 ) => (
   <SideMenuComponent
@@ -38,6 +40,7 @@ const SideMenu = (
   >
     {
       // TODO: Remove this button after demo purposes
+      // also remove currentUser and publishPrayer from props
     }
     <button
       style={
@@ -48,13 +51,7 @@ const SideMenu = (
       }
       onClick={
         () => {
-          publishPrayerRequestNotification(
-            {
-              id: '12345',
-              nickname: 'William',
-            },
-            true
-          );
+          publishPrayerRequestNotification(currentUser, true);
         }
       }
     >

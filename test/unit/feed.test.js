@@ -18,8 +18,6 @@ import {
 
 import { MESSAGE } from '../../src/moment/dux';
 
-import { acceptPrayerRequest } from '../../src/moment/actionableNotification/dux';
-
 import {
   addToCurrentChannel,
   chatInput,
@@ -1187,7 +1185,6 @@ describe('Feed tests', () => {
           id: '12345',
           timeStamp: '4:53pm',
           active: true,
-          action: acceptPrayerRequest,
         },
       }
     );
@@ -1211,7 +1208,6 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: true,
-                action: acceptPrayerRequest,
               },
             ],
           },
