@@ -120,7 +120,7 @@ describe('Chat', () => {
     expect(result).toEqual('Chat with hosts');
   });
 
-  test('get placeholder for host', () => {
+  test('get placeholder for direct chat', () => {
     const result = getPlaceholder(
       {
         ...defaultFeedState,
@@ -135,12 +135,20 @@ describe('Chat', () => {
                 id: '12345',
                 nickname: 'Bobby G.',
               },
+              {
+                id: '54353',
+                nickname: 'Shaq O.',
+              },
             ],
           },
         },
         currentChannel: 'direct',
+        currentUser: {
+          id: '12345',
+          nickname: 'Bobby G.',
+        },
       },
     );
-    expect(result).toEqual('Chat with Bobby G.');
+    expect(result).toEqual('Chat with Shaq O.');
   });
 });
