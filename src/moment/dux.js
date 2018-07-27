@@ -31,12 +31,17 @@ type MomentType =
 
 // Reducer
 
-const reducer = combineReducers(
-  {
-    message: messageReducer,
-    actionableNotification: actionableNotificationReducer,
-  }
-);
+console.log(actionableNotificationReducer)
+
+const reducersObj = {
+  message: messageReducer,
+  actionableNotification: actionableNotificationReducer,
+};
+
+console.log(reducersObj.actionableNotification);
+
+const reducer = combineReducers(reducersObj);
+
 
 // Exports
 

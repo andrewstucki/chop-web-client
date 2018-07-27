@@ -169,7 +169,7 @@ const getReducer = (chatIO: Chat) => (
         currentChannel: action.channel,
       };
     case INVITE_TO_CHANNEL:
-      chatIO.inviteToChannel(action.userId, action.channelName);
+      chatIO.inviteToChannel(action.user.id, action.channelName);
       return state;
     default:
       return state;

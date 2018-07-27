@@ -7,6 +7,8 @@ import getReducer, {
 } from '../../../src/io/chat/dux';
 
 import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
+// TODO write a test for acceptPrayerRequest and update everyone's feed
+// import { acceptPrayerRequest } from '../../../src/moment/actionableNotification/dux';
 
 import {
   changeChannel,

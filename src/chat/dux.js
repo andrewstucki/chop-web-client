@@ -100,12 +100,19 @@ const textEntered = (state: ChatState) =>
   (state) ? state.currentInput.length > 0 : false;
 
 const getPlaceholder = (state: FeedType) => {
+  const currentChannelObj = state.channels[state.currentChannel];
   if (state.currentChannel === 'host') {
     return 'Chat with hosts';
-  } else if (state.channels[state.currentChannel] &&
-      state.channels[state.currentChannel].participants &&
-      state.channels[state.currentChannel].participants.length) {
-    return `Chat with ${state.channels[state.currentChannel].participants[0].nickname}`;
+  } else if (currentChannelObj &&
+    currentChannelObj.participants &&
+    currentChannelObj.participants.length
+  ) {
+    const isUserFirstParticipant = currentChannelObj.participants[0].id === state.currentUser.id;
+    const firstParticipantName = currentChannelObj.participants[0].nickname;
+    const secondParticipantName = currentChannelObj.participants[1].nickname;
+
+    const otherUserName = isUserFirstParticipant ? secondParticipantName : firstParticipantName;
+    return `Chat with ${otherUserName}`;
   } else {
     return 'Chat';
   }

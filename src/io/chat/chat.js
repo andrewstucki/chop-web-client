@@ -161,21 +161,7 @@ class Chat {
   }
 
   inviteToChannel (userId: string, channelName: string): void {
-    /* chats: {
-        [channelName]: {
-          emit: func,
-          on: func,
-          invite: userId => (invite userId),
-        }
-      } */
     const privateChat = this.chats[channelName];
-    /*  chatEngine: {
-          global: {
-            users: {
-              [userId]: {}
-            },
-          },
-        } */
     const otherUser = this.chatEngine.global.users[userId];
     privateChat.invite(otherUser);
   }

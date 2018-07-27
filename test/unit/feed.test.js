@@ -7,6 +7,7 @@ import reducer, {
   feedContents,
   defaultState,
   appendMessage,
+  inviteToChannel,
 } from '../../src/feed/dux';
 
 import {
@@ -15,6 +16,8 @@ import {
   deleteMessage,
   toggleCloseTrayButton,
 } from '../../src/moment';
+
+import { acceptPrayerRequest } from '../../src/moment/actionableNotification/dux';
 
 import { MESSAGE } from '../../src/moment/dux';
 
@@ -1288,6 +1291,102 @@ describe('Feed tests', () => {
         placeholderPresent: false,
         currentChannel: 'host',
       }
+    );
+  });
+
+  test('Accept prayer request', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: true,
+              },
+            ],
+          },
+        },
+      },
+      acceptPrayerRequest('12345')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: false,
+              },
+            ],
+          },
+        },
+      },
+    );
+  });
+
+  test('Invite to channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        currentUser: {
+          id: '67890',
+          nickname: 'Booffie',
+        },
+      },
+      inviteToChannel(
+        {
+          id: '32454',
+          nickname: 'Billy',
+        },
+        '12345')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ['12345']: {
+            id: '12345',
+            name: '12345',
+            moments: [],
+            participants: [
+              {
+                id: '67890',
+                nickname: 'Booffie',
+              },
+              {
+                id: '32454',
+                nickname: 'Billy',
+              },
+            ],
+          },
+        },
+        currentUser: {
+          id: '67890',
+          nickname: 'Booffie',
+        },
+      },
     );
   });
 });

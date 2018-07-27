@@ -9,13 +9,19 @@ import styles from './style.css';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
-  acceptPrayerRequest: UserType => void,
+  acceptPrayerRequest: (UserType, id: string) => void,
 };
 
 const ActionableNotification = (
   { notification, acceptPrayerRequest }: ActionableNotificationPropsType
 ) => {
-  const { active, user, timeStamp } = notification;
+  const {
+    active,
+    user,
+    timeStamp,
+    id,
+  } = notification;
+
   const notificationStyle =
     active ? styles.actionableNotification : styles.notification;
 
@@ -41,7 +47,7 @@ const ActionableNotification = (
           <button
             className={styles.acceptButton}
             onClick={
-              () => (acceptPrayerRequest(user))
+              () => (acceptPrayerRequest(user, id))
             }
           >
             Accept

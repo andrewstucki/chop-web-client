@@ -13,9 +13,13 @@ import type {
   MomentType,
 } from '../moment';
 
+import type { AcceptPrayerRequestType } from '../moment/actionableNotification/dux';
+
 import type { SetUser } from '../io/chat/dux';
 
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
+
+import { ACCEPT_PRAYER_REQUEST } from '../moment/actionableNotification/dux';
 
 import {
   PUBLISH_MESSAGE,
@@ -93,7 +97,7 @@ type AddChannelType = {
 
 type InviteToChannelType = {
   type: 'INVITE_TO_CHANNEL',
-  userId: string,
+  user: UserType,
   channelName: string,
 };
 
@@ -113,7 +117,9 @@ type FeedActionTypes =
   | OpenMessageTrayType
   | CloseMessageTrayType
   | DeleteMessageType
-  | ToggleCloseTrayButtonType;
+  | ToggleCloseTrayButtonType
+  | AcceptPrayerRequestType
+  | InviteToChannelType;
 
 // Action Creators
 
@@ -145,17 +151,15 @@ const addChannel = (name: string, id: string, participants?: Array<UserType>): A
 );
 
 const inviteToChannel = (
-  userId: string,
+  user: UserType,
   channelName: string
 ): InviteToChannelType => (
   {
     type: INVITE_TO_CHANNEL,
-    userId,
+    user,
     channelName,
   }
 );
-
-// create inviteToChannel here as well (channelName, userId)
 
 const removeChannel = (channel: string): RemoveChannelType => (
   {
@@ -248,6 +252,23 @@ const reducer = (
         [action.channel.name]: action.channel,
       },
     };
+  case INVITE_TO_CHANNEL:
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channelName]: {
+          ...state[action.channelName],
+          id: action.channelName,
+          name: action.channelName,
+          moments: [],
+          participants: [
+            state.currentUser,
+            action.user,
+          ],
+        },
+      },
+    };
   case REMOVE_CHANNEL: {
     if (action.channel === 'public' ||
       action.channel === 'host') {
@@ -331,6 +352,26 @@ const reducer = (
               {
                 ...message,
                 closeTrayButtonRendered: message.id === id ? !message.closeTrayButtonRendered : null,
+              }
+            )
+          ),
+        },
+      },
+    };
+  }
+  case ACCEPT_PRAYER_REQUEST: {
+    const { id } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: {
+          ...state.channels[action.channel],
+          moments: state.channels[action.channel].moments.map(
+            moment => (
+              {
+                ...moment,
+                active: moment.id === id ? !moment.active : null,
               }
             )
           ),
