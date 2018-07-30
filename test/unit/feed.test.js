@@ -8,6 +8,7 @@ import reducer, {
   defaultState,
   appendMessage,
   inviteToChannel,
+  receiveAcceptedPrayerRequest,
 } from '../../src/feed/dux';
 
 import {
@@ -17,7 +18,7 @@ import {
   toggleCloseTrayButton,
 } from '../../src/moment';
 
-import { acceptPrayerRequest } from '../../src/moment/actionableNotification/dux';
+import { publishAcceptedPrayerRequest } from '../../src/moment/actionableNotification/dux';
 
 import { MESSAGE } from '../../src/moment/dux';
 
@@ -1294,7 +1295,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Accept prayer request', () => {
+  test('Publish accepted prayer request', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -1318,7 +1319,59 @@ describe('Feed tests', () => {
           },
         },
       },
-      acceptPrayerRequest('12345')
+      publishAcceptedPrayerRequest('12345')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: false,
+              },
+            ],
+          },
+        },
+      },
+    );
+  });
+
+  test('Receive accepted prayer request', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: true,
+              },
+            ],
+          },
+        },
+      },
+      receiveAcceptedPrayerRequest('12345')
     );
     expect(result).toEqual(
       {

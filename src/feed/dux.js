@@ -13,13 +13,13 @@ import type {
   MomentType,
 } from '../moment';
 
-import type { AcceptPrayerRequestType } from '../moment/actionableNotification/dux';
+import type { PublishAcceptedPrayerRequestType } from '../moment/actionableNotification/dux';
 
 import type { SetUser } from '../io/chat/dux';
 
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 
-import { ACCEPT_PRAYER_REQUEST } from '../moment/actionableNotification/dux';
+import { PUBLISH_ACCEPTED_PRAYER_REQUEST } from '../moment/actionableNotification/dux';
 
 import {
   PUBLISH_MESSAGE,
@@ -47,10 +47,11 @@ import {
 
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
-const RECEIVE_MOMENT = 'RECEIVE_MOMENT';//RECEIVE
+const RECEIVE_MOMENT = 'RECEIVE_MOMENT';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
+const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 
 // Flow Type Definitions
 
@@ -90,6 +91,12 @@ type ReceiveMomentType = {
   moment: MomentType,
 };
 
+type ReceiveAcceptedPrayerRequestType = {
+  type: 'RECEIVE_ACCEPTED_PRAYER_REQUEST',
+  id: string,
+  channel: string,
+};
+
 type AddChannelType = {
   type: 'ADD_CHANNEL',
   channel: ChannelType,
@@ -118,8 +125,9 @@ type FeedActionTypes =
   | CloseMessageTrayType
   | DeleteMessageType
   | ToggleCloseTrayButtonType
-  | AcceptPrayerRequestType
-  | InviteToChannelType;
+  | PublishAcceptedPrayerRequestType
+  | InviteToChannelType
+  | ReceiveAcceptedPrayerRequestType;
 
 // Action Creators
 
@@ -135,6 +143,14 @@ const receiveMoment = (channel: string, moment: MomentType): ReceiveMomentType =
     type: RECEIVE_MOMENT,
     channel,
     moment,
+  }
+);
+
+const receiveAcceptedPrayerRequest = (id: string): ReceiveAcceptedPrayerRequestType => (
+  {
+    type: RECEIVE_ACCEPTED_PRAYER_REQUEST,
+    id,
+    channel: 'host',
   }
 );
 
@@ -359,7 +375,8 @@ const reducer = (
       },
     };
   }
-  case ACCEPT_PRAYER_REQUEST: {
+  case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+  case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
     const { id } = action;
     return {
       ...state,
@@ -470,6 +487,7 @@ export {
   defaultState,
   appendMessage,
   inviteToChannel,
+  receiveAcceptedPrayerRequest,
 };
 export type {
   AddChannelType,
@@ -480,6 +498,7 @@ export type {
   UserType,
   FeedType,
   InviteToChannelType,
+  ReceiveAcceptedPrayerRequestType,
 };
 
 export default reducer;

@@ -14,6 +14,8 @@ import type {
 
 import type { PublishMomentToChannelType } from '../../../src/moment/dux';
 
+import type { PublishAcceptedPrayerRequestType } from '../../../src/moment/actionableNotification/dux';
+
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../../../src/moment/dux';
 
 import {
@@ -22,6 +24,8 @@ import {
 } from '../../../src/chat/dux';
 
 import { createMessage } from '../../../src/moment';
+
+import { PUBLISH_ACCEPTED_PRAYER_REQUEST } from '../../../src/moment/actionableNotification/dux';
 
 import {
   CHANGE_CHANNEL,
@@ -71,7 +75,8 @@ type IOChatActionTypes =
   | ReceiveMomentType
   | ChangeChannelType
   | PublishMomentToChannelType
-  | InviteToChannelType;
+  | InviteToChannelType
+  | PublishAcceptedPrayerRequestType;
 
 // Action Creators
 
@@ -170,6 +175,9 @@ const getReducer = (chatIO: Chat) => (
       };
     case INVITE_TO_CHANNEL:
       chatIO.inviteToChannel(action.user.id, action.channelName);
+      return state;
+    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+      chatIO.publishAcceptedPrayerRequest(action.id, action.channel);
       return state;
     default:
       return state;

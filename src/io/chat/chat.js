@@ -1,5 +1,6 @@
 // @flow
 import type { MomentType } from '../../moment';
+import type { UserType } from '../../feed/dux';
 import { MESSAGE } from '../../moment';
 import {
   PRAYER_REQUEST,
@@ -22,7 +23,10 @@ type ChatType = {
 };
 
 type MeType = {
-
+  uuid: string,
+  state: {
+    nickname: string,
+  },
 };
 
 type ChatEngineType = {
@@ -61,17 +65,24 @@ class Chat {
   }
   addToChannel: AddToChannelType
   userId: string
-  addChannel: (channelName: string, channelId: string) => void;
+  addChannel: (
+    channelName: string,
+    channelId: string,
+    participants?: Array<UserType>
+  ) => void
+  receiveAcceptedPrayerRequest: (id: string) => void;
 
   constructor (
     engine: ChatEngineCoreType,
     addToChannel: AddToChannelType,
     addChannel: (channelName: string, channelId: string) => void,
+    receiveAcceptedPrayerRequest: (id: string) => void
   ) {
     this.chatEngineCore = engine;
     this.chats = {};
     this.addToChannel = addToChannel;
     this.addChannel = addChannel;
+    this.receiveAcceptedPrayerRequest = receiveAcceptedPrayerRequest;
   }
 
   setKeys (publishKey: string, subscribeKey: string): void {
@@ -89,7 +100,20 @@ class Chat {
     this.chatEngine.on ('$.ready', data => {
       this.me = data.me;
       this.me.direct.on('$.invite', payload => {
-        this.addChannel(payload.data.channel, payload.data.channel);
+        const currentUser = {
+          id: this.me.uuid,
+          nickname: this.me.state.nickname,
+        };
+        const otherUser = {
+          id: payload.sender.uuid,
+          nickname: payload.sender.state.nickname,
+        };
+
+        this.addChannel(
+          payload.data.channel,
+          payload.data.channel,
+          [currentUser, otherUser]
+        );
       });
     });
     this.chatEngine.connect(id, {
@@ -148,15 +172,21 @@ class Chat {
       'message',
       payload => {
         if (payload.sender.uuid !== this.userId) {
-          if (channelName === 'public' ||
-            channelName === 'host' || channelName === 'direct') {
+          if (channelName !== 'request' || channelName !== 'command') {
             this.receiveMessage(channelName, payload.data);
-          } else {
+          } 
+
+          if (channelName === 'request' || channelName === 'command') {
             this.receiveCommand(channelName, payload.data);
           }
         }
       }
     );
+    chat.on('accepted', payload => {
+      if (payload.sender.uuid !== this.userId) {
+        this.receiveAcceptedPrayerRequest(payload.id);
+      }
+    });
     this.chats[channelName] = chat;
   }
 
@@ -164,6 +194,11 @@ class Chat {
     const privateChat = this.chats[channelName];
     const otherUser = this.chatEngine.global.users[userId];
     privateChat.invite(otherUser);
+  }
+
+  publishAcceptedPrayerRequest (id: string, channelName: string): void {
+    const requestId = { id };
+    this.chats[channelName].emit('accepted', requestId);
   }
 
   publish (channel: string, moment: MomentType): void {

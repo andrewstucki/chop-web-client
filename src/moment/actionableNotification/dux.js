@@ -9,7 +9,7 @@ import { createUid } from '../../util';
 
 const ACTIONABLE_NOTIFICATION = 'ACTIONABLE_NOTIFICATION';
 const PRAYER_REQUEST = 'PRAYER_REQUEST';
-const ACCEPT_PRAYER_REQUEST = 'ACCEPT_PRAYER_REQUEST';
+const PUBLISH_ACCEPTED_PRAYER_REQUEST = 'PUBLISH_ACCEPTED_PRAYER_REQUEST';
 
 type ActionableNotificationType =
   | PrayerRequestNotificationType;
@@ -23,8 +23,8 @@ type PrayerRequestNotificationType = {
   active: boolean,
 };
 
-type AcceptPrayerRequestType = {
-  type: 'ACCEPT_PRAYER_REQUEST',
+type PublishAcceptedPrayerRequestType = {
+  type: 'PUBLISH_ACCEPTED_PRAYER_REQUEST',
   id: string,
   channel: string,
 };
@@ -48,9 +48,11 @@ const publishPrayerRequestNotification = (
   }
 );
 
-const acceptPrayerRequest = (id: string): AcceptPrayerRequestType => (
+const publishAcceptedPrayerRequest = (
+  id: string
+): PublishAcceptedPrayerRequestType => (
   {
-    type: ACCEPT_PRAYER_REQUEST,
+    type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
     id,
     channel: 'host',
   }
@@ -75,18 +77,18 @@ const reducer = (
 export type {
   ActionableNotificationType,
   PrayerRequestNotificationType,
-  AcceptPrayerRequestType,
+  PublishAcceptedPrayerRequestType,
 };
 
 export {
   publishPrayerRequestNotification,
-  acceptPrayerRequest,
+  publishAcceptedPrayerRequest,
 };
 
 export {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
-  ACCEPT_PRAYER_REQUEST,
+  PUBLISH_ACCEPTED_PRAYER_REQUEST,
 };
 
 export default reducer;

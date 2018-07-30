@@ -3,7 +3,7 @@ import ActionableNotification from './actionableNotification';
 import { connect } from 'react-redux';
 
 import { addChannel, inviteToChannel } from '../../feed/dux';
-import { acceptPrayerRequest } from './dux';
+import { publishAcceptedPrayerRequest } from './dux';
 
 const mapStateToProps = () => (
   {}
@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => (
       const channelId = `direct-chat-${dateTime}`;
       dispatch(addChannel(channelId, channelId));
       dispatch(inviteToChannel(user, channelId));
-      dispatch(acceptPrayerRequest(prayerRequestId));
+      dispatch(publishAcceptedPrayerRequest(prayerRequestId));
     },
   }
 );
