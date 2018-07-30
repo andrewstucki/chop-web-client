@@ -1,12 +1,14 @@
 // @flow
 import reducer, {
   changeChannel,
-  receiveMessage,
+  receiveMoment,
   addChannel,
   removeChannel,
   feedContents,
   defaultState,
   appendMessage,
+  inviteToChannel,
+  receiveAcceptedPrayerRequest,
 } from '../../src/feed/dux';
 
 import {
@@ -16,18 +18,9 @@ import {
   toggleCloseTrayButton,
 } from '../../src/moment';
 
+import { publishAcceptedPrayerRequest } from '../../src/moment/actionableNotification/dux';
+
 import { MESSAGE } from '../../src/moment/dux';
-
-import {
-  publishPrayerNotification,
-  publishJoinedChatNotification,
-  publishLeftChatNotification,
-} from '../../src/moment/notification/dux';
-
-import {
-  publishPrayerRequestNotification,
-  acceptPrayerRequest,
-} from '../../src/moment/actionableNotification/dux';
 
 import {
   addToCurrentChannel,
@@ -164,7 +157,7 @@ describe('Feed tests', () => {
     expect(result.appendingMessage).toBe(true);
   });
 
-  test('adds a message to not current channel', () => {
+  test('receives a message and adds it to the appropriate channel', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -175,12 +168,18 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
           },
+          host: {
+            id: '67890',
+            name: 'host',
+            moments: [],
+          },
         },
         currentChannel: 'public',
         chatInput: 'this is a string',
         animatingMoment: false,
+        appeningMessage: true,
       },
-      receiveMessage('host', {
+      receiveMoment('host', {
         type: MESSAGE,
         id: '12345',
         text: 'Hello there',
@@ -196,6 +195,52 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('Hello there');
     expect(result.channels.host.moments[0].id.length).toEqual(5);
+    expect(result.appendingMessage).toBe(false);
+    expect(result.animatingMoment).toBe(true);
+  });
+
+  test('adds a prayer request to host', () => {
+    const action = () => {};
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          ...defaultState.channels,
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+          },
+          host: {
+            id: '67890',
+            name: 'host',
+            moments: [],
+          },
+        },
+        currentChannel: 'public',
+        animatingMoment: false,
+        appendingMessage: true,
+      },
+      receiveMoment('host', {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
+        id: '12345',
+        user: {
+          id: '12345',
+          nickname: 'Herbert',
+        },
+        timeStamp: '4:53pm',
+        active: true,
+        action: action,
+      })
+    );
+    expect(result.channels.host.moments.length).toEqual(1);
+    expect(result.channels.host.moments[0].id.length).toEqual(5);
+    expect(result.channels.host.moments[0].user.id).toEqual('12345');
+    expect(result.channels.host.moments[0].user.nickname).toEqual('Herbert');
+    expect(result.channels.host.moments[0].timeStamp).toEqual('4:53pm');
+    expect(result.channels.host.moments[0].active).toEqual(true);
+    expect(result.channels.host.moments[0].action).toEqual(action);
     expect(result.appendingMessage).toBe(false);
     expect(result.animatingMoment).toBe(true);
   });
@@ -829,7 +874,18 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishPrayerNotification('Boofie', 'Beefie')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'PRAYER',
+          id: '12345',
+          host: 'Boofie',
+          guest: 'Beefie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -842,6 +898,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'PRAYER',
+                id: '12345',
                 host: 'Boofie',
                 guest: 'Beefie',
                 timeStamp: '4:53pm',
@@ -867,7 +924,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'public',
       },
-      publishJoinedChatNotification('Boofie', 'public')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'JOINED_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -881,6 +948,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'JOINED_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -905,7 +973,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishJoinedChatNotification('Boofie', 'host')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'JOINED_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -919,6 +997,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'JOINED_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -943,7 +1022,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'public',
       },
-      publishLeftChatNotification('Boofie', 'public')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'LEFT_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -957,6 +1046,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'LEFT_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -982,7 +1072,17 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishLeftChatNotification('Boofie', 'host')
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'LEFT_CHAT',
+          id: '12345',
+          name: 'Boofie',
+          timeStamp: '4:53pm',
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -997,6 +1097,7 @@ describe('Feed tests', () => {
               {
                 type: 'NOTIFICATION',
                 notificationType: 'LEFT_CHAT',
+                id: '12345',
                 name: 'Boofie',
                 timeStamp: '4:53pm',
               },
@@ -1075,7 +1176,21 @@ describe('Feed tests', () => {
         },
         currentChannel: 'host',
       },
-      publishPrayerRequestNotification('Boofie', true)
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'ACTIONABLE_NOTIFICATION',
+          notificationType: 'PRAYER_REQUEST',
+          user: {
+            id: '5893',
+            nickname: 'Boofie',
+          },
+          id: '12345',
+          timeStamp: '4:53pm',
+          active: true,
+        },
+      }
     );
     expect(result).toEqual(
       {
@@ -1090,10 +1205,13 @@ describe('Feed tests', () => {
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
-                name: 'Boofie',
+                id: '12345',
+                user: {
+                  id: '5893',
+                  nickname: 'Boofie',
+                },
                 timeStamp: '4:53pm',
                 active: true,
-                action: acceptPrayerRequest,
               },
             ],
           },
@@ -1174,6 +1292,154 @@ describe('Feed tests', () => {
         placeholderPresent: false,
         currentChannel: 'host',
       }
+    );
+  });
+
+  test('Publish accepted prayer request', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: true,
+              },
+            ],
+          },
+        },
+      },
+      publishAcceptedPrayerRequest('12345')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: false,
+              },
+            ],
+          },
+        },
+      },
+    );
+  });
+
+  test('Receive accepted prayer request', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: true,
+              },
+            ],
+          },
+        },
+      },
+      receiveAcceptedPrayerRequest('12345')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          host: {
+            id: '12345',
+            name: 'host',
+            moments: [
+              {
+                type: 'ACTIONABLE_NOTIFICATION',
+                notificationType: 'PRAYER_REQUEST',
+                id: '12345',
+                user: {
+                  id: '67890',
+                  nickname: 'Burglekutt',
+                },
+                timeStamp: '4:53pm',
+                active: false,
+              },
+            ],
+          },
+        },
+      },
+    );
+  });
+
+  test('Invite to channel', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        currentUser: {
+          id: '67890',
+          nickname: 'Booffie',
+        },
+      },
+      inviteToChannel(
+        {
+          id: '32454',
+          nickname: 'Billy',
+        },
+        '12345')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          ['12345']: {
+            id: '12345',
+            name: '12345',
+            moments: [],
+            participants: [
+              {
+                id: '67890',
+                nickname: 'Booffie',
+              },
+              {
+                id: '32454',
+                nickname: 'Billy',
+              },
+            ],
+          },
+        },
+        currentUser: {
+          id: '67890',
+          nickname: 'Booffie',
+        },
+      },
     );
   });
 });

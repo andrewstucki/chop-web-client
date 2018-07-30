@@ -13,9 +13,13 @@ import type {
   MomentType,
 } from '../moment';
 
+import type { PublishAcceptedPrayerRequestType } from '../moment/actionableNotification/dux';
+
 import type { SetUser } from '../io/chat/dux';
 
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
+
+import { PUBLISH_ACCEPTED_PRAYER_REQUEST } from '../moment/actionableNotification/dux';
 
 import {
   PUBLISH_MESSAGE,
@@ -43,9 +47,11 @@ import {
 
 // Action Types
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
-const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';//RECEIVE
+const RECEIVE_MOMENT = 'RECEIVE_MOMENT';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
+const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
+const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 
 // Flow Type Definitions
 
@@ -59,7 +65,7 @@ type ChannelType = {
   name: string,
   moments: Array<MomentType>,
   participants?: Array<UserType>,
-}
+};
 
 type FeedType = {
   channels: {
@@ -79,15 +85,27 @@ type ChangeChannelType = {
   channel: string,
 };
 
-type ReceiveMessageType = {
-  type: 'RECEIVE_MESSAGE',
+type ReceiveMomentType = {
+  type: 'RECEIVE_MOMENT',
   channel: string,
-  message: MessageType,
+  moment: MomentType,
+};
+
+type ReceiveAcceptedPrayerRequestType = {
+  type: 'RECEIVE_ACCEPTED_PRAYER_REQUEST',
+  id: string,
+  channel: string,
 };
 
 type AddChannelType = {
   type: 'ADD_CHANNEL',
   channel: ChannelType,
+};
+
+type InviteToChannelType = {
+  type: 'INVITE_TO_CHANNEL',
+  user: UserType,
+  channelName: string,
 };
 
 type RemoveChannelType = {
@@ -98,7 +116,7 @@ type RemoveChannelType = {
 type FeedActionTypes =
   | ChangeChannelType
   | PublishMessageAction
-  | ReceiveMessageType
+  | ReceiveMomentType
   | AddChannelType
   | RemoveChannelType
   | ChatInputAction
@@ -106,7 +124,10 @@ type FeedActionTypes =
   | OpenMessageTrayType
   | CloseMessageTrayType
   | DeleteMessageType
-  | ToggleCloseTrayButtonType;
+  | ToggleCloseTrayButtonType
+  | PublishAcceptedPrayerRequestType
+  | InviteToChannelType
+  | ReceiveAcceptedPrayerRequestType;
 
 // Action Creators
 
@@ -117,11 +138,19 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const receiveMessage = (channel: string, message: MessageType): ReceiveMessageType => (
+const receiveMoment = (channel: string, moment: MomentType): ReceiveMomentType => (
   {
-    type: RECEIVE_MESSAGE,
+    type: RECEIVE_MOMENT,
     channel,
-    message,
+    moment,
+  }
+);
+
+const receiveAcceptedPrayerRequest = (id: string): ReceiveAcceptedPrayerRequestType => (
+  {
+    type: RECEIVE_ACCEPTED_PRAYER_REQUEST,
+    id,
+    channel: 'host',
   }
 );
 
@@ -134,6 +163,17 @@ const addChannel = (name: string, id: string, participants?: Array<UserType>): A
       moments: [],
       participants,
     },
+  }
+);
+
+const inviteToChannel = (
+  user: UserType,
+  channelName: string
+): InviteToChannelType => (
+  {
+    type: INVITE_TO_CHANNEL,
+    user,
+    channelName,
   }
 );
 
@@ -198,22 +238,25 @@ const reducer = (
       };
     }
     return state;
-  case RECEIVE_MESSAGE:
-    return {
-      ...state,
-      appendingMessage: false,
-      animatingMoment: true,
-      channels: {
-        ...state.channels,
-        [action.channel]: {
-          ...state.channels[state.currentChannel],
-          moments: [
-            ...state.channels[state.currentChannel].moments,
-            action.message,
-          ],
+  case RECEIVE_MOMENT:
+    if (state.channels[action.channel]) {
+      return {
+        ...state,
+        appendingMessage: false,
+        animatingMoment: true,
+        channels: {
+          ...state.channels,
+          [action.channel]: {
+            ...state.channels[action.channel],
+            moments: [
+              ...state.channels[action.channel].moments,
+              action.moment,
+            ],
+          },
         },
-      },
-    };
+      };
+    }
+    return state;
   case ADD_CHANNEL:
     if (state.channels[action.channel.name]) {
       return state;
@@ -223,6 +266,23 @@ const reducer = (
       channels: {
         ...state.channels,
         [action.channel.name]: action.channel,
+      },
+    };
+  case INVITE_TO_CHANNEL:
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channelName]: {
+          ...state[action.channelName],
+          id: action.channelName,
+          name: action.channelName,
+          moments: [],
+          participants: [
+            state.currentUser,
+            action.user,
+          ],
+        },
       },
     };
   case REMOVE_CHANNEL: {
@@ -315,6 +375,27 @@ const reducer = (
       },
     };
   }
+  case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+  case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
+    const { id } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: {
+          ...state.channels[action.channel],
+          moments: state.channels[action.channel].moments.map(
+            moment => (
+              {
+                ...moment,
+                active: moment.id === id ? !moment.active : null,
+              }
+            )
+          ),
+        },
+      },
+    };
+  }
   case DELETE_MESSAGE: {
     const { id } = action;
     const { channels, currentChannel } = state;
@@ -392,27 +473,32 @@ const appendMessage = (state: FeedType) => (
 
 export {
   CHANGE_CHANNEL,
-  RECEIVE_MESSAGE,
+  RECEIVE_MOMENT,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
+  INVITE_TO_CHANNEL,
 };
 export {
   changeChannel,
-  receiveMessage,
+  receiveMoment,
   addChannel,
   removeChannel,
   feedContents,
   defaultState,
   appendMessage,
+  inviteToChannel,
+  receiveAcceptedPrayerRequest,
 };
 export type {
   AddChannelType,
   RemoveChannelType,
   MomentType,
-  ReceiveMessageType,
+  ReceiveMomentType,
   ChangeChannelType,
   UserType,
   FeedType,
+  InviteToChannelType,
+  ReceiveAcceptedPrayerRequestType,
 };
 
 export default reducer;

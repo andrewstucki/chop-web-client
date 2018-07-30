@@ -15,8 +15,6 @@ import {
 
 import AnchorMoment from '../../src/placeholder/anchorMoment';
 
-import { acceptPrayerRequest } from '../../src/moment/actionableNotification/dux';
-
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Moment tests', () => {
@@ -156,7 +154,6 @@ describe('Moment tests', () => {
             name: 'Billy',
             timeStamp: '4:53pm',
             active: true,
-            action: acceptPrayerRequest,
           }
         }
       />
@@ -169,7 +166,6 @@ describe('Moment tests', () => {
           name: 'Billy',
           timeStamp: '4:53pm',
           active: true,
-          action: acceptPrayerRequest,
         },
       }
     );

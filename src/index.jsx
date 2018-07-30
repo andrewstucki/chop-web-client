@@ -116,16 +116,7 @@ setTimeout(() => {
 
   store.dispatch(addChannel('request', 'request'));
 
-  store.dispatch(addChannel('public', 'public'));
-
-  const participantName = characters[Math.floor(Math.random() * characters.length)];
-
-  store.dispatch(addChannel('direct', 'direct',  [
-    {
-      id: new Date().getTime().toString(),
-      nickname: participantName,
-    },
-  ]));
+  store.dispatch(addChannel('command', 'command'));
 
   store.dispatch(
     {
@@ -133,5 +124,6 @@ setTimeout(() => {
       channel: 'public',
     }
   );
+
   store.dispatch(publishSalvation(2));
 }, 2000);

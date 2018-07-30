@@ -15,16 +15,26 @@ type ChannelsListType = Array<ChannelType>;
 // Selectors
 
 const getChannels = (state: FeedType): ChannelsListType => (
-  Object.keys(state.channels).filter(id => id !== 'request' && id !== 'command').map(id => ({
-    id,
-    isCurrent: state.currentChannel === id,
-    hasActions: state.channels[id].moments.filter(moment => (
-      moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
-    )).length > 0,
-    directChatParticipant: state.channels[id].participants && state.channels[id].participants[0].nickname ?
-      state.channels[id].participants[0].nickname :
-      undefined,
-  }))
+  Object.keys(state.channels).filter(
+    id => id !== 'request' && id !== 'command'
+  ).map(id => {
+    const { participants, moments } = state.channels[id];
+    const otherUserNickname = () => {
+      if (participants) {
+        return participants[0].id !== state.currentUser.id ?
+          participants[0].nickname : participants[1].nickname;
+      }
+    };
+
+    return {
+      id,
+      isCurrent: state.currentChannel === id,
+      hasActions: moments.filter(moment => (
+        moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
+      )).length > 0,
+      directChatParticipant: otherUserNickname(),
+    };
+  })
 );
 
 // Exports

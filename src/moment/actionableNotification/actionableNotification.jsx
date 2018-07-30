@@ -1,27 +1,27 @@
 // @flow
 import React from 'react';
 
-import { PRAYER_REQUEST } from './dux';
+import type { UserType } from '../../feed/dux';
+import type { ActionableNotificationType } from './dux';
 
-import type {
-  ActionableNotificationType,
-  PrayerRequestNotificationType,
-} from './dux';
 import ChatNotification from '../../../assets/chat-notification.svg';
 import styles from './style.css';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
+  acceptPrayerRequest: (UserType, id: string) => void,
 };
 
-const prayerRequestNotificationText = (
-  {
-    name,
-    timeStamp,
-    active,
-    action,
-  }: PrayerRequestNotificationType
+const ActionableNotification = (
+  { notification, acceptPrayerRequest }: ActionableNotificationPropsType
 ) => {
+  const {
+    active,
+    user,
+    timeStamp,
+    id,
+  } = notification;
+
   const notificationStyle =
     active ? styles.actionableNotification : styles.notification;
 
@@ -38,7 +38,7 @@ const prayerRequestNotificationText = (
       />
       <div className={styles.text}>
         <div>
-          <strong>{name} </strong>has requested prayer
+          <strong>{user.nickname} </strong>has requested prayer
         </div>
         <div className={styles.timeStamp}>{timeStamp}</div>
       </div>
@@ -47,7 +47,7 @@ const prayerRequestNotificationText = (
           <button
             className={styles.acceptButton}
             onClick={
-              () => (action())
+              () => (acceptPrayerRequest(user, id))
             }
           >
             Accept
@@ -57,18 +57,5 @@ const prayerRequestNotificationText = (
     </div>
   );
 };
-
-const getNotificationText = notification => {
-  switch (notification.notificationType) {
-  case PRAYER_REQUEST:
-    return prayerRequestNotificationText(notification);
-  }
-};
-
-const ActionableNotification = (
-  { notification }: ActionableNotificationPropsType
-) => (
-  getNotificationText(notification)
-);
 
 export default ActionableNotification;

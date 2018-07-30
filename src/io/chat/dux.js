@@ -6,17 +6,32 @@ import type {
 } from '../../../src/chat/dux';
 
 import type {
-  ReceiveMessageType,
+  ReceiveMomentType,
   ChangeChannelType,
   AddChannelType,
+  InviteToChannelType,
 } from '../../../src/feed/dux';
+
+import type { PublishMomentToChannelType } from '../../../src/moment/dux';
+
+import type { PublishAcceptedPrayerRequestType } from '../../../src/moment/actionableNotification/dux';
+
+import { PUBLISH_MOMENT_TO_CHANNEL } from '../../../src/moment/dux';
 
 import {
   PUBLISH_MESSAGE,
   CHAT_INPUT,
 } from '../../../src/chat/dux';
+
 import { createMessage } from '../../../src/moment';
-import { CHANGE_CHANNEL, ADD_CHANNEL } from '../../../src/feed/dux';
+
+import { PUBLISH_ACCEPTED_PRAYER_REQUEST } from '../../../src/moment/actionableNotification/dux';
+
+import {
+  CHANGE_CHANNEL,
+  ADD_CHANNEL,
+  INVITE_TO_CHANNEL,
+} from '../../../src/feed/dux';
 
 // Actions
 const SET_CHAT_KEYS = 'SET_CHAT_KEYS';
@@ -57,8 +72,11 @@ type IOChatActionTypes =
   | AddChannelType
   | ChatInputAction
   | PublishMessageAction
-  | ReceiveMessageType
-  | ChangeChannelType;
+  | ReceiveMomentType
+  | ChangeChannelType
+  | PublishMomentToChannelType
+  | InviteToChannelType
+  | PublishAcceptedPrayerRequestType;
 
 // Action Creators
 
@@ -133,6 +151,15 @@ const getReducer = (chatIO: Chat) => (
         ...state,
         chatInput: '',
       };
+    case PUBLISH_MOMENT_TO_CHANNEL: {
+      // $FlowFixMe
+      const { moment } = action;
+      chatIO.publish(
+        'request',
+        moment
+      );
+      return state;
+    }
     case CHAT_INPUT:
       return {
         ...state,
@@ -146,6 +173,12 @@ const getReducer = (chatIO: Chat) => (
         ...state,
         currentChannel: action.channel,
       };
+    case INVITE_TO_CHANNEL:
+      chatIO.inviteToChannel(action.user.id, action.channelName);
+      return state;
+    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+      chatIO.publishAcceptedPrayerRequest(action.id, action.channel);
+      return state;
     default:
       return state;
     }
@@ -164,6 +197,7 @@ export {
 export {
   setChatKeys,
   setUser,
+  defaultState,
 };
 
 export default getReducer;

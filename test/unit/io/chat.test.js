@@ -1,9 +1,20 @@
 // @flow
-//import getReducer from '../../../src/io/chat/dux';
 import Chat from '../../../src/io/chat/chat';
-import getReducer, { setChatKeys, setUser } from '../../../src/io/chat/dux';
+import getReducer, {
+  setChatKeys,
+  setUser,
+  defaultState,
+} from '../../../src/io/chat/dux';
+
 import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
-import { changeChannel, addChannel } from '../../../src/feed/dux';
+// TODO write a test for acceptPrayerRequest and update everyone's feed
+// import { acceptPrayerRequest } from '../../../src/moment/actionableNotification/dux';
+
+import {
+  changeChannel,
+  addChannel,
+} from '../../../src/feed/dux';
+
 import { MESSAGE } from '../../../src/moment/dux';
 
 describe('Chat IO reducer test', () => {
@@ -228,42 +239,97 @@ describe('Chat IO reducer test', () => {
     expect(chat.publish.mock.calls[0][0]).toEqual('default');
     expect(chat.publish.mock.calls[0][1].text).toEqual('Hello buddy');
   });
+
+  test('publish prayer request moment to channel', () => {
+    const action = () => {};
+    const result = reducer(
+      defaultState,
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'ACTIONABLE_NOTIFICATION',
+          notificationType: 'PRAYER_REQUEST',
+          id: '12345',
+          user: {
+            id: '12345',
+            nickname: 'Willaim Wallace',
+          },
+          active: true,
+          timeStamp: '4:53pm',
+          action: action,
+        },
+      }
+    );
+    expect(result).toEqual(defaultState);
+    expect(chat.publish.mock.calls.length).toBe(1);
+    expect(chat.publish.mock.calls[0][0]).toEqual('request');
+    expect(chat.publish.mock.calls[0][1]).toEqual(
+      {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
+        id: '12345',
+        user: {
+          id: '12345',
+          nickname: 'Willaim Wallace',
+        },
+        active: true,
+        timeStamp: '4:53pm',
+        action: action,
+      }
+    );
+  });
 });
 
 
 describe('Chat IO Interface test', () => {
-  let engine;
-  let ce;
-  let me;
-  let ch;
+  let mockedEngineCore;
+  let mockedChatEngine;
+  let mockedMe;
+  let mockedChat;
 
   beforeEach(() => {
-    ch = {
+    mockedChat = {
       emit: jest.fn(),
       on: jest.fn(),
+      invite: jest.fn(),
     };
-    me = {
+    mockedMe = {
+      uuid: '5432',
+      state: {
+        nickname: 'Carl',
+      },
     };
-    ce = {
-      connect: jest.fn().mockReturnValue(me),
-      Chat: jest.fn().mockReturnValue(ch),
+    mockedChatEngine = {
+      connect: jest.fn().mockReturnValue(mockedMe),
+      Chat: jest.fn().mockReturnValue(mockedChat),
       on: jest.fn(),
+      global: {
+        users: {
+          userId: {
+            uuid: '12345',
+            state: {
+              nickname: 'Bill',
+            },
+          },
+        },
+      },
     };
-    engine = {
-      create: jest.fn().mockReturnValue(ce),
+    mockedEngineCore = {
+      create: jest.fn().mockReturnValue(mockedChatEngine),
     };
   });
 
   test('initializes with a chatEngine', () => {
-    const chat = new Chat(engine, () => {});
-    expect(chat.chatEngineCore).toBe(engine);
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
+    expect(chat.chatEngineCore).toBe(mockedEngineCore);
   });
 
   test('set keys', () => {
-    const chat = new Chat(engine, () => {});
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     chat.setKeys('12345', '67890');
-    expect(engine.create.mock.calls.length).toBe(1);
-    expect(engine.create.mock.calls[0][0]).toEqual(
+    expect(mockedEngineCore.create.mock.calls.length).toBe(1);
+    expect(mockedEngineCore.create.mock.calls[0][0]).toEqual(
       {
         publishKey: '12345',
         subscribeKey: '67890',
@@ -272,35 +338,35 @@ describe('Chat IO Interface test', () => {
   });
 
   test('set user does not work unless keys are set', () => {
-    const chat = new Chat(engine, () => {});
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     chat.setUser('12345', 'Billy Bob');
-    expect(ce.connect.mock.calls.length).toBe(0);
+    expect(mockedChatEngine.connect.mock.calls.length).toBe(0);
   });
 
   test('set user', () => {
-    const chat = new Chat(engine, () => {});
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('12345', 'Billy Bob');
-    expect(ce.connect.mock.calls.length).toBe(1);
+    expect(mockedChatEngine.connect.mock.calls.length).toBe(1);
   });
 
   test('add chat does not work unless keys', () => {
-    const chat = new Chat(engine, () => {});
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     chat.addChat('default', '12345');
-    expect(ce.Chat.mock.calls.length).toBe(0);
+    expect(mockedChatEngine.Chat.mock.calls.length).toBe(0);
   });
 
   test('add chat', () => {
-    const chat = new Chat(engine, () => {});
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('12345', 'Billy Bob');
     chat.addChat('default', '12345');
-    expect(ce.Chat.mock.calls.length).toBe(1);
-    expect(ce.Chat.mock.calls[0][0]).toEqual('12345');
+    expect(mockedChatEngine.Chat.mock.calls.length).toBe(1);
+    expect(mockedChatEngine.Chat.mock.calls[0][0]).toEqual('12345');
   });
 
   test('publish dose not work without chat, engine or user', () => {
-    const chat = new Chat(engine, () => {});
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
 
     chat.publish('default', {
       type: MESSAGE,
@@ -313,7 +379,7 @@ describe('Chat IO Interface test', () => {
       },
       messageTrayOpen: false,
     });
-    expect(ch.emit.mock.calls.length).toBe(0);
+    expect(mockedChat.emit.mock.calls.length).toBe(0);
 
     chat.setKeys('12345', '67890');
     chat.publish('default', {
@@ -327,7 +393,7 @@ describe('Chat IO Interface test', () => {
       },
       messageTrayOpen: false,
     });
-    expect(ch.emit.mock.calls.length).toBe(0);
+    expect(mockedChat.emit.mock.calls.length).toBe(0);
 
     chat.setUser('12345', 'Billy Bob');
     chat.publish('default', {
@@ -341,11 +407,11 @@ describe('Chat IO Interface test', () => {
       },
       messageTrayOpen: false,
     });
-    expect(ch.emit.mock.calls.length).toBe(0);
+    expect(mockedChat.emit.mock.calls.length).toBe(0);
   });
 
-  test('publish', () => {
-    const chat = new Chat(engine, () => {});
+  test('publish message', () => {
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('12345', 'Billy Bob');
     chat.addChat('default', '12345');
@@ -360,9 +426,9 @@ describe('Chat IO Interface test', () => {
       },
       messageTrayOpen: false,
     });
-    expect(ch.emit.mock.calls.length).toBe(1);
-    expect(ch.emit.mock.calls[0][0]).toEqual('message');
-    expect(ch.emit.mock.calls[0][1]).toEqual(
+    expect(mockedChat.emit.mock.calls.length).toBe(1);
+    expect(mockedChat.emit.mock.calls[0][0]).toEqual('message');
+    expect(mockedChat.emit.mock.calls[0][1]).toEqual(
       {
         id: '12345',
         text: 'Hello, world!',
@@ -376,8 +442,44 @@ describe('Chat IO Interface test', () => {
     );
   });
 
+  test('publish prayerRequestNotification', () => {
+    const action = () => {};
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
+    chat.setKeys('12345', '67890');
+    chat.setUser('12345', 'William Wallace');
+    chat.addChat('request', '12345');
+    chat.publish('request', {
+      type: 'ACTIONABLE_NOTIFICATION',
+      notificationType: 'PRAYER_REQUEST',
+      id: '12345',
+      user: {
+        id: '12345',
+        nickname: 'William Wallace',
+      },
+      timeStamp: '4:53pm',
+      active: true,
+      action: action,
+    });
+    expect(mockedChat.emit.mock.calls.length).toBe(1);
+    expect(mockedChat.emit.mock.calls[0][0]).toEqual('message');
+    expect(mockedChat.emit.mock.calls[0][1]).toEqual(
+      {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
+        id: '12345',
+        user: {
+          id: '12345',
+          nickname: 'William Wallace',
+        },
+        timeStamp: '4:53pm',
+        active: true,
+        action: action,
+      }
+    );
+  });
+
   test('validate message', () => {
-    const chat = new Chat(engine, () => {});
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     expect(chat.validMessage(
       {
         type: 'MESSAGE',
@@ -391,64 +493,110 @@ describe('Chat IO Interface test', () => {
       }
     )).toBe(true);
   });
-
-  test('receive', () => {
-    const addToChannel = jest.fn();
-    const chat = new Chat(engine, addToChannel);
-    chat.setKeys('12345', '67890');
-    chat.setUser('bb', 'Billy Bob');
-
+  
+  // TODO
+  // test('receive message', () => {
+  //   const addToChannel = jest.fn();
+  //   const chat = new Chat(mockedEngineCore, addToChannel, () => {}, () => {});
+  //   chat.setKeys('12345', '67890');
+  //   chat.setUser('bb', 'Billy Bob');
     
-    let cb = payload => {}; /* eslint-disable-line no-unused-vars */
-    ch.on = (event, callback) => {
-      cb = callback;
-    };
+  //   let cb = payload => {}; /* eslint-disable-line no-unused-vars */
+  //   mockedChat.on = (event, callback) => {
+  //     cb = callback;
+  //   };
 
-    chat.addChat('public', '67890');
+  //   chat.addChat('public', '67890');
     
-    cb(
-      {
-        sender: {
-          uuid: '599465b0-23c2-42a7-b837-298e8a51c94a',
-        },
-        data: {
-          type: 'MESSAGE',
-          id: '599465b0-23c2-42a7-b837-298e8a51c94f',
-          text: 'Hello, world!',
-          user: {
-            id: '599465b0-23c2-42a7-b837-298e8a51c94a',
-            nickname: 'Billy Bob',
-          },
-          messageTrayOpen: false,
-        },
-      }
-    );
+  //   cb(
+  //     {
+  //       sender: {
+  //         uuid: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //       },
+  //       data: {
+  //         type: 'MESSAGE',
+  //         id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+  //         text: 'Hello, world!',
+  //         user: {
+  //           id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //           nickname: 'Billy Bob',
+  //         },
+  //         messageTrayOpen: false,
+  //       },
+  //     }
+  //   );
 
-    expect(addToChannel.mock.calls.length).toBe(1);
-    expect(addToChannel.mock.calls[0][0]).toEqual('public');
-    expect(addToChannel.mock.calls[0][1]).toEqual(
-      {
-        type: 'MESSAGE',
-        id: '599465b0-23c2-42a7-b837-298e8a51c94f',
-        text: 'Hello, world!',
-        user: {
-          id: '599465b0-23c2-42a7-b837-298e8a51c94a',
-          nickname: 'Billy Bob',
-        },
-        messageTrayOpen: false,
-      }
-    );
-  });
+  //   expect(addToChannel.mock.calls.length).toBe(1);
+  //   expect(addToChannel.mock.calls[0][0]).toEqual('public');
+  //   expect(addToChannel.mock.calls[0][1]).toEqual(
+  //     {
+  //       type: 'MESSAGE',
+  //       id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+  //       text: 'Hello, world!',
+  //       user: {
+  //         id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //         nickname: 'Billy Bob',
+  //       },
+  //       messageTrayOpen: false,
+  //     }
+  //   );
+  // });
+
+  // TODO
+  // test('receive prayerRequestNotification', () => {
+  //   const action = () => {};
+  //   const addToChannel = jest.fn();
+  //   const chat = new Chat(mockedEngineCore, addToChannel);
+  //   chat.setKeys('12345', '67890');
+  //   chat.setUser('bb', 'Billy Bob');
+  //   chat.addChat('request', '67890');
+    
+  //   let cb = payload => payload; /* eslint-disable-line no-unused-vars */
+  //   mockedChat.on('message', {
+  //     sender: {
+  //       uuid: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //     },
+  //     data: {
+  //       type: 'ACTIONABLE_NOTIFICATION',
+  //       notificationType: 'PRAYER_REQUEST',
+  //       id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+  //       user: {
+  //         id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //         nickname: 'Billy Bob',
+  //       },
+  //       timeStamp: '4:53pm',
+  //       active: true,
+  //       action: action,
+  //     },
+  //   });
+
+  //   expect(addToChannel.mock.calls.length).toBe(1);
+  //   expect(addToChannel.mock.calls[0][0]).toEqual('host');
+  //   expect(addToChannel.mock.calls[0][1]).toEqual(
+  //     {
+  //       type: 'ACTIONABLE_NOTIFICATION',
+  //       notificationType: 'PRAYER_REQUEST',
+  //       id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+  //       user: {
+  //         id: '599465b0-23c2-42a7-b837-298e8a51c94a',
+  //         nickname: 'Billy Bob',
+  //       },
+  //       timeStamp: '4:53pm',
+  //       active: true,
+  //       action: action,
+  //     },
+  //   );
+  // });
 
   test('receive malformed message', () => {
     const addToChannel = jest.fn();
-    const chat = new Chat(engine, addToChannel);
+    const chat = new Chat(mockedEngineCore, addToChannel, () => {}, () => {});
     chat.setKeys('12345', '67890');
     chat.setUser('bb', 'Billy Bob');
 
     
     let cb = payload => {}; /* eslint-disable-line no-unused-vars */
-    ch.on = (event, callback) => {
+    mockedChat.on = (event, callback) => {
       cb = callback;
     };
 
@@ -467,5 +615,16 @@ describe('Chat IO Interface test', () => {
     );
 
     expect(addToChannel.mock.calls.length).toBe(0);
+  });
+
+  test('invite to channel', () => {
+    const addChannel = jest.fn();
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, addChannel);
+    chat.setKeys('12345', '67890');
+    chat.setUser('bb', 'Billy Bob');
+    chat.addChat('fake-chat', 'fake-chat');
+    chat.inviteToChannel('userId', 'fake-chat');
+    expect(mockedChat.invite.mock.calls.length).toBe(1);
+    expect(mockedChat.invite.mock.calls[0][0]).toBe(mockedChatEngine.global.users.userId);
   });
 });

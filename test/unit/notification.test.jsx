@@ -15,6 +15,7 @@ describe('Notification test', () => {
           {
             type: 'NOTIFICATION',
             notificationType: 'PRAYER',
+            id: '12345',
             host: 'yablby',
             guest: 'cookietree',
             timeStamp: '9:33pm',
@@ -37,6 +38,7 @@ describe('Notification test', () => {
           {
             type: 'NOTIFICATION',
             notificationType: 'JOINED_CHAT',
+            id: '12345',
             name: 'cookietree',
             timeStamp: '9:33pm',
           }
@@ -58,6 +60,7 @@ describe('Notification test', () => {
           {
             type: 'NOTIFICATION',
             notificationType: 'LEFT_CHAT',
+            id: '12345',
             name: 'cookietree',
             timeStamp: '9:33pm',
           }

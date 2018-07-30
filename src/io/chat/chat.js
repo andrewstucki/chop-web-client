@@ -1,6 +1,11 @@
 // @flow
-import type { MessageType } from '../../moment';
+import type { MomentType } from '../../moment';
+import type { UserType } from '../../feed/dux';
 import { MESSAGE } from '../../moment';
+import {
+  PRAYER_REQUEST,
+  ACTIONABLE_NOTIFICATION,
+} from '../../moment/actionableNotification/dux';
 
 
 type ChatType = {
@@ -14,51 +19,70 @@ type ChatType = {
       payload: Object,
     ) => void
   ) => void,
-}
+  invite: MeType => void;
+};
 
-type Me = {
+type MeType = {
+  uuid: string,
+  state: {
+    nickname: string,
+  },
+};
 
-}
-
-type ChatEngine = {
+type ChatEngineType = {
   connect: (
     uuid: string,
     state: Object,
-  ) => Me,
+  ) => MeType,
   Chat: (channel: string) => ChatType,
-  on: (event: string, (data: Object) => void) => void
-}
+  on: (event: string, (data: Object) => void) => void,
+  global: {
+    users: {
+      [string]: MeType
+    }
+  }
+};
 
-type ChatEngineCore = {
+type ChatEngineCoreType = {
   create: (pnConfig: {
     publishKey: string,
     subscribeKey: string,
-  }) => ChatEngine
+  }) => ChatEngineType
 };
 
+type AddToChannelType = (
+  channelId: string,
+  moment: MomentType
+) => void;
+
 class Chat {
-  chatEngineCore: ChatEngineCore
-  chatEngine: ChatEngine
-  me: Me
+  // Type Definitions
+  chatEngineCore: ChatEngineCoreType
+  chatEngine: ChatEngineType
+  me: MeType
   chats: {
     [string]: ChatType,
   }
-  addToChannel: (
-    channelId: string,
-    message: MessageType
-  ) => void
+  addToChannel: AddToChannelType
   userId: string
+  addChannel: (
+    channelName: string,
+    channelId: string,
+    participants?: Array<UserType>
+  ) => void
+  receiveAcceptedPrayerRequest: (id: string) => void;
 
   constructor (
-    engine: ChatEngineCore,
-    addToChannel: (
-      channelId: string,
-      message: MessageType
-    ) => void
+    engine: ChatEngineCoreType,
+    addToChannel: AddToChannelType,
+    addChannel: (channelName: string, channelId: string) => void,
+    receiveAcceptedPrayerRequest: (id: string) => void
   ) {
     this.chatEngineCore = engine;
     this.chats = {};
     this.addToChannel = addToChannel;
+    this.addChannel = addChannel;
+    this.receiveAcceptedPrayerRequest = receiveAcceptedPrayerRequest;
   }
 
   setKeys (publishKey: string, subscribeKey: string): void {
@@ -75,6 +99,22 @@ class Chat {
     this.userId = id;
     this.chatEngine.on ('$.ready', data => {
       this.me = data.me;
+      this.me.direct.on('$.invite', payload => {
+        const currentUser = {
+          id: this.me.uuid,
+          nickname: this.me.state.nickname,
+        };
+        const otherUser = {
+          id: payload.sender.uuid,
+          nickname: payload.sender.state.nickname,
+        };
+
+        this.addChannel(
+          payload.data.channel,
+          payload.data.channel,
+          [currentUser, otherUser]
+        );
+      });
     });
     this.chatEngine.connect(id, {
       nickname,
@@ -85,7 +125,7 @@ class Chat {
     return typeof(str) === 'string' || str instanceof String;
   }
 
-  validMessage (message: MessageType): boolean {
+  validMessage (message: MomentType): boolean {
     return message.type === MESSAGE &&
       this.isString(message.text) &&
       message.text.length > 0 &&
@@ -104,48 +144,73 @@ class Chat {
     return data instanceof Object;
   }
 
-  receiveMessage (channelId: string, message: MessageType): void {
+  receiveMessage (channelId: string, message: MomentType): void {
     if (this.validMessage(message)) {
       this.addToChannel(channelId, message);
     }
   }
 
-  receiveCommand (channelId: string, data: Object): void {
+  receiveCommand (channelId: string, data: MomentType): void {
     if (this.validCommand(data)) {
       switch (data.type) {
+      case ACTIONABLE_NOTIFICATION: {
+        if (data.notificationType === PRAYER_REQUEST) {
+          this.addToChannel('host', data);
+        }
+        return;
+      }
       default:
         //do nothing
       }
     }
   }
 
-  addChat (channelId: string, channelToken: string): void {
+  addChat (channelName: string, channelId: string): void {
     if (!this.chatEngine /*|| !this.me*/) return;
-    const chat = this.chatEngine.Chat(channelToken);
+    const chat = this.chatEngine.Chat(channelId);
     chat.on(
       'message',
       payload => {
         if (payload.sender.uuid !== this.userId) {
-          if (channelId === 'public') {
-            this.receiveMessage(channelId, payload.data);
-          } else {
-            this.receiveCommand(channelId, payload.data);
+          if (channelName !== 'request' || channelName !== 'command') {
+            this.receiveMessage(channelName, payload.data);
+          } 
+
+          if (channelName === 'request' || channelName === 'command') {
+            this.receiveCommand(channelName, payload.data);
           }
         }
       }
     );
-    this.chats[channelId] = chat;
+    chat.on('accepted', payload => {
+      if (payload.sender.uuid !== this.userId) {
+        this.receiveAcceptedPrayerRequest(payload.id);
+      }
+    });
+    this.chats[channelName] = chat;
   }
 
-  publish (channel: string, message: MessageType): void {
+  inviteToChannel (userId: string, channelName: string): void {
+    const privateChat = this.chats[channelName];
+    const otherUser = this.chatEngine.global.users[userId];
+    privateChat.invite(otherUser);
+  }
+
+  publishAcceptedPrayerRequest (id: string, channelName: string): void {
+    const requestId = { id };
+    this.chats[channelName].emit('accepted', requestId);
+  }
+
+  publish (channel: string, moment: MomentType): void {
     if (!this.chatEngine ||
       // !this.me ||
       !this.chats[channel]) {
       return;
     }
-    this.chats[channel].emit('message', message);
+    this.chats[channel].emit('message', moment);
   }
 }
 
-export default Chat;
 export type { Chat };
+
+export default Chat;

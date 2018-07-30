@@ -1,5 +1,6 @@
 // @flow
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
+import { createUid } from '../../util';
 
 // Type Definitions
 
@@ -16,6 +17,7 @@ type NotificationType =
 type LeftChatNotificationType = {
   type: 'NOTIFICATION',
   notificationType: 'LEFT_CHAT',
+  id: string,
   name: string,
   timeStamp: string,
 };
@@ -23,6 +25,7 @@ type LeftChatNotificationType = {
 type JoinedChatNotificationType = {
   type: 'NOTIFICATION',
   notificationType: 'JOINED_CHAT',
+  id: string,
   name: string,
   timeStamp: string,
 };
@@ -30,6 +33,7 @@ type JoinedChatNotificationType = {
 type PrayerNotificationType = {
   type: 'NOTIFICATION',
   notificationType: 'PRAYER',
+  id: string,
   host: string,
   guest: string,
   timeStamp: string,
@@ -55,6 +59,7 @@ const publishPrayerNotification = (host: string, guest: string) => (
     moment: {
       type: NOTIFICATION,
       notificationType: PRAYER,
+      id: createUid(),
       host,
       guest,
       timeStamp: formatAMPM(new Date),
@@ -69,6 +74,7 @@ const publishLeftChatNotification = (name: string, channel: string) => (
     moment: {
       type: NOTIFICATION,
       notificationType: LEFT_CHAT,
+      id: createUid(),
       name,
       timeStamp: formatAMPM(new Date()),
     },
@@ -82,6 +88,7 @@ const publishJoinedChatNotification = (name: string, channel: string) => (
     moment: {
       type: NOTIFICATION,
       notificationType: JOINED_CHAT,
+      id: createUid(),
       name,
       timeStamp: formatAMPM(new Date()),
     },
