@@ -1,9 +1,12 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
-import Feed from '../../src/feed/feed';
-import { MESSAGE } from '../../src/moment/dux';
-import Enzyme from 'enzyme';
 import React from 'react';
+import Enzyme from 'enzyme';
+
+import { MESSAGE } from '../../src/moment/dux';
+
+import Feed from '../../src/feed/feed';
+import FeedActionBanner from '../../src/feed/feedActionBanner';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -16,6 +19,7 @@ describe('Feed tests', () => {
         appendingMessage={false}
         animatingMoment={false}
         placeholderPresent={true}
+        hasParticipants={false}
       />
     );
     expect(wrapper.find('ul').children().length).toBe(0);
@@ -43,6 +47,7 @@ describe('Feed tests', () => {
         appendingMessage={false}
         animatingMoment={true}
         placeholderPresent={true}
+        hasParticipants={false}
       />
     );
     
@@ -70,6 +75,7 @@ describe('Feed tests', () => {
         appendingMessage={false}
         animatingMoment={false}
         placeholderPresent={true}
+        hasParticipants={false}
       />
     );
     expect(wrapper.find('ul').key()).toEqual('default');
@@ -85,6 +91,7 @@ describe('Feed tests', () => {
         appendingMessage={false}
         animatingMoment={false}
         placeholderPresent={true}
+        hasParticipants={false}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('withPlaceholder');
@@ -100,6 +107,7 @@ describe('Feed tests', () => {
         appendingMessage={false}
         animatingMoment={false}
         placeholderPresent={true}
+        hasParticipants={false}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
@@ -115,8 +123,25 @@ describe('Feed tests', () => {
         appendingMessage={false}
         animatingMoment={false}
         placeholderPresent={false}
+        hasParticipants={false}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
+  });
+
+  test('Feed with participants', () => {
+    const wrapper = Enzyme.shallow(
+      <Feed
+        offset={0}
+        moments={[]}
+        onMessageRender={function () {}}
+        currentChannel="host"
+        appendingMessage={false}
+        animatingMoment={false}
+        placeholderPresent={false}
+        hasParticipants={true}
+      />
+    );
+    expect(wrapper.find(FeedActionBanner).length).toBe(1);
   });
 });

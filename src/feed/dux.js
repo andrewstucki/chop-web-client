@@ -473,7 +473,7 @@ const appendMessage = (state: FeedType): boolean => (
   state.appendingMessage
 );
 
-const getParticipantsBool = (state: FeedType): boolean => {
+const hasParticipants = (state: FeedType): boolean => {
   if (state.currentChannel) {
     return state.channels[state.currentChannel].participants ? true : false;
   }
@@ -499,7 +499,7 @@ export {
   appendMessage,
   inviteToChannel,
   receiveAcceptedPrayerRequest,
-  getParticipantsBool,
+  hasParticipants,
 };
 export type {
   AddChannelType,

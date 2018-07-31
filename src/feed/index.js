@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   feedContents,
   appendMessage,
-  getParticipantsBool,
+  hasParticipants,
 } from './dux';
 
 const mapStateToProps = state => {
@@ -15,7 +15,7 @@ const mapStateToProps = state => {
     appendingMessage: appendMessage(feedState),
     animatingMoment: feedState.renderingAnchorMoment,
     placeholderPresent: feedState.placeholderPresent,
-    hasParticipants: getParticipantsBool(feedState),
+    hasParticipants: hasParticipants(feedState),
   };
 };
 

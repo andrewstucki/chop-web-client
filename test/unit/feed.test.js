@@ -9,7 +9,7 @@ import reducer, {
   appendMessage,
   inviteToChannel,
   receiveAcceptedPrayerRequest,
-  getParticipantsBool,
+  hasParticipants,
 } from '../../src/feed/dux';
 
 import {
@@ -1445,7 +1445,7 @@ describe('Feed tests', () => {
   });
 
   test('hasParticipants', () => {
-    const result = getParticipantsBool(
+    const result = hasParticipants(
       {
         ...defaultState,
         channels: {
