@@ -20,6 +20,8 @@ build:
     - yarn build
   only:
     - master
+  allow_failure: false
+
   artifacts:
     expire_in: 1 day
     paths:
@@ -32,3 +34,6 @@ deploy:
     - gsutil iam ch allUsers:objectViewer gs://chop-webclient
   only:
     - master
+  allow_failure: false
+
+  
