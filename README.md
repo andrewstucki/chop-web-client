@@ -1,6 +1,6 @@
 # CWC -- ChOP (Church Online Platform) Web Client
 
-A Progressive Web App for experiencing church online.
+A Progressive Web App for experiencing church online...
 
 ## Getting Started
 
