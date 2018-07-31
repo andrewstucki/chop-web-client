@@ -1464,8 +1464,8 @@ describe('Feed tests', () => {
               },
             ],
           },
-          currentChannel: 'direct',
         },
+        currentChannel: 'direct',
       }
     );
     expect(result).toEqual(true);
