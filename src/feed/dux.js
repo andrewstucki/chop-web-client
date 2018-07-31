@@ -392,7 +392,7 @@ const reducer = (
             moment => (
               {
                 ...moment,
-                active: moment.id === id ? !moment.active : null,
+                active: moment.id === id ? !moment.active : moment.active,
               }
             )
           ),

@@ -203,7 +203,7 @@ class Chat {
     );
     chat.on('accepted', payload => {
       if (payload.sender.uuid !== this.userId) {
-        this.receiveAcceptedPrayerRequest(payload.id);
+        this.receiveAcceptedPrayerRequest(payload.data.id);
       }
     });
     this.chats[channelName] = chat;
