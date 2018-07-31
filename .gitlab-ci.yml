@@ -19,7 +19,7 @@ build:
     # - yarn test
     - yarn build
   only:
-    - integration
+    - master
   artifacts:
     expire_in: 1 day
     paths:
@@ -30,6 +30,5 @@ deploy:
   script:
     - gsutil -m cp -r dist/* gs://chop-webclient
     - gsutil iam ch allUsers:objectViewer gs://chop-webclient
-  when: manual
   only:
     - master
