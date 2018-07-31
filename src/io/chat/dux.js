@@ -25,7 +25,10 @@ import {
 
 import { createMessage } from '../../../src/moment';
 
-import { PUBLISH_ACCEPTED_PRAYER_REQUEST } from '../../../src/moment/actionableNotification/dux';
+import {
+  PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  PRAYER_REQUEST,
+} from '../../../src/moment/actionableNotification/dux';
 
 import {
   CHANGE_CHANNEL,
@@ -153,11 +156,11 @@ const getReducer = (chatIO: Chat) => (
       };
     case PUBLISH_MOMENT_TO_CHANNEL: {
       // $FlowFixMe
-      const { moment } = action;
-      chatIO.publish(
-        'request',
-        moment
-      );
+      const { moment, channel } = action;
+      if (moment.notificationType === PRAYER_REQUEST) {
+        chatIO.publish('request', moment);
+      }
+      chatIO.publish(channel, moment);
       return state;
     }
     case CHAT_INPUT:

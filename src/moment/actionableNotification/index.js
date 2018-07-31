@@ -4,10 +4,14 @@ import { connect } from 'react-redux';
 
 import { addChannel, inviteToChannel } from '../../feed/dux';
 import { publishAcceptedPrayerRequest } from './dux';
+import { publishPrayerNotification } from '../notification/dux';
 
-const mapStateToProps = () => (
-  {}
-);
+const mapStateToProps = state => {
+  const feedState = state.feed;
+  return {
+    currentUser: feedState.currentUser,
+  };
+};
 
 const mapDispatchToProps = dispatch => (
   {
@@ -18,6 +22,9 @@ const mapDispatchToProps = dispatch => (
       dispatch(inviteToChannel(user, channelId));
       dispatch(publishAcceptedPrayerRequest(prayerRequestId));
     },
+    publishPrayerNotification: (host, guest) => dispatch(
+      publishPrayerNotification(host, guest)
+    ),
   }
 );
 

@@ -9,6 +9,7 @@ import reducer, {
   appendMessage,
   inviteToChannel,
   receiveAcceptedPrayerRequest,
+  hasParticipants,
 } from '../../src/feed/dux';
 
 import {
@@ -1441,5 +1442,32 @@ describe('Feed tests', () => {
         },
       },
     );
+  });
+
+  test('hasParticipants', () => {
+    const result = hasParticipants(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bootbot',
+              },
+              {
+                id: '54321',
+                nickname: 'Sockrock',
+              },
+            ],
+          },
+        },
+        currentChannel: 'direct',
+      }
+    );
+    expect(result).toEqual(true);
   });
 });

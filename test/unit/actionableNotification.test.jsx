@@ -11,6 +11,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('ActionableNotification tests', () => {
   test('Active prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
+    const publishPrayerNotification = sinon.spy();
     const wrapper = Enzyme.shallow(
       <ActionableNotification
         notification={
@@ -27,6 +28,13 @@ describe('ActionableNotification tests', () => {
           }
         }
         acceptPrayerRequest={acceptPrayerRequest}
+        currentUser={
+          {
+            id: '5483',
+            nickname: 'Bill Bogus',
+          }
+        }
+        publishPrayerNotification={publishPrayerNotification}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual(
@@ -40,6 +48,7 @@ describe('ActionableNotification tests', () => {
     expect(wrapper.find('button').at(0).text()).toEqual('Accept');
     wrapper.find('button').at(0).simulate('click');
     expect(acceptPrayerRequest.calledOnce).toEqual(true);
+    expect(publishPrayerNotification.calledOnce).toEqual(true);
   });
 
   test('Inactive prayer request notification renders', () => {
@@ -59,6 +68,13 @@ describe('ActionableNotification tests', () => {
           }
         }
         acceptPrayerRequest={() => {}}
+        publishPrayerNotification={() => {}}
+        currentUser={
+          {
+            id: '5483',
+            nickname: 'Bill Bogus',
+          }
+        }
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('notification');

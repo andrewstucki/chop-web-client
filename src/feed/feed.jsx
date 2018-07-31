@@ -1,9 +1,12 @@
 // @flow
 import React from 'react';
-import type { MomentType } from '../moment/dux';
-import Moment from '../moment/moment';
-import styles from './styles.css';
 import BezierEasing from 'bezier-easing';
+
+import type { MomentType } from '../moment/dux';
+
+import Moment from '../moment/moment';
+import FeedActionBanner from './feedActionBanner';
+import styles from './styles.css';
 
 type FeedProps = {
   moments: Array<MomentType>,
@@ -11,6 +14,7 @@ type FeedProps = {
   appendingMessage: boolean,
   animatingMoment: boolean,
   placeholderPresent: boolean,
+  hasParticipants: boolean,
 };
 
 type RefObject = { current: any };
@@ -122,7 +126,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   render () {
-    const { currentChannel, moments, placeholderPresent } = this.props;
+    const {
+      currentChannel,
+      moments,
+      placeholderPresent,
+      hasParticipants,
+    } = this.props;
     const feedStyle =
       currentChannel === 'host' && placeholderPresent ?
         styles.withPlaceholder : styles.withoutPlaceholder;
@@ -142,6 +151,13 @@ class Feed extends React.Component<FeedProps, FeedState> {
         ref={this.wrapperRef}
         className={feedStyle}
       >
+        {
+          hasParticipants &&
+            <FeedActionBanner
+              text="Leave"
+              action={() => {}}
+            />
+        }
         <ul
           // top starts at 100% (the bottom) and gets smaller as list grows
           style={{top: this.state.top}}
@@ -158,6 +174,3 @@ class Feed extends React.Component<FeedProps, FeedState> {
 }
 
 export default Feed;
-
-// end goal is to not run an animation if rendering an anchorMoment in the feed
-// and don't scroll to the anchorMoment if user has scrolled manually

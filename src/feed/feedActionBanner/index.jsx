@@ -11,7 +11,9 @@ const FeedActionBanner = (
   <div className={styles.feedActionBanner}>
     <button 
       className={styles.action}
-      onClick={action}
+      onClick={
+        () => (action())
+      }
     >
       {text}
     </button>
