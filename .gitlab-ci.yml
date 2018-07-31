@@ -1,0 +1,35 @@
+image: in.thewardro.be:4567/io/io-builder:1.0.1
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  - source ~/.bashrc
+  - gcloud config set project $GCP_PROJECT_ID  
+  - echo $SERVICE_ACCOUNT > gcp_credentials.json
+  - gcloud auth activate-service-account --key-file gcp_credentials.json
+  
+build:
+  stage: build
+  script:
+    - yarn
+    # - yarn flow check
+    - yarn lint
+    # - yarn test
+    - yarn build
+  only:
+    - integration
+  artifacts:
+    expire_in: 1 day
+    paths:
+    - dist/
+
+deploy:
+  stage: deploy
+  script:
+    - gsutil -m cp -r dist/* gs://chop-webclient
+    - gsutil iam ch allUsers:objectViewer gs://chop-webclient
+  when: manual
+  only:
+    - master
