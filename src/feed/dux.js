@@ -475,7 +475,9 @@ const appendMessage = (state: FeedType): boolean => (
 
 const hasParticipants = (state: FeedType): boolean => {
   if (state.currentChannel) {
-    return state.channels[state.currentChannel].participants ? true : false;
+    const currentChannel = state.channels[state.currentChannel];
+    return currentChannel.participants &&
+      currentChannel.participants.length ? true : false;
   }
   return false;
 };

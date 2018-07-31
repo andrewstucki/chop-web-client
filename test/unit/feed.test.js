@@ -1444,7 +1444,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('hasParticipants', () => {
+  test('hasParticipants channel with participants', () => {
     const result = hasParticipants(
       {
         ...defaultState,
@@ -1469,5 +1469,22 @@ describe('Feed tests', () => {
       }
     );
     expect(result).toEqual(true);
+  });
+
+  test('hasParticipants channel without participants', () => {
+    const result = hasParticipants(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+          },
+        },
+        currentChannel: 'direct',
+      }
+    );
+    expect(result).toEqual(false);
   });
 });

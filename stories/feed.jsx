@@ -21,25 +21,6 @@ storiesOf('Feed', module)
           appendingMessage={false}
           animatingMoment={false}
           placeholderPresent={false}
-          channels={
-            {
-              direct: {
-                id: '12345',
-                name: 'Carl',
-                moments: [],
-                participants: [
-                  {
-                    id: '12345',
-                    nickname: 'Bootbot',
-                  },
-                  {
-                    id: '54321',
-                    nickname: 'Sockrock',
-                  },
-                ],
-              },
-            }
-          }
           hasParticipants={false}
         />
       </div>
@@ -74,26 +55,6 @@ storiesOf('Feed', module)
           }
           animatingMoment={false}
           placeholderPresent={false}
-          channels={
-            {
-              direct: {
-                id: '12345',
-                name: 'Carl',
-                moments: [],
-                participants: [
-                  {
-                    id: '12345',
-                    nickname: 'Bootbot',
-                  },
-                  {
-                    id: '54321',
-                    nickname: 'Sockrock',
-                  },
-                ],
-                hasParticipants: true,
-              },
-            }
-          }
           hasParticipants={false}
         />
       </div>
@@ -129,26 +90,6 @@ storiesOf('Feed', module)
           }
           animatingMoment={false}
           placeholderPresent={false}
-          channels={
-            {
-              direct: {
-                id: '12345',
-                name: 'Carl',
-                moments: [],
-                participants: [
-                  {
-                    id: '12345',
-                    nickname: 'Bootbot',
-                  },
-                  {
-                    id: '54321',
-                    nickname: 'Sockrock',
-                  },
-                ],
-                hasParticipants: true,
-              },
-            }
-          }
           hasParticipants={true}
         />
       </div>
