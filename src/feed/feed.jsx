@@ -155,9 +155,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           hasParticipants &&
             <FeedActionBanner
               text="Leave"
-              action={() => {
-                console.log('Leave');
-              }}
+              action={() => {}}
             />
         }
         <ul
