@@ -1,7 +1,10 @@
 // @flow
 import type { MomentType } from '../../moment';
 import type { UserType } from '../../feed/dux';
-import { MESSAGE } from '../../moment';
+import {
+  MESSAGE,
+  PRAYER,
+} from '../../moment';
 import {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
@@ -140,13 +143,29 @@ class Chat {
       message.user.nickname.length > 0;
   }
 
+  validNotification (notification: MomentType): boolean {
+    switch (notification.notificationType) {
+    case PRAYER:
+      return this.isString(notification.timeStamp) &&
+        notification.timeStamp.length > 0 &&
+        this.isString(notification.host) &&
+        notification.host.length > 0 &&
+        this.isString(notification.guest) &&
+        notification.guest.length > 0 &&
+        this.isString(notification.id) &&
+        notification.id.length === 36;
+    }
+    return false;
+  }
+
   validCommand (data: Object): boolean {
+    // TODO validate commands
     return data instanceof Object;
   }
 
-  receiveMessage (channelId: string, message: MomentType): void {
-    if (this.validMessage(message)) {
-      this.addToChannel(channelId, message);
+  receiveMoment (channelId: string, moment: MomentType): void {
+    if (this.validMessage(moment) || this.validNotification(moment)) {
+      this.addToChannel(channelId, moment);
     }
   }
 
@@ -173,7 +192,7 @@ class Chat {
       payload => {
         if (payload.sender.uuid !== this.userId) {
           if (channelName !== 'request' || channelName !== 'command') {
-            this.receiveMessage(channelName, payload.data);
+            this.receiveMoment(channelName, payload.data);
           } 
 
           if (channelName === 'request' || channelName === 'command') {

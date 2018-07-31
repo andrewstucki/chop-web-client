@@ -10,10 +10,17 @@ import styles from './style.css';
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
   acceptPrayerRequest: (UserType, id: string) => void,
+  publishPrayerNotification: (host: string, guest: string) => void,
+  currentUser: UserType,
 };
 
 const ActionableNotification = (
-  { notification, acceptPrayerRequest }: ActionableNotificationPropsType
+  {
+    notification,
+    acceptPrayerRequest,
+    publishPrayerNotification,
+    currentUser,
+  }: ActionableNotificationPropsType
 ) => {
   const {
     active,
@@ -47,7 +54,10 @@ const ActionableNotification = (
           <button
             className={styles.acceptButton}
             onClick={
-              () => (acceptPrayerRequest(user, id))
+              () => (
+                acceptPrayerRequest(user, id),
+                publishPrayerNotification(currentUser.nickname, user.nickname)
+              )
             }
           >
             Accept

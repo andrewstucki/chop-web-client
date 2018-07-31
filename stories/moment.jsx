@@ -10,7 +10,11 @@ import { createMessage } from '../src/moment';
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
-const store = createStore(() => {});
+const store = createStore(() => (
+  {
+    feed: {},
+  }
+));
 
 storiesOf('Moment', module)
   .add('Message tray closed', () => (

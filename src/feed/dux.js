@@ -154,7 +154,11 @@ const receiveAcceptedPrayerRequest = (id: string): ReceiveAcceptedPrayerRequestT
   }
 );
 
-const addChannel = (name: string, id: string, participants?: Array<UserType>): AddChannelType => (
+const addChannel = (
+  name: string,
+  id: string,
+  participants?: Array<UserType>
+): AddChannelType => (
   {
     type: ADD_CHANNEL,
     channel: {
@@ -465,9 +469,16 @@ const feedContents = (state: FeedType): Array<MessageType> => (
     []
 );
 
-const appendMessage = (state: FeedType) => (
+const appendMessage = (state: FeedType): boolean => (
   state.appendingMessage
 );
+
+const getParticipantsBool = (state: FeedType): boolean => {
+  if (state.currentChannel) {
+    return state.channels[state.currentChannel].participants ? true : false;
+  }
+  return false;
+};
 
 // Exports
 
@@ -488,6 +499,7 @@ export {
   appendMessage,
   inviteToChannel,
   receiveAcceptedPrayerRequest,
+  getParticipantsBool,
 };
 export type {
   AddChannelType,
@@ -499,6 +511,7 @@ export type {
   FeedType,
   InviteToChannelType,
   ReceiveAcceptedPrayerRequestType,
+  ChannelType,
 };
 
 export default reducer;

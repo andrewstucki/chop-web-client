@@ -4,8 +4,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
-import Feed from '../src/feed/feed';
+
 import { createMessage } from '../src/moment';
+
+import Feed from '../src/feed/feed';
 
 const store = createStore(() => {});
 
@@ -19,6 +21,26 @@ storiesOf('Feed', module)
           appendingMessage={false}
           animatingMoment={false}
           placeholderPresent={false}
+          channels={
+            {
+              direct: {
+                id: '12345',
+                name: 'Carl',
+                moments: [],
+                participants: [
+                  {
+                    id: '12345',
+                    nickname: 'Bootbot',
+                  },
+                  {
+                    id: '54321',
+                    nickname: 'Sockrock',
+                  },
+                ],
+                hasParticipants: true,
+              },
+            }
+          }
         />
       </div>
     </Provider>
@@ -52,6 +74,26 @@ storiesOf('Feed', module)
           }
           animatingMoment={false}
           placeholderPresent={false}
+          channels={
+            {
+              direct: {
+                id: '12345',
+                name: 'Carl',
+                moments: [],
+                participants: [
+                  {
+                    id: '12345',
+                    nickname: 'Bootbot',
+                  },
+                  {
+                    id: '54321',
+                    nickname: 'Sockrock',
+                  },
+                ],
+                hasParticipants: true,
+              },
+            }
+          }
         />
       </div>
     </Provider>

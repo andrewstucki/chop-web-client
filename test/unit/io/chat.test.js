@@ -262,7 +262,7 @@ describe('Chat IO reducer test', () => {
       }
     );
     expect(result).toEqual(defaultState);
-    expect(chat.publish.mock.calls.length).toBe(1);
+    expect(chat.publish.mock.calls.length).toBe(2);
     expect(chat.publish.mock.calls[0][0]).toEqual('request');
     expect(chat.publish.mock.calls[0][1]).toEqual(
       {
@@ -490,6 +490,20 @@ describe('Chat IO Interface test', () => {
           nickname: 'Billy Bob',
         },
         messageTrayOpen: false,
+      }
+    )).toBe(true);
+  });
+
+  test('validate prayer notification', () => {
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
+    expect(chat.validNotification(
+      {
+        type: 'NOTIFICATION',
+        notificationType: 'PRAYER',
+        id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+        host: 'Billy Bob',
+        guest: 'Jackie',
+        timeStamp: '4:53pm',
       }
     )).toBe(true);
   });
