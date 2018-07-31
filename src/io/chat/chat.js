@@ -4,11 +4,9 @@ import type { UserType } from '../../feed/dux';
 import {
   MESSAGE,
   PRAYER,
-} from '../../moment';
-import {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
-} from '../../moment/actionableNotification/dux';
+} from '../../moment';
 
 
 type ChatType = {
