@@ -507,6 +507,23 @@ describe('Chat IO Interface test', () => {
       }
     )).toBe(true);
   });
+
+  test('validate prayer request notification', () => {
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
+    expect(chat.validCommand(
+      {
+        type: 'ACTIONABLE_NOTIFICATION',
+        notificationType: 'PRAYER_REQUEST',
+        id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+        user: {
+          id: '12345',
+          nickname: 'Billy Bob',
+        },
+        timeStamp: '4:53pm',
+        active: true,
+      }
+    )).toBe(true);
+  });
   
   // TODO
   // test('receive message', () => {

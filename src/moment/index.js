@@ -12,6 +12,11 @@ import {
   NOTIFICATION,
   PRAYER,
 } from './notification/dux';
+import {
+  PRAYER_REQUEST,
+  ACTIONABLE_NOTIFICATION,
+} from './actionableNotification/dux';
+
 
 import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
 
@@ -39,8 +44,8 @@ export {
 export {
   NOTIFICATION,
   PRAYER,
-  PUBLISH_MOMENT_TO_CHANNEL,
-  PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  PRAYER_REQUEST,
+  ACTIONABLE_NOTIFICATION,
 };
 
 export type {
