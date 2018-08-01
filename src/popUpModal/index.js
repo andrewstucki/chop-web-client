@@ -19,7 +19,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => (
   {
     keepChatting: () => (dispatch(keepChatting())),
-    leaveChat: () => (dispatch(leaveChat())),
+    leaveChat: user => (dispatch(leaveChat(user))),
   }
 );
 

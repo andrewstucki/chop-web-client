@@ -12,6 +12,7 @@ import reducer, {
   hasParticipants,
   getOtherUser,
   togglePopUpModal,
+  leaveChat,
 } from '../../src/feed/dux';
 
 import {
@@ -836,8 +837,10 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public:
-            [
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
               {
                 id: '189',
                 text: 'Hello Billy Bob',
@@ -857,6 +860,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
               },
             ],
+          },
         },
         currentChannel: 'public',
       },
@@ -1537,6 +1541,65 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         isPopUpModalVisible: true,
+      }
+    );
+  });
+
+  test('leaveChat', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bootbot',
+              },
+              {
+                id: '54321',
+                nickname: 'Sockrock',
+              },
+            ],
+          },
+        },
+        currentChannel: 'direct',
+        currentUser: {
+          id: '12345',
+          nickname: 'Bootbot',
+        },
+      },
+      leaveChat(
+        {
+          id: '12345',
+          nickname: 'Bootbot',
+        }
+      )
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            participants: [
+              {
+                id: '54321',
+                nickname: 'Sockrock',
+              },
+            ],
+          },
+        },
+        currentChannel: 'direct',
+        currentUser: {
+          id: '12345',
+          nickname: 'Bootbot',
+        },
       }
     );
   });

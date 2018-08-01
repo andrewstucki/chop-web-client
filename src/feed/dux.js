@@ -48,6 +48,7 @@ const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
+const LEAVE_CHAT = 'LEAVE_CHAT';
 
 // Flow Type Definitions
 
@@ -113,6 +114,11 @@ type RemoveChannelType = {
 type TogglePopUpModalType = {
   type: 'TOGGLE_POP_UP_MODAL',
   isPopUpModalVisible: boolean,
+};
+
+type LeaveChatType = {
+  type: 'LEAVE_CHAT',
+  user: UserType,
 };
 
 type FeedActionTypes =
@@ -201,6 +207,13 @@ const togglePopUpModal = (
   {
     type: TOGGLE_POP_UP_MODAL,
     isPopUpModalVisible,
+  }
+);
+
+const leaveChat = (user: UserType): LeaveChatType => (
+  {
+    type: LEAVE_CHAT,
+    user,
   }
 );
 
@@ -427,10 +440,13 @@ const reducer = (
       ...state,
       channels: {
         ...channels,
-        [currentChannel]: [
-          ...channels[currentChannel].moments.slice(0, messageIndex),
-          ...channels[currentChannel].moments.slice(messageIndex + 1),
-        ],
+        [currentChannel]: {
+          ...channels[currentChannel],
+          moments: [
+            ...channels[currentChannel].moments.slice(0, messageIndex),
+            ...channels[currentChannel].moments.slice(messageIndex + 1),
+          ],
+        },
       },
     };
   }
@@ -478,6 +494,37 @@ const reducer = (
       ...state,
       isPopUpModalVisible: !action.isPopUpModalVisible,
     };
+  case LEAVE_CHAT: {
+    const { channels, currentChannel } = state;
+    const { user } = action;
+    if (currentChannel &&
+      channels[currentChannel].participants &&
+      channels[currentChannel].participants.length
+    ) {
+      const { participants } = channels[currentChannel];
+      const userIndex = participants.findIndex(el => (
+        el.id === user.id
+      ));
+      if (participants) {
+        // Flow complains that participants can still
+        // be undefined here even though we already checked for them
+        return {
+          ...state,
+          channels: {
+            ...channels,
+            [currentChannel]: {
+              ...channels[currentChannel],
+              participants: [
+                ...participants.slice(0, userIndex),
+                ...participants.slice(userIndex + 1),
+              ],
+            },
+          },
+        };
+      }
+    }
+    return state;
+  }
   default:
     return state;
   }
@@ -527,6 +574,7 @@ export {
   REMOVE_CHANNEL,
   INVITE_TO_CHANNEL,
   TOGGLE_POP_UP_MODAL,
+  LEAVE_CHAT,
 };
 export {
   changeChannel,
@@ -541,6 +589,7 @@ export {
   hasParticipants,
   getOtherUser,
   togglePopUpModal,
+  leaveChat,
 };
 export type {
   AddChannelType,
@@ -554,6 +603,7 @@ export type {
   ReceiveAcceptedPrayerRequestType,
   ChannelType,
   TogglePopUpModalType,
+  LeaveChatType,
 };
 
 export default reducer;
