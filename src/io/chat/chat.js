@@ -4,11 +4,9 @@ import type { UserType } from '../../feed/dux';
 import {
   MESSAGE,
   PRAYER,
-} from '../../moment';
-import {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
-} from '../../moment/actionableNotification/dux';
+} from '../../moment';
 
 
 type ChatType = {
@@ -158,9 +156,16 @@ class Chat {
     return false;
   }
 
-  validCommand (data: Object): boolean {
-    // TODO validate commands
-    return data instanceof Object;
+  validCommand (command: MomentType): boolean {
+    return command.notificationType === PRAYER_REQUEST &&
+      this.isString(command.id) &&
+      command.id.length === 36 &&
+      this.isString(command.user.id) &&
+      this.isString(command.user.nickname) &&
+      command.user.nickname.length > 0 &&
+      this.isString(command.timeStamp) &&
+      command.timeStamp.length > 0 &&
+      command.active.constructor === Boolean;
   }
 
   receiveMoment (channelId: string, moment: MomentType): void {
@@ -169,12 +174,12 @@ class Chat {
     }
   }
 
-  receiveCommand (channelId: string, data: MomentType): void {
-    if (this.validCommand(data)) {
-      switch (data.type) {
+  receiveCommand (channelId: string, command: MomentType): void {
+    if (this.validCommand(command)) {
+      switch (command.type) {
       case ACTIONABLE_NOTIFICATION: {
-        if (data.notificationType === PRAYER_REQUEST) {
-          this.addToChannel('host', data);
+        if (command.notificationType === PRAYER_REQUEST) {
+          this.addToChannel('host', command);
         }
         return;
       }

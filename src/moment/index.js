@@ -1,9 +1,14 @@
-import Message from './message';
-import Notification from './notification';
 import {
   NOTIFICATION,
   PRAYER,
 } from './notification/dux';
+import {
+  PRAYER_REQUEST,
+  ACTIONABLE_NOTIFICATION,
+} from './actionableNotification/dux';
+
+import Message from './message';
+import Notification from './notification';
 import ActionableNotification from './actionableNotification';
 import Text from './text';
 import AvatarMoment from './avatarMoment';
@@ -20,4 +25,6 @@ export {
 export {
   NOTIFICATION,
   PRAYER,
+  PRAYER_REQUEST,
+  ACTIONABLE_NOTIFICATION,
 };
