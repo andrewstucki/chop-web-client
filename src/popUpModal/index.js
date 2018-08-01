@@ -6,6 +6,9 @@ import {
   getOtherUser,
   togglePopUpModal,
 } from '../feed/dux';
+
+import { publishLeftChatNotification } from '../moment';
+
 import PopUpModal from './popUpModal';
 
 const mapStateToProps = state => {
@@ -23,6 +26,9 @@ const mapDispatchToProps = dispatch => (
       togglePopUpModal(isPopUpModalVisible)
     )),
     leaveChat: user => (dispatch(leaveChat(user))),
+    publishLeftChatNotification: name => (dispatch(
+      publishLeftChatNotification(name)
+    )),
   }
 );
 

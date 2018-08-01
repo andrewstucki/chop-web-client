@@ -7,6 +7,7 @@ import type {
 import {
   NOTIFICATION,
   PRAYER,
+  publishLeftChatNotification,
 } from './notification/dux';
 
 import {
@@ -38,6 +39,7 @@ export {
   Text,
   AvatarMoment,
   publishAcceptedPrayerRequest,
+  publishLeftChatNotification,
 };
 
 export {

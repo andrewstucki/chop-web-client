@@ -5,6 +5,7 @@ import {
   feedContents,
   appendMessage,
   hasParticipants,
+  togglePopUpModal,
 } from './dux';
 
 const mapStateToProps = state => {
@@ -16,11 +17,21 @@ const mapStateToProps = state => {
     animatingMoment: feedState.renderingAnchorMoment,
     placeholderPresent: feedState.placeholderPresent,
     hasParticipants: hasParticipants(feedState),
+    isPopUpModalPresent: feedState.isPopUpModalPresent,
   };
 };
 
+const mapDispatchToProps = dispatch => (
+  {
+    togglePopUpModal: isPopUpModalPresent => (dispatch(
+      togglePopUpModal(isPopUpModalPresent)
+    )),
+  }
+);
+
 const VisibleFeed = connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Feed);
 
 export default VisibleFeed;

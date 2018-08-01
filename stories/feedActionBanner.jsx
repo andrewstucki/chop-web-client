@@ -8,12 +8,14 @@ storiesOf('FeedActionBanner', module)
   .add('Leave direct chat', () => (
     <FeedActionBanner
       text="Leave"
-      action={action('clicked')}
+      togglePopUpModal={action('clicked')}
+      isPopUpModalVisible={false}
     />
   ))
   .add('Cancel direct chat', () => (
     <FeedActionBanner
       text="Cancel"
-      action={action('clicked')}
+      togglePopUpModal={action('clicked')}
+      isPopUpModalVisible={false}
     />
   ));

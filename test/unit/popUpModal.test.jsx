@@ -14,6 +14,7 @@ describe('PopUpModal tests', () => {
       <PopUpModal
         togglePopUpModal={() => {}}
         leaveChat={() => {}}
+        publishLeftChatNotification={() => {}}
         otherUser={
           {
             id: '12345',
@@ -37,12 +38,14 @@ describe('PopUpModal tests', () => {
   });
 
   test('Actions can be fired', () => {
-    const buttonOneOnClick = sinon.spy();
-    const buttonTwoOnClick = sinon.spy();
+    const togglePopUpModal = sinon.spy();
+    const leaveChat = sinon.spy();
+    const publishLeftChatNotification = sinon.spy();
     const wrapper = Enzyme.shallow(
       <PopUpModal
-        togglePopUpModal={buttonOneOnClick}
-        leaveChat={buttonTwoOnClick}
+        togglePopUpModal={togglePopUpModal}
+        leaveChat={leaveChat}
+        publishLeftChatNotification={publishLeftChatNotification}
         otherUser={
           {
             id: '12345',
@@ -60,7 +63,8 @@ describe('PopUpModal tests', () => {
     );
     expect(wrapper.find('button').at(0).simulate('click'));
     expect(wrapper.find('button').at(1).simulate('click'));
-    expect(buttonOneOnClick.calledOnce).toEqual(true);
-    expect(buttonTwoOnClick.calledOnce).toEqual(true);
+    expect(togglePopUpModal.calledOnce).toEqual(true);
+    expect(leaveChat.calledOnce).toEqual(true);
+    expect(publishLeftChatNotification.calledOnce).toEqual(true);
   });
 });

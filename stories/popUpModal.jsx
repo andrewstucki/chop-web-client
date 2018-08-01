@@ -11,6 +11,7 @@ storiesOf('PopUpModal', module)
     <PopUpModal
       togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
+      publishLeftChatNotification={action('clicked')}
       otherUser={
         {
           id: '12345',
@@ -31,6 +32,7 @@ storiesOf('PopUpModal', module)
     <PopUpModal
       togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
+      publishLeftChatNotification={action('clicked')}
       otherUser={
         {
           id: '12345',

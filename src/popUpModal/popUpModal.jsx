@@ -7,6 +7,7 @@ import styles from './style.css';
 type PopUpModalPropsType = {
   togglePopUpModal: (isPopUpModalVisible: boolean) => void,
   leaveChat: (user: UserType) => void,
+  publishLeftChatNotification: (name: string) => void,
   otherUser: UserType,
   currentUser: UserType,
   isPopUpModalVisible: boolean,
@@ -19,6 +20,7 @@ const PopUpModal = (
     otherUser,
     currentUser,
     isPopUpModalVisible,
+    publishLeftChatNotification,
   }: PopUpModalPropsType
 ) => {
   if (isPopUpModalVisible) {
@@ -37,7 +39,10 @@ const PopUpModal = (
             </button>
             <button
               className={styles.action}
-              onClick={() => (leaveChat(currentUser))}
+              onClick={() => (
+                leaveChat(currentUser),
+                publishLeftChatNotification(currentUser.nickname)
+              )}
             >
               Leave
             </button>
