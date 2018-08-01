@@ -9,12 +9,18 @@ import '../assets/global.css';
 storiesOf('PopUpModal', module)
   .add('Modal renders if isPopUpModalVisible is true', () => (
     <PopUpModal
-      keepChatting={action('clicked')}
+      togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
-      user={
+      otherUser={
         {
           id: '12345',
           nickname: 'Walker, Texas Ranger',
+        }
+      }
+      currentUser={
+        {
+          id: '12345',
+          nickname: 'Jimmy Trivette',
         }
       }
       isPopUpModalVisible={true}
@@ -23,12 +29,18 @@ storiesOf('PopUpModal', module)
 
   .add('Modal does not render if isPopUpModalVisible is false', () => (
     <PopUpModal
-      keepChatting={action('clicked')}
+      togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
-      user={
+      otherUser={
         {
           id: '12345',
           nickname: 'Walker, Texas Ranger',
+        }
+      }
+      currentUser={
+        {
+          id: '12345',
+          nickname: 'Jimmy Trivette',
         }
       }
       isPopUpModalVisible={false}

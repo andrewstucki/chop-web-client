@@ -2,9 +2,9 @@
 import { connect } from 'react-redux';
 
 import {
-  keepChatting,
   leaveChat,
   getOtherUser,
+  togglePopUpModal,
 } from '../feed/dux';
 import PopUpModal from './popUpModal';
 
@@ -12,13 +12,16 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     isPopUpModalVisible: feedState.isPopUpModalVisible,
-    user: getOtherUser(feedState),
+    otherUser: getOtherUser(feedState),
+    currentUser: feedState.currentUser,
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    keepChatting: () => (dispatch(keepChatting())),
+    togglePopUpModal: isPopUpModalVisible => (dispatch(
+      togglePopUpModal(isPopUpModalVisible)
+    )),
     leaveChat: user => (dispatch(leaveChat(user))),
   }
 );

@@ -12,12 +12,18 @@ describe('PopUpModal tests', () => {
   test('Modal has background and popup', () => {
     const wrapper = Enzyme.shallow(
       <PopUpModal
-        keepChatting={() => {}}
+        togglePopUpModal={() => {}}
         leaveChat={() => {}}
-        user={
+        otherUser={
           {
             id: '12345',
             nickname: 'Walker, Texas Ranger',
+          }
+        }
+        currentUser={
+          {
+            id: '12345',
+            nickname: 'Jimmy Trivette',
           }
         }
         isPopUpModalVisible={true}
@@ -35,12 +41,18 @@ describe('PopUpModal tests', () => {
     const buttonTwoOnClick = sinon.spy();
     const wrapper = Enzyme.shallow(
       <PopUpModal
-        keepChatting={buttonOneOnClick}
+        togglePopUpModal={buttonOneOnClick}
         leaveChat={buttonTwoOnClick}
-        user={
+        otherUser={
           {
             id: '12345',
-            nickname: 'Walker Texas Ranger',
+            nickname: 'Walker, Texas Ranger',
+          }
+        }
+        currentUser={
+          {
+            id: '12345',
+            nickname: 'Jimmy Trivette',
           }
         }
         isPopUpModalVisible={true}
