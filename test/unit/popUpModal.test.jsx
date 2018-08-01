@@ -20,7 +20,7 @@ describe('PopUpModal tests', () => {
             nickname: 'Walker, Texas Ranger',
           }
         }
-        showPopUpModal={true}
+        isPopUpModalVisible={true}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('popUpModal');
@@ -43,7 +43,7 @@ describe('PopUpModal tests', () => {
             nickname: 'Walker Texas Ranger',
           }
         }
-        showPopUpModal={true}
+        isPopUpModalVisible={true}
       />
     );
     expect(wrapper.find('button').at(0).simulate('click'));

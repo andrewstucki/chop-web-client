@@ -8,7 +8,7 @@ type PopUpModalPropsType = {
   keepChatting: () => void,
   leaveChat: () => void,
   user: UserType,
-  showPopUpModal: boolean,
+  isPopUpModalVisible: boolean,
 };
 
 const PopUpModal = (
@@ -16,10 +16,10 @@ const PopUpModal = (
     keepChatting,
     leaveChat,
     user,
-    showPopUpModal,
+    isPopUpModalVisible,
   }: PopUpModalPropsType
 ) => {
-  if (showPopUpModal) {
+  if (isPopUpModalVisible) {
     return (
       <div className={styles.popUpModal}>
         <div className={styles.alert}>

@@ -6,6 +6,7 @@ describe('NavBar tests', () => {
   test('channel selector test', () => {
     const result = getChannels(
       {
+        ...defaultFeedState,
         channels: {
           public: {
             id: '12345',
@@ -53,6 +54,7 @@ describe('NavBar tests', () => {
   test('show pip in public', () => {
     const result = getChannels(
       {
+        ...defaultFeedState,
         channels: {
           public: {
             id: '12345',
@@ -105,6 +107,7 @@ describe('NavBar tests', () => {
   test('show pip in host', () => {
     const result = getChannels(
       {
+        ...defaultFeedState,
         channels: {
           public: {
             id: '12345',

@@ -11,6 +11,7 @@ import reducer, {
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
+  togglePopUpModal,
 } from '../../src/feed/dux';
 
 import {
@@ -18,9 +19,8 @@ import {
   closeMessageTray,
   deleteMessage,
   toggleCloseTrayButton,
+  publishAcceptedPrayerRequest,
 } from '../../src/moment';
-
-import { publishAcceptedPrayerRequest } from '../../src/moment/actionableNotification/dux';
 
 import { MESSAGE } from '../../src/moment/dux';
 
@@ -1521,6 +1521,22 @@ describe('Feed tests', () => {
       {
         id: '54321',
         nickname: 'Sockrock',
+      }
+    );
+  });
+
+  test('togglePopUpModal', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        isPopUpModalVisible: false,
+      },
+      togglePopUpModal(false)
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isPopUpModalVisible: true,
       }
     );
   });

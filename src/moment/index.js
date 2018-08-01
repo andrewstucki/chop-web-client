@@ -13,6 +13,7 @@ import {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  publishAcceptedPrayerRequest,
 } from './actionableNotification/dux';
 
 import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
@@ -36,6 +37,7 @@ export {
   ActionableNotification,
   Text,
   AvatarMoment,
+  publishAcceptedPrayerRequest,
 };
 
 export {

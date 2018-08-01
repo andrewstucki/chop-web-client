@@ -47,6 +47,7 @@ const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
+const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 
 // Flow Type Definitions
 
@@ -73,6 +74,7 @@ type FeedType = {
   anchorMoment: AnchorMomentType | null,
   animatingMoment: boolean,
   placeholderPresent: boolean,
+  isPopUpModalVisible: boolean,
 };
 
 type ChangeChannelType = {
@@ -108,6 +110,11 @@ type RemoveChannelType = {
   channel: string,
 };
 
+type TogglePopUpModalType = {
+  type: 'TOGGLE_POP_UP_MODAL',
+  isPopUpModalVisible: boolean,
+};
+
 type FeedActionTypes =
   | ChangeChannelType
   | PublishMessageAction
@@ -133,7 +140,10 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const receiveMoment = (channel: string, moment: MomentType): ReceiveMomentType => (
+const receiveMoment = (
+  channel: string,
+  moment: MomentType
+): ReceiveMomentType => (
   {
     type: RECEIVE_MOMENT,
     channel,
@@ -141,7 +151,9 @@ const receiveMoment = (channel: string, moment: MomentType): ReceiveMomentType =
   }
 );
 
-const receiveAcceptedPrayerRequest = (id: string): ReceiveAcceptedPrayerRequestType => (
+const receiveAcceptedPrayerRequest = (
+  id: string
+): ReceiveAcceptedPrayerRequestType => (
   {
     type: RECEIVE_ACCEPTED_PRAYER_REQUEST,
     id,
@@ -183,6 +195,15 @@ const removeChannel = (channel: string): RemoveChannelType => (
   }
 );
 
+const togglePopUpModal = (
+  isPopUpModalVisible: boolean
+): TogglePopUpModalType => (
+  {
+    type: TOGGLE_POP_UP_MODAL,
+    isPopUpModalVisible,
+  }
+);
+
 // Default State
 
 const defaultState = {
@@ -197,6 +218,7 @@ const defaultState = {
   anchorMoment: null,
   animatingMoment: true,
   placeholderPresent: false,
+  isPopUpModalVisible: false,
 };
 
 // Reducer
@@ -451,6 +473,11 @@ const reducer = (
       },
       anchorMoment: null,
     };
+  case TOGGLE_POP_UP_MODAL:
+    return {
+      ...state,
+      isPopUpModalVisible: !action.isPopUpModalVisible,
+    };
   default:
     return state;
   }
@@ -499,6 +526,7 @@ export {
   ADD_CHANNEL,
   REMOVE_CHANNEL,
   INVITE_TO_CHANNEL,
+  TOGGLE_POP_UP_MODAL,
 };
 export {
   changeChannel,
@@ -512,6 +540,7 @@ export {
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
+  togglePopUpModal,
 };
 export type {
   AddChannelType,
@@ -524,6 +553,7 @@ export type {
   InviteToChannelType,
   ReceiveAcceptedPrayerRequestType,
   ChannelType,
+  TogglePopUpModalType,
 };
 
 export default reducer;

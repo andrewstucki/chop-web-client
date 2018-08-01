@@ -7,7 +7,7 @@ import PopUpModal from '../src/popUpModal/popUpModal';
 import '../assets/global.css';
 
 storiesOf('PopUpModal', module)
-  .add('Modal renders if showPopUpModal is true', () => (
+  .add('Modal renders if isPopUpModalVisible is true', () => (
     <PopUpModal
       keepChatting={action('clicked')}
       leaveChat={action('clicked')}
@@ -17,11 +17,11 @@ storiesOf('PopUpModal', module)
           nickname: 'Walker, Texas Ranger',
         }
       }
-      showPopUpModal={true}
+      isPopUpModalVisible={true}
     />
   ))
 
-  .add('Modal does not render if showPopUpModal is false', () => (
+  .add('Modal does not render if isPopUpModalVisible is false', () => (
     <PopUpModal
       keepChatting={action('clicked')}
       leaveChat={action('clicked')}
@@ -31,6 +31,6 @@ storiesOf('PopUpModal', module)
           nickname: 'Walker, Texas Ranger',
         }
       }
-      showPopUpModal={false}
+      isPopUpModalVisible={false}
     />
   ));
