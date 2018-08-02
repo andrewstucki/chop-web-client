@@ -16,7 +16,7 @@ type NavBarState = {
   left: number,
   width: number,
   opacity: number,
-}
+};
 
 const Underline = props => (
   <div
@@ -31,9 +31,10 @@ const Underline = props => (
     }
   ></div>
 );
+
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: any
-  channelLink: (channel:ChannelType) => React$Node | string
+  channelLink: (channel:ChannelType) => React$Node | string;
   
   constructor (props:NavBarProps) {
     super(props);
@@ -68,6 +69,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
   channelLink (channel: ChannelType) {
     const style = channel.isCurrent ? null : styles.unselected;
+
     if (channel.id === 'public') {
       return (
         <span className={style}>
@@ -80,16 +82,27 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           {channel.id}
         </span>
       );
-    } else if (channel.directChatParticipant) {
+    } else if (channel.directChatParticipants
+      && channel.directChatParticipants.length > 0
+    ) {
       const opacity = channel.isCurrent ? '1.0' : '0.5';
-      return (
-        <div
-          className={styles.avatar} 
-          style={{backgroundColor: getAvatarColor(channel.directChatParticipant, opacity)}}
-        >
-          {getFirstInitial(channel.directChatParticipant)}
-        </div>
+
+      const participantAvatars = participants => (
+        participants.map(participant => (
+          <div
+            key={participant.id}
+            className={styles.avatar} 
+            style={
+              {
+                backgroundColor: getAvatarColor(participant.nickname, opacity),
+              }
+            }
+          >
+            {getFirstInitial(participant.nickname)}
+          </div>
+        ))
       );
+      return participantAvatars(channel.directChatParticipants);
     }
   }
 

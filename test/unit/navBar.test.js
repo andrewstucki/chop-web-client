@@ -177,8 +177,16 @@ describe('NavBar tests', () => {
                 id: '12345',
                 nickname: 'Bob',
               },
+              {
+                id: '54321',
+                nickname: 'Carl',
+              },
             ],
           },
+        },
+        currentUser: {
+          id: '12345',
+          nickname: 'Bob',
         },
       }
     )).toEqual(
@@ -187,7 +195,12 @@ describe('NavBar tests', () => {
           id: 'direct',
           isCurrent: false,
           hasActions: false,
-          directChatParticipant: 'Bob',
+          directChatParticipants: [
+            {
+              id: '54321',
+              nickname:'Carl',
+            },
+          ],
         },
       ]
     );

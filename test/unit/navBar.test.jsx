@@ -2,8 +2,10 @@
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import NavBar from '../../src/navBar/navBar';
 import sinon from 'sinon';
+
+import NavBar from '../../src/navBar/navBar';
+
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -101,8 +103,28 @@ describe('NavBar tests', () => {
         channels={[
           {id: 'public', isCurrent: true, hasActions: false},
           {id: 'host', isCurrent: false, hasActions: false},
-          {id: 'direct1', isCurrent: false, hasActions: false, directChatParticipant: 'bob'},
-          {id: 'direct2', isCurrent: false, hasActions: false, directChatParticipant: 'dave'},
+          {
+            id: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            directChatParticipants: [
+              {
+                id: '12345',
+                nickname: 'bob',
+              },
+            ],
+          },
+          {
+            id: 'direct2',
+            isCurrent: false,
+            hasActions: false,
+            directChatParticipants: [
+              {
+                id: '67890',
+                nickname: 'dave',
+              },
+            ],
+          },
         ]}
         onClick={function () {}}
         openMenu={() => {}}
