@@ -16,7 +16,7 @@ type NavBarState = {
   left: number,
   width: number,
   opacity: number,
-}
+};
 
 const Underline = props => (
   <div
@@ -31,9 +31,10 @@ const Underline = props => (
     }
   ></div>
 );
+
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: any
-  channelLink: (channel:ChannelType) => React$Node | string
+  channelLink: (channel:ChannelType) => React$Node | string;
   
   constructor (props:NavBarProps) {
     super(props);
@@ -68,6 +69,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
   channelLink (channel: ChannelType) {
     const style = channel.isCurrent ? null : styles.unselected;
+    const opacity = channel.isCurrent ? '1.0' : '0.5';
+
     if (channel.id === 'public') {
       return (
         <span className={style}>
@@ -80,14 +83,36 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           {channel.id}
         </span>
       );
-    } else if (channel.directChatParticipant) {
-      const opacity = channel.isCurrent ? '1.0' : '0.5';
+    } else if (channel.directChatParticipants
+      && channel.directChatParticipants.length > 2
+    ) {
+      const participantAvatars = participants => (
+        participants.map(participant => (
+          <div
+            key={participant.id}
+            className={styles.avatar} 
+            style={
+              {
+                backgroundColor: getAvatarColor(participant.nickname, opacity),
+              }
+            }
+          >
+            {getFirstInitial(participant.nickname)}
+          </div>
+        ))
+      );
+      return participantAvatars(channel.directChatParticipants);
+    } else if (channel.otherUserName) {
       return (
         <div
           className={styles.avatar} 
-          style={{backgroundColor: getAvatarColor(channel.directChatParticipant, opacity)}}
+          style={
+            {
+              backgroundColor: getAvatarColor(channel.otherUserName, opacity),
+            }
+          }
         >
-          {getFirstInitial(channel.directChatParticipant)}
+          {getFirstInitial(channel.otherUserName)}
         </div>
       );
     }

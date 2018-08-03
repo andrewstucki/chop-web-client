@@ -1,5 +1,5 @@
 // @flow
-import type { FeedType } from '../feed/dux';
+import type { FeedType, UserType } from '../feed/dux';
 
 // Flow Type Definitions
 
@@ -7,7 +7,8 @@ type ChannelType = {
   id: string,
   isCurrent: boolean,
   hasActions: boolean,
-  directChatParticipant?: string,
+  directChatParticipants?: Array<UserType>,
+  otherUserName?: string,
 };
 
 type ChannelsListType = Array<ChannelType>;
@@ -19,10 +20,23 @@ const getChannels = (state: FeedType): ChannelsListType => (
     id => id !== 'request' && id !== 'command'
   ).map(id => {
     const { participants, moments } = state.channels[id];
-    const otherUserNickname = () => {
-      if (participants) {
-        return participants[0].id !== state.currentUser.id ?
-          participants[0].nickname : participants[1].nickname;
+    let otherUserName = [];
+
+    const filterCurrentUser = users => (
+      users.filter(user =>
+        user.id !== state.currentUser.id
+      )
+    );
+
+    if (participants && participants.length === 2) {
+      const [ user ] = filterCurrentUser(participants);
+      otherUserName.push(user.nickname);
+    }
+
+    const getOtherUsers = () => {
+      if (participants && participants.length > 2) {
+        otherUserName = [];
+        return filterCurrentUser(participants);
       }
     };
 
@@ -32,7 +46,8 @@ const getChannels = (state: FeedType): ChannelsListType => (
       hasActions: moments.filter(moment => (
         moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
       )).length > 0,
-      directChatParticipant: otherUserNickname(),
+      directChatParticipants: getOtherUsers(),
+      otherUserName: otherUserName[0],
     };
   })
 );
