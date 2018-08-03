@@ -69,6 +69,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
   channelLink (channel: ChannelType) {
     const style = channel.isCurrent ? null : styles.unselected;
+    const opacity = channel.isCurrent ? '1.0' : '0.5';
 
     if (channel.id === 'public') {
       return (
@@ -83,10 +84,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         </span>
       );
     } else if (channel.directChatParticipants
-      && channel.directChatParticipants.length > 0
+      && channel.directChatParticipants.length > 2
     ) {
-      const opacity = channel.isCurrent ? '1.0' : '0.5';
-
       const participantAvatars = participants => (
         participants.map(participant => (
           <div
@@ -103,6 +102,19 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         ))
       );
       return participantAvatars(channel.directChatParticipants);
+    } else if (channel.otherUserName) {
+      return (
+        <div
+          className={styles.avatar} 
+          style={
+            {
+              backgroundColor: getAvatarColor(channel.otherUserName, opacity),
+            }
+          }
+        >
+          {getFirstInitial(channel.otherUserName)}
+        </div>
+      );
     }
   }
 

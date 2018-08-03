@@ -97,7 +97,42 @@ describe('NavBar tests', () => {
     expect(wrapper.find('#nav-host span.pip').length).toBe(1);
   });
 
-  test('direct chat', () => {
+  test('direct chat with more the 2 participants', () => {
+    const wrapper = Enzyme.shallow(
+      <NavBar
+        channels={[
+          {id: 'public', isCurrent: true, hasActions: false},
+          {id: 'host', isCurrent: false, hasActions: false},
+          {
+            id: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            directChatParticipants: [
+              {
+                id: '12345',
+                nickname: 'bob',
+              },
+              {
+                id: '54321',
+                nickname: 'carl',
+              },
+              {
+                id: '67890',
+                nickname: 'will',
+              },
+            ],
+          },
+        ]}
+        onClick={function () {}}
+        openMenu={() => {}}
+        barWidth={100}
+        barX={50}
+      />
+    );
+    expect(wrapper.find('#nav-direct1').text()).toEqual('BCW');
+  });
+
+  test('direct chat with 2 participants', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
@@ -113,6 +148,7 @@ describe('NavBar tests', () => {
                 nickname: 'bob',
               },
             ],
+            otherUserName: 'carl',
           },
           {
             id: 'direct2',
@@ -124,6 +160,7 @@ describe('NavBar tests', () => {
                 nickname: 'dave',
               },
             ],
+            otherUserName: 'will',
           },
         ]}
         onClick={function () {}}
@@ -132,7 +169,7 @@ describe('NavBar tests', () => {
         barX={50}
       />
     );
-    expect(wrapper.find('#nav-direct1').text()).toEqual('B');
-    expect(wrapper.find('#nav-direct2').text()).toEqual('D');
+    expect(wrapper.find('#nav-direct1').text()).toEqual('C');
+    expect(wrapper.find('#nav-direct2').text()).toEqual('W');
   });
 });

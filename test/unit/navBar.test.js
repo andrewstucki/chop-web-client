@@ -1,6 +1,9 @@
 // @flow
 import { getChannels } from '../../src/navBar/dux';
-import { defaultState as defaultFeedState } from '../../src/feed/dux';
+import {
+  defaultState as defaultFeedState,
+  leaveChat,
+} from '../../src/feed/dux';
 
 describe('NavBar tests', () => {
   test('channel selector test', () => {
@@ -162,7 +165,59 @@ describe('NavBar tests', () => {
     ]);
   });
 
-  test('direct chat name', () => {
+  test('direct chat name more than 2 participants', () => {
+    expect(getChannels(
+      {
+        ...defaultFeedState,
+        channels: {
+          ...defaultFeedState.channels,
+          direct: {
+            id: '12345',
+            name: 'direct',
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bob',
+              },
+              {
+                id: '54321',
+                nickname: 'Carl',
+              },
+              {
+                id: '67890',
+                nickname: 'Will',
+              },
+            ],
+          },
+        },
+        currentUser: {
+          id: '12345',
+          nickname: 'Bob',
+        },
+      }
+    )).toEqual(
+      [
+        {
+          id: 'direct',
+          isCurrent: false,
+          hasActions: false,
+          directChatParticipants: [
+            {
+              id: '54321',
+              nickname:'Carl',
+            },
+            {
+              id: '67890',
+              nickname: 'Will',
+            },
+          ],
+        },
+      ]
+    );
+  });
+
+  test('direct chat name 2 participants', () => {
     expect(getChannels(
       {
         ...defaultFeedState,
@@ -195,12 +250,7 @@ describe('NavBar tests', () => {
           id: 'direct',
           isCurrent: false,
           hasActions: false,
-          directChatParticipants: [
-            {
-              id: '54321',
-              nickname:'Carl',
-            },
-          ],
+          otherUserName: 'Carl',
         },
       ]
     );
