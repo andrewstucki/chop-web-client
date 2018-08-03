@@ -13,6 +13,7 @@ import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
 import {
   changeChannel,
   addChannel,
+  removeChannel,
 } from '../../../src/feed/dux';
 
 import { MESSAGE } from '../../../src/moment/dux';
@@ -133,6 +134,43 @@ describe('Chat IO reducer test', () => {
     expect(chat.addChat.mock.calls.length).toBe(1);
     expect(chat.addChat.mock.calls[0][0]).toEqual('default');
     expect(chat.addChat.mock.calls[0][1]).toEqual('12345');
+  });
+
+  test('remove chat', () => {
+    const result = reducer(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {
+          direct: '12345',
+          public: '54321',
+          host: '67890',
+        },
+        chatInput: '',
+        currentChannel: 'direct',
+      },
+      removeChannel('direct')
+    );
+    expect(result).toEqual(
+      {
+        publishKey: '',
+        subscribeKey: '',
+        user: {
+          id: '',
+          nickname: '',
+        },
+        chats: {
+          public: '54321',
+          host: '67890',
+        },
+        chatInput: '',
+        currentChannel: 'public',
+      }
+    );
   });
 
   test('chat input', () => {
