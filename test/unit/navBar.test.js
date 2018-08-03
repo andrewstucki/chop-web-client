@@ -1,9 +1,6 @@
 // @flow
 import { getChannels } from '../../src/navBar/dux';
-import {
-  defaultState as defaultFeedState,
-  leaveChat,
-} from '../../src/feed/dux';
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
 describe('NavBar tests', () => {
   test('channel selector test', () => {
