@@ -7,9 +7,11 @@ import styles from './style.css';
 type PopUpModalPropsType = {
   togglePopUpModal: (isPopUpModalVisible: boolean) => void,
   leaveChat: (user: UserType) => void,
-  publishLeftChatNotification: (name: string) => void,
+  publishLeftChatNotification: (userName: string, channelName: string) => void,
+  removeChannel: (channelName: string) => void,
   otherUser: UserType,
   currentUser: UserType,
+  currentChannel: string,
   isPopUpModalVisible: boolean,
 };
 
@@ -17,10 +19,12 @@ const PopUpModal = (
   {
     togglePopUpModal,
     leaveChat,
+    publishLeftChatNotification,
+    removeChannel,
     otherUser,
     currentUser,
     isPopUpModalVisible,
-    publishLeftChatNotification,
+    currentChannel,
   }: PopUpModalPropsType
 ) => {
   if (isPopUpModalVisible) {
@@ -28,7 +32,8 @@ const PopUpModal = (
       <div className={styles.popUpModal}>
         <div className={styles.alert}>
           <div className={styles.text}>
-            Are you sure you want to end your chat with <strong>{otherUser.nickname}</strong>?
+            Are you sure you want to end your chat with
+            <strong> {otherUser.nickname}</strong>?
           </div>
           <div className={styles.actionContainer}>
             <button
@@ -40,8 +45,10 @@ const PopUpModal = (
             <button
               className={styles.action}
               onClick={() => (
+                togglePopUpModal(isPopUpModalVisible),
+                publishLeftChatNotification(currentUser.nickname, currentChannel),
                 leaveChat(currentUser),
-                publishLeftChatNotification(currentUser.nickname)
+                removeChannel(currentChannel)
               )}
             >
               Leave

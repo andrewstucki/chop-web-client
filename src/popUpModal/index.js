@@ -5,6 +5,7 @@ import {
   leaveChat,
   getOtherUser,
   togglePopUpModal,
+  removeChannel,
 } from '../feed/dux';
 
 import { publishLeftChatNotification } from '../moment';
@@ -17,6 +18,7 @@ const mapStateToProps = state => {
     isPopUpModalVisible: feedState.isPopUpModalVisible,
     otherUser: getOtherUser(feedState),
     currentUser: feedState.currentUser,
+    currentChannel: feedState.currentChannel,
   };
 };
 
@@ -26,9 +28,10 @@ const mapDispatchToProps = dispatch => (
       togglePopUpModal(isPopUpModalVisible)
     )),
     leaveChat: user => (dispatch(leaveChat(user))),
-    publishLeftChatNotification: name => (dispatch(
-      publishLeftChatNotification(name)
+    publishLeftChatNotification: (userName, channelName) => (dispatch(
+      publishLeftChatNotification(userName, channelName)
     )),
+    removeChannel: channelName => (dispatch(removeChannel(channelName))),
   }
 );
 

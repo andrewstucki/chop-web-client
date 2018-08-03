@@ -508,6 +508,19 @@ describe('Chat IO Interface test', () => {
     )).toBe(true);
   });
 
+  test('validate prayer notification', () => {
+    const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
+    expect(chat.validNotification(
+      {
+        type: 'NOTIFICATION',
+        notificationType: 'LEFT_CHAT',
+        id: '599465b0-23c2-42a7-b837-298e8a51c94f',
+        name: 'Jim',
+        timeStamp: '9:33pm',
+      }
+    )).toBe(true);
+  });
+
   test('validate prayer request notification', () => {
     const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     expect(chat.validCommand(
