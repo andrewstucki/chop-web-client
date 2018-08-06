@@ -7,6 +7,7 @@ import type {
 import {
   NOTIFICATION,
   PRAYER,
+  LEFT_CHAT,
   publishLeftChatNotification,
 } from './notification/dux';
 
@@ -49,6 +50,7 @@ export {
   ACTIONABLE_NOTIFICATION,
   PUBLISH_MOMENT_TO_CHANNEL,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  LEFT_CHAT,
 };
 
 export type {
