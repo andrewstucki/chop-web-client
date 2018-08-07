@@ -10,6 +10,7 @@ import reducer, {
   inviteToChannel,
   receiveAcceptedPrayerRequest,
   hasParticipants,
+  getOtherUser,
 } from '../../src/feed/dux';
 
 import {
@@ -1491,5 +1492,41 @@ describe('Feed tests', () => {
       }
     );
     expect(result).toEqual(false);
+  });
+
+  test('getOtherUser', () => {
+    const result = getOtherUser(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bootbot',
+              },
+              {
+                id: '54321',
+                nickname: 'Sockrock',
+              },
+            ],
+          },
+        },
+        currentChannel: 'direct',
+        currentUser: {
+          id: '12345',
+          nickname: 'Bootbot',
+        },
+      }
+    );
+    expect(result).toEqual(
+      {
+        id: '54321',
+        nickname: 'Sockrock',
+      }
+    );
   });
 });

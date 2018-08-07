@@ -3,19 +3,34 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import PopUpModal from '../src/components/popUpModal';
+import PopUpModal from '../src/popUpModal/popUpModal';
 import '../assets/global.css';
 
 storiesOf('PopUpModal', module)
-  .add('Modal', () => (
+  .add('Modal renders if showPopUpModal is true', () => (
     <PopUpModal
-      actionOne={action('clicked')}
-      actionTwo={action('clicked')}
-      actionOneDescription="Leave"
-      actionTwoDescription="Stay"
-    >
-      <div>
-        Are you sure you want to end your chat with <strong>Fred</strong>?
-      </div>
-    </PopUpModal>
+      keepChatting={action('clicked')}
+      leaveChat={action('clicked')}
+      user={
+        {
+          id: '12345',
+          nickname: 'Walker, Texas Ranger',
+        }
+      }
+      showPopUpModal={true}
+    />
   ))
+
+  .add('Modal does not render if showPopUpModal is false', () => (
+    <PopUpModal
+      keepChatting={action('clicked')}
+      leaveChat={action('clicked')}
+      user={
+        {
+          id: '12345',
+          nickname: 'Walker, Texas Ranger',
+        }
+      }
+      showPopUpModal={false}
+    />
+  ));
