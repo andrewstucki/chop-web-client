@@ -42,11 +42,13 @@ describe('NavBar tests', () => {
         id: 'public',
         isCurrent: true,
         hasActions: false,
+        otherUsersNames: [],
       },
       {
         id: 'host',
         isCurrent: false,
         hasActions: false,
+        otherUsersNames: [],
       },
     ]);
   });
@@ -95,11 +97,13 @@ describe('NavBar tests', () => {
         id: 'public',
         isCurrent: true,
         hasActions: true,
+        otherUsersNames: [],
       },
       {
         id: 'host',
         isCurrent: false,
         hasActions: false,
+        otherUsersNames: [],
       },
     ]);
   });
@@ -153,16 +157,18 @@ describe('NavBar tests', () => {
         id: 'public',
         isCurrent: true,
         hasActions: false,
+        otherUsersNames: [],
       },
       {
         id: 'host',
         isCurrent: false,
         hasActions: true,
+        otherUsersNames: [],
       },
     ]);
   });
 
-  test('direct chat name more than 2 participants', () => {
+  test('otherUsersNames', () => {
     expect(getChannels(
       {
         ...defaultFeedState,
@@ -199,55 +205,7 @@ describe('NavBar tests', () => {
           id: 'direct',
           isCurrent: false,
           hasActions: false,
-          directChatParticipants: [
-            {
-              id: '54321',
-              nickname:'Carl',
-            },
-            {
-              id: '67890',
-              nickname: 'Will',
-            },
-          ],
-        },
-      ]
-    );
-  });
-
-  test('direct chat name 2 participants', () => {
-    expect(getChannels(
-      {
-        ...defaultFeedState,
-        channels: {
-          ...defaultFeedState.channels,
-          direct: {
-            id: '12345',
-            name: 'direct',
-            moments: [],
-            participants: [
-              {
-                id: '12345',
-                nickname: 'Bob',
-              },
-              {
-                id: '54321',
-                nickname: 'Carl',
-              },
-            ],
-          },
-        },
-        currentUser: {
-          id: '12345',
-          nickname: 'Bob',
-        },
-      }
-    )).toEqual(
-      [
-        {
-          id: 'direct',
-          isCurrent: false,
-          hasActions: false,
-          otherUserName: 'Carl',
+          otherUsersNames: ['Carl', 'Will'],
         },
       ]
     );
@@ -283,6 +241,7 @@ describe('NavBar tests', () => {
           id: 'public',
           isCurrent: true,
           hasActions: false,
+          otherUsersNames: [],
         },
       ]
     );

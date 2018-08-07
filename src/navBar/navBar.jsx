@@ -16,6 +16,9 @@ type NavBarState = {
   left: number,
   width: number,
   opacity: number,
+  directChatChannelNames: {
+    [string]: string,
+  },
 };
 
 const Underline = props => (
@@ -34,9 +37,9 @@ const Underline = props => (
 
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: any
-  channelLink: (channel:ChannelType) => React$Node | string;
+  channelLink: (channel: ChannelType) => React$Node | string;
   
-  constructor (props:NavBarProps) {
+  constructor (props: NavBarProps) {
     super(props);
     // $FlowFixMe
     this.selectedLink = React.createRef();
@@ -44,7 +47,37 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       left: 20,
       width: 35,
       opacity: 1.0,
+      directChatChannelNames: {},
     };
+  }
+
+  static getDerivedStateFromProps (
+    props: NavBarProps,
+    state: NavBarState
+  ): NavBarState | null {
+    let copyOfNames = { ...state.directChatChannelNames };
+    let hasUpdated = false;
+
+    props.channels.forEach(channel => {
+      if (channel.otherUsersNames.length > 0 &&
+        state.directChatChannelNames[channel.id] !== channel.otherUsersNames[0]
+      ) { 
+        hasUpdated = true;
+        copyOfNames = {
+          ...copyOfNames,
+          [channel.id]: channel.otherUsersNames[0],
+        };
+      }
+    });
+
+    if (hasUpdated) {
+      return {
+        ...state,
+        directChatChannelNames: copyOfNames,
+      };
+    } else {
+      return null;
+    }
   }
 
   componentDidUpdate () {
@@ -83,36 +116,19 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           {channel.id}
         </span>
       );
-    } else if (channel.directChatParticipants
-      && channel.directChatParticipants.length > 2
-    ) {
-      const participantAvatars = participants => (
-        participants.map(participant => (
-          <div
-            key={participant.id}
-            className={styles.avatar} 
-            style={
-              {
-                backgroundColor: getAvatarColor(participant.nickname, opacity),
-              }
-            }
-          >
-            {getFirstInitial(participant.nickname)}
-          </div>
-        ))
-      );
-      return participantAvatars(channel.directChatParticipants);
-    } else if (channel.otherUserName) {
+    } else if (channel.otherUsersNames.length > 0) {
+      const channelIconName = this.state.directChatChannelNames[channel.id];
+
       return (
         <div
           className={styles.avatar} 
           style={
             {
-              backgroundColor: getAvatarColor(channel.otherUserName, opacity),
+              backgroundColor: getAvatarColor(channelIconName, opacity),
             }
           }
         >
-          {getFirstInitial(channel.otherUserName)}
+          {getFirstInitial(channelIconName)}
         </div>
       );
     }
