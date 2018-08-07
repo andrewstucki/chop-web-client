@@ -12,33 +12,46 @@ describe('Chat tests', () => {
   test('has a TextField and Button', () => {
     const wrapper = Enzyme.shallow(
       <Chat
-        textValue=""
-        textOnInput={function () {}}
         textOnBlur={function () {}}
         textOnFocus={function () {}}
         buttonOnClick={function () {}}
         focused={true}
-        textEntered={true}
         enterDetect={function () {}}
         currentPlaceholder=""
+        currentChannel="public"
+        currentUser={
+          {
+            id: '12345',
+            nickname: 'Wilbur',
+          }
+        }
+        publishMessage={() => {}}
       />
     );
+    wrapper.setState({
+      chatInput: 'Hello',
+    });
     expect(wrapper.find(TextField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(1);
   });
 
-  test('has a TextField and Button', () => {
+  test('has a TextField but not a Button', () => {
     const wrapper = Enzyme.shallow(
       <Chat
-        textValue=""
-        textOnInput={function () {}}
         textOnBlur={function () {}}
         textOnFocus={function () {}}
         buttonOnClick={function () {}}
         focused={false}
-        textEntered={false}
         enterDetect={function () {}}
         currentPlaceholder=""
+        currentChannel="public"
+        currentUser={
+          {
+            id: '12345',
+            nickname: 'Wilbur',
+          }
+        }
+        publishMessage={() => {}}
       />
     );
     expect(wrapper.find(TextField).length).toBe(1);

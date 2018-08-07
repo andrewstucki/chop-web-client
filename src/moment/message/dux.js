@@ -1,5 +1,8 @@
 // @flow
 import type { UserType } from '../../feed/dux';
+import type { PublishMomentToChannelType } from '../dux';
+import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
+import { createUid } from '../../util';
 
 // Action Types
 
@@ -44,49 +47,52 @@ type ToggleCloseTrayButtonType = {
 type MessageActionTypes =
   | OpenMessageTrayType
   | CloseMessageTrayType
-  | DeleteMessageType;
+  | DeleteMessageType
+  | ToggleCloseTrayButtonType;
 
 // Action Creators
 
-const openMessageTray = (id: string) => (
+const publishMessage = (
+  channel: string,
+  text: string,
+  user: UserType
+): PublishMomentToChannelType => (
+  {
+    type: PUBLISH_MOMENT_TO_CHANNEL,
+    channel,
+    moment: {
+      type: MESSAGE,
+      id: createUid(),
+      text,
+      user,
+      messageTrayOpen: false,
+      closeTrayButtonRendered: false,
+    },
+  }
+);
+
+const openMessageTray = (id: string): OpenMessageTrayType => (
   {
     type: OPEN_MESSAGE_TRAY,
     id,
   }
 );
 
-const closeMessageTray = (id: string) => (
+const closeMessageTray = (id: string): CloseMessageTrayType => (
   {
     type: CLOSE_MESSAGE_TRAY,
     id,
   }
 );
 
-const toggleCloseTrayButton = (id: string) => (
+const toggleCloseTrayButton = (id: string): ToggleCloseTrayButtonType => (
   {
     type: TOGGLE_CLOSE_TRAY_BUTTON,
     id,
   }
 );
 
-const createMessage = (
-  id: string,
-  text: string,
-  user: UserType,
-  messageTrayOpen: boolean,
-  closeTrayButtonRendered: boolean
-): MessageType => (
-  {
-    type: MESSAGE,
-    id,
-    text,
-    user,
-    messageTrayOpen,
-    closeTrayButtonRendered,
-  }
-);
-
-const deleteMessage = (id:string) => (
+const deleteMessage = (id:string): DeleteMessageType => (
   {
     type: DELETE_MESSAGE,
     id,
@@ -118,11 +124,11 @@ export {
 };
 
 export {
-  createMessage,
   openMessageTray,
   closeMessageTray,
   deleteMessage,
   toggleCloseTrayButton,
+  publishMessage,
 };
 
 export type {

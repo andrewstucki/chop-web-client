@@ -6,7 +6,6 @@ import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { createMessage } from '../src/moment';
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
@@ -21,16 +20,17 @@ storiesOf('Moment', module)
     <Provider store={store}>
       <Moment
         data={
-          createMessage(
-            '1234',
-            'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            {
-              id: '12345',
+          {
+            type: 'MESSAGE',
+            id: '12345',
+            text: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
+            user: {
+              id: '54321',
               nickname: 'Billy Bob',
             },
-            false,
-            false,
-          )
+            messageTrayOpen: false,
+            closeTrayButtonRendered: false,
+          }
         }
       />
     </Provider>
@@ -39,16 +39,17 @@ storiesOf('Moment', module)
     <Provider store={store}>
       <Moment
         data={
-          createMessage(
-            '1234',
-            'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            {
-              id: '12345',
+          {
+            type: 'MESSAGE',
+            id: '12345',
+            text: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
+            user: {
+              id: '54321',
               nickname: 'Billy Bob',
             },
-            true,
-            true,
-          )
+            messageTrayOpen: true,
+            closeTrayButtonRendered: true,
+          }
         }
       />
     </Provider>

@@ -10,7 +10,6 @@ import {
   ActionableNotification,
   Text,
   AvatarMoment,
-  createMessage,
 } from '../../src/moment';
 
 import AnchorMoment from '../../src/placeholder/anchorMoment';
@@ -22,15 +21,17 @@ describe('Moment tests', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
-          createMessage(
-            '12345',
-            'Hello',
-            {
-              id: '67890',
-              nickname: 'Bob',
+          {
+            type: 'MESSAGE',
+            id: '12345',
+            text: 'Hello',
+            user: {
+              id: '54321',
+              nickname: 'Wilbur Wagner',
             },
-            false
-          )
+            messageTrayOpen: false,
+            closeTrayButtonRendered: false,
+          }
         }
       />
     );
@@ -41,15 +42,17 @@ describe('Moment tests', () => {
     const wrapper = Enzyme.shallow(
       <Moment
         data={
-          createMessage(
-            '12345',
-            'Hello',
-            {
-              id: '67890',
-              nickname: 'Bob',
+          {
+            type: 'MESSAGE',
+            id: '12345',
+            text: 'Hello',
+            user: {
+              id: '54321',
+              nickname: 'Wilbur Wagner',
             },
-            false
-          )
+            messageTrayOpen: false,
+            closeTrayButtonRendered: false,
+          }
         }
       />
     );
@@ -59,10 +62,11 @@ describe('Moment tests', () => {
         id: '12345',
         text: 'Hello',
         user: {
-          id: '67890',
-          nickname: 'Bob',
+          id: '54321',
+          nickname: 'Wilbur Wagner',
         },
         messageTrayOpen: false,
+        closeTrayButtonRendered: false,
       }
     );
   });

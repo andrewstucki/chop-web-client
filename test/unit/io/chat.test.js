@@ -5,8 +5,6 @@ import getReducer, {
   setUser,
   defaultState,
 } from '../../../src/io/chat/dux';
-
-import { chatInput, addToCurrentChannel } from '../../../src/chat/dux';
 // TODO write a test for acceptPrayerRequest and update everyone's feed
 // import { acceptPrayerRequest } from '../../../src/moment/actionableNotification/dux';
 
@@ -135,36 +133,6 @@ describe('Chat IO reducer test', () => {
     expect(chat.addChat.mock.calls[0][1]).toEqual('12345');
   });
 
-  test('chat input', () => {
-    const result = reducer(
-      {
-        publishKey: '',
-        subscribeKey: '',
-        user: {
-          id: '',
-          nickname: '',
-        },
-        chats: {},
-        chatInput: '',
-        currentChannel: 'default',
-      },
-      chatInput('Hello buddy'),
-    );
-    expect(result).toEqual(
-      {
-        publishKey: '',
-        subscribeKey: '',
-        user: {
-          id: '',
-          nickname: '',
-        },
-        chats: {},
-        chatInput: 'Hello buddy',
-        currentChannel: 'default',
-      }
-    );
-  });
-
   test('change current channel', () => {
     const result = reducer(
       {
@@ -211,13 +179,26 @@ describe('Chat IO reducer test', () => {
           nickname: '',
         },
         chats: {
-          default: '12345',
+          public: '12345',
           host: '67890',
         },
-        chatInput: 'Hello buddy',
-        currentChannel: 'default',
+        currentChannel: 'public',
       },
-      addToCurrentChannel(),
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'MESSAGE',
+          id: '12345',
+          text: 'Hello buddy',
+          user: {
+            id: '54321',
+            nickname: 'Billy',
+          },
+          messageTrayOpen: false,
+          closeTrayButtonRendered: false,
+        },
+      },
     );
     expect(result).toEqual(
       {
@@ -228,15 +209,14 @@ describe('Chat IO reducer test', () => {
           nickname: '',
         },
         chats: {
-          default: '12345',
+          public: '12345',
           host: '67890',
         },
-        chatInput: '',
-        currentChannel: 'default',
+        currentChannel: 'public',
       }
     );
     expect(chat.publish.mock.calls.length).toBe(1);
-    expect(chat.publish.mock.calls[0][0]).toEqual('default');
+    expect(chat.publish.mock.calls[0][0]).toEqual('public');
     expect(chat.publish.mock.calls[0][1].text).toEqual('Hello buddy');
   });
 
