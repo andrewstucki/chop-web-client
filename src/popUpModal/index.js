@@ -24,9 +24,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    togglePopUpModal: isPopUpModalVisible => (dispatch(
-      togglePopUpModal(isPopUpModalVisible)
-    )),
+    togglePopUpModal: () => (dispatch(togglePopUpModal())),
     leaveChat: user => (dispatch(leaveChat(user))),
     publishLeftChatNotification: (userName, channelName) => (dispatch(
       publishLeftChatNotification(userName, channelName)

@@ -1535,7 +1535,7 @@ describe('Feed tests', () => {
         ...defaultState,
         isPopUpModalVisible: false,
       },
-      togglePopUpModal(false)
+      togglePopUpModal()
     );
     expect(result).toEqual(
       {
