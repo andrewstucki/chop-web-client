@@ -109,7 +109,7 @@ const getPlaceholder = (state: FeedType) => {
     currentChannelObj.participants.length === 2
   ) {
     const [ getOtherUser ] = currentChannelObj.participants.filter(participant =>
-      participant.id !== state.currentUser.id
+      participant.pubnubToken !== state.currentUser.pubnubToken
     );
     otherUserName.push(getOtherUser.name);
     return `Chat with ${otherUserName[0]}`;

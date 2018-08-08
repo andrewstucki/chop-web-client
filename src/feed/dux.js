@@ -71,15 +71,11 @@ type SharedUserType = {
   }
 };
 
-type UserType =
-  | PrivateUserType
-  | SharedUserType;
-
 type ChannelType = {
   id: string,
   name: string,
   moments: Array<MomentType>,
-  participants?: Array<UserType>,
+  participants?: Array<SharedUserType>,
 };
 
 type FeedType = {
@@ -120,7 +116,7 @@ type AddChannelType = {
 
 type InviteToChannelType = {
   type: 'INVITE_TO_CHANNEL',
-  user: UserType,
+  user: SharedUserType,
   channelName: string,
 };
 
@@ -135,7 +131,7 @@ type TogglePopUpModalType = {
 
 type LeaveChatType = {
   type: 'LEAVE_CHAT',
-  user: UserType,
+  user: SharedUserType,
 };
 
 type FeedActionTypes =
@@ -187,7 +183,7 @@ const receiveAcceptedPrayerRequest = (
 const addChannel = (
   name: string,
   id: string,
-  participants?: Array<UserType>
+  participants?: Array<SharedUserType>
 ): AddChannelType => (
   {
     type: ADD_CHANNEL,
@@ -201,7 +197,7 @@ const addChannel = (
 );
 
 const inviteToChannel = (
-  user: UserType,
+  user: SharedUserType,
   channelName: string
 ): InviteToChannelType => (
   {
@@ -224,7 +220,7 @@ const togglePopUpModal = (): TogglePopUpModalType => (
   }
 );
 
-const leaveChat = (user: UserType): LeaveChatType => (
+const leaveChat = (user: SharedUserType): LeaveChatType => (
   {
     type: LEAVE_CHAT,
     user,
@@ -333,7 +329,7 @@ const reducer = (
           name: action.channelName,
           moments: [],
           participants: [
-            state.currentUser,
+            getCurrentUserAsPrivateUser(state),
             action.user,
           ],
         },
@@ -519,7 +515,7 @@ const reducer = (
     ) {
       const { participants } = channels[currentChannel];
       const userIndex = participants.findIndex(el => (
-        el.id === user.id
+        el.pubnubToken === user.pubnubToken
       ));
       if (participants) {
         // Flow complains that participants can still
@@ -548,6 +544,17 @@ const reducer = (
 
 // Selectors
 
+
+const getCurrentUserAsPrivateUser = (state: FeedType): SharedUserType => (
+  {
+    pubnubToken: state.currentUser.pubnubToken,
+    name: state.currentUser.name,
+    role: {
+      label: state.currentUser.role.label,
+    },
+  }
+);
+
 const feedContents = (state: FeedType): Array<MessageType> => (
   state.channels[state.currentChannel] && state.channels[state.currentChannel].moments ?
     state.channels[state.currentChannel].moments :
@@ -567,14 +574,14 @@ const hasParticipants = (state: FeedType): boolean => {
   return false;
 };
 
-const getOtherUser = (state: FeedType): UserType | null => {
+const getOtherUser = (state: FeedType): SharedUserType | null => {
   const currentChannel = state.channels[state.currentChannel];
   if (currentChannel &&
     currentChannel.participants
     && currentChannel.participants.length === 2
   ) {
     const [ otherUser ] = currentChannel.participants.filter(
-      participant => participant.id !== state.currentUser.id
+      participant => participant.pubnubToken !== state.currentUser.pubnubToken
     );
     return otherUser;
   }
@@ -606,6 +613,7 @@ export {
   getOtherUser,
   togglePopUpModal,
   leaveChat,
+  getCurrentUserAsPrivateUser,
 };
 export type {
   AddChannelType,
@@ -613,7 +621,6 @@ export type {
   MomentType,
   ReceiveMomentType,
   ChangeChannelType,
-  UserType,
   FeedType,
   InviteToChannelType,
   ReceiveAcceptedPrayerRequestType,

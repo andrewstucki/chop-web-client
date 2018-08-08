@@ -1,5 +1,5 @@
 // @flow
-import type { UserType } from '../../feed/dux';
+import type { SharedUserType } from '../../feed/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import { formatAMPM } from '../notification/dux';
@@ -18,7 +18,7 @@ type PrayerRequestNotificationType = {
   type: 'ACTIONABLE_NOTIFICATION',
   notificationType: 'PRAYER_REQUEST',
   id: string,
-  user: UserType,
+  user: SharedUserType,
   timeStamp: string,
   active: boolean,
 };
@@ -32,7 +32,7 @@ type PublishAcceptedPrayerRequestType = {
 // Action Creators
 
 const publishPrayerRequestNotification = (
-  user: UserType
+  user: SharedUserType
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,

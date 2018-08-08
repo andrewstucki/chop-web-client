@@ -22,8 +22,8 @@ const getChannels = (state: FeedType): ChannelsListType => (
 
     const getOtherUserNames = () => {
       if (participants && participants.length) {
-        return participants.filter(user => user.id !== state.currentUser.id)
-          .map(user => user.nickname);
+        return participants.filter(user => user.pubnubToken !== state.currentUser.pubnubToken)
+          .map(user => user.name);
       } else {
         return [];
       }

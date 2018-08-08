@@ -8,6 +8,17 @@ import ActionableNotification from '../../src/moment/actionableNotification/acti
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const yablby = {
+  pubnubToken: '12345',
+  name: 'yablby',
+  role: { label: '' },
+};
+const billBogus = {
+  pubnubToken: '5483',
+  name: 'Bill Bogus',
+  role: { label: '' },
+};
+
 describe('ActionableNotification tests', () => {
   test('Active prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
@@ -19,21 +30,13 @@ describe('ActionableNotification tests', () => {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: {
-              id: '12345',
-              nickname: 'yablby',
-            },
+            user: yablby,
             timeStamp: '9:33pm',
             active: true,
           }
         }
         acceptPrayerRequest={acceptPrayerRequest}
-        currentUser={
-          {
-            id: '5483',
-            nickname: 'Bill Bogus',
-          }
-        }
+        currentUser={billBogus}
         publishPrayerNotification={publishPrayerNotification}
       />
     );
@@ -59,22 +62,14 @@ describe('ActionableNotification tests', () => {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: {
-              id: '12345',
-              nickname: 'yablby',
-            },
+            user: yablby,
             timeStamp: '9:33pm',
             active: false,
           }
         }
         acceptPrayerRequest={() => {}}
         publishPrayerNotification={() => {}}
-        currentUser={
-          {
-            id: '5483',
-            nickname: 'Bill Bogus',
-          }
-        }
+        currentUser={billBogus}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('notification');

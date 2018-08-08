@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import type { UserType } from '../../feed/dux';
+import type { SharedUserType } from '../../feed/dux';
 import type { ActionableNotificationType } from './dux';
 
 import ChatNotification from '../../../assets/chat-notification.svg';
@@ -9,9 +9,9 @@ import styles from './style.css';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
-  acceptPrayerRequest: (UserType, id: string) => void,
+  acceptPrayerRequest: (SharedUserType, id: string) => void,
   publishPrayerNotification: (host: string, guest: string) => void,
-  currentUser: UserType,
+  currentUser: SharedUserType,
 };
 
 const ActionableNotification = (

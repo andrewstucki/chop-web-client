@@ -1,5 +1,5 @@
 // @flow
-import type { UserType } from '../../feed/dux';
+import type { SharedUserType } from '../../feed/dux';
 
 // Action Types
 
@@ -17,7 +17,7 @@ type MessageType = {
   id: string,
   lang: string,
   text: string,
-  user: UserType,
+  user: SharedUserType,
   messageTrayOpen: boolean,
   closeTrayButtonRendered: boolean,
 };
@@ -73,7 +73,7 @@ const toggleCloseTrayButton = (id: string) => (
 const createMessage = (
   id: string,
   text: string,
-  user: UserType,
+  user: SharedUserType,
   messageTrayOpen: boolean,
   closeTrayButtonRendered: boolean
 ): MessageType => (
