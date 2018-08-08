@@ -113,7 +113,6 @@ type RemoveChannelType = {
 
 type TogglePopUpModalType = {
   type: 'TOGGLE_POP_UP_MODAL',
-  isPopUpModalVisible: boolean,
 };
 
 type LeaveChatType = {
@@ -201,12 +200,9 @@ const removeChannel = (channel: string): RemoveChannelType => (
   }
 );
 
-const togglePopUpModal = (
-  isPopUpModalVisible: boolean
-): TogglePopUpModalType => (
+const togglePopUpModal = (): TogglePopUpModalType => (
   {
     type: TOGGLE_POP_UP_MODAL,
-    isPopUpModalVisible,
   }
 );
 

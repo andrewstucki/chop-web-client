@@ -17,15 +17,12 @@ const mapStateToProps = state => {
     animatingMoment: feedState.renderingAnchorMoment,
     placeholderPresent: feedState.placeholderPresent,
     hasParticipants: hasParticipants(feedState),
-    isPopUpModalPresent: feedState.isPopUpModalPresent,
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    togglePopUpModal: isPopUpModalPresent => (dispatch(
-      togglePopUpModal(isPopUpModalPresent)
-    )),
+    togglePopUpModal: () => (dispatch(togglePopUpModal())),
   }
 );
 

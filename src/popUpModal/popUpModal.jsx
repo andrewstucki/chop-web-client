@@ -5,7 +5,7 @@ import type { UserType } from '../feed/dux';
 import styles from './style.css';
 
 type PopUpModalPropsType = {
-  togglePopUpModal: (isPopUpModalVisible: boolean) => void,
+  togglePopUpModal: () => void,
   leaveChat: (user: UserType) => void,
   publishLeftChatNotification: (userName: string, channelName: string) => void,
   removeChannel: (channelName: string) => void,
@@ -38,14 +38,14 @@ const PopUpModal = (
           <div className={styles.actionContainer}>
             <button
               className={styles.action}
-              onClick={() => (togglePopUpModal(isPopUpModalVisible))}
+              onClick={() => (togglePopUpModal())}
             >
               Keep chatting
             </button>
             <button
               className={styles.action}
               onClick={() => (
-                togglePopUpModal(isPopUpModalVisible),
+                togglePopUpModal(),
                 publishLeftChatNotification(currentUser.nickname, currentChannel),
                 leaveChat(currentUser),
                 removeChannel(currentChannel)
