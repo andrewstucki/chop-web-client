@@ -43,7 +43,6 @@ describe('Chat IO reducer test', () => {
           nickname: '',
         },
         chats: {},
-        chatInput: '',
         currentChannel: 'default',
       },
       setChatKeys('12345', '67890')
@@ -57,7 +56,6 @@ describe('Chat IO reducer test', () => {
           nickname: '',
         },
         chats: {},
-        chatInput: '',
         currentChannel: 'default',
       }
     );
@@ -76,7 +74,6 @@ describe('Chat IO reducer test', () => {
           nickname: '',
         },
         chats: {},
-        chatInput: '',
         currentChannel: 'default',
       },
       setUser('12345', 'Billy Bob')
@@ -90,7 +87,6 @@ describe('Chat IO reducer test', () => {
           nickname: 'Billy Bob',
         },
         chats: {},
-        chatInput: '',
         currentChannel: 'default',
       }
     );
@@ -109,7 +105,6 @@ describe('Chat IO reducer test', () => {
           nickname: '',
         },
         chats: {},
-        chatInput: '',
         currentChannel: 'default',
       },
       addChannel('default', '12345')
@@ -125,7 +120,6 @@ describe('Chat IO reducer test', () => {
         chats: {
           default: '12345',
         },
-        chatInput: '',
         currentChannel: 'default',
       }
     );
@@ -148,7 +142,6 @@ describe('Chat IO reducer test', () => {
           public: '54321',
           host: '67890',
         },
-        chatInput: '',
         currentChannel: 'direct',
       },
       removeChannel('direct')
@@ -165,11 +158,11 @@ describe('Chat IO reducer test', () => {
           public: '54321',
           host: '67890',
         },
-        chatInput: '',
         currentChannel: 'public',
       }
     );
   });
+
   test('change current channel', () => {
     const result = reducer(
       {
@@ -183,7 +176,6 @@ describe('Chat IO reducer test', () => {
           default: '12345',
           host: '67890',
         },
-        chatInput: 'Hello buddy',
         currentChannel: 'default',
       },
       changeChannel('host'),
@@ -200,7 +192,6 @@ describe('Chat IO reducer test', () => {
           default: '12345',
           host: '67890',
         },
-        chatInput: 'Hello buddy',
         currentChannel: 'host',
       }
     );
@@ -270,7 +261,7 @@ describe('Chat IO reducer test', () => {
           id: '12345',
           user: {
             id: '12345',
-            nickname: 'Willaim Wallace',
+            nickname: 'William Wallace',
           },
           active: true,
           timeStamp: '4:53pm',
@@ -288,7 +279,7 @@ describe('Chat IO reducer test', () => {
         id: '12345',
         user: {
           id: '12345',
-          nickname: 'Willaim Wallace',
+          nickname: 'William Wallace',
         },
         active: true,
         timeStamp: '4:53pm',
