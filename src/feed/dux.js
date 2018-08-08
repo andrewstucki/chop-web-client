@@ -11,15 +11,12 @@ import type {
   DeleteMessageType,
   ToggleCloseTrayButtonType,
   MomentType,
+  PublishAcceptedPrayerRequestType,
 } from '../moment';
-
-import type { PublishAcceptedPrayerRequestType } from '../moment/actionableNotification/dux';
 
 import type { SetUser } from '../io/chat/dux';
 
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
-
-import { PUBLISH_ACCEPTED_PRAYER_REQUEST } from '../moment/actionableNotification/dux';
 
 import {
   PUBLISH_MESSAGE,
@@ -32,11 +29,9 @@ import {
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   TOGGLE_CLOSE_TRAY_BUTTON,
-} from '../moment';
-
-import {
+  PUBLISH_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
-} from '../moment/dux';
+} from '../moment';
 
 import { SET_USER } from '../io/chat/dux';
 
@@ -475,9 +470,25 @@ const appendMessage = (state: FeedType): boolean => (
 
 const hasParticipants = (state: FeedType): boolean => {
   if (state.currentChannel) {
-    return state.channels[state.currentChannel].participants ? true : false;
+    const currentChannel = state.channels[state.currentChannel];
+    return currentChannel.participants &&
+      currentChannel.participants.length ? true : false;
   }
   return false;
+};
+
+const getOtherUser = (state: FeedType): UserType | null => {
+  const currentChannel = state.channels[state.currentChannel];
+  if (currentChannel &&
+    currentChannel.participants
+    && currentChannel.participants.length === 2
+  ) {
+    const [ otherUser ] = currentChannel.participants.filter(
+      participant => participant.id !== state.currentUser.id
+    );
+    return otherUser;
+  }
+  return null;
 };
 
 // Exports
@@ -500,6 +511,7 @@ export {
   inviteToChannel,
   receiveAcceptedPrayerRequest,
   hasParticipants,
+  getOtherUser,
 };
 export type {
   AddChannelType,
