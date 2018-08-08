@@ -12,6 +12,8 @@ storiesOf('PopUpModal', module)
       togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
       publishLeftChatNotification={action('clicked')}
+      removeChannel={action('clicked')}
+      currentChannel="direct"
       otherUser={
         {
           id: '12345',
@@ -33,6 +35,8 @@ storiesOf('PopUpModal', module)
       togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
       publishLeftChatNotification={action('clicked')}
+      removeChannel={action('clicked')}
+      currentChannel="direct"
       otherUser={
         {
           id: '12345',

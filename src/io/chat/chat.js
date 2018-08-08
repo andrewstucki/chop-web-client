@@ -6,6 +6,7 @@ import {
   PRAYER,
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
+  LEFT_CHAT,
 } from '../../moment';
 
 
@@ -152,6 +153,13 @@ class Chat {
         notification.guest.length > 0 &&
         this.isString(notification.id) &&
         notification.id.length === 36;
+    case LEFT_CHAT:
+      return this.isString(notification.id) &&
+        notification.id.length === 36 &&
+        this.isString(notification.name) &&
+        notification.name.length > 0 &&
+        this.isString(notification.timeStamp) &&
+        notification.timeStamp.length > 0;
     }
     return false;
   }

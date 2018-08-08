@@ -42,11 +42,13 @@ describe('NavBar tests', () => {
         id: 'public',
         isCurrent: true,
         hasActions: false,
+        otherUsersNames: [],
       },
       {
         id: 'host',
         isCurrent: false,
         hasActions: false,
+        otherUsersNames: [],
       },
     ]);
   });
@@ -95,11 +97,13 @@ describe('NavBar tests', () => {
         id: 'public',
         isCurrent: true,
         hasActions: true,
+        otherUsersNames: [],
       },
       {
         id: 'host',
         isCurrent: false,
         hasActions: false,
+        otherUsersNames: [],
       },
     ]);
   });
@@ -153,16 +157,18 @@ describe('NavBar tests', () => {
         id: 'public',
         isCurrent: true,
         hasActions: false,
+        otherUsersNames: [],
       },
       {
         id: 'host',
         isCurrent: false,
         hasActions: true,
+        otherUsersNames: [],
       },
     ]);
   });
 
-  test('direct chat name', () => {
+  test('otherUsersNames', () => {
     expect(getChannels(
       {
         ...defaultFeedState,
@@ -177,8 +183,20 @@ describe('NavBar tests', () => {
                 id: '12345',
                 nickname: 'Bob',
               },
+              {
+                id: '54321',
+                nickname: 'Carl',
+              },
+              {
+                id: '67890',
+                nickname: 'Will',
+              },
             ],
           },
+        },
+        currentUser: {
+          id: '12345',
+          nickname: 'Bob',
         },
       }
     )).toEqual(
@@ -187,7 +205,7 @@ describe('NavBar tests', () => {
           id: 'direct',
           isCurrent: false,
           hasActions: false,
-          directChatParticipant: 'Bob',
+          otherUsersNames: ['Carl', 'Will'],
         },
       ]
     );
@@ -223,6 +241,7 @@ describe('NavBar tests', () => {
           id: 'public',
           isCurrent: true,
           hasActions: false,
+          otherUsersNames: [],
         },
       ]
     );
