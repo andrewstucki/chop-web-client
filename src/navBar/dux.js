@@ -7,7 +7,7 @@ type ChannelType = {
   id: string,
   isCurrent: boolean,
   hasActions: boolean,
-  directChatParticipant?: string,
+  otherUsersNames: Array<string>,
 };
 
 type ChannelsListType = Array<ChannelType>;
@@ -19,10 +19,13 @@ const getChannels = (state: FeedType): ChannelsListType => (
     id => id !== 'request' && id !== 'command'
   ).map(id => {
     const { participants, moments } = state.channels[id];
-    const otherUserNickname = () => {
-      if (participants) {
-        return participants[0].id !== state.currentUser.id ?
-          participants[0].name : participants[1].name;
+
+    const getOtherUserNames = () => {
+      if (participants && participants.length) {
+        return participants.filter(user => user.id !== state.currentUser.id)
+          .map(user => user.nickname);
+      } else {
+        return [];
       }
     };
 
@@ -32,7 +35,7 @@ const getChannels = (state: FeedType): ChannelsListType => (
       hasActions: moments.filter(moment => (
         moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
       )).length > 0,
-      directChatParticipant: otherUserNickname(),
+      otherUsersNames: getOtherUserNames(),
     };
   })
 );

@@ -35,4 +35,5 @@
   border: none;
   padding: 0 16px;
   color: var(--primaryColor);
+  background-color: var(--backgroundColor);
 }

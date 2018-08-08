@@ -2,8 +2,10 @@
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import NavBar from '../../src/navBar/navBar';
 import sinon from 'sinon';
+
+import NavBar from '../../src/navBar/navBar';
+
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -12,8 +14,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false},
-          {id: 'host', isCurrent: false, hasActions: false},
+          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -28,8 +30,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false},
-          {id: 'host', isCurrent: false, hasActions: false},
+          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -47,8 +49,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false},
-          {id: 'host', isCurrent: false, hasActions: false},
+          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={onClick}
         openMenu={() => {}}
@@ -65,8 +67,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: true},
-          {id: 'host', isCurrent: false, hasActions: false},
+          {id: 'public', isCurrent: true, hasActions: true, otherUsersNames: []},
+          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -82,8 +84,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false},
-          {id: 'host', isCurrent: false, hasActions: true},
+          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: 'host', isCurrent: false, hasActions: true, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -95,14 +97,126 @@ describe('NavBar tests', () => {
     expect(wrapper.find('#nav-host span.pip').length).toBe(1);
   });
 
-  test('direct chat', () => {
+  test('channels with other user names to store', () => {
+    expect(NavBar.getDerivedStateFromProps(
+      {
+        channels: [
+          {
+            id: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: [
+              'bob',
+            ],
+          },
+          {
+            id: 'direct2',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: [
+              'sue',
+            ],
+          },
+        ],
+        onClick: () => {},
+        openMenu: () => {},
+      }, 
+      {
+        left: 20,
+        width: 35,
+        opacity: 1.0,
+        directChatChannelNames: {},
+      }))
+      .toEqual(
+        {
+          left: 20,
+          width: 35,
+          opacity: 1.0,
+          directChatChannelNames: {
+            direct1: 'bob',
+            direct2: 'sue',
+          },
+        }
+      );
+  });
+
+  test('channels without other user names to be stored', () => {
+    expect(NavBar.getDerivedStateFromProps(
+      {
+        channels: [
+          {
+            id: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: [],
+          },
+          {
+            id: 'direct2',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: [],
+          },
+        ],
+        onClick: () => {},
+        openMenu: () => {},
+      }, 
+      {
+        left: 20,
+        width: 35,
+        opacity: 1.0,
+        directChatChannelNames: {},
+      }
+    )).toEqual(null);
+  });
+
+  test('channels with other user names that are already stored', () => {
+    expect(NavBar.getDerivedStateFromProps(
+      {
+        channels: [
+          {
+            id: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: [
+              'bob',
+            ],
+          },
+          {
+            id: 'direct2',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: [
+              'sue',
+            ],
+          },
+        ],
+        onClick: () => {},
+        openMenu: () => {},
+      }, 
+      {
+        left: 20,
+        width: 35,
+        opacity: 1.0,
+        directChatChannelNames: {
+          direct1: 'bob',
+          direct2: 'sue',
+        },
+      }
+    )).toEqual(null);
+  });
+
+  test('direct chat with participants', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false},
-          {id: 'host', isCurrent: false, hasActions: false},
-          {id: 'direct1', isCurrent: false, hasActions: false, directChatParticipant: 'bob'},
-          {id: 'direct2', isCurrent: false, hasActions: false, directChatParticipant: 'dave'},
+          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+          {
+            id: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: ['bob'],
+          },
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -111,6 +225,5 @@ describe('NavBar tests', () => {
       />
     );
     expect(wrapper.find('#nav-direct1').text()).toEqual('B');
-    expect(wrapper.find('#nav-direct2').text()).toEqual('D');
   });
 });

@@ -101,21 +101,20 @@ const textEntered = (state: ChatState) =>
 
 const getPlaceholder = (state: FeedType) => {
   const currentChannelObj = state.channels[state.currentChannel];
+  let otherUserName = [];
   if (state.currentChannel === 'host') {
     return 'Chat with hosts';
   } else if (currentChannelObj &&
     currentChannelObj.participants &&
-    currentChannelObj.participants.length
+    currentChannelObj.participants.length === 2
   ) {
-    const isUserFirstParticipant =
-      currentChannelObj.participants[0].pubnubToken === state.currentUser.pubnubToken;
-    const firstParticipantName = currentChannelObj.participants[0].name;
-    const secondParticipantName = currentChannelObj.participants[1].name;
-
-    const otherUserName =
-      isUserFirstParticipant ? secondParticipantName : firstParticipantName;
-    return `Chat with ${otherUserName}`;
+    const [ getOtherUser ] = currentChannelObj.participants.filter(participant =>
+      participant.id !== state.currentUser.id
+    );
+    otherUserName.push(getOtherUser.name);
+    return `Chat with ${otherUserName[0]}`;
   } else {
+    otherUserName = [];
     return 'Chat';
   }
 };
