@@ -1,6 +1,6 @@
 import { Pubnub } from 'pubnub';
 
-const actorMiddleware = (...actorClasses) => ({ dispatch }) => next => {
+const actorMiddleware = (...actorClasses) => ({ getState, dispatch }) => next => {
   const actors = actorClasses.map(actor => new actor(dispatch));
   return action => {
     next(action);
@@ -120,12 +120,9 @@ class ChatActor {
     }
   }
 
-  messageListener (msg) {
-    this.dispatch({
-      type: 'RECEIVE_MOMENT',
-      channel: msg.channel,
-      message: this.translator.fromLegacy(msg.message),
-    });
+  messageListener (legacyMessage) {
+    const action = Translator.fromLegacy(legacyMessage);
+    this.dispatch(action);
   }
 
   // presenceListener (presenceEvent) {
@@ -135,7 +132,7 @@ class ChatActor {
   publishMoment (action) {
     this.pubnub.publish(
       {
-        message: this.translator.fromCwc(action.message),
+        message: action.message,
         channel: action.channel,
       }
     );
@@ -168,12 +165,13 @@ class ChatActor {
   // }
 
   dispatch (action) {
-    switch (action.type) {
+    const legacyAction = Translator.fromCwc(action);
+    switch (legacyAction.type) {
     case 'PUBLISH_MOMENT':
-      this.publishMoment(action);
+      this.publishMoment(legacyAction);
       break;
     case 'CHAT_CONNECT':
-      this.chatConnect(action);
+      this.chatConnect(legacyAction);
       break;
     // case 'PUBLISH_PRAYER_REQUEST':
     //   this.publishPrayerRequest(action);
