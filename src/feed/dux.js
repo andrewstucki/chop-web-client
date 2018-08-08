@@ -1,10 +1,5 @@
 // @flow
 import type {
-  PublishMessageAction,
-  ChatInputAction,
-} from '../chat/dux';
-
-import type {
   MessageType,
   OpenMessageTrayType,
   CloseMessageTrayType,
@@ -19,16 +14,11 @@ import type { SetUser } from '../io/chat/dux';
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 
 import {
-  PUBLISH_MESSAGE,
-  CHAT_INPUT,
-} from '../chat/dux';
-
-import {
-  createMessage,
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   TOGGLE_CLOSE_TRAY_BUTTON,
+  MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../moment';
@@ -69,7 +59,6 @@ type FeedType = {
     [string]: ChannelType,
   },
   currentChannel: string,
-  chatInput: string,
   currentUser: UserType,
   appendingMessage: boolean,
   anchorMoment: AnchorMomentType | null,
@@ -122,11 +111,9 @@ type LeaveChatType = {
 
 type FeedActionTypes =
   | ChangeChannelType
-  | PublishMessageAction
   | ReceiveMomentType
   | AddChannelType
   | RemoveChannelType
-  | ChatInputAction
   | SetUser
   | OpenMessageTrayType
   | CloseMessageTrayType
@@ -218,7 +205,6 @@ const leaveChat = (user: UserType): LeaveChatType => (
 const defaultState = {
   channels: {},
   currentChannel: '',
-  chatInput: '',
   currentUser: {
     id: '',
     nickname: '',
@@ -248,26 +234,6 @@ const reducer = (
       appendingMessage: false,
       currentChannel: action.channel,
     };
-  case PUBLISH_MESSAGE:
-    if ([state.chatInput].toString().length > 0) {
-      return {
-        ...state,
-        appendingMessage: true,
-        animatingMoment: true,
-        channels: {
-          ...state.channels,
-          [state.currentChannel]: {
-            ...state.channels[state.currentChannel],
-            moments: [
-              ...state.channels[state.currentChannel].moments,
-              createMessage(action.id, state.chatInput, state.currentUser, false, false),
-            ],
-          },
-        },
-        chatInput: '',
-      };
-    }
-    return state;
   case RECEIVE_MOMENT:
     if (state.channels[action.channel]) {
       return {
@@ -331,11 +297,6 @@ const reducer = (
     delete stateCopy.channels[action.channel];
     return stateCopy;
   }
-  case CHAT_INPUT:
-    return {
-      ...state,
-      chatInput: action.value,
-    };
   case SET_USER:
     return {
       ...state,
@@ -447,6 +408,26 @@ const reducer = (
     };
   }
   case PUBLISH_MOMENT_TO_CHANNEL: {
+    if (action.moment.type === MESSAGE) {
+      if ([action.moment.text].toString().length > 0) {
+        return {
+          ...state,
+          appendingMessage: true,
+          animatingMoment: true,
+          channels: {
+            ...state.channels,
+            [state.currentChannel]: {
+              ...state.channels[state.currentChannel],
+              moments: [
+                ...state.channels[state.currentChannel].moments,
+                action.moment,
+              ],
+            },
+          },
+          chatInput: '',
+        };
+      }
+    }
     return {
       ...state,
       animatingMoment: true,

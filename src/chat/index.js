@@ -1,7 +1,14 @@
 // @flow
-import Chat from './chat';
 import { connect } from 'react-redux';
-import { chatInput, toggleChatFocus, addToCurrentChannel, textEntered, getPlaceholder } from './dux';
+
+import {
+  toggleChatFocus,
+  getPlaceholder,
+} from './dux';
+
+import { publishMessage } from '../moment';
+
+import Chat from './chat';
 
 const mapStateToProps = state => {
   const chatState = state.chat;
@@ -9,22 +16,17 @@ const mapStateToProps = state => {
   return {
     textValue: chatState.currentInput,
     focused: chatState.focused,
-    textEntered: textEntered(chatState),
     currentPlaceholder: getPlaceholder(feedState),
+    currentUser: feedState.currentUser,
+    currentChannel: feedState.currentChannel,
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    textOnInput: event => dispatch(chatInput(event.target.value)),
     textOnBlur: () => dispatch(toggleChatFocus(false)),
     textOnFocus: () => dispatch(toggleChatFocus(true)),
-    buttonOnClick: () => dispatch(addToCurrentChannel()),
-    enterDetect: event => {
-      if (event.charCode === 13) {
-        return dispatch(addToCurrentChannel());
-      }
-    },
+    publishMessage: (channel, text, user) => dispatch(publishMessage(channel, text, user)),
   }
 );
 

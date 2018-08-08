@@ -25,11 +25,6 @@ import {
 
 import { MESSAGE } from '../../src/moment/dux';
 
-import {
-  addToCurrentChannel,
-  chatInput,
-} from '../../src/chat/dux';
-
 import { setUser } from '../../src/io/chat/dux';
 
 import {
@@ -89,11 +84,6 @@ describe('Feed tests', () => {
     );
   });
 
-  test('does not add message if chatInput is empty', () => {
-    const result = reducer(defaultState, addToCurrentChannel());
-    expect(result).toEqual(defaultState);
-  });
-
   test('adds a message to current channel from current user', () => {
     const result = reducer(
       {
@@ -107,20 +97,33 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'public',
-        chatInput: 'this is a message',
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         },
         animatingMoment: false,
       },
-      addToCurrentChannel(),
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'MESSAGE',
+          id: '54321',
+          text: 'this is a message',
+          user: {
+            id: '12345',
+            nickname: 'Billy Bob',
+          },
+          messageTrayOpen: false,
+          closeTrayButtonRendered: false,
+        },
+      }
     );
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
     expect(result.channels.public.moments[0].user.id).toEqual('12345');
     expect(result.channels.public.moments[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.public.moments[0].id.length).toEqual(36);
+    expect(result.channels.public.moments[0].id).toEqual('54321');
     expect(result.appendingMessage).toBe(true);
     expect(result.animatingMoment).toBe(true);
   });
@@ -143,20 +146,33 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'host',
-        chatInput: 'this is a string',
         currentUser: {
           id: '12345',
           nickname: 'Billy Bob',
         },
       },
-      addToCurrentChannel()
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'MESSAGE',
+          id: '54321',
+          text: 'this is a string',
+          user: {
+            id: '12345',
+            nickname: 'Billy Bob',
+          },
+          messageTrayOpen: false,
+          closeTrayButtonRendered: false,
+        },
+      }
     );
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('this is a string');
     expect(result.channels.host.moments[0].user.id).toEqual('12345');
     expect(result.channels.host.moments[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.host.moments[0].id.length).toEqual(36);
+    expect(result.channels.host.moments[0].id).toEqual('54321');
     expect(result.appendingMessage).toBe(true);
   });
 
@@ -178,20 +194,19 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'public',
-        chatInput: 'this is a string',
         animatingMoment: false,
         appeningMessage: true,
       },
       receiveMoment('host', {
-        type: MESSAGE,
+        type: 'MESSAGE',
         id: '12345',
         text: 'Hello there',
-        neverRendered: true,
         user: {
           id: '',
           nickname: '',
         },
         messageTrayOpen: false,
+        closeTrayButtonRendered: false,
       })
     );
     expect(result.channels.public.moments.length).toEqual(0);
@@ -500,16 +515,6 @@ describe('Feed tests', () => {
 
   test('feedContents works without a channel', () => {
     expect(feedContents(defaultState)).toEqual([]);
-  });
-
-  test('Feed listens to message input', () => {
-    const result = reducer(defaultState, chatInput('Hello'));
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        chatInput: 'Hello',
-      }
-    );
   });
 
   test('Accepts a user', () => {

@@ -5,8 +5,6 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { storiesOf } from '@storybook/react';
 
-import { createMessage } from '../src/moment';
-
 import Feed from '../src/feed/feed';
 
 const store = createStore(() => {});
@@ -35,24 +33,26 @@ storiesOf('Feed', module)
           currentChannel="default"
           moments={
             [
-              createMessage(
-                '1',
-                'Hello',
-                {
-                  id: 'a',
-                  nickname: 'Billy Bob',
+              {
+                type: 'MESSAGE',
+                id: 'string',
+                text: 'Hello',
+                user: {
+                  id: '12345',
+                  nickname: 'Bobby Boucher',
                 },
-                false,
-              ),
-              createMessage(
-                '2',
-                'Goodbye',
-                {
-                  id: 'b',
-                  nickname: 'Joe Joe',
+                messageTrayOpen: false,
+              },
+              {
+                type: 'MESSAGE',
+                id: 'string',
+                text: 'Goodbye',
+                user: {
+                  id: '12345',
+                  nickname: 'Vicki Vallencourt',
                 },
-                false,
-              ),
+                messageTrayOpen: false,
+              },
             ]
           }
           animatingMoment={false}
@@ -72,24 +72,26 @@ storiesOf('Feed', module)
           currentChannel="default"
           moments={
             [
-              createMessage(
-                '1',
-                'Hello',
-                {
-                  id: 'a',
-                  nickname: 'Billy Bob',
+              {
+                type: 'MESSAGE',
+                id: 'string',
+                text: 'Hello',
+                user: {
+                  id: '12345',
+                  nickname: 'Bobby Boucher',
                 },
-                false,
-              ),
-              createMessage(
-                '2',
-                'Goodbye',
-                {
-                  id: 'b',
-                  nickname: 'Joe Joe',
+                messageTrayOpen: false,
+              },
+              {
+                type: 'MESSAGE',
+                id: 'string',
+                text: 'Goodbye',
+                user: {
+                  id: '12345',
+                  nickname: 'Vicki Vallencourt',
                 },
-                false,
-              ),
+                messageTrayOpen: false,
+              },
             ]
           }
           animatingMoment={false}
