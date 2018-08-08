@@ -15,6 +15,7 @@ type FeedProps = {
   animatingMoment: boolean,
   placeholderPresent: boolean,
   hasParticipants: boolean,
+  togglePopUpModal: () => void,
 };
 
 type RefObject = { current: any };
@@ -131,6 +132,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       moments,
       placeholderPresent,
       hasParticipants,
+      togglePopUpModal,
     } = this.props;
     const feedStyle =
       currentChannel === 'host' && placeholderPresent ?
@@ -155,7 +157,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           hasParticipants &&
             <FeedActionBanner
               text="Leave"
-              action={() => {}}
+              togglePopUpModal={togglePopUpModal}
             />
         }
         <ul

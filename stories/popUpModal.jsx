@@ -7,30 +7,48 @@ import PopUpModal from '../src/popUpModal/popUpModal';
 import '../assets/global.css';
 
 storiesOf('PopUpModal', module)
-  .add('Modal renders if showPopUpModal is true', () => (
+  .add('Modal renders if isPopUpModalVisible is true', () => (
     <PopUpModal
-      keepChatting={action('clicked')}
+      togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
-      user={
+      publishLeftChatNotification={action('clicked')}
+      removeChannel={action('clicked')}
+      currentChannel="direct"
+      otherUser={
         {
           id: '12345',
           nickname: 'Walker, Texas Ranger',
         }
       }
-      showPopUpModal={true}
+      currentUser={
+        {
+          id: '12345',
+          nickname: 'Jimmy Trivette',
+        }
+      }
+      isPopUpModalVisible={true}
     />
   ))
 
-  .add('Modal does not render if showPopUpModal is false', () => (
+  .add('Modal does not render if isPopUpModalVisible is false', () => (
     <PopUpModal
-      keepChatting={action('clicked')}
+      togglePopUpModal={action('clicked')}
       leaveChat={action('clicked')}
-      user={
+      publishLeftChatNotification={action('clicked')}
+      removeChannel={action('clicked')}
+      currentChannel="direct"
+      otherUser={
         {
           id: '12345',
           nickname: 'Walker, Texas Ranger',
         }
       }
-      showPopUpModal={false}
+      currentUser={
+        {
+          id: '12345',
+          nickname: 'Jimmy Trivette',
+        }
+      }
+      isPopUpModalVisible={false}
     />
   ));

@@ -6,6 +6,7 @@ import type {
   ChangeChannelType,
   AddChannelType,
   InviteToChannelType,
+  RemoveChannelType,
 } from '../../../src/feed/dux';
 
 import type { PublishMomentToChannelType } from '../../../src/moment/dux';
@@ -23,6 +24,7 @@ import {
   CHANGE_CHANNEL,
   ADD_CHANNEL,
   INVITE_TO_CHANNEL,
+  REMOVE_CHANNEL,
 } from '../../../src/feed/dux';
 
 // Actions
@@ -65,7 +67,8 @@ type IOChatActionTypes =
   | ChangeChannelType
   | PublishMomentToChannelType
   | InviteToChannelType
-  | PublishAcceptedPrayerRequestType;
+  | PublishAcceptedPrayerRequestType
+  | RemoveChannelType;
 
 // Action Creators
 
@@ -154,6 +157,25 @@ const getReducer = (chatIO: Chat) => (
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
       chatIO.publishAcceptedPrayerRequest(action.id, action.channel);
       return state;
+    case REMOVE_CHANNEL: {
+      if (action.channel === 'public' ||
+        action.channel === 'host' || 
+        action.channel === 'request' || 
+        action.channel === 'command'
+      ) {
+        return state;
+      }
+      const stateCopy = { ...state };
+      if (action.channel === state.currentChannel) {
+        if (state.chats.public) {
+          stateCopy.currentChannel = 'public';
+        } else {
+          stateCopy.currentChannel = '';
+        }
+      }
+      delete stateCopy.chats[action.channel];
+      return stateCopy;
+    }
     default:
       return state;
     }

@@ -12,15 +12,24 @@ describe('PopUpModal tests', () => {
   test('Modal has background and popup', () => {
     const wrapper = Enzyme.shallow(
       <PopUpModal
-        keepChatting={() => {}}
+        togglePopUpModal={() => {}}
         leaveChat={() => {}}
-        user={
+        publishLeftChatNotification={() => {}}
+        removeChannel={() => {}}
+        currentChannel="direct"
+        otherUser={
           {
             id: '12345',
             nickname: 'Walker, Texas Ranger',
           }
         }
-        showPopUpModal={true}
+        currentUser={
+          {
+            id: '12345',
+            nickname: 'Jimmy Trivette',
+          }
+        }
+        isPopUpModalVisible={true}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('popUpModal');
@@ -31,24 +40,37 @@ describe('PopUpModal tests', () => {
   });
 
   test('Actions can be fired', () => {
-    const buttonOneOnClick = sinon.spy();
-    const buttonTwoOnClick = sinon.spy();
+    const togglePopUpModal = sinon.spy();
+    const leaveChat = sinon.spy();
+    const publishLeftChatNotification = sinon.spy();
+    const removeChannel = sinon.spy();
     const wrapper = Enzyme.shallow(
       <PopUpModal
-        keepChatting={buttonOneOnClick}
-        leaveChat={buttonTwoOnClick}
-        user={
+        togglePopUpModal={togglePopUpModal}
+        leaveChat={leaveChat}
+        publishLeftChatNotification={publishLeftChatNotification}
+        removeChannel={removeChannel}
+        currentChannel="direct"
+        otherUser={
           {
             id: '12345',
-            nickname: 'Walker Texas Ranger',
+            nickname: 'Walker, Texas Ranger',
           }
         }
-        showPopUpModal={true}
+        currentUser={
+          {
+            id: '12345',
+            nickname: 'Jimmy Trivette',
+          }
+        }
+        isPopUpModalVisible={true}
       />
     );
     expect(wrapper.find('button').at(0).simulate('click'));
     expect(wrapper.find('button').at(1).simulate('click'));
-    expect(buttonOneOnClick.calledOnce).toEqual(true);
-    expect(buttonTwoOnClick.calledOnce).toEqual(true);
+    expect(togglePopUpModal.calledTwice).toEqual(true);
+    expect(leaveChat.calledOnce).toEqual(true);
+    expect(publishLeftChatNotification.calledOnce).toEqual(true);
+    expect(removeChannel.calledOnce).toEqual(true);
   });
 });
