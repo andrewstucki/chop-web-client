@@ -492,7 +492,7 @@ const reducer = (
   case TOGGLE_POP_UP_MODAL:
     return {
       ...state,
-      isPopUpModalVisible: !action.isPopUpModalVisible,
+      isPopUpModalVisible: !state.isPopUpModalVisible,
     };
   case LEAVE_CHAT: {
     const { channels, currentChannel } = state;
