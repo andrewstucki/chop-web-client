@@ -108,9 +108,9 @@ const getPlaceholder = (state: FeedType) => {
     currentChannelObj.participants.length
   ) {
     const isUserFirstParticipant =
-      currentChannelObj.participants[0].id === state.currentUser.id;
-    const firstParticipantName = currentChannelObj.participants[0].nickname;
-    const secondParticipantName = currentChannelObj.participants[1].nickname;
+      currentChannelObj.participants[0].pubnubToken === state.currentUser.pubnubToken;
+    const firstParticipantName = currentChannelObj.participants[0].name;
+    const secondParticipantName = currentChannelObj.participants[1].name;
 
     const otherUserName =
       isUserFirstParticipant ? secondParticipantName : firstParticipantName;

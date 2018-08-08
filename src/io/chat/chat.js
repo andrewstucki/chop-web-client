@@ -1,6 +1,6 @@
 // @flow
 import type { MomentType } from '../../moment';
-import type { UserType } from '../../feed/dux';
+import type { PrivateUserType, SharedUserType } from '../../feed/dux';
 import {
   MESSAGE,
   PRAYER,
@@ -26,7 +26,10 @@ type ChatType = {
 type MeType = {
   uuid: string,
   state: {
-    nickname: string,
+    name: string,
+    role: {
+      label: string,
+    }
   },
 };
 
@@ -69,7 +72,7 @@ class Chat {
   addChannel: (
     channelName: string,
     channelId: string,
-    participants?: Array<UserType>
+    participants?: Array<SharedUserType>
   ) => void
   receiveAcceptedPrayerRequest: (id: string) => void;
 
@@ -95,19 +98,21 @@ class Chat {
     );
   }
 
-  setUser (id: string, nickname: string): void {
+  setUser (user: PrivateUserType): void {
     if (!this.chatEngine) return;
-    this.userId = id;
+    this.userId = user.pubnubToken;
     this.chatEngine.on ('$.ready', data => {
       this.me = data.me;
       this.me.direct.on('$.invite', payload => {
         const currentUser = {
-          id: this.me.uuid,
-          nickname: this.me.state.nickname,
+          pubnubToken: this.me.uuid,
+          name: this.me.state.name,
+          role: this.me.state.role,
         };
         const otherUser = {
-          id: payload.sender.uuid,
-          nickname: payload.sender.state.nickname,
+          pubnubToken: payload.sender.uuid,
+          name: payload.sender.state.name,
+          role: payload.sender.state.role,
         };
 
         this.addChannel(
@@ -117,8 +122,8 @@ class Chat {
         );
       });
     });
-    this.chatEngine.connect(id, {
-      nickname,
+    this.chatEngine.connect(user.pubnubToken, {
+      name: user.name,
     });
   }
 

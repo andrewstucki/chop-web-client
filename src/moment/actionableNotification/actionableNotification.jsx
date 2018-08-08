@@ -45,7 +45,7 @@ const ActionableNotification = (
       />
       <div className={styles.text}>
         <div>
-          <strong>{user.nickname} </strong>has requested prayer
+          <strong>{user.name} </strong>has requested prayer
         </div>
         <div className={styles.timeStamp}>{timeStamp}</div>
       </div>
@@ -56,7 +56,7 @@ const ActionableNotification = (
             onClick={
               () => (
                 acceptPrayerRequest(user, id),
-                publishPrayerNotification(currentUser.nickname, user.nickname)
+                publishPrayerNotification(currentUser.name, user.name)
               )
             }
           >

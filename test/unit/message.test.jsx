@@ -16,6 +16,7 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            lang: 'en',
             text: 'Go west young man!',
             user: {
               id: '12345',
@@ -43,6 +44,7 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            lang: 'en',
             text: 'Go west young man!',
             user: {
               id: '12345',
@@ -72,6 +74,7 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            lang: 'en',
             text: 'Go west young man!',
             user: {
               id: '12345',

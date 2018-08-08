@@ -50,10 +50,28 @@ const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 
 // Flow Type Definitions
 
-type UserType = {
+type PrivateUserType = {
   id: string,
-  nickname: string,
+  name: string,
+  pubnubToken: string,
+  pubnubAccessToken: string,
+  role: {
+    label: string,
+    permissions: Array<string>,
+  }
 };
+
+type SharedUserType = {
+  name: string,
+  pubnubToken: string,
+  role: {
+    label: string,
+  }
+};
+
+type UserType =
+  | PrivateUserType
+  | SharedUserType;
 
 type ChannelType = {
   id: string,
@@ -68,7 +86,7 @@ type FeedType = {
   },
   currentChannel: string,
   chatInput: string,
-  currentUser: UserType,
+  currentUser: PrivateUserType,
   appendingMessage: boolean,
   anchorMoment: AnchorMomentType | null,
   animatingMoment: boolean,
@@ -191,7 +209,13 @@ const defaultState = {
   chatInput: '',
   currentUser: {
     id: '',
-    nickname: '',
+    name: '',
+    pubnubToken: '',
+    pubnubAccessToken: '',
+    role: {
+      label: '',
+      permissions: [],
+    },
   },
   appendingMessage: false,
   anchorMoment: null,
@@ -308,11 +332,7 @@ const reducer = (
   case SET_USER:
     return {
       ...state,
-      currentUser: {
-        ...state.currentUser,
-        id: action.id,
-        nickname: action.nickname,
-      },
+      currentUser: action.user,
     };
   case OPEN_MESSAGE_TRAY: {
     const { id } = action;
@@ -524,6 +544,8 @@ export type {
   InviteToChannelType,
   ReceiveAcceptedPrayerRequestType,
   ChannelType,
+  PrivateUserType,
+  SharedUserType,
 };
 
 export default reducer;

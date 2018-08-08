@@ -15,6 +15,7 @@ const MESSAGE = 'MESSAGE';
 type MessageType = {
   type: 'MESSAGE',
   id: string,
+  lang: string,
   text: string,
   user: UserType,
   messageTrayOpen: boolean,
@@ -79,6 +80,7 @@ const createMessage = (
   {
     type: MESSAGE,
     id,
+    lang: 'en',
     text,
     user,
     messageTrayOpen,

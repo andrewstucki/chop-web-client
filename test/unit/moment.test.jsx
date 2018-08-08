@@ -57,6 +57,7 @@ describe('Moment tests', () => {
       {
         type: 'MESSAGE',
         id: '12345',
+        lang: 'en',
         text: 'Hello',
         user: {
           id: '67890',

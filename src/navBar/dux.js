@@ -22,7 +22,7 @@ const getChannels = (state: FeedType): ChannelsListType => (
     const otherUserNickname = () => {
       if (participants) {
         return participants[0].id !== state.currentUser.id ?
-          participants[0].nickname : participants[1].nickname;
+          participants[0].name : participants[1].name;
       }
     };
 
