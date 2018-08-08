@@ -11,6 +11,8 @@ import reducer, {
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
+  togglePopUpModal,
+  leaveChat,
 } from '../../src/feed/dux';
 
 import {
@@ -18,9 +20,8 @@ import {
   closeMessageTray,
   deleteMessage,
   toggleCloseTrayButton,
+  publishAcceptedPrayerRequest,
 } from '../../src/moment';
-
-import { publishAcceptedPrayerRequest } from '../../src/moment/actionableNotification/dux';
 
 import { MESSAGE } from '../../src/moment/dux';
 
@@ -836,8 +837,10 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public:
-            [
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
               {
                 id: '189',
                 text: 'Hello Billy Bob',
@@ -857,6 +860,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
               },
             ],
+          },
         },
         currentChannel: 'public',
       },
@@ -1521,6 +1525,81 @@ describe('Feed tests', () => {
       {
         id: '54321',
         nickname: 'Sockrock',
+      }
+    );
+  });
+
+  test('togglePopUpModal', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        isPopUpModalVisible: false,
+      },
+      togglePopUpModal()
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isPopUpModalVisible: true,
+      }
+    );
+  });
+
+  test('leaveChat', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            participants: [
+              {
+                id: '12345',
+                nickname: 'Bootbot',
+              },
+              {
+                id: '54321',
+                nickname: 'Sockrock',
+              },
+            ],
+          },
+        },
+        currentChannel: 'direct',
+        currentUser: {
+          id: '12345',
+          nickname: 'Bootbot',
+        },
+      },
+      leaveChat(
+        {
+          id: '12345',
+          nickname: 'Bootbot',
+        }
+      )
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            participants: [
+              {
+                id: '54321',
+                nickname: 'Sockrock',
+              },
+            ],
+          },
+        },
+        currentChannel: 'direct',
+        currentUser: {
+          id: '12345',
+          nickname: 'Bootbot',
+        },
       }
     );
   });

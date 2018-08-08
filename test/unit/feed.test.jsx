@@ -20,6 +20,8 @@ describe('Feed tests', () => {
         animatingMoment={false}
         placeholderPresent={true}
         hasParticipants={false}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
       />
     );
     expect(wrapper.find('ul').children().length).toBe(0);
@@ -48,6 +50,8 @@ describe('Feed tests', () => {
         animatingMoment={true}
         placeholderPresent={true}
         hasParticipants={false}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
       />
     );
     
@@ -76,6 +80,8 @@ describe('Feed tests', () => {
         animatingMoment={false}
         placeholderPresent={true}
         hasParticipants={false}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
       />
     );
     expect(wrapper.find('ul').key()).toEqual('default');
@@ -92,6 +98,8 @@ describe('Feed tests', () => {
         animatingMoment={false}
         placeholderPresent={true}
         hasParticipants={false}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('withPlaceholder');
@@ -108,6 +116,8 @@ describe('Feed tests', () => {
         animatingMoment={false}
         placeholderPresent={true}
         hasParticipants={false}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
@@ -124,6 +134,8 @@ describe('Feed tests', () => {
         animatingMoment={false}
         placeholderPresent={false}
         hasParticipants={false}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
@@ -140,6 +152,8 @@ describe('Feed tests', () => {
         animatingMoment={false}
         placeholderPresent={false}
         hasParticipants={true}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
       />
     );
     expect(wrapper.find(FeedActionBanner).length).toBe(1);

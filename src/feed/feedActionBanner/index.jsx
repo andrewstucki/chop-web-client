@@ -1,18 +1,24 @@
 // @flow
 import React from 'react';
 
-import type { FeedActionBannerType } from './dux';
-
 import styles from './style.css';
 
+type FeedActionBannerPropsType = {
+  text: string,
+  togglePopUpModal: () => void,
+};
+
 const FeedActionBanner = (
-  { text, action }: FeedActionBannerType
+  {
+    text,
+    togglePopUpModal,
+  }: FeedActionBannerPropsType
 ) => (
   <div className={styles.feedActionBanner}>
     <button 
       className={styles.action}
       onClick={
-        () => (action())
+        () => (togglePopUpModal())
       }
     >
       {text}
