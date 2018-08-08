@@ -22,6 +22,8 @@ storiesOf('Feed', module)
           animatingMoment={false}
           placeholderPresent={false}
           hasParticipants={false}
+          isPopUpModalVisible={false}
+          togglePopUpModal={() => {}}
         />
       </div>
     </Provider>
@@ -56,6 +58,8 @@ storiesOf('Feed', module)
           animatingMoment={false}
           placeholderPresent={false}
           hasParticipants={false}
+          isPopUpModalVisible={false}
+          togglePopUpModal={() => {}}
         />
       </div>
     </Provider>
@@ -91,6 +95,8 @@ storiesOf('Feed', module)
           animatingMoment={false}
           placeholderPresent={false}
           hasParticipants={true}
+          isPopUpModalVisible={false}
+          togglePopUpModal={() => {}}
         />
       </div>
     </Provider>

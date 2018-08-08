@@ -5,37 +5,51 @@ import type { UserType } from '../feed/dux';
 import styles from './style.css';
 
 type PopUpModalPropsType = {
-  keepChatting: () => void,
-  leaveChat: () => void,
-  user: UserType,
-  showPopUpModal: boolean,
+  togglePopUpModal: () => void,
+  leaveChat: (user: UserType) => void,
+  publishLeftChatNotification: (userName: string, channelName: string) => void,
+  removeChannel: (channelName: string) => void,
+  otherUser: UserType,
+  currentUser: UserType,
+  currentChannel: string,
+  isPopUpModalVisible: boolean,
 };
 
 const PopUpModal = (
   {
-    keepChatting,
+    togglePopUpModal,
     leaveChat,
-    user,
-    showPopUpModal,
+    publishLeftChatNotification,
+    removeChannel,
+    otherUser,
+    currentUser,
+    isPopUpModalVisible,
+    currentChannel,
   }: PopUpModalPropsType
 ) => {
-  if (showPopUpModal) {
+  if (isPopUpModalVisible) {
     return (
       <div className={styles.popUpModal}>
         <div className={styles.alert}>
           <div className={styles.text}>
-            Are you sure you want to end your chat with <strong>{user.nickname}</strong>?
+            Are you sure you want to end your chat with
+            <strong> {otherUser.nickname}</strong>?
           </div>
           <div className={styles.actionContainer}>
             <button
               className={styles.action}
-              onClick={keepChatting}
+              onClick={() => (togglePopUpModal())}
             >
               Keep chatting
             </button>
             <button
               className={styles.action}
-              onClick={leaveChat}
+              onClick={() => (
+                togglePopUpModal(),
+                publishLeftChatNotification(currentUser.nickname, currentChannel),
+                leaveChat(currentUser),
+                removeChannel(currentChannel)
+              )}
             >
               Leave
             </button>

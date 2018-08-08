@@ -14,7 +14,8 @@ describe('FeedActionBanner test', () => {
     const wrapper = Enzyme.shallow(
       <FeedActionBanner
         text="Leave"
-        action={onClick}
+        togglePopUpModal={onClick}
+        isPopUpModalVisible={false}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('feedActionBanner');

@@ -11,6 +11,8 @@ import {
   releaseAnchorMoment,
 } from '../../src/placeholder/anchorMoment/dux';
 
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
+
 describe('PlaceHolder tests', () => {
   test('Default state', () => {
     const result = reducer(defaultState);
@@ -96,6 +98,7 @@ describe('PlaceHolder tests', () => {
   test('Get current channel', () => {
     const result = getCurrentChannel(
       {
+        ...defaultFeedState,
         channels: {
           public: {
             id: '12345',
