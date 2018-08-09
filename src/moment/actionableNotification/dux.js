@@ -58,20 +58,6 @@ const publishAcceptedPrayerRequest = (
   }
 );
 
-// Reducer
-
-const reducer = (
-  state: Object = {},
-  action?: ActionableNotificationType) => {
-  if (!action || !action.type) {
-    return state;
-  }
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
-
 // Exports
 
 export type {
@@ -90,5 +76,3 @@ export {
   ACTIONABLE_NOTIFICATION,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
 };
-
-export default reducer;

@@ -15,6 +15,8 @@ import reducer, {
   leaveChat,
 } from '../../src/feed/dux';
 
+import { TOGGLE_CHAT_FOCUS } from '../../src/chat/dux';
+
 import {
   openMessageTray,
   closeMessageTray,
@@ -1611,6 +1613,34 @@ describe('Feed tests', () => {
         },
       }
     );
+  });
+});
+
+describe('Chat tests', () => {
+  test('chat focus', () => {
+    const result = reducer(
+      defaultState,
+      {
+        type: TOGGLE_CHAT_FOCUS,
+        focus: true,
+      });
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isChatFocused: true,
+      }
+    );
+
+    const result2 = reducer(
+      {
+        ...defaultState,
+        isChatFocused: true,
+      },
+      {
+        type: TOGGLE_CHAT_FOCUS,
+        focus: false,
+      });
+    expect(result2).toEqual(defaultState);
   });
 });
 

@@ -1,5 +1,5 @@
 // @flow
-import type { ToggleChatFocusAction } from '../chat/dux';
+import type { ToggleChatFocusType } from '../chat/dux';
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
 const SET_VIDEO_URL = 'SET_VIDEO_URL';
@@ -17,7 +17,7 @@ type SetVideoUrl = {
 }
 
 type VideoFeedActionTypes =
-  | ToggleChatFocusAction
+  | ToggleChatFocusType
   | SetVideoUrl;
 
 // Default State
