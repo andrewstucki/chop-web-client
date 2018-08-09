@@ -44,12 +44,6 @@ type ToggleCloseTrayButtonType = {
   id: string,
 };
 
-type MessageActionTypes =
-  | OpenMessageTrayType
-  | CloseMessageTrayType
-  | DeleteMessageType
-  | ToggleCloseTrayButtonType;
-
 // Action Creators
 
 const publishMessage = (
@@ -99,20 +93,6 @@ const deleteMessage = (id:string): DeleteMessageType => (
   }
 );
 
-// Reducer
-
-const reducer = (
-  state: Object = {},
-  action?: MessageActionTypes) => {
-  if (!action || !action.type) {
-    return state;
-  }
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
-
 // Exports
 
 export {
@@ -138,4 +118,3 @@ export type {
   DeleteMessageType,
   ToggleCloseTrayButtonType,
 };
-export default reducer;
