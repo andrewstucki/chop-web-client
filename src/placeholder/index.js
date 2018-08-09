@@ -5,7 +5,7 @@ import { releaseAnchorMoment } from './anchorMoment/dux';
 import {
   placeholderContents,
   getCurrentChannel,
-  setAnchorMomentAnchored,
+  toggleAnchorMomentAnchored,
 } from './dux';
 
 import Placeholder from './placeholder';
@@ -16,7 +16,7 @@ const mapStateToProps = state => {
     anchorMoment: placeholderContents(feedState),
     isPlaceholderPresent: feedState.isPlaceholderPresent,
     currentChannel: getCurrentChannel(feedState),
-    anchorMomentAnchored: setAnchorMomentAnchored(feedState),
+    isAnchorMomentAnchored: toggleAnchorMomentAnchored(feedState),
   };
 };
 

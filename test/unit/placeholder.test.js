@@ -2,7 +2,7 @@
 import {
   placeholderContents,
   getCurrentChannel,
-  setAnchorMomentAnchored,
+  toggleAnchorMomentAnchored,
 } from '../../src/placeholder/dux';
 
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
@@ -32,7 +32,7 @@ describe('PlaceHolder tests', () => {
   });
 
   test('Set anchor moment anchored true', () => {
-    const result = setAnchorMomentAnchored(
+    const result = toggleAnchorMomentAnchored(
       {
         ...defaultFeedState,
         isPlaceholderPresent: false,
@@ -48,7 +48,7 @@ describe('PlaceHolder tests', () => {
   });
 
   test('Set anchor moment anchored false', () => {
-    const result = setAnchorMomentAnchored(
+    const result = toggleAnchorMomentAnchored(
       {
         ...defaultFeedState,
         isPlaceholderPresent: false,

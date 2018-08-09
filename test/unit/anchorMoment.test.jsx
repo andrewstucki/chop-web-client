@@ -21,7 +21,7 @@ describe('AnchorMoment tests', () => {
           }
         }
         releaseAnchorMoment={() => {}}
-        anchorMomentAnchored={true}
+        isAnchorMomentAnchored={true}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('anchored');
@@ -43,7 +43,7 @@ describe('AnchorMoment tests', () => {
           }
         }
         releaseAnchorMoment={() => {}}
-        anchorMomentAnchored={false}
+        isAnchorMomentAnchored={false}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('released');
@@ -66,7 +66,7 @@ describe('AnchorMoment tests', () => {
           }
         }
         releaseAnchorMoment={releaseAnchorMoment}
-        anchorMomentAnchored={true}
+        isAnchorMomentAnchored={true}
       />
     );
     expect(wrapper.find('button').at(0).props().className).toEqual('releaseAnchorButton');

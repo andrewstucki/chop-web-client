@@ -23,7 +23,7 @@ describe('Placeholder tests', () => {
         isPlaceholderPresent={true}
         releaseAnchorMoment={() => {}}
         currentChannel="host"
-        anchorMomentAnchored={true}
+        isAnchorMomentAnchored={true}
       />
     );
     expect(wrapper.find(AnchorMoment).length).toBe(1);

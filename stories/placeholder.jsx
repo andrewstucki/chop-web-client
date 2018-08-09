@@ -26,7 +26,7 @@ storiesOf('Placeholder', module)
         releaseAnchorMoment={action('clicked')}
         isPlaceholderPresent={true}
         currentChannel="host"
-        anchorMomentAnchored={true}
+        isAnchorMomentAnchored={true}
       />
     </Provider>
   ));

@@ -14,7 +14,7 @@ const getCurrentChannel = (state: FeedType): string => (
   state.currentChannel
 );
 
-const setAnchorMomentAnchored = (state: FeedType): boolean => (
+const toggleAnchorMomentAnchored = (state: FeedType): boolean => (
   state.anchorMoment === null ? false : true
 );
 
@@ -23,5 +23,5 @@ const setAnchorMomentAnchored = (state: FeedType): boolean => (
 export {
   placeholderContents,
   getCurrentChannel,
-  setAnchorMomentAnchored,
+  toggleAnchorMomentAnchored,
 };
