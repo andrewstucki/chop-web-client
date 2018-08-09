@@ -198,7 +198,7 @@ describe('Moment tests', () => {
           text: 'I commit my life to Christ',
           subText: '1 hand raised',
         },
-        anchorMomentAnchored: false,
+        isAnchorMomentAnchored: false,
       }
     );
   });

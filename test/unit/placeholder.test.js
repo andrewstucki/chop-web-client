@@ -1,83 +1,19 @@
 // @flow
-import reducer, {
-  defaultState,
+import {
   placeholderContents,
   getCurrentChannel,
-  setAnchorMomentAnchored,
+  toggleAnchorMomentAnchored,
 } from '../../src/placeholder/dux';
-
-import {
-  publishSalvation,
-  releaseAnchorMoment,
-} from '../../src/placeholder/anchorMoment/dux';
 
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
 describe('PlaceHolder tests', () => {
-  test('Default state', () => {
-    const result = reducer(defaultState);
-    expect(result).toEqual(defaultState);
-  });
-  // TODO learn how to mock createUid
-  test('Publish salvation anchorMoment 1 hand raised', () => {
-    const result = reducer(defaultState, publishSalvation(1));
-    expect(result.placeholder ? result.placeholder.subText : '')
-      .toEqual('1 hand raised');
-  });
-
-  test('Publish salvation anchorMoment multiple hands raised', () => {
-    const result = reducer(defaultState, publishSalvation(4));
-    expect(result.placeholder ? result.placeholder.subText : '')
-      .toBe('4 hands raised');
-  });
-
-  test('Sets salvation anchor moment', () => {
-    const result = reducer(
-      defaultState,
-      {
-        type: 'SET_ANCHOR_MOMENT',
-        anchorMoment: {
-          type: 'ANCHOR_MOMENT',
-          id: '12345',
-          text: 'I commit my life to Christ.',
-          subText: '1 hand raised',
-        },
-      }
-    );
-    expect(result.renderPlaceholder).toBe(true);
-    expect(result.placeholder).toEqual(
-      {
-        type: 'ANCHOR_MOMENT',
-        id: '12345',
-        text: 'I commit my life to Christ.',
-        subText: '1 hand raised',
-      }
-    );
-  });
-
-  test('Release anchor moment', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        renderPlaceholder: true,
-        placeholder: {
-          type: 'ANCHOR_MOMENT',
-          id: '12345',
-          text: 'I commit my life to Christ.',
-          subText: '1 hand raised',
-        },
-      },
-      releaseAnchorMoment()
-    );
-    expect(result).toEqual(defaultState);
-  });
-
   test('Get anchor moment', () => {
     const result = placeholderContents(
       {
-        ...defaultState,
-        renderPlaceholder: true,
-        placeholder: {
+        ...defaultFeedState,
+        isPlaceholderPresent: true,
+        anchorMoment: {
           type: 'ANCHOR_MOMENT',
           id: '12345',
           text: 'I commit my life to Christ.',
@@ -95,33 +31,12 @@ describe('PlaceHolder tests', () => {
     );
   });
 
-  test('Get current channel', () => {
-    const result = getCurrentChannel(
+  test('Set anchor moment anchored true', () => {
+    const result = toggleAnchorMomentAnchored(
       {
         ...defaultFeedState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [],
-          },
-          host: {
-            id: '12345',
-            name: 'host',
-            moments: [],
-          },
-        },
-        currentChannel: 'host',
-      }
-    );
-    expect(result).toEqual('host');
-  });
-
-  test('Set anchor moment anchored true', () => {
-    const result = setAnchorMomentAnchored(
-      {
-        renderPlaceholder: false,
-        placeholder: {
+        isPlaceholderPresent: false,
+        anchorMoment: {
           type: 'ANCHOR_MOMENT',
           id: '12345',
           text: 'I commit my life to Christ.',
@@ -133,12 +48,23 @@ describe('PlaceHolder tests', () => {
   });
 
   test('Set anchor moment anchored false', () => {
-    const result = setAnchorMomentAnchored(
+    const result = toggleAnchorMomentAnchored(
       {
-        renderPlaceholder: false,
-        placeholder: null,
+        ...defaultFeedState,
+        isPlaceholderPresent: false,
+        anchorMoment: null,
       }
     );
     expect(result).toEqual(false);
+  });
+
+  test('Get current channel', () => {
+    const result = getCurrentChannel(
+      {
+        ...defaultFeedState,
+        currentChannel: 'host',
+      }
+    );
+    expect(result).toEqual('host');
   });
 });

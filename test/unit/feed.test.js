@@ -31,6 +31,7 @@ import { setUser } from '../../src/io/chat/dux';
 
 import {
   releaseAnchorMoment,
+  publishSalvation,
   SET_ANCHOR_MOMENT,
 } from '../../src/placeholder/anchorMoment/dux';
 
@@ -1227,7 +1228,10 @@ describe('Feed tests', () => {
 
   test('Store anchorMoment from publishSalvation', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        isPlaceholderPresent: false,
+      },
       {
         type: SET_ANCHOR_MOMENT,
         anchorMoment: {
@@ -1247,7 +1251,7 @@ describe('Feed tests', () => {
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
         },
-        placeholderPresent: true,
+        isPlaceholderPresent: true,
       }
     );
   });
@@ -1271,7 +1275,7 @@ describe('Feed tests', () => {
           subText: '1 hand raised',
         },
         animatingMoment: true,
-        placeholderPresent: true,
+        isPlaceholderPresent: true,
       },
       releaseAnchorMoment()
     );
@@ -1293,7 +1297,7 @@ describe('Feed tests', () => {
           },
         },
         animatingMoment: false,
-        placeholderPresent: false,
+        isPlaceholderPresent: false,
         currentChannel: 'host',
       }
     );
@@ -1598,5 +1602,43 @@ describe('Chat tests', () => {
         focus: false,
       });
     expect(result2).toEqual(defaultState);
+  });
+});
+
+describe('Placeholder tests', () => {
+  test('Publish salvation anchorMoment 1 hand raised', () => {
+    const result = reducer(defaultState, publishSalvation(1));
+    expect(result.anchorMoment ? result.anchorMoment.subText : '')
+      .toEqual('1 hand raised');
+  });
+
+  test('Publish salvation anchorMoment multiple hands raised', () => {
+    const result = reducer(defaultState, publishSalvation(4));
+    expect(result.anchorMoment ? result.anchorMoment.subText : '')
+      .toBe('4 hands raised');
+  });
+
+  test('Sets salvation anchor moment', () => {
+    const result = reducer(
+      defaultState,
+      {
+        type: 'SET_ANCHOR_MOMENT',
+        anchorMoment: {
+          type: 'ANCHOR_MOMENT',
+          id: '12345',
+          text: 'I commit my life to Christ.',
+          subText: '1 hand raised',
+        },
+      }
+    );
+    expect(result.isPlaceholderPresent).toBe(true);
+    expect(result.anchorMoment).toEqual(
+      {
+        type: 'ANCHOR_MOMENT',
+        id: '12345',
+        text: 'I commit my life to Christ.',
+        subText: '1 hand raised',
+      }
+    );
   });
 });

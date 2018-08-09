@@ -24,9 +24,9 @@ storiesOf('Placeholder', module)
           }
         }
         releaseAnchorMoment={action('clicked')}
-        renderPlaceholder={true}
+        isPlaceholderPresent={true}
         currentChannel="host"
-        anchorMomentAnchored={true}
+        isAnchorMomentAnchored={true}
       />
     </Provider>
   ));

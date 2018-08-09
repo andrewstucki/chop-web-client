@@ -5,19 +5,18 @@ import { releaseAnchorMoment } from './anchorMoment/dux';
 import {
   placeholderContents,
   getCurrentChannel,
-  setAnchorMomentAnchored,
+  toggleAnchorMomentAnchored,
 } from './dux';
 
 import Placeholder from './placeholder';
 
 const mapStateToProps = state => {
-  const placeholderState = state.placeholder;
   const feedState = state.feed;
   return {
-    anchorMoment: placeholderContents(placeholderState),
-    renderPlaceholder: placeholderState.renderPlaceholder,
+    anchorMoment: placeholderContents(feedState),
+    isPlaceholderPresent: feedState.isPlaceholderPresent,
     currentChannel: getCurrentChannel(feedState),
-    anchorMomentAnchored: setAnchorMomentAnchored(placeholderState),
+    isAnchorMomentAnchored: toggleAnchorMomentAnchored(feedState),
   };
 };
 

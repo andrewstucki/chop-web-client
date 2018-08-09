@@ -7,26 +7,26 @@ import AnchorMoment from './anchorMoment';
 
 type PlaceholderPropsType = {
   anchorMoment: AnchorMomentType,
-  renderPlaceholder: boolean,
+  isPlaceholderPresent: boolean,
   releaseAnchorMoment: () => void,
   currentChannel: string,
-  anchorMomentAnchored: boolean,
+  isAnchorMomentAnchored: boolean,
 };
 
 const Placeholder = (
   {
     anchorMoment,
-    renderPlaceholder,
+    isPlaceholderPresent,
     releaseAnchorMoment,
     currentChannel,
-    anchorMomentAnchored,
+    isAnchorMomentAnchored,
   }: PlaceholderPropsType
 ) => {
-  if (renderPlaceholder && currentChannel === 'host') {
+  if (isPlaceholderPresent && currentChannel === 'host') {
     return (
       <AnchorMoment
         anchorMoment={anchorMoment}
-        anchorMomentAnchored={anchorMomentAnchored}
+        isAnchorMomentAnchored={isAnchorMomentAnchored}
         releaseAnchorMoment={releaseAnchorMoment}
       />
     );
