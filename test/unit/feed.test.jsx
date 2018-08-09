@@ -18,7 +18,7 @@ describe('Feed tests', () => {
         currentChannel="default"
         appendingMessage={false}
         animatingMoment={false}
-        placeholderPresent={true}
+        isPlaceholderPresent={true}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -48,7 +48,7 @@ describe('Feed tests', () => {
         currentChannel="default"
         appendingMessage={false}
         animatingMoment={true}
-        placeholderPresent={true}
+        isPlaceholderPresent={true}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -78,7 +78,7 @@ describe('Feed tests', () => {
         currentChannel="default"
         appendingMessage={false}
         animatingMoment={false}
-        placeholderPresent={true}
+        isPlaceholderPresent={true}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -96,7 +96,7 @@ describe('Feed tests', () => {
         currentChannel="host"
         appendingMessage={false}
         animatingMoment={false}
-        placeholderPresent={true}
+        isPlaceholderPresent={true}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -114,7 +114,7 @@ describe('Feed tests', () => {
         currentChannel="public"
         appendingMessage={false}
         animatingMoment={false}
-        placeholderPresent={true}
+        isPlaceholderPresent={true}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -132,7 +132,7 @@ describe('Feed tests', () => {
         currentChannel="host"
         appendingMessage={false}
         animatingMoment={false}
-        placeholderPresent={false}
+        isPlaceholderPresent={false}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -150,7 +150,7 @@ describe('Feed tests', () => {
         currentChannel="host"
         appendingMessage={false}
         animatingMoment={false}
-        placeholderPresent={false}
+        isPlaceholderPresent={false}
         hasParticipants={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
