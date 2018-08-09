@@ -1,9 +1,5 @@
 // @flow
 import type { Chat } from './chat';
-import type {
-  PublishMessageAction,
-  ChatInputAction,
-} from '../../../src/chat/dux';
 
 import type {
   ReceiveMomentType,
@@ -19,13 +15,6 @@ import type { PublishMomentToChannelType } from '../../../src/moment/dux';
 import type { PublishAcceptedPrayerRequestType } from '../../../src/moment/actionableNotification/dux';
 
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../../../src/moment/dux';
-
-import {
-  PUBLISH_MESSAGE,
-  CHAT_INPUT,
-} from '../../../src/chat/dux';
-
-import { createMessage } from '../../../src/moment';
 
 import {
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
@@ -53,7 +42,6 @@ type IOChatState = {
     [string]: string,
   },
   currentChannel: string,
-  chatInput: string,
 };
 
 type SetChatKeys = {
@@ -72,8 +60,6 @@ type IOChatActionTypes =
   | SetChatKeys
   | SetUser
   | AddChannelType
-  | ChatInputAction
-  | PublishMessageAction
   | ReceiveMomentType
   | ChangeChannelType
   | PublishMomentToChannelType
@@ -113,7 +99,6 @@ const defaultState = {
   },
   chats: {},
   currentChannel: 'public',
-  chatInput: '',
 };
 
 const getReducer = (chatIO: Chat) => (
@@ -147,14 +132,6 @@ const getReducer = (chatIO: Chat) => (
           [action.channel.name]: action.channel.id,
         },
       };
-    case PUBLISH_MESSAGE:
-      chatIO.publish(
-        state.currentChannel,
-        createMessage(action.id, state.chatInput, state.user, false));
-      return {
-        ...state,
-        chatInput: '',
-      };
     case PUBLISH_MOMENT_TO_CHANNEL: {
       // $FlowFixMe
       const { moment, channel } = action;
@@ -164,11 +141,6 @@ const getReducer = (chatIO: Chat) => (
       chatIO.publish(channel, moment);
       return state;
     }
-    case CHAT_INPUT:
-      return {
-        ...state,
-        chatInput: action.value,
-      };
     case CHANGE_CHANNEL:
       if (!state.chats[action.channel]) {
         return state;

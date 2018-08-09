@@ -1,5 +1,5 @@
 // @flow
-import type { ToggleChatFocusAction, PublishMessageAction } from '../../chat/dux';
+import type { ToggleChatFocusType } from '../../chat/dux';
 import { TOGGLE_CHAT_FOCUS } from '../../chat/dux';
 import { CHANGE_CHANNEL } from '../../feed/dux';
 import type { ChangeChannelType } from '../../feed/dux';
@@ -8,8 +8,7 @@ import type { ChangeChannelType } from '../../feed/dux';
 type DomStateType = {};
 
 type DomActionType = 
-  | ToggleChatFocusAction
-  | PublishMessageAction
+  | ToggleChatFocusType
   | ChangeChannelType;
 
 const defaultState = {};

@@ -1,34 +1,29 @@
 // @flow
-import { MessageType } from '../moment';
 
-type ConfigurationType = {
-  event: {
-    id: string,
-    startTime: number,
-    title: string,
-  },
-  organization: {},
-};
+let _getState;
 
-let configuration = {};
 const Converter = {
-  config: (data: ConfigurationType) => {
-    configuration = Object.assign({}, data);
+  config: (getState: () => any) => {
+    _getState = getState;
   },
 
-  cwcToLegacy:( message: MessageType) => {
+  cwcToLegacy:( message: any, channelName: string) => {
     const time = new Date();
-    const offset = (time.getTime() - configuration.event.startTime).toString();
+    const offset = (time.getTime() - _getState().event.startTime).toString();
     const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();
     const month = monthIndex => twoDigitNumber(monthIndex + 1);
     const timestamp = `${time.getUTCFullYear()}-${month(time.getUTCMonth())}-${twoDigitNumber(time.getUTCDate())} ${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()} +0000`;
+    let roomType = 'public';
+    if (channelName === 'host') {
+      roomType = 'volunteer';
+    }
 
     return {
       messageText: message.text,
       language: message.lang,
-      eventTimeId: configuration.event.id,
+      eventTimeId: _getState().event.id,
       eventTimeOffset: offset,
-      eventTitle: configuration.event.title,
+      eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
       fromNickname: message.user.name,
       fromToken: message.user.pubnubToken,
@@ -37,9 +32,33 @@ const Converter = {
       fromAvatar: null,
       isHost: true,
       label: message.user.role.label,
-      eventStartTime: configuration.event.startTime,
+      isVolunteer: true,
+      isUser: true,
+      userId: message.user.id,
+      organizationId: _getState().organization.id,
+      organizationName: _getState().organization.name,
+      roomType: roomType,
+      channelToken: _getState().channels[channelName].token,
+      eventStartTime: _getState().event.startTime,
     };
   },
+
+  legacyToCwc: (message: any) => (
+    {
+      type: 'MESSAGE',
+      id: message.msgId,
+      lang: message.language,
+      text: message.messageText,
+      user: {
+        id: message.userId,
+        name: message.fromNickname,
+        pubnubToken: message.fromToken,
+        role: {
+          label: message.label,
+        },
+      },
+    }
+  ),
 };
 
 export default Converter;

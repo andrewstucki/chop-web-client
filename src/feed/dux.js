@@ -1,10 +1,5 @@
 // @flow
 import type {
-  PublishMessageAction,
-  ChatInputAction,
-} from '../chat/dux';
-
-import type {
   MessageType,
   OpenMessageTrayType,
   CloseMessageTrayType,
@@ -19,19 +14,16 @@ import type { SetUser } from '../io/chat/dux';
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 
 import {
-  PUBLISH_MESSAGE,
-  CHAT_INPUT,
-} from '../chat/dux';
-
-import {
-  createMessage,
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   TOGGLE_CLOSE_TRAY_BUTTON,
+  MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../moment';
+
+import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
 import { SET_USER } from '../io/chat/dux';
 
@@ -83,13 +75,13 @@ type FeedType = {
     [string]: ChannelType,
   },
   currentChannel: string,
-  chatInput: string,
   currentUser: PrivateUserType,
   appendingMessage: boolean,
   anchorMoment: AnchorMomentType | null,
   animatingMoment: boolean,
   placeholderPresent: boolean,
   isPopUpModalVisible: boolean,
+  isChatFocused: boolean,
 };
 
 type ChangeChannelType = {
@@ -136,11 +128,9 @@ type LeaveChatType = {
 
 type FeedActionTypes =
   | ChangeChannelType
-  | PublishMessageAction
   | ReceiveMomentType
   | AddChannelType
   | RemoveChannelType
-  | ChatInputAction
   | SetUser
   | OpenMessageTrayType
   | CloseMessageTrayType
@@ -232,7 +222,6 @@ const leaveChat = (user: SharedUserType): LeaveChatType => (
 const defaultState = {
   channels: {},
   currentChannel: '',
-  chatInput: '',
   currentUser: {
     id: '',
     name: '',
@@ -248,6 +237,7 @@ const defaultState = {
   animatingMoment: true,
   placeholderPresent: false,
   isPopUpModalVisible: false,
+  isChatFocused: false,
 };
 
 // Reducer
@@ -268,26 +258,6 @@ const reducer = (
       appendingMessage: false,
       currentChannel: action.channel,
     };
-  case PUBLISH_MESSAGE:
-    if ([state.chatInput].toString().length > 0) {
-      return {
-        ...state,
-        appendingMessage: true,
-        animatingMoment: true,
-        channels: {
-          ...state.channels,
-          [state.currentChannel]: {
-            ...state.channels[state.currentChannel],
-            moments: [
-              ...state.channels[state.currentChannel].moments,
-              createMessage(action.id, state.chatInput, state.currentUser, false, false),
-            ],
-          },
-        },
-        chatInput: '',
-      };
-    }
-    return state;
   case RECEIVE_MOMENT:
     if (state.channels[action.channel]) {
       return {
@@ -329,7 +299,7 @@ const reducer = (
           name: action.channelName,
           moments: [],
           participants: [
-            getCurrentUserAsPrivateUser(state),
+            getCurrentUserAsSharedUser(state),
             action.user,
           ],
         },
@@ -351,11 +321,6 @@ const reducer = (
     delete stateCopy.channels[action.channel];
     return stateCopy;
   }
-  case CHAT_INPUT:
-    return {
-      ...state,
-      chatInput: action.value,
-    };
   case SET_USER:
     return {
       ...state,
@@ -463,6 +428,26 @@ const reducer = (
     };
   }
   case PUBLISH_MOMENT_TO_CHANNEL: {
+    if (action.moment.type === MESSAGE) {
+      if ([action.moment.text].toString().length > 0) {
+        return {
+          ...state,
+          appendingMessage: true,
+          animatingMoment: true,
+          channels: {
+            ...state.channels,
+            [state.currentChannel]: {
+              ...state.channels[state.currentChannel],
+              moments: [
+                ...state.channels[state.currentChannel].moments,
+                action.moment,
+              ],
+            },
+          },
+          chatInput: '',
+        };
+      }
+    }
     return {
       ...state,
       animatingMoment: true,
@@ -537,6 +522,11 @@ const reducer = (
     }
     return state;
   }
+  case TOGGLE_CHAT_FOCUS:
+    return {
+      ...state,
+      isChatFocused: action.focus,
+    };
   default:
     return state;
   }
@@ -545,7 +535,7 @@ const reducer = (
 // Selectors
 
 
-const getCurrentUserAsPrivateUser = (state: FeedType): SharedUserType => (
+const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   {
     pubnubToken: state.currentUser.pubnubToken,
     name: state.currentUser.name,
@@ -613,7 +603,7 @@ export {
   getOtherUser,
   togglePopUpModal,
   leaveChat,
-  getCurrentUserAsPrivateUser,
+  getCurrentUserAsSharedUser,
 };
 export type {
   AddChannelType,

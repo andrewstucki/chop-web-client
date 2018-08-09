@@ -15,6 +15,8 @@ import reducer, {
   leaveChat,
 } from '../../src/feed/dux';
 
+import { TOGGLE_CHAT_FOCUS } from '../../src/chat/dux';
+
 import {
   openMessageTray,
   closeMessageTray,
@@ -24,11 +26,6 @@ import {
 } from '../../src/moment';
 
 import { MESSAGE } from '../../src/moment/dux';
-
-import {
-  addToCurrentChannel,
-  chatInput,
-} from '../../src/chat/dux';
 
 import { setUser } from '../../src/io/chat/dux';
 
@@ -107,11 +104,6 @@ describe('Feed tests', () => {
     );
   });
 
-  test('does not add message if chatInput is empty', () => {
-    const result = reducer(defaultState, addToCurrentChannel());
-    expect(result).toEqual(defaultState);
-  });
-
   test('adds a message to current channel from current user', () => {
     const result = reducer(
       {
@@ -129,13 +121,23 @@ describe('Feed tests', () => {
         currentUser: currentUser,
         animatingMoment: false,
       },
-      addToCurrentChannel(),
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'public',
+        moment: {
+          type: 'MESSAGE',
+          id: '54321',
+          text: 'this is a message',
+          user: currentUser,
+          messageTrayOpen: false,
+          closeTrayButtonRendered: false,
+        },
+      }
     );
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
     expect(result.channels.public.moments[0].user.id).toEqual('12345');
     expect(result.channels.public.moments[0].user.name).toEqual('Joan Jet');
-    expect(result.channels.public.moments[0].id.length).toEqual(36);
     expect(result.appendingMessage).toBe(true);
     expect(result.animatingMoment).toBe(true);
   });
@@ -161,14 +163,24 @@ describe('Feed tests', () => {
         chatInput: 'this is a string',
         currentUser: currentUser,
       },
-      addToCurrentChannel()
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'host',
+        moment: {
+          type: 'MESSAGE',
+          id: '54321',
+          text: 'this is a string',
+          user: otherUser,
+          messageTrayOpen: false,
+          closeTrayButtonRendered: false,
+        },
+      }
     );
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('this is a string');
-    expect(result.channels.host.moments[0].user.id).toEqual('12345');
-    expect(result.channels.host.moments[0].user.name).toEqual('Joan Jet');
-    expect(result.channels.host.moments[0].id.length).toEqual(36);
+    expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
+    expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
     expect(result.appendingMessage).toBe(true);
   });
 
@@ -190,20 +202,19 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'public',
-        chatInput: 'this is a string',
         animatingMoment: false,
         appeningMessage: true,
       },
       receiveMoment('host', {
-        type: MESSAGE,
+        type: 'MESSAGE',
         id: '12345',
         text: 'Hello there',
-        neverRendered: true,
         user: {
           id: '',
           name: '',
         },
         messageTrayOpen: false,
+        closeTrayButtonRendered: false,
       })
     );
     expect(result.channels.public.moments.length).toEqual(0);
@@ -500,16 +511,6 @@ describe('Feed tests', () => {
 
   test('feedContents works without a channel', () => {
     expect(feedContents(defaultState)).toEqual([]);
-  });
-
-  test('Feed listens to message input', () => {
-    const result = reducer(defaultState, chatInput('Hello'));
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        chatInput: 'Hello',
-      }
-    );
   });
 
   test('Accepts a user', () => {
@@ -1569,5 +1570,33 @@ describe('Feed tests', () => {
         currentUser: currentUser,
       }
     );
+  });
+});
+
+describe('Chat tests', () => {
+  test('chat focus', () => {
+    const result = reducer(
+      defaultState,
+      {
+        type: TOGGLE_CHAT_FOCUS,
+        focus: true,
+      });
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isChatFocused: true,
+      }
+    );
+
+    const result2 = reducer(
+      {
+        ...defaultState,
+        isChatFocused: true,
+      },
+      {
+        type: TOGGLE_CHAT_FOCUS,
+        focus: false,
+      });
+    expect(result2).toEqual(defaultState);
   });
 });

@@ -1,18 +1,61 @@
+// @flow
 /* global module */
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+
 import Chat from '../src/chat/chat';
+
+const user = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: { label: '' },
+};
 
 storiesOf('Chat', module)
   .add('default', () => (
-    <Chat placeholder="Chat" />
+    <Chat
+      currentPlaceholder="Chat"
+      currentChannel="public"
+      currentUser={user}
+      focused={false}
+      publishMessage={() => {}}
+      textOnBlur={() => {}}
+      textOnFocus={() => {}}
+
+    />
   ))
   .add('focused', () => (
-    <Chat placeholder="Chat" focused={true} />
+    <Chat
+      currentPlaceholder="Chat"
+      currentChannel="public"
+      currentUser={user}
+      focused={true}
+      publishMessage={() => {}}
+      textOnBlur={() => {}}
+      textOnFocus={() => {}}
+    />
   ))
   .add('focused and text entered', () => (
-    <Chat textValue="Hello my peeps" focused={true} textEntered={true} />
+    <Chat
+      currentPlaceholder="Chat"
+      currentChannel="public"
+      currentUser={user}
+      focused={true}
+      publishMessage={() => {}}
+      textOnBlur={() => {}}
+      textOnFocus={() => {}}
+      initialState={{ chatInput: 'Hello my peeps'}}
+    />
   ))
   .add('text entered', () => (
-    <Chat textValue="Hello my peeps" focused={false} textEntered={true} />
+    <Chat
+      currentPlaceholder="Chat"
+      currentChannel="public"
+      currentUser={user}
+      focused={false}
+      publishMessage={() => {}}
+      textOnBlur={() => {}}
+      textOnFocus={() => {}}
+      initialState={{ chatInput: 'Hello my peeps' }}
+    />
   ));

@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import { getCurrentUserAsPrivateUser } from '../feed/dux';
+import { getCurrentUserAsSharedUser } from '../feed/dux';
 
 import { closeMenu, logout } from './dux';
 // TODO: Remove publishPrayerRequestNotification after demo
@@ -16,7 +16,7 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     isClosed: sideMenuState.closed,
-    currentUser: getCurrentUserAsPrivateUser(feedState),
+    currentUser: getCurrentUserAsSharedUser(feedState),
   };
 };
 

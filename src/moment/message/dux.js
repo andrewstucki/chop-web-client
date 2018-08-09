@@ -1,5 +1,8 @@
 // @flow
 import type { SharedUserType } from '../../feed/dux';
+import type { PublishMomentToChannelType } from '../dux';
+import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
+import { createUid } from '../../util';
 
 // Action Types
 
@@ -42,72 +45,54 @@ type ToggleCloseTrayButtonType = {
   id: string,
 };
 
-type MessageActionTypes =
-  | OpenMessageTrayType
-  | CloseMessageTrayType
-  | DeleteMessageType;
-
 // Action Creators
 
-const openMessageTray = (id: string) => (
+const publishMessage = (
+  channel: string,
+  text: string,
+  user: SharedUserType
+): PublishMomentToChannelType => (
+  {
+    type: PUBLISH_MOMENT_TO_CHANNEL,
+    channel,
+    moment: {
+      type: MESSAGE,
+      id: createUid(),
+      text,
+      user,
+      messageTrayOpen: false,
+      closeTrayButtonRendered: false,
+    },
+  }
+);
+
+const openMessageTray = (id: string): OpenMessageTrayType => (
   {
     type: OPEN_MESSAGE_TRAY,
     id,
   }
 );
 
-const closeMessageTray = (id: string) => (
+const closeMessageTray = (id: string): CloseMessageTrayType => (
   {
     type: CLOSE_MESSAGE_TRAY,
     id,
   }
 );
 
-const toggleCloseTrayButton = (id: string) => (
+const toggleCloseTrayButton = (id: string): ToggleCloseTrayButtonType => (
   {
     type: TOGGLE_CLOSE_TRAY_BUTTON,
     id,
   }
 );
 
-const createMessage = (
-  id: string,
-  text: string,
-  user: SharedUserType,
-  messageTrayOpen: boolean,
-  closeTrayButtonRendered: boolean
-): MessageType => (
-  {
-    type: MESSAGE,
-    id,
-    lang: 'en',
-    text,
-    user,
-    messageTrayOpen,
-    closeTrayButtonRendered,
-  }
-);
-
-const deleteMessage = (id:string) => (
+const deleteMessage = (id:string): DeleteMessageType => (
   {
     type: DELETE_MESSAGE,
     id,
   }
 );
-
-// Reducer
-
-const reducer = (
-  state: Object = {},
-  action?: MessageActionTypes) => {
-  if (!action || !action.type) {
-    return state;
-  }
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
 
 // Exports
 
@@ -120,11 +105,11 @@ export {
 };
 
 export {
-  createMessage,
   openMessageTray,
   closeMessageTray,
   deleteMessage,
   toggleCloseTrayButton,
+  publishMessage,
 };
 
 export type {
@@ -134,4 +119,3 @@ export type {
   DeleteMessageType,
   ToggleCloseTrayButtonType,
 };
-export default reducer;
