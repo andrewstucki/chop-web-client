@@ -63,7 +63,7 @@ type FeedType = {
   appendingMessage: boolean,
   anchorMoment: AnchorMomentType | null,
   animatingMoment: boolean,
-  placeholderPresent: boolean,
+  isPlaceholderPresent: boolean,
   isPopUpModalVisible: boolean,
 };
 
@@ -212,7 +212,7 @@ const defaultState = {
   appendingMessage: false,
   anchorMoment: null,
   animatingMoment: true,
-  placeholderPresent: false,
+  isPlaceholderPresent: false,
   isPopUpModalVisible: false,
 };
 
@@ -446,13 +446,13 @@ const reducer = (
   case SET_ANCHOR_MOMENT:
     return {
       ...state,
-      placeholderPresent: true,
+      isPlaceholderPresent: true,
       anchorMoment: action.anchorMoment,
     };
   case RELEASE_ANCHOR_MOMENT:
     return {
       ...state,
-      placeholderPresent: false,
+      isPlaceholderPresent: false,
       animatingMoment: false,
       channels: {
         ...state.channels,

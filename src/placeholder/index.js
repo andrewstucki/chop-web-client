@@ -11,13 +11,12 @@ import {
 import Placeholder from './placeholder';
 
 const mapStateToProps = state => {
-  const placeholderState = state.placeholder;
   const feedState = state.feed;
   return {
-    anchorMoment: placeholderContents(placeholderState),
-    renderPlaceholder: placeholderState.renderPlaceholder,
+    anchorMoment: placeholderContents(feedState),
+    isPlaceholderPresent: feedState.isPlaceholderPresent,
     currentChannel: getCurrentChannel(feedState),
-    anchorMomentAnchored: setAnchorMomentAnchored(placeholderState),
+    anchorMomentAnchored: setAnchorMomentAnchored(feedState),
   };
 };
 

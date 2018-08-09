@@ -31,14 +31,14 @@ type AnchorMomentActionType =
 
 // Action Creators
 
-const releaseAnchorMoment = () => (
+const releaseAnchorMoment = (): ReleaseAnchorMomentType => (
   {
     type: RELEASE_ANCHOR_MOMENT,
     channel: 'host',
   }
 );
 
-const publishSalvation = (number: number) => (
+const publishSalvation = (number: number): PublishSalvationType => (
   {
     type: SET_ANCHOR_MOMENT,
     anchorMoment: {
