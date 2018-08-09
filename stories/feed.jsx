@@ -9,6 +9,17 @@ import Feed from '../src/feed/feed';
 
 const store = createStore(() => {});
 
+const user1 = {
+  pubnubToken: '123456',
+  name: 'Billy Bob',
+  role: { label: '' },
+};
+const user2 = {
+  pubnubToken: '4567890',
+  name: 'Joan Jet',
+  role: { label: '' },
+};
+
 storiesOf('Feed', module)
   .add('blank', () => (
     <Provider store={store}>
@@ -37,20 +48,14 @@ storiesOf('Feed', module)
                 type: 'MESSAGE',
                 id: 'string',
                 text: 'Hello',
-                user: {
-                  id: '12345',
-                  nickname: 'Bobby Boucher',
-                },
+                user: user1,
                 messageTrayOpen: false,
               },
               {
                 type: 'MESSAGE',
                 id: 'string',
                 text: 'Goodbye',
-                user: {
-                  id: '12345',
-                  nickname: 'Vicki Vallencourt',
-                },
+                user: user2,
                 messageTrayOpen: false,
               },
             ]
@@ -76,20 +81,14 @@ storiesOf('Feed', module)
                 type: 'MESSAGE',
                 id: 'string',
                 text: 'Hello',
-                user: {
-                  id: '12345',
-                  nickname: 'Bobby Boucher',
-                },
+                user: user1,
                 messageTrayOpen: false,
               },
               {
                 type: 'MESSAGE',
                 id: 'string',
                 text: 'Goodbye',
-                user: {
-                  id: '12345',
-                  nickname: 'Vicki Vallencourt',
-                },
+                user: user2,
                 messageTrayOpen: false,
               },
             ]

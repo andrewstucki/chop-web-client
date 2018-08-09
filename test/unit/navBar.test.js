@@ -2,6 +2,24 @@
 import { getChannels } from '../../src/navBar/dux';
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
+const otherUser = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: {
+    label: '',
+  },
+};
+const currentUser = {
+  id: '12345',
+  pubnubToken: '09876',
+  pubnubAccessToken: '67890',
+  name: 'Joan Jet',
+  role: {
+    label: '',
+    permissions: [],
+  },
+};
+
 describe('NavBar tests', () => {
   test('channel selector test', () => {
     const result = getChannels(
@@ -21,10 +39,7 @@ describe('NavBar tests', () => {
         },
         currentChannel: 'public',
         chatInput: '',
-        currentUser: {
-          id: '',
-          nickname: 'bob',
-        },
+        currentUser: currentUser,
         appendingMessage: false,
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
@@ -76,10 +91,7 @@ describe('NavBar tests', () => {
         },
         currentChannel: 'public',
         chatInput: '',
-        currentUser: {
-          id: '',
-          nickname: 'bob',
-        },
+        currentUser: currentUser,
         appendingMessage: false,
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
@@ -136,10 +148,7 @@ describe('NavBar tests', () => {
         },
         currentChannel: 'public',
         chatInput: '',
-        currentUser: {
-          id: '',
-          nickname: 'bob',
-        },
+        currentUser: currentUser,
         appendingMessage: false,
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
@@ -179,25 +188,13 @@ describe('NavBar tests', () => {
             name: 'direct',
             moments: [],
             participants: [
-              {
-                id: '12345',
-                nickname: 'Bob',
-              },
-              {
-                id: '54321',
-                nickname: 'Carl',
-              },
-              {
-                id: '67890',
-                nickname: 'Will',
-              },
+              otherUser,
+              otherUser,
+              otherUser,
             ],
           },
         },
-        currentUser: {
-          id: '12345',
-          nickname: 'Bob',
-        },
+        currentUser: currentUser,
       }
     )).toEqual(
       [
@@ -205,7 +202,7 @@ describe('NavBar tests', () => {
           id: 'direct',
           isCurrent: false,
           hasActions: false,
-          otherUsersNames: ['Carl', 'Will'],
+          otherUsersNames: ['Billy Bob', 'Billy Bob', 'Billy Bob'],
         },
       ]
     );

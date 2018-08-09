@@ -8,6 +8,14 @@ import React from 'react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const otherUser = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: {
+    label: '',
+  },
+};
+
 describe('Chat tests', () => {
   test('has a TextField and Button', () => {
     const wrapper = Enzyme.shallow(
@@ -19,12 +27,7 @@ describe('Chat tests', () => {
         enterDetect={function () {}}
         currentPlaceholder=""
         currentChannel="public"
-        currentUser={
-          {
-            id: '12345',
-            nickname: 'Wilbur',
-          }
-        }
+        currentUser={otherUser}
         publishMessage={() => {}}
       />
     );
@@ -45,12 +48,7 @@ describe('Chat tests', () => {
         enterDetect={function () {}}
         currentPlaceholder=""
         currentChannel="public"
-        currentUser={
-          {
-            id: '12345',
-            nickname: 'Wilbur',
-          }
-        }
+        currentUser={otherUser}
         publishMessage={() => {}}
       />
     );

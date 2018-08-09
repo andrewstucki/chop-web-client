@@ -36,6 +36,24 @@ import {
 
 import { mockDate } from '../testUtils';
 
+const otherUser = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: {
+    label: '',
+  },
+};
+const currentUser = {
+  id: '12345',
+  pubnubToken: '09876',
+  pubnubAccessToken: '67890',
+  name: 'Joan Jet',
+  role: {
+    label: '',
+    permissions: [],
+  },
+};
+
 describe('Feed tests', () => {
   mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
 
@@ -99,10 +117,8 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'public',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
+        chatInput: 'this is a message',
+        currentUser: currentUser,
         animatingMoment: false,
       },
       {
@@ -112,10 +128,7 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a message',
-          user: {
-            id: '12345',
-            nickname: 'Billy Bob',
-          },
+          user: currentUser,
           messageTrayOpen: false,
           closeTrayButtonRendered: false,
         },
@@ -124,8 +137,7 @@ describe('Feed tests', () => {
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
     expect(result.channels.public.moments[0].user.id).toEqual('12345');
-    expect(result.channels.public.moments[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.public.moments[0].id).toEqual('54321');
+    expect(result.channels.public.moments[0].user.name).toEqual('Joan Jet');
     expect(result.appendingMessage).toBe(true);
     expect(result.animatingMoment).toBe(true);
   });
@@ -148,10 +160,8 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'host',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
+        chatInput: 'this is a string',
+        currentUser: currentUser,
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -160,10 +170,7 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a string',
-          user: {
-            id: '12345',
-            nickname: 'Billy Bob',
-          },
+          user: otherUser,
           messageTrayOpen: false,
           closeTrayButtonRendered: false,
         },
@@ -172,9 +179,8 @@ describe('Feed tests', () => {
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('this is a string');
-    expect(result.channels.host.moments[0].user.id).toEqual('12345');
-    expect(result.channels.host.moments[0].user.nickname).toEqual('Billy Bob');
-    expect(result.channels.host.moments[0].id).toEqual('54321');
+    expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
+    expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
     expect(result.appendingMessage).toBe(true);
   });
 
@@ -205,7 +211,7 @@ describe('Feed tests', () => {
         text: 'Hello there',
         user: {
           id: '',
-          nickname: '',
+          name: '',
         },
         messageTrayOpen: false,
         closeTrayButtonRendered: false,
@@ -245,10 +251,7 @@ describe('Feed tests', () => {
         type: 'ACTIONABLE_NOTIFICATION',
         notificationType: 'PRAYER_REQUEST',
         id: '12345',
-        user: {
-          id: '12345',
-          nickname: 'Herbert',
-        },
+        user: otherUser,
         timeStamp: '4:53pm',
         active: true,
         action: action,
@@ -256,8 +259,8 @@ describe('Feed tests', () => {
     );
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].id.length).toEqual(5);
-    expect(result.channels.host.moments[0].user.id).toEqual('12345');
-    expect(result.channels.host.moments[0].user.nickname).toEqual('Herbert');
+    expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
+    expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
     expect(result.channels.host.moments[0].timeStamp).toEqual('4:53pm');
     expect(result.channels.host.moments[0].active).toEqual(true);
     expect(result.channels.host.moments[0].action).toEqual(action);
@@ -304,7 +307,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
       },
-      addChannel('direct', '12345', [{ id: '12345', nickname: 'Bobby G.' }])
+      addChannel('direct', '12345', [otherUser])
     );
     expect(result).toEqual(
       {
@@ -315,10 +318,7 @@ describe('Feed tests', () => {
             moments: [],
             name: 'direct',
             participants: [
-              {
-                id: '12345',
-                nickname: 'Bobby G.',
-              },
+              otherUser,
             ],
           },
         },
@@ -436,7 +436,7 @@ describe('Feed tests', () => {
                   text: 'I like socks',
                   user: {
                     id: '12345',
-                    nickname: 'Billy Bob',
+                    name: 'Billy Bob',
                   },
                   messageTrayOpen: false,
                 },
@@ -444,10 +444,7 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'public',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
+        currentUser: currentUser,
       }
     );
     expect(result).toEqual(
@@ -457,7 +454,7 @@ describe('Feed tests', () => {
           text: 'I like socks',
           user: {
             id: '12345',
-            nickname: 'Billy Bob',
+            name: 'Billy Bob',
           },
           messageTrayOpen: false,
         },
@@ -486,7 +483,7 @@ describe('Feed tests', () => {
                   text: 'I like socks',
                   user: {
                     id: '12345',
-                    nickname: 'Billy Bob',
+                    name: 'Billy Bob',
                   },
                   messageTrayOpen: false,
                 },
@@ -494,10 +491,7 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'host',
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
+        currentUser: currentUser,
       }
     );
     expect(result).toEqual(
@@ -507,7 +501,7 @@ describe('Feed tests', () => {
           text: 'I like socks',
           user: {
             id: '12345',
-            nickname: 'Billy Bob',
+            name: 'Billy Bob',
           },
           messageTrayOpen: false,
         },
@@ -520,14 +514,11 @@ describe('Feed tests', () => {
   });
 
   test('Accepts a user', () => {
-    const result = reducer(defaultState, setUser('12345', 'Billy Bob'));
+    const result = reducer(defaultState, setUser(currentUser));
     expect(result).toEqual(
       {
         ...defaultState,
-        currentUser: {
-          id: '12345',
-          nickname: 'Billy Bob',
-        },
+        currentUser: currentUser,
       }
     );
   });
@@ -555,7 +546,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: false,
               },
@@ -578,7 +569,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: true,
               },
@@ -605,7 +596,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: false,
               },
@@ -628,7 +619,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: true,
               },
@@ -655,7 +646,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: true,
               },
@@ -678,7 +669,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: false,
               },
@@ -705,7 +696,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: true,
                 closeTrayButtonRendered: false,
@@ -729,7 +720,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: true,
                 closeTrayButtonRendered: true,
@@ -757,7 +748,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: false,
                 closeTrayButtonRendered: true,
@@ -781,7 +772,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: false,
                 closeTrayButtonRendered: false,
@@ -809,7 +800,7 @@ describe('Feed tests', () => {
                 text: 'I like socks',
                 user: {
                   id: '12345',
-                  nickname: 'Billy Bob',
+                  name: 'Billy Bob',
                 },
                 messageTrayOpen: true,
               },
@@ -819,7 +810,7 @@ describe('Feed tests', () => {
                 text: 'Hello Billy Bob',
                 user: {
                   id: '14543',
-                  nickname: 'Jenny Jane',
+                  name: 'Jenny Jane',
                 },
                 messageTrayOpen: true,
               },
@@ -829,7 +820,7 @@ describe('Feed tests', () => {
                 text: 'George is very angry',
                 user: {
                   id: '18475',
-                  nickname: 'George Costanza',
+                  name: 'George Costanza',
                 },
                 messageTrayOpen: true,
               },
@@ -853,7 +844,7 @@ describe('Feed tests', () => {
                 text: 'Hello Billy Bob',
                 user: {
                   id: '14543',
-                  nickname: 'Jenny Jane',
+                  name: 'Jenny Jane',
                 },
                 messageTrayOpen: true,
               },
@@ -862,7 +853,7 @@ describe('Feed tests', () => {
                 text: 'George is very angry',
                 user: {
                   id: '18475',
-                  nickname: 'George Costanza',
+                  name: 'George Costanza',
                 },
                 messageTrayOpen: true,
               },
@@ -1144,7 +1135,7 @@ describe('Feed tests', () => {
           id: '12345',
           user: {
             id: '6789',
-            nickname: 'Madmartigan',
+            name: 'Madmartigan',
           },
         },
       },
@@ -1164,7 +1155,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 user: {
                   id: '6789',
-                  nickname: 'Madmartigan',
+                  name: 'Madmartigan',
                 },
               },
             ],
@@ -1197,7 +1188,7 @@ describe('Feed tests', () => {
           notificationType: 'PRAYER_REQUEST',
           user: {
             id: '5893',
-            nickname: 'Boofie',
+            name: 'Boofie',
           },
           id: '12345',
           timeStamp: '4:53pm',
@@ -1221,7 +1212,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 user: {
                   id: '5893',
-                  nickname: 'Boofie',
+                  name: 'Boofie',
                 },
                 timeStamp: '4:53pm',
                 active: true,
@@ -1323,7 +1314,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 user: {
                   id: '67890',
-                  nickname: 'Burglekutt',
+                  name: 'Burglekutt',
                 },
                 timeStamp: '4:53pm',
                 active: true,
@@ -1348,7 +1339,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 user: {
                   id: '67890',
-                  nickname: 'Burglekutt',
+                  name: 'Burglekutt',
                 },
                 timeStamp: '4:53pm',
                 active: false,
@@ -1375,7 +1366,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 user: {
                   id: '67890',
-                  nickname: 'Burglekutt',
+                  name: 'Burglekutt',
                 },
                 timeStamp: '4:53pm',
                 active: true,
@@ -1400,7 +1391,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 user: {
                   id: '67890',
-                  nickname: 'Burglekutt',
+                  name: 'Burglekutt',
                 },
                 timeStamp: '4:53pm',
                 active: false,
@@ -1416,18 +1407,9 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         ...defaultState,
-        currentUser: {
-          id: '67890',
-          nickname: 'Booffie',
-        },
+        currentUser: currentUser,
       },
-      inviteToChannel(
-        {
-          id: '32454',
-          nickname: 'Billy',
-        },
-        '12345')
-    );
+      inviteToChannel(otherUser, '12345'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -1438,20 +1420,17 @@ describe('Feed tests', () => {
             moments: [],
             participants: [
               {
-                id: '67890',
-                nickname: 'Booffie',
+                pubnubToken: currentUser.pubnubToken,
+                name: currentUser.name,
+                role: {
+                  label: currentUser.role.label,
+                },
               },
-              {
-                id: '32454',
-                nickname: 'Billy',
-              },
+              otherUser,
             ],
           },
         },
-        currentUser: {
-          id: '67890',
-          nickname: 'Booffie',
-        },
+        currentUser: currentUser,
       },
     );
   });
@@ -1466,14 +1445,8 @@ describe('Feed tests', () => {
             name: 'Carl',
             moments: [],
             participants: [
-              {
-                id: '12345',
-                nickname: 'Bootbot',
-              },
-              {
-                id: '54321',
-                nickname: 'Sockrock',
-              },
+              otherUser,
+              otherUser,
             ],
           },
         },
@@ -1511,28 +1484,22 @@ describe('Feed tests', () => {
             moments: [],
             participants: [
               {
-                id: '12345',
-                nickname: 'Bootbot',
+                pubnubToken: currentUser.pubnubToken,
+                name: currentUser.name,
+                role: {
+                  label: currentUser.role.label,
+                },
               },
-              {
-                id: '54321',
-                nickname: 'Sockrock',
-              },
+              otherUser,
             ],
           },
         },
         currentChannel: 'direct',
-        currentUser: {
-          id: '12345',
-          nickname: 'Bootbot',
-        },
+        currentUser: currentUser,
       }
     );
     expect(result).toEqual(
-      {
-        id: '54321',
-        nickname: 'Sockrock',
-      }
+      otherUser
     );
   });
 
@@ -1563,26 +1530,26 @@ describe('Feed tests', () => {
             moments: [],
             participants: [
               {
-                id: '12345',
-                nickname: 'Bootbot',
+                pubnubToken: currentUser.pubnubToken,
+                name: currentUser.name,
+                role: {
+                  label: currentUser.role.label,
+                },
               },
-              {
-                id: '54321',
-                nickname: 'Sockrock',
-              },
+              otherUser,
             ],
           },
         },
         currentChannel: 'direct',
-        currentUser: {
-          id: '12345',
-          nickname: 'Bootbot',
-        },
+        currentUser: currentUser,
       },
       leaveChat(
         {
-          id: '12345',
-          nickname: 'Bootbot',
+          pubnubToken: currentUser.pubnubToken,
+          name: currentUser.name,
+          role: {
+            label: currentUser.role.label,
+          },
         }
       )
     );
@@ -1595,18 +1562,12 @@ describe('Feed tests', () => {
             name: 'Carl',
             moments: [],
             participants: [
-              {
-                id: '54321',
-                nickname: 'Sockrock',
-              },
+              otherUser,
             ],
           },
         },
         currentChannel: 'direct',
-        currentUser: {
-          id: '12345',
-          nickname: 'Bootbot',
-        },
+        currentUser: currentUser,
       }
     );
   });

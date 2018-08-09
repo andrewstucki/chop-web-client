@@ -2,7 +2,7 @@
 /* global SyntheticEvent, SyntheticKeyboardEvent, SyntheticFocusEvent */
 import React, { Component } from 'react';
 
-import type { UserType } from '../feed/dux';
+import type { SharedUserType } from '../feed/dux';
 
 import Button from '../components/button';
 import TextField from '../components/text-field';
@@ -10,12 +10,12 @@ import UpArrow from '../../assets/large-arrow-up.svg';
 import styles from './styles.css';
 
 type ChatProps = {
-  publishMessage: (channel: string, text: string, user: UserType) => void,
+  publishMessage: (channel: string, text: string, user: SharedUserType) => void,
   textOnBlur:  (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   textOnFocus:  (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   focused: boolean,
   currentPlaceholder: string,
-  currentUser: UserType,
+  currentUser: SharedUserType,
   currentChannel: string,
   initialState?: ChatState,
 };

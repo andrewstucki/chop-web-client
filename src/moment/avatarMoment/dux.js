@@ -1,5 +1,5 @@
 // @flow
-import type { UserType } from '../../feed/dux';
+import type { SharedUserType } from '../../feed/dux';
 import { createUid } from '../../util';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 
@@ -10,13 +10,13 @@ const AVATAR_MOMENT = 'AVATAR_MOMENT';
 type AvatarMomentType = {
   type: 'AVATAR_MOMENT',
   id: string,
-  user: UserType,
+  user: SharedUserType,
 };
 
 type PublishAvatarMomentType = {
   type: 'PUBLISH_AVATAR_MOMENT',
   channel: string,
-  user: UserType,
+  user: SharedUserType,
 };
 
 type AvatarMomentActionTypes =
@@ -24,7 +24,7 @@ type AvatarMomentActionTypes =
 
 // Action Creators
 
-const publishAvatarMoment = (user: UserType, channel: string) => (
+const publishAvatarMoment = (user: SharedUserType, channel: string) => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,

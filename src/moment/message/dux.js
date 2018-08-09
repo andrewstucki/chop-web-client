@@ -1,5 +1,5 @@
 // @flow
-import type { UserType } from '../../feed/dux';
+import type { SharedUserType } from '../../feed/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import { createUid } from '../../util';
@@ -18,8 +18,9 @@ const MESSAGE = 'MESSAGE';
 type MessageType = {
   type: 'MESSAGE',
   id: string,
+  lang: string,
   text: string,
-  user: UserType,
+  user: SharedUserType,
   messageTrayOpen: boolean,
   closeTrayButtonRendered: boolean,
 };
@@ -49,7 +50,7 @@ type ToggleCloseTrayButtonType = {
 const publishMessage = (
   channel: string,
   text: string,
-  user: UserType
+  user: SharedUserType
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,

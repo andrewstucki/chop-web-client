@@ -7,6 +7,7 @@ import Chop from './chop';
 import reducer from './chop/dux';
 import thunk from 'redux-thunk';
 import {setStore} from './io/chat';
+import {setUser} from './io/chat/dux';
 import { publishSalvation } from './placeholder/anchorMoment/dux';
 import { addChannel } from './feed/dux';
 
@@ -101,13 +102,18 @@ const characters = [
 
 const characterName = characters[Math.floor(Math.random() * characters.length)];
 
-store.dispatch(
+store.dispatch(setUser(
   {
-    type: 'SET_USER',
     id: new Date().getTime().toString(),
-    nickname: characterName,
+    name: characterName,
+    pubnubToken: new Date().getTime().toString(),
+    pubnubAccessToken: '',
+    role: {
+      label: 'HOST',
+      permissions: [],
+    },
   }
-);
+));
 
 setTimeout(() => {
   store.dispatch(addChannel('public', 'public'));

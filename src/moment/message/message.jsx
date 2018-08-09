@@ -71,12 +71,12 @@ const Message = (
       >
         <div
           className={styles.icon}
-          style={{backgroundColor: getAvatarColor(message.user.nickname)}}
+          style={{backgroundColor: getAvatarColor(message.user.name)}}
         >
-          {getFirstInitial(message.user.nickname)}
+          {getFirstInitial(message.user.name)}
         </div>
         <div className={styles.body}>
-          <strong className={styles.name}>{message.user.nickname}</strong>
+          <strong className={styles.name}>{message.user.name}</strong>
           <span className={styles.role}>Host</span>
           <div data-node="text" className={styles.text}>{message.text}</div>
         </div>

@@ -1,16 +1,16 @@
 // @flow
 import React from 'react';
 
-import type { UserType } from '../feed/dux';
+import type { SharedUserType } from '../feed/dux';
 import styles from './style.css';
 
 type PopUpModalPropsType = {
   togglePopUpModal: () => void,
-  leaveChat: (user: UserType) => void,
+  leaveChat: (user: SharedUserType) => void,
   publishLeftChatNotification: (userName: string, channelName: string) => void,
   removeChannel: (channelName: string) => void,
-  otherUser: UserType,
-  currentUser: UserType,
+  otherUser: SharedUserType,
+  currentUser: SharedUserType,
   currentChannel: string,
   isPopUpModalVisible: boolean,
 };
@@ -33,7 +33,7 @@ const PopUpModal = (
         <div className={styles.alert}>
           <div className={styles.text}>
             Are you sure you want to end your chat with
-            <strong> {otherUser.nickname}</strong>?
+            <strong> {otherUser.name}</strong>?
           </div>
           <div className={styles.actionContainer}>
             <button
@@ -46,7 +46,7 @@ const PopUpModal = (
               className={styles.action}
               onClick={() => (
                 togglePopUpModal(),
-                publishLeftChatNotification(currentUser.nickname, currentChannel),
+                publishLeftChatNotification(currentUser.name, currentChannel),
                 leaveChat(currentUser),
                 removeChannel(currentChannel)
               )}

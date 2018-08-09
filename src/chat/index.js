@@ -9,13 +9,14 @@ import {
 import { publishMessage } from '../moment';
 
 import Chat from './chat';
+import { getCurrentUserAsSharedUser } from '../feed/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     focused: feedState.isChatFocused,
     currentPlaceholder: getPlaceholder(feedState),
-    currentUser: feedState.currentUser,
+    currentUser: getCurrentUserAsSharedUser(feedState),
     currentChannel: feedState.currentChannel,
   };
 };
