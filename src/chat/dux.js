@@ -11,14 +11,6 @@ type ToggleChatFocusType = {
   focus: boolean
 };
 
-type ChatActions =
-  | ToggleChatFocusType;
-
-
-type ChatState = {
-  focused: boolean,
-};
-
 // Action Creators
 
 const toggleChatFocus = (focus: boolean): ToggleChatFocusType => (
@@ -27,21 +19,6 @@ const toggleChatFocus = (focus: boolean): ToggleChatFocusType => (
     focus,
   }
 );
-
-// Reducer
-const reducer =
-(
-  state: Object = {},
-  action?: ChatActions
-): ChatState => {
-  if (!action || !action.type) {
-    return state;
-  }
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
 
 // Selectors
 
@@ -66,18 +43,15 @@ const getPlaceholder = (state: FeedType) => {
 };
 
 // Exports
-export { 
+export {
   TOGGLE_CHAT_FOCUS,
 };
 
-export type { 
-  ToggleChatFocusType, 
-  ChatState,
+export type {
+  ToggleChatFocusType,
 };
 
-export { 
+export {
   toggleChatFocus,
   getPlaceholder,
 };
-
-export default reducer;
