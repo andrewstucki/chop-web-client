@@ -6,13 +6,13 @@ const TOGGLE_CHAT_FOCUS = 'TOGGLE_CHAT_FOCUS';
 
 // Flow Type Definitions
 
-type ToggleChatFocusAction = {
+type ToggleChatFocusType = {
   type: 'TOGGLE_CHAT_FOCUS',
   focus: boolean
 };
 
 type ChatActions =
-  | ToggleChatFocusAction;
+  | ToggleChatFocusType;
 
 
 type ChatState = {
@@ -21,33 +21,23 @@ type ChatState = {
 
 // Action Creators
 
-const toggleChatFocus = (focus: boolean): ToggleChatFocusAction => (
+const toggleChatFocus = (focus: boolean): ToggleChatFocusType => (
   {
     type: TOGGLE_CHAT_FOCUS,
     focus,
   }
 );
 
-// Default State
-const defaultState = {
-  focused: false,
-};
-
 // Reducer
 const reducer =
 (
-  state: ChatState = defaultState,
+  state: Object = {},
   action?: ChatActions
 ): ChatState => {
   if (!action || !action.type) {
     return state;
   }
   switch (action.type) {
-  case TOGGLE_CHAT_FOCUS:
-    return {
-      ...state,
-      focused: action.focus,
-    };
   default:
     return state;
   }
@@ -81,13 +71,12 @@ export {
 };
 
 export type { 
-  ToggleChatFocusAction, 
+  ToggleChatFocusType, 
   ChatState,
 };
 
 export { 
   toggleChatFocus,
-  defaultState,
   getPlaceholder,
 };
 
