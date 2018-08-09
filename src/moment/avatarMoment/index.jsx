@@ -14,12 +14,12 @@ const AvatarMoment = ({ avatarMoment }: AvatarMomentPropsType) => (
   <div className={styles.avatarMoment}>
     <div
       className={styles.avatar}
-      style={{backgroundColor: getAvatarColor(avatarMoment.user.nickname)}}
+      style={{backgroundColor: getAvatarColor(avatarMoment.user.name)}}
     >
-      {getFirstInitial(avatarMoment.user.nickname)}
+      {getFirstInitial(avatarMoment.user.name)}
     </div>
     <div className={styles.user}>
-      <strong>{avatarMoment.user.nickname}</strong>
+      <strong>{avatarMoment.user.name}</strong>
     </div>
   </div>
 );

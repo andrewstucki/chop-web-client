@@ -8,6 +8,24 @@ import PopUpModal from '../../src/popUpModal/popUpModal';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const otherUser = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: {
+    label: '',
+  },
+};
+const currentUser = {
+  id: '12345',
+  pubnubToken: '09876',
+  pubnubAccessToken: '67890',
+  name: 'Joan Jet',
+  role: {
+    label: '',
+    permissions: [],
+  },
+};
+
 describe('PopUpModal tests', () => {
   test('Modal has background and popup', () => {
     const wrapper = Enzyme.shallow(
@@ -17,25 +35,15 @@ describe('PopUpModal tests', () => {
         publishLeftChatNotification={() => {}}
         removeChannel={() => {}}
         currentChannel="direct"
-        otherUser={
-          {
-            id: '12345',
-            nickname: 'Walker, Texas Ranger',
-          }
-        }
-        currentUser={
-          {
-            id: '12345',
-            nickname: 'Jimmy Trivette',
-          }
-        }
+        otherUser={otherUser}
+        currentUser={currentUser}
         isPopUpModalVisible={true}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('popUpModal');
     expect(wrapper.find('div').at(1).props().className).toEqual('alert');
     expect(wrapper.find('div').at(2).text()).toEqual(
-      'Are you sure you want to end your chat with Walker, Texas Ranger?'
+      'Are you sure you want to end your chat with Billy Bob?'
     );
   });
 
@@ -51,18 +59,8 @@ describe('PopUpModal tests', () => {
         publishLeftChatNotification={publishLeftChatNotification}
         removeChannel={removeChannel}
         currentChannel="direct"
-        otherUser={
-          {
-            id: '12345',
-            nickname: 'Walker, Texas Ranger',
-          }
-        }
-        currentUser={
-          {
-            id: '12345',
-            nickname: 'Jimmy Trivette',
-          }
-        }
+        otherUser={otherUser}
+        currentUser={currentUser}
         isPopUpModalVisible={true}
       />
     );

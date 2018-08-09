@@ -9,9 +9,17 @@ import { action } from '@storybook/addon-actions';
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
+const user = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: { label: '' },
+};
+
 const store = createStore(() => (
   {
-    feed: {},
+    feed: {
+      currentUser: user,
+    },
   }
 ));
 
@@ -24,10 +32,7 @@ storiesOf('Moment', module)
             type: 'MESSAGE',
             id: '12345',
             text: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            user: {
-              id: '54321',
-              nickname: 'Billy Bob',
-            },
+            user: user,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
           }
@@ -43,10 +48,7 @@ storiesOf('Moment', module)
             type: 'MESSAGE',
             id: '12345',
             text: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            user: {
-              id: '54321',
-              nickname: 'Billy Bob',
-            },
+            user: user,
             messageTrayOpen: true,
             closeTrayButtonRendered: true,
           }
@@ -108,10 +110,7 @@ storiesOf('Moment', module)
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: {
-              id: '12345',
-              nickname: 'Pickle',
-            },
+            user: user,
             timeStamp: '9:33pm',
             active: true,
           }
@@ -127,10 +126,7 @@ storiesOf('Moment', module)
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: {
-              id: '12345',
-              nickname: 'Pickle',
-            },
+            user: user,
             timeStamp: '9:33pm',
             active: false,
             action: action('clicked'),
@@ -173,10 +169,7 @@ storiesOf('Moment', module)
           {
             type: 'AVATAR_MOMENT',
             id: '12345',
-            user: {
-              id: '6789',
-              nickname: 'Madmartigan',
-            },
+            user: user,
           }
         }
       />

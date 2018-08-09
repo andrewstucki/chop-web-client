@@ -36,12 +36,14 @@ describe('Chat', () => {
             moments: [],
             participants: [
               {
-                id: '12345',
-                nickname: 'Bobby G.',
+                pubnubToken: '12345',
+                name: 'Bobby G.',
+                role: { label: '' },
               },
               {
-                id: '54353',
-                nickname: 'Shaq O.',
+                pubnubToken: '54353',
+                name: 'Shaq O.',
+                role: { label: '' },
               },
             ],
           },
@@ -49,7 +51,13 @@ describe('Chat', () => {
         currentChannel: 'direct',
         currentUser: {
           id: '12345',
-          nickname: 'Bobby G.',
+          pubnubToken: '12345',
+          pubnubAccessToken: '12345',
+          name: 'Bobby G.',
+          role: {
+            label: '',
+            permissions: [],
+          },
         },
       },
     );

@@ -8,6 +8,14 @@ import sinon from 'sinon';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const otherUser = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: {
+    label: '',
+  },
+};
+
 describe('Message', () => {
   test('has correct text', () => {
     const wrapper = Enzyme.shallow(
@@ -16,11 +24,9 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            lang: 'en',
             text: 'Go west young man!',
-            user: {
-              id: '12345',
-              nickname: 'Billy Bob',
-            },
+            user: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
           }
@@ -43,11 +49,9 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            lang: 'en',
             text: 'Go west young man!',
-            user: {
-              id: '12345',
-              nickname: 'Billy Bob',
-            },
+            user: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
           }
@@ -72,11 +76,9 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            lang: 'en',
             text: 'Go west young man!',
-            user: {
-              id: '12345',
-              nickname: 'Billy Bob',
-            },
+            user: otherUser,
             messageTrayOpen: true,
             closeTrayButtonRendered: true,
           }

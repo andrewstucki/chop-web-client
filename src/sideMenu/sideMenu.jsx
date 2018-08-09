@@ -2,7 +2,7 @@
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React from 'react';
 
-import type { UserType } from '../feed/dux';
+import type { SharedUserType } from '../feed/dux';
 
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';
@@ -17,10 +17,10 @@ type SideMenuType = {
   isClosed: boolean,
   onSwipe?: (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
   publishPrayerRequestNotification: (
-    user: UserType,
+    user: SharedUserType,
     active: boolean
   ) => void,
-  currentUser: UserType,
+  currentUser: SharedUserType,
 };
 
 const SideMenu = (

@@ -6,6 +6,7 @@ import type {
   ChangeChannelType,
   AddChannelType,
   InviteToChannelType,
+  PrivateUserType,
   RemoveChannelType,
 } from '../../../src/feed/dux';
 
@@ -36,10 +37,7 @@ const SET_USER = 'SET_USER';
 type IOChatState = {
   publishKey: string,
   subscribeKey: string,
-  user: {
-    id: string,
-    nickname: string,
-  },
+  user: PrivateUserType,
   chats: {
     [string]: string,
   },
@@ -54,8 +52,7 @@ type SetChatKeys = {
 
 type SetUser = {
   type: 'SET_USER',
-  id: string,
-  nickname: string,
+  user: PrivateUserType,
 };
 
 
@@ -80,11 +77,10 @@ const setChatKeys = (publishKey: string, subscribeKey: string): SetChatKeys => (
   }
 );
 
-const setUser = (id: string, nickname: string): SetUser => (
+const setUser = (user: PrivateUserType): SetUser => (
   {
     type: SET_USER,
-    id,
-    nickname,
+    user,
   }
 );
 
@@ -93,7 +89,13 @@ const defaultState = {
   subscribeKey: '',
   user: {
     id: '',
-    nickname: '',
+    name: '',
+    pubnubToken: '',
+    pubnubAccessToken: '',
+    role: {
+      label: '',
+      permissions: [],
+    },
   },
   chats: {},
   currentChannel: 'public',
@@ -116,14 +118,10 @@ const getReducer = (chatIO: Chat) => (
         subscribeKey: action.subscribeKey,
       };
     case SET_USER:
-      chatIO.setUser(action.id, action.nickname);
+      chatIO.setUser(action.user);
       return {
         ...state,
-        user: {
-          ...state.user,
-          id: action.id,
-          nickname: action.nickname,
-        },
+        user: action.user,
       };
     case ADD_CHANNEL:
       chatIO.addChat(action.channel.name, action.channel.id);
@@ -152,7 +150,7 @@ const getReducer = (chatIO: Chat) => (
         currentChannel: action.channel,
       };
     case INVITE_TO_CHANNEL:
-      chatIO.inviteToChannel(action.user.id, action.channelName);
+      chatIO.inviteToChannel(action.user.pubnubToken, action.channelName);
       return state;
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
       chatIO.publishAcceptedPrayerRequest(action.id, action.channel);

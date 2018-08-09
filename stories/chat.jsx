@@ -5,17 +5,18 @@ import { storiesOf } from '@storybook/react';
 
 import Chat from '../src/chat/chat';
 
+const user = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: { label: '' },
+};
+
 storiesOf('Chat', module)
   .add('default', () => (
     <Chat
       currentPlaceholder="Chat"
       currentChannel="public"
-      currentUser={
-        {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      }
+      currentUser={user}
       focused={false}
       publishMessage={() => {}}
       textOnBlur={() => {}}
@@ -27,12 +28,7 @@ storiesOf('Chat', module)
     <Chat
       currentPlaceholder="Chat"
       currentChannel="public"
-      currentUser={
-        {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      }
+      currentUser={user}
       focused={true}
       publishMessage={() => {}}
       textOnBlur={() => {}}
@@ -43,12 +39,7 @@ storiesOf('Chat', module)
     <Chat
       currentPlaceholder="Chat"
       currentChannel="public"
-      currentUser={
-        {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      }
+      currentUser={user}
       focused={true}
       publishMessage={() => {}}
       textOnBlur={() => {}}
@@ -60,12 +51,7 @@ storiesOf('Chat', module)
     <Chat
       currentPlaceholder="Chat"
       currentChannel="public"
-      currentUser={
-        {
-          id: '12345',
-          nickname: 'Billy Bob',
-        }
-      }
+      currentUser={user}
       focused={false}
       publishMessage={() => {}}
       textOnBlur={() => {}}

@@ -6,6 +6,17 @@ import { action } from '@storybook/addon-actions';
 import PopUpModal from '../src/popUpModal/popUpModal';
 import '../assets/global.css';
 
+const otherUser = {
+  pubnubToken: '12345',
+  name: 'Walker, Texas Ranger',
+  role: { label: '' },
+};
+const currentUser = {
+  pubnubToken: '12345',
+  name: 'Jimmy Trivette',
+  role: { label: '' },
+};
+
 storiesOf('PopUpModal', module)
   .add('Modal renders if isPopUpModalVisible is true', () => (
     <PopUpModal
@@ -14,18 +25,8 @@ storiesOf('PopUpModal', module)
       publishLeftChatNotification={action('clicked')}
       removeChannel={action('clicked')}
       currentChannel="direct"
-      otherUser={
-        {
-          id: '12345',
-          nickname: 'Walker, Texas Ranger',
-        }
-      }
-      currentUser={
-        {
-          id: '12345',
-          nickname: 'Jimmy Trivette',
-        }
-      }
+      otherUser={otherUser}
+      currentUser={currentUser}
       isPopUpModalVisible={true}
     />
   ))
@@ -37,18 +38,8 @@ storiesOf('PopUpModal', module)
       publishLeftChatNotification={action('clicked')}
       removeChannel={action('clicked')}
       currentChannel="direct"
-      otherUser={
-        {
-          id: '12345',
-          nickname: 'Walker, Texas Ranger',
-        }
-      }
-      currentUser={
-        {
-          id: '12345',
-          nickname: 'Jimmy Trivette',
-        }
-      }
+      otherUser={otherUser}
+      currentUser={currentUser}
       isPopUpModalVisible={false}
     />
   ));

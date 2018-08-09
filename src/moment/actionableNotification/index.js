@@ -2,14 +2,14 @@
 import ActionableNotification from './actionableNotification';
 import { connect } from 'react-redux';
 
-import { addChannel, inviteToChannel } from '../../feed/dux';
+import { addChannel, inviteToChannel, getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishAcceptedPrayerRequest } from './dux';
 import { publishPrayerNotification } from '../notification/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
   return {
-    currentUser: feedState.currentUser,
+    currentUser: getCurrentUserAsSharedUser(feedState),
   };
 };
 
