@@ -1,6 +1,7 @@
 import { Pubnub } from 'pubnub';
 
-const actorMiddleware = (...actorClasses) => ({ getState, dispatch }) => next => {
+// KENNY I REMOVED GETSTATE BECAUSE THE LINTER WAS MAD
+const actorMiddleware = (...actorClasses) => ({ dispatch }) => next => {
   const actors = actorClasses.map(actor => new actor(dispatch));
   return action => {
     next(action);
