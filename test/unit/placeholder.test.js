@@ -112,15 +112,6 @@ describe('PlaceHolder tests', () => {
           },
         },
         currentChannel: 'host',
-        chatInput: '',
-        currentUser: {
-          id: '',
-          nickname: '',
-        },
-        appendingMessage: false,
-        anchorMoment: null,
-        animatingMoment: false,
-        placeholderPresent: true,
       }
     );
     expect(result).toEqual('host');

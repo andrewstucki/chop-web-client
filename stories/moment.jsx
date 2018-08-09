@@ -10,9 +10,17 @@ import { createMessage } from '../src/moment';
 import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
+const user = {
+  pubnubToken: '12345',
+  name: 'Billy Bob',
+  role: { label: '' },
+};
+
 const store = createStore(() => (
   {
-    feed: {},
+    feed: {
+      currentUser: user,
+    },
   }
 ));
 
@@ -24,10 +32,7 @@ storiesOf('Moment', module)
           createMessage(
             '1234',
             'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            {
-              id: '12345',
-              nickname: 'Billy Bob',
-            },
+            user,
             false,
             false,
           )
@@ -42,10 +47,7 @@ storiesOf('Moment', module)
           createMessage(
             '1234',
             'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            {
-              id: '12345',
-              nickname: 'Billy Bob',
-            },
+            user,
             true,
             true,
           )
@@ -107,10 +109,7 @@ storiesOf('Moment', module)
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: {
-              id: '12345',
-              nickname: 'Pickle',
-            },
+            user: user,
             timeStamp: '9:33pm',
             active: true,
           }
@@ -126,10 +125,7 @@ storiesOf('Moment', module)
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: {
-              id: '12345',
-              nickname: 'Pickle',
-            },
+            user: user,
             timeStamp: '9:33pm',
             active: false,
             action: action('clicked'),
@@ -172,10 +168,7 @@ storiesOf('Moment', module)
           {
             type: 'AVATAR_MOMENT',
             id: '12345',
-            user: {
-              id: '6789',
-              nickname: 'Madmartigan',
-            },
+            user: user,
           }
         }
       />
