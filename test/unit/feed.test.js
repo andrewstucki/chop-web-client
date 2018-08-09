@@ -15,6 +15,11 @@ import reducer, {
   leaveChat,
 } from '../../src/feed/dux';
 
+import {
+  closeMenu, 
+  openMenu,
+} from '../../src/sideMenu/dux';
+
 import { TOGGLE_CHAT_FOCUS } from '../../src/chat/dux';
 
 import {
@@ -1638,6 +1643,72 @@ describe('Placeholder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
+      }
+    );
+  });
+});
+
+describe('SideMenu tests', () => {
+  test('Close sideMenu', () => {
+    const results = reducer(
+      {
+        ...defaultState,
+        isSideMenuClosed: false,
+      },
+      closeMenu()
+    );
+    expect(results).toEqual(
+      {
+        ...defaultState,
+        isSideMenuClosed: true,
+      }
+    );
+  });
+
+  test('Close menu does not toggle when already true', () => {
+    const results = reducer(
+      {
+        ...defaultState,
+        isSideMenuClosed: true,
+      },
+      closeMenu()
+    );
+    expect(results).toEqual(
+      {
+        ...defaultState,
+        isSideMenuClosed: true,
+      }
+    );
+  });
+
+  test('Open sideMenu', () => {
+    const results = reducer(
+      {
+        ...defaultState,
+        isSideMenuClosed: true,
+      },
+      openMenu()
+    );
+    expect(results).toEqual(
+      {
+        ...defaultState,
+        isSideMenuClosed: false,
+      }
+    );
+  });
+
+  test('Open sideMenu does not toggle when already false', () => {
+    const results = reducer(
+      {
+        ...defaultState,
+        isSideMenuClosed: false,
+      },
+      openMenu()
+    );
+    expect(results).toEqual(
+      {
+        ...defaultState,
+        isSideMenuClosed: false,
       }
     );
   });
