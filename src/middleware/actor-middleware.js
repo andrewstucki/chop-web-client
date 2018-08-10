@@ -5,10 +5,11 @@ type ActionType = {
 type TakeActionType = (action: ActionType) => any;
 type StoreType = {
   dispatch: TakeActionType,
+  getStore: () => any,
 }
 
-const actorMiddleware = (...actorClasses: Array<any>) => ({ dispatch }: StoreType) => (next: TakeActionType) => {
-  const actors = actorClasses.map(actor => new actor(dispatch));
+const actorMiddleware = (...actorClasses: Array<any>) => ({ dispatch, getStore }: StoreType) => (next: TakeActionType) => {
+  const actors = actorClasses.map(actor => new actor(dispatch, getStore));
   return (action: ActionType) => {
     const result = next(action);
     actors.forEach(actor => actor.dispatch(action));
