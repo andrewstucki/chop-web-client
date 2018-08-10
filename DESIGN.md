@@ -47,12 +47,8 @@ http://cssnext.io/
 Storybook -- Component testing site
 https://storybook.js.org/
 
-Docker -- Container for packaging and deploying app
-https://www.docker.com/
-
-Kubernetes -- Container scaling, deployment and management
-https://kubernetes.io/
-https://www.youtube.com/watch?v=4ht22ReBjno
+GitLab CI/CD -- Continues Integration and Deployment
+https://about.gitlab.com/features/gitlab-ci-cd/
 
 node.js -- JavaScript environment. We mainly use it for a build and
 development tool but also it runs our static server for production
@@ -156,3 +152,61 @@ You'll also need to make a new action creator. You can use the action types:
 
 - PUBLISH_MOMENT_TO_CHANNEL - to add a moment to a channel and publish it across the WebSocket
 - RECEIVE_MOMENT - when you receive a moment over the WebSocket and need to act on it
+
+## Middleware
+
+You don’t have to fully understand middleware to understand what’s going on here. Take a look at this function:
+https://in.thewardro.be/io/opennetwork/chop-web-client/merge_requests/106/diffs#6115dd4c7eebef5a7a766c3308a5ccf11274db46_0_64
+```
+dispatch (action: any) {
+  if (!action && !action.type) {
+    return;
+  }
+  switch (action.type) {
+  case 'GET_INIT_DATA':
+    this.getInitialData();
+    return;
+  default:
+    return;
+  }
+}
+```
+They way the middleware is set up any time you dispatch an action this dispatch function is called. Maybe it needs a better name because it’s not dispatching anything, it’s receiving an action. It has a switch statement just like any other reducer. 
+There are two big differences between this function and a reducer. 
+1. Reducers are “pure” functions (take time to read this: https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-pure-function-d1c076bec976). While the actors are designed to cause side effects.
+2. Reducers cannot dispatch another action (Redux will throw an error if you try). Once they are done performing their side effect or async action, actors are designed to dispatch another action.
+You can see #2 here when it calls this.storeDispatch (which is just the redux dispatch function): https://in.thewardro.be/io/opennetwork/chop-web-client/merge_requests/106/diffs#6115dd4c7eebef5a7a766c3308a5ccf11274db46_0_54
+```
+getInitialData () {
+  this.getAll()
+    .then(data => {
+      this.storeDispatch({
+        type: 'SET_INIT_DATA',
+        data: data.data,
+      });
+    });
+}
+```
+The flow in this bit of code goes like this:
+1. We dispatch an action: `dispatch({type:'GET_INIT_DATA'})`
+2. All the reducers AND all the middleware are called with that action
+3. Our GraphQlActor.dispatch function is called with the action
+4. the switch statement matching the action.type and calls `this.getInitialData();`
+5. `getInitialData` is called and calls `this.getAll()` which returns a `Promise` (in case you need a refresher: https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-promise-27fc71e77261)
+6. `getAll` calls the server and asks for a bunch of information about our app (video URL, user, channels, etc…)
+7. When the data comes back the `Promise` resolves with `.then`
+8. this.storeDispatch is just the redux `dispatch` function so we dispatch the action
+```
+{
+  type: 'SET_INIT_DATA',
+  data: {...} // lots of data
+}
+```
+9. Again all the reducers AND middleware are called with that action
+10. the reducer will have that action added and apply this data to the store
+Notice we do an async side effect between receiving the action and dispatching a new action. In this case it’s an HTTP call to the server like calling `fetch`. And we dispatch a new action when we are done. The two things reducers are not allowed to do. But other than that the actors are just like reducers in that they listen to and respond to dispatched actions.
+
+Actors (the actor model) is a real thing I’m borrowing the name from (https://www.brianstorti.com/the-actor-model/). A little bit harder to understand but basically a `Actors` are objects that communicate by ‘sending messages’ to each other (in our case read ‘dispatching actions’).
+
+In a real Actor Model setup The Actors are synchronous and the messages are sent (actions are dispatched) asynchronously. For us Redux dispatch actions synchronously and our actors primarily do asynchronous tasks. So it’s backwards, but the idea is similar.
+If all of that doesn’t make sense don’t worry about it, it’s not important. Just know I borrowed the name from a real concept.
