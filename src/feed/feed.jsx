@@ -13,7 +13,7 @@ type FeedProps = {
   currentChannel: string,
   appendingMessage: boolean,
   animatingMoment: boolean,
-  placeholderPresent: boolean,
+  isPlaceholderPresent: boolean,
   hasParticipants: boolean,
   togglePopUpModal: () => void,
 };
@@ -130,12 +130,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const {
       currentChannel,
       moments,
-      placeholderPresent,
+      isPlaceholderPresent,
       hasParticipants,
       togglePopUpModal,
     } = this.props;
     const feedStyle =
-      currentChannel === 'host' && placeholderPresent ?
+      currentChannel === 'host' && isPlaceholderPresent ?
         styles.withPlaceholder : styles.withoutPlaceholder;
 
     const listItems = moments.map(moment => (

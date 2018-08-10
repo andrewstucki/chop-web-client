@@ -205,7 +205,7 @@ describe('Chat IO reducer test', () => {
       }
     );
     expect(result).toEqual(defaultState);
-    expect(chat.publish.mock.calls.length).toBe(2);
+    expect(chat.publish.mock.calls.length).toBe(1);
     expect(chat.publish.mock.calls[0][0]).toEqual('request');
     expect(chat.publish.mock.calls[0][1]).toEqual(
       {
@@ -410,8 +410,8 @@ describe('Chat IO Interface test', () => {
         id: '599465b0-23c2-42a7-b837-298e8a51c94f',
         text: 'Hello, world!',
         user: {
-          id: '599465b0-23c2-42a7-b837-298e8a51c94a',
-          nickname: 'Billy Bob',
+          pubnubToken: '599465b0-23c2-42a7-b837-298e8a51c94a',
+          name: 'Billy Bob',
         },
         messageTrayOpen: false,
       }
@@ -432,7 +432,7 @@ describe('Chat IO Interface test', () => {
     )).toBe(true);
   });
 
-  test('validate prayer notification', () => {
+  test('validate left chat notification', () => {
     const chat = new Chat(mockedEngineCore, () => {}, () => {}, () => {});
     expect(chat.validNotification(
       {
@@ -453,8 +453,8 @@ describe('Chat IO Interface test', () => {
         notificationType: 'PRAYER_REQUEST',
         id: '599465b0-23c2-42a7-b837-298e8a51c94f',
         user: {
-          id: '12345',
-          nickname: 'Billy Bob',
+          pubnubToken: '12345',
+          name: 'Billy Bob',
         },
         timeStamp: '4:53pm',
         active: true,

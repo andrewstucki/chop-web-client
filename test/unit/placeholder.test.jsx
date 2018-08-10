@@ -20,10 +20,10 @@ describe('Placeholder tests', () => {
             subText: '1 hand raised',
           }
         }
-        renderPlaceholder={true}
+        isPlaceholderPresent={true}
         releaseAnchorMoment={() => {}}
         currentChannel="host"
-        anchorMomentAnchored={true}
+        isAnchorMomentAnchored={true}
       />
     );
     expect(wrapper.find(AnchorMoment).length).toBe(1);

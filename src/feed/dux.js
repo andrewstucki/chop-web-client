@@ -23,6 +23,11 @@ import {
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../moment';
 
+import {
+  OPEN_SIDE_MENU,
+  CLOSE_SIDE_MENU,
+} from '../sideMenu/dux';
+
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
 import { SET_USER } from '../io/chat/dux';
@@ -79,9 +84,10 @@ type FeedType = {
   appendingMessage: boolean,
   anchorMoment: AnchorMomentType | null,
   animatingMoment: boolean,
-  placeholderPresent: boolean,
+  isPlaceholderPresent: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
+  isSideMenuClosed: boolean,
 };
 
 type ChangeChannelType = {
@@ -235,9 +241,10 @@ const defaultState = {
   appendingMessage: false,
   anchorMoment: null,
   animatingMoment: true,
-  placeholderPresent: false,
+  isPlaceholderPresent: false,
   isPopUpModalVisible: false,
   isChatFocused: false,
+  isSideMenuClosed: true,
 };
 
 // Reducer
@@ -466,13 +473,13 @@ const reducer = (
   case SET_ANCHOR_MOMENT:
     return {
       ...state,
-      placeholderPresent: true,
+      isPlaceholderPresent: true,
       anchorMoment: action.anchorMoment,
     };
   case RELEASE_ANCHOR_MOMENT:
     return {
       ...state,
-      placeholderPresent: false,
+      isPlaceholderPresent: false,
       animatingMoment: false,
       channels: {
         ...state.channels,
@@ -526,6 +533,16 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
+    };
+  case CLOSE_SIDE_MENU:
+    return {
+      ...state,
+      isSideMenuClosed: true,
+    };
+  case OPEN_SIDE_MENU:
+    return {
+      ...state,
+      isSideMenuClosed: false,
     };
   default:
     return state;

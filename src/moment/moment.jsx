@@ -51,7 +51,7 @@ const Moment = ({ data }: MomentPropType) => {
     return (
       <AnchorMoment
         anchorMoment={data}
-        anchorMomentAnchored={false}
+        isAnchorMomentAnchored={false}
       />
     );
   case BASIC_TEXT:
