@@ -3,16 +3,11 @@ import Chat from '../../../src/io/chat/chat';
 import getReducer, {
   setChatKeys,
   setUser,
-  defaultState,
 } from '../../../src/io/chat/dux';
 // TODO write a test for acceptPrayerRequest and update everyone's feed
 // import { acceptPrayerRequest } from '../../../src/moment/actionableNotification/dux';
 
-import {
-  changeChannel,
-  addChannel,
-  removeChannel,
-} from '../../../src/feed/dux';
+import { addChannel } from '../../../src/feed/dux';
 
 import { MESSAGE } from '../../../src/moment/dux';
 
@@ -52,16 +47,9 @@ describe('Chat IO reducer test', () => {
   });
 
   test('set chat keys', () => {
-    const result = reducer(
-      defaultState,
+    reducer(
+      {},
       setChatKeys('12345', '67890')
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        publishKey: '12345',
-        subscribeKey: '67890',
-      }
     );
     expect(chat.setKeys.mock.calls.length).toBe(1);
     expect(chat.setKeys.mock.calls[0][0]).toEqual('12345');
@@ -69,95 +57,27 @@ describe('Chat IO reducer test', () => {
   });
 
   test('set user', () => {
-    const result = reducer(
-      defaultState,
+    reducer(
+      {},
       setUser(currentUser)
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        user: currentUser,
-      }
     );
     expect(chat.setUser.mock.calls.length).toBe(1);
     expect(chat.setUser.mock.calls[0][0]).toBe(currentUser);
   });
 
   test('add chat', () => {
-    const result = reducer(
-      defaultState,
+    reducer(
+      {},
       addChannel('default', '12345')
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        chats: {
-          default: '12345',
-        },
-      }
     );
     expect(chat.addChat.mock.calls.length).toBe(1);
     expect(chat.addChat.mock.calls[0][0]).toEqual('default');
     expect(chat.addChat.mock.calls[0][1]).toEqual('12345');
   });
 
-  test('remove chat', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        chats: {
-          direct: '12345',
-          public: '54321',
-          host: '67890',
-        },
-      },
-      removeChannel('direct')
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        chats: {
-          public: '54321',
-          host: '67890',
-        },
-        currentChannel: 'public',
-      }
-    );
-  });
-
-  test('change current channel', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        chats: {
-          default: '12345',
-          host: '67890',
-        },
-      },
-      changeChannel('host'),
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        chats: {
-          default: '12345',
-          host: '67890',
-        },
-        currentChannel: 'host',
-      }
-    );
-  });
-
   test('add to current channel', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        chats: {
-          public: '12345',
-          host: '67890',
-        },
-        currentChannel: 'public',
-      },
+    reducer(
+      {},
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
         channel: 'public',
@@ -171,16 +91,6 @@ describe('Chat IO reducer test', () => {
         },
       },
     );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        chats: {
-          public: '12345',
-          host: '67890',
-        },
-        currentChannel: 'public',
-      }
-    );
     expect(chat.publish.mock.calls.length).toBe(1);
     expect(chat.publish.mock.calls[0][0]).toEqual('public');
     expect(chat.publish.mock.calls[0][1].text).toEqual('Hello buddy');
@@ -188,8 +98,8 @@ describe('Chat IO reducer test', () => {
 
   test('publish prayer request moment to channel', () => {
     const action = () => {};
-    const result = reducer(
-      defaultState,
+    reducer(
+      {},
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
         channel: 'host',
@@ -204,7 +114,6 @@ describe('Chat IO reducer test', () => {
         },
       }
     );
-    expect(result).toEqual(defaultState);
     expect(chat.publish.mock.calls.length).toBe(1);
     expect(chat.publish.mock.calls[0][0]).toEqual('request');
     expect(chat.publish.mock.calls[0][1]).toEqual(

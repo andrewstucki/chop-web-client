@@ -183,8 +183,7 @@ class Chat {
 
   receiveMoment (channelId: string, moment: MomentType): void {
     if (this.validMessage(moment) ||
-      this.validNotification(moment) ||
-      this.validCommand(moment)
+      this.validNotification(moment)
     ) {
       this.addToChannel(channelId, moment);
     }
