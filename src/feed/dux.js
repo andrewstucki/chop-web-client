@@ -23,6 +23,11 @@ import {
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../moment';
 
+import {
+  OPEN_SIDE_MENU,
+  CLOSE_SIDE_MENU,
+} from '../sideMenu/dux';
+
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
 import { SET_USER } from '../io/chat/dux';
@@ -82,6 +87,7 @@ type FeedType = {
   isPlaceholderPresent: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
+  isSideMenuClosed: boolean,
 };
 
 type ChangeChannelType = {
@@ -238,6 +244,7 @@ const defaultState = {
   isPlaceholderPresent: false,
   isPopUpModalVisible: false,
   isChatFocused: false,
+  isSideMenuClosed: true,
 };
 
 // Reducer
@@ -526,6 +533,16 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
+    };
+  case CLOSE_SIDE_MENU:
+    return {
+      ...state,
+      isSideMenuClosed: true,
+    };
+  case OPEN_SIDE_MENU:
+    return {
+      ...state,
+      isSideMenuClosed: false,
     };
   default:
     return state;

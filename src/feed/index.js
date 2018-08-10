@@ -15,7 +15,7 @@ const mapStateToProps = state => {
     currentChannel: feedState.currentChannel,
     appendingMessage: appendMessage(feedState),
     animatingMoment: feedState.renderingAnchorMoment,
-    placeholderPresent: feedState.placeholderPresent,
+    isPlaceholderPresent: feedState.isPlaceholderPresent,
     hasParticipants: hasParticipants(feedState),
   };
 };

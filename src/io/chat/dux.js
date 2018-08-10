@@ -137,8 +137,9 @@ const getReducer = (chatIO: Chat) => (
       const { moment, channel } = action;
       if (moment.notificationType === PRAYER_REQUEST) {
         chatIO.publish('request', moment);
+      } else {
+        chatIO.publish(channel, moment);
       }
-      chatIO.publish(channel, moment);
       return state;
     }
     case CHANGE_CHANNEL:

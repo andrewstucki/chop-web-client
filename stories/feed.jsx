@@ -29,7 +29,7 @@ storiesOf('Feed', module)
           currentChannel="default"
           appendingMessage={false}
           animatingMoment={false}
-          placeholderPresent={false}
+          isPlaceholderPresent={false}
           hasParticipants={false}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
@@ -61,7 +61,7 @@ storiesOf('Feed', module)
             ]
           }
           animatingMoment={false}
-          placeholderPresent={false}
+          isPlaceholderPresent={false}
           hasParticipants={false}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
@@ -94,7 +94,7 @@ storiesOf('Feed', module)
             ]
           }
           animatingMoment={false}
-          placeholderPresent={false}
+          isPlaceholderPresent={false}
           hasParticipants={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
