@@ -23,6 +23,11 @@ import {
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../moment';
 
+import {
+  OPEN_SIDE_MENU,
+  CLOSE_SIDE_MENU,
+} from '../sideMenu/dux';
+
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
 import { SET_VIDEO_URL } from '../videoFeed/dux';
@@ -84,6 +89,7 @@ type FeedType = {
   isPlaceholderPresent: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
+  isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   url: string,
 };
@@ -242,6 +248,7 @@ const defaultState = {
   isPlaceholderPresent: false,
   isPopUpModalVisible: false,
   isChatFocused: false,
+  isSideMenuClosed: true,
   isVideoHidden: false,
   url: '',
 };
@@ -533,6 +540,16 @@ const reducer = (
       ...state,
       isChatFocused: action.focus,
       isVideoHidden: action.focus,
+    };
+  case CLOSE_SIDE_MENU:
+    return {
+      ...state,
+      isSideMenuClosed: true,
+    };
+  case OPEN_SIDE_MENU:
+    return {
+      ...state,
+      isSideMenuClosed: false,
     };
   case SET_VIDEO_URL:
     return {

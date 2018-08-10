@@ -1,83 +1,47 @@
 // @flow
 
 // Actions
-const CLOSE_MENU = 'CLOSE_MENU';
-const OPEN_MENU = 'OPEN_MENU';
+const CLOSE_SIDE_MENU = 'CLOSE_SIDE_MENU';
+const OPEN_SIDE_MENU = 'OPEN_SIDE_MENU';
 const LOGOUT = 'LOGOUT';
 
-// Flow Types
-type SideMenuStateType = {
-  closed: boolean,
-};
+// Type Definitions
 
 type CloseMenuType = {
-  type: 'CLOSE_MENU',
+  type: 'CLOSE_SIDE_MENU',
 };
 
 type OpenMenuType = {
-  type: 'OPEN_MENU',
+  type: 'OPEN_SIDE_MENU',
 };
 
 type LogoutType = {
   type: 'LOGOUT',
 };
 
-type SideMenuActionType =
-  | CloseMenuType
-  | OpenMenuType;
-
 // Action Creators
-const closeMenu = () => (
+const closeMenu = (): CloseMenuType => (
   {
-    type: CLOSE_MENU,
+    type: CLOSE_SIDE_MENU,
   }
 );
 
-const openMenu = () => (
+const openMenu = (): OpenMenuType => (
   {
-    type: OPEN_MENU,
+    type: OPEN_SIDE_MENU,
   }
 );
 
-const logout = () => (
+const logout = (): LogoutType => (
   {
     type: LOGOUT,
   }
 );
 
-// Reducer
-const defaultState = {
-  closed: true,
-};
-
-const reducer = (
-  state: SideMenuStateType = defaultState,
-  action?: SideMenuActionType
-) => {
-  if (!action || !action.type) {
-    return state;
-  }
-  switch (action.type) {
-  case CLOSE_MENU:
-    return {
-      ...state,
-      closed: true,
-    };
-  case OPEN_MENU:
-    return {
-      ...state,
-      closed: false,
-    };
-  default:
-    return state;
-  }
-};
-
 // Exports
-export default reducer;
 export {
-  OPEN_MENU,
-  CLOSE_MENU,
+  OPEN_SIDE_MENU,
+  CLOSE_SIDE_MENU,
   LOGOUT,
 };
 export type {

@@ -139,12 +139,12 @@ class Chat {
       this.isString(message.id) &&
       message.id.length === 36 &&
       message.user instanceof Object &&
-      this.isString(message.user.id) &&
+      this.isString(message.user.pubnubToken) &&
       // FIXME: when we connect to real users
       // our fake users have the wrong length id
       //message.user.id.length === 36 &&
-      this.isString(message.user.nickname) &&
-      message.user.nickname.length > 0;
+      this.isString(message.user.name) &&
+      message.user.name.length > 0;
   }
 
   validNotification (notification: MomentType): boolean {
@@ -173,16 +173,19 @@ class Chat {
     return command.notificationType === PRAYER_REQUEST &&
       this.isString(command.id) &&
       command.id.length === 36 &&
-      this.isString(command.user.id) &&
-      this.isString(command.user.nickname) &&
-      command.user.nickname.length > 0 &&
+      this.isString(command.user.pubnubToken) &&
+      this.isString(command.user.name) &&
+      command.user.name.length > 0 &&
       this.isString(command.timeStamp) &&
       command.timeStamp.length > 0 &&
       command.active.constructor === Boolean;
   }
 
   receiveMoment (channelId: string, moment: MomentType): void {
-    if (this.validMessage(moment) || this.validNotification(moment)) {
+    if (this.validMessage(moment) ||
+      this.validNotification(moment) ||
+      this.validCommand(moment)
+    ) {
       this.addToChannel(channelId, moment);
     }
   }
