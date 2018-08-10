@@ -1,76 +1,29 @@
 // @flow
-import type { ToggleChatFocusType } from '../chat/dux';
-import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
-
-const SET_VIDEO_URL = 'SET_VIDEO_URL';
 
 // Type Definitions
 
-type VideoFeedType = {
-  isVideoHidden: boolean,
-  url: string,
-};
+const SET_VIDEO_URL = 'SET_VIDEO_URL';
 
-type SetVideoUrl = {
+type SetVideoUrlType = {
   type: 'SET_VIDEO_URL',
   url: string,
-}
-
-type VideoFeedActionTypes =
-  | ToggleChatFocusType
-  | SetVideoUrl;
-
-// Default State
-
-const defaultState = {
-  isVideoHidden: false,
-  url: '',
 };
 
 // Action Creators
-const setVideoUrl = (url: string): SetVideoUrl => (
+
+const setVideoUrl = (url: string): SetVideoUrlType => (
   {
     type: SET_VIDEO_URL,
     url,
   }
 );
 
-// Reducer
-
-const reducer = (
-  state: VideoFeedType = defaultState,
-  action?: VideoFeedActionTypes): VideoFeedType => {
-  if (!action || !action.type) {
-    return state;
-  }
-  switch (action.type) {
-  case TOGGLE_CHAT_FOCUS:
-    return {
-      ...state,
-      isVideoHidden: action.focus,
-    };
-  case SET_VIDEO_URL:
-    return {
-      ...state,
-      url: action.url,
-    };
-  default:
-    return state;
-  }
-};
-
-// Selectors
-
-const getChatFocus = (state: VideoFeedType): boolean => (
-  state.isVideoHidden
-);
-
 // Exports
 
 export {
-  getChatFocus,
-  defaultState,
   setVideoUrl,
 };
 
-export default reducer;
+export {
+  SET_VIDEO_URL,
+};
