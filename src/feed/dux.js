@@ -30,6 +30,8 @@ import {
 
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
+import { SET_VIDEO_URL } from '../videoFeed/dux';
+
 import { SET_USER } from '../io/chat/dux';
 
 import {
@@ -88,6 +90,8 @@ type FeedType = {
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
   isSideMenuClosed: boolean,
+  isVideoHidden: boolean,
+  url: string,
 };
 
 type ChangeChannelType = {
@@ -245,6 +249,8 @@ const defaultState = {
   isPopUpModalVisible: false,
   isChatFocused: false,
   isSideMenuClosed: true,
+  isVideoHidden: false,
+  url: '',
 };
 
 // Reducer
@@ -533,6 +539,7 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
+      isVideoHidden: action.focus,
     };
   case CLOSE_SIDE_MENU:
     return {
@@ -543,6 +550,11 @@ const reducer = (
     return {
       ...state,
       isSideMenuClosed: false,
+    };
+  case SET_VIDEO_URL:
+    return {
+      ...state,
+      url: action.url,
     };
   default:
     return state;

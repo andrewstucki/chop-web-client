@@ -20,6 +20,8 @@ import {
   openMenu,
 } from '../../src/sideMenu/dux';
 
+import { setVideoUrl } from '../../src/videoFeed/dux';
+
 import { TOGGLE_CHAT_FOCUS } from '../../src/chat/dux';
 
 import {
@@ -1585,7 +1587,11 @@ describe('Feed tests', () => {
 describe('Chat tests', () => {
   test('chat focus', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        isChatFocused: false,
+        isVideoHidden: false,
+      },
       {
         type: TOGGLE_CHAT_FOCUS,
         focus: true,
@@ -1594,6 +1600,7 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
+        isVideoHidden: true,
       }
     );
 
@@ -1601,6 +1608,7 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
+        isVideoHidden: true,
       },
       {
         type: TOGGLE_CHAT_FOCUS,
@@ -1709,6 +1717,22 @@ describe('SideMenu tests', () => {
       {
         ...defaultState,
         isSideMenuClosed: false,
+      }
+    );
+  });
+});
+
+describe('VideoFeed tests', () => {
+  test('set url', () => {
+    const result = reducer(
+      defaultState,
+      setVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isVideoHidden: false,
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
       }
     );
   });
