@@ -12,10 +12,9 @@ import SideMenu from './sideMenu';
 
 // TODO remove currentUser and publishPrayerRequestNotification after demo
 const mapStateToProps = state => {
-  const sideMenuState = state.sideMenu;
   const feedState = state.feed;
   return {
-    isClosed: sideMenuState.closed,
+    isClosed: feedState.isSideMenuClosed,
     currentUser: getCurrentUserAsSharedUser(feedState),
   };
 };
