@@ -15,6 +15,8 @@ import reducer, {
   leaveChat,
 } from '../../src/feed/dux';
 
+import { setVideoUrl } from '../../src/videoFeed/dux';
+
 import { TOGGLE_CHAT_FOCUS } from '../../src/chat/dux';
 
 import {
@@ -1580,7 +1582,11 @@ describe('Feed tests', () => {
 describe('Chat tests', () => {
   test('chat focus', () => {
     const result = reducer(
-      defaultState,
+      {
+        ...defaultState,
+        isChatFocused: false,
+        isVideoHidden: false,
+      },
       {
         type: TOGGLE_CHAT_FOCUS,
         focus: true,
@@ -1589,6 +1595,7 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
+        isVideoHidden: true,
       }
     );
 
@@ -1596,6 +1603,7 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
+        isVideoHidden: true,
       },
       {
         type: TOGGLE_CHAT_FOCUS,
@@ -1638,6 +1646,22 @@ describe('Placeholder tests', () => {
         id: '12345',
         text: 'I commit my life to Christ.',
         subText: '1 hand raised',
+      }
+    );
+  });
+});
+
+describe('VideoFeed tests', () => {
+  test('set url', () => {
+    const result = reducer(
+      defaultState,
+      setVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isVideoHidden: false,
+        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
       }
     );
   });

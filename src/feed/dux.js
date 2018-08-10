@@ -25,6 +25,8 @@ import {
 
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
+import { SET_VIDEO_URL } from '../videoFeed/dux';
+
 import { SET_USER } from '../io/chat/dux';
 
 import {
@@ -82,6 +84,8 @@ type FeedType = {
   isPlaceholderPresent: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
+  isVideoHidden: boolean,
+  url: string,
 };
 
 type ChangeChannelType = {
@@ -238,6 +242,8 @@ const defaultState = {
   isPlaceholderPresent: false,
   isPopUpModalVisible: false,
   isChatFocused: false,
+  isVideoHidden: false,
+  url: '',
 };
 
 // Reducer
@@ -526,6 +532,12 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
+      isVideoHidden: action.focus,
+    };
+  case SET_VIDEO_URL:
+    return {
+      ...state,
+      url: action.url,
     };
   default:
     return state;

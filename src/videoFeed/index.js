@@ -2,13 +2,12 @@
 import { connect } from 'react-redux';
 
 import VideoFeed from './videoFeed';
-import { getChatFocus } from './dux';
 
 const mapStateToProps = state => {
-  const videoFeedState = state.videoFeed;
+  const feedState = state.feed;
   return {
-    isVideoHidden: getChatFocus(videoFeedState),
-    url: videoFeedState.url,
+    isVideoHidden: feedState.isVideoHidden,
+    url: feedState.url,
   };
 };
 
