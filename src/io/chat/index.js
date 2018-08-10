@@ -1,13 +1,16 @@
 // @flow
 /* global Store */
-import getReducer, {  } from './dux';
-import Chat from './chat';
 import ChatEngineCore from 'chat-engine';
+
+import getReducer from './dux';
+
 import {
   receiveMoment,
   addChannel,
   receiveAcceptedPrayerRequest,
 } from '../../feed/dux';
+
+import Chat from './chat';
 
 let _store;
 // $FlowFixMe
@@ -25,5 +28,6 @@ const chat = new Chat(
 
 const reducer = getReducer(chat);
 
-export default reducer;
 export { setStore };
+
+export default reducer;
