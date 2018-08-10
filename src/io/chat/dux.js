@@ -22,10 +22,8 @@ import {
 } from '../../../src/moment/actionableNotification/dux';
 
 import {
-  CHANGE_CHANNEL,
   ADD_CHANNEL,
   INVITE_TO_CHANNEL,
-  REMOVE_CHANNEL,
 } from '../../../src/feed/dux';
 
 // Actions Types
@@ -34,16 +32,6 @@ const SET_CHAT_KEYS = 'SET_CHAT_KEYS';
 const SET_USER = 'SET_USER';
 
 // Flow Type Definitions
-
-type IOChatState = {
-  publishKey: string,
-  subscribeKey: string,
-  user: PrivateUserType,
-  chats: {
-    [string]: string,
-  },
-  currentChannel: string,
-};
 
 type SetChatKeys = {
   type: 'SET_CHAT_KEYS',
@@ -85,26 +73,9 @@ const setUser = (user: PrivateUserType): SetUser => (
   }
 );
 
-const defaultState = {
-  publishKey: '',
-  subscribeKey: '',
-  user: {
-    id: '',
-    name: '',
-    pubnubToken: '',
-    pubnubAccessToken: '',
-    role: {
-      label: '',
-      permissions: [],
-    },
-  },
-  chats: {},
-  currentChannel: 'public',
-};
-
 const getReducer = (chatIO: Chat) => (
   (
-    state: IOChatState = defaultState,
+    state: Object = {},
     action: IOChatActionTypes
   ) => {
     if (!action || !action.type) {
@@ -113,26 +84,13 @@ const getReducer = (chatIO: Chat) => (
     switch (action.type) {
     case SET_CHAT_KEYS:
       chatIO.setKeys(action.publishKey, action.subscribeKey);
-      return {
-        ...state,
-        publishKey: action.publishKey,
-        subscribeKey: action.subscribeKey,
-      };
+      return state;
     case SET_USER:
       chatIO.setUser(action.user);
-      return {
-        ...state,
-        user: action.user,
-      };
+      return state;
     case ADD_CHANNEL:
       chatIO.addChat(action.channel.name, action.channel.id);
-      return {
-        ...state,
-        chats: {
-          ...state.chats,
-          [action.channel.name]: action.channel.id,
-        },
-      };
+      return state;
     case PUBLISH_MOMENT_TO_CHANNEL: {
       // $FlowFixMe
       const { moment, channel } = action;
@@ -143,39 +101,12 @@ const getReducer = (chatIO: Chat) => (
       }
       return state;
     }
-    case CHANGE_CHANNEL:
-      if (!state.chats[action.channel]) {
-        return state;
-      }
-      return {
-        ...state,
-        currentChannel: action.channel,
-      };
     case INVITE_TO_CHANNEL:
       chatIO.inviteToChannel(action.user.pubnubToken, action.channelName);
       return state;
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
       chatIO.publishAcceptedPrayerRequest(action.id, action.channel);
       return state;
-    case REMOVE_CHANNEL: {
-      if (action.channel === 'public' ||
-        action.channel === 'host' || 
-        action.channel === 'request' || 
-        action.channel === 'command'
-      ) {
-        return state;
-      }
-      const stateCopy = { ...state };
-      if (action.channel === state.currentChannel) {
-        if (state.chats.public) {
-          stateCopy.currentChannel = 'public';
-        } else {
-          stateCopy.currentChannel = '';
-        }
-      }
-      delete stateCopy.chats[action.channel];
-      return stateCopy;
-    }
     default:
       return state;
     }
@@ -195,7 +126,6 @@ export {
 export {
   setChatKeys,
   setUser,
-  defaultState,
 };
 
 export default getReducer;

@@ -321,7 +321,10 @@ const reducer = (
     };
   case REMOVE_CHANNEL: {
     if (action.channel === 'public' ||
-      action.channel === 'host') {
+      action.channel === 'host' || 
+      action.channel === 'request' ||
+      action.channel === 'command'
+    ) {
       return state;
     }
     const stateCopy = { ...state };
@@ -563,7 +566,6 @@ const reducer = (
 };
 
 // Selectors
-
 
 const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   {
