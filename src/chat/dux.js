@@ -2,6 +2,7 @@
 import type { FeedType } from '../feed/dux';
 
 // Action Types
+
 const TOGGLE_CHAT_FOCUS = 'TOGGLE_CHAT_FOCUS';
 
 // Flow Type Definitions
@@ -43,6 +44,7 @@ const getPlaceholder = (state: FeedType) => {
 };
 
 // Exports
+
 export {
   TOGGLE_CHAT_FOCUS,
 };

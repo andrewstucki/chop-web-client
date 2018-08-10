@@ -28,11 +28,12 @@ import {
   REMOVE_CHANNEL,
 } from '../../../src/feed/dux';
 
-// Actions
+// Actions Types
+
 const SET_CHAT_KEYS = 'SET_CHAT_KEYS';
 const SET_USER = 'SET_USER';
 
-// Flow Types
+// Flow Type Definitions
 
 type IOChatState = {
   publishKey: string,
@@ -180,6 +181,7 @@ const getReducer = (chatIO: Chat) => (
     }
   }
 );
+
 // Exports
 
 export type {

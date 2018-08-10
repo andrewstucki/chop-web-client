@@ -1,12 +1,14 @@
 // @flow
 import { createUid } from '../../util';
 
-// Type Definitions
+// Action Types
 
 const ANCHOR_MOMENT = 'ANCHOR_MOMENT';
 const SALVATION = 'SALVATION';
 const SET_ANCHOR_MOMENT = 'SET_ANCHOR_MOMENT';
 const RELEASE_ANCHOR_MOMENT = 'RELEASE_ANCHOR_MOMENT';
+
+// Flow Type Definitions
 
 type PublishSalvationType = {
   type: 'SET_ANCHOR_MOMENT',
