@@ -5,17 +5,19 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import Chop from './chop';
 import reducer from './chop/dux';
-import thunk from 'redux-thunk';
+import actorMiddleware from './middleware/actor-middleware';
 import {setStore} from './io/chat';
 import {setUser} from './io/chat/dux';
 import { publishSalvation } from './placeholder/anchorMoment/dux';
 import { addChannel } from './feed/dux';
 
+const actorMiddlewareApplied = actorMiddleware();
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducer,
   composeEnhancers(
-    applyMiddleware(thunk)
+    applyMiddleware(actorMiddlewareApplied)
   )
 );
 

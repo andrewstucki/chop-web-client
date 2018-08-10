@@ -54,7 +54,6 @@
     "eslint-plugin-react": "^7.7.0",
     "flow-bin": "^0.69.0",
     "flow-typed": "^2.4.0",
-    "graphql.js": "^0.4.20",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
@@ -76,12 +75,12 @@
   "dependencies": {
     "bezier-easing": "^2.1.0",
     "chat-engine": "^0.9.5",
+    "graphql.js": "^0.4.20",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-redux": "^5.0.7",
     "react-touch-events": "^2.1.0",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0",
     "reset-css": "^3.0.0"
   }
 }
