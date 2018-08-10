@@ -4,7 +4,7 @@
 
 The CWC is a single page client application that runs in the browser.
 It is built with many technologies but primarily based on Redux and
-React. The follow resources should help you if you're not familiar with
+React. The following resources should help you if you're not familiar with
 any of the technologies we use.
 
 JavaScript -- The language
@@ -75,14 +75,14 @@ All our source code is in the src file. This has one index.jsx file
 which is the entry point into the application. There is a components
 folder and then a folder for every control.
 
-Components are simple UI modules that have no internal state or reducer. These normally just have one JSX file and a CSS file. And example would be a button.
+Components are simple UI modules that have no internal state or reducer. These normally just have one JSX file and a CSS file. An example would be a button.
 
-Controls are more complex modules that require both state and a reducer. Controls are sometimes called container components. The will have four main files
+Controls are more complex modules that require access to state and often have type definitions defined in a separate file. Controls are sometimes called container components. They will have four main files
 
 - CSS for styles
 - a JSX file that renders that UI
-- a dux.js file that holds all the logic; reducer, default state, selectors, action creators, action types.
-- index.jsx which is the outward facing interface for the control and binds together the UI (*.jsx) and logic (dux.js)
+- a dux.js file that holds selectors, action creators, flow type definitions, and action types.
+- index.js which is the outward facing interface for the control and binds together the UI (*.jsx) and logic (dux.js)
 
 Learn about the dux (or ducks) pattern
 https://github.com/erikras/ducks-modular-redux
@@ -92,7 +92,6 @@ We layout our DUX files in this order:
 - action types
 - flow types
 - action creators
-- reducer
 - selectors
 - exports
 
@@ -110,25 +109,13 @@ The final code after transpiling and bundling is copied into the dist folder. Th
 
 CWC is built out of controls that are independent of each other. They in theory could each live in a separate repo and be pulled in as a dependency and may move that way in the future if needed.
 
-These controls each have their over state, reducer and communicate with each other over messages (redux actions). Even though Redux has a single store each control uses a sub branch of the store for itself. They don't depend on anything another controls store. So if both controls Feed and Chat need the value of 'chatInput' and it is set with the action 'CHAT_INPUT' both Feed and Chat will have a reducer that will respond to 'CHAT_INPUT' and store the value it their own branch of the store.
+These controls each have access to the state (also called store in some cases) and communicate with each other over messages (redux actions). Even though Redux has a single store, each control can utilize it's own part of state if the need arises, but currently we have one reducer that holds all of our state.
 
-Some controls dispatch actions and don't respond to them. They are letting everyone else know that this happened. Some listen to an action that they don't dispatch. Some both respond and dispatch an action. Some actions are shared and some are only used by one controls. The action is defined in the control that dispatches it, not the ones that listen to it.
+We currently separate most action creators according to the module that they are updating. For example we have a "chat" module that has a toggleChatFocus action creator that updates a boolean when the chat component is focused or blurred. The action creator is defined in the chat dux.js file, but we listen for the the TOGGLE_CHAT_FOCUS type in the reducer and update state accordingly.
 
-Each control saves the data in the state in a format that best servers that control. So just because two controls respond to the same action doesn't mean their state is similar. For example both Feed and NavBar respond to ADD_CHANNEL and CHANGE_CHANNEL. But Feed stores the state like this:
+The action types and flow type definitions are usually defined in the same file as the action creator that they are defining. Sometimes we also need to define what a piece of state looks like as well and those definitions live in the reducer dux file (currently inside src/feed/dux.js).
 
-```javascript
-channels: {
-  [string]: Array<MessageType>,
-},
-currentChannel: string,
-```
-
-And NavBar stores it like this:
-
-```javascript
-channels: Array<string>,
-currentChannel: string,
-```
+Not all action creators are stored like this. Some are stored in the same dux file as the reducer itself. As CWC grows we learn new and better ways to organize where we store state, action creators, type definitions, etc. This is a pattern that we're still defining and could change in the near future.
 
 ## Layers
 
@@ -149,7 +136,7 @@ The IO layer is where any network or other external related calls are made. With
 The Feed and Moments are one of the core features of CWC. The Feed is an area that can display a list of Moments in order. Moments are any small piece of UI that can go into the Feed. That sounds a little abstract so here are some examples:
 
 - A Chat Message is a Moment and if the only thing in the Feed is Chat Messages then you may start to think of the Feed as the message display of the Chat.
-- Notifications an be Moments when displayed inline in the Feed.
+- Notifications can be Moments when displayed inline in the Feed.
 - Invitations to Give, for Prayer, to Raise your hand signaling you would like to receive Christ as your savior, all can be types of Moments.
 
 Think of the Feed as a scrolling, ordered list of bits of information and Moments are those bits of information.
@@ -158,10 +145,9 @@ A Moment has one property `data`. The `data` prop has the required parameter `ty
 
 To build a new Moment type:
 
-- Create a new sub-director here: https://in.thewardro.be/io/opennetwork/chop-web-client/tree/master/src/moment. Name it after your new moment type. This is where you'll put all the files related to it.
+- Create a new sub-directory here: https://in.thewardro.be/io/opennetwork/chop-web-client/tree/master/src/moment. Name it after your new moment type. This is where you'll put all the files related to it.
 - Moments types will often have a dux and index file along with the JSX file. But they don't need a reducer unless there is some state you want to track that applies to all Moments of that type.
 - Add your new type here: https://in.thewardro.be/io/opennetwork/chop-web-client/blob/master/src/moment/moment.jsx updating the switch statement to render it correctly.
-- If you have a reducer you'll need to add it in the moment/dux file.
 - Expose any selectors and the main component in moment/index
 
 Don't forget to write all the necessary tests and add to the moment story.
@@ -169,4 +155,4 @@ Don't forget to write all the necessary tests and add to the moment story.
 You'll also need to make a new action creator. You can use the action types:
 
 - PUBLISH_MOMENT_TO_CHANNEL - to add a moment to a channel and publish it across the WebSocket
-- RECEIVE_MESSAGE - when you receive a moment over the WebSocket and need to act on it
+- RECEIVE_MOMENT - when you receive a moment over the WebSocket and need to act on it

@@ -40,6 +40,7 @@ import {
 } from '../placeholder/anchorMoment/dux';
 
 // Action Types
+
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const RECEIVE_MOMENT = 'RECEIVE_MOMENT';
 const ADD_CHANNEL = 'ADD_CHANNEL';

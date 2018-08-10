@@ -6,9 +6,11 @@ import type { ActionableNotificationType } from './actionableNotification/dux';
 import type { TextType } from './text/dux';
 import type { AvatarMomentType } from './avatarMoment/dux';
 
-// Type Declarations
+// Action Types
 
 const PUBLISH_MOMENT_TO_CHANNEL = 'PUBLISH_MOMENT_TO_CHANNEL';
+
+// Flow Type Definitions
 
 type PublishMomentToChannelType = {
   type: 'PUBLISH_MOMENT_TO_CHANNEL',

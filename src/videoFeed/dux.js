@@ -1,8 +1,10 @@
 // @flow
 
-// Type Definitions
+// Action Types
 
 const SET_VIDEO_URL = 'SET_VIDEO_URL';
+
+// Type Definitions
 
 type SetVideoUrlType = {
   type: 'SET_VIDEO_URL',

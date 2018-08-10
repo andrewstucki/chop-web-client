@@ -1,13 +1,16 @@
 // @flow
+import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import { createUid } from '../../util';
 
-// Type Definitions
+// Action Types
 
 const NOTIFICATION = 'NOTIFICATION';
 const LEFT_CHAT = 'LEFT_CHAT';
 const JOINED_CHAT = 'JOINED_CHAT';
 const PRAYER = 'PRAYER';
+
+// Flow Type Definitions
 
 type NotificationType =
   | PrayerNotificationType
@@ -52,7 +55,10 @@ const formatAMPM = (date: Date) => {
   return strTime;
 };
 
-const publishPrayerNotification = (host: string, guest: string) => (
+const publishPrayerNotification = (
+  host: string,
+  guest: string
+): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel: 'host',
@@ -67,7 +73,10 @@ const publishPrayerNotification = (host: string, guest: string) => (
   }
 );
 
-const publishLeftChatNotification = (name: string, channel: string) => (
+const publishLeftChatNotification = (
+  name: string,
+  channel: string
+): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
@@ -81,7 +90,10 @@ const publishLeftChatNotification = (name: string, channel: string) => (
   }
 );
 
-const publishJoinedChatNotification = (name: string, channel: string) => (
+const publishJoinedChatNotification = (
+  name: string,
+  channel: string
+): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
