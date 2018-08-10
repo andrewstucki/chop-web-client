@@ -11,16 +11,6 @@ A Progressive Web App for experiencing church online.
 
 NOTE: We use yarn because of the added security benefits as well as other features. Because yarn using yarn.lock and npm using package.lock we need to be consistent about using the same package tool within a project.
 
-If you are going to deploy production releases you will also need these to install the following. You will need to have permissions to our GKE project as well.
-
-- docker : https://www.docker.com/community-edition#/download
-- gcloud : https://cloud.google.com/sdk/install
-- kubectl : run `gcloud components install kubectl`
-- setup gcloud :
-  - `gcloud config set project open-network-194320`
-  - `gcloud container clusters get-credentials chop-web-client`
-  - `gcloud auth configure-docker`
-
 ### Installing
 
 In order to ensure that you have the correct version of node installed use nvm to match our .nvmrc file. Our tests will not work with the latest version of node. We use the Node LTS (Long Term Support which is 8.11.2 as of the time of this writing) version. From withing the project directory run:
@@ -145,43 +135,19 @@ To start the production server run
 yarn server
 ```
 
+## Merge Requests
+
+You should always work in your own branch. We follow the convention of naming our branches `<initials>/<feature-name>`. So a branch where I'm (Kenny Heaton) developing a feature to add login might be called `kh/add-login`. You can also add the JIRA ticket `kh/add-login_CHOP-1234`.
+
+Once your ready run `yarn validate` and make sure everything passes. Push your branch to our repository on GitLab (git@in.thewardro.be:io/opennetwork/chop-web-client.git) and open a merge request.
+
+An approved merger will review your changes and either leave feedback or mark as approved for merging. Once approved you should mere your own change and insure the the CI/CD pipeline passes (https://in.thewardro.be/io/opennetwork/chop-web-client/pipelines) and your changes are deployed correctly and everything works in production.
+
+You can validate production at this URL: https://cwc-chopapi.global.ssl.fastly.net/
+
 ## Deployment
 
-Before deploying you will need permissions to our GKE project and to install the deployment prerequisites.
-
-Update the version in the project.json and config/deployment.yaml files as well as set the git tag.
-
-You can update the package.json and the git tag together.
-
-```
-yarn version --minor
-```
-
-NOTE: Until we reach MVP we are leaving the major version 0 and just updating the minor version. We are doing this because almost ever release has breaking changes. Once we reach MVP we will be at 1.0.0 and will follow strict semantic versioning form that point on.
-
-You will have to manually update the tag on config/deployment.yaml on this line to match the new version.
-
-```
-image: gcr.io/open-network-194320/chop-web-client:0.13.0
-```
-
-Build your docker container replacing <version> with the correct version:
-
-```
-docker build -f config/Dockerfile -t gcr.io/open-network-194320/chop-web-client:<version> .
-```
-
-Push the container to Google's Container Registry
-
-```
-docker push gcr.io/open-network-194320/chop-web-client:<version>
-```
-
-Deploy the  new container to GKE
-
-```
-kubectl apply -f config/deployment.yaml
-```
+Changes merged into master are automatically merged and deployed by our CI/CD pipeline. This is done with GitLab CI/CD.
 
 ## Contributing
 
