@@ -1,5 +1,6 @@
 // @flow
 import graphqlJs from 'graphql.js';
+import { SET_INIT_DATA, GET_INIT_DATA } from '../../feed/dux';
 
 class GraphQlActor {
   storeDispatch: (action: any) => void
@@ -55,7 +56,7 @@ class GraphQlActor {
     this.getAll()
       .then(data => {
         this.storeDispatch({
-          type: 'SET_INIT_DATA',
+          type: SET_INIT_DATA,
           data: data.data,
         });
       });
@@ -66,7 +67,7 @@ class GraphQlActor {
       return;
     }
     switch (action.type) {
-    case 'GET_INIT_DATA':
+    case GET_INIT_DATA:
       this.getInitialData();
       return;
     default:

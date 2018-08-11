@@ -52,7 +52,7 @@ describe('Chat', () => {
         currentUser: {
           id: '12345',
           pubnubToken: '12345',
-          pubnubAccessToken: '12345',
+          pubnubAccessKey: '12345',
           name: 'Bobby G.',
           role: {
             label: '',

@@ -109,7 +109,7 @@ store.dispatch(setUser(
     id: new Date().getTime().toString(),
     name: characterName,
     pubnubToken: new Date().getTime().toString(),
-    pubnubAccessToken: '',
+    pubnubAccessKey: '',
     role: {
       label: 'HOST',
       permissions: [],

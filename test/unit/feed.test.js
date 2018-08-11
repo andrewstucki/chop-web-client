@@ -13,6 +13,7 @@ import reducer, {
   getOtherUser,
   togglePopUpModal,
   leaveChat,
+  setInitData,
 } from '../../src/feed/dux';
 
 import {
@@ -54,7 +55,7 @@ const otherUser = {
 const currentUser = {
   id: '12345',
   pubnubToken: '09876',
-  pubnubAccessToken: '67890',
+  pubnubAccessKey: '67890',
   name: 'Joan Jet',
   role: {
     label: '',
@@ -1732,7 +1733,116 @@ describe('VideoFeed tests', () => {
       {
         ...defaultState,
         isVideoHidden: false,
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        video: {
+          ...defaultState.video,
+          url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        },
+      }
+    );
+  });
+});
+
+describe('Initial State', () => {
+  test('Set Initial State', () => {
+    expect(reducer(
+      defaultState,
+      setInitData(
+        {
+          event: {
+            startTime: 1531864800,
+            id: 334494,
+            timezone: 'America/Chicago',
+            title: 'Fake Event',
+          },
+          video: {
+            type: 'StandardEmbed',
+            url: 'https://www.youtube.com/embed/bz2kN31m_S0',
+          },
+          channels: [
+            {
+              id: '123456',
+              name: 'public',
+              users: null,
+              moments: [],
+            },
+            {
+              id: '123456',
+              name: 'host',
+              users: null,
+              moments: [],
+            },
+          ],
+          user: {
+            avatar: null,
+            id: '123456',
+            name: 'Pebbles FlintStone',
+            pubnubAccessKey: '123456',
+            pubnubToken: '1533956431068',
+            role: {
+              label: 'HOST',
+              permissions: [
+                'all-the-things',
+              ],
+            },
+          },
+          pubnubKeys: {
+            publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+            subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+          },
+          organization: {
+            id: 2,
+            name: 'Life.Church',
+          },
+        }
+      )
+    )).toEqual(
+      {
+        ...defaultState,
+        event: {
+          startTime: 1531864800,
+          id: 334494,
+          timezone: 'America/Chicago',
+          title: 'Fake Event',
+        },
+        video: {
+          type: 'StandardEmbed',
+          url: 'https://www.youtube.com/embed/bz2kN31m_S0',
+        },
+        channels: {
+          public: {
+            id: '123456',
+            name: 'public',
+            users: null,
+            moments: [],
+          },
+          host: {
+            id: '123456',
+            name: 'host',
+            users: null,
+            moments: [],
+          },
+        },
+        currentUser: {
+          avatar: null,
+          id: '123456',
+          name: 'Pebbles FlintStone',
+          pubnubAccessKey: '123456',
+          pubnubToken: '1533956431068',
+          role: {
+            label: 'HOST',
+            permissions: [
+              'all-the-things',
+            ],
+          },
+        },
+        pubnubKeys: {
+          publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+          subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+        },
+        organization: {
+          id: 2,
+          name: 'Life.Church',
+        },
       }
     );
   });
