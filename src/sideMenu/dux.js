@@ -1,11 +1,12 @@
 // @flow
 
-// Actions
+// Action Types
+
 const CLOSE_SIDE_MENU = 'CLOSE_SIDE_MENU';
 const OPEN_SIDE_MENU = 'OPEN_SIDE_MENU';
 const LOGOUT = 'LOGOUT';
 
-// Type Definitions
+// Flow Type Definitions
 
 type CloseMenuType = {
   type: 'CLOSE_SIDE_MENU',
@@ -20,6 +21,7 @@ type LogoutType = {
 };
 
 // Action Creators
+
 const closeMenu = (): CloseMenuType => (
   {
     type: CLOSE_SIDE_MENU,
@@ -39,16 +41,19 @@ const logout = (): LogoutType => (
 );
 
 // Exports
+
 export {
   OPEN_SIDE_MENU,
   CLOSE_SIDE_MENU,
   LOGOUT,
 };
+
 export type {
   OpenMenuType,
   CloseMenuType,
   LogoutType,
 };
+
 export {
   closeMenu,
   openMenu,

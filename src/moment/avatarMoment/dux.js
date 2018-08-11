@@ -3,9 +3,11 @@ import type { SharedUserType } from '../../feed/dux';
 import { createUid } from '../../util';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 
-// Type Definitions
+// Action Types
 
 const AVATAR_MOMENT = 'AVATAR_MOMENT';
+
+// Flow Type Definitions
 
 type AvatarMomentType = {
   type: 'AVATAR_MOMENT',
@@ -35,6 +37,8 @@ const publishAvatarMoment = (user: SharedUserType, channel: string) => (
     },
   }
 );
+
+// Exports
 
 export {
   AVATAR_MOMENT,

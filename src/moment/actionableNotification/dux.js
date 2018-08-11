@@ -5,11 +5,13 @@ import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import { formatAMPM } from '../notification/dux';
 import { createUid } from '../../util';
 
-// Type Definitions
+// Action Types
 
 const ACTIONABLE_NOTIFICATION = 'ACTIONABLE_NOTIFICATION';
 const PRAYER_REQUEST = 'PRAYER_REQUEST';
 const PUBLISH_ACCEPTED_PRAYER_REQUEST = 'PUBLISH_ACCEPTED_PRAYER_REQUEST';
+
+// Flow Type Definitions
 
 type ActionableNotificationType =
   | PrayerRequestNotificationType;
