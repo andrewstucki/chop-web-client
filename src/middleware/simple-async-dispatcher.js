@@ -34,6 +34,11 @@ const actorMiddleware = (...actorClasses) => ({ dispatch }) => next => {
 //   "eventStartTime": event.startTime
 // }
 
+const sequences = {
+  INIT: 'GET_APP_DATA',
+  GET_APP_DATA_SUCCESS: 'CHAT_CONNECT',
+};
+
 class InitSequenceActor {
   constructor (dispatch) {
     this.dispatch = dispatch;
@@ -41,31 +46,12 @@ class InitSequenceActor {
   }
 
   dispatch (action) {
-    switch (action.type) {
-    case 'INIT':
+    if (sequences[action.type]) {
       this.dispatch(
         {
-          type: 'APP_DATA_REQUEST',
+          type: sequences[action.type],
         }
       );
-      break;
-    case 'APP_DATA_RECEIVED':
-      this.serverData = action.data;
-      Translator.config(action);
-      this.dispatch(
-        {
-          type: 'CHAT_CONNECT',
-        }
-      );
-      break;
-    case 'CHAT_CONNECTION_SUCCESS':
-      this.dispatch(
-        {
-          type: 'SET_APP_STATE',
-          data: this.data,
-        }
-      );
-      break;
     }
   }
 }

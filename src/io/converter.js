@@ -38,7 +38,7 @@ const Converter = {
       organizationId: _getState().organization.id,
       organizationName: _getState().organization.name,
       roomType: roomType,
-      channelToken: _getState().channels[channelName].token,
+      channelToken: _getState().channels[channelName].id,
       eventStartTime: _getState().event.startTime,
     };
   },
