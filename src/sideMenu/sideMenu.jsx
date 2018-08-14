@@ -21,6 +21,7 @@ type SideMenuType = {
     active: boolean
   ) => void,
   currentUser: SharedUserType,
+  hostChannel: string,
 };
 
 const SideMenu = (
@@ -31,6 +32,7 @@ const SideMenu = (
     onSwipe,
     publishPrayerRequestNotification,
     currentUser,
+    hostChannel,
   }: SideMenuType
 ) => (
   <SideMenuComponent
@@ -51,7 +53,7 @@ const SideMenu = (
       }
       onClick={
         () => {
-          publishPrayerRequestNotification(currentUser, true);
+          publishPrayerRequestNotification(currentUser, hostChannel);
         }
       }
     >

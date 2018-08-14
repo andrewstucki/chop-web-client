@@ -35,12 +35,17 @@ class Chat {
     this.onMessage = this.onMessage.bind(this);
     // $FlowFixMe
     this.publish = this.publish.bind(this);
+    // $FlowFixMe
+    this.init = this.init.bind(this);
     
     this.storeDispatch = dispatch;
     this.getState = getState;
-    const state = getState();
+  }
 
-    Converter.config(getState);
+  init () {
+    const state = this.getState();
+
+    Converter.config(this.getState);
 
     this.pubnub = new Pubnub(
       {
@@ -78,30 +83,38 @@ class Chat {
   }
 
   onMessage (event: PubnubMessageEventType) {
-    switch (event.message.type) {
-    case 'MESSAGE':
+    if (event.message.action === 'newMessage' &&
+      event.message.data.fromToken !== this.getState().currentUser.pubnubToken) {
       this.storeDispatch(
         {
           type: 'RECEIVE_MOMENT',
-          moment: event.message,
+          channel: event.channel,
+          moment: Converter.legacyToCwc(event.message.data),
         }
       );
     }
   }
 
-  publish (moment: MomentType, channelName: string) {
+  publish (moment: MomentType, channel: any) {
     this.pubnub.publish(
       {
-        channel: channelName,
-        message: Converter.cwcToLegacy(moment, channelName),
+        channel: channel.id,
+        message: {
+          action: 'newMessage',
+          channel: channel.id,
+          data: Converter.cwcToLegacy(moment, channel.id),
+        }
       }
     );
   }
 
   dispatch (action: any) {
     switch (action.type) {
-    case 'PUBLISH_MOMENT':
-      this.publish(action.moment, action.channel);
+    case 'PUBLISH_MOMENT_TO_CHANNEL':
+      this.publish(action.moment, this.getState().channels[action.channel]);
+      return;
+    case 'CHAT_CONNECT':
+      this.init();
       return;
     }
   }

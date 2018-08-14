@@ -35,6 +35,10 @@ class GraphQlActor {
             permissions
           }
         }
+        currentOrganization {
+          id
+          name
+        }
         currentFeeds {
           id
           name
@@ -55,30 +59,40 @@ class GraphQlActor {
   getInitialData () {
     this.getAll()
       .then(payload => {
+        const channels = {};
+        payload.currentFeeds.forEach(channel => {
+          channels[channel.id] = {
+            id: channel.id,
+            name: channel.name,
+            moments: [],
+          };
+        });
         this.storeDispatch(
           setInitData(
             {
               event: {
-                startTime: payload.data.currentEvent.eventStartTime,
-                id: payload.data.currentEvent.eventTimeId,
-                timezone: payload.data.currentEvent.eventTimezone,
-                title: payload.data.currentEvent.title,
+                startTime: payload.currentEvent.eventStartTime,
+                id: payload.currentEvent.eventTimeId,
+                timezone: payload.currentEvent.eventTimezone,
+                title: payload.currentEvent.title,
               },
-              video: payload.data.currentEvent.video,
-              organization: payload.data.currentOrganization,
-              channels: payload.data.currentFeeds,
+              video: payload.currentEvent.video,
+              organization: payload.currentOrganization,
+              channels,
               user: {
-                id: payload.data.currentProfile.id,
-                name: payload.data.currentProfile.nickname,
-                avatar: payload.data.currentProfile.avatar,
-                pubnubAccessKey: payload.data.currentProfile.pubnub_access_key,
-                pubnubToken: payload.data.currentProfile.pubnub_token,
-                role: payload.data.currentProfile.role,
+                id: payload.currentProfile.id,
+                name: payload.currentProfile.nickname,
+                avatar: payload.currentProfile.avatar,
+                pubnubAccessKey: payload.currentProfile.pubnub_access_key,
+                pubnubToken: payload.currentProfile.pubnub_token,
+                role: payload.currentProfile.role,
               },
               pubnubKeys: {
-                publish: payload.data.pubnubKeys.publish_key,
-                subscribe: payload.data.pubnubKeys.subscribe_key,
+                publish: payload.pubnubKeys.publish_key,
+                subscribe: payload.pubnubKeys.subscribe_key,
               },
+              currentChannel: payload.currentFeeds
+                .find(channel => channel.name === 'public').id,
             }
           )
         );

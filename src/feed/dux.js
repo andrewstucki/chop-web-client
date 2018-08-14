@@ -211,6 +211,7 @@ const setInitData = (
     user,
     channels,
     pubnubKeys,
+    currentChannel,
   }:
   {
     event: EventType,
@@ -219,6 +220,7 @@ const setInitData = (
     user: PrivateUserType,
     channels: ChannelListType,
     pubnubKeys: PubnubKeysType,
+    currentChannel: string,
   }
 ): SetInitData => (
   {
@@ -229,6 +231,7 @@ const setInitData = (
     channels,
     user,
     pubnubKeys,
+    currentChannel,
   }
 );
 
@@ -360,19 +363,17 @@ const reducer = (
   }
   switch (action.type) {
   case SET_INIT_DATA: {
-    const newState = {
+    return {
       ...state,
       event: action.event,
       organization: action.organization,
       video: action.video,
       currentUser: action.user,
       pubnubKeys: action.pubnubKeys,
-      channels: {},
+      channels: action.channels,
+      currentChannel: action.currentChannel,
+
     };
-    action.channels.forEach(channel => {
-      newState.channels[channel.name] = channel;
-    });
-    return newState;
   }
   case CHANGE_CHANNEL:
     if (!state.channels[action.channel]) {

@@ -16,6 +16,8 @@ const mapStateToProps = state => {
   return {
     isClosed: feedState.isSideMenuClosed,
     currentUser: getCurrentUserAsSharedUser(feedState),
+    hostChannel: Object.keys(feedState.channels)
+      .find(channelId => feedState.channels[channelId].name === 'host'),
   };
 };
 
@@ -26,8 +28,8 @@ const mapDispatchToProps = dispatch => (
     onSwipe: direction => {
       if (direction === 'left') return dispatch(closeMenu());
     },
-    publishPrayerRequestNotification: user => dispatch(
-      publishPrayerRequestNotification(user)
+    publishPrayerRequestNotification: (user, channel) => dispatch(
+      publishPrayerRequestNotification(user, channel)
     ),
   }
 );

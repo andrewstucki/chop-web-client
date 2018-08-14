@@ -52,6 +52,12 @@ describe('Chat2 Tests', () => {
 
     const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars 
 
+    chat.dispatch(
+      {
+        type: 'CHAT_CONNECT',
+      }
+    );
+
     expect(Converter.config).toHaveBeenCalledTimes(1);
     expect(Converter.config).toHaveBeenCalledWith(getState);
 
@@ -85,6 +91,12 @@ describe('Chat2 Tests', () => {
     getState.mockReturnValue(store);
 
     const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars 
+
+    chat.dispatch(
+      {
+        type: 'CHAT_CONNECT',
+      }
+    );
 
     __subscribeEvent(
       {
@@ -130,6 +142,12 @@ describe('Chat2 Tests', () => {
 
     chat.dispatch(
       {
+        type: 'CHAT_CONNECT',
+      }
+    );
+
+    chat.dispatch(
+      {
         type: 'PUBLISH_MOMENT',
         moment: message,
         channel: 'public',
@@ -169,6 +187,12 @@ describe('Chat2 Tests', () => {
 
     const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars 
 
+    chat.dispatch(
+      {
+        type: 'CHAT_CONNECT',
+      }
+    );
+    
     __messageEvent(
       {
         channel: 'public',

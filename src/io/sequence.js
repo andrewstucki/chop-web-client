@@ -1,10 +1,22 @@
+// @flow
+import { GET_INIT_DATA } from '../feed/dux';
 const sequence = {
-  INIT: 'GET_APP_DATA',
-  GET_APP_DATA_SUCCESS: 'CHAT_CONNECT',
+  INIT: GET_INIT_DATA,
+  SET_INIT_DATA: 'CHAT_CONNECT',
 };
 
+type ActionType = {
+  type: string,
+}
+
+type dispatch = (action: ActionType) => any;
+type getState = () => any;
+
 class SequenceActor {
-  constructor (dispatch, getState) {
+  storeDispatch: dispatch
+  getState: getState
+
+  constructor (dispatch: dispatch, getState: getState) {
     this.storeDispatch = dispatch;
     this.getState = getState;
   }
