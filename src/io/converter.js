@@ -13,7 +13,7 @@ const Converter = {
     const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();
     const month = monthIndex => twoDigitNumber(monthIndex + 1);
     const timestamp = `${time.getUTCFullYear()}-${month(time.getUTCMonth())}-${twoDigitNumber(time.getUTCDate())} ${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()} +0000`;
-    let roomType = 'public';
+    const roomType = 'public';
 
     return {
       messageText: message.text,

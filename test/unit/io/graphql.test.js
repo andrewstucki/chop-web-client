@@ -30,32 +30,28 @@ describe('Test GraphQL', () => {
           type: 'StandardEmbed',
           url: 'https://www.youtube.com/embed/bz2kN31m_S0',
         },
-        channels: [
-          {
-            direct: false,
+        channels: {
+          '123456': {
             id: '123456',
             name: 'public',
-            users: null,
+            moments: [],
           },
-          {
-            direct: false,
-            id: '123456',
+          '123456a': {
+            id: '123456a',
             name: 'host',
-            users: null,
+            moments: [],
           },
-          {
-            direct: false,
-            id: '123456',
+          '123456b': {
+            id: '123456b',
             name: 'request',
-            users: null,
+            moments: [],
           },
-          {
-            direct: false,
-            id: '123456',
+          '123456c': {
+            id: '123456c',
             name: 'command',
-            users: null,
+            moments: [],
           },
-        ],
+        },
         organization: {
           id: 2,
           name: 'Life.Church',
@@ -77,6 +73,7 @@ describe('Test GraphQL', () => {
           publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
           subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
         },
+        currentChannel: '123456',
       },
     );
   });

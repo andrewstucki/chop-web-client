@@ -103,7 +103,7 @@ class Chat {
           action: 'newMessage',
           channel: channel.id,
           data: Converter.cwcToLegacy(moment, channel.id),
-        }
+        },
       }
     );
   }

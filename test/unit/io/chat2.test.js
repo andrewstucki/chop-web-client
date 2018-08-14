@@ -148,7 +148,7 @@ describe('Chat2 Tests', () => {
 
     chat.dispatch(
       {
-        type: 'PUBLISH_MOMENT',
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
         moment: message,
         channel: 'public',
       }
@@ -156,11 +156,15 @@ describe('Chat2 Tests', () => {
 
     expect(mockPublish).toHaveBeenCalledTimes(1);
     expect(Converter.cwcToLegacy).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcToLegacy).toHaveBeenCalledWith(message, 'public');
-    expect(mockPublish).toHaveBeenCalledWith(
+    expect(Converter.cwcToLegacy).toHaveBeenCalledWith(message, '123456');
+    expect(mockPublish.mock.calls[0][0]).toEqual(
       {
-        channel: 'public',
-        message: message,
+        channel: '123456',
+        message: {
+          action: 'newMessage',
+          channel: '123456',
+          data: message,
+        },
       }
     );
   });
@@ -196,7 +200,11 @@ describe('Chat2 Tests', () => {
     __messageEvent(
       {
         channel: 'public',
-        message: message,
+        message: {
+          action: 'newMessage',
+          channel: 'public',
+          data: message,
+        },
         publisher: '123456',
         subscription: null,
         timetoken: '14966804541029440',
@@ -204,9 +212,10 @@ describe('Chat2 Tests', () => {
     );
 
     expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toHaveBeenLastCalledWith(
+    expect(dispatch.mock.calls[0][0]).toEqual(
       {
         type: 'RECEIVE_MOMENT',
+        channel: 'public',
         moment: message,
       }
     );

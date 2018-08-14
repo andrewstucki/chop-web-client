@@ -86,8 +86,9 @@ type SetInitData = {
   video: VideoType,
   organization: OrganizationType,
   user: PrivateUserType,
-  channels: ChannelListType,
+  channels: ChannelCollectionType,
   pubnubKeys: PubnubKeysType,
+  currentChannel: string,
 };
 
 type PrivateUserType = {
@@ -116,7 +117,7 @@ type ChannelType = {
   participants?: Array<SharedUserType>,
 };
 
-type ChannelListType = Array<ChannelType>;
+type ChannelCollectionType = { [string]: ChannelType };
 
 type FeedType = {
   pubnubKeys: PubnubKeysType,
@@ -218,7 +219,7 @@ const setInitData = (
     video: VideoType,
     organization: OrganizationType,
     user: PrivateUserType,
-    channels: ChannelListType,
+    channels: ChannelCollectionType,
     pubnubKeys: PubnubKeysType,
     currentChannel: string,
   }

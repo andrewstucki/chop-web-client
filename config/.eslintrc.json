@@ -130,7 +130,8 @@
         ],
         "quote-props": [
             "error",
-            "consistent-as-needed"
+            "as-needed",
+            { "numbers": true }
         ],
         "react/prop-types": [
             0

@@ -1758,20 +1758,20 @@ describe('Initial State', () => {
             type: 'StandardEmbed',
             url: 'https://www.youtube.com/embed/bz2kN31m_S0',
           },
-          channels: [
-            {
+          channels: {
+            '123456': {
               id: '123456',
               name: 'public',
               users: null,
               moments: [],
             },
-            {
-              id: '123456',
+            '654321': {
+              id: '654321',
               name: 'host',
               users: null,
               moments: [],
             },
-          ],
+          },
           user: {
             avatar: null,
             id: '123456',
@@ -1793,6 +1793,7 @@ describe('Initial State', () => {
             id: 2,
             name: 'Life.Church',
           },
+          currentChannel: '123456',
         }
       )
     )).toEqual(
@@ -1809,14 +1810,14 @@ describe('Initial State', () => {
           url: 'https://www.youtube.com/embed/bz2kN31m_S0',
         },
         channels: {
-          public: {
+          '123456': {
             id: '123456',
             name: 'public',
             users: null,
             moments: [],
           },
-          host: {
-            id: '123456',
+          '654321': {
+            id: '654321',
             name: 'host',
             users: null,
             moments: [],
@@ -1843,6 +1844,7 @@ describe('Initial State', () => {
           id: 2,
           name: 'Life.Church',
         },
+        currentChannel: '123456',
       }
     );
   });

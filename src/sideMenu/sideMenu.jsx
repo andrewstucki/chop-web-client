@@ -18,7 +18,7 @@ type SideMenuType = {
   onSwipe?: (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
   publishPrayerRequestNotification: (
     user: SharedUserType,
-    active: boolean
+    channel: string
   ) => void,
   currentUser: SharedUserType,
   hostChannel: string,

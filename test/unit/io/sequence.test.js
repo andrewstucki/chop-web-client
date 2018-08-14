@@ -15,7 +15,7 @@ describe('Sequence Actor Test', () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith(
       {
-        type: 'GET_APP_DATA',
+        type: 'GET_INIT_DATA',
       }
     );
   });
@@ -27,7 +27,7 @@ describe('Sequence Actor Test', () => {
 
     seq.dispatch(
       {
-        type: 'GET_APP_DATA_SUCCESS',
+        type: 'SET_INIT_DATA',
       }
     );
 
