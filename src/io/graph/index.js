@@ -11,7 +11,7 @@ class GraphQlActor {
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
     this.getStore = getStore;
-    this.graph = graphqlJs('http://localhost:3000/graphql');
+    this.graph = graphqlJs('https://chopapi.com/graphql');
     this.getAll = this.graph(
       `{
         currentEvent {
