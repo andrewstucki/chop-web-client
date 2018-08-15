@@ -20,7 +20,7 @@ describe('Converter Tests', () => {
           },
           channels: {
             public: {
-              token: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
+              id: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
             },
           },
         }
@@ -89,7 +89,7 @@ describe('Converter Tests', () => {
           },
           channels: {
             public: {
-              token: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
+              id: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
             },
           },
         }

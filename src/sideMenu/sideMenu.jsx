@@ -19,9 +19,10 @@ type SideMenuType = {
   onSwipe?: (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
   publishPrayerRequestNotification: (
     user: SharedUserType,
-    active: boolean
+    channel: string
   ) => void,
   currentUser: SharedUserType,
+  hostChannel: string,
 };
 
 const SideMenu = (
@@ -32,6 +33,7 @@ const SideMenu = (
     onSwipe,
     publishPrayerRequestNotification,
     currentUser,
+    hostChannel,
   }: SideMenuType
 ) => (
   <SideMenuComponent
@@ -52,7 +54,7 @@ const SideMenu = (
       }
       onClick={
         () => {
-          publishPrayerRequestNotification(currentUser, true);
+          publishPrayerRequestNotification(currentUser, hostChannel);
         }
       }
     >

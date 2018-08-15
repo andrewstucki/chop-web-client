@@ -46,14 +46,14 @@ type SetUser = {
 
 
 type IOChatActionTypes =
+  | PublishAcceptedPrayerRequestType
+  | InviteToChannelType
   | SetChatKeys
   | SetUser
   | AddChannelType
   | ReceiveMomentType
   | ChangeChannelType
   | PublishMomentToChannelType
-  | InviteToChannelType
-  | PublishAcceptedPrayerRequestType
   | RemoveChannelType;
 
 // Action Creators
@@ -89,7 +89,15 @@ const getReducer = (chatIO: Chat) => (
       chatIO.setUser(action.user);
       return state;
     case ADD_CHANNEL:
+    // $FlowFixMe
       chatIO.addChat(action.channel.name, action.channel.id);
+      return state;
+    case INVITE_TO_CHANNEL:
+    // $FlowFixMe
+      chatIO.inviteToChannel(action.user.pubnubToken, action.channelName);
+      return state;
+    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+      chatIO.publishAcceptedPrayerRequest(action.id, action.channel);
       return state;
     case PUBLISH_MOMENT_TO_CHANNEL: {
       // $FlowFixMe
@@ -101,12 +109,6 @@ const getReducer = (chatIO: Chat) => (
       }
       return state;
     }
-    case INVITE_TO_CHANNEL:
-      chatIO.inviteToChannel(action.user.pubnubToken, action.channelName);
-      return state;
-    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
-      chatIO.publishAcceptedPrayerRequest(action.id, action.channel);
-      return state;
     default:
       return state;
     }

@@ -13,6 +13,7 @@ import reducer, {
   getOtherUser,
   togglePopUpModal,
   leaveChat,
+  setInitData,
 } from '../../src/feed/dux';
 
 import {
@@ -30,9 +31,8 @@ import {
   deleteMessage,
   toggleCloseTrayButton,
   publishAcceptedPrayerRequest,
+  MESSAGE,
 } from '../../src/moment';
-
-import { MESSAGE } from '../../src/moment/dux';
 
 import { setUser } from '../../src/io/chat/dux';
 
@@ -54,7 +54,7 @@ const otherUser = {
 const currentUser = {
   id: '12345',
   pubnubToken: '09876',
-  pubnubAccessToken: '67890',
+  pubnubAccessKey: '67890',
   name: 'Joan Jet',
   role: {
     label: '',
@@ -458,6 +458,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       [
         {
+          type: MESSAGE,
           id: '12345',
           text: 'I like socks',
           user: {
@@ -505,6 +506,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       [
         {
+          type: MESSAGE,
           id: '12345',
           text: 'I like socks',
           user: {
@@ -556,6 +558,18 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -573,13 +587,26 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -606,6 +633,18 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -623,13 +662,26 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -656,7 +708,19 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: true,
                 messageTrayOpen: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -673,12 +737,25 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                messageTrayOpen: false,
+                closeTrayButtonRendered: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -709,6 +786,17 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
                 closeTrayButtonRendered: false,
               },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
             ],
           },
         },
@@ -724,6 +812,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
@@ -732,6 +821,17 @@ describe('Feed tests', () => {
                 },
                 messageTrayOpen: true,
                 closeTrayButtonRendered: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -761,6 +861,17 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
                 closeTrayButtonRendered: true,
               },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
             ],
           },
         },
@@ -776,6 +887,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
@@ -784,6 +896,17 @@ describe('Feed tests', () => {
                 },
                 messageTrayOpen: false,
                 closeTrayButtonRendered: false,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -848,6 +971,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
                 user: {
@@ -857,6 +981,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
               },
               {
+                type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
                 user: {
@@ -1732,7 +1857,118 @@ describe('VideoFeed tests', () => {
       {
         ...defaultState,
         isVideoHidden: false,
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        video: {
+          ...defaultState.video,
+          url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        },
+      }
+    );
+  });
+});
+
+describe('Initial State', () => {
+  test('Set Initial State', () => {
+    expect(reducer(
+      defaultState,
+      setInitData(
+        {
+          event: {
+            startTime: 1531864800,
+            id: 334494,
+            timezone: 'America/Chicago',
+            title: 'Fake Event',
+          },
+          video: {
+            type: 'StandardEmbed',
+            url: 'https://www.youtube.com/embed/bz2kN31m_S0',
+          },
+          channels: {
+            '123456': {
+              id: '123456',
+              name: 'public',
+              users: null,
+              moments: [],
+            },
+            '654321': {
+              id: '654321',
+              name: 'host',
+              users: null,
+              moments: [],
+            },
+          },
+          user: {
+            avatar: null,
+            id: '123456',
+            name: 'Pebbles FlintStone',
+            pubnubAccessKey: '123456',
+            pubnubToken: '1533956431068',
+            role: {
+              label: 'HOST',
+              permissions: [
+                'all-the-things',
+              ],
+            },
+          },
+          pubnubKeys: {
+            publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+            subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+          },
+          organization: {
+            id: 2,
+            name: 'Life.Church',
+          },
+          currentChannel: '123456',
+        }
+      )
+    )).toEqual(
+      {
+        ...defaultState,
+        event: {
+          startTime: 1531864800,
+          id: 334494,
+          timezone: 'America/Chicago',
+          title: 'Fake Event',
+        },
+        video: {
+          type: 'StandardEmbed',
+          url: 'https://www.youtube.com/embed/bz2kN31m_S0',
+        },
+        channels: {
+          '123456': {
+            id: '123456',
+            name: 'public',
+            users: null,
+            moments: [],
+          },
+          '654321': {
+            id: '654321',
+            name: 'host',
+            users: null,
+            moments: [],
+          },
+        },
+        currentUser: {
+          avatar: null,
+          id: '123456',
+          name: 'Pebbles FlintStone',
+          pubnubAccessKey: '123456',
+          pubnubToken: '1533956431068',
+          role: {
+            label: 'HOST',
+            permissions: [
+              'all-the-things',
+            ],
+          },
+        },
+        pubnubKeys: {
+          publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+          subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+        },
+        organization: {
+          id: 2,
+          name: 'Life.Church',
+        },
+        currentChannel: '123456',
       }
     );
   });

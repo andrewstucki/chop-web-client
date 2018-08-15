@@ -104,16 +104,16 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     const style = channel.isCurrent ? null : styles.unselected;
     const opacity = channel.isCurrent ? '1.0' : '0.5';
 
-    if (channel.id === 'public') {
+    if (channel.name === 'public') {
       return (
         <span className={style}>
           event
         </span>
       );
-    } else if (channel.id === 'host') {
+    } else if (channel.name === 'host') {
       return (
         <span className={style}>
-          {channel.id}
+          {channel.name}
         </span>
       );
     } else if (channel.otherUsersNames.length > 0) {
@@ -156,7 +156,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
                 <a
                   // $FlowFixMe
                   ref={selectedLink}
-                  id={'nav-' + channel.id}
+                  id={'nav-' + channel.name}
                   href="javascript:void(0)"
                   key={channel.id}
                   className={styles.link}
