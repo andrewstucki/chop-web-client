@@ -1,61 +1,59 @@
 {
-  "data": {
-    "currentEvent": {
-      "eventStartTime": 1531864800,
-      "eventTimeId": 334494,
-      "eventTimezone": "America/Chicago",
-      "title": "Fake Event",
-      "video": {
-        "type": "StandardEmbed",
-        "url": "https://www.youtube.com/embed/bz2kN31m_S0"
-      }
-    },
-    "currentFeeds": [
-      {
-        "direct": false,
-        "id": "123456",
-        "name": "public",
-        "users": null
-      },
-      {
-        "direct": false,
-        "id": "123456",
-        "name": "host",
-        "users": null
-      },
-      {
-        "direct": false,
-        "id": "123456",
-        "name": "request",
-        "users": null
-      },
-      {
-        "direct": false,
-        "id": "123456",
-        "name": "command",
-        "users": null
-      }
-    ],
-    "currentOrganization": {
-      "id": 2,
-      "name": "Life.Church"
-    },
-    "currentProfile": {
-      "avatar": null,
-      "id": 123456,
-      "nickname": "Bobby G.",
-      "pubnub_access_key": "123456",
-      "pubnub_token": "1533912921585",
-      "role": {
-        "label": "HOST",
-        "permissions": [
-          "all-the-things"
-        ]
-      }
-    },
-    "pubnubKeys": {
-      "publish_key": "pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7",
-      "subscribe_key": "sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7"
+  "currentEvent": {
+    "eventStartTime": 1531864800,
+    "eventTimeId": 334494,
+    "eventTimezone": "America/Chicago",
+    "title": "Fake Event",
+    "video": {
+      "type": "StandardEmbed",
+      "url": "https://www.youtube.com/embed/bz2kN31m_S0"
     }
+  },
+  "currentFeeds": [
+    {
+      "direct": false,
+      "id": "123456",
+      "name": "public",
+      "users": null
+    },
+    {
+      "direct": false,
+      "id": "123456a",
+      "name": "host",
+      "users": null
+    },
+    {
+      "direct": false,
+      "id": "123456b",
+      "name": "request",
+      "users": null
+    },
+    {
+      "direct": false,
+      "id": "123456c",
+      "name": "command",
+      "users": null
+    }
+  ],
+  "currentOrganization": {
+    "id": 2,
+    "name": "Life.Church"
+  },
+  "currentProfile": {
+    "avatar": null,
+    "id": 123456,
+    "nickname": "Bobby G.",
+    "pubnub_access_key": "123456",
+    "pubnub_token": "1533912921585",
+    "role": {
+      "label": "HOST",
+      "permissions": [
+        "all-the-things"
+      ]
+    }
+  },
+  "pubnubKeys": {
+    "publish_key": "pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7",
+    "subscribe_key": "sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7"
   }
 }

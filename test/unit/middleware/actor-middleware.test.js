@@ -13,13 +13,13 @@ describe('Actor Middleware', () => {
       }
     }
     const dispatch = jest.fn();
-    const getStore = jest.fn();
+    const getState = jest.fn();
     const next = jest.fn();
     next.mockReturnValue(42);
     const action = {
       type: 'NOOP',
     };
-    const middleware = actorMiddleware(Actor, Actor)({ dispatch: dispatch, getStore: getStore })(next);
+    const middleware = actorMiddleware(Actor, Actor)({ dispatch: dispatch, getState: getState })(next);
     expect(middleware(action)).toBe(42);
     expect(next).toHaveBeenCalledTimes(1);
     expect(next).toHaveBeenLastCalledWith(action);

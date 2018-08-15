@@ -49,14 +49,53 @@ const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHAT = 'LEAVE_CHAT';
+const SET_INIT_DATA = 'SET_INIT_DATA';
+const GET_INIT_DATA = 'GET_INIT_DATA';
 
 // Flow Type Definitions
+
+type GetInitData = {
+  type: 'GET_INIT_DATA',
+};
+
+type EventType = {
+  title: string,
+  id: number,
+  startTime: number,
+  timezone: string,
+};
+
+type VideoType = {
+  type: string,
+  url: string,
+};
+
+type OrganizationType = {
+  id: number,
+  name: string,
+};
+
+type PubnubKeysType = {
+  publish: string,
+  subscribe: string,
+};
+
+type SetInitDataType = {
+  type: 'SET_INIT_DATA',
+  event: EventType,
+  video: VideoType,
+  organization: OrganizationType,
+  user: PrivateUserType,
+  channels: ChannelCollectionType,
+  pubnubKeys: PubnubKeysType,
+  currentChannel: string,
+};
 
 type PrivateUserType = {
   id: string,
   name: string,
   pubnubToken: string,
-  pubnubAccessToken: string,
+  pubnubAccessKey: string,
   role: {
     label: string,
     permissions: Array<string>,
@@ -78,7 +117,12 @@ type ChannelType = {
   participants?: Array<SharedUserType>,
 };
 
+type ChannelCollectionType = { [string]: ChannelType };
+
 type FeedType = {
+  pubnubKeys: PubnubKeysType,
+  event: EventType,
+  organization: OrganizationType,
   channels: {
     [string]: ChannelType,
   },
@@ -92,7 +136,7 @@ type FeedType = {
   isChatFocused: boolean,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
-  url: string,
+  video: VideoType,
 };
 
 type ChangeChannelType = {
@@ -138,6 +182,7 @@ type LeaveChatType = {
 };
 
 type FeedActionTypes =
+  | SetInitData
   | ChangeChannelType
   | ReceiveMomentType
   | AddChannelType
@@ -152,6 +197,44 @@ type FeedActionTypes =
   | ReceiveAcceptedPrayerRequestType;
 
 // Action Creators
+
+const getInitData = (): GetInitData => (
+  {
+    type: GET_INIT_DATA,
+  }
+);
+
+const setInitData = (
+  {
+    event,
+    video,
+    organization,
+    user,
+    channels,
+    pubnubKeys,
+    currentChannel,
+  }:
+  {
+    event: EventType,
+    video: VideoType,
+    organization: OrganizationType,
+    user: PrivateUserType,
+    channels: ChannelCollectionType,
+    pubnubKeys: PubnubKeysType,
+    currentChannel: string,
+  }
+): SetInitData => (
+  {
+    type: SET_INIT_DATA,
+    event,
+    organization,
+    video,
+    channels,
+    user,
+    pubnubKeys,
+    currentChannel,
+  }
+);
 
 const changeChannel = (newChannel: string): ChangeChannelType => (
   {
@@ -231,13 +314,27 @@ const leaveChat = (user: SharedUserType): LeaveChatType => (
 // Default State
 
 const defaultState = {
+  pubnubKeys: {
+    publish: '',
+    subscribe: '',
+  },
+  event: {
+    id: 0,
+    startTime: 0,
+    title: '',
+    timezone: '',
+  },
+  organization: {
+    id: 0,
+    name: '',
+  },
   channels: {},
   currentChannel: '',
   currentUser: {
     id: '',
     name: '',
     pubnubToken: '',
-    pubnubAccessToken: '',
+    pubnubAccessKey: '',
     role: {
       label: '',
       permissions: [],
@@ -251,7 +348,10 @@ const defaultState = {
   isChatFocused: false,
   isSideMenuClosed: true,
   isVideoHidden: false,
-  url: '',
+  video: {
+    type: '',
+    url: '',
+  },
 };
 
 // Reducer
@@ -263,6 +363,19 @@ const reducer = (
     return state;
   }
   switch (action.type) {
+  case SET_INIT_DATA: {
+    return {
+      ...state,
+      event: action.event,
+      organization: action.organization,
+      video: action.video,
+      currentUser: action.user,
+      pubnubKeys: action.pubnubKeys,
+      channels: action.channels,
+      currentChannel: action.currentChannel,
+
+    };
+  }
   case CHANGE_CHANNEL:
     if (!state.channels[action.channel]) {
       return state;
@@ -558,7 +671,10 @@ const reducer = (
   case SET_VIDEO_URL:
     return {
       ...state,
-      url: action.url,
+      video: {
+        ...state.video,
+        url: action.url,
+      },
     };
   default:
     return state;
@@ -620,6 +736,8 @@ export {
   INVITE_TO_CHANNEL,
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHAT,
+  GET_INIT_DATA,
+  SET_INIT_DATA,
 };
 export {
   changeChannel,
@@ -636,6 +754,8 @@ export {
   togglePopUpModal,
   leaveChat,
   getCurrentUserAsSharedUser,
+  getInitData,
+  setInitData,
 };
 export type {
   AddChannelType,
@@ -651,6 +771,8 @@ export type {
   SharedUserType,
   TogglePopUpModalType,
   LeaveChatType,
+  GetInitData,
+  SetInitData,
 };
 
 export default reducer;

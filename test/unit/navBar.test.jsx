@@ -14,8 +14,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -30,8 +30,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -49,8 +49,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: '654321', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={onClick}
         openMenu={() => {}}
@@ -60,15 +60,15 @@ describe('NavBar tests', () => {
     );
     wrapper.find('.navBar a').at(1).simulate('click', 'public');
     expect(onClick.calledOnce).toEqual(true);
-    expect(onClick.getCall(0).args[0]).toEqual('public');
+    expect(onClick.getCall(0).args[0]).toEqual('123456');
   });
 
   test('displaying pip on public', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: true, otherUsersNames: []},
-          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'public', isCurrent: true, hasActions: true, otherUsersNames: []},
+          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -84,8 +84,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: 'host', isCurrent: false, hasActions: true, otherUsersNames: []},
+          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'host', isCurrent: false, hasActions: true, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -102,7 +102,8 @@ describe('NavBar tests', () => {
       {
         channels: [
           {
-            id: 'direct1',
+            id: '123456',
+            name: 'direct1',
             isCurrent: false,
             hasActions: false,
             otherUsersNames: [
@@ -110,7 +111,8 @@ describe('NavBar tests', () => {
             ],
           },
           {
-            id: 'direct2',
+            id: '12345',
+            name: 'direct2',
             isCurrent: false,
             hasActions: false,
             otherUsersNames: [
@@ -133,8 +135,8 @@ describe('NavBar tests', () => {
           width: 35,
           opacity: 1.0,
           directChatChannelNames: {
-            direct1: 'bob',
-            direct2: 'sue',
+            '123456': 'bob',
+            '12345': 'sue',
           },
         }
       );
@@ -145,13 +147,15 @@ describe('NavBar tests', () => {
       {
         channels: [
           {
-            id: 'direct1',
+            id: '123456',
+            name: 'direct1',
             isCurrent: false,
             hasActions: false,
             otherUsersNames: [],
           },
           {
-            id: 'direct2',
+            id: '123456',
+            name: 'direct2',
             isCurrent: false,
             hasActions: false,
             otherUsersNames: [],
@@ -174,7 +178,8 @@ describe('NavBar tests', () => {
       {
         channels: [
           {
-            id: 'direct1',
+            id: '123456',
+            name: 'direct1',
             isCurrent: false,
             hasActions: false,
             otherUsersNames: [
@@ -182,7 +187,8 @@ describe('NavBar tests', () => {
             ],
           },
           {
-            id: 'direct2',
+            id: '12345',
+            name: 'direct2',
             isCurrent: false,
             hasActions: false,
             otherUsersNames: [
@@ -198,8 +204,8 @@ describe('NavBar tests', () => {
         width: 35,
         opacity: 1.0,
         directChatChannelNames: {
-          direct1: 'bob',
-          direct2: 'sue',
+          '123456': 'bob',
+          '12345': 'sue',
         },
       }
     )).toEqual(null);
@@ -209,10 +215,11 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
           {
-            id: 'direct1',
+            id: '123456',
+            name: 'direct1',
             isCurrent: false,
             hasActions: false,
             otherUsersNames: ['bob'],

@@ -34,11 +34,12 @@ type PublishAcceptedPrayerRequestType = {
 // Action Creators
 
 const publishPrayerRequestNotification = (
-  user: SharedUserType
+  user: SharedUserType,
+  channel: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
-    channel: 'host',
+    channel,
     moment: {
       type: ACTIONABLE_NOTIFICATION,
       notificationType: PRAYER_REQUEST,

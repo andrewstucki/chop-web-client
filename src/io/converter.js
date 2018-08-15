@@ -7,16 +7,13 @@ const Converter = {
     _getState = getState;
   },
 
-  cwcToLegacy:( message: any, channelName: string) => {
+  cwcToLegacy:( message: any, channelId: string) => {
     const time = new Date();
     const offset = (time.getTime() - _getState().event.startTime).toString();
     const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();
     const month = monthIndex => twoDigitNumber(monthIndex + 1);
     const timestamp = `${time.getUTCFullYear()}-${month(time.getUTCMonth())}-${twoDigitNumber(time.getUTCDate())} ${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()} +0000`;
-    let roomType = 'public';
-    if (channelName === 'host') {
-      roomType = 'volunteer';
-    }
+    const roomType = 'public';
 
     return {
       messageText: message.text,
@@ -38,7 +35,7 @@ const Converter = {
       organizationId: _getState().organization.id,
       organizationName: _getState().organization.name,
       roomType: roomType,
-      channelToken: _getState().channels[channelName].token,
+      channelToken: _getState().channels[channelId].id,
       eventStartTime: _getState().event.startTime,
     };
   },

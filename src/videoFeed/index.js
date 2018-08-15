@@ -7,7 +7,7 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     isVideoHidden: feedState.isVideoHidden,
-    url: feedState.url,
+    url: feedState.video.url,
   };
 };
 

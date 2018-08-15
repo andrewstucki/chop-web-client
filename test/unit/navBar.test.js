@@ -12,7 +12,7 @@ const otherUser = {
 const currentUser = {
   id: '12345',
   pubnubToken: '09876',
-  pubnubAccessToken: '67890',
+  pubnubAccessKey: '67890',
   name: 'Joan Jet',
   role: {
     label: '',
@@ -26,18 +26,18 @@ describe('NavBar tests', () => {
       {
         ...defaultFeedState,
         channels: {
-          public: {
-            id: '12345',
+          '1234': {
+            id: '1234',
             name: 'public',
             moments: [],
           },
-          host: {
+          '12345': {
             id: '12345',
             name: 'host',
             moments: [],
           },
         },
-        currentChannel: 'public',
+        currentChannel: '1234',
         chatInput: '',
         currentUser: currentUser,
         appendingMessage: false,
@@ -54,13 +54,15 @@ describe('NavBar tests', () => {
     );
     expect(result).toEqual([
       {
-        id: 'public',
+        id: '1234',
+        name: 'public',
         isCurrent: true,
         hasActions: false,
         otherUsersNames: [],
       },
       {
-        id: 'host',
+        id: '12345',
+        name: 'host',
         isCurrent: false,
         hasActions: false,
         otherUsersNames: [],
@@ -73,7 +75,7 @@ describe('NavBar tests', () => {
       {
         ...defaultFeedState,
         channels: {
-          public: {
+          '1234': {
             id: '12345',
             name: 'public',
             moments: [
@@ -83,13 +85,13 @@ describe('NavBar tests', () => {
               },
             ],
           },
-          host: {
+          '12345': {
             id: '12345',
             name: 'host',
             moments: [],
           },
         },
-        currentChannel: 'public',
+        currentChannel: '1234',
         chatInput: '',
         currentUser: currentUser,
         appendingMessage: false,
@@ -106,13 +108,15 @@ describe('NavBar tests', () => {
     );
     expect(result).toEqual([
       {
-        id: 'public',
+        id: '1234',
+        name: 'public',
         isCurrent: true,
         hasActions: true,
         otherUsersNames: [],
       },
       {
-        id: 'host',
+        id: '12345',
+        name: 'host',
         isCurrent: false,
         hasActions: false,
         otherUsersNames: [],
@@ -125,8 +129,8 @@ describe('NavBar tests', () => {
       {
         ...defaultFeedState,
         channels: {
-          public: {
-            id: '12345',
+          '1234': {
+            id: '1234',
             name: 'public',
             moments: [
               {
@@ -135,7 +139,7 @@ describe('NavBar tests', () => {
               },
             ],
           },
-          host: {
+          '12345': {
             id: '12345',
             name: 'host',
             moments: [
@@ -146,7 +150,7 @@ describe('NavBar tests', () => {
             ],
           },
         },
-        currentChannel: 'public',
+        currentChannel: '1234',
         chatInput: '',
         currentUser: currentUser,
         appendingMessage: false,
@@ -163,13 +167,15 @@ describe('NavBar tests', () => {
     );
     expect(result).toEqual([
       {
-        id: 'public',
+        id: '1234',
+        name: 'public',
         isCurrent: true,
         hasActions: false,
         otherUsersNames: [],
       },
       {
-        id: 'host',
+        id: '12345',
+        name: 'host',
         isCurrent: false,
         hasActions: true,
         otherUsersNames: [],
@@ -183,7 +189,7 @@ describe('NavBar tests', () => {
         ...defaultFeedState,
         channels: {
           ...defaultFeedState.channels,
-          direct: {
+          '12345': {
             id: '12345',
             name: 'direct',
             moments: [],
@@ -199,7 +205,8 @@ describe('NavBar tests', () => {
     )).toEqual(
       [
         {
-          id: 'direct',
+          id: '12345',
+          name: 'direct',
           isCurrent: false,
           hasActions: false,
           otherUsersNames: ['Billy Bob', 'Billy Bob', 'Billy Bob'],
@@ -214,28 +221,29 @@ describe('NavBar tests', () => {
         ...defaultFeedState,
         channels: {
           ...defaultFeedState.channels,
-          request: {
+          '1234': {
             id: '12345',
-            name: 'request',
+            name: 'legacy',
             moments: [],
           },
-          command: {
+          '123456': {
             id: '12345',
-            name: 'command',
+            name: 'personal',
             moments: [],
           },
-          public: {
+          '12345': {
             id: '12345',
             name: 'public',
             moments: [],
           },
         },
-        currentChannel: 'public',
+        currentChannel: '12345',
       }
     )).toEqual(
       [
         {
-          id: 'public',
+          id: '12345',
+          name: 'public',
           isCurrent: true,
           hasActions: false,
           otherUsersNames: [],
