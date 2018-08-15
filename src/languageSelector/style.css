@@ -1,0 +1,28 @@
+@import url('../../assets/theme.css');
+
+.container {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.text,
+.selectorToggle,
+.caret {
+  display: inline-block;
+  color: var(--disabledTextColor);
+}
+
+.selectorToggle {
+  padding: 0 0 0 4px;
+  text-decoration: underline;
+}
+
+.buttonContainer {
+  display: flex;
+}
+
+.caret {
+  width: 10px;
+  margin-left: 3px;
+}

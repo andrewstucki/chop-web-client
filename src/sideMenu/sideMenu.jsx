@@ -6,6 +6,7 @@ import type { SharedUserType } from '../feed/dux';
 
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';
+import LanguageSelector from '../languageSelector/languageSelector';
 import GuestExperienceLink from '../../assets/guest-experience-link.svg';
 import FeedbackLink from '../../assets/feedback-link.svg';
 
@@ -84,6 +85,7 @@ const SideMenu = (
       text="Log out"
       buttonType="default"
     />
+    <LanguageSelector />
   </SideMenuComponent>
 );
 

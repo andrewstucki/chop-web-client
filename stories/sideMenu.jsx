@@ -1,9 +1,21 @@
+// @flow
 /* global module */
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import SideMenuComponent from '../src/components/sideMenu';
 import SideMenu from '../src/sideMenu/sideMenu';
+
+const currentUser = {
+  id: 'string',
+  name: 'Ben Butters',
+  pubnubToken: 'string2',
+  pubnubAccessToken: 'string3',
+  role: {
+    label: 'Host',
+    permissions: [],
+  },
+};
 
 storiesOf('SideMenu', module)
   .add('Basic Component', () => (
@@ -27,5 +39,7 @@ storiesOf('SideMenu', module)
     <SideMenu
       logout={action('logout')}
       close={action('close')}
-      isClosed={false} />
+      isClosed={false}
+      currentUser={currentUser}
+    />
   ));
