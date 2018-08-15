@@ -31,9 +31,8 @@ import {
   deleteMessage,
   toggleCloseTrayButton,
   publishAcceptedPrayerRequest,
+  MESSAGE,
 } from '../../src/moment';
-
-import { MESSAGE } from '../../src/moment/dux';
 
 import { setUser } from '../../src/io/chat/dux';
 
@@ -459,6 +458,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       [
         {
+          type: MESSAGE,
           id: '12345',
           text: 'I like socks',
           user: {
@@ -506,6 +506,7 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       [
         {
+          type: MESSAGE,
           id: '12345',
           text: 'I like socks',
           user: {
@@ -557,6 +558,18 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -574,13 +587,26 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -607,6 +633,18 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -624,13 +662,26 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -657,7 +708,19 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                closeTrayButtonRendered: true,
                 messageTrayOpen: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -674,12 +737,25 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
+                messageTrayOpen: false,
+                closeTrayButtonRendered: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -710,6 +786,17 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
                 closeTrayButtonRendered: false,
               },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
             ],
           },
         },
@@ -725,6 +812,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
@@ -733,6 +821,17 @@ describe('Feed tests', () => {
                 },
                 messageTrayOpen: true,
                 closeTrayButtonRendered: true,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -762,6 +861,17 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
                 closeTrayButtonRendered: true,
               },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
+              },
             ],
           },
         },
@@ -777,6 +887,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
                 user: {
@@ -785,6 +896,17 @@ describe('Feed tests', () => {
                 },
                 messageTrayOpen: false,
                 closeTrayButtonRendered: false,
+              },
+              {
+                type: MESSAGE,
+                id: '456',
+                text: 'I like rocks',
+                user: {
+                  id: '12345',
+                  name: 'William',
+                },
+                closeTrayButtonRendered: false,
+                messageTrayOpen: false,
               },
             ],
           },
@@ -849,6 +971,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [
               {
+                type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
                 user: {
@@ -858,6 +981,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
               },
               {
+                type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
                 user: {

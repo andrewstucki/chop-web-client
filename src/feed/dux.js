@@ -488,7 +488,7 @@ const reducer = (
             message => (
               {
                 ...message,
-                messageTrayOpen: message.id === id ? false : null,
+                messageTrayOpen: message.id === id ? false : message.messageTrayOpen,
               }
             )
           ),
@@ -508,7 +508,8 @@ const reducer = (
             message => (
               {
                 ...message,
-                closeTrayButtonRendered: message.id === id ? !message.closeTrayButtonRendered : null,
+                closeTrayButtonRendered: message.id === id ?
+                  !message.closeTrayButtonRendered : message.closeTrayButtonRendered,
               }
             )
           ),
