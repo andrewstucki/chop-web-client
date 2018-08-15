@@ -182,7 +182,7 @@ type LeaveChatType = {
 };
 
 type FeedActionTypes =
-  | SetInitData
+  | SetInitDataType
   | ChangeChannelType
   | ReceiveMomentType
   | AddChannelType
@@ -223,7 +223,7 @@ const setInitData = (
     pubnubKeys: PubnubKeysType,
     currentChannel: string,
   }
-): SetInitData => (
+): SetInitDataType => (
   {
     type: SET_INIT_DATA,
     event,
@@ -772,7 +772,7 @@ export type {
   TogglePopUpModalType,
   LeaveChatType,
   GetInitData,
-  SetInitData,
+  SetInitDataType,
 };
 
 export default reducer;
