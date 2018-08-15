@@ -80,7 +80,7 @@ type PubnubKeysType = {
   subscribe: string,
 };
 
-type SetInitData = {
+type SetInitDataType = {
   type: 'SET_INIT_DATA',
   event: EventType,
   video: VideoType,
