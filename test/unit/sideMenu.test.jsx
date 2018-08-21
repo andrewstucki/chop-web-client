@@ -4,7 +4,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import sinon from 'sinon';
 
-import LanguageSelector from '../../src/languageSelector/languageSelector';
 import Button from '../../src/components/button';
 import SideMenuComponent from '../../src/components/sideMenu';
 import SideMenu from '../../src/sideMenu/sideMenu';
@@ -26,7 +25,6 @@ describe('SideBar tests', () => {
     expect(wrapper.find(SideMenuComponent).length).toBe(1);
     expect(wrapper.find(SideMenuComponent).props().isClosed).toBe(false);
     expect(wrapper.find(SideMenuComponent).props().close).toBe(closeFunction);
-    expect(wrapper.find(LanguageSelector).length).toBe(1);
   });
 
   test('SideBar has link to guest experience', () => {

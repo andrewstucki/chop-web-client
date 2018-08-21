@@ -13,7 +13,7 @@ describe('LanguageSelector tests', () => {
     const toggleLanguageSelector = sinon.spy();
     const wrapper = Enzyme.shallow(
       <LanguageSelector
-        languageName="English"
+        currentLanguage="English"
         toggleLanguageSelector={toggleLanguageSelector}
       />
     );

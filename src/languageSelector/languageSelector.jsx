@@ -6,13 +6,13 @@ import styles from './style.css';
 
 type LanguageSelectorPropsType = {
   toggleLanguageSelector: () => void,
-  languageName: string,
+  currentLanguage: string,
 };
 
 const LanguageSelector = (
   {
     toggleLanguageSelector,
-    languageName,
+    currentLanguage,
   }: LanguageSelectorPropsType
 ) => (
   <div className={styles.container}>
@@ -26,7 +26,7 @@ const LanguageSelector = (
         }}
         className={styles.selectorToggle}
       >
-        {languageName}
+        {currentLanguage}
       </button>
       <span
         className={styles.caret}

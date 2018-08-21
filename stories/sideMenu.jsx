@@ -37,9 +37,11 @@ storiesOf('SideMenu', module)
   ))
   .add('Control', () => (
     <SideMenu
+      publishPrayerRequestNotification={action('clicked')}
+      hostChannel="host"
+      currentUser={currentUser}
       logout={action('logout')}
       close={action('close')}
       isClosed={false}
-      currentUser={currentUser}
     />
   ));
