@@ -46,6 +46,7 @@ import { mockDate } from '../testUtils';
 
 import {
   toggleLanguageSelector,
+  setLanguage,
 } from '../../src/languageSelector/dux';
 
 const otherUser = {
@@ -1976,7 +1977,9 @@ describe('Initial State', () => {
       }
     );
   });
+});
 
+describe('LanguageSelector tests', () => {
   test('ToggleLanguageSelector when set to false', () => {
     const result = reducer(
       {
@@ -2005,6 +2008,22 @@ describe('Initial State', () => {
       {
         ...defaultState,
         isLanguageSelectorVisible: false,
+      }
+    );
+  });
+
+  test('SetLanguage Japanese', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        currentLanguage: 'English',
+      },
+      setLanguage('Japanese')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        currentLanguage: 'Japanese',
       }
     );
   });
