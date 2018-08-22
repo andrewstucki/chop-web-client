@@ -44,6 +44,10 @@ import {
 
 import { mockDate } from '../testUtils';
 
+import {
+  toggleLanguageSelector,
+} from '../../src/languageSelector/dux';
+
 const otherUser = {
   pubnubToken: '12345',
   name: 'Billy Bob',
@@ -1969,6 +1973,38 @@ describe('Initial State', () => {
           name: 'Life.Church',
         },
         currentChannel: '123456',
+      }
+    );
+  });
+
+  test('ToggleLanguageSelector when set to false', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: false,
+      },
+      toggleLanguageSelector()
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: true,
+      }
+    );
+  });
+
+  test('ToggleLanguageSelector when set to true', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: true,
+      },
+      toggleLanguageSelector()
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: false,
       }
     );
   });

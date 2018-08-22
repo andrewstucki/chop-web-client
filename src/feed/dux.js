@@ -39,6 +39,8 @@ import {
   SET_ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
+import { TOGGLE_LANGUAGE_SELECTOR } from '../languageSelector/dux';
+
 // Action Types
 
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
@@ -136,6 +138,7 @@ type FeedType = {
   isChatFocused: boolean,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
+  isLanguageSelectorVisible: boolean,
   video: VideoType,
 };
 
@@ -348,6 +351,7 @@ const defaultState = {
   isChatFocused: false,
   isSideMenuClosed: true,
   isVideoHidden: false,
+  isLanguageSelectorVisible: false,
   video: {
     type: '',
     url: '',
@@ -676,6 +680,11 @@ const reducer = (
         ...state.video,
         url: action.url,
       },
+    };
+  case TOGGLE_LANGUAGE_SELECTOR:
+    return {
+      ...state,
+      isLanguageSelectorVisible: !state.isLanguageSelectorVisible,
     };
   default:
     return state;
