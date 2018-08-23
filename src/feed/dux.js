@@ -360,7 +360,7 @@ const defaultState = {
     type: '',
     url: '',
   },
-  currentLanguage: 'English',
+  currentLanguage: window.navigator.language || 'en',
 };
 
 // Reducer
