@@ -19,17 +19,40 @@ const currentUser = {
   },
 };
 
+const languageOptions = [
+  {
+    code: 'en',
+    name: 'English',
+  },
+  {
+    code: 'ja-jp',
+    name: 'Japanese',
+  },
+  {
+    code: 'fr',
+    name: 'French',
+  },
+  {
+    code: 'sp',
+    name: 'Spanish',
+  },
+  {
+    code: 'gm',
+    name: 'German',
+  },
+  {
+    code: 'it',
+    name: 'Italian',
+  },
+  {
+    code: 'ko',
+    name: 'Korean',
+  },
+];
+
 const feed = () => (
   {
-    languageOptions: [
-      'English',
-      'Japanese',
-      'French',
-      'Spanish',
-      'German',
-      'Italian',
-      'Korean',
-    ],
+    languageOptions: languageOptions,
   }
 );
 
@@ -66,17 +89,7 @@ storiesOf('SideMenu', module)
         logout={action('logout')}
         close={action('close')}
         isClosed={false}
-        languageOptions={
-          [
-            'English',
-            'Japanese',
-            'French',
-            'Spanish',
-            'German',
-            'Italian',
-            'Korean',
-          ]
-        }
+        languageOptions={languageOptions}
         setLanguage={() => {}}
       />
     </Provider>

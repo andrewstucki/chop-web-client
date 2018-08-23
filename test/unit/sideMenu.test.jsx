@@ -25,6 +25,37 @@ const currentUser = {
   },
 };
 
+const languageOptions = [
+  {
+    code: 'en',
+    name: 'English',
+  },
+  {
+    code: 'ja-jp',
+    name: 'Japanese',
+  },
+  {
+    code: 'fr',
+    name: 'French',
+  },
+  {
+    code: 'sp',
+    name: 'Spanish',
+  },
+  {
+    code: 'gm',
+    name: 'German',
+  },
+  {
+    code: 'it',
+    name: 'Italian',
+  },
+  {
+    code: 'ko',
+    name: 'Korean',
+  },
+];
+
 describe('SideBar tests', () => {
   test('SideBar renders', () => {
     const closeFunction = () => {};
@@ -36,17 +67,7 @@ describe('SideBar tests', () => {
         logout={() => {}}
         close={closeFunction}
         isClosed={false}
-        languageOptions={
-          [
-            'English',
-            'Japanese',
-            'French',
-            'Spanish',
-            'German',
-            'Italian',
-            'Korean',
-          ]
-        }
+        languageOptions={languageOptions}
         setLanguage={() => {}}
       />
     );
@@ -65,17 +86,7 @@ describe('SideBar tests', () => {
         logout={() => {}}
         close={() => {}}
         isClosed={false}
-        languageOptions={
-          [
-            'English',
-            'Japanese',
-            'French',
-            'Spanish',
-            'German',
-            'Italian',
-            'Korean',
-          ]
-        }
+        languageOptions={languageOptions}
         setLanguage={() => {}}
       />
     );
@@ -96,17 +107,7 @@ describe('SideBar tests', () => {
         logout={() => {}}
         close={() => {}}
         isClosed={false}
-        languageOptions={
-          [
-            'English',
-            'Japanese',
-            'French',
-            'Spanish',
-            'German',
-            'Italian',
-            'Korean',
-          ]
-        }
+        languageOptions={languageOptions}
         setLanguage={() => {}}
       />
     );
@@ -128,17 +129,7 @@ describe('SideBar tests', () => {
         logout={logoutButton}
         close={() => {}}
         isClosed={false}
-        languageOptions={
-          [
-            'English',
-            'Japanese',
-            'French',
-            'Spanish',
-            'German',
-            'Italian',
-            'Korean',
-          ]
-        }
+        languageOptions={languageOptions}
         setLanguage={() => {}}
       />
     );

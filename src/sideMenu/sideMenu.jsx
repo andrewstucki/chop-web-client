@@ -2,7 +2,7 @@
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React from 'react';
 
-import type { SharedUserType } from '../feed/dux';
+import type { SharedUserType, LanguageType } from '../feed/dux';
 
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';
@@ -24,7 +24,7 @@ type SideMenuType = {
   currentUser: SharedUserType,
   hostChannel: string,
   setLanguage: (language: string) => void,
-  languageOptions: Array<string>,
+  languageOptions: Array<LanguageType>,
 };
 
 const SideMenu = (

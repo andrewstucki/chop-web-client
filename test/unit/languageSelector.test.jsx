@@ -20,13 +20,34 @@ describe('LanguageSelector tests', () => {
       <LanguageSelector
         languageOptions={
           [
-            'English',
-            'Japanese',
-            'French',
-            'Spanish',
-            'German',
-            'Italian',
-            'Korean',
+            {
+              code: 'en',
+              name: 'English',
+            },
+            {
+              code: 'ja-jp',
+              name: 'Japanese',
+            },
+            {
+              code: 'fr',
+              name: 'French',
+            },
+            {
+              code: 'sp',
+              name: 'Spanish',
+            },
+            {
+              code: 'gm',
+              name: 'German',
+            },
+            {
+              code: 'it',
+              name: 'Italian',
+            },
+            {
+              code: 'ko',
+              name: 'Korean',
+            },
           ]
         }
         setLanguage={setLanguage}

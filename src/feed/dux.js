@@ -67,6 +67,11 @@ type EventType = {
   timezone: string,
 };
 
+type LanguageType = {
+  code: string,
+  name: string,
+};
+
 type VideoType = {
   type: string,
   url: string,
@@ -141,7 +146,7 @@ type FeedType = {
   isLanguageSelectorVisible: boolean,
   video: VideoType,
   currentLanguage: string,
-  languageOptions: Array<string>,
+  languageOptions: Array<LanguageType>,
 };
 
 type ChangeChannelType = {
@@ -360,13 +365,34 @@ const defaultState = {
   },
   currentLanguage: window.navigator.language || 'en',
   languageOptions: [
-    'English',
-    'Japanese',
-    'French',
-    'Spanish',
-    'German',
-    'Italian',
-    'Korean',
+    {
+      code: 'en',
+      name: 'English',
+    },
+    {
+      code: 'ja-jp',
+      name: 'Japanese',
+    },
+    {
+      code: 'fr',
+      name: 'French',
+    },
+    {
+      code: 'sp',
+      name: 'Spanish',
+    },
+    {
+      code: 'gm',
+      name: 'German',
+    },
+    {
+      code: 'it',
+      name: 'Italian',
+    },
+    {
+      code: 'ko',
+      name: 'Korean',
+    },
   ],
 };
 
@@ -795,6 +821,7 @@ export type {
   LeaveChatType,
   GetInitData,
   SetInitDataType,
+  LanguageType,
 };
 
 export default reducer;

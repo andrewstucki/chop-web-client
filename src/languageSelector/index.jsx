@@ -1,11 +1,12 @@
 // @flow
 import React from 'react';
 
+import type { LanguageType } from '../feed/dux';
 import styles from './style.css';
 
 type LanguageSelectorPropsType = {
   setLanguage: (language: string) => void,
-  languageOptions: Array<string>,
+  languageOptions: Array<LanguageType>,
 };
 
 const LanguageSelector = (
@@ -28,10 +29,10 @@ const LanguageSelector = (
         {
           languageOptions.map(language => (
             <option
-              key={language}
-              value={language}
+              key={language.code}
+              value={language.code}
             >
-              {language}
+              {language.name}
             </option>
           ))
         }
