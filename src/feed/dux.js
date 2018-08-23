@@ -358,7 +358,7 @@ const defaultState = {
     type: '',
     url: '',
   },
-  currentLanguage: 'English',
+  currentLanguage: window.navigator.language || 'en',
   languageOptions: [
     'English',
     'Japanese',
