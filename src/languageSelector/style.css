@@ -38,4 +38,5 @@
   border-top: 5px solid var(--disabledTextColor);
   right: 6px;
   position: absolute;
+  pointer-events: none;
 }
