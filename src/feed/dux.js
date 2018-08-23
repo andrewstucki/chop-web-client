@@ -39,6 +39,11 @@ import {
   SET_ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
+import {
+  TOGGLE_LANGUAGE_SELECTOR,
+  SET_LANGUAGE,
+} from '../languageSelector/dux';
+
 // Action Types
 
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
@@ -136,7 +141,9 @@ type FeedType = {
   isChatFocused: boolean,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
+  isLanguageSelectorVisible: boolean,
   video: VideoType,
+  currentLanguage: string,
 };
 
 type ChangeChannelType = {
@@ -348,10 +355,12 @@ const defaultState = {
   isChatFocused: false,
   isSideMenuClosed: true,
   isVideoHidden: false,
+  isLanguageSelectorVisible: false,
   video: {
     type: '',
     url: '',
   },
+  currentLanguage: window.navigator.language || 'en',
 };
 
 // Reducer
@@ -676,6 +685,16 @@ const reducer = (
         ...state.video,
         url: action.url,
       },
+    };
+  case TOGGLE_LANGUAGE_SELECTOR:
+    return {
+      ...state,
+      isLanguageSelectorVisible: !state.isLanguageSelectorVisible,
+    };
+  case SET_LANGUAGE:
+    return {
+      ...state,
+      currentLanguage: action.language,
     };
   default:
     return state;

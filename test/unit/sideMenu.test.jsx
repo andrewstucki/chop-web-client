@@ -2,10 +2,11 @@
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import SideMenu from '../../src/sideMenu/sideMenu';
-import SideMenuComponent from '../../src/components/sideMenu';
-import Button from '../../src/components/button';
 import sinon from 'sinon';
+
+import Button from '../../src/components/button';
+import SideMenuComponent from '../../src/components/sideMenu';
+import SideMenu from '../../src/sideMenu/sideMenu';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -13,12 +14,13 @@ describe('SideBar tests', () => {
   test('SideBar renders', () => {
     const closeFunction = () => {};
     const wrapper = Enzyme.shallow(
-      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
       // $FlowFixMe
       <SideMenu
         logout={() => {}}
         close={closeFunction}
-        isClosed={false} />
+        isClosed={false}
+      />
     );
     expect(wrapper.find(SideMenuComponent).length).toBe(1);
     expect(wrapper.find(SideMenuComponent).props().isClosed).toBe(false);
@@ -27,7 +29,7 @@ describe('SideBar tests', () => {
 
   test('SideBar has link to guest experience', () => {
     const wrapper = Enzyme.shallow(
-      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
       // $FlowFixMe
       <SideMenu
         logout={() => {}}
@@ -44,7 +46,7 @@ describe('SideBar tests', () => {
 
   test('SideBar has link to give feedback', () => {
     const wrapper = Enzyme.shallow(
-      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
       // $FlowFixMe
       <SideMenu
         logout={() => {}}
@@ -62,7 +64,7 @@ describe('SideBar tests', () => {
   test('SideBar has logout button', () => {
     const logoutButton = sinon.spy();
     const wrapper = Enzyme.mount(
-      // HOUSTON REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
+      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
       // $FlowFixMe
       <SideMenu
         logout={logoutButton}
