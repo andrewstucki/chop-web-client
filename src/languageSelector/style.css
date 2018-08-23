@@ -7,8 +7,7 @@
 }
 
 .text,
-.languageSelector,
-.caret {
+.languageSelector {
   display: inline-block;
   color: var(--disabledTextColor);
 }
