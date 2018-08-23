@@ -7,34 +7,88 @@ import sinon from 'sinon';
 import Button from '../../src/components/button';
 import SideMenuComponent from '../../src/components/sideMenu';
 import SideMenu from '../../src/sideMenu/sideMenu';
+import LanguageSelector from '../../src/languageSelector';
 
 Enzyme.configure({ adapter: new Adapter() });
+
+// TODO remove currentUser, publishPrayerRequestNotification
+// and hostChannel after demo prayer requests are gone
+
+const currentUser = {
+  id: 'string',
+  name: 'Ben Butters',
+  pubnubToken: 'string2',
+  pubnubAccessToken: 'string3',
+  role: {
+    label: 'Host',
+    permissions: [],
+  },
+};
+
+const languageOptions = [
+  {
+    code: 'en',
+    name: 'English',
+  },
+  {
+    code: 'ja-jp',
+    name: 'Japanese',
+  },
+  {
+    code: 'fr',
+    name: 'French',
+  },
+  {
+    code: 'sp',
+    name: 'Spanish',
+  },
+  {
+    code: 'gm',
+    name: 'German',
+  },
+  {
+    code: 'it',
+    name: 'Italian',
+  },
+  {
+    code: 'ko',
+    name: 'Korean',
+  },
+];
 
 describe('SideBar tests', () => {
   test('SideBar renders', () => {
     const closeFunction = () => {};
     const wrapper = Enzyme.shallow(
-      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
-      // $FlowFixMe
       <SideMenu
+        currentUser={currentUser}
+        publishPrayerRequestNotification={() => {}}
+        hostChannel="host"
         logout={() => {}}
         close={closeFunction}
         isClosed={false}
+        languageOptions={languageOptions}
+        setLanguage={() => {}}
       />
     );
     expect(wrapper.find(SideMenuComponent).length).toBe(1);
     expect(wrapper.find(SideMenuComponent).props().isClosed).toBe(false);
     expect(wrapper.find(SideMenuComponent).props().close).toBe(closeFunction);
+    expect(wrapper.find(LanguageSelector).length).toBe(1);
   });
 
   test('SideBar has link to guest experience', () => {
     const wrapper = Enzyme.shallow(
-      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
-      // $FlowFixMe
       <SideMenu
+        currentUser={currentUser}
+        publishPrayerRequestNotification={() => {}}
+        hostChannel="host"
         logout={() => {}}
         close={() => {}}
-        isClosed={false} />
+        isClosed={false}
+        languageOptions={languageOptions}
+        setLanguage={() => {}}
+      />
     );
     expect(wrapper.find('#guest-experience').length)
       .toBe(1);
@@ -46,12 +100,16 @@ describe('SideBar tests', () => {
 
   test('SideBar has link to give feedback', () => {
     const wrapper = Enzyme.shallow(
-      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
-      // $FlowFixMe
       <SideMenu
+        currentUser={currentUser}
+        publishPrayerRequestNotification={() => {}}
+        hostChannel="host"
         logout={() => {}}
         close={() => {}}
-        isClosed={false} />
+        isClosed={false}
+        languageOptions={languageOptions}
+        setLanguage={() => {}}
+      />
     );
     expect(wrapper.find('#feedback').length)
       .toBe(1);
@@ -64,12 +122,16 @@ describe('SideBar tests', () => {
   test('SideBar has logout button', () => {
     const logoutButton = sinon.spy();
     const wrapper = Enzyme.mount(
-      // TODO REMOVE AFTER REMOVING HACKETY CODE FOR DEMO
-      // $FlowFixMe
       <SideMenu
+        currentUser={currentUser}
+        publishPrayerRequestNotification={() => {}}
+        hostChannel="host"
         logout={logoutButton}
         close={() => {}}
-        isClosed={false} />
+        isClosed={false}
+        languageOptions={languageOptions}
+        setLanguage={() => {}}
+      />
     );
     expect(wrapper.find(Button).length)
       .toBe(1);

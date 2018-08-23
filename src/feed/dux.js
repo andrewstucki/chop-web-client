@@ -39,10 +39,7 @@ import {
   SET_ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
-import {
-  TOGGLE_LANGUAGE_SELECTOR,
-  SET_LANGUAGE,
-} from '../languageSelector/dux';
+import { SET_LANGUAGE } from '../languageSelector/dux';
 
 // Action Types
 
@@ -68,6 +65,11 @@ type EventType = {
   id: number,
   startTime: number,
   timezone: string,
+};
+
+type LanguageType = {
+  code: string,
+  name: string,
 };
 
 type VideoType = {
@@ -144,6 +146,7 @@ type FeedType = {
   isLanguageSelectorVisible: boolean,
   video: VideoType,
   currentLanguage: string,
+  languageOptions: Array<LanguageType>,
 };
 
 type ChangeChannelType = {
@@ -361,6 +364,36 @@ const defaultState = {
     url: '',
   },
   currentLanguage: window.navigator.language || 'en',
+  languageOptions: [
+    {
+      code: 'en',
+      name: 'English',
+    },
+    {
+      code: 'ja-jp',
+      name: 'Japanese',
+    },
+    {
+      code: 'fr',
+      name: 'French',
+    },
+    {
+      code: 'sp',
+      name: 'Spanish',
+    },
+    {
+      code: 'gm',
+      name: 'German',
+    },
+    {
+      code: 'it',
+      name: 'Italian',
+    },
+    {
+      code: 'ko',
+      name: 'Korean',
+    },
+  ],
 };
 
 // Reducer
@@ -686,11 +719,6 @@ const reducer = (
         url: action.url,
       },
     };
-  case TOGGLE_LANGUAGE_SELECTOR:
-    return {
-      ...state,
-      isLanguageSelectorVisible: !state.isLanguageSelectorVisible,
-    };
   case SET_LANGUAGE:
     return {
       ...state,
@@ -793,6 +821,7 @@ export type {
   LeaveChatType,
   GetInitData,
   SetInitDataType,
+  LanguageType,
 };
 
 export default reducer;

@@ -17,6 +17,37 @@ const currentUser = {
   },
 };
 
+const languageOptions = [
+  {
+    code: 'en',
+    name: 'English',
+  },
+  {
+    code: 'ja-jp',
+    name: 'Japanese',
+  },
+  {
+    code: 'fr',
+    name: 'French',
+  },
+  {
+    code: 'sp',
+    name: 'Spanish',
+  },
+  {
+    code: 'gm',
+    name: 'German',
+  },
+  {
+    code: 'it',
+    name: 'Italian',
+  },
+  {
+    code: 'ko',
+    name: 'Korean',
+  },
+];
+
 storiesOf('SideMenu', module)
   .add('Basic Component', () => (
     <SideMenuComponent close={action('clicked')} isClosed={false}>
@@ -43,5 +74,7 @@ storiesOf('SideMenu', module)
       logout={action('logout')}
       close={action('close')}
       isClosed={false}
+      languageOptions={languageOptions}
+      setLanguage={() => {}}
     />
   ));
