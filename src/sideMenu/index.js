@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getCurrentUserAsSharedUser } from '../feed/dux';
 
 import { closeMenu, logout } from './dux';
+import { setLanguage } from '../languageSelector/dux';
 // TODO: Remove publishPrayerRequestNotification after demo
 import {
   publishPrayerRequestNotification,
@@ -18,6 +19,7 @@ const mapStateToProps = state => {
     currentUser: getCurrentUserAsSharedUser(feedState),
     hostChannel: Object.keys(feedState.channels)
       .find(channelId => feedState.channels[channelId].name === 'host'),
+    languageOptions: feedState.languageOptions,
   };
 };
 
@@ -31,6 +33,7 @@ const mapDispatchToProps = dispatch => (
     publishPrayerRequestNotification: (user, channel) => dispatch(
       publishPrayerRequestNotification(user, channel)
     ),
+    setLanguage: language => (dispatch(setLanguage(language))),
   }
 );
 

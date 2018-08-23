@@ -39,10 +39,7 @@ import {
   SET_ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
-import {
-  TOGGLE_LANGUAGE_SELECTOR,
-  SET_LANGUAGE,
-} from '../languageSelector/dux';
+import { SET_LANGUAGE } from '../languageSelector/dux';
 
 // Action Types
 
@@ -144,6 +141,7 @@ type FeedType = {
   isLanguageSelectorVisible: boolean,
   video: VideoType,
   currentLanguage: string,
+  languageOptions: Array<string>,
 };
 
 type ChangeChannelType = {
@@ -361,6 +359,15 @@ const defaultState = {
     url: '',
   },
   currentLanguage: 'English',
+  languageOptions: [
+    'English',
+    'Japanese',
+    'French',
+    'Spanish',
+    'German',
+    'Italian',
+    'Korean',
+  ],
 };
 
 // Reducer
@@ -685,11 +692,6 @@ const reducer = (
         ...state.video,
         url: action.url,
       },
-    };
-  case TOGGLE_LANGUAGE_SELECTOR:
-    return {
-      ...state,
-      isLanguageSelectorVisible: !state.isLanguageSelectorVisible,
     };
   case SET_LANGUAGE:
     return {

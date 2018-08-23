@@ -6,6 +6,7 @@ import type { SharedUserType } from '../feed/dux';
 
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';
+import LanguageSelector from '../languageSelector';
 import GuestExperienceLink from '../../assets/guest-experience-link.svg';
 import FeedbackLink from '../../assets/feedback-link.svg';
 
@@ -22,6 +23,8 @@ type SideMenuType = {
   ) => void,
   currentUser: SharedUserType,
   hostChannel: string,
+  setLanguage: (language: string) => void,
+  languageOptions: Array<string>,
 };
 
 const SideMenu = (
@@ -33,6 +36,8 @@ const SideMenu = (
     publishPrayerRequestNotification,
     currentUser,
     hostChannel,
+    languageOptions,
+    setLanguage,
   }: SideMenuType
 ) => (
   <SideMenuComponent
@@ -86,6 +91,10 @@ const SideMenu = (
       text="Log out"
       buttonType="default"
     />
+    <LanguageSelector
+      setLanguage={setLanguage}
+      languageOptions={languageOptions}
+    />  
   </SideMenuComponent>
 );
 

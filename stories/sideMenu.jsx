@@ -1,6 +1,8 @@
 // @flow
 /* global module */
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import SideMenuComponent from '../src/components/sideMenu';
@@ -16,6 +18,26 @@ const currentUser = {
     permissions: [],
   },
 };
+
+const feed = () => (
+  {
+    languageOptions: [
+      'English',
+      'Japanese',
+      'French',
+      'Spanish',
+      'German',
+      'Italian',
+      'Korean',
+    ],
+  }
+);
+
+const store = createStore(() => (
+  {
+    feed: feed(),
+  }
+));
 
 storiesOf('SideMenu', module)
   .add('Basic Component', () => (
@@ -36,12 +58,26 @@ storiesOf('SideMenu', module)
     </SideMenuComponent>
   ))
   .add('Control', () => (
-    <SideMenu
-      publishPrayerRequestNotification={action('clicked')}
-      hostChannel="host"
-      currentUser={currentUser}
-      logout={action('logout')}
-      close={action('close')}
-      isClosed={false}
-    />
+    <Provider store={store}>
+      <SideMenu
+        publishPrayerRequestNotification={action('clicked')}
+        hostChannel="host"
+        currentUser={currentUser}
+        logout={action('logout')}
+        close={action('close')}
+        isClosed={false}
+        languageOptions={
+          [
+            'English',
+            'Japanese',
+            'French',
+            'Spanish',
+            'German',
+            'Italian',
+            'Korean',
+          ]
+        }
+        setLanguage={() => {}}
+      />
+    </Provider>
   ));
