@@ -44,6 +44,11 @@ import {
 
 import { mockDate } from '../testUtils';
 
+import {
+  toggleLanguageSelector,
+  setLanguage,
+} from '../../src/languageSelector/dux';
+
 const otherUser = {
   pubnubToken: '12345',
   name: 'Billy Bob',
@@ -1969,6 +1974,56 @@ describe('Initial State', () => {
           name: 'Life.Church',
         },
         currentChannel: '123456',
+      }
+    );
+  });
+});
+
+describe('LanguageSelector tests', () => {
+  test('ToggleLanguageSelector when set to false', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: false,
+      },
+      toggleLanguageSelector()
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: true,
+      }
+    );
+  });
+
+  test('ToggleLanguageSelector when set to true', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: true,
+      },
+      toggleLanguageSelector()
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        isLanguageSelectorVisible: false,
+      }
+    );
+  });
+
+  test('SetLanguage Japanese', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+        currentLanguage: 'English',
+      },
+      setLanguage('Japanese')
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        currentLanguage: 'Japanese',
       }
     );
   });
