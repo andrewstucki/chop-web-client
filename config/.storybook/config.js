@@ -13,6 +13,7 @@ function loadStories() {
   require('../../stories/popUpModal.jsx');
   require('../../stories/feedActionBanner.jsx');
   require('../../stories/placeholder.jsx');
+  require('../../stories/reactionButton.jsx');
 }
 
 configure(loadStories, module);
