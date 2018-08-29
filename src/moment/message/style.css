@@ -74,6 +74,7 @@
 .closeTrayButton,
 .openTrayButton {
   @apply --button;
+  outline-style: none;
 }
 
 .closeTrayButton {
