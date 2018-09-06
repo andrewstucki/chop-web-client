@@ -52,6 +52,10 @@ class GraphQlActor {
         pubnubKeys {
           publish_key
           subscribe_key
+        },
+        currentLanguages {
+          name
+          code
         }
       }`);
   }
@@ -93,6 +97,7 @@ class GraphQlActor {
               },
               currentChannel: payload.currentFeeds
                 .find(channel => channel.name === 'public').id,
+              languageOptions: payload.currentLanguages,
             }
           )
         );

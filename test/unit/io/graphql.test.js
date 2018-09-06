@@ -74,6 +74,20 @@ describe('Test GraphQL', () => {
           subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
         },
         currentChannel: '123456',
+        languageOptions: [
+          {
+            code: 'af',
+            name: 'Afrikaans',
+          },
+          {
+            code: 'en',
+            name: 'English',
+          },
+          {
+            code: 'ko',
+            name: 'Korean',
+          },
+        ]
       },
     );
   });

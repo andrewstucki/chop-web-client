@@ -1920,6 +1920,16 @@ describe('Initial State', () => {
             name: 'Life.Church',
           },
           currentChannel: '123456',
+          languageOptions: [
+            {
+              name: 'English',
+              code: 'ok',
+            },
+            {
+              name: 'Korean',
+              code: 'ko',
+            },
+          ],
         }
       )
     )).toEqual(
@@ -1971,6 +1981,16 @@ describe('Initial State', () => {
           name: 'Life.Church',
         },
         currentChannel: '123456',
+        languageOptions: [
+          {
+            name: 'English',
+            code: 'ok',
+          },
+          {
+            name: 'Korean',
+            code: 'ko',
+          },
+        ],
       }
     );
   });

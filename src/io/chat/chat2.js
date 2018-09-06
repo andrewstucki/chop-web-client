@@ -27,6 +27,7 @@ class Chat {
   pubnub: Pubnub
   storeDispatch: Dispatch
   getState: () => FeedType
+  previousLanguage: String
 
   constructor (dispatch: Dispatch, getState: () => FeedType) {
     // $FlowFixMe
@@ -40,6 +41,8 @@ class Chat {
     
     this.storeDispatch = dispatch;
     this.getState = getState;
+
+    this.previousLanguage = null;
   }
 
   init () {
@@ -72,9 +75,23 @@ class Chat {
     );
   }
 
+  setLanguage (languageCode) {
+    this.pubnub.setState(
+      {
+        channels: Object.keys(this.getState().channels),
+        state: {
+          language: languageCode,
+          prevLanguage: this.previousLanguage,
+        },
+      }
+    );
+    this.previousLanguage = languageCode;
+  }
+
   onStatus (event: PubnubStatusEventType) {
     switch (event.category) {
     case 'PNConnectedCategory':
+      this.setLanguage(this.getState().currentLanguage);
       this.storeDispatch({
         type: 'CHAT_CONNECTED',
       });
@@ -115,6 +132,9 @@ class Chat {
       return;
     case 'CHAT_CONNECT':
       this.init();
+      return;
+    case 'SET_LANGUAGE':
+      this.setLanguage(action.language);
       return;
     }
   }
