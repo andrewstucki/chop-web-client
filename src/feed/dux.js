@@ -822,6 +822,7 @@ export type {
   GetInitData,
   SetInitDataType,
   LanguageType,
+  OrganizationType,
 };
 
 export default reducer;
