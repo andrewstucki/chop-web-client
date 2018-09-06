@@ -9,6 +9,7 @@ import actorMiddleware from './middleware/actor-middleware';
 import SequenceActor from './io/sequence';
 import ChatActor from './io/chat/chat2';
 import GraphQlActor from './io/graph';
+import tagManagerMiddleware from './middleware/tagmanager-middleware';
 
 const actorMiddlewareApplied = actorMiddleware(
   SequenceActor,
@@ -17,10 +18,11 @@ const actorMiddlewareApplied = actorMiddleware(
 );
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const middlewareList = [actorMiddlewareApplied, tagManagerMiddleware];
 const store = createStore(
   reducer,
   composeEnhancers(
-    applyMiddleware(actorMiddlewareApplied)
+    applyMiddleware(...middlewareList)
   )
 );
 
