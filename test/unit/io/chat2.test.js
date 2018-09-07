@@ -6,14 +6,20 @@ import Pubnub,
   __subscribeEvent,
   __messageEvent,
   mockPublish,
+  mockSetState,
 } from 'pubnub';
 import Chat from '../../../src/io/chat/chat2';
 import { defaultState } from '../../../src/feed/dux';
+import { setLanguage } from '../../../src/languageSelector/dux';
 import Converter from '../../../src/io/converter';
 jest.mock('pubnub');
 jest.mock('../../../src/io/converter');
 
 describe('Chat2 Tests', () => {
+  beforeEach(() => {
+    mockSetState.mockReset();
+  });
+
   const store = {
     ...defaultState,
     currentUser: {
@@ -189,7 +195,7 @@ describe('Chat2 Tests', () => {
     const getState = jest.fn();
     getState.mockReturnValue(store);
 
-    const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars 
+    const chat = new Chat(dispatch, getState);
 
     chat.dispatch(
       {
@@ -217,6 +223,29 @@ describe('Chat2 Tests', () => {
         type: 'RECEIVE_MOMENT',
         channel: 'public',
         moment: message,
+      }
+    );
+  });
+
+  test('Change Language', () => {
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    getState.mockReturnValue(store);
+
+    const chat = new Chat(dispatch, getState);
+
+    chat.init();
+
+    chat.dispatch(setLanguage('ko'));
+
+    expect(mockSetState).toHaveBeenCalledTimes(1);
+    expect(mockSetState).toHaveBeenCalledWith(
+      {
+        channels: ['public'],
+        state: {
+          language: 'ko',
+          prevLanguage: null,
+        },
       }
     );
   });

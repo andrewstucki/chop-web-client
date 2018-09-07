@@ -27,7 +27,7 @@ class Chat {
   pubnub: Pubnub
   storeDispatch: Dispatch
   getState: () => FeedType
-  previousLanguage: String
+  previousLanguage: string | null;
 
   constructor (dispatch: Dispatch, getState: () => FeedType) {
     // $FlowFixMe
@@ -75,7 +75,7 @@ class Chat {
     );
   }
 
-  setLanguage (languageCode) {
+  setLanguage (languageCode: string) {
     this.pubnub.setState(
       {
         channels: Object.keys(this.getState().channels),

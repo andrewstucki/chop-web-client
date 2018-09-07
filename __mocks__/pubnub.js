@@ -5,7 +5,7 @@ export const mockAddListener = jest.fn().mockImplementation(obj => {
   listeners = obj;
 });
 export const mockPublish = jest.fn();
-
+export const mockSetState = jest.fn();
 
 const __subscribeEvent = event => {
   if (typeof listeners.status === 'function') {
@@ -29,6 +29,7 @@ const mock = jest.fn().mockImplementation(() => (
     subscribe: mockSubscribe,
     addListener: mockAddListener,
     publish: mockPublish,
+    setState: mockSetState,
   }
 ));
 
