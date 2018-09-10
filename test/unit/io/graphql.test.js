@@ -87,7 +87,7 @@ describe('Test GraphQL', () => {
             code: 'ko',
             name: 'Korean',
           },
-        ]
+        ],
       },
     );
   });
