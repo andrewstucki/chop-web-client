@@ -1,7 +1,7 @@
 // @flow
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
-import type { FeedType } from '../../feed/dux';
+import type { FeedType, ReactionType } from '../../feed/dux';
 import Converter from '../converter';
 import type { MomentType } from '../../moment/dux';
 
@@ -17,7 +17,7 @@ type PubnubStatusEventType = {
 
 type PubnubMessageEventType = {
   channel: string,
-  message: MomentType,
+  message: MomentType | ReactionType,
   publisher: string,
   subscription: string,
   timetoken: string,
@@ -90,6 +90,16 @@ class Chat {
           type: 'RECEIVE_MOMENT',
           channel: event.channel,
           moment: Converter.legacyToCwc(event.message.data),
+        }
+      );
+    } else if (event.message.action === 'reaction') {
+      this.storeDispatch(
+        {
+          type: 'RECEIVE_REACTION',
+          reaction: {
+            type: 'REACTION',
+            id: event.message.data.id,
+          },
         }
       );
     }
