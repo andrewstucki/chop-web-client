@@ -9,6 +9,11 @@ import type {
   PublishAcceptedPrayerRequestType,
 } from '../moment';
 
+import type {
+  PublishReactionActionType,
+  ReactionType,
+} from '../reactionButton/dux';
+
 import type { SetUser } from '../io/chat/dux';
 
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
@@ -22,6 +27,10 @@ import {
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
 } from '../moment';
+
+import {
+  PUBLISH_REACTION,
+} from '../reactionButton/dux';
 
 import {
   OPEN_SIDE_MENU,
@@ -53,6 +62,8 @@ const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHAT = 'LEAVE_CHAT';
 const SET_INIT_DATA = 'SET_INIT_DATA';
 const GET_INIT_DATA = 'GET_INIT_DATA';
+const REMOVE_REACTION = 'REMOVE_REACTION';
+const RECEIVE_REACTION = 'RECEIVE_REACTION';
 
 // Flow Type Definitions
 
@@ -97,6 +108,16 @@ type SetInitDataType = {
   pubnubKeys: PubnubKeysType,
   currentChannel: string,
 };
+
+type RemoveReactionType = {
+  type: 'REMOVE_REACTION',
+  id: string,
+}
+
+type ReceiveReactionType = {
+  type: 'RECEIVE_REACTION',
+  reaction: ReactionType,
+}
 
 type PrivateUserType = {
   id: string,
@@ -147,6 +168,7 @@ type FeedType = {
   video: VideoType,
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
+  reactions: Array<ReactionType>,
 };
 
 type ChangeChannelType = {
@@ -204,13 +226,23 @@ type FeedActionTypes =
   | ToggleCloseTrayButtonType
   | PublishAcceptedPrayerRequestType
   | InviteToChannelType
-  | ReceiveAcceptedPrayerRequestType;
+  | ReceiveAcceptedPrayerRequestType
+  | PublishReactionActionType
+  | RemoveReactionType
+  | ReceiveReactionType;
 
 // Action Creators
 
 const getInitData = (): GetInitData => (
   {
     type: GET_INIT_DATA,
+  }
+);
+
+const removeReaction = (id: string): RemoveReactionType => (
+  {
+    type: REMOVE_REACTION,
+    id,
   }
 );
 
@@ -394,6 +426,7 @@ const defaultState = {
       name: 'Korean',
     },
   ],
+  reactions: [],
 };
 
 // Reducer
@@ -499,6 +532,7 @@ const reducer = (
       currentUser: action.user,
     };
   case OPEN_MESSAGE_TRAY: {
+    // $FlowFixMe
     const { id } = action;
     return {
       ...state,
@@ -519,6 +553,7 @@ const reducer = (
     };
   }
   case CLOSE_MESSAGE_TRAY: {
+    // $FlowFixMe
     const { id } = action;
     return {
       ...state,
@@ -539,6 +574,7 @@ const reducer = (
     };
   }
   case TOGGLE_CLOSE_TRAY_BUTTON: {
+    // $FlowFixMe
     const { id } = action;
     return {
       ...state,
@@ -561,13 +597,17 @@ const reducer = (
   }
   case PUBLISH_ACCEPTED_PRAYER_REQUEST:
   case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
+    // $FlowFixMe
     const { id } = action;
     return {
       ...state,
       channels: {
         ...state.channels,
+        // $FlowFixMe
         [action.channel]: {
+          // $FlowFixMe
           ...state.channels[action.channel],
+          // $FlowFixMe
           moments: state.channels[action.channel].moments.map(
             moment => (
               {
@@ -581,6 +621,7 @@ const reducer = (
     };
   }
   case DELETE_MESSAGE: {
+    // $FlowFixMe
     const { id } = action;
     const { channels, currentChannel } = state;
     const messageIndex = channels[currentChannel].moments.findIndex(el => (
@@ -601,6 +642,7 @@ const reducer = (
     };
   }
   case PUBLISH_MOMENT_TO_CHANNEL: {
+    // $FlowFixMe
     if (action.moment.type === MESSAGE) {
       if ([action.moment.text].toString().length > 0) {
         return {
@@ -613,6 +655,7 @@ const reducer = (
               ...state.channels[state.currentChannel],
               moments: [
                 ...state.channels[state.currentChannel].moments,
+                // $FlowFixMe
                 action.moment,
               ],
             },
@@ -626,10 +669,14 @@ const reducer = (
       animatingMoment: true,
       channels: {
         ...state.channels,
+        // $FlowFixMe
         [action.channel]: {
+          // $FlowFixMe
           ...state.channels[action.channel],
           moments: [
+            // $FlowFixMe
             ...state.channels[action.channel].moments,
+            // $FlowFixMe
             action.moment,
           ],
         },
@@ -724,6 +771,18 @@ const reducer = (
       ...state,
       currentLanguage: action.language,
     };
+  case PUBLISH_REACTION:
+  case RECEIVE_REACTION:
+    return {
+      ...state,
+      reactions: [...state.reactions, action.reaction],
+    };
+  case REMOVE_REACTION:
+    return {
+      ...state,
+      // $FlowFixMe
+      reactions: state.reactions.filter(reaction => reaction.id !== action.id),
+    };
   default:
     return state;
   }
@@ -804,6 +863,7 @@ export {
   getCurrentUserAsSharedUser,
   getInitData,
   setInitData,
+  removeReaction,
 };
 export type {
   AddChannelType,
