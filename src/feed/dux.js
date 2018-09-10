@@ -107,6 +107,7 @@ type SetInitDataType = {
   channels: ChannelCollectionType,
   pubnubKeys: PubnubKeysType,
   currentChannel: string,
+  languageOptions: Array<LanguageType>
 };
 
 type RemoveReactionType = {
@@ -255,6 +256,7 @@ const setInitData = (
     channels,
     pubnubKeys,
     currentChannel,
+    languageOptions,
   }:
   {
     event: EventType,
@@ -264,6 +266,7 @@ const setInitData = (
     channels: ChannelCollectionType,
     pubnubKeys: PubnubKeysType,
     currentChannel: string,
+    languageOptions: Array<LanguageType>,
   }
 ): SetInitDataType => (
   {
@@ -275,6 +278,7 @@ const setInitData = (
     user,
     pubnubKeys,
     currentChannel,
+    languageOptions,
   }
 );
 
@@ -355,6 +359,13 @@ const leaveChat = (user: SharedUserType): LeaveChatType => (
 
 // Default State
 
+const getLanguage = () => {
+  const bcp47 = window.navigator.language || 'en';
+  const iso639 = bcp47.substring(0, bcp47.indexOf('-'));
+  // Google Translate requires ISO 639 format except for Chinese where they need BCP 47
+  return iso639 === 'zh' ? bcp47 : iso639;
+};
+
 const defaultState = {
   pubnubKeys: {
     publish: '',
@@ -395,26 +406,26 @@ const defaultState = {
     type: '',
     url: '',
   },
-  currentLanguage: window.navigator.language || 'en',
+  currentLanguage: getLanguage(),
   languageOptions: [
     {
       code: 'en',
       name: 'English',
     },
     {
-      code: 'ja-jp',
-      name: 'Japanese',
+      code: 'zh-CN',
+      name: 'Chinese',
     },
     {
       code: 'fr',
       name: 'French',
     },
     {
-      code: 'sp',
+      code: 'es',
       name: 'Spanish',
     },
     {
-      code: 'gm',
+      code: 'de',
       name: 'German',
     },
     {
@@ -448,7 +459,7 @@ const reducer = (
       pubnubKeys: action.pubnubKeys,
       channels: action.channels,
       currentChannel: action.currentChannel,
-
+      languageOptions: action.languageOptions,
     };
   }
   case CHANGE_CHANNEL:
@@ -802,7 +813,17 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
 
 const feedContents = (state: FeedType): Array<MessageType> => (
   state.channels[state.currentChannel] && state.channels[state.currentChannel].moments ?
-    state.channels[state.currentChannel].moments :
+    state.channels[state.currentChannel].moments.map(moment => {
+      if (moment.type === 'MESSAGE' && moment.lang !== state.currentLanguage && moment.translations) {
+        const [ translation ] = moment.translations.filter(translation => 
+          translation.languageCode === state.currentLanguage
+        );
+        if (translation && translation.text) {
+          moment.text = translation.text;
+        }
+      }
+      return moment;
+    }) :
     []
 );
 

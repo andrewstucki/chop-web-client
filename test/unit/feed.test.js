@@ -525,6 +525,70 @@ describe('Feed tests', () => {
     expect(feedContents(defaultState)).toEqual([]);
   });
 
+  test('feedContents returns translations', () => {
+    const result = feedContents(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments:
+              [
+                {
+                  type: MESSAGE,
+                  id: '12345',
+                  text: 'I like socks',
+                  user: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
+                  translations: [
+                    {
+                      languageCode: 'en',
+                      text: 'I like socks',
+                    },
+                    {
+                      languageCode: 'ko',
+                      text: '나는 양말을 좋아한다.',
+                    },
+                  ],
+                },
+              ],
+          },
+        },
+        currentLanguage: 'ko',
+        currentChannel: 'public',
+        currentUser: currentUser,
+      }
+    );
+    expect(result).toEqual(
+      [
+        {
+          type: MESSAGE,
+          id: '12345',
+          text: '나는 양말을 좋아한다.',
+          user: {
+            id: '12345',
+            name: 'Billy Bob',
+          },
+          messageTrayOpen: false,
+          translations: [
+            {
+              languageCode: 'en',
+              text: 'I like socks',
+            },
+            {
+              languageCode: 'ko',
+              text: '나는 양말을 좋아한다.',
+            },
+          ],
+        },
+      ],
+    );
+  });
+
   test('Accepts a user', () => {
     const result = reducer(defaultState, setUser(currentUser));
     expect(result).toEqual(
@@ -1920,6 +1984,16 @@ describe('Initial State', () => {
             name: 'Life.Church',
           },
           currentChannel: '123456',
+          languageOptions: [
+            {
+              name: 'English',
+              code: 'ok',
+            },
+            {
+              name: 'Korean',
+              code: 'ko',
+            },
+          ],
         }
       )
     )).toEqual(
@@ -1971,6 +2045,16 @@ describe('Initial State', () => {
           name: 'Life.Church',
         },
         currentChannel: '123456',
+        languageOptions: [
+          {
+            name: 'English',
+            code: 'ok',
+          },
+          {
+            name: 'Korean',
+            code: 'ko',
+          },
+        ],
       }
     );
   });
@@ -1981,14 +2065,14 @@ describe('LanguageSelector tests', () => {
     const result = reducer(
       {
         ...defaultState,
-        currentLanguage: 'English',
+        currentLanguage: 'en',
       },
-      setLanguage('Japanese')
+      setLanguage('ko')
     );
     expect(result).toEqual(
       {
         ...defaultState,
-        currentLanguage: 'Japanese',
+        currentLanguage: 'ko',
       }
     );
   });

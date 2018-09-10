@@ -55,5 +55,19 @@
   "pubnubKeys": {
     "publish_key": "pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7",
     "subscribe_key": "sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7"
-  }
+  },
+  "currentLanguages": [
+      {
+        "code": "af",
+        "name": "Afrikaans"
+      },
+      {
+        "code": "en",
+        "name": "English"
+      },
+      {
+        "code": "ko",
+        "name": "Korean"
+      }
+  ]
 }

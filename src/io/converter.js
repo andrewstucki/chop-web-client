@@ -17,7 +17,7 @@ const Converter = {
 
     return {
       messageText: message.text,
-      language: message.lang,
+      language: _getState().currentLanguage,
       eventTimeId: _getState().event.id,
       eventTimeOffset: offset,
       eventTitle: _getState().event.title,
@@ -46,6 +46,7 @@ const Converter = {
       id: message.msgId,
       lang: message.language,
       text: message.messageText,
+      translations: message.translations,
       user: {
         id: message.userId,
         name: message.fromNickname,
