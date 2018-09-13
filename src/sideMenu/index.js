@@ -26,7 +26,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => (
   {
     close: () => dispatch(closeMenu()),
-    logout: () => dispatch(logout()),
+    logout: () => logout(),
     onSwipe: direction => {
       if (direction === 'left') return dispatch(closeMenu());
     },

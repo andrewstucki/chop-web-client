@@ -87,6 +87,7 @@ const SideMenu = (
       />
     </a>
     <Button
+      id="logout"
       onClick={logout}
       text="Log out"
       buttonType="default"

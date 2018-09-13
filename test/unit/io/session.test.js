@@ -1,20 +1,28 @@
 // @flow
-import { logout } from '../../../src/sideMenu/dux';
-import reducer from '../../../src/io/session/dux';
+import React from 'react';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme from 'enzyme';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducer from '../../../src/chop/dux';
+import SideMenu from '../../../src/sideMenu';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('Session', () => {
-  test('reducer with no values', () => {
-    const result = reducer();
-    expect(result).toEqual({});
-  });
-
   test('logout', () => {
-    window.location.assign = jest.fn();
-    reducer(
-      {},
-      logout()
+    global.location.assign = jest.fn();
+
+    const store = createStore(reducer);
+
+    const wrapper = Enzyme.mount(
+      <Provider store={store}>
+        <SideMenu />
+      </Provider>
     );
-    expect(window.location.assign)
-      .toBeCalledWith('https://live.life.church/sessions/sign_out');
+
+    wrapper.find('#logout').simulate('click');
+    expect(global.location.assign).toHaveBeenCalledTimes(1);
+    expect(global.location.assign).toHaveBeenCalledWith('https://live.life.church/sessions/sign_out');
   });
 });
