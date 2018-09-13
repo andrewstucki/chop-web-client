@@ -35,95 +35,23 @@ class Feed extends React.Component<FeedProps, FeedState> {
     this.listRef = React.createRef();
     // $FlowFixMe
     this.wrapperRef = React.createRef();
-    // if the list extends past the feed the height is wrapperHeight
-    // and top is 0
-    // if the list is smaller than the feedHeight then height is listHeight
-    // and top is 100% - listHeight
-    // top sets the ul's top & height is used to determine if the feed is full
-    // and if the list height extends past the feed
-    this.state = {
-      height: 0,
-      top: '100%',
-    };
     // $FlowFixMe
     this.easeout = BezierEasing(0.2, 0.7, 0.4, 1);
   }
 
-  scrollUntilDone (shouldKeepScrolling: () => number): Promise<void> {
-    const prom = new Promise(resolve => {
-      const scroll = () => {
-        // $FlowFixMe 
-        this.wrapperRef.current.scrollBy(0, Math.ceil(this.easeout(shouldKeepScrolling()) * 4) || 1);
-        if (shouldKeepScrolling() < 1) {
-          window.requestAnimationFrame(scroll);
-        } else {
-          resolve();
-        }
-      };
-      scroll();
-    });
-    return prom;
+  // NOTE: Animations have been removed temporarily until they can be fixed
+  // You can find the old code in commit ebb49cb3a96b3bb69e2475b120f99b0e842622d2
+  // These two lines temporarily make sure your at the bottom of the feed
+  componentDidMount () {
+    setTimeout(() => {
+      this.wrapperRef.current.scrollTop = 10000;
+    }, 300);
   }
 
   componentDidUpdate () {
-    const list = this.listRef.current;
-    const listHeight = list.scrollHeight;
-    const wrapper = this.wrapperRef.current;
-    const wrapperHeight = Math.ceil(wrapper.getBoundingClientRect().height);
-    const start = wrapper.scrollTop;
-    const end = wrapper.scrollHeight - wrapperHeight;
-    const rangeEnd = end - start;
-    // if the list height doesn't extend past the feed and
-    // if the feed isn't full
-    if (listHeight !== this.state.height &&
-        wrapperHeight !== this.state.height) {
-      this.scrollUntilDone(
-        () => (
-          (wrapper.scrollTop - start) / rangeEnd))
-        .then(() => {
-          // if the list extends past the feed 
-          if (listHeight > wrapperHeight) {
-            this.setState(
-              {
-                height: wrapperHeight,
-                top: '0px',
-              }
-            );
-          } else {
-            this.setState(
-              {
-                height: listHeight,
-                top: `calc(100% - ${listHeight}px)`,
-              }
-            );
-          }
-        });
-      // if the feed is full and you're publishing a message
-    } else if (this.state.top === '0px' && this.props.appendingMessage) {
-      const newestMessage = list.lastChild.firstChild;
-      const messageHeight = Math.ceil(newestMessage.getBoundingClientRect().height);
-      const marginTop = parseInt(window.getComputedStyle(newestMessage)['margin-top'], 10);
-      const messageTotalHeight = messageHeight + marginTop;
-      // if the wrapper's scrollable height - (the wrapper's visible height + the next message's total height)
-      // is greater than the position the wrapper is scrolled to
-      // checks to see how far above the wrapper and incoming messages the list goes
-      // and if it's a greater number than where the user is scrolled to
-      if (wrapper.scrollHeight - (wrapperHeight + messageTotalHeight) >
-        wrapper.scrollTop) {
-        wrapper.scroll({
-          top: wrapper.scrollHeight - (wrapperHeight + messageTotalHeight),
-          behavior: 'instant',
-        });
-      }
-      const self = this;
-      window.requestAnimationFrame(
-        () => {
-          self.scrollUntilDone(
-            () => ((wrapper.scrollTop - start) / rangeEnd)
-          );
-        }
-      );
-    }
+    setTimeout(() => {
+      this.wrapperRef.current.scrollTop = 10000;
+    }, 300);
   }
 
   render () {
@@ -138,7 +66,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       currentChannel === 'host' && isPlaceholderPresent ?
         styles.withPlaceholder : styles.withoutPlaceholder;
 
-    const listItems = moments.map(moment => (
+    const listItems = moments.reverse().map(moment => (
       <li key={moment.id}>
         <Moment
           data={moment}
@@ -160,16 +88,16 @@ class Feed extends React.Component<FeedProps, FeedState> {
               togglePopUpModal={togglePopUpModal}
             />
         }
-        <ul
-          // top starts at 100% (the bottom) and gets smaller as list grows
-          style={{top: this.state.top}}
-          // $FlowFixMe
-          ref={this.listRef}
-          key={currentChannel}
-          className={styles.feed}
-        >
-          {listItems}
-        </ul>
+        <div style={{width: '100%'}}>
+          <ul
+            // $FlowFixMe
+            ref={this.listRef}
+            key={currentChannel}
+            className={styles.feed}
+          >
+            {listItems}
+          </ul>
+        </div>
       </div>
     );
   }

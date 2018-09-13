@@ -4,7 +4,6 @@
 
 const CLOSE_SIDE_MENU = 'CLOSE_SIDE_MENU';
 const OPEN_SIDE_MENU = 'OPEN_SIDE_MENU';
-const LOGOUT = 'LOGOUT';
 
 // Flow Type Definitions
 
@@ -14,10 +13,6 @@ type CloseMenuType = {
 
 type OpenMenuType = {
   type: 'OPEN_SIDE_MENU',
-};
-
-type LogoutType = {
-  type: 'LOGOUT',
 };
 
 // Action Creators
@@ -34,24 +29,19 @@ const openMenu = (): OpenMenuType => (
   }
 );
 
-const logout = (): LogoutType => (
-  {
-    type: LOGOUT,
-  }
-);
+const logout = (): void => 
+  global.location.assign('https://live.life.church/sessions/sign_out');
 
 // Exports
 
 export {
   OPEN_SIDE_MENU,
   CLOSE_SIDE_MENU,
-  LOGOUT,
 };
 
 export type {
   OpenMenuType,
   CloseMenuType,
-  LogoutType,
 };
 
 export {

@@ -8,7 +8,7 @@ import reducer from '../../src/chop/dux';
 import { defaultState, removeReaction } from '../../src/feed/dux';
 
 import ReactionButton from '../../src/reactionButton';
-import Chat from '../../src/io/chat/chat2';
+import Chat from '../../src/io/chat';
 
 Enzyme.configure({ adapter: new Adapter() });
 

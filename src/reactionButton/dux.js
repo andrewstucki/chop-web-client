@@ -13,7 +13,7 @@ type PublishReactionActionType = {
 type ReactionType = {
   type: 'REACTION',
   id: string,
-  user: SharedUserType,
+  user?: SharedUserType,
 };
 
 const publishReaction = (currentUser: SharedUserType): PublishReactionActionType => (

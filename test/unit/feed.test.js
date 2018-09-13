@@ -14,6 +14,7 @@ import reducer, {
   togglePopUpModal,
   leaveChat,
   setInitData,
+  setUser,
 } from '../../src/feed/dux';
 
 import {
@@ -33,8 +34,6 @@ import {
   publishAcceptedPrayerRequest,
   MESSAGE,
 } from '../../src/moment';
-
-import { setUser } from '../../src/io/chat/dux';
 
 import {
   releaseAnchorMoment,

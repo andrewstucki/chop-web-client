@@ -14,8 +14,6 @@ import type {
   ReactionType,
 } from '../reactionButton/dux';
 
-import type { SetUser } from '../io/chat/dux';
-
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 
 import {
@@ -41,8 +39,6 @@ import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
 import { SET_VIDEO_URL } from '../videoFeed/dux';
 
-import { SET_USER } from '../io/chat/dux';
-
 import {
   RELEASE_ANCHOR_MOMENT,
   SET_ANCHOR_MOMENT,
@@ -64,6 +60,7 @@ const SET_INIT_DATA = 'SET_INIT_DATA';
 const GET_INIT_DATA = 'GET_INIT_DATA';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
+const SET_USER = 'SET_USER';
 
 // Flow Type Definitions
 
@@ -108,6 +105,11 @@ type SetInitDataType = {
   pubnubKeys: PubnubKeysType,
   currentChannel: string,
   languageOptions: Array<LanguageType>
+};
+
+type SetUser = {
+  type: 'SET_USER',
+  user: PrivateUserType,
 };
 
 type RemoveReactionType = {
@@ -244,6 +246,13 @@ const removeReaction = (id: string): RemoveReactionType => (
   {
     type: REMOVE_REACTION,
     id,
+  }
+);
+
+const setUser = (user: PrivateUserType): SetUser => (
+  {
+    type: SET_USER,
+    user,
   }
 );
 
@@ -885,6 +894,7 @@ export {
   getInitData,
   setInitData,
   removeReaction,
+  setUser,
 };
 export type {
   AddChannelType,

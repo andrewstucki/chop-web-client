@@ -1,9 +1,10 @@
 // @flow
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
-import type { FeedType, ReactionType } from '../../feed/dux';
-import Converter from '../converter';
-import type { MomentType } from '../../moment/dux';
+import type { FeedType } from '../feed/dux';
+import type { ReactionType } from '../reactionButton/dux';
+import Converter from './converter';
+import type { MomentType } from '../moment/dux';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -17,7 +18,10 @@ type PubnubStatusEventType = {
 
 type PubnubMessageEventType = {
   channel: string,
-  message: MomentType | ReactionType,
+  message: {
+    action: string,
+    data: MomentType | ReactionType,
+  },
   publisher: string,
   subscription: string,
   timetoken: string,

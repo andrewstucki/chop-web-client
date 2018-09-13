@@ -1,5 +1,5 @@
 // @flow
-/* global SyntheticEvent, SyntheticKeyboardEvent, SyntheticFocusEvent */
+/* global SyntheticEvent, SyntheticKeyboardEvent */
 import React, { Component } from 'react';
 
 import type { SharedUserType } from '../feed/dux';
@@ -11,8 +11,8 @@ import styles from './styles.css';
 
 type ChatProps = {
   publishMessage: (channel: string, text: string, user: SharedUserType) => void,
-  textOnBlur:  (event: SyntheticFocusEvent<HTMLInputElement>) => void,
-  textOnFocus:  (event: SyntheticFocusEvent<HTMLInputElement>) => void,
+  textOnBlur:  () => void,
+  textOnFocus:  () => void,
   focused: boolean,
   currentPlaceholder: string,
   currentUser: SharedUserType,
@@ -31,6 +31,10 @@ class Chat extends Component<ChatProps, ChatState> {
     this.onTextEntered = this.onTextEntered.bind(this);
     // $FlowFixMe
     this.onKeyPressed = this.onKeyPressed.bind(this);
+    // $FlowFixMe
+    this.onBlur = this.onBlur.bind(this);
+    // $FlowFixMe
+    this.onFocus = this.onFocus.bind(this);
 
     if (props.initialState) {
       this.state = props.initialState;
@@ -60,11 +64,35 @@ class Chat extends Component<ChatProps, ChatState> {
     }
   }
 
+  onFocus () {
+    setTimeout(() => {
+      if (document.body && document.documentElement) {
+        document.body.style.height = window.innerHeight + 'px';
+        document.documentElement.style.height = window.innerHeight + 'px';
+        window.scroll({
+          top: 0,
+          behavior: 'instant',
+        });
+      }
+    }, 200);
+    this.props.textOnFocus();
+  }
+
+  onBlur () {
+    if (document.body && document.documentElement) {
+      document.body.style.height = '100%';
+      document.documentElement.style.height = '100%';
+      window.scroll({
+        top: 0,
+        behavior: 'instant',
+      });
+    }
+    this.props.textOnBlur();
+  }
+
   render () {
     const {
       publishMessage,
-      textOnBlur,
-      textOnFocus,
       focused = false,
       currentPlaceholder,
       currentUser,
@@ -78,8 +106,8 @@ class Chat extends Component<ChatProps, ChatState> {
         <div className={style}>
           <TextField
             onInput={this.onTextEntered}
-            onBlur={textOnBlur}
-            onFocus={textOnFocus}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
             value={this.state.chatInput}
             placeholder={currentPlaceholder}
             enterDetect={this.onKeyPressed}
