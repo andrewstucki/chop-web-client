@@ -18,6 +18,9 @@ module.exports = merge(common, {
     new CopyWebpackPlugin([
       { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
     ]),
-  ]
+  ],
+  output: {
+    publicPath: 'https://cwc-chopapi.global.ssl.fastly.net/'
+  }
 });
 
