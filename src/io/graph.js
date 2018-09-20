@@ -54,6 +54,7 @@ mutation AccessToken($token: String!) {
     id
     nickname
     avatar
+    pubnubToken
     role {
       label
     }
