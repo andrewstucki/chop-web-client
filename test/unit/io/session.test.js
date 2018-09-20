@@ -68,8 +68,8 @@ describe('Session', () => {
     name
   }
   pubnubKeys {
-    publish_key
-    subscribe_key
+    publishKey
+    subscribeKey
   }
   currentLanguages {
     name

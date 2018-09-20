@@ -68,8 +68,8 @@ mutation AccessToken($token: String!) {
     name
   }
   pubnubKeys {
-    publish_key
-    subscribe_key
+    publishKey
+    subscribeKey
   }
   currentLanguages {
     name
