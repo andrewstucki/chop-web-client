@@ -1,73 +1,358 @@
 {
   "currentEvent": {
-    "eventStartTime": 1531864800,
-    "eventTimeId": 334494,
-    "eventTimezone": "America/Chicago",
     "title": "Fake Event",
+    "eventTimeId": 334494,
+    "eventStartTime": 1531864800,
+    "eventTimezone": "America/Chicago",
     "video": {
       "type": "StandardEmbed",
       "url": "https://www.youtube.com/embed/bz2kN31m_S0"
     }
   },
-  "currentFeeds": [
-    {
-      "direct": false,
-      "id": "123456",
-      "name": "public",
-      "users": null
-    },
-    {
-      "direct": false,
-      "id": "123456a",
-      "name": "host",
-      "users": null
-    },
-    {
-      "direct": false,
-      "id": "123456b",
-      "name": "request",
-      "users": null
-    },
-    {
-      "direct": false,
-      "id": "123456c",
-      "name": "command",
-      "users": null
-    }
-  ],
-  "currentOrganization": {
-    "id": 2,
-    "name": "Life.Church"
-  },
-  "currentProfile": {
-    "avatar": null,
+  "currentUser": {
     "id": 123456,
-    "nickname": "Bobby G.",
-    "pubnub_access_key": "123456",
-    "pubnub_token": "1533912921585",
-    "role": {
-      "label": "HOST",
-      "permissions": [
-        "all-the-things"
-      ]
-    }
+    "nickname": "Tony Hoare",
+    "pubnubAccessKey": "abc123xyz",
+    "pubnubToken": "abc123xyz",
+    "avatar": null,
+    "role": null
+  },
+  "currentFeeds": [{
+    "id": "1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c",
+    "name": "Public",
+    "type": "public"
+  }, {
+    "id": "a70c52181da2f13f1f8313894c6125e2cdb87f1844fc785fb87988bc4725f2bc",
+    "name": "Host",
+    "type": "host"
+  }, {
+    "id": "4944bf368d26faf882940ee0811964cd357a37ccf468cd8ccdf25b95b0b52a28",
+    "name": "Legacy",
+    "type": "legacy"
+  }, {
+    "id": "26a7b967c49cff813f5449271c8a1158bb430a09bf6db5847f88abf301ea9cb1",
+    "name": "Personal",
+    "type": "personal"
+  }],
+  "currentOrganization": {
+    "id": 3,
+    "name": "Freedom Church"
   },
   "pubnubKeys": {
-    "publish_key": "pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7",
-    "subscribe_key": "sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7"
+    "publish_key": "pub-9b402341-30c2-459f-9bed-69fd684a5e00",
+    "subscribe_key": "sub-5ef6daa3-9490-11e1-bef7-45383605a8b5"
   },
-  "currentLanguages": [
-      {
-        "code": "af",
-        "name": "Afrikaans"
-      },
-      {
-        "code": "en",
-        "name": "English"
-      },
-      {
-        "code": "ko",
-        "name": "Korean"
-      }
-  ]
+  "currentLanguages": [{
+    "name": "Afrikaans",
+    "code": "af"
+  }, {
+    "name": "Albanian",
+    "code": "sq"
+  }, {
+    "name": "Amharic",
+    "code": "am"
+  }, {
+    "name": "Arabic",
+    "code": "ar"
+  }, {
+    "name": "Armenian",
+    "code": "hy"
+  }, {
+    "name": "Azerbaijani",
+    "code": "az"
+  }, {
+    "name": "Basque",
+    "code": "eu"
+  }, {
+    "name": "Belarusian",
+    "code": "be"
+  }, {
+    "name": "Bengali",
+    "code": "bn"
+  }, {
+    "name": "Bosnian",
+    "code": "bs"
+  }, {
+    "name": "Bulgarian",
+    "code": "bg"
+  }, {
+    "name": "Catalan",
+    "code": "ca"
+  }, {
+    "name": "Cebuano",
+    "code": "ceb"
+  }, {
+    "name": "Chichewa",
+    "code": "ny"
+  }, {
+    "name": "Chinese (Simplified)",
+    "code": "zh"
+  }, {
+    "name": "Chinese (Traditional)",
+    "code": "zh-TW"
+  }, {
+    "name": "Corsican",
+    "code": "co"
+  }, {
+    "name": "Croatian",
+    "code": "hr"
+  }, {
+    "name": "Czech",
+    "code": "cs"
+  }, {
+    "name": "Danish",
+    "code": "da"
+  }, {
+    "name": "Dutch",
+    "code": "nl"
+  }, {
+    "name": "English",
+    "code": "en"
+  }, {
+    "name": "Esperanto",
+    "code": "eo"
+  }, {
+    "name": "Estonian",
+    "code": "et"
+  }, {
+    "name": "Filipino",
+    "code": "tl"
+  }, {
+    "name": "Finnish",
+    "code": "fi"
+  }, {
+    "name": "French",
+    "code": "fr"
+  }, {
+    "name": "Frisian",
+    "code": "fy"
+  }, {
+    "name": "Galician",
+    "code": "gl"
+  }, {
+    "name": "Georgian",
+    "code": "ka"
+  }, {
+    "name": "German",
+    "code": "de"
+  }, {
+    "name": "Greek",
+    "code": "el"
+  }, {
+    "name": "Gujarati",
+    "code": "gu"
+  }, {
+    "name": "Haitian Creole",
+    "code": "ht"
+  }, {
+    "name": "Hausa",
+    "code": "ha"
+  }, {
+    "name": "Hawaiian",
+    "code": "haw"
+  }, {
+    "name": "Hebrew",
+    "code": "iw"
+  }, {
+    "name": "Hindi",
+    "code": "hi"
+  }, {
+    "name": "Hmong",
+    "code": "hmn"
+  }, {
+    "name": "Hungarian",
+    "code": "hu"
+  }, {
+    "name": "Icelandic",
+    "code": "is"
+  }, {
+    "name": "Igbo",
+    "code": "ig"
+  }, {
+    "name": "Indonesian",
+    "code": "id"
+  }, {
+    "name": "Irish",
+    "code": "ga"
+  }, {
+    "name": "Italian",
+    "code": "it"
+  }, {
+    "name": "Japanese",
+    "code": "ja"
+  }, {
+    "name": "Javanese",
+    "code": "jw"
+  }, {
+    "name": "Kannada",
+    "code": "kn"
+  }, {
+    "name": "Kazakh",
+    "code": "kk"
+  }, {
+    "name": "Khmer",
+    "code": "km"
+  }, {
+    "name": "Korean",
+    "code": "ko"
+  }, {
+    "name": "Kurdish (Kurmanji)",
+    "code": "ku"
+  }, {
+    "name": "Kyrgyz",
+    "code": "ky"
+  }, {
+    "name": "Lao",
+    "code": "lo"
+  }, {
+    "name": "Latin",
+    "code": "la"
+  }, {
+    "name": "Latvian",
+    "code": "lv"
+  }, {
+    "name": "Lithuanian",
+    "code": "lt"
+  }, {
+    "name": "Luxembourgish",
+    "code": "lb"
+  }, {
+    "name": "Macedonian",
+    "code": "mk"
+  }, {
+    "name": "Malagasy",
+    "code": "mg"
+  }, {
+    "name": "Malay",
+    "code": "ms"
+  }, {
+    "name": "Malayalam",
+    "code": "ml"
+  }, {
+    "name": "Maltese",
+    "code": "mt"
+  }, {
+    "name": "Maori",
+    "code": "mi"
+  }, {
+    "name": "Marathi",
+    "code": "mr"
+  }, {
+    "name": "Mongolian",
+    "code": "mn"
+  }, {
+    "name": "Myanmar (Burmese)",
+    "code": "my"
+  }, {
+    "name": "Nepali",
+    "code": "ne"
+  }, {
+    "name": "Norwegian",
+    "code": "no"
+  }, {
+    "name": "Pashto",
+    "code": "ps"
+  }, {
+    "name": "Persian",
+    "code": "fa"
+  }, {
+    "name": "Polish",
+    "code": "pl"
+  }, {
+    "name": "Portuguese",
+    "code": "pt"
+  }, {
+    "name": "Punjabi",
+    "code": "pa"
+  }, {
+    "name": "Romanian",
+    "code": "ro"
+  }, {
+    "name": "Russian",
+    "code": "ru"
+  }, {
+    "name": "Samoan",
+    "code": "sm"
+  }, {
+    "name": "Scots Gaelic",
+    "code": "gd"
+  }, {
+    "name": "Serbian",
+    "code": "sr"
+  }, {
+    "name": "Sesotho",
+    "code": "st"
+  }, {
+    "name": "Shona",
+    "code": "sn"
+  }, {
+    "name": "Sindhi",
+    "code": "sd"
+  }, {
+    "name": "Sinhala",
+    "code": "si"
+  }, {
+    "name": "Slovak",
+    "code": "sk"
+  }, {
+    "name": "Slovenian",
+    "code": "sl"
+  }, {
+    "name": "Somali",
+    "code": "so"
+  }, {
+    "name": "Spanish",
+    "code": "es"
+  }, {
+    "name": "Sundanese",
+    "code": "su"
+  }, {
+    "name": "Swahili",
+    "code": "sw"
+  }, {
+    "name": "Swedish",
+    "code": "sv"
+  }, {
+    "name": "Tajik",
+    "code": "tg"
+  }, {
+    "name": "Tamil",
+    "code": "ta"
+  }, {
+    "name": "Telugu",
+    "code": "te"
+  }, {
+    "name": "Thai",
+    "code": "th"
+  }, {
+    "name": "Turkish",
+    "code": "tr"
+  }, {
+    "name": "Ukrainian",
+    "code": "uk"
+  }, {
+    "name": "Urdu",
+    "code": "ur"
+  }, {
+    "name": "Uzbek",
+    "code": "uz"
+  }, {
+    "name": "Vietnamese",
+    "code": "vi"
+  }, {
+    "name": "Welsh",
+    "code": "cy"
+  }, {
+    "name": "Xhosa",
+    "code": "xh"
+  }, {
+    "name": "Yiddish",
+    "code": "yi"
+  }, {
+    "name": "Yoruba",
+    "code": "yo"
+  }, {
+    "name": "Zulu",
+    "code": "zu"
+  }]
 }

@@ -223,17 +223,17 @@ describe('NavBar tests', () => {
           ...defaultFeedState.channels,
           '1234': {
             id: '12345',
-            name: 'legacy',
+            name: 'Legacy',
             moments: [],
           },
           '123456': {
             id: '12345',
-            name: 'personal',
+            name: 'Personal',
             moments: [],
           },
           '12345': {
             id: '12345',
-            name: 'public',
+            name: 'Public',
             moments: [],
           },
         },
@@ -243,7 +243,7 @@ describe('NavBar tests', () => {
       [
         {
           id: '12345',
-          name: 'public',
+          name: 'Public',
           isCurrent: true,
           hasActions: false,
           otherUsersNames: [],

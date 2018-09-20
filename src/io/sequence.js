@@ -1,7 +1,8 @@
 // @flow
 import { GET_INIT_DATA } from '../feed/dux';
 const sequence = {
-  INIT: GET_INIT_DATA,
+  INIT: 'GET_ACCESS_TOKEN',
+  RECEIVED_ACCESS_TOKEN: GET_INIT_DATA,
   SET_INIT_DATA: 'CHAT_CONNECT',
 };
 
