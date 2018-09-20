@@ -17,7 +17,7 @@ type ChannelsListType = Array<ChannelType>;
 
 const getChannels = (state: FeedType): ChannelsListType => (
   Object.keys(state.channels).filter(
-    id => state.channels[id].name !== 'legacy' && state.channels[id].name !== 'personal'
+    id => state.channels[id].name !== 'Legacy' && state.channels[id].name !== 'Personal'
   ).map(id => {
     const { participants, moments, name } = state.channels[id];
 

@@ -30,8 +30,8 @@ describe('NavBar tests', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
         channels={[
-          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'Public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'Host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -41,7 +41,7 @@ describe('NavBar tests', () => {
     );
     expect(wrapper.find('.navBar a').length).toBe(3);
     expect(wrapper.find('.navBar a').at(1).text()).toBe('event');
-    expect(wrapper.find('.navBar a').at(2).text()).toBe('host');
+    expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
   });
 
   test('onClick function works', () => {

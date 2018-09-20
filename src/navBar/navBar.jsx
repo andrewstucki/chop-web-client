@@ -104,13 +104,13 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     const style = channel.isCurrent ? null : styles.unselected;
     const opacity = channel.isCurrent ? '1.0' : '0.5';
 
-    if (channel.name === 'public') {
+    if (channel.name === 'Public') {
       return (
         <span className={style}>
           event
         </span>
       );
-    } else if (channel.name === 'host') {
+    } else if (channel.name === 'Host') {
       return (
         <span className={style}>
           {channel.name}

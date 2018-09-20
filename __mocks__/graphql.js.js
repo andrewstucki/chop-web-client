@@ -1,24 +1,15 @@
-const graphqlJs = jest.fn();
-const graph = jest.fn();
-const promiseFunction = jest.fn();
+const mockGraphqlJs = jest.fn();
+const mockGraph = jest.fn();
+const mockFetch = jest.fn();
 
-let fakeData = {};
+mockGraphqlJs.mockReturnValue(mockGraph);
+mockGraph.mockReturnValue(mockFetch);
+mockFetch.mockResolvedValue({});
 
-graphqlJs.__setFakeData = data => {
-  fakeData = data;
+
+export default mockGraphqlJs;
+
+export {
+  mockGraph,
+  mockFetch,
 };
-
-const then = callback => {
-  callback(fakeData);
-};
-
-const promise = {
-  then: then,
-};
-
-graphqlJs.mockReturnValue(graph);
-graph.mockReturnValue(promiseFunction);
-promiseFunction.mockReturnValue(promise);
-
-
-export default graphqlJs;
