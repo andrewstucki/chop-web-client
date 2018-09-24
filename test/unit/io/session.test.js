@@ -54,6 +54,7 @@ describe('Session', () => {
     id
     nickname
     avatar
+    pubnubToken
     role {
       label
     }
