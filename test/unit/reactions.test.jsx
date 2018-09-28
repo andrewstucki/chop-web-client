@@ -7,9 +7,7 @@ import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
 import { defaultState, removeReaction } from '../../src/feed/dux';
 
-import ReactionButton from '../../src/reactions/reactionButton';
 import ReactionsContainer from '../../src/reactions/reactionsContainer';
-import Reaction from '../../src/reactions/reaction';
 import Chat from '../../src/io/chat';
 
 Enzyme.configure({ adapter: new Adapter() });

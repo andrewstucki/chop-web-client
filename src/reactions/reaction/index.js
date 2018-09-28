@@ -1,15 +1,11 @@
 // @flow
 import { connect } from 'react-redux';
 
-import Reaction from './reaction'
+import Reaction from './reaction';
 
 import { removeReaction } from '../../feed/dux';
 
-const mapStateToProps = () => {
-  return {
-    
-  };
-};
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => (
   {

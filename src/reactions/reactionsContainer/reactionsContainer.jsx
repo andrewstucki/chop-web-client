@@ -16,6 +16,6 @@ const ReactionsContainer = ({reactions}: ReactionsContainerProps) => (
     )}
     <ReactionButton />
   </div>
-)
+);
 
 export default ReactionsContainer;
