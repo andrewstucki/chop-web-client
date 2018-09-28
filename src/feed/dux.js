@@ -12,7 +12,7 @@ import type {
 import type {
   PublishReactionActionType,
   ReactionType,
-} from '../reactionButton/dux';
+} from '../reactions/reactionButton/dux';
 
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 
@@ -28,7 +28,7 @@ import {
 
 import {
   PUBLISH_REACTION,
-} from '../reactionButton/dux';
+} from '../reactions/reactionButton/dux';
 
 import {
   OPEN_SIDE_MENU,

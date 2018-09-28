@@ -8,7 +8,7 @@ import VideoFeed from '../videoFeed';
 import SideMenu from '../sideMenu';
 import Placeholder from '../placeholder';
 import PopUpModal from '../popUpModal';
-import ReactionButton from '../reactionButton';
+import ReactionsContainer from '../reactions/reactionsContainer';
 
 import '../../assets/global.css';
 import chopStyles from './styles.css';
@@ -23,7 +23,7 @@ const ChopContainer = ()  => (
       <Feed />
       <Placeholder />
       <Chat />
-      <ReactionButton />
+      <ReactionsContainer />
     </div>
   </div>
 );

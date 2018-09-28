@@ -22,3 +22,4 @@ const VideoFeed = ({isVideoHidden, url}: VideoFeedProps) => {
 };
 
 export default VideoFeed;
+
