@@ -2,7 +2,7 @@
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
 import type { FeedType } from '../feed/dux';
-import type { ReactionType } from '../reactionButton/dux';
+import type { ReactionType } from '../reactions/reactionButton/dux';
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
 
