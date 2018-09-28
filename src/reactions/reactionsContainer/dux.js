@@ -1,5 +1,6 @@
 // @flow
 import type { FeedType } from '../../feed/dux';
+import type { ReactionType } from '../reactionButton/dux';
 
 // Selectors
 

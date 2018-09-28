@@ -14,7 +14,7 @@ class Reaction extends React.Component {
     this.removeReaction = this.removeReaction.bind(this);
   }
 
-  removeReaction() {
+  removeReaction () {
     this.props.removeReaction(this.props.id);
   }
 
@@ -23,12 +23,12 @@ class Reaction extends React.Component {
     const randRight = Math.floor(Math.random() * 20) + 10;
     const randTop = Math.floor(Math.random() * 11) + 75;
     const heartStyle = {
-      width:randWidth+'px',
-      height:(randWidth-2)+'px',
+      width:randWidth + 'px',
+      height:(randWidth - 2) + 'px',
       position: 'absolute',
-      top: '-'+randTop + 'px',
-      right: randRight+'px',
-    }
+      top: '-' + randTop + 'px',
+      right: randRight + 'px',
+    };
 
     return (
       <div 
