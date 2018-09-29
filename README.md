@@ -44,6 +44,24 @@ To start the server locally in development mode use:
 yarn start
 ```
 
+The first thing that happens when CWC starts up is it uses a cookie a token in a
+cookie to authenticate you as a user and load needed data to run. Locally you
+will not have that cookie so you will have to copy if from
+http://digerati.churchonline.org/. 
+Go to http://digerati.churchonline.org/ and sign in. If you don't have an account
+you will have to create one and ask one of the current admins to make you an admin.
+Once signed in go to http://digerati.churchonline.org/host_mobile.
+You have to copy the legacy_token cookie from this domain into your localhost 
+domain for it to work with the service.
+
+1. Open the dev tools
+2. Then go to the application tab (I'm assuming your using Chrome)
+3. Under Cookies > http://digerati.churchonline.org/host_mobile
+4. Copy the 'legacy_token' cookie value
+5. go to your http://localhost:8080
+6. Add the cookie (under application tab) 'legacy_token' with the value you copied
+7. refresh the page
+
 To start the Storybook server to view components.
 ```
 yarn storybook
