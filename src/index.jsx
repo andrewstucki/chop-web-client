@@ -37,3 +37,12 @@ if (content) {
     </Provider>,
     content);
 }
+
+if (document.body) {
+  window.addEventListener("orientationchange", function() {
+    if (document.activeElement) {
+      document.activeElement.blur();
+    }
+    window.scrollTo({top:0, behavior:'instant'});
+  });
+}
