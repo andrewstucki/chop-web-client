@@ -25,7 +25,7 @@ const LanguageSelector = (
           setLanguage(event.target.value);
         }}
         className={styles.languageSelector}
-        tabindex="-1"
+        tabIndex="-1"
       >
         {
           languageOptions.map(language => (
