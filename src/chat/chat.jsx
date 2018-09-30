@@ -35,6 +35,8 @@ class Chat extends Component<ChatProps, ChatState> {
     this.onBlur = this.onBlur.bind(this);
     // $FlowFixMe
     this.onFocus = this.onFocus.bind(this);
+    // $FlowFixMe
+    this.noScrollFunction = this.noScrollFunction.bind(this);
 
     if (props.initialState) {
       this.state = props.initialState;
@@ -63,9 +65,14 @@ class Chat extends Component<ChatProps, ChatState> {
       this.setState({chatInput: ''});
     }
   }
+  
+  noScrollFunction() {
+    if (window.scrollY > 1)
+      setTimeout(() => window.scrollTo(0, 0), 500);
+  };
 
   onFocus () {
-    window.scrollTo({top:0, behavior:'instant'});
+    window.scrollTo(0, 0);
     this.props.textOnFocus();
 
     var iPhone = !!navigator.platform && /iPhone/.test(navigator.platform);
@@ -74,9 +81,9 @@ class Chat extends Component<ChatProps, ChatState> {
       // Happily it doesn't hurt to scroll to the top multiple times.
       // It might be possible to remove this if we move the text input box
       // higher, so iOS Safari doesn't shove our window offscreen.
-      setTimeout(() => window.scrollTo({top:0, behavior:'instant'}), 50);
-      setTimeout(() => window.scrollTo({top:0, behavior:'instant'}), 100);
-      setTimeout(() => window.scrollTo({top:0, behavior:'instant'}), 150);
+      setTimeout(() => window.scrollTo(0, 0), 50);
+      setTimeout(() => window.scrollTo(0, 0), 100);
+      setTimeout(() => window.scrollTo(0, 0), 150);
     }
 
     var iPad = !!navigator.platform && /iPad/.test(navigator.platform);
@@ -85,17 +92,22 @@ class Chat extends Component<ChatProps, ChatState> {
       // in window.innerHeight which tells us how big the soft keyboard is.
       // So, if we see it change, we subtract that amount from our page's height.
       var oldH = window.innerHeight;
+      window.removeEventListener("scroll", this.noScrollFunction);
       setTimeout(function() {
         var newH = window.innerHeight;
         if (newH < oldH) {
           var shortstyle = "calc(100% - " + (oldH - newH) + "px)";
           // TODO: get this height to ChopContainer in a better way.
           document.querySelector("#wrapper").style.height = shortstyle;
-          window.scrollTo({top:0, behavior:'instant'});
+          window.scrollTo(0, 0);
+          window.addEventListener("scroll", this.noScrollFunction);
         }
       }, 500);  // TODO this is an arbitrarily chosen time. Improve this.
     }
 
+    if (iPhone || iPad) {
+      window.addEventListener("scroll", this.noScrollFunction);
+    }
   }
 
   onBlur () {
