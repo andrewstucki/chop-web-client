@@ -21,19 +21,20 @@
 
 .frame {
   /* This defines the maximum size for the video. */
-  /* 320x180 and 256x144 are both 16:9 ratios. */
+  /* 356x200, 320x180 and 256x144 are both 16:9 ratios. */
   /* So is 455x256 but that's pretty huge on a phone. */
+  /* YouTube's embed API "requires" 200 pixels minimum. */
   /* Keep this width value always equal to the max-width 
      selector below, so it is smooth when resizing. */
-  width: 320px;
-  height:180px;
+  width: 356px;
+  height:200px;
   display: block;
   margin: 0 auto 0 auto;
 }
 
 /* THIN SCREENS: image is full width, height is proportional.  */
 /* This max-width should always match the width in the standard variant above. */
-@media only screen and (max-width: 320px) {
+@media only screen and (max-width: 356px) {
   .showVideo {
     padding-bottom: 56vw;  /* Leaves space for a 16:9 image under any other content */
   }
