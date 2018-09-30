@@ -3,6 +3,7 @@ import ChopContainer from './chop';
 
 const mapStateToProps = state => ({
   state: state,
+  focused: state.feed.isChatFocused,
 });
 
 const mapDispatchToProps = dispatch => ({

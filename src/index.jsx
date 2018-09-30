@@ -37,18 +37,3 @@ if (content) {
     </Provider>,
     content);
 }
-
-if (document.body) {
-  document.body.addEventListener('touchstart', (event: Event) => {
-    const targetElement = event.target;
-    if (
-      !(targetElement instanceof HTMLInputElement ||
-      targetElement instanceof HTMLAnchorElement ||
-      targetElement instanceof HTMLButtonElement)
-    ) {
-      if (document.activeElement) {
-        document.activeElement.blur();
-      }
-    }
-  });
-}

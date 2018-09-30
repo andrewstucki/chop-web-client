@@ -3,23 +3,19 @@
 :root {
   --wrapper: {
     overflow: hidden;
-    display: flex;
-    flex-basis: auto;
-    height: auto;
+    height: 144px;
     background-color: #1e1f23;
   }
 }
 
 .showVideo {
   @apply --wrapper;
-  flex: 1;
   transition-timing-function: var(--ease-in);
   transition: flex var(--animation-duration);
 }
 
 .hideVideo {
   @apply --wrapper;
-  flex: 0;
   transition-timing-function: var(--ease-out);
   transition: flex var(--animation-duration);
 }
