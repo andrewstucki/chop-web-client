@@ -2,8 +2,7 @@
 
 :root {
   --wrapper: {
-    overflow: hidden;
-    height: 144px;
+    position: relative;
     background-color: #1e1f23;
   }
 }
@@ -21,12 +20,38 @@
 }
 
 .frame {
-  width: 100%;
+  /* This defines the maximum size for the video. */
+  /* 320x180 and 256x144 are both 16:9 ratios. */
+  /* So is 455x256 but that's pretty huge on a phone. */
+  /* Keep this width value always equal to the max-width 
+     selector below, so it is smooth when resizing. */
+  width: 320px;
+  height:180px;
+  display: block;
+  margin: 0 auto 0 auto;
 }
 
-@media only screen and (min-width: 720px) {
+/* THIN SCREENS: image is full width, height is proportional.  */
+/* This max-width should always match the width in the standard variant above. */
+@media only screen and (max-width: 320px) {
+  .showVideo {
+    padding-bottom: 56vw;  /* Leaves space for a 16:9 image under any other content */
+  }
+  .frame { /* Place the video in the padding defined just above. */
+    position: absolute;
+    width: 100%;
+    height: 56vw;  /* this keeps it 16:9 */
+    left: 0;
+    bottom: 0;
+  }
+}
+
+/* SHORT SCREENS: hide the video. */
+@media only screen and (max-height: 400px) {
+  .showVideo {
+    padding-bottom: 0;
+  }
   .frame {
-    max-width: 720px;
-    margin: 0 auto 0 auto;
+    display: none;
   }
 }
