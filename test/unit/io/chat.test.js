@@ -249,4 +249,31 @@ describe('Chat2 Tests', () => {
       }
     );
   });
+
+  test('Set Available for Prayer', () => {
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    getState.mockReturnValue(store);
+
+    const chat = new Chat(dispatch, getState);
+
+    chat.init();
+    
+    chat.dispatch(
+      {
+        type: 'SET_AVAILABLE_FOR_PRAYER',
+        status: true,
+      }
+    ); 
+
+    expect(mockSetState).toHaveBeenCalledTimes(1);
+    expect(mockSetState).toHaveBeenCalledWith(
+      {
+        channels: ['public'],
+        state: {
+          available_prayer: true, // eslint-disable-line camelcase
+        },
+      }
+    );
+  });
 });
