@@ -79,23 +79,38 @@ class Chat {
     );
   }
 
-  setLanguage (languageCode: string) {
+  setPubnubState (state: any) {
     this.pubnub.setState(
       {
         channels: Object.keys(this.getState().channels),
-        state: {
-          language: languageCode,
-          prevLanguage: this.previousLanguage,
-        },
+        state: state,
       }
     );
+  }
+
+  setLanguage (languageCode: string) {
+    this.setPubnubState (
+      {
+        language: languageCode,
+        prevLanguage: this.previousLanguage,
+      },
+    );
     this.previousLanguage = languageCode;
+  }
+
+  setAvailableForPrayer (status: boolean) {
+    this.setPubnubState (
+      {
+        available_prayer: status, // eslint-disable-line camelcase
+      },
+    );
   }
 
   onStatus (event: PubnubStatusEventType) {
     switch (event.category) {
     case 'PNConnectedCategory':
       this.setLanguage(this.getState().currentLanguage);
+      this.setAvailableForPrayer(true);
       this.storeDispatch({
         type: 'CHAT_CONNECTED',
       });
@@ -149,6 +164,9 @@ class Chat {
       return;
     case 'SET_LANGUAGE':
       this.setLanguage(action.language);
+      return;
+    case 'SET_AVAILABLE_FOR_PRAYER':
+      this.setAvailableForPrayer(action.status);
       return;
     }
   }
