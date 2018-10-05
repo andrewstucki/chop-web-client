@@ -38,8 +38,12 @@ const createUid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
 
+const getChannelByName = (channels: Array<string>, name) => 
+  Object.keys(channels).find(id => channels[id].name === name);
+
 export {
   getFirstInitial,
   getAvatarColor,
   createUid,
+  getChannelByName,
 };
