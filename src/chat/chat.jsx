@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 
 import type { SharedUserType } from '../feed/dux';
 
+import { isUsingIPad, isUsingIPhone } from '../util';
+
 import Button from '../components/button';
 import TextField from '../components/text-field';
 import UpArrow from '../../assets/large-arrow-up.svg';
@@ -75,8 +77,7 @@ class Chat extends Component<ChatProps, ChatState> {
     window.scrollTo(0, 0);
     this.props.textOnFocus();
 
-    var iPhone = !!navigator.platform && /iPhone/.test(navigator.platform);
-    if (iPhone) {
+    if (isUsingIPhone()) {
       // The required timing here depends on the phone's speed.
       // Happily it doesn't hurt to scroll to the top multiple times.
       // It might be possible to remove this if we move the text input box
@@ -86,8 +87,7 @@ class Chat extends Component<ChatProps, ChatState> {
       setTimeout(() => window.scrollTo(0, 0), 150);
     }
 
-    var iPad = !!navigator.platform && /iPad/.test(navigator.platform);
-    if (iPad) {
+    if (isUsingIPad()) {
       // On iPad, when the soft keyboard comes up, that will cause a change
       // in window.innerHeight which tells us how big the soft keyboard is.
       // So, if we see it change, we subtract that amount from our page's height.
@@ -105,7 +105,7 @@ class Chat extends Component<ChatProps, ChatState> {
       }, 500);  // TODO this is an arbitrarily chosen time. Improve this.
     }
 
-    if (iPhone || iPad) {
+    if (isUsingIPhone() || isUsingIPad()) {
       window.addEventListener("scroll", this.noScrollFunction);
     }
   }

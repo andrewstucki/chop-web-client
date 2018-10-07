@@ -38,8 +38,18 @@ const createUid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
 
+const isUsingIPad = () => {
+  return !!navigator.platform && /iPad/.test(navigator.platform);
+}
+
+const isUsingIPhone = () => {
+  return !!navigator.platform && /iPhone/.test(navigator.platform);
+}
+
 export {
   getFirstInitial,
   getAvatarColor,
   createUid,
+  isUsingIPad,
+  isUsingIPhone
 };
