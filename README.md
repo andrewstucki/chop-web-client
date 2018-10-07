@@ -75,8 +75,7 @@ interactive with UI.
 yarn test
 ```
 
-To run the Functional Tests. Functional tests validate state and
-behavior of React UI.
+To run the Functional Tests. Functional tests validate state and behavior of React UI. NOTE: these tests will only pass if you are **running the server locally** in another terminal window with `yarn start`.
 ```
 yarn functional
 ```
@@ -115,7 +114,7 @@ To run the Snapshot and Visual Regression Tests. Snapshot tests create a copy of
 the markup created by React UI and compare it to the previous copy and validate
 there are no differences. Visual Regression tests take a screenshot of each
 component and compare it to the last screenshot. Both of these types of tests
-need the Storybook server running (see above). 
+need the Storybook server running (see above) in another terminal window (`yarn storybook`).
 ```
 yarn snap
 ```
@@ -140,6 +139,8 @@ To run all the validation (test, functional, snap, flow and lint)
 ```
 yarn validate
 ```
+
+Remember, the functional tests will only work if you have first run `yarn start` and `yarn storybook` in other terminal windows.
 
 ## Production Build
 
