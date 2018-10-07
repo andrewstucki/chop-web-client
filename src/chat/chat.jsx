@@ -92,7 +92,6 @@ class Chat extends Component<ChatProps, ChatState> {
       // in window.innerHeight which tells us how big the soft keyboard is.
       // So, if we see it change, we subtract that amount from our page's height.
       var oldH = window.innerHeight;
-      window.removeEventListener("scroll", this.noScrollFunction);
       setTimeout(function() {
         var newH = window.innerHeight;
         if (newH < oldH) {
@@ -100,7 +99,6 @@ class Chat extends Component<ChatProps, ChatState> {
           // TODO: get this height to ChopContainer in a better way.
           document.querySelector("#wrapper").style.height = shortstyle;
           window.scrollTo(0, 0);
-          window.addEventListener("scroll", this.noScrollFunction);
         }
       }, 500);  // TODO this is an arbitrarily chosen time. Improve this.
     }
