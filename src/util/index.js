@@ -46,10 +46,34 @@ const isUsingIPhone = () => {
   return !!navigator.platform && /iPhone/.test(navigator.platform);
 }
 
+// using info from https://51degrees.com/blog/device-detection-for-apple-iphone-and-ipad
+const isUsingIPhoneX = () => {
+  return (window.screen.height == 812
+    && window.screen.width == 375 
+    && window.devicePixelRatio == 3);
+}
+
+// 6/6s/7/8
+const isUsingIPhone678 = () => {
+  return (window.screen.height == 667
+    && window.screen.width == 375 
+    && window.devicePixelRatio == 2);
+}
+
+// iPhone 6+/6s+/7+/8+
+const isUsingIPhone678plus = () => {
+  return (window.screen.height == 736
+    && window.screen.width == 414 
+    && window.devicePixelRatio == 3);
+}
+
 export {
   getFirstInitial,
   getAvatarColor,
   createUid,
   isUsingIPad,
-  isUsingIPhone
+  isUsingIPhone,
+  isUsingIPhoneX,
+  isUsingIPhone678,
+  isUsingIPhone678plus
 };

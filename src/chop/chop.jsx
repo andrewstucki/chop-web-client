@@ -9,6 +9,7 @@ import SideMenu from '../sideMenu';
 import Placeholder from '../placeholder';
 import PopUpModal from '../popUpModal';
 import ReactionButton from '../reactionButton';
+import { isUsingIPhone, isUsingIPhoneX, isUsingIPhone678, isUsingIPhone678plus } from '../util';
 
 import '../../assets/global.css';
 import styles from './styles.css';
@@ -18,16 +19,15 @@ class ChopContainer extends React.Component {
   render () {
     var wrapperstyle = styles.wrapper;
     if (this.props.focused) {
-      var iPhone = !!navigator.platform && /iPhone/.test(navigator.platform);
-      if (iPhone) {
-        wrapperstyle = styles.wrapperfocused_generic_iphone;
-        // using info from https://51degrees.com/blog/device-detection-for-apple-iphone-and-ipad
-        if (window.screen.height / window.screen.width == 812 / 375 && window.devicePixelRatio == 3)
+      if (isUsingIPhone()) {
+        if (isUsingIPhoneX())
           wrapperstyle = styles.wrapperfocused_iphonex;
-        if (window.screen.height / window.screen.width == 736 / 414 && window.devicePixelRatio == 3)
-          wrapperstyle = styles.wrapperfocused_iphone678plus;  // iPhone 6+/6s+/7+/8+
-        if (window.screen.height / window.screen.width == 667 / 375 && window.devicePixelRatio == 2)
-          wrapperstyle = styles.wrapperfocused_iphone678;  // 6/6s/7/8
+        else if (isUsingIPhone678())
+          wrapperstyle = styles.wrapperfocused_iphone678;  
+        else if (isUsingIPhone678plus())
+          wrapperstyle = styles.wrapperfocused_iphone678plus;
+        else
+          wrapperstyle = styles.wrapperfocused_generic_iphone;
       }
     }
 
