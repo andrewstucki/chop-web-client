@@ -26,15 +26,6 @@
   }
 }
 
-.icon {
-  border-radius: var(--borderRadius);
-  height: 36px;
-  width: 36px;
-  color: var(--backgroundColor);
-  text-align: center;
-  line-height: 36px;
-}
-
 .body {
   flex: 1;
   margin: 0 8px;

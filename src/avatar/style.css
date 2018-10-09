@@ -1,0 +1,10 @@
+@import '../../assets/theme.css';
+
+.icon {
+  border-radius: var(--borderRadius);
+  height: 36px;
+  width: 36px;
+  color: var(--backgroundColor);
+  text-align: center;
+  line-height: 36px;
+}

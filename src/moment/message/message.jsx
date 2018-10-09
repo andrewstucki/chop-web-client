@@ -2,8 +2,7 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
-
-import { getFirstInitial, getAvatarColor } from '../../util';
+import Avatar from '../../avatar';
 
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
 import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
@@ -69,12 +68,8 @@ const Message = (
           toggleCloseTrayButton(message.id);
         }}
       >
-        <div
-          className={styles.icon}
-          style={{backgroundColor: getAvatarColor(message.user.name)}}
-        >
-          {getFirstInitial(message.user.name)}
-        </div>
+        <Avatar user={message.user} />
+        
         <div className={styles.body}>
           <strong className={styles.name}>{message.user.name}</strong>
           <span className={styles.role}>Host</span>

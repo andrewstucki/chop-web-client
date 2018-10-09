@@ -1,6 +1,7 @@
 // @flow
 import graphqlJs from 'graphql.js';
 import { GET_INIT_DATA, setInitData } from '../feed/dux';
+import { avatarImageExists } from '../util';
 
 class GraphQlActor {
   storeDispatch: (action: any) => void
@@ -91,6 +92,16 @@ mutation AccessToken($token: String!) {
         };
       });
     }
+    avatarImageExists(payload.currentUser.id).then(exists => {
+      if (exists) {
+        this.storeDispatch(
+          {
+            type: 'SET_AVATAR',
+            url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${payload.currentUser.id}/thumb/photo.jpg`,
+          }
+        );
+      }
+    }) ;
     this.storeDispatch(
       setInitData(
         {

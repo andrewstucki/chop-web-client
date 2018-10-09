@@ -26,7 +26,7 @@ const Converter = {
       fromToken: message.user.pubnubToken,
       msgId: message.id,
       timestamp,
-      fromAvatar: null,
+      fromAvatar: message.user.avatarUrl,
       isHost: true,
       label: message.user.role.label,
       isVolunteer: true,
@@ -58,6 +58,7 @@ const Converter = {
       user: {
         id: message.userId,
         name: message.fromNickname,
+        avatarUrl: message.fromAvatar,
         pubnubToken: message.fromToken,
         role: {
           label: message.label,
