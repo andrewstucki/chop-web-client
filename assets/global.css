@@ -13,6 +13,7 @@ body,html {
   width: 100%;
   box-sizing: border-box;
   webkit-overflow-scrolling: touch; /* momentum scrolling */
+  touch-action: manipulation;
 }
 
 input {

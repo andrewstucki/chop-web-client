@@ -8,7 +8,6 @@
     height: 100%;
     width: 100%;
     z-index: 5;
-    transform: translateX(-100%);
     overflow: visible;
   }
   --overlay: {
@@ -39,6 +38,9 @@
 
 .closed {
   @apply --wrapper;
+  transform: translateX(-100%);
+  transition-timing-function: var(--ease-in);
+  transition: transform var(--animation-duration);
 }
 
 .open {
@@ -48,25 +50,20 @@
 .closed .overlay {
   @apply --overlay;
   opacity: 0;
-  transform: translateX(0%);
-  transition: opacity var(--animation-duration) var(--ease-in) 0ms, transform 0ms linear var(--animation-duration);
 }
 
 .open .overlay {
   @apply --overlay;
   opacity: 1;
-  transition: opacity var(--animation-duration) var(--ease-out) 0ms, transform 0ms linear 0ms;
-  transform: translateX(100%);
 }
 
 .closed .container {
   @apply --container;
-  transform: translateX(0%);
-  transition-timing-function:  var(--ease-in);
+  transform: translateX(-100%);
+  transition-timing-function: var(--ease-in);
 }
 
 .open .container {
   @apply --container;
-  transform: translateX(100%);
   transition-timing-function: var(--ease-out);
 }
