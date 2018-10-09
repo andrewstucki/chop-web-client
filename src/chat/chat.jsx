@@ -141,7 +141,8 @@ class Chat extends Component<ChatProps, ChatState> {
           />
           {this.state.chatInput &&
             <Button
-              onClick={() => (
+              onClick={event => (
+                event.preventDefault(),
                 publishMessage(currentChannel, this.state.chatInput, currentUser),
                 this.setState({chatInput: ''})
               )}
