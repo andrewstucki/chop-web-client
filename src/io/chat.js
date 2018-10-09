@@ -2,9 +2,10 @@
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
 import type { FeedType } from '../feed/dux';
-import type { ReactionType } from '../reactions/reactionButton/dux';
+import type { ReactionType, LegacyReactionType } from '../reactions/reactionButton/dux';
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
+import { getChannelByName } from '../util/index';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -20,7 +21,7 @@ type PubnubMessageEventType = {
   channel: string,
   message: {
     action: string,
-    data: MomentType | ReactionType,
+    data: MomentType | LegacyReactionType,
   },
   publisher: string,
   subscription: string,
@@ -40,6 +41,8 @@ class Chat {
     this.onMessage = this.onMessage.bind(this);
     // $FlowFixMe
     this.publish = this.publish.bind(this);
+    // $FlowFixMe
+    this.publishReaction = this.publishReaction.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
     
@@ -128,13 +131,13 @@ class Chat {
           moment: Converter.legacyToCwc(event.message.data),
         }
       );
-    } else if (event.message.action === 'reaction') {
+    } else if (event.message.action === 'videoReaction' && this.getState().reactions.find(reaction => event.message.data.reactionId === reaction.id) === undefined) {
       this.storeDispatch(
         {
           type: 'RECEIVE_REACTION',
           reaction: {
             type: 'REACTION',
-            id: event.message.data.id,
+            id: event.message.data.reactionId,
           },
         }
       );
@@ -154,6 +157,19 @@ class Chat {
     );
   }
 
+  publishReaction (reaction: ReactionType, channelId: string) {
+    this.pubnub.publish(
+      {
+        channel: channelId,
+        message: {
+          action: 'videoReaction',
+          channel: channelId,
+          data: Converter.cwcToLegacyReaction(reaction, channelId),
+        },
+      }
+    );
+  }
+
   dispatch (action: any) {
     switch (action.type) {
     case 'PUBLISH_MOMENT_TO_CHANNEL':
@@ -167,6 +183,9 @@ class Chat {
       return;
     case 'SET_AVAILABLE_FOR_PRAYER':
       this.setAvailableForPrayer(action.status);
+      return;
+    case 'PUBLISH_REACTION':
+      this.publishReaction(action.reaction, getChannelByName(this.getState().channels, 'Public'));
       return;
     }
   }

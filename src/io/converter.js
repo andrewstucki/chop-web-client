@@ -40,6 +40,14 @@ const Converter = {
     };
   },
 
+  cwcToLegacyReaction: (reaction: any, channelId: string) => (
+    {
+      nickname: reaction.user.name,
+      channelToken: channelId,
+      reactionId: reaction.id,
+    }
+  ),
+
   legacyToCwc: (message: any) => (
     {
       type: 'MESSAGE',
