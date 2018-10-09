@@ -38,34 +38,23 @@ const createUid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
 
-const isUsingIPad = () => {
-  return !!navigator.platform && /iPad/.test(navigator.platform);
-}
+const isUsingIPad = () => 
+  !!navigator.platform && /iPad/.test(navigator.platform);
 
-const isUsingIPhone = () => {
-  return !!navigator.platform && /iPhone/.test(navigator.platform);
-}
+const isUsingIPhone = () =>
+  !!navigator.platform && /iPhone/.test(navigator.platform);
 
 // using info from https://51degrees.com/blog/device-detection-for-apple-iphone-and-ipad
-const isUsingIPhoneX = () => {
-  return (window.screen.height == 812
-    && window.screen.width == 375 
-    && window.devicePixelRatio == 3);
-}
+const isUsingIPhoneX = () =>
+  (window.screen.height === 812 && window.screen.width === 375 && window.devicePixelRatio === 3);
 
 // 6/6s/7/8
-const isUsingIPhone678 = () => {
-  return (window.screen.height == 667
-    && window.screen.width == 375 
-    && window.devicePixelRatio == 2);
-}
+const isUsingIPhone678 = () => 
+  (window.screen.height === 667 && window.screen.width === 375 && window.devicePixelRatio === 2);
 
 // iPhone 6+/6s+/7+/8+
-const isUsingIPhone678plus = () => {
-  return (window.screen.height == 736
-    && window.screen.width == 414 
-    && window.devicePixelRatio == 3);
-}
+const isUsingIPhone678plus = () =>
+  (window.screen.height === 736 && window.screen.width === 414 && window.devicePixelRatio === 3);
 
 const getChannelByName = (channels: Array<string>, name) => 
   Object.keys(channels).find(id => channels[id].name === name);

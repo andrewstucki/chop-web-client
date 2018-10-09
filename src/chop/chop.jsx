@@ -15,19 +15,14 @@ import '../../assets/global.css';
 import styles from './styles.css';
 
 class ChopContainer extends React.Component {
-
   render () {
-    var wrapperstyle = styles.wrapper;
+    let wrapperstyle = styles.wrapper;
     if (this.props.focused) {
       if (isUsingIPhone()) {
-        if (isUsingIPhoneX())
-          wrapperstyle = styles.wrapperfocused_iphonex;
-        else if (isUsingIPhone678())
-          wrapperstyle = styles.wrapperfocused_iphone678;  
-        else if (isUsingIPhone678plus())
-          wrapperstyle = styles.wrapperfocused_iphone678plus;
-        else
-          wrapperstyle = styles.wrapperfocused_generic_iphone;
+        if (isUsingIPhoneX()) wrapperstyle = styles.wrapperfocused_iphonex;
+        else if (isUsingIPhone678()) wrapperstyle = styles.wrapperfocused_iphone678;  
+        else if (isUsingIPhone678plus()) wrapperstyle = styles.wrapperfocused_iphone678plus;
+        else wrapperstyle = styles.wrapperfocused_generic_iphone;
       }
     }
 
@@ -47,7 +42,6 @@ class ChopContainer extends React.Component {
         </div>
       </div>
     );
-
   }
 }
 
