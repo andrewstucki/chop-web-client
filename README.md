@@ -44,6 +44,24 @@ To start the server locally in development mode use:
 yarn start
 ```
 
+The first thing that happens when CWC starts up is it uses a cookie a token in a
+cookie to authenticate you as a user and load needed data to run. Locally you
+will not have that cookie so you will have to copy if from
+http://digerati.churchonline.org/. 
+Go to http://digerati.churchonline.org/ and sign in. If you don't have an account
+you will have to create one and ask one of the current admins to make you an admin.
+Once signed in go to http://digerati.churchonline.org/host_mobile.
+You have to copy the legacy_token cookie from this domain into your localhost 
+domain for it to work with the service.
+
+1. Open the dev tools
+2. Then go to the application tab (I'm assuming your using Chrome)
+3. Under Cookies > http://digerati.churchonline.org/host_mobile
+4. Copy the 'legacy_token' cookie value
+5. go to your http://localhost:8080
+6. Add the cookie (under application tab) 'legacy_token' with the value you copied
+7. refresh the page
+
 To start the Storybook server to view components.
 ```
 yarn storybook
@@ -57,8 +75,7 @@ interactive with UI.
 yarn test
 ```
 
-To run the Functional Tests. Functional tests validate state and
-behavior of React UI.
+To run the Functional Tests. Functional tests validate state and behavior of React UI. NOTE: these tests will only pass if you are **running the server locally** in another terminal window with `yarn start`.
 ```
 yarn functional
 ```
@@ -97,7 +114,7 @@ To run the Snapshot and Visual Regression Tests. Snapshot tests create a copy of
 the markup created by React UI and compare it to the previous copy and validate
 there are no differences. Visual Regression tests take a screenshot of each
 component and compare it to the last screenshot. Both of these types of tests
-need the Storybook server running (see above). 
+need the Storybook server running (see above) in another terminal window (`yarn storybook`).
 ```
 yarn snap
 ```
@@ -122,6 +139,8 @@ To run all the validation (test, functional, snap, flow and lint)
 ```
 yarn validate
 ```
+
+Remember, the functional tests will only work if you have first run `yarn start` and `yarn storybook` in other terminal windows.
 
 ## Production Build
 

@@ -7,7 +7,7 @@ import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
 import { defaultState, removeReaction } from '../../src/feed/dux';
 
-import ReactionButton from '../../src/reactionButton';
+import ReactionsContainer from '../../src/reactions/reactionsContainer';
 import Chat from '../../src/io/chat';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -29,22 +29,16 @@ describe('Reaction tests', () => {
     );
     const wrapper = Enzyme.mount(
       <Provider store={store}>
-        <ReactionButton />
+        <div>
+          <ReactionsContainer />
+        </div>   
       </Provider>
     );
-    wrapper.find('button').simulate('click');
-    expect(store.getState().feed.reactions.length).toBe(1);
-    expect(store.getState().feed.reactions[0]).toMatchObject(
-      {
-        type: 'REACTION',
-        id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
-        user: {
-          pubnubToken: '123456',
-          name: 'Billy Bob',
-          role: { label: '' },
-        },
-      }
-    );
+    wrapper.find('button').first().simulate('click');
+    expect(wrapper.find('ReactionsContainer').children().find('Reaction').length).toBe(1);
+    expect(wrapper.find('Reaction').get(0).props.id).toMatch(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/);
+    wrapper.find('Reaction').first().simulate('animationEnd');
+    expect(wrapper.find('ReactionsContainer').children().find('Reaction').length).toBe(0);
   });
 
   test('Remove Reaction removes a reaction from state', () => {
@@ -129,3 +123,4 @@ describe('Reaction tests', () => {
     );
   });
 });
+

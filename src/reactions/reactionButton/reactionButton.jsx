@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import type { SharedUserType } from '../feed/dux';
+import type { SharedUserType } from '../../feed/dux';
 
-import HeartButton from '../../assets/heart-button.svg';
+import HeartButton from '../../../assets/heart-button.svg';
 import styles from './style.css';
 
 type ReactionButtonPropsType = {

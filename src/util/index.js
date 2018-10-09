@@ -67,6 +67,9 @@ const isUsingIPhone678plus = () => {
     && window.devicePixelRatio == 3);
 }
 
+const getChannelByName = (channels: Array<string>, name) => 
+  Object.keys(channels).find(id => channels[id].name === name);
+
 export {
   getFirstInitial,
   getAvatarColor,
@@ -75,5 +78,6 @@ export {
   isUsingIPhone,
   isUsingIPhoneX,
   isUsingIPhone678,
-  isUsingIPhone678plus
+  isUsingIPhone678plus,
+  getChannelByName,
 };
