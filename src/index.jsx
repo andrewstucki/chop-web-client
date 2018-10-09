@@ -39,16 +39,10 @@ if (content) {
 }
 
 if (document.body) {
-  document.body.addEventListener('touchstart', (event: Event) => {
-    const targetElement = event.target;
-    if (
-      !(targetElement instanceof HTMLInputElement ||
-      targetElement instanceof HTMLAnchorElement ||
-      targetElement instanceof HTMLButtonElement)
-    ) {
-      if (document.activeElement) {
-        document.activeElement.blur();
-      }
+  window.addEventListener("orientationchange", function() {
+    if (document.activeElement) {
+      document.activeElement.blur();
     }
+    window.scrollTo({top:0, behavior:'instant'});
   });
 }

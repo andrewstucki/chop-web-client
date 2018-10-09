@@ -11,9 +11,8 @@ body,html {
   @apply --font;
   height: 100%;
   width: 100%;
-  /* prevent overscrolling/bounce in iOS */
-  position: fixed;
-  overflow: hidden;
+  box-sizing: border-box;
+  webkit-overflow-scrolling: touch; /* momentum scrolling */
 }
 
 input {

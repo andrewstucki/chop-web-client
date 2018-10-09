@@ -2,36 +2,57 @@
 
 :root {
   --wrapper: {
-    overflow: hidden;
-    display: flex;
-    flex-basis: auto;
-    height: auto;
+    position: relative;
     background-color: #1e1f23;
   }
 }
 
 .showVideo {
   @apply --wrapper;
-  flex: 1;
   transition-timing-function: var(--ease-in);
   transition: flex var(--animation-duration);
 }
 
 .hideVideo {
   @apply --wrapper;
-  flex: 0;
   transition-timing-function: var(--ease-out);
   transition: flex var(--animation-duration);
 }
 
 .frame {
-  width: 100%;
+  /* This defines the maximum size for the video. */
+  /* 356x200, 320x180 and 256x144 are both 16:9 ratios. */
+  /* So is 455x256 but that's pretty huge on a phone. */
+  /* YouTube's embed API "requires" 200 pixels minimum. */
+  /* Keep this width value always equal to the max-width 
+     selector below, so it is smooth when resizing. */
+  width: 356px;
+  height:200px;
+  display: block;
+  margin: 0 auto 0 auto;
 }
 
-@media only screen and (min-width: 720px) {
-  .frame {
-    max-width: 720px;
-    margin: 0 auto 0 auto;
+/* THIN SCREENS: image is full width, height is proportional.  */
+/* This max-width should always match the width in the standard variant above. */
+@media only screen and (max-width: 356px) {
+  .showVideo {
+    padding-bottom: 56vw;  /* Leaves space for a 16:9 image under any other content */
+  }
+  .frame { /* Place the video in the padding defined just above. */
+    position: absolute;
+    width: 100%;
+    height: 56vw;  /* this keeps it 16:9 */
+    left: 0;
+    bottom: 0;
   }
 }
 
+/* SHORT SCREENS: hide the video. */
+@media only screen and (max-height: 400px) {
+  .showVideo {
+    padding-bottom: 0;
+  }
+  .frame {
+    display: none;
+  }
+}

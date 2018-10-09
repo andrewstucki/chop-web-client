@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 
 import type { SharedUserType } from '../feed/dux';
 
+import { isUsingIPad, isUsingIPhone } from '../util';
+
 import Button from '../components/button';
 import TextField from '../components/text-field';
 import UpArrow from '../../assets/large-arrow-up.svg';
@@ -35,6 +37,8 @@ class Chat extends Component<ChatProps, ChatState> {
     this.onBlur = this.onBlur.bind(this);
     // $FlowFixMe
     this.onFocus = this.onFocus.bind(this);
+    // $FlowFixMe
+    this.noScrollFunction = this.noScrollFunction.bind(this);
 
     if (props.initialState) {
       this.state = props.initialState;
@@ -63,31 +67,55 @@ class Chat extends Component<ChatProps, ChatState> {
       this.setState({chatInput: ''});
     }
   }
+  
+  noScrollFunction() {
+    if (window.scrollY > 1)
+      setTimeout(() => window.scrollTo(0, 0), 500);
+  };
 
   onFocus () {
-    setTimeout(() => {
-      if (document.body && document.documentElement) {
-        document.body.style.height = window.innerHeight + 'px';
-        document.documentElement.style.height = window.innerHeight + 'px';
-        window.scroll({
-          top: 0,
-          behavior: 'instant',
-        });
-      }
-    }, 200);
+    window.scrollTo(0, 0);
     this.props.textOnFocus();
+
+    if (isUsingIPhone()) {
+      // The required timing here depends on the phone's speed.
+      // Happily it doesn't hurt to scroll to the top multiple times.
+      // It might be possible to remove this if we move the text input box
+      // higher, so iOS Safari doesn't shove our window offscreen.
+      setTimeout(() => window.scrollTo(0, 0), 50);
+      setTimeout(() => window.scrollTo(0, 0), 100);
+      setTimeout(() => window.scrollTo(0, 0), 150);
+    }
+
+    if (isUsingIPad()) {
+      // On iPad, when the soft keyboard comes up, that will cause a change
+      // in window.innerHeight which tells us how big the soft keyboard is.
+      // So, if we see it change, we subtract that amount from our page's height.
+      var oldH = window.innerHeight;
+      setTimeout(function() {
+        var newH = window.innerHeight;
+        if (newH < oldH) {
+          var shortstyle = "calc(100% - " + (oldH - newH) + "px)";
+          // TODO: get this height to ChopContainer in a better way.
+          document.querySelector("#wrapper").style.height = shortstyle;
+          window.scrollTo(0, 0);
+        }
+      }, 500);  // TODO this is an arbitrarily chosen time. Improve this.
+    }
+
+    if (isUsingIPhone() || isUsingIPad()) {
+      window.addEventListener("scroll", this.noScrollFunction);
+    }
   }
 
   onBlur () {
-    if (document.body && document.documentElement) {
-      document.body.style.height = '100%';
-      document.documentElement.style.height = '100%';
-      window.scroll({
-        top: 0,
-        behavior: 'instant',
-      });
-    }
     this.props.textOnBlur();
+
+    var iPad = !!navigator.platform && /iPad/.test(navigator.platform);
+    if (iPad) {
+      // undo the height modification made in onFocus().
+      document.querySelector("#wrapper").style.height = "";
+    }
   }
 
   render () {

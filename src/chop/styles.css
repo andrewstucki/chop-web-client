@@ -1,9 +1,37 @@
 .wrapper {
-  height: 100%;
+  position: fixed;
+  height: 100%; /* This gets overridden sometimes. Don't use 100vh as that acts differently. */
+  width: 100%;
 }
+
+/* Sadly, on iPhone there's no way to know the height of the soft keyboard. */
+/* Usually it's around 256px high. If predictive text is disabled in Settings, */
+/* then it's shorter. Other language keyboards might be taller or shorter. */
+
+/* On iPad, the keyboard height is knowable by watching window.innerHeight, so */
+/* we have javascript to detect those changes and override this height similarly. */
+.wrapperfocused_generic_iphone {
+  height: calc(100% - 256px);
+}
+.wrapperfocused_iphonex {
+  height: calc(100% - 294px);
+}
+.wrapperfocused_iphone678plus {
+  height: calc(100% - 270px);
+}
+.wrapperfocused_iphone678 {
+  height: calc(100% - 256px);
+}
+
 
 .chop {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+
+.inputs {
+  position: relative;
+  width: 100%;
 }
