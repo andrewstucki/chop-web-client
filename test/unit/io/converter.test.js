@@ -38,6 +38,7 @@ describe('Converter Tests', () => {
           user: {
             id: 1234567,
             name: 'Jackie Chan',
+            avatarUrl: null,
             pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
             role: {
               label: 'HOST',
@@ -132,6 +133,7 @@ describe('Converter Tests', () => {
         user: {
           id: 1234567,
           name: 'Jackie Chan',
+          avatarUrl: null,
           pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
           role: {
             label: 'HOST',

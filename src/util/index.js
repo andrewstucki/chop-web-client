@@ -2,6 +2,19 @@ const getFirstInitial = name => (
   name.charAt(0).toUpperCase()
 );
 
+function avatarImageExists (userId) {
+  return new Promise(resolve => {
+    const image = new Image();
+    image.onload = () => {
+      resolve(true);
+    };
+    image.onerror = () => {
+      resolve(false);
+    };
+    image.src = `https://chop-v3-media.s3.amazonaws.com/users/avatars/${userId}/thumb/photo.jpg`;
+  });
+}
+
 const avatarColors = [
   '100,180,242', '118,144,244', '176,117,237', '221,129,232', '247,114,146',
   '226,85,82',   '246,125,66',  '255,172,72',  '255,201,72',  '252,219,81',
@@ -63,6 +76,7 @@ export {
   getFirstInitial,
   getAvatarColor,
   createUid,
+  avatarImageExists,
   isUsingIPad,
   isUsingIPhone,
   isUsingIPhoneX,

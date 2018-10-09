@@ -125,6 +125,7 @@ type ReceiveReactionType = {
 type PrivateUserType = {
   id: string,
   name: string,
+  avatarUrl?: string,
   pubnubToken: string,
   pubnubAccessKey: string,
   role: {
@@ -135,6 +136,7 @@ type PrivateUserType = {
 
 type SharedUserType = {
   name: string,
+  avatarUrl?: string,
   pubnubToken: string,
   role: {
     label: string,
@@ -762,6 +764,14 @@ const reducer = (
     }
     return state;
   }
+  case 'SET_AVATAR':
+    return {
+      ...state,
+      currentUser: {
+        ...state.currentUser,
+        avatarUrl: action.url,
+      },
+    };
   case TOGGLE_CHAT_FOCUS:
     return {
       ...state,
@@ -814,6 +824,7 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   {
     pubnubToken: state.currentUser.pubnubToken,
     name: state.currentUser.name,
+    avatarUrl: state.currentUser.avatarUrl,
     role: {
       label: state.currentUser.role.label,
     },
