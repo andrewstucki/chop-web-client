@@ -39,7 +39,7 @@ if (content) {
 }
 
 if (document.body) {
-  window.addEventListener("orientationchange", function() {
+  window.addEventListener('orientationchange', () => {
     if (document.activeElement) {
       document.activeElement.blur();
     }

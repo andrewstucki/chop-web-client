@@ -68,10 +68,9 @@ class Chat extends Component<ChatProps, ChatState> {
     }
   }
   
-  noScrollFunction() {
-    if (window.scrollY > 1)
-      setTimeout(() => window.scrollTo(0, 0), 500);
-  };
+  noScrollFunction () {
+    if (window.scrollY > 1) setTimeout(() => window.scrollTo(0, 0), 500);
+  }
 
   onFocus () {
     window.scrollTo(0, 0);
@@ -91,30 +90,30 @@ class Chat extends Component<ChatProps, ChatState> {
       // On iPad, when the soft keyboard comes up, that will cause a change
       // in window.innerHeight which tells us how big the soft keyboard is.
       // So, if we see it change, we subtract that amount from our page's height.
-      var oldH = window.innerHeight;
-      setTimeout(function() {
-        var newH = window.innerHeight;
+      const oldH = window.innerHeight;
+      setTimeout (() => {
+        const newH = window.innerHeight;
         if (newH < oldH) {
-          var shortstyle = "calc(100% - " + (oldH - newH) + "px)";
+          const shortstyle = 'calc(100% - ' + (oldH - newH) + 'px)';
           // TODO: get this height to ChopContainer in a better way.
-          document.querySelector("#wrapper").style.height = shortstyle;
+          document.querySelector('#wrapper').style.height = shortstyle;
           window.scrollTo(0, 0);
         }
       }, 500);  // TODO this is an arbitrarily chosen time. Improve this.
     }
 
     if (isUsingIPhone() || isUsingIPad()) {
-      window.addEventListener("scroll", this.noScrollFunction);
+      window.addEventListener('scroll', this.noScrollFunction);
     }
   }
 
   onBlur () {
     this.props.textOnBlur();
 
-    var iPad = !!navigator.platform && /iPad/.test(navigator.platform);
+    const iPad = !!navigator.platform && /iPad/.test(navigator.platform);
     if (iPad) {
       // undo the height modification made in onFocus().
-      document.querySelector("#wrapper").style.height = "";
+      document.querySelector('#wrapper').style.height = '';
     }
   }
 
