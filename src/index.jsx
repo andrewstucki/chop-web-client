@@ -14,7 +14,7 @@ import bugsnag from 'bugsnag-js';
 import createPlugin from 'bugsnag-react';
 
 const bugsnagClient = bugsnag('2403ac729529750d296e1e4ee022f7dc');
-const ErrorBoundary = bugsnagClient.use(createPlugin(React))
+const ErrorBoundary = bugsnagClient.use(createPlugin(React));
 
 const actorMiddlewareApplied = actorMiddleware(
   SequenceActor,
