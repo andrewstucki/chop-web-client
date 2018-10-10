@@ -10,9 +10,7 @@ const Converter = {
   cwcToLegacy:( message: any, channelId: string) => {
     const time = new Date();
     const offset = (time.getTime() - _getState().event.startTime).toString();
-    const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();
-    const month = monthIndex => twoDigitNumber(monthIndex + 1);
-    const timestamp = `${time.getUTCFullYear()}-${month(time.getUTCMonth())}-${twoDigitNumber(time.getUTCDate())} ${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()} +0000`;
+    const timestamp = Converter.getTimestamp(time);
     const roomType = 'public';
 
     return {
@@ -48,6 +46,17 @@ const Converter = {
     }
   ),
 
+  cwcToLegacySystemMessage:(message: any) => {
+    const time = new Date();
+    const timestamp = Converter.getTimestamp(time);
+
+    return {
+      fromNickname: 'System',
+      messageText: `${message.host.name} started a live prayer with ${message.guest.name}`,
+      timestamp: timestamp,
+    };
+  },
+
   legacyToCwc: (message: any) => (
     {
       type: 'MESSAGE',
@@ -66,6 +75,12 @@ const Converter = {
       },
     }
   ),
+
+  getTimestamp: (time:Date) => {
+    const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();
+    const month = monthIndex => twoDigitNumber(monthIndex + 1);
+    return `${time.getUTCFullYear()}-${month(time.getUTCMonth())}-${twoDigitNumber(time.getUTCDate())} ${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()} +0000`;
+  },
 };
 
 export default Converter;

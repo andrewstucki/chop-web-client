@@ -2,6 +2,8 @@
 import GraphQlActor from '../../../src/io/graph';
 import testData from './test-data.json';
 import { mockFetch } from 'graphql.js';
+import { publishAcceptedPrayerRequest } from '../../../src/moment';
+
 jest.mock('graphql.js');
 
 describe('Test GraphQL', () => {
@@ -90,5 +92,29 @@ describe('Test GraphQL', () => {
         ],
       },
     );
+  });
+
+  test.skip('Accept prayer request', () => {
+    const returnValue = {
+      id: '1',
+      direct: true,
+      name: 'Prayer',
+      subscribers: [
+        {
+          pubnubToken: 'as93jlsdksdf',
+        },
+      ],
+      type: 'prayer',
+    };
+    
+    mockFetch.mockResolvedValue(returnValue);
+
+    const storeDispatch = jest.fn();
+    const getStore = jest.fn(() => ({}));
+    const actor = new GraphQlActor(storeDispatch, getStore);
+    actor.dispatch(publishAcceptedPrayerRequest('1', '12345'));
+    expect(storeDispatch.mock.calls.length).toBe(1);
+
+    expect(storeDispatch.mock.calls[0][0]).toEqual(returnValue);
   });
 });

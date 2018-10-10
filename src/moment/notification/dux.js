@@ -2,6 +2,7 @@
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import { createUid } from '../../util';
+import type { SharedUserType } from '../../feed/dux';
 
 // Action Types
 
@@ -37,8 +38,8 @@ type PrayerNotificationType = {
   type: 'NOTIFICATION',
   notificationType: 'PRAYER',
   id: string,
-  host: string,
-  guest: string,
+  host: SharedUserType,
+  guest: SharedUserType,
   timeStamp: string,
 };
 
@@ -57,11 +58,12 @@ const formatAMPM = (date: Date) => {
 
 const publishPrayerNotification = (
   host: string,
-  guest: string
+  guest: string,
+  channel: string
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
-    channel: 'host',
+    channel,
     moment: {
       type: NOTIFICATION,
       notificationType: PRAYER,

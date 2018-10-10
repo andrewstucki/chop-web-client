@@ -24,6 +24,30 @@ type MessageType = {
   closeTrayButtonRendered: boolean,
 };
 
+type LegacyMessageType = {
+  messageText: string,
+  language: string,
+  eventTimeId: string,
+  eventTimeOffset: string,
+  eventTitle: string,
+  uniqueMessageToken: string,
+  fromNickname: string,
+  fromToken: string,
+  msgId: string,
+  timestamp: string,
+  fromAvatar: string,
+  isHost: boolean,
+  label: string,
+  isVolunteer: boolean,
+  isUser: boolean,
+  userId: string,
+  organizationId: string,
+  organizationName: string,
+  roomType: string,
+  channelToken: string,
+  eventStartTime: string,
+};
+
 type OpenMessageTrayType = {
   type: 'OPEN_MESSAGE_TRAY',
   id: string,
@@ -117,4 +141,5 @@ export type {
   CloseMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
+  LegacyMessageType,
 };

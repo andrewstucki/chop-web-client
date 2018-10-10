@@ -10,15 +10,17 @@ import {
 } from '../moment/actionableNotification/dux';
 
 import SideMenu from './sideMenu';
+import { getChannelByName } from '../util';
 
 // TODO remove currentUser and publishPrayerRequestNotification after demo
 const mapStateToProps = state => {
   const feedState = state.feed;
+  const hostChannel = Object.keys(feedState.channels).length ? getChannelByName(feedState.channels, 'Host') : '';
+
   return {
     isClosed: feedState.isSideMenuClosed,
     currentUser: getCurrentUserAsSharedUser(feedState),
-    hostChannel: Object.keys(feedState.channels)
-      .find(channelId => feedState.channels[channelId].name === 'host'),
+    hostChannel,
     languageOptions: feedState.languageOptions,
   };
 };

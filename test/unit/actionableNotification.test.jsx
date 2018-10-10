@@ -18,6 +18,12 @@ const billBogus = {
   name: 'Bill Bogus',
   role: { label: '' },
 };
+const hostChannel = {
+  id: 'host',
+  name: 'Host',
+  moments: [],
+  participants: [],
+};
 
 describe('ActionableNotification tests', () => {
   test('Active prayer request notification renders', () => {
@@ -38,6 +44,7 @@ describe('ActionableNotification tests', () => {
         acceptPrayerRequest={acceptPrayerRequest}
         currentUser={billBogus}
         publishPrayerNotification={publishPrayerNotification}
+        hostChannel={hostChannel.id}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual(
@@ -70,6 +77,7 @@ describe('ActionableNotification tests', () => {
         acceptPrayerRequest={() => {}}
         publishPrayerNotification={() => {}}
         currentUser={billBogus}
+        hostChannel={hostChannel.id}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('notification');

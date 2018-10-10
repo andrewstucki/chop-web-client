@@ -14,9 +14,9 @@ build:
   stage: build
   script:
     - yarn
-    # - yarn flow check
+    - yarn flow check
     - yarn lint
-    # - yarn test
+    - yarn test
     - yarn build
   only:
     - master

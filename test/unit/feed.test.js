@@ -300,7 +300,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
           },
-          host: {
+          '12345': {
             id: '12345',
             moments: [],
             name: 'host',
@@ -322,7 +322,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          direct: {
+          '12345': {
             id: '12345',
             moments: [],
             name: 'direct',
@@ -341,7 +341,7 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          host: {
+          '12345': {
             id: '12345',
             name: 'host',
             moments: [],
@@ -354,7 +354,7 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           ...defaultState.channels,
-          host: {
+          '12345': {
             id: '12345',
             name: 'host',
             moments: [],
@@ -1458,35 +1458,35 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          host: {
+          ['12345']: {
             id: '12345',
-            name: 'host',
+            name: 'Host',
             moments: [],
           },
         },
-        currentChannel: 'host',
+        currentChannel: '12345',
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
-          id: '12345',
+          id: 'moment1',
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
         },
         animatingMoment: true,
         isPlaceholderPresent: true,
       },
-      releaseAnchorMoment()
+      releaseAnchorMoment('12345')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          host: {
+          ['12345']: {
             id: '12345',
-            name: 'host',
+            name: 'Host',
             moments: [
               {
                 type: 'ANCHOR_MOMENT',
-                id: '12345',
+                id: 'moment1',
                 text: 'I commit my life to Christ.',
                 subText: '1 hand raised',
               },
@@ -1495,7 +1495,7 @@ describe('Feed tests', () => {
         },
         animatingMoment: false,
         isPlaceholderPresent: false,
-        currentChannel: 'host',
+        currentChannel: '12345',
       }
     );
   });
@@ -1505,14 +1505,14 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          host: {
+          ['12345']: {
             id: '12345',
-            name: 'host',
+            name: 'Host',
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
-                id: '12345',
+                id: 'moment1',
                 user: {
                   id: '67890',
                   name: 'Burglekutt',
@@ -1524,20 +1524,20 @@ describe('Feed tests', () => {
           },
         },
       },
-      publishAcceptedPrayerRequest('12345')
+      publishAcceptedPrayerRequest('moment1', '12345')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          host: {
+          ['12345']: {
             id: '12345',
-            name: 'host',
+            name: 'Host',
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
-                id: '12345',
+                id: 'moment1',
                 user: {
                   id: '67890',
                   name: 'Burglekutt',
@@ -1557,14 +1557,14 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          host: {
+          ['12345']: {
             id: '12345',
-            name: 'host',
+            name: 'Host',
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
-                id: '12345',
+                id: 'moment1',
                 user: {
                   id: '67890',
                   name: 'Burglekutt',
@@ -1576,20 +1576,20 @@ describe('Feed tests', () => {
           },
         },
       },
-      receiveAcceptedPrayerRequest('12345')
+      receiveAcceptedPrayerRequest('moment1', '12345')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          host: {
+          ['12345']: {
             id: '12345',
-            name: 'host',
+            name: 'Host',
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
-                id: '12345',
+                id: 'moment1',
                 user: {
                   id: '67890',
                   name: 'Burglekutt',
@@ -1610,14 +1610,14 @@ describe('Feed tests', () => {
         ...defaultState,
         currentUser: currentUser,
       },
-      inviteToChannel(otherUser, '12345'));
+      inviteToChannel(otherUser, '12345', 'Prayer'));
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          ['12345']: {
+          '12345': {
             id: '12345',
-            name: '12345',
+            name: 'Prayer',
             moments: [],
             participants: [
               {
