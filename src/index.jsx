@@ -10,6 +10,11 @@ import SequenceActor from './io/sequence';
 import ChatActor from './io/chat';
 import GraphQlActor from './io/graph';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
+import bugsnag from 'bugsnag-js';
+import createPlugin from 'bugsnag-react';
+
+const bugsnagClient = bugsnag('2403ac729529750d296e1e4ee022f7dc');
+const ErrorBoundary = bugsnagClient.use(createPlugin(React))
 
 const actorMiddlewareApplied = actorMiddleware(
   SequenceActor,
@@ -33,7 +38,9 @@ const content = document.getElementById('content');
 if (content) {
   ReactDOM.render(
     <Provider store={store}>
-      <Chop />
+      <ErrorBoundary>
+        <Chop />
+      </ErrorBoundary>
     </Provider>,
     content);
 }

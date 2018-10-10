@@ -43,7 +43,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "babel-runtime": "^6.26.0",
     "compression-webpack-plugin": "^1.1.11",
-    "copy-webpack-plugin": "^4.5.1",
+    "copy-webpack-plugin": "^4.5.3",
     "css-loader": "^0.28.11",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
@@ -75,6 +75,8 @@
   "dependencies": {
     "@redux-beacon/google-tag-manager": "^1.0.1",
     "bezier-easing": "^2.1.0",
+    "bugsnag-js": "^4.7.3",
+    "bugsnag-react": "^1.1.1",
     "chat-engine": "^0.9.5",
     "graphql.js": "^0.4.20",
     "react": "^16.3.1",
