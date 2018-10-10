@@ -1,6 +1,7 @@
 // @flow
 import graphqlJs from 'graphql.js';
-import { GET_INIT_DATA, setInitData } from '../feed/dux';
+import { GET_INIT_DATA, setInitData, addChannel, inviteToChannel } from '../feed/dux';
+import { PUBLISH_ACCEPTED_PRAYER_REQUEST, PublishAcceptedPrayerRequestType} from '../moment';
 import { avatarImageExists } from '../util';
 
 class GraphQlActor {
@@ -18,12 +19,13 @@ class GraphQlActor {
     
     this.getAuthentication = this.graphAuth(
       `
-mutation AccessToken($token: String!) {
-  authenticate(type: "LegacyAuth", legacy_token: $token) {
-    access_token
-  }
-}
-`);
+        mutation AccessToken($token: String!) {
+          authenticate(type: "LegacyAuth", legacy_token: $token) {
+            access_token
+          }
+        }
+      `
+    );
   }
 
   getAccessToken () {
@@ -40,44 +42,47 @@ mutation AccessToken($token: String!) {
         },
       });
       this.graph(
-        `{
-  currentEvent {
-    title
-    eventTimeId
-    eventStartTime
-    eventTimezone
-    video {
-      type
-      url
-    }
-  }
-  currentUser {
-    id
-    nickname
-    avatar
-    pubnubToken
-    role {
-      label
-    }
-  }
-  currentFeeds {
-    id
-    name
-    type
-  }
-  currentOrganization {
-    id
-    name
-  }
-  pubnubKeys {
-    publishKey
-    subscribeKey
-  }
-  currentLanguages {
-    name
-    code
-  }
-}`)().then(this.getInitialData.bind(this));
+        `
+          {
+            currentEvent {
+              title
+              eventTimeId
+              eventStartTime
+              eventTimezone
+              video {
+                type
+                url
+              }
+            }
+            currentUser {
+              id
+              nickname
+              avatar
+              pubnubToken
+              role {
+                label
+              }
+            }
+            currentFeeds {
+              id
+              name
+              type
+            }
+            currentOrganization {
+              id
+              name
+            }
+            pubnubKeys {
+              publishKey
+              subscribeKey
+            }
+            currentLanguages {
+              name
+              code
+            }
+          }
+        `
+      )().then(this.getInitialData.bind(this));
     });
   }
 
@@ -134,6 +139,40 @@ mutation AccessToken($token: String!) {
     );
   }
 
+  publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {
+    const { user } = this.getStore().channels[this.getStore().currentChannel].moments.find(moment => moment.id === action.id);
+    const now = new Date().getTime();
+    const channel = `direct-chat-${now}`;
+
+
+    this.graph(
+      `
+        mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!) {
+          acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken) {
+            id
+            name
+            type
+            direct
+            subscribers {
+              pubnubAccessKey
+              pubnubToken
+              avatar
+              userId
+            }
+          }
+        }
+      `,
+      {
+        feedToken: channel,
+        requesterPubnubToken: user.pubnubToken,
+      }
+    ).then(data => {
+      const { name, id } = data.acceptPrayer;
+      this.storeDispatch(addChannel(name, id));
+      this.storeDispatch(inviteToChannel(user, id, name));
+    });
+  }
+
   dispatch (action: any) {
     if (!action && !action.type) {
       return;
@@ -144,6 +183,9 @@ mutation AccessToken($token: String!) {
       return;
     case GET_INIT_DATA:
       this.getInitialData();
+      return;
+    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+      this.publishAcceptedPrayerRequest(action);
       return;
     default:
       return;

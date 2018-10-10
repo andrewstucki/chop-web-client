@@ -33,10 +33,10 @@ type AnchorMomentActionType =
 
 // Action Creators
 
-const releaseAnchorMoment = (): ReleaseAnchorMomentType => (
+const releaseAnchorMoment = (channel:string): ReleaseAnchorMomentType => (
   {
     type: RELEASE_ANCHOR_MOMENT,
-    channel: 'host',
+    channel,
   }
 );
 

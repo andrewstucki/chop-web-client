@@ -10,6 +10,7 @@ type AnchorMomentPropsType = {
   anchorMoment: AnchorMomentType,
   isAnchorMomentAnchored: boolean,
   releaseAnchorMoment?: () => void,
+  hostChannel?: string,
 };
 
 const AnchorMoment = (
@@ -17,6 +18,7 @@ const AnchorMoment = (
     anchorMoment,
     isAnchorMomentAnchored,
     releaseAnchorMoment,
+    hostChannel,
   }: AnchorMomentPropsType
 ) => {
   const { text, subText } = anchorMoment;
@@ -37,7 +39,7 @@ const AnchorMoment = (
             dangerouslySetInnerHTML={{ __html: ReleaseAnchorButton }}
             onClick={() => {
               // $FlowFixMe
-              releaseAnchorMoment();
+              releaseAnchorMoment(hostChannel);
             }}
           />
       }

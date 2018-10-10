@@ -39,53 +39,55 @@ describe('Session', () => {
 
     expect(mockGraph).toHaveBeenCalledTimes(2);
     expect(mockGraph.mock.calls[1][0]).toBe(
-      `{
-  currentEvent {
-    title
-    eventTimeId
-    eventStartTime
-    eventTimezone
-    video {
-      type
-      url
-    }
-  }
-  currentUser {
-    id
-    nickname
-    avatar
-    pubnubToken
-    role {
-      label
-    }
-  }
-  currentFeeds {
-    id
-    name
-    type
-  }
-  currentOrganization {
-    id
-    name
-  }
-  pubnubKeys {
-    publishKey
-    subscribeKey
-  }
-  currentLanguages {
-    name
-    code
-  }
-}`
+      `
+          {
+            currentEvent {
+              title
+              eventTimeId
+              eventStartTime
+              eventTimezone
+              video {
+                type
+                url
+              }
+            }
+            currentUser {
+              id
+              nickname
+              avatar
+              pubnubToken
+              role {
+                label
+              }
+            }
+            currentFeeds {
+              id
+              name
+              type
+            }
+            currentOrganization {
+              id
+              name
+            }
+            pubnubKeys {
+              publishKey
+              subscribeKey
+            }
+            currentLanguages {
+              name
+              code
+            }
+          }
+        `
     );
     expect(mockGraph.mock.calls[0][0]).toBe(
       `
-mutation AccessToken($token: String!) {
-  authenticate(type: "LegacyAuth", legacy_token: $token) {
-    access_token
-  }
-}
-`
+        mutation AccessToken($token: String!) {
+          authenticate(type: "LegacyAuth", legacy_token: $token) {
+            access_token
+          }
+        }
+      `
     );
 
     expect(store.getState().feed.currentUser).toEqual(

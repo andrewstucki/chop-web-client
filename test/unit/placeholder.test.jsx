@@ -36,4 +36,44 @@ describe('Placeholder tests', () => {
       }
     );
   });
+
+  test('Placeholder does not render if present is false', () => {
+    const wrapper = Enzyme.shallow(
+      <Placeholder
+        anchorMoment={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'I commit my life to Christ.',
+            subText: '1 hand raised',
+          }
+        }
+        isPlaceholderPresent={false}
+        releaseAnchorMoment={() => {}}
+        currentChannel="host"
+        isAnchorMomentAnchored={true}
+      />
+    );
+    expect(wrapper.find(AnchorMoment).length).toBe(0);
+  });
+
+  test('Placeholder does not render if currentChannel is not the host channel', () => {
+    const wrapper = Enzyme.shallow(
+      <Placeholder
+        anchorMoment={
+          {
+            type: 'ANCHOR_MOMENT',
+            id: '12345',
+            text: 'I commit my life to Christ.',
+            subText: '1 hand raised',
+          }
+        }
+        isPlaceholderPresent={true}
+        releaseAnchorMoment={() => {}}
+        currentChannel="public"
+        isAnchorMomentAnchored={true}
+      />
+    );
+    expect(wrapper.find(AnchorMoment).length).toBe(0);
+  });
 });

@@ -2,28 +2,28 @@
 import ActionableNotification from './actionableNotification';
 import { connect } from 'react-redux';
 
-import { addChannel, inviteToChannel, getCurrentUserAsSharedUser } from '../../feed/dux';
+import { getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishAcceptedPrayerRequest } from './dux';
 import { publishPrayerNotification } from '../notification/dux';
+import { getChannelByName } from '../../util';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
+  const hostChannel = Object.keys(feedState.channels).length ? getChannelByName(feedState.channels, 'Host') : '';
+
   return {
     currentUser: getCurrentUserAsSharedUser(feedState),
+    hostChannel,
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    acceptPrayerRequest: (user, prayerRequestId) => {
-      const dateTime = (new Date()).getTime();
-      const channelId = `direct-chat-${dateTime}`;
-      dispatch(addChannel(channelId, channelId));
-      dispatch(inviteToChannel(user, channelId));
-      dispatch(publishAcceptedPrayerRequest(prayerRequestId));
+    acceptPrayerRequest: (user, prayerRequestId, channel) => {
+      dispatch(publishAcceptedPrayerRequest(prayerRequestId, channel));
     },
-    publishPrayerNotification: (host, guest) => dispatch(
-      publishPrayerNotification(host, guest)
+    publishPrayerNotification: (host, guest, channel) => dispatch(
+      publishPrayerNotification(host, guest, channel)
     ),
   }
 );

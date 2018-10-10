@@ -38,7 +38,7 @@ const prayerNotificationText = (
     />
     <div className={styles.text}>
       <div>
-        <strong>{host} </strong>started a live prayer with<strong> {guest}</strong>
+        <strong>{host.name} </strong>started a live prayer with<strong> {guest.name}</strong>
       </div>
       <div className={styles.timeStamp}>{timeStamp}</div>
     </div>

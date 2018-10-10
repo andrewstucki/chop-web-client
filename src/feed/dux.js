@@ -201,6 +201,7 @@ type AddChannelType = {
 type InviteToChannelType = {
   type: 'INVITE_TO_CHANNEL',
   user: SharedUserType,
+  channelId: string,
   channelName: string,
 };
 
@@ -312,12 +313,13 @@ const receiveMoment = (
 );
 
 const receiveAcceptedPrayerRequest = (
-  id: string
+  id: string,
+  channel: string
 ): ReceiveAcceptedPrayerRequestType => (
   {
     type: RECEIVE_ACCEPTED_PRAYER_REQUEST,
     id,
-    channel: 'host',
+    channel,
   }
 );
 
@@ -339,11 +341,13 @@ const addChannel = (
 
 const inviteToChannel = (
   user: SharedUserType,
-  channelName: string
+  channelId: string,
+  channelName: string,
 ): InviteToChannelType => (
   {
     type: INVITE_TO_CHANNEL,
     user,
+    channelId,
     channelName,
   }
 );
@@ -502,14 +506,14 @@ const reducer = (
     }
     return state;
   case ADD_CHANNEL:
-    if (state.channels[action.channel.name]) {
+    if (state.channels[action.channel.id]) {
       return state;
     }
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel.name]: action.channel,
+        [action.channel.id]: action.channel,
       },
     };
   case INVITE_TO_CHANNEL:
@@ -517,9 +521,9 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [action.channelName]: {
-          ...state[action.channelName],
-          id: action.channelName,
+        [action.channelId]: {
+          ...state[action.channelId],
+          id: action.channelId,
           name: action.channelName,
           moments: [],
           participants: [
@@ -620,17 +624,17 @@ const reducer = (
   case PUBLISH_ACCEPTED_PRAYER_REQUEST:
   case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
     // $FlowFixMe
-    const { id } = action;
+    const { id, channel} = action;
     return {
       ...state,
       channels: {
         ...state.channels,
         // $FlowFixMe
-        [action.channel]: {
+        [channel]: {
           // $FlowFixMe
-          ...state.channels[action.channel],
+          ...state.channels[channel],
           // $FlowFixMe
-          moments: state.channels[action.channel].moments.map(
+          moments: state.channels[channel].moments.map(
             moment => (
               {
                 ...moment,

@@ -141,4 +141,25 @@ describe('SideBar tests', () => {
     expect(logoutButton.calledOnce)
       .toBe(true);
   });
+
+  test('Prayer request button sends a prayer request', () => {
+    const prayerRequestButton = sinon.spy();
+    const wrapper = Enzyme.mount(
+      <SideMenu
+        currentUser={currentUser}
+        publishPrayerRequestNotification={prayerRequestButton}
+        hostChannel="host"
+        logout={() => {}}
+        close={() => {}}
+        isClosed={false}
+        languageOptions={languageOptions}
+        setLanguage={() => {}}
+      />
+    );
+    expect(wrapper.find('#prayerRequest').length)
+      .toBe(1);
+    wrapper.find('#prayerRequest').simulate('click');
+    expect(prayerRequestButton.calledOnce)
+      .toBe(true);
+  });
 });

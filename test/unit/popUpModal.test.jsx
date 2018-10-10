@@ -71,4 +71,20 @@ describe('PopUpModal tests', () => {
     expect(publishLeftChatNotification.calledOnce).toEqual(true);
     expect(removeChannel.calledOnce).toEqual(true);
   });
+
+  test('Modal does not render if visible is set to false', () => {
+    const wrapper = Enzyme.shallow(
+      <PopUpModal
+        togglePopUpModal={() => {}}
+        leaveChat={() => {}}
+        publishLeftChatNotification={() => {}}
+        removeChannel={() => {}}
+        currentChannel="direct"
+        otherUser={otherUser}
+        currentUser={currentUser}
+        isPopUpModalVisible={false}
+      />
+    );
+    expect(wrapper.find('div').at(0).props().className).toEqual(undefined);
+  });
 });

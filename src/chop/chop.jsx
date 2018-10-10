@@ -14,7 +14,7 @@ import { isUsingIPhone, isUsingIPhoneX, isUsingIPhone678, isUsingIPhone678plus }
 import '../../assets/global.css';
 import styles from './styles.css';
 
-class ChopContainer extends React.Component {
+class ChopContainer extends React.Component<any> {
   render () {
     let wrapperstyle = styles.wrapper;
     if (this.props.focused) {

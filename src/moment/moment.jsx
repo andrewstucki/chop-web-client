@@ -19,9 +19,10 @@ import type { MomentType } from './dux';
 
 type MomentPropType = {
   data: MomentType,
+  hostChannel?: string,
 };
 
-const Moment = ({ data }: MomentPropType) => {
+const Moment = ({ data, hostChannel }: MomentPropType) => {
   switch (data.type) {
   case MESSAGE:
     return (
@@ -52,6 +53,7 @@ const Moment = ({ data }: MomentPropType) => {
       <AnchorMoment
         anchorMoment={data}
         isAnchorMomentAnchored={false}
+        hostChannel={hostChannel}
       />
     );
   case BASIC_TEXT:

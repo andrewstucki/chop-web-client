@@ -50,6 +50,7 @@ const SideMenu = (
       // also remove currentUser and publishPrayer from props
     }
     <button
+      id="prayerRequest"
       style={
         {
           marginBottom: '100px',

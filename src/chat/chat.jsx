@@ -95,8 +95,13 @@ class Chat extends Component<ChatProps, ChatState> {
         const newH = window.innerHeight;
         if (newH < oldH) {
           const shortstyle = 'calc(100% - ' + (oldH - newH) + 'px)';
+
           // TODO: get this height to ChopContainer in a better way.
-          document.querySelector('#wrapper').style.height = shortstyle;
+          const wrapper: ?HTMLElement = document.querySelector('#wrapper');
+          if (wrapper && wrapper instanceof HTMLElement) {
+            wrapper.style.height = shortstyle;
+          }
+
           window.scrollTo(0, 0);
         }
       }, 500);  // TODO this is an arbitrarily chosen time. Improve this.
@@ -113,7 +118,10 @@ class Chat extends Component<ChatProps, ChatState> {
     const iPad = !!navigator.platform && /iPad/.test(navigator.platform);
     if (iPad) {
       // undo the height modification made in onFocus().
-      document.querySelector('#wrapper').style.height = '';
+      const wrapper: ?HTMLElement = document.querySelector('#wrapper');
+      if (wrapper && wrapper instanceof HTMLElement) {
+        wrapper.style.height = '';
+      }
     }
   }
 

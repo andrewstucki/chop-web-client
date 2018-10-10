@@ -52,12 +52,13 @@ const publishPrayerRequestNotification = (
 );
 
 const publishAcceptedPrayerRequest = (
-  id: string
+  id: string,
+  channel: string
 ): PublishAcceptedPrayerRequestType => (
   {
     type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
     id,
-    channel: 'host',
+    channel,
   }
 );
 
