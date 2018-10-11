@@ -19,6 +19,13 @@ const store = createStore(() => (
   {
     feed: {
       currentUser: user,
+      channels: {
+        abc123: {
+          id: 'abc123',
+          name: 'Host',
+          moments: [],
+        }
+      }
     },
   }
 ));

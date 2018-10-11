@@ -2,7 +2,8 @@
 import graphqlJs from 'graphql.js';
 import { GET_INIT_DATA, setInitData, addChannel, inviteToChannel } from '../feed/dux';
 import { PUBLISH_ACCEPTED_PRAYER_REQUEST, PublishAcceptedPrayerRequestType} from '../moment';
-import { MUTE_USER, MuteUserType } from '../moment/message/dux';
+import { MUTE_USER } from '../moment/message/dux';
+import type { MuteUserType } from '../moment/message/dux';
 import { avatarImageExists } from '../util';
 
 class GraphQlActor {
