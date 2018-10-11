@@ -8,6 +8,7 @@ import styles from './style.css';
 
 type MessageTrayPropsType = {
   deleteMessage: (id: string) => void,
+  muteUser: (pubnubToken: string) => void,
 };
 
 const trayButton = (
@@ -32,6 +33,7 @@ const trayButton = (
 const MessageTray = (
   {
     deleteMessage,
+    muteUser,
   }: MessageTrayPropsType
 ) => (
   <div className={styles.tray}>
@@ -58,7 +60,8 @@ const MessageTray = (
         styles.muteButton,
         styles.muteImage,
         MuteButton,
-        'Mute'
+        'Mute',
+        muteUser
       )
     }
   </div>

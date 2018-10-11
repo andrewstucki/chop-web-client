@@ -6,6 +6,7 @@ import {
   closeMessageTray,
   deleteMessage,
   toggleCloseTrayButton,
+  muteUser,
 } from './dux';
 
 const mapStateToProps = () => (
@@ -18,6 +19,7 @@ const mapDispatchToProps = dispatch => (
     closeMessageTray: id => dispatch(closeMessageTray(id)),
     deleteMessage: id => dispatch(deleteMessage(id)),
     toggleCloseTrayButton: id => dispatch(toggleCloseTrayButton(id)),
+    muteUser: pubnubToken => dispatch(muteUser(pubnubToken)),
   }
 );
 

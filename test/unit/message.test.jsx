@@ -36,6 +36,7 @@ describe('Message', () => {
         openMessageTray={() => {}}
         deleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
+        muteUser={() => {}}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
@@ -61,6 +62,7 @@ describe('Message', () => {
         openMessageTray={openTray}
         deleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
+        muteUser={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
@@ -88,6 +90,7 @@ describe('Message', () => {
         openMessageTray={() => {}}
         deleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
+        muteUser={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
