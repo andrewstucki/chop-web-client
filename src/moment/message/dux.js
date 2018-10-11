@@ -11,6 +11,7 @@ const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const TOGGLE_CLOSE_TRAY_BUTTON = 'TOGGLE_CLOSE_TRAY_BUTTON';
 const MESSAGE = 'MESSAGE';
+const MUTE_USER = 'MUTE_USER';
 
 // Flow Type Definitions
 
@@ -68,6 +69,11 @@ type ToggleCloseTrayButtonType = {
   id: string,
 };
 
+type MuteUserType = {
+  type: 'MUTE_USER',
+  pubnubToken: string,
+}
+
 // Action Creators
 
 const publishMessage = (
@@ -117,6 +123,13 @@ const deleteMessage = (id:string): DeleteMessageType => (
   }
 );
 
+const muteUser = (pubnubToken:string): MuteUserType => (
+  {
+    type: MUTE_USER,
+    pubnubToken,
+  }
+);
+
 // Exports
 
 export {
@@ -125,6 +138,7 @@ export {
   DELETE_MESSAGE,
   TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
+  MUTE_USER,
 };
 
 export {
@@ -133,6 +147,7 @@ export {
   deleteMessage,
   toggleCloseTrayButton,
   publishMessage,
+  muteUser,
 };
 
 export type {
@@ -142,4 +157,5 @@ export type {
   DeleteMessageType,
   ToggleCloseTrayButtonType,
   LegacyMessageType,
+  MuteUserType,
 };

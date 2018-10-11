@@ -16,6 +16,7 @@ type MessagePropsType = {
   closeMessageTray: (id: string) => void,
   deleteMessage: (id: string) => void,
   toggleCloseTrayButton: (id: string) => void,
+  muteUser: (pubnubToken: string) => void,
 };
 
 const Message = (
@@ -25,6 +26,7 @@ const Message = (
     closeMessageTray,
     deleteMessage,
     toggleCloseTrayButton,
+    muteUser,
   }: MessagePropsType
 ) => {
   const { messageTrayOpen, closeTrayButtonRendered } = message;
@@ -60,6 +62,9 @@ const Message = (
       <MessageTray
         deleteMessage={() => {
           deleteMessage(message.id);
+        }}
+        muteUser={() => {
+          muteUser(message.user.pubnubToken);
         }}
       />
       <div

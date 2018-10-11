@@ -2,6 +2,7 @@
 import graphqlJs from 'graphql.js';
 import { GET_INIT_DATA, setInitData, addChannel, inviteToChannel } from '../feed/dux';
 import { PUBLISH_ACCEPTED_PRAYER_REQUEST, PublishAcceptedPrayerRequestType} from '../moment';
+import { MUTE_USER, MuteUserType } from '../moment/message/dux';
 import { avatarImageExists } from '../util';
 
 class GraphQlActor {
@@ -144,7 +145,6 @@ class GraphQlActor {
     const now = new Date().getTime();
     const channel = `direct-chat-${now}`;
 
-
     this.graph(
       `
         mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!) {
@@ -173,6 +173,21 @@ class GraphQlActor {
     });
   }
 
+  muteUser (action:MuteUserType) {
+    this.graph(
+      ` 
+        mutation muteUser($pubnubToken: String!) {
+          muteUser(pubnub_token: $pubnubToken) {
+            success
+          }
+        }
+      `,
+      {
+        pubnubToken: action.pubnubToken,
+      }
+    );
+  }
+
   dispatch (action: any) {
     if (!action && !action.type) {
       return;
@@ -186,6 +201,9 @@ class GraphQlActor {
       return;
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
       this.publishAcceptedPrayerRequest(action);
+      return;
+    case MUTE_USER:
+      this.muteUser(action);
       return;
     default:
       return;
