@@ -12,5 +12,6 @@ storiesOf('MessageTray', module)
       messageTrayOpen={true}
       closeMessageTray={() => {}}
       deleteMessage={() => {}}
+      muteUser={() => {}}
     />
   ))
