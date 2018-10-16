@@ -40,6 +40,7 @@ class GraphQlActor {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + payload.authenticate.access_token,
+          'Application-Domain': window.location.hostname,
         },
       });
       this.graph(

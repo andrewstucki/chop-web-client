@@ -10,9 +10,11 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('MessageTray tests', () => {
   test('MessageTray has buttons', () => {
+    const muteUser = sinon.spy();
     const wrapper = Enzyme.shallow(
       <MessageTray 
         deleteMessage={() => {}}
+        muteUser={muteUser}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('tray');
@@ -23,9 +25,11 @@ describe('MessageTray tests', () => {
 
   test('Can click delete', () => {
     const deleteMessage = sinon.spy();
+    const muteUser = sinon.spy();
     const wrapper = Enzyme.shallow(
       <MessageTray 
         deleteMessage={deleteMessage}
+        muteUser={muteUser}
       />
     );
     wrapper.find('button').at(1).simulate('click');
