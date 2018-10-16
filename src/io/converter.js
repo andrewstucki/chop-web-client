@@ -57,6 +57,22 @@ const Converter = {
     };
   },
 
+  cwcToLegacyLeaveChannel:(user: any, channelId: string) => {
+    const time = new Date();
+    const timestamp = Converter.getTimestamp(time);
+    const roomType = 'public';
+
+    return {
+      messageText: `${user.name} has left the chat`,
+      timestamp: timestamp,
+      userId: user.pubnubToken,
+      fromNickname: user.name,
+      type: 'system',
+      roomType: roomType,
+      channelToken: channelId,
+    };
+  },
+
   legacyToCwc: (message: any) => (
     {
       type: 'MESSAGE',

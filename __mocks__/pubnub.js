@@ -1,6 +1,7 @@
 let listeners = {};
 
 export const mockSubscribe = jest.fn();
+export const mockUnsubscribe = jest.fn();
 export const mockAddListener = jest.fn().mockImplementation(obj => {
   listeners = obj;
 });
@@ -27,6 +28,7 @@ export {
 const mock = jest.fn().mockImplementation(() => (
   {
     subscribe: mockSubscribe,
+    unsubscribe: mockUnsubscribe,
     addListener: mockAddListener,
     publish: mockPublish,
     setState: mockSetState,

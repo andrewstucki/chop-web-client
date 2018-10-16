@@ -7,7 +7,7 @@ import type { SharedUserType } from '../../feed/dux';
 // Action Types
 
 const NOTIFICATION = 'NOTIFICATION';
-const LEFT_CHAT = 'LEFT_CHAT';
+const LEFT_CHANNEL = 'LEFT_CHANNEL';
 const JOINED_CHAT = 'JOINED_CHAT';
 const PRAYER = 'PRAYER';
 
@@ -16,11 +16,11 @@ const PRAYER = 'PRAYER';
 type NotificationType =
   | PrayerNotificationType
   | JoinedChatNotificationType
-  | LeftChatNotificationType;
+  | LeftChannelNotificationType;
 
-type LeftChatNotificationType = {
+type LeftChannelNotificationType = {
   type: 'NOTIFICATION',
-  notificationType: 'LEFT_CHAT',
+  notificationType: 'LEFT_CHANNEL',
   id: string,
   name: string,
   timeStamp: string,
@@ -75,7 +75,7 @@ const publishPrayerNotification = (
   }
 );
 
-const publishLeftChatNotification = (
+const publishLeftChannelNotification = (
   name: string,
   channel: string
 ): PublishMomentToChannelType => (
@@ -84,7 +84,7 @@ const publishLeftChatNotification = (
     channel,
     moment: {
       type: NOTIFICATION,
-      notificationType: LEFT_CHAT,
+      notificationType: LEFT_CHANNEL,
       id: createUid(),
       name,
       timeStamp: formatAMPM(new Date()),
@@ -113,14 +113,14 @@ const publishJoinedChatNotification = (
 
 export type {
   NotificationType,
-  LeftChatNotificationType,
+  LeftChannelNotificationType,
   JoinedChatNotificationType,
   PrayerNotificationType,
 };
 
 export {
   publishJoinedChatNotification,
-  publishLeftChatNotification,
+  publishLeftChannelNotification,
   publishPrayerNotification,
   formatAMPM,
 };
@@ -128,6 +128,6 @@ export {
 export {
   PRAYER,
   JOINED_CHAT,
-  LEFT_CHAT,
+  LEFT_CHANNEL,
   NOTIFICATION,
 };

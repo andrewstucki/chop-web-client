@@ -2,13 +2,13 @@
 import { connect } from 'react-redux';
 
 import {
-  leaveChat,
   getOtherUser,
   togglePopUpModal,
   removeChannel,
+  publishLeaveChannel,
 } from '../feed/dux';
 
-import { publishLeftChatNotification } from '../moment';
+//import { publishLeftChannelNotification } from '../moment';
 
 import PopUpModal from './popUpModal';
 
@@ -25,11 +25,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => (
   {
     togglePopUpModal: () => (dispatch(togglePopUpModal())),
-    leaveChat: user => (dispatch(leaveChat(user))),
-    publishLeftChatNotification: (userName, channelName) => (dispatch(
-      publishLeftChatNotification(userName, channelName)
-    )),
     removeChannel: channelName => (dispatch(removeChannel(channelName))),
+    publishLeaveChannel: (user, channel) => (dispatch(publishLeaveChannel(user, channel))),
   }
 );
 
