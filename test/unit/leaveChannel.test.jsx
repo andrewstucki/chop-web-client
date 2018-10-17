@@ -1,0 +1,201 @@
+// @flow
+import GraphQlActor from '../../src/io/graph';
+import ChatActor from '../../src/io/chat';
+import SequenceActor from '../../src/io/sequence';
+import { mockFetch, mockGraph } from 'graphql.js';
+import React from 'react';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme from 'enzyme';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import reducer from '../../src/chop/dux';
+import { defaultState, addChannel, changeChannel, togglePopUpModal } from '../../src/feed/dux';
+import PopUpModal from '../../src/popUpModal';
+import actorMiddleware from '../../src/middleware/actor-middleware';
+import testData from './io/test-data.json';
+import accessToken from './io/access-token.json';
+import { mockPublish, mockUnsubscribe, __messageEvent } from 'pubnub';
+import { mockDate } from '../testUtils';
+
+jest.mock('graphql.js');
+jest.mock('pubnub');
+
+Enzyme.configure({ adapter: new Adapter() });
+
+describe('Test leave channel', () => {
+  const message = {
+    channelToken: 'test',
+    messageText: 'Tony Hoare has left the chat',
+    userId: 'abc123xyz',
+    fromNickname: 'Tony Hoare',
+    type: 'system',
+    roomType: 'public',
+    timestamp: '2018-06-27 21:53:6 +0000',
+  };
+  test('Remove channel and send pubnub notification', async () => {
+    global.document.cookie  = 'legacy_token=12345; ';
+    mockFetch.mockResolvedValueOnce(accessToken);
+    mockFetch.mockResolvedValueOnce(testData);
+    mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
+    const actorMiddlewareApplied = actorMiddleware(
+      SequenceActor,
+      GraphQlActor,
+      ChatActor,
+    );
+    const participants = [
+      {
+        pubnubToken: 'abc123xyz',
+        name: 'Tony Hoare',
+        role: { label: '' },
+      },
+      {
+        pubnubToken: '54353',
+        name: 'Shaq O.',
+        role: { label: '' },
+      },
+    ];
+    const store = createStore(
+      reducer,
+      compose(
+        applyMiddleware(actorMiddlewareApplied)
+      )
+    );   
+
+    // await for both stages of starting up application
+    await await store.dispatch({ type: 'INIT' });
+    store.dispatch(
+      addChannel('test', 'test', participants)
+    );
+    store.dispatch(
+      changeChannel('test')
+    );
+    store.dispatch(
+      togglePopUpModal()
+    );
+
+    mockFetch.mockResolvedValueOnce(accessToken);
+
+    const wrapper = Enzyme.mount(
+      <Provider store={store}>
+        <div>
+          <PopUpModal />
+        </div>   
+      </Provider>
+    );
+
+    wrapper.find('button').at(1).simulate('click');
+    expect(mockPublish).toHaveBeenCalledTimes(1);
+    expect(mockPublish.mock.calls[0][0]).toEqual(
+      {
+        channel: 'test',
+        message: {
+          action: 'newMessage',
+          channel: 'test',
+          data: message,
+        },
+      }
+    );
+    expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
+    expect(mockUnsubscribe).toHaveBeenCalledWith(
+      {
+        channels: ['test'],
+      }
+    );
+    expect(Object.keys(store.getState().feed.channels).length).toEqual(4);
+    expect(store.getState().feed.currentChannel).toEqual('');
+    expect(mockGraph).toHaveBeenCalledTimes(3);
+    expect(mockGraph.mock.calls[2][0]).toBe(
+      ` 
+        mutation leaveFeed($feedId: String!) {
+          leaveFeed(feed_id: $feedId) {
+            success
+          }
+        }
+      `
+    );
+  });
+
+  test('Receive leave channel and publish notification', () => {
+    const store = {
+      ...defaultState,
+      currentUser: {
+        pubnubToken: '54353',
+        name: 'Shaq O.',
+        role: { label: '' },
+      },
+      organization: {
+        id: 2,
+        name: 'Life.Church',
+      },
+      pubnubKeys: {
+        publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+        subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+      },
+      channels: {
+        ...defaultState.channels,
+        test: {
+          name: 'test',
+          id: 'test',
+          moments: [],
+          participants: [
+            {
+              pubnubToken: 'abc123xyz',
+              name: 'Tony Hoare',
+              role: { label: '' },
+            },
+            {
+              pubnubToken: '54353',
+              name: 'Shaq O.',
+              role: { label: '' },
+            },
+          ],
+        },
+      },
+    };
+
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    getState.mockReturnValue(store);
+
+    const chat = new ChatActor(dispatch, getState);
+
+    chat.dispatch(
+      {
+        type: 'CHAT_CONNECT',
+      }
+    );
+
+    __messageEvent(
+      {
+        channel: 'test',
+        message: {
+          action: 'newMessage',
+          channel: 'test',
+          data: message,
+        },
+      }
+    );
+
+    expect(dispatch).toHaveBeenCalledTimes(2);
+    expect(dispatch.mock.calls[0][0]).toEqual(
+      {
+        type: 'LEAVE_CHANNEL',
+        channel: 'test',
+        pubnubToken: 'abc123xyz',
+      }
+    );
+    expect(dispatch.mock.calls[1][0]).toEqual(
+      {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: 'test',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'LEFT_CHANNEL',
+          id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
+          name: 'Tony Hoare',
+          timeStamp: '4:53pm',
+        },
+      }
+    );
+  });
+});

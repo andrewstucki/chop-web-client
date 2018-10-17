@@ -1,10 +1,12 @@
 // @flow
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
-import type { FeedType, ChannelType } from '../feed/dux';
+import type { FeedType, ChannelType, SharedUserType } from '../feed/dux';
+import { leaveChannel } from '../feed/dux';
 import type { ReactionType, LegacyReactionType } from '../reactions/reactionButton/dux';
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
+import { publishLeftChannelNotification } from '../moment/notification/dux';
 import { publishPrayerRequestNotification } from '../moment/actionableNotification/dux';
 import type { LegacyMessageType } from '../moment/message/dux';
 import { getChannelByName } from '../util';
@@ -132,23 +134,26 @@ class Chat {
   onMessage (event: PubnubMessageEventType) {
     const { channels } = this.getState();
     let hasMomentBeenRecieved = false;
-
     switch (event.message.action) {
     case 'newMessage':
+      if (event.message.data.type === 'system') {
+        this.storeDispatch(leaveChannel(event.message.data.userId, event.message.data.channelToken));
+        this.storeDispatch(publishLeftChannelNotification(event.message.data.fromNickname, event.message.data.channelToken));
+      } else {
+        hasMomentBeenRecieved = Object.keys(channels).find(
+          id => channels[id].moments.find(
+            // $FlowFixMe
+            moment => moment.id === event.message.data.msgId));
 
-      hasMomentBeenRecieved = Object.keys(channels).find(
-        id => channels[id].moments.find(
-          // $FlowFixMe
-          moment => moment.id === event.message.data.msgId));
-
-      if (!hasMomentBeenRecieved) {
-        this.storeDispatch(
-          {
-            type: 'RECEIVE_MOMENT',
-            channel: event.channel,
-            moment: Converter.legacyToCwc(event.message.data),
-          }
-        );
+        if (!hasMomentBeenRecieved) {
+          this.storeDispatch(
+            {
+              type: 'RECEIVE_MOMENT',
+              channel: event.channel,
+              moment: Converter.legacyToCwc(event.message.data),
+            }
+          );
+        }
       }
       return;
     case 'videoReaction':
@@ -238,6 +243,27 @@ class Chat {
     );
   }
 
+  unsubscribe (channels: Array<string>) {
+    this.pubnub.unsubscribe (
+      {
+        channels,
+      }
+    );
+  }
+
+  publishLeaveChannel (user: SharedUserType, channelId: ChannelType) {
+    this.publish(
+      {
+        channel: channelId,
+        message: {
+          action: 'newMessage',
+          channel: channelId,
+          data: Converter.cwcToLegacyLeaveChannel(user, channelId),
+        },
+      }
+    );
+  }
+
   dispatch (action: any) {
     if (!action || !action.type) {
       return;
@@ -265,6 +291,11 @@ class Chat {
     case 'PUBLISH_REACTION':
       this.publishReaction(action.reaction, getChannelByName(this.getState().channels, 'Public'));
       return;
+    case 'PUBLISH_LEAVE_CHANNEL':
+      this.publishLeaveChannel(action.user, action.channel);
+      return;
+    case 'REMOVE_CHANNEL': 
+      this.unsubscribe([action.channel]);
     }
   }
 }

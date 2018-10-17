@@ -1,9 +1,8 @@
 // @flow
 import graphqlJs from 'graphql.js';
-import { GET_INIT_DATA, setInitData, addChannel, inviteToChannel } from '../feed/dux';
-import { PUBLISH_ACCEPTED_PRAYER_REQUEST, PublishAcceptedPrayerRequestType} from '../moment';
-import { MUTE_USER } from '../moment/message/dux';
-import type { MuteUserType } from '../moment/message/dux';
+import { GET_INIT_DATA, setInitData, addChannel, inviteToChannel, REMOVE_CHANNEL, RemoveChannelType } from '../feed/dux';
+import { PUBLISH_ACCEPTED_PRAYER_REQUEST, PublishAcceptedPrayerRequestType } from '../moment';
+import { MUTE_USER, MuteUserType } from '../moment/message/dux';
 import { avatarImageExists } from '../util';
 
 class GraphQlActor {
@@ -175,6 +174,21 @@ class GraphQlActor {
     });
   }
 
+  leaveFeed (action:RemoveChannelType) {
+    this.graph(
+      ` 
+        mutation leaveFeed($feedId: String!) {
+          leaveFeed(feed_id: $feedId) {
+            success
+          }
+        }
+      `,
+      {
+        feedId: action.channel,
+      }
+    );
+  }
+
   muteUser (action:MuteUserType) {
     this.graph(
       ` 
@@ -203,6 +217,9 @@ class GraphQlActor {
       return;
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
       this.publishAcceptedPrayerRequest(action);
+      return;
+    case REMOVE_CHANNEL:
+      this.leaveFeed(action);
       return;
     case MUTE_USER:
       this.muteUser(action);
