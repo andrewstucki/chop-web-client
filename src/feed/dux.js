@@ -55,12 +55,13 @@ const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
-const LEAVE_CHAT = 'LEAVE_CHAT';
+const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const SET_INIT_DATA = 'SET_INIT_DATA';
 const GET_INIT_DATA = 'GET_INIT_DATA';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
 const SET_USER = 'SET_USER';
+const PUBLISH_LEAVE_CHANNEL = 'PUBLISH_LEAVE_CHANNEL';
 
 // Flow Type Definitions
 
@@ -214,10 +215,16 @@ type TogglePopUpModalType = {
   type: 'TOGGLE_POP_UP_MODAL',
 };
 
-type LeaveChatType = {
-  type: 'LEAVE_CHAT',
+type LeaveChannelType = {
+  type: 'LEAVE_CHANNEL',
   user: SharedUserType,
 };
+
+type PublishLeaveChannelType = {
+  type: 'PUBLISH_LEAVE_CHANNEL',
+  user: SharedUserType,
+  channel: string,
+}
 
 type FeedActionTypes =
   | SetInitDataType
@@ -365,10 +372,19 @@ const togglePopUpModal = (): TogglePopUpModalType => (
   }
 );
 
-const leaveChat = (user: SharedUserType): LeaveChatType => (
+const leaveChannel = (pubnubToken: string, channel: string): LeaveChannelType => (
   {
-    type: LEAVE_CHAT,
+    type: LEAVE_CHANNEL,
+    pubnubToken,
+    channel,
+  }
+);
+
+const publishLeaveChannel = (user: SharedUserType, channel: string): PublishLeaveChannelType => (
+  {
+    type: PUBLISH_LEAVE_CHANNEL,
     user,
+    channel,
   }
 );
 
@@ -737,16 +753,15 @@ const reducer = (
       ...state,
       isPopUpModalVisible: !state.isPopUpModalVisible,
     };
-  case LEAVE_CHAT: {
+  case LEAVE_CHANNEL: {
     const { channels, currentChannel } = state;
-    const { user } = action;
     if (currentChannel &&
       channels[currentChannel].participants &&
       channels[currentChannel].participants.length
     ) {
       const { participants } = channels[currentChannel];
       const userIndex = participants.findIndex(el => (
-        el.pubnubToken === user.pubnubToken
+        el.pubnubToken === action.pubnubToken
       ));
       if (participants) {
         // Flow complains that participants can still
@@ -887,9 +902,10 @@ export {
   REMOVE_CHANNEL,
   INVITE_TO_CHANNEL,
   TOGGLE_POP_UP_MODAL,
-  LEAVE_CHAT,
+  LEAVE_CHANNEL,
   GET_INIT_DATA,
   SET_INIT_DATA,
+  PUBLISH_LEAVE_CHANNEL,
 };
 export {
   changeChannel,
@@ -904,12 +920,13 @@ export {
   hasParticipants,
   getOtherUser,
   togglePopUpModal,
-  leaveChat,
+  leaveChannel,
   getCurrentUserAsSharedUser,
   getInitData,
   setInitData,
   removeReaction,
   setUser,
+  publishLeaveChannel,
 };
 export type {
   AddChannelType,
@@ -924,11 +941,12 @@ export type {
   PrivateUserType,
   SharedUserType,
   TogglePopUpModalType,
-  LeaveChatType,
+  LeaveChannelType,
   GetInitData,
   SetInitDataType,
   LanguageType,
   OrganizationType,
+  PublishLeaveChannelType,
 };
 
 export default reducer;

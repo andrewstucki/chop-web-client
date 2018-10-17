@@ -65,13 +65,13 @@ describe('Notification test', () => {
     expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
   });
 
-  test('Left chat notification renders', () => {
+  test('Left channel notification renders', () => {
     const wrapper = Enzyme.shallow(
       <Notification
         notification={
           {
             type: 'NOTIFICATION',
-            notificationType: 'LEFT_CHAT',
+            notificationType: 'LEFT_CHANNEL',
             id: '12345',
             name: 'cookietree',
             timeStamp: '9:33pm',

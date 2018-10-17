@@ -32,7 +32,7 @@ describe('PopUpModal tests', () => {
       <PopUpModal
         togglePopUpModal={() => {}}
         leaveChat={() => {}}
-        publishLeftChatNotification={() => {}}
+        publishLeaveChannel={() => {}}
         removeChannel={() => {}}
         currentChannel="direct"
         otherUser={otherUser}
@@ -50,13 +50,13 @@ describe('PopUpModal tests', () => {
   test('Actions can be fired', () => {
     const togglePopUpModal = sinon.spy();
     const leaveChat = sinon.spy();
-    const publishLeftChatNotification = sinon.spy();
+    const publishLeaveChannel = sinon.spy();
     const removeChannel = sinon.spy();
     const wrapper = Enzyme.shallow(
       <PopUpModal
         togglePopUpModal={togglePopUpModal}
         leaveChat={leaveChat}
-        publishLeftChatNotification={publishLeftChatNotification}
+        publishLeaveChannel={publishLeaveChannel}
         removeChannel={removeChannel}
         currentChannel="direct"
         otherUser={otherUser}
@@ -67,8 +67,7 @@ describe('PopUpModal tests', () => {
     expect(wrapper.find('button').at(0).simulate('click'));
     expect(wrapper.find('button').at(1).simulate('click'));
     expect(togglePopUpModal.calledTwice).toEqual(true);
-    expect(leaveChat.calledOnce).toEqual(true);
-    expect(publishLeftChatNotification.calledOnce).toEqual(true);
+    expect(publishLeaveChannel.calledOnce).toEqual(true);
     expect(removeChannel.calledOnce).toEqual(true);
   });
 
@@ -77,7 +76,7 @@ describe('PopUpModal tests', () => {
       <PopUpModal
         togglePopUpModal={() => {}}
         leaveChat={() => {}}
-        publishLeftChatNotification={() => {}}
+        publishLeaveChannel={() => {}}
         removeChannel={() => {}}
         currentChannel="direct"
         otherUser={otherUser}

@@ -12,7 +12,7 @@ import reducer, {
   hasParticipants,
   getOtherUser,
   togglePopUpModal,
-  leaveChat,
+  leaveChannel,
   setInitData,
   setUser,
 } from '../../src/feed/dux';
@@ -1720,7 +1720,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('leaveChat', () => {
+  test('leaveChannel', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -1744,15 +1744,7 @@ describe('Feed tests', () => {
         currentChannel: 'direct',
         currentUser: currentUser,
       },
-      leaveChat(
-        {
-          pubnubToken: currentUser.pubnubToken,
-          name: currentUser.name,
-          role: {
-            label: currentUser.role.label,
-          },
-        }
-      )
+      leaveChannel(currentUser.pubnubToken, 'direct')
     );
     expect(result).toEqual(
       {

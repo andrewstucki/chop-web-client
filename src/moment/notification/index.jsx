@@ -4,13 +4,13 @@ import React from 'react';
 import {
   PRAYER,
   JOINED_CHAT,
-  LEFT_CHAT,
+  LEFT_CHANNEL,
 } from './dux';
 
 import type {
   PrayerNotificationType,
   JoinedChatNotificationType,
-  LeftChatNotificationType,
+  LeftChannelNotificationType,
   NotificationType,
 } from './dux';
 
@@ -67,11 +67,11 @@ const joinedChatNotificationText = (
   </div>
 );
 
-const leftChatNotificationText = (
+const leftChannelNotificationText = (
   {
     name,
     timeStamp,
-  }: LeftChatNotificationType
+  }: LeftChannelNotificationType
 ) => (
   <div className={styles.notification}>
     <span
@@ -95,8 +95,8 @@ const getNotificationText = notification => {
     return prayerNotificationText(notification);
   case JOINED_CHAT:
     return joinedChatNotificationText(notification);
-  case LEFT_CHAT:
-    return leftChatNotificationText(notification);
+  case LEFT_CHANNEL:
+    return leftChannelNotificationText(notification);
   }
 };
 
