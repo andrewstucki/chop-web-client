@@ -1,8 +1,19 @@
 // @flow
 import graphqlJs from 'graphql.js';
-import { GET_INIT_DATA, setInitData, addChannel, inviteToChannel, REMOVE_CHANNEL, RemoveChannelType } from '../feed/dux';
-import { PUBLISH_ACCEPTED_PRAYER_REQUEST, PublishAcceptedPrayerRequestType } from '../moment';
-import { MUTE_USER, MuteUserType } from '../moment/message/dux';
+import {
+  GET_INIT_DATA,
+  setInitData,
+  addChannel,
+  inviteToChannel,
+  REMOVE_CHANNEL,
+} from '../feed/dux';
+import type {   RemoveChannelType } from '../feed/dux';
+import {
+  PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  PublishAcceptedPrayerRequestType,
+} from '../moment';
+import { MUTE_USER } from '../moment/message/dux';
+import type { MuteUserType } from '../moment/message/dux';
 import { avatarImageExists } from '../util';
 
 class GraphQlActor {
@@ -17,7 +28,7 @@ class GraphQlActor {
     this.storeDispatch = dispatch;
     this.getStore = getStore;
     this.graphAuth = graphqlJs('https://chopapi.com/graphql');
-    
+
     this.getAuthentication = this.graphAuth(
       `
         mutation AccessToken($token: String!) {

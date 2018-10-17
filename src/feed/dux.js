@@ -217,7 +217,8 @@ type TogglePopUpModalType = {
 
 type LeaveChannelType = {
   type: 'LEAVE_CHANNEL',
-  user: SharedUserType,
+  pubnubToken: string,
+  channel: string,
 };
 
 type PublishLeaveChannelType = {
@@ -242,7 +243,9 @@ type FeedActionTypes =
   | ReceiveAcceptedPrayerRequestType
   | PublishReactionActionType
   | RemoveReactionType
-  | ReceiveReactionType;
+  | ReceiveReactionType
+  | LeaveChannelType
+  | PublishLeaveChannelType;
 
 // Action Creators
 
@@ -761,6 +764,7 @@ const reducer = (
     ) {
       const { participants } = channels[currentChannel];
       const userIndex = participants.findIndex(el => (
+        // $FlowFixMe
         el.pubnubToken === action.pubnubToken
       ));
       if (participants) {

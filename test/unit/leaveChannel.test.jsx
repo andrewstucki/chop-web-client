@@ -119,9 +119,14 @@ describe('Test leave channel', () => {
     const store = {
       ...defaultState,
       currentUser: {
+        id: '12234',
         pubnubToken: '54353',
+        pubnubAccessKey: '09876',
         name: 'Shaq O.',
-        role: { label: '' },
+        role: {
+          label: '',
+          permissions: [],
+        },
       },
       organization: {
         id: 2,
