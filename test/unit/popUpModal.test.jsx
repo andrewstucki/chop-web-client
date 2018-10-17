@@ -38,6 +38,7 @@ describe('PopUpModal tests', () => {
         otherUser={otherUser}
         currentUser={currentUser}
         isPopUpModalVisible={true}
+        publishLeftChannelNotification={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('popUpModal');
@@ -62,6 +63,7 @@ describe('PopUpModal tests', () => {
         otherUser={otherUser}
         currentUser={currentUser}
         isPopUpModalVisible={true}
+        publishLeftChannelNotification={() => {}}
       />
     );
     expect(wrapper.find('button').at(0).simulate('click'));
@@ -82,6 +84,7 @@ describe('PopUpModal tests', () => {
         otherUser={otherUser}
         currentUser={currentUser}
         isPopUpModalVisible={false}
+        publishLeftChannelNotification={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual(undefined);

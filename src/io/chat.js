@@ -135,10 +135,13 @@ class Chat {
     const { channels } = this.getState();
     let hasMomentBeenRecieved = false;
     switch (event.message.action) {
-    case 'newMessage':
-      if (event.message.data.type === 'system') {
-        this.storeDispatch(leaveChannel(event.message.data.userId, event.message.data.channelToken));
-        this.storeDispatch(publishLeftChannelNotification(event.message.data.fromNickname, event.message.data.channelToken));
+    case 'newMessage': {
+      const message = event.message.data;
+      if (message.type === 'system') {
+        this.storeDispatch(leaveChannel(message.userId, message.channelToken));
+        this.storeDispatch(
+          publishLeftChannelNotification(message.fromNickname, message.channelToken)
+        );
       } else {
         hasMomentBeenRecieved = Object.keys(channels).find(
           id => channels[id].moments.find(
@@ -156,6 +159,7 @@ class Chat {
         }
       }
       return;
+    }
     case 'videoReaction':
       // $FlowFixMe
       if (this.getState().reactions.find(reaction => event.message.data.reactionId === reaction.id) === undefined) {
@@ -251,7 +255,7 @@ class Chat {
     );
   }
 
-  publishLeaveChannel (user: SharedUserType, channelId: ChannelType) {
+  publishLeaveChannel (user: SharedUserType, channelId: string) {
     this.publish(
       {
         channel: channelId,
