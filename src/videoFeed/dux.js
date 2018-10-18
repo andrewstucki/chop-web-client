@@ -2,30 +2,44 @@
 
 // Action Types
 
-const SET_VIDEO_URL = 'SET_VIDEO_URL';
+const SET_VIDEO = 'SET_VIDEO';
 
 // Type Definitions
 
-type SetVideoUrlType = {
-  type: 'SET_VIDEO_URL',
+type VideoType = {
+  type: string,
   url: string,
+};
+
+
+type SetVideoType = {
+  type: 'SET_VIDEO',
+  video: VideoType,
 };
 
 // Action Creators
 
-const setVideoUrl = (url: string): SetVideoUrlType => (
+const setVideo = (url: string, type: string): SetVideoType => (
   {
-    type: SET_VIDEO_URL,
-    url,
+    type: SET_VIDEO,
+    video: {
+      url,
+      type,
+    },
   }
 );
 
 // Exports
 
 export {
-  setVideoUrl,
+  setVideo,
+};
+
+export type {
+  SetVideoType,
+  VideoType,
 };
 
 export {
-  SET_VIDEO_URL,
+  SET_VIDEO,
 };

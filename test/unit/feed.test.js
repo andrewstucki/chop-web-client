@@ -13,7 +13,6 @@ import reducer, {
   getOtherUser,
   togglePopUpModal,
   leaveChannel,
-  setInitData,
   setUser,
 } from '../../src/feed/dux';
 
@@ -22,7 +21,7 @@ import {
   openMenu,
 } from '../../src/sideMenu/dux';
 
-import { setVideoUrl } from '../../src/videoFeed/dux';
+import { setVideo } from '../../src/videoFeed/dux';
 
 import { TOGGLE_CHAT_FOCUS } from '../../src/chat/dux';
 
@@ -1908,7 +1907,7 @@ describe('VideoFeed tests', () => {
   test('set url', () => {
     const result = reducer(
       defaultState,
-      setVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+      setVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Standard')
     );
     expect(result).toEqual(
       {
@@ -1917,135 +1916,8 @@ describe('VideoFeed tests', () => {
         video: {
           ...defaultState.video,
           url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          type: 'Standard',
         },
-      }
-    );
-  });
-});
-
-describe('Initial State', () => {
-  test('Set Initial State', () => {
-    expect(reducer(
-      defaultState,
-      setInitData(
-        {
-          event: {
-            startTime: 1531864800,
-            id: 334494,
-            timezone: 'America/Chicago',
-            title: 'Fake Event',
-          },
-          video: {
-            type: 'StandardEmbed',
-            url: 'https://www.youtube.com/embed/bz2kN31m_S0',
-          },
-          channels: {
-            '123456': {
-              id: '123456',
-              name: 'public',
-              users: null,
-              moments: [],
-            },
-            '654321': {
-              id: '654321',
-              name: 'host',
-              users: null,
-              moments: [],
-            },
-          },
-          user: {
-            avatar: null,
-            id: '123456',
-            name: 'Pebbles FlintStone',
-            pubnubAccessKey: '123456',
-            pubnubToken: '1533956431068',
-            role: {
-              label: 'HOST',
-              permissions: [
-                'all-the-things',
-              ],
-            },
-          },
-          pubnubKeys: {
-            publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
-            subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
-          },
-          organization: {
-            id: 2,
-            name: 'Life.Church',
-          },
-          currentChannel: '123456',
-          languageOptions: [
-            {
-              name: 'English',
-              code: 'ok',
-            },
-            {
-              name: 'Korean',
-              code: 'ko',
-            },
-          ],
-        }
-      )
-    )).toEqual(
-      {
-        ...defaultState,
-        event: {
-          startTime: 1531864800,
-          id: 334494,
-          timezone: 'America/Chicago',
-          title: 'Fake Event',
-        },
-        video: {
-          type: 'StandardEmbed',
-          url: 'https://www.youtube.com/embed/bz2kN31m_S0',
-        },
-        channels: {
-          '123456': {
-            id: '123456',
-            name: 'public',
-            users: null,
-            moments: [],
-          },
-          '654321': {
-            id: '654321',
-            name: 'host',
-            users: null,
-            moments: [],
-          },
-        },
-        currentUser: {
-          avatar: null,
-          id: '123456',
-          name: 'Pebbles FlintStone',
-          pubnubAccessKey: '123456',
-          pubnubToken: '1533956431068',
-          role: {
-            label: 'HOST',
-            permissions: [
-              'all-the-things',
-            ],
-          },
-        },
-        pubnubKeys: {
-          publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
-          subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
-        },
-        organization: {
-          id: 2,
-          name: 'Life.Church',
-        },
-        currentChannel: '123456',
-        languageOptions: [
-          {
-            name: 'English',
-            code: 'ok',
-          },
-          {
-            name: 'Korean',
-            code: 'ko',
-          },
-        ],
       }
     );
   });

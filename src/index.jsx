@@ -6,9 +6,8 @@ import { Provider } from 'react-redux';
 import Chop from './chop';
 import reducer from './chop/dux';
 import actorMiddleware from './middleware/actor-middleware';
-import SequenceActor from './io/sequence';
 import ChatActor from './io/chat';
-import GraphQlActor from './io/graph';
+import serviceActor from './io/serviceActor';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import bugsnag from 'bugsnag-js';
 import createPlugin from 'bugsnag-react';
@@ -17,9 +16,8 @@ const bugsnagClient = bugsnag('2403ac729529750d296e1e4ee022f7dc');
 const ErrorBoundary = bugsnagClient.use(createPlugin(React));
 
 const actorMiddlewareApplied = actorMiddleware(
-  SequenceActor,
   ChatActor,
-  GraphQlActor,
+  serviceActor,
 );
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

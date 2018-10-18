@@ -7,6 +7,10 @@ const mockDate = date => {
       super();
       return new RealDate(date);
     }
+
+    static now () {
+      return date;//(new RealDate(date)).getTime();
+    }
   };
 };
 

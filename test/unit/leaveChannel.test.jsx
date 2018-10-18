@@ -1,8 +1,8 @@
 // @flow
-import GraphQlActor from '../../src/io/graph';
+import serviceActor from '../../src/io/serviceActor';
 import ChatActor from '../../src/io/chat';
-import SequenceActor from '../../src/io/sequence';
-import { mockFetch, mockGraph } from 'graphql.js';
+import { mockFetch } from 'graphql.js';
+import { mockLeaveChannel } from '../../src/io/graphQL';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
@@ -17,7 +17,9 @@ import accessToken from './io/access-token.json';
 import { mockPublish, mockUnsubscribe, __messageEvent } from 'pubnub';
 import { mockDate } from '../testUtils';
 
+jest.mock('../../src/io/location');
 jest.mock('graphql.js');
+jest.mock('../../src/io/graphQL');
 jest.mock('pubnub');
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -33,15 +35,15 @@ describe('Test leave channel', () => {
     roomType: 'public',
     timestamp: '2018-06-27 21:53:6 +0000',
   };
+  global.document.cookie  = 'legacy_token=12345; ';
+  mockFetch.mockResolvedValueOnce(accessToken);
+  mockFetch.mockResolvedValueOnce(testData);
+  const actorMiddlewareApplied = actorMiddleware(
+    serviceActor,
+    ChatActor,
+  );
+
   test('Remove channel and send pubnub notification', async () => {
-    global.document.cookie  = 'legacy_token=12345; ';
-    mockFetch.mockResolvedValueOnce(accessToken);
-    mockFetch.mockResolvedValueOnce(testData);
-    const actorMiddlewareApplied = actorMiddleware(
-      SequenceActor,
-      GraphQlActor,
-      ChatActor,
-    );
     const participants = [
       {
         pubnubToken: 'abc123xyz',
@@ -63,6 +65,7 @@ describe('Test leave channel', () => {
 
     // await for both stages of starting up application
     await await store.dispatch({ type: 'INIT' });
+
     store.dispatch(
       addChannel('test', 'test', participants)
     );
@@ -103,16 +106,8 @@ describe('Test leave channel', () => {
     );
     expect(Object.keys(store.getState().feed.channels).length).toEqual(4);
     expect(store.getState().feed.currentChannel).toEqual('');
-    expect(mockGraph).toHaveBeenCalledTimes(3);
-    expect(mockGraph.mock.calls[2][0]).toBe(
-      `
-        mutation leaveFeed($feedId: String!) {
-          leaveFeed(feed_id: $feedId) {
-            success
-          }
-        }
-      `
-    );
+    expect(mockLeaveChannel).toHaveBeenCalledTimes(1);
+    expect(mockLeaveChannel).toHaveBeenCalledWith('test');
   });
 
   test('Receive leave channel and publish notification', () => {
@@ -164,11 +159,7 @@ describe('Test leave channel', () => {
 
     const chat = new ChatActor(dispatch, getState);
 
-    chat.dispatch(
-      {
-        type: 'CHAT_CONNECT',
-      }
-    );
+    chat.init();
 
     __messageEvent(
       {
