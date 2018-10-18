@@ -187,7 +187,7 @@ class GraphQlActor {
 
   leaveFeed (action:RemoveChannelType) {
     this.graph(
-      ` 
+      `
         mutation leaveFeed($feedId: String!) {
           leaveFeed(feed_id: $feedId) {
             success
