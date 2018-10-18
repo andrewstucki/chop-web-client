@@ -59,7 +59,7 @@ describe('Test leave channel', () => {
       compose(
         applyMiddleware(actorMiddlewareApplied)
       )
-    );   
+    );
 
     // await for both stages of starting up application
     await await store.dispatch({ type: 'INIT' });
@@ -79,7 +79,7 @@ describe('Test leave channel', () => {
       <Provider store={store}>
         <div>
           <PopUpModal />
-        </div>   
+        </div>
       </Provider>
     );
 
@@ -105,7 +105,7 @@ describe('Test leave channel', () => {
     expect(store.getState().feed.currentChannel).toEqual('');
     expect(mockGraph).toHaveBeenCalledTimes(3);
     expect(mockGraph.mock.calls[2][0]).toBe(
-      ` 
+      `
         mutation leaveFeed($feedId: String!) {
           leaveFeed(feed_id: $feedId) {
             success
@@ -116,6 +116,7 @@ describe('Test leave channel', () => {
   });
 
   test('Receive leave channel and publish notification', () => {
+    mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
     const store = {
       ...defaultState,
       currentUser: {
@@ -189,7 +190,7 @@ describe('Test leave channel', () => {
         pubnubToken: 'abc123xyz',
       }
     );
-    expect(dispatch.mock.calls[1][0]).toEqual(
+    expect(dispatch.mock.calls[1][0]).toMatchObject(
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
         channel: 'test',
