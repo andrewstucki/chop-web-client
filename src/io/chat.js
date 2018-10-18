@@ -58,7 +58,7 @@ class Chat {
     this.publishReaction = this.publishReaction.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
-    
+
     this.storeDispatch = dispatch;
     this.getState = getState;
 
@@ -67,6 +67,14 @@ class Chat {
 
   init () {
     const state = this.getState();
+
+    if (this.pubnub ||
+        !(state.pubnubKeys.publish &&
+          state.pubnubKeys.subscribe &&
+          //  state.currentUser.pubnubAccessKey &&
+          state.currentUser.pubnubToken)) {
+      return;
+    }
 
     Converter.config(this.getState);
 
@@ -240,6 +248,9 @@ class Chat {
   }
 
   subscribe (channels: Array<string>) {
+    if (!this.pubnub) {
+      return;
+    }
     this.pubnub.subscribe (
       {
         channels,
@@ -280,7 +291,8 @@ class Chat {
         this.publishNewMessage(action.moment, this.getState().channels[action.channel]);
       }
       return;
-    case 'CHAT_CONNECT':
+    case 'SET_USER':
+    case 'SET_PUBNUB_KEYS':
       this.init();
       return;
     case 'SET_LANGUAGE':
