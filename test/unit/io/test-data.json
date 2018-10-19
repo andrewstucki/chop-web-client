@@ -1,13 +1,12 @@
 {
   "currentEvent": {
     "title": "Fake Event",
-    "eventTimeId": 334494,
-    "eventStartTime": 1531864800,
-    "eventTimezone": "America/Chicago",
-    "video": {
-      "type": "StandardEmbed",
-      "url": "https://www.youtube.com/embed/bz2kN31m_S0"
-    }
+    "id": 334494,
+    "startTime": 1531864800
+  },
+  "currentVideo": {
+    "type": "StandardEmbed",
+    "url": "https://www.youtube.com/embed/bz2kN31m_S0"
   },
   "currentUser": {
     "id": 123456,
