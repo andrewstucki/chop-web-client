@@ -66,6 +66,7 @@ const SET_ORGANIZATION = 'SET_ORGANIZATION';
 const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const PUBLISH_LEAVE_CHANNEL = 'PUBLISH_LEAVE_CHANNEL';
+const LOAD_HISTORY = 'LOAD_HISTORY';
 
 // Flow Type Definitions
 
@@ -589,6 +590,25 @@ const reducer = (
     delete stateCopy.channels[action.channel];
     return stateCopy;
   }
+  case LOAD_HISTORY:
+    if (state.channels[action.channel]) {
+      return {
+        ...state,
+        appendingMessage: false,
+        animatingMoment: false,
+        channels: {
+          ...state.channels,
+          [action.channel]: {
+            ...state.channels[action.channel],
+            moments: [
+              ...state.channels[action.channel].moments,
+              ...action.moments,
+            ],
+          },
+        },
+      };
+    }
+    return state;
   case SET_USER:
     return {
       ...state,
