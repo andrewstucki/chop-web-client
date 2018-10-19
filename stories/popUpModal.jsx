@@ -28,6 +28,8 @@ storiesOf('PopUpModal', module)
       otherUser={otherUser}
       currentUser={currentUser}
       isPopUpModalVisible={true}
+      publishLeftChannelNotification={() => {}}
+      publishLeaveChannel={() => {}}
     />
   ))
 
@@ -41,5 +43,7 @@ storiesOf('PopUpModal', module)
       otherUser={otherUser}
       currentUser={currentUser}
       isPopUpModalVisible={false}
+      publishLeftChannelNotification={() => {}}
+      publishLeaveChannel={() => {}}
     />
   ));

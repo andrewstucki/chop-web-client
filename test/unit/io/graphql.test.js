@@ -1,5 +1,5 @@
 // @flow
-import GraphQlActor from '../../../src/io/graph';
+import GraphQlActor from '../../../src/io/serviceActor';
 import testData from './test-data.json';
 import { mockFetch } from 'graphql.js';
 import { publishAcceptedPrayerRequest } from '../../../src/moment';

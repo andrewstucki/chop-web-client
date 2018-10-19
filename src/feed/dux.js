@@ -37,7 +37,8 @@ import {
 
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
-import { SET_VIDEO_URL } from '../videoFeed/dux';
+import { SET_VIDEO } from '../videoFeed/dux';
+import type { SetVideoType, VideoType } from '../videoFeed/dux';
 
 import {
   RELEASE_ANCHOR_MOMENT,
@@ -56,11 +57,14 @@ const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
-const SET_INIT_DATA = 'SET_INIT_DATA';
 const GET_INIT_DATA = 'GET_INIT_DATA';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
 const SET_USER = 'SET_USER';
+const SET_EVENT = 'SET_EVENT';
+const SET_ORGANIZATION = 'SET_ORGANIZATION';
+const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
+const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const PUBLISH_LEAVE_CHANNEL = 'PUBLISH_LEAVE_CHANNEL';
 
 // Flow Type Definitions
@@ -73,7 +77,6 @@ type EventType = {
   title: string,
   id: number,
   startTime: number,
-  timezone: string,
 };
 
 type LanguageType = {
@@ -81,31 +84,19 @@ type LanguageType = {
   name: string,
 };
 
-type VideoType = {
-  type: string,
-  url: string,
-};
-
 type OrganizationType = {
   id: number,
   name: string,
 };
 
+type SetOrganizationType = {
+  type: 'SET_ORGANIZATION',
+  organization: OrganizationType,
+};
+
 type PubnubKeysType = {
   publish: string,
   subscribe: string,
-};
-
-type SetInitDataType = {
-  type: 'SET_INIT_DATA',
-  event: EventType,
-  video: VideoType,
-  organization: OrganizationType,
-  user: PrivateUserType,
-  channels: ChannelCollectionType,
-  pubnubKeys: PubnubKeysType,
-  currentChannel: string,
-  languageOptions: Array<LanguageType>
 };
 
 type SetUser = {
@@ -150,8 +141,6 @@ type ChannelType = {
   moments: Array<MomentType>,
   participants?: Array<SharedUserType>,
 };
-
-type ChannelCollectionType = { [string]: ChannelType };
 
 type FeedType = {
   pubnubKeys: PubnubKeysType,
@@ -217,7 +206,24 @@ type TogglePopUpModalType = {
 
 type LeaveChannelType = {
   type: 'LEAVE_CHANNEL',
-  user: SharedUserType,
+  pubnubToken: string,
+  channel: string,
+};
+
+type SetEventType = {
+  type: 'SET_EVENT',
+  event: EventType,
+}
+
+type SetLanguageOptionsType = {
+  type: 'SET_LANGUAGE_OPTIONS',
+  languageOptions: Array<LanguageType>,
+};
+
+type SetPubnubKeysType = {
+  type: 'SET_PUBNUB_KEYS',
+  publish: string,
+  subscribe: string,
 };
 
 type PublishLeaveChannelType = {
@@ -227,7 +233,6 @@ type PublishLeaveChannelType = {
 }
 
 type FeedActionTypes =
-  | SetInitDataType
   | ChangeChannelType
   | ReceiveMomentType
   | AddChannelType
@@ -242,9 +247,51 @@ type FeedActionTypes =
   | ReceiveAcceptedPrayerRequestType
   | PublishReactionActionType
   | RemoveReactionType
-  | ReceiveReactionType;
+  | ReceiveReactionType
+  | SetEventType
+  | SetVideoType
+  | SetOrganizationType
+  | SetPubnubKeysType
+  | LeaveChannelType
+  | PublishLeaveChannelType;
 
 // Action Creators
+
+const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOptionsType => (
+  {
+    type: SET_LANGUAGE_OPTIONS,
+    languageOptions,
+  }
+);
+
+const setOrganization = (id: number, name: string): SetOrganizationType => (
+  {
+    type: SET_ORGANIZATION,
+    organization: {
+      id,
+      name,
+    },
+  }
+);
+
+const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType => (
+  {
+    type: SET_PUBNUB_KEYS,
+    publish,
+    subscribe,
+  }
+);
+
+const setEvent = (title: string, id: number, startTime: number): SetEventType => (
+  {
+    type: SET_EVENT,
+    event: {
+      title,
+      id,
+      startTime,
+    },
+  }
+);
 
 const getInitData = (): GetInitData => (
   {
@@ -263,41 +310,6 @@ const setUser = (user: PrivateUserType): SetUser => (
   {
     type: SET_USER,
     user,
-  }
-);
-
-const setInitData = (
-  {
-    event,
-    video,
-    organization,
-    user,
-    channels,
-    pubnubKeys,
-    currentChannel,
-    languageOptions,
-  }:
-  {
-    event: EventType,
-    video: VideoType,
-    organization: OrganizationType,
-    user: PrivateUserType,
-    channels: ChannelCollectionType,
-    pubnubKeys: PubnubKeysType,
-    currentChannel: string,
-    languageOptions: Array<LanguageType>,
-  }
-): SetInitDataType => (
-  {
-    type: SET_INIT_DATA,
-    event,
-    organization,
-    video,
-    channels,
-    user,
-    pubnubKeys,
-    currentChannel,
-    languageOptions,
   }
 );
 
@@ -406,7 +418,6 @@ const defaultState = {
     id: 0,
     startTime: 0,
     title: '',
-    timezone: '',
   },
   organization: {
     id: 0,
@@ -480,19 +491,29 @@ const reducer = (
     return state;
   }
   switch (action.type) {
-  case SET_INIT_DATA: {
+  case SET_LANGUAGE_OPTIONS:
+    return {
+      ...state,
+      languageOptions: action.languageOptions,
+    };
+  case SET_PUBNUB_KEYS:
+    return {
+      ...state,
+      pubnubKeys: {
+        publish: action.publish,
+        subscribe: action.subscribe,
+      },
+    };
+  case SET_ORGANIZATION:
+    return {
+      ...state,
+      organization: action.organization,
+    };
+  case SET_EVENT :
     return {
       ...state,
       event: action.event,
-      organization: action.organization,
-      video: action.video,
-      currentUser: action.user,
-      pubnubKeys: action.pubnubKeys,
-      channels: action.channels,
-      currentChannel: action.currentChannel,
-      languageOptions: action.languageOptions,
     };
-  }
   case CHANGE_CHANNEL:
     if (!state.channels[action.channel]) {
       return state;
@@ -761,6 +782,7 @@ const reducer = (
     ) {
       const { participants } = channels[currentChannel];
       const userIndex = participants.findIndex(el => (
+        // $FlowFixMe
         el.pubnubToken === action.pubnubToken
       ));
       if (participants) {
@@ -807,13 +829,10 @@ const reducer = (
       ...state,
       isSideMenuClosed: false,
     };
-  case SET_VIDEO_URL:
+  case SET_VIDEO:
     return {
       ...state,
-      video: {
-        ...state.video,
-        url: action.url,
-      },
+      video: action.video,
     };
   case SET_LANGUAGE:
     return {
@@ -904,7 +923,6 @@ export {
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   GET_INIT_DATA,
-  SET_INIT_DATA,
   PUBLISH_LEAVE_CHANNEL,
 };
 export {
@@ -923,9 +941,12 @@ export {
   leaveChannel,
   getCurrentUserAsSharedUser,
   getInitData,
-  setInitData,
   removeReaction,
   setUser,
+  setEvent,
+  setOrganization,
+  setLanguageOptions,
+  setPubnubKeys,
   publishLeaveChannel,
 };
 export type {
@@ -943,7 +964,6 @@ export type {
   TogglePopUpModalType,
   LeaveChannelType,
   GetInitData,
-  SetInitDataType,
   LanguageType,
   OrganizationType,
   PublishLeaveChannelType,

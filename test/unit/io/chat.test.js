@@ -94,11 +94,7 @@ describe('Chat2 Tests', () => {
 
     const chat = new Chat(dispatch, getState);
 
-    chat.dispatch(
-      {
-        type: 'CHAT_CONNECT',
-      }
-    );
+    chat.init();
 
     expect(Converter.config).toHaveBeenCalledTimes(1);
     expect(Converter.config).toHaveBeenCalledWith(getState);
@@ -132,13 +128,9 @@ describe('Chat2 Tests', () => {
     const getState = jest.fn();
     getState.mockReturnValue(store);
 
-    const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars 
+    const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars
 
-    chat.dispatch(
-      {
-        type: 'CHAT_CONNECT',
-      }
-    );
+    chat.init();
 
     __subscribeEvent(
       {
@@ -182,12 +174,8 @@ describe('Chat2 Tests', () => {
 
     const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars 
 
-    chat.dispatch(
-      {
-        type: 'CHAT_CONNECT',
-      }
-    );
-
+    chat.init();
+    
     chat.dispatch(
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -233,11 +221,7 @@ describe('Chat2 Tests', () => {
 
     const chat = new Chat(dispatch, getState);
 
-    chat.dispatch(
-      {
-        type: 'CHAT_CONNECT',
-      }
-    );
+    chat.init();
     
     __messageEvent(
       {
@@ -342,7 +326,7 @@ describe('Chat2 Tests', () => {
 
     chat.dispatch(
       {
-        type: 'CHAT_CONNECT',
+        type: 'SET_PUBNUB_KEYS',
       }
     );
     

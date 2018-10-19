@@ -13,9 +13,6 @@ const PUBLISH_ACCEPTED_PRAYER_REQUEST = 'PUBLISH_ACCEPTED_PRAYER_REQUEST';
 
 // Flow Type Definitions
 
-type ActionableNotificationType =
-  | PrayerRequestNotificationType;
-
 type PrayerRequestNotificationType = {
   type: 'ACTIONABLE_NOTIFICATION',
   notificationType: 'PRAYER_REQUEST',
@@ -24,6 +21,9 @@ type PrayerRequestNotificationType = {
   timeStamp: string,
   active: boolean,
 };
+
+type ActionableNotificationType =
+  | PrayerRequestNotificationType;
 
 type PublishAcceptedPrayerRequestType = {
   type: 'PUBLISH_ACCEPTED_PRAYER_REQUEST',

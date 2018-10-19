@@ -58,7 +58,7 @@ class Chat {
     this.publishReaction = this.publishReaction.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
-    
+
     this.storeDispatch = dispatch;
     this.getState = getState;
 
@@ -67,6 +67,14 @@ class Chat {
 
   init () {
     const state = this.getState();
+
+    if (this.pubnub ||
+        !(state.pubnubKeys.publish &&
+          state.pubnubKeys.subscribe &&
+          //  state.currentUser.pubnubAccessKey &&
+          state.currentUser.pubnubToken)) {
+      return;
+    }
 
     Converter.config(this.getState);
 
@@ -135,10 +143,13 @@ class Chat {
     const { channels } = this.getState();
     let hasMomentBeenRecieved = false;
     switch (event.message.action) {
-    case 'newMessage':
-      if (event.message.data.type === 'system') {
-        this.storeDispatch(leaveChannel(event.message.data.userId, event.message.data.channelToken));
-        this.storeDispatch(publishLeftChannelNotification(event.message.data.fromNickname, event.message.data.channelToken));
+    case 'newMessage': {
+      const message = event.message.data;
+      if (message.type === 'system') {
+        this.storeDispatch(leaveChannel(message.userId, message.channelToken));
+        this.storeDispatch(
+          publishLeftChannelNotification(message.fromNickname, message.channelToken)
+        );
       } else {
         hasMomentBeenRecieved = Object.keys(channels).find(
           id => channels[id].moments.find(
@@ -156,6 +167,7 @@ class Chat {
         }
       }
       return;
+    }
     case 'videoReaction':
       // $FlowFixMe
       if (this.getState().reactions.find(reaction => event.message.data.reactionId === reaction.id) === undefined) {
@@ -236,6 +248,9 @@ class Chat {
   }
 
   subscribe (channels: Array<string>) {
+    if (!this.pubnub) {
+      return;
+    }
     this.pubnub.subscribe (
       {
         channels,
@@ -251,7 +266,7 @@ class Chat {
     );
   }
 
-  publishLeaveChannel (user: SharedUserType, channelId: ChannelType) {
+  publishLeaveChannel (user: SharedUserType, channelId: string) {
     this.publish(
       {
         channel: channelId,
@@ -276,7 +291,8 @@ class Chat {
         this.publishNewMessage(action.moment, this.getState().channels[action.channel]);
       }
       return;
-    case 'CHAT_CONNECT':
+    case 'SET_USER':
+    case 'SET_PUBNUB_KEYS':
       this.init();
       return;
     case 'SET_LANGUAGE':

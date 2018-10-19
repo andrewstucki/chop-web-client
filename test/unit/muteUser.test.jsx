@@ -1,6 +1,6 @@
 // @flow
-import GraphQlActor from '../../src/io/graph';
-import { mockFetch, mockGraph } from 'graphql.js';
+import serviceActor from '../../src/io/serviceActor';
+import { mockAuthenticate, mockMuteUser } from '../../src/io/graphQL';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
@@ -10,19 +10,21 @@ import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
 import Message from '../../src/moment/message';
 import actorMiddleware from '../../src/middleware/actor-middleware';
-import accessToken from './io/access-token.json';
+import '../../src/io/location';
 
-jest.mock('graphql.js');
+jest.mock('../../src/io/graphQL');
+jest.mock('../../src/io/location');
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Test mute user', () => {
   test('Mute user', async () => {
     const actorMiddlewareApplied = actorMiddleware(
-      GraphQlActor,
+      serviceActor,
     );
+
     global.document.cookie  = 'legacy_token=12345; ';
-    mockFetch.mockResolvedValueOnce(accessToken);
+
     const message = {
       type: 'MESSAGE',
       id: '123456',
@@ -36,6 +38,7 @@ describe('Test mute user', () => {
       messageTrayOpen: true,
       closeTrayButtonRendered: true,
     };
+
     const store = createStore(
       reducer,
       {
@@ -43,6 +46,7 @@ describe('Test mute user', () => {
       },
       applyMiddleware(actorMiddlewareApplied)
     );
+
     const wrapper = Enzyme.mount(
       <Provider store={store}>
         <div>
@@ -50,17 +54,15 @@ describe('Test mute user', () => {
         </div>   
       </Provider>
     );
-    await store.dispatch({type:'GET_ACCESS_TOKEN'});
+
+    await await store.dispatch({type:'INIT'});
+
     wrapper.find('button.muteButton').simulate('click');
-    expect(mockGraph).toHaveBeenCalledTimes(3);
-    expect(mockGraph.mock.calls[2][0]).toBe(
-      ` 
-        mutation muteUser($pubnubToken: String!) {
-          muteUser(pubnub_token: $pubnubToken) {
-            success
-          }
-        }
-      `
-    );
+
+    expect(mockAuthenticate).toHaveBeenCalledTimes(1);
+    expect(mockAuthenticate).toHaveBeenCalledWith(
+      '12345',
+      'digerati.churchonline.org');
+    expect(mockMuteUser).toHaveBeenCalledTimes(1);
   });
 });
