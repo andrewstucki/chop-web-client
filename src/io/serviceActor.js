@@ -39,6 +39,9 @@ class GraphQlActor {
     this.cookies = new Cookies();
     this.location = new Location();
     this.graph = new GraphQl();
+
+    this.getInitialData = this.getInitialData.bind(this);
+    this.handleDataFetchErrors = this.handleDataFetchErrors.bind(this);
   }
 
   getAccessToken () {
@@ -49,20 +52,28 @@ class GraphQlActor {
     }
     const hostname = this.location.hostname();
     this.graph.authenticate(token, hostname).then(() => {
-      this.graph.currentState().then(this.getInitialData.bind(this), payload => {
-        // TODO: log these errors better (new-relic?)
-        if (payload.errors) {
-          console.log('The graphql response returned errors:');  // eslint-disable-line no-console
-          for (const err in payload.errors) {
-            if (payload.errors[err].message) console.log(' - ' + payload.errors[err].message);  // eslint-disable-line no-console
-          }
-        } else {
-          console.log('The graphql response returned an error code but no error messages.');  // eslint-disable-line no-console
-        }
-        // TODO: give a nicer error message to the user
-        alert('It was not possible to get the event information.');
-      });
+      this.graph.currentState()
+        .then(this.getInitialData, this.handleDataFetchErrors);
     });
+  }
+
+  handleDataFetchErrors (payload: any) {
+    // TODO: log these errors better (new-relic?)
+    if (payload.errors) {
+      // eslint-disable-next-line no-console
+      console.log('The graphql response returned errors:');
+      for (const err in payload.errors) {
+        const errorMessage = payload.errors[err].message;
+        // eslint-disable-next-line no-console
+        if (payload.errors[err].message) console.log(` - ${errorMessage}`);
+      }
+    } else {
+      // eslint-disable-next-line no-console
+      console.log('The graphql response returned \
+        an error code but no error messages.');
+    }
+    // TODO: give a nicer error message to the user
+    alert('It was not possible to get the event information.');
   }
 
   getInitialData (payload: any) {
@@ -90,20 +101,20 @@ class GraphQlActor {
         this.storeDispatch(
           setEvent(
             event.title,
-            event.eventTimeId,
-            event.eventStartTime,
-            event.eventTimezone
+            event.id,
+            event.startTime,
           )
         );
-        const { video } = event;
-        if (video) {
-          this.storeDispatch(
-            setVideo(
-              video.url,
-              video.type,
-            )
-          );
-        }
+        break;
+      }
+      case 'currentVideo': {
+        const video = payload.currentVideo;
+        this.storeDispatch(
+          setVideo(
+            video.url,
+            video.type,
+          )
+        );
         break;
       }
       case 'currentOrganization': {
