@@ -32,6 +32,8 @@ class GraphQlActor {
   getStore: () => any
   getAuthentication: (variables: any) => any
   cookies: Cookies
+  handleDataFetchErrors: (payload: any) => void
+  getInitialData: (payload: any) => void
 
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
@@ -40,8 +42,8 @@ class GraphQlActor {
     this.location = new Location();
     this.graph = new GraphQl();
 
-    this.getInitialData = this.getInitialData.bind(this);
-    this.handleDataFetchErrors = this.handleDataFetchErrors.bind(this);
+    this.getInitialData = this._getInitialData.bind(this);
+    this.handleDataFetchErrors = this._handleDataFetchErrors.bind(this);
   }
 
   getAccessToken () {
@@ -57,7 +59,7 @@ class GraphQlActor {
     });
   }
 
-  handleDataFetchErrors (payload: any) {
+  _handleDataFetchErrors (payload: any) {
     // TODO: log these errors better (new-relic?)
     if (payload.errors) {
       // eslint-disable-next-line no-console
@@ -69,14 +71,14 @@ class GraphQlActor {
       }
     } else {
       // eslint-disable-next-line no-console
-      console.log('The graphql response returned \
-        an error code but no error messages.');
+      console.log('The graphql response returned' +
+        'an error code but no error messages.');
     }
     // TODO: give a nicer error message to the user
     alert('It was not possible to get the event information.');
   }
 
-  getInitialData (payload: any) {
+  _getInitialData (payload: any) {
     Object.keys(payload).forEach(key => {
       switch (key) {
       case 'currentFeeds': {
@@ -145,6 +147,16 @@ class GraphQlActor {
             }
           )
         );
+        avatarImageExists(payload.currentUser.id).then(exists => {
+          if (exists) {
+            this.storeDispatch(
+              {
+                type: 'SET_AVATAR',
+                url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${payload.currentUser.id}/thumb/photo.jpg`,
+              }
+            );
+          }
+        }) ;
         break;
       }
       case 'pubnubKeys': {
@@ -166,16 +178,6 @@ class GraphQlActor {
       }
       }
     });
-    avatarImageExists(payload.currentUser.id).then(exists => {
-      if (exists) {
-        this.storeDispatch(
-          {
-            type: 'SET_AVATAR',
-            url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${payload.currentUser.id}/thumb/photo.jpg`,
-          }
-        );
-      }
-    }) ;
   }
 
   publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {

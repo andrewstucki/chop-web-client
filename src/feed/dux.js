@@ -77,7 +77,6 @@ type EventType = {
   title: string,
   id: number,
   startTime: number,
-  timezone: string,
 };
 
 type LanguageType = {
@@ -283,14 +282,13 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
   }
 );
 
-const setEvent = (title: string, id: number, startTime: number, timezone: string): SetEventType => (
+const setEvent = (title: string, id: number, startTime: number): SetEventType => (
   {
     type: SET_EVENT,
     event: {
       title,
       id,
       startTime,
-      timezone,
     },
   }
 );
@@ -420,7 +418,6 @@ const defaultState = {
     id: 0,
     startTime: 0,
     title: '',
-    timezone: '',
   },
   organization: {
     id: 0,

@@ -40,7 +40,6 @@ describe('Session', () => {
         event: {
           id: 334494,
           startTime: 1531864800,
-          timezone: 'America/Chicago',
           title: 'Fake Event',
         },
         organization: {
