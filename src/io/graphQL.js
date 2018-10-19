@@ -11,13 +11,14 @@ mutation AccessToken($token: String!) {
 const currentEvent = `
 currentEvent {
   title
-  eventTimeId
-  eventStartTime
-  eventTimezone
-  video {
-    type
-    url
-  }
+  id
+  startTime
+}`;
+
+const currentVideo = `
+currentVideo {
+  type
+  url
 }`;
 
 const currentUser = `
@@ -92,6 +93,7 @@ mutation leaveFeed($feedId: String!) {
 const currentState = `
 {
   ${currentEvent}
+  ${currentVideo}
   ${currentUser}
   ${currentChannels}
   ${currentOrganization}
