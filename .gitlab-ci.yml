@@ -32,8 +32,8 @@ compile:app:
     expire_in: 1 day
     paths:
       - dist/
-  except:
-    - master
+  only:
+    - branches
 lint:
   stage: test
   image: in.thewardro.be:4567/io/io-builder:1.0.1
