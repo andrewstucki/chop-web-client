@@ -224,6 +224,7 @@ class Chat {
     case 'newLiveResponseRequest':
       if (event.message.data.type === 'prayer') {
         this.storeDispatch(
+          // This logic will be moved to the converter
           publishPrayerRequestNotification(
             { 
               name: event.message.data.fromNickname,
