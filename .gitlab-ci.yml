@@ -70,8 +70,8 @@ build:image:
     - command build Dockerfile-app
   dependencies: 
     - compile:app
-  except:
-    - master
+  only:
+    - branches
 
 review:
   stage: review
