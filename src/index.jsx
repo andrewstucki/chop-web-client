@@ -12,7 +12,11 @@ import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import bugsnag from 'bugsnag-js';
 import createPlugin from 'bugsnag-react';
 
-const bugsnagClient = bugsnag('2403ac729529750d296e1e4ee022f7dc');
+const bugsnagClient = bugsnag({
+  apiKey: '2403ac729529750d296e1e4ee022f7dc',
+  notifyReleaseStages: [ 'production', 'staging' ]
+});
+
 const ErrorBoundary = bugsnagClient.use(createPlugin(React));
 
 const actorMiddlewareApplied = actorMiddleware(
