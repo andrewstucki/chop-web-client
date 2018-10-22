@@ -8,11 +8,11 @@ stages:
   # - test
   - build
   # - review
-  - staging
+  # - staging
   - coverage
-  - canary
-  - destroy-canary
-  - production
+  # - canary
+  # - destroy-canary
+  # - production
 
 cache:
   untracked: true
@@ -106,26 +106,24 @@ build:image:
 #   except:
 #     - master
 
-staging:
-  stage: staging
-  cache:
-    untracked: false
-    policy: pull
-  variables:
-    CI_ENVIRONMENT_URL: https://staging.$KUBE_DOMAIN
-  script:
-    - command deploy
-  environment:
-    name: staging
-    url: https://staging.$KUBE_DOMAIN
-  only:
-    - master
+# staging:
+#   stage: staging
+#   cache:
+#     untracked: false
+#     policy: pull
+#   variables:
+#     CI_ENVIRONMENT_URL: https://staging.$KUBE_DOMAIN
+#   script:
+#     - command deploy
+#   environment:
+#     name: staging
+#     url: https://staging.$KUBE_DOMAIN
+#   only:
+#     - master
 
 code_coverage_report_master:
   stage: coverage
-  cache:
-    untracked: false
-    policy: pull  
+  cache: {}
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   variables:
     CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
@@ -134,57 +132,56 @@ code_coverage_report_master:
     - chmod +x ./cc-test-reporter
     - ./cc-test-reporter before-build
     - yarn install --pure-lockfile --cache-folder .yarn
-    - yarn build    
-    - yarn add jest
+    - yarn build
     - yarn coverage
     - ./cc-test-reporter after-build -t lcov --exit-code $? || echo "Skipping Code Climate Coverage Upload"
   only:
     - master
 
-canary:
-  stage: canary
-  cache:
-    untracked: false
-    policy: pull  
-  dependencies: []
-  script:
-    - command deploy
-  environment:
-    name: production
-    url: https://$KUBE_DOMAIN
-  when: manual
-  allow_failure: true
-  only:
-    - master
+# canary:
+#   stage: canary
+#   cache:
+#     untracked: false
+#     policy: pull  
+#   dependencies: []
+#   script:
+#     - command deploy
+#   environment:
+#     name: production
+#     url: https://$KUBE_DOMAIN
+#   when: manual
+#   allow_failure: true
+#   only:
+#     - master
 
-destroy-canary:
-  stage: destroy-canary
-  cache:
-    untracked: false
-    policy: pull  
-  dependencies: []
-  allow_failure: true
-  environment:
-    name: production
-  when: manual
-  script:
-    - command destroy-canary
-  only:
-    - master
+# destroy-canary:
+#   stage: destroy-canary
+#   cache:
+#     untracked: false
+#     policy: pull  
+#   dependencies: []
+#   allow_failure: true
+#   environment:
+#     name: production
+#   when: manual
+#   script:
+#     - command destroy-canary
+#   only:
+#     - master
 
-production:
-  stage: production
-  cache:
-    untracked: false
-    policy: pull  
-  variables:
-    CI_ENVIRONMENT_URL: http://$KUBE_DOMAIN
-  script:
-    - command deploy
-  environment:
-    name: production
-    url: https://$KUBE_DOMAIN
-  when: manual
-  allow_failure: false
-  only:
-    - master 
+# production:
+#   stage: production
+#   cache:
+#     untracked: false
+#     policy: pull  
+#   variables:
+#     CI_ENVIRONMENT_URL: http://$KUBE_DOMAIN
+#   script:
+#     - command deploy
+#   environment:
+#     name: production
+#     url: https://$KUBE_DOMAIN
+#   when: manual
+#   allow_failure: false
+#   only:
+#     - master 
