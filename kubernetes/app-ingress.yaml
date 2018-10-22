@@ -2,15 +2,13 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: app-$CI_ENVIRONMENT_SLUG
+  name: cwc
   namespace: $KUBE_NAMESPACE
   annotations:
     kubernetes.io/ingress.global-static-ip-name: review-cwc
     ingress.gcp.kubernetes.io/pre-shared-cert: 'star-churchonline-us'  
   labels:
-    app: app-$CI_ENVIRONMENT_SLUG
-    pipeline_id: "$CI_PIPELINE_ID"
-    build_id: "$CI_JOB_ID"
+    app: cwc
 spec:
   rules:
   - host: $CI_ENVIRONMENT_SLUG.churchonline.us
