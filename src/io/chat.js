@@ -41,6 +41,12 @@ type PubnubPublishMessageType = {
   }
 }
 
+type PubnubMessageType = {
+  action: string,
+  channel: string,
+  data: any,
+}
+
 class Chat {
   pubnub: Pubnub
   storeDispatch: Dispatch
@@ -53,9 +59,13 @@ class Chat {
     // $FlowFixMe
     this.onMessage = this.onMessage.bind(this);
     // $FlowFixMe
+    this.loadHistory = this.loadHistory.bind(this);
+    // $FlowFixMe
     this.publish = this.publish.bind(this);
     // $FlowFixMe
     this.publishReaction = this.publishReaction.bind(this);
+    // $FlowFixMe
+    this.publishLeaveChannel = this.publishLeaveChannel.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
 
@@ -98,6 +108,13 @@ class Chat {
       .map(name => state.channels[name].id);
 
     this.subscribe(channels);
+
+    channels.map(channel => this.pubnub.history({
+      channel: channel,
+    }, 
+    ((status, response) => {
+      this.loadHistory(response.messages, channel);
+    }).bind(this)));
   }
 
   setPubnubState (state: any) {
@@ -137,6 +154,27 @@ class Chat {
       });
       return;
     }
+  }
+
+  loadHistory (messages: Array<PubnubMessageType>, channel: string) {
+    const moments = [];
+    messages.map(message => {
+      switch (message.entry.action) {
+      case 'newMessage':
+        moments.push(Converter.legacyToCwc(message.entry.data));
+        return;
+      case 'newLiveResponseRequest':
+        if (message.entry.data.type === 'prayer') {
+          moments.push(Converter.legacyToCwcPrayer(message.entry));
+        }
+        return;
+      }
+    });
+    this.storeDispatch({
+      type: 'LOAD_HISTORY',
+      channel: channel,
+      moments: moments,
+    });
   }
 
   onMessage (event: PubnubMessageEventType) {
@@ -186,6 +224,7 @@ class Chat {
     case 'newLiveResponseRequest':
       if (event.message.data.type === 'prayer') {
         this.storeDispatch(
+          // This logic will be moved to the converter
           publishPrayerRequestNotification(
             { 
               name: event.message.data.fromNickname,

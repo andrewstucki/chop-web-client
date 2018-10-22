@@ -1,5 +1,8 @@
 // @flow
 
+import { getChannelByName } from '../util';
+import { publishPrayerRequestNotification } from '../moment/actionableNotification/dux';
+
 let _getState;
 
 const Converter = {
@@ -90,6 +93,19 @@ const Converter = {
         },
       },
     }
+  ),
+
+  legacyToCwcPrayer: (message: any) => (
+    publishPrayerRequestNotification(
+      { 
+        name: message.data.fromNickname,
+        pubnubToken: message.data.fromToken,
+        role: { 
+          label: '',
+        },
+      }, 
+      getChannelByName(_getState().channels, 'Host')
+    )
   ),
 
   getTimestamp: (time:Date) => {
