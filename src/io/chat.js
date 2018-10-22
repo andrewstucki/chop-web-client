@@ -7,7 +7,6 @@ import type { ReactionType, LegacyReactionType } from '../reactions/reactionButt
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
 import { publishLeftChannelNotification } from '../moment/notification/dux';
-import { publishPrayerRequestNotification } from '../moment/actionableNotification/dux';
 import type { LegacyMessageType } from '../moment/message/dux';
 import { getChannelByName } from '../util';
 
@@ -156,12 +155,16 @@ class Chat {
     }
   }
 
-  loadHistory (messages: Array<PubnubMessageType>, channel: string) {
+  loadHistory (messages: Array<any>, channel: string) {
     const moments = [];
     messages.map(message => {
       switch (message.entry.action) {
       case 'newMessage':
-        moments.push(Converter.legacyToCwc(message.entry.data));
+        if (message.entry.type === 'system') {
+          moments.push(publishLeftChannelNotification(message.entry.fromNickname, message.entry.channelToken).moment);
+        } else {
+          moments.push(Converter.legacyToCwc(message.entry.data));
+        }
         return;
       case 'newLiveResponseRequest':
         if (message.entry.data.type === 'prayer') {
@@ -224,17 +227,7 @@ class Chat {
     case 'newLiveResponseRequest':
       if (event.message.data.type === 'prayer') {
         this.storeDispatch(
-          // This logic will be moved to the converter
-          publishPrayerRequestNotification(
-            { 
-              name: event.message.data.fromNickname,
-              pubnubToken: event.message.data.fromToken,
-              role: { 
-                label: '',
-              },
-            }, 
-            getChannelByName(this.getState().channels, 'Host')
-          )
+          Converter.legacyToCwcPrayer(event.message)
         );
       }
       return;
