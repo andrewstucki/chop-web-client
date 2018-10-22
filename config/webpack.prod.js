@@ -20,7 +20,7 @@ module.exports = merge(common, {
     ]),
   ],
   output: {
-    publicPath: 'https://cwc-chopapi.global.ssl.fastly.net/'
+    publicPath: 'replacethisstringinnginx'
   }
 });
 

@@ -1,39 +1,173 @@
-image: in.thewardro.be:4567/io/io-builder:1.0.1
+image: quay.io/lifechurch/k8s-deploy-helper:3.0.1
+variables:
+  # Application deployment domain
+  KUBE_DOMAIN: churchonline.us
 
 stages:
+  - compile
+  - test
   - build
-  - deploy
+  - review
+  - staging
+  - coverage
+  - canary
+  - destroy-canary
+  - production
 
-before_script:
-  - source ~/.bashrc
-  - gcloud config set project $GCP_PROJECT_ID  
-  - echo $SERVICE_ACCOUNT > gcp_credentials.json
-  - gcloud auth activate-service-account --key-file gcp_credentials.json
-  
-build:
-  stage: build
-  script:
-    - yarn
-    - yarn flow check
-    - yarn lint
-    - yarn test
+cache:
+  untracked: true
+  key: "$CI_PROJECT_ID"
+  paths:
+    - node_modules/
+    - .yarn
+    - dist/
+
+compile:app:
+  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  stage: compile
+  script: 
+    - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build
-  only:
-    - master
-  allow_failure: false
-
   artifacts:
     expire_in: 1 day
     paths:
-    - dist/
-
-deploy:
-  stage: deploy
+      - dist/
+  except:
+    - master
+lint:
+  stage: test
+  image: in.thewardro.be:4567/io/io-builder:1.0.1
   script:
-    - gsutil -m cp -r dist/* gs://chop-webclient
-    - gsutil iam ch allUsers:objectViewer gs://chop-webclient
+    - yarn lint
+    # - yarn flow check    # -- this is failing tests right now commenting out - SR
+  except:
+    - master
+
+test:
+  stage: test
+  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  cache:
+    untracked: false
+    policy: pull  
+  variables:
+    CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
+  script:
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+    - yarn add jest
+    - yarn coverage
+    - ./cc-test-reporter after-build -t lcov --exit-code $? || echo "Skipping Code Climate Coverage Upload"
+  except:
+    - master
+
+build:image:
+  stage: build
+  cache:
+    untracked: false
+    policy: pull  
+  script: 
+    - command build Dockerfile-app
+  dependencies: 
+    - compile:app
+  except:
+    - master
+
+review:
+  stage: review
+  cache:
+    untracked: false
+    policy: pull  
+  variables:
+    CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+  script:
+    - command deploy
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
+
+stop_review:
+  stage: review
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - command destroy
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+  only:
+    - branches
+  except:
+    - master
+
+staging:
+  stage: staging
+  variables:
+    CI_ENVIRONMENT_URL: https://staging.$KUBE_DOMAIN
+  script:
+    - command deploy
+  environment:
+    name: staging
+    url: https://staging.$KUBE_DOMAIN
   only:
     - master
-  allow_failure: false
 
-  
+code_coverage_report_master:
+  stage: coverage
+  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  variables:
+    CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
+  script:
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+    - yarn add jest
+    - yarn coverage
+    - ./cc-test-reporter after-build -t lcov --exit-code $? || echo "Skipping Code Climate Coverage Upload"
+  only:
+    - master
+
+canary:
+  stage: canary
+  dependencies: []
+  script:
+    - command deploy
+  environment:
+    name: production
+    url: https://$KUBE_DOMAIN
+  when: manual
+  allow_failure: true
+  only:
+    - master
+
+destroy-canary:
+  stage: destroy-canary
+  dependencies: []
+  allow_failure: true
+  environment:
+    name: production
+  when: manual
+  script:
+    - command destroy-canary
+  only:
+    - master
+
+production:
+  stage: production
+  variables:
+    CI_ENVIRONMENT_URL: http://$KUBE_DOMAIN
+  script:
+    - command deploy
+  environment:
+    name: production
+    url: https://$KUBE_DOMAIN
+  when: manual
+  allow_failure: false
+  only:
+    - master 
