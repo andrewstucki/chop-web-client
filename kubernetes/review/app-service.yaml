@@ -1,17 +1,17 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: app-$CI_ENVIRONMENT_SLUG
-  namespace: $KUBE_NAMESPACE
-  labels:
-    app: app-$CI_ENVIRONMENT_SLUG
-    pipeline_id: "$CI_PIPELINE_ID"
-    build_id: "$CI_JOB_ID"
-spec:
-  ports:
-  - port: 80
-    targetPort: $PORT
-    name: app-$CI_ENVIRONMENT_SLUG
-  selector:
-    app: app-$CI_ENVIRONMENT_SLUG
-  type: NodePort
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: app-$CI_ENVIRONMENT_SLUG
+#   namespace: $KUBE_NAMESPACE
+#   labels:
+#     app: app-$CI_ENVIRONMENT_SLUG
+#     pipeline_id: "$CI_PIPELINE_ID"
+#     build_id: "$CI_JOB_ID"
+# spec:
+#   ports:
+#   - port: 80
+#     targetPort: $PORT
+#     name: app-$CI_ENVIRONMENT_SLUG
+#   selector:
+#     app: app-$CI_ENVIRONMENT_SLUG
+#   type: NodePort
