@@ -112,7 +112,7 @@ class Chat {
     channels.map(channel => this.pubnub.history({
       channel: channel,
     }, 
-    (function (status, response) {
+    ((status, response) => {
       this.loadHistory(response.messages, channel);
     }).bind(this)));
   }
@@ -157,13 +157,18 @@ class Chat {
   }
 
   loadHistory (messages: Array<PubnubMessageType>, channel: string) {
-    var moments = [];
+    const moments = [];
     messages.map(message => {
       switch (message.entry.action) {
       case 'newMessage':
         moments.push(Converter.legacyToCwc(message.entry.data));
         return;
-      };
+      case 'newLiveResponseRequest':
+        if (message.entry.data.type === 'prayer') {
+          moments.push(Converter.legacyToCwcPrayer(message.entry));
+        }
+        return;
+      }
     });
     this.storeDispatch({
       type: 'LOAD_HISTORY',

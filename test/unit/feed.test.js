@@ -13,7 +13,6 @@ import reducer, {
   getOtherUser,
   togglePopUpModal,
   leaveChannel,
-  setInitData,
   setUser,
 } from '../../src/feed/dux';
 
