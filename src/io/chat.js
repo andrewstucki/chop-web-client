@@ -40,6 +40,12 @@ type PubnubPublishMessageType = {
   }
 }
 
+type PubnubMessageType = {
+  action: string,
+  channel: string,
+  data: any,
+}
+
 class Chat {
   pubnub: Pubnub
   storeDispatch: Dispatch
