@@ -1,0 +1,44 @@
+# ---
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: cwc
+#   namespace: $KUBE_NAMESPACE
+#   annotations:
+#     kubernetes.io/ingress.global-static-ip-name: review-cwc
+#     ingress.gcp.kubernetes.io/pre-shared-cert: 'star-churchonline-us'  
+#   labels:
+#     app: cwc
+# spec:
+#   rules:
+#   - host: $CI_ENVIRONMENT_SLUG.churchonline.us
+#     http:
+#       paths:
+#       - backend:
+#           serviceName: app-$CI_ENVIRONMENT_SLUG
+#           servicePort: $PORT
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: app-$CI_ENVIRONMENT_SLUG
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  labels:
+    app: app-$CI_ENVIRONMENT_SLUG
+    pipeline_id: "$CI_PIPELINE_ID"
+    build_id: "$CI_JOB_ID"    
+spec:
+  tls:
+  - hosts:
+    - $CI_ENVIRONMENT_SLUG.churchonline.us
+    secretName: ssl-cwc
+  rules:
+    - host: $CI_ENVIRONMENT_SLUG.churchonline.us
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: app-$CI_ENVIRONMENT_SLUG
+            servicePort: $PORT
