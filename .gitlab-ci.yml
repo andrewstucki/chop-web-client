@@ -7,7 +7,7 @@ stages:
   - compile
   - test
   - build
-  # - review
+  - review
   - staging
   - coverage
   - canary
@@ -73,38 +73,38 @@ build:image:
   only:
     - branches
 
-# review:
-#   stage: review
-#   cache:
-#     untracked: false
-#     policy: pull  
-#   variables:
-#     CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
-#   script:
-#     - command deploy
-#   environment:
-#     name: review/$CI_COMMIT_REF_NAME
-#     url: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
-#     on_stop: stop_review
-#   only:
-#     - branches
-#   except:
-#     - master
+review:
+  stage: review
+  cache:
+    untracked: false
+    policy: pull  
+  variables:
+    CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+  script:
+    - command deploy
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
 
-# stop_review:
-#   stage: review
-#   variables:
-#     GIT_STRATEGY: none
-#   script:
-#     - command destroy
-#   environment:
-#     name: review/$CI_COMMIT_REF_NAME
-#     action: stop
-#   when: manual
-#   only:
-#     - branches
-#   except:
-#     - master
+stop_review:
+  stage: review
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - command destroy
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+  only:
+    - branches
+  except:
+    - master
 
 staging:
   stage: staging
