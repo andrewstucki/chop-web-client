@@ -68,7 +68,9 @@ const SideMenu = (
     <a
       id="feedback"
       className={styles.feedbackLink}
-      href="https://lifechurch.formstack.com/forms/host_mobile_feedback"
+      target="_blank"
+      rel="noopener noreferrer"
+      href="https://lifechurch.formstack.com/forms/host_feedback_2"
     >
       Give feedback
       <span

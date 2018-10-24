@@ -116,7 +116,7 @@ describe('SideBar tests', () => {
     expect(wrapper.find('#feedback').text())
       .toBe('Give feedback');
     expect(wrapper.find('#feedback').props().href)
-      .toBe('https://lifechurch.formstack.com/forms/host_mobile_feedback');
+      .toBe('https://lifechurch.formstack.com/forms/host_feedback_2');
   });
 
   test('SideBar has logout button', () => {
