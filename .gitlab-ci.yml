@@ -39,7 +39,7 @@ lint:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   script:
     - yarn lint
-    # - yarn flow check
+    - yarn flow check
   except:
     - master
 

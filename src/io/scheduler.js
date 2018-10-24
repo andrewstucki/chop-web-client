@@ -17,8 +17,8 @@ export default class Scheduler {
 
   exicute (now: any, schedule: any) {
     const data = (typeof now.data === 'string') ?
-          JSON.parse(now.data) :
-          now.data;
+      JSON.parse(now.data) :
+      now.data;
     this.callback(data);
 
     const [ next ] = schedule;
