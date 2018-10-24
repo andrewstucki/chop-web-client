@@ -9,6 +9,7 @@ import {
   changeChannel,
   setLanguageOptions,
   REMOVE_CHANNEL,
+  setSchedule,
 } from '../feed/dux';
 import type { RemoveChannelType } from '../feed/dux';
 import { setVideo } from '../videoFeed/dux';
@@ -22,8 +23,9 @@ import { avatarImageExists } from '../util';
 import Cookies from './cookies';
 import Location from './location';
 import GraphQl from './graphQL';
+import Scheduler from './scheduler';
 
-class GraphQlActor {
+class ServiceActor {
   storeDispatch: (action: any) => void
   graph: GraphQl
   location: Location
@@ -107,8 +109,19 @@ class GraphQlActor {
             event.startTime,
           )
         );
+        if (event.sequence) {
+          this.scheduler = new Scheduler(
+            event.sequence.serverTime,
+            this.getInitialData);
+          this.scheduler.run(event.sequence.steps);
+        }
         break;
       }
+      case 'currentSchedule':
+        this.storeDispatch(
+          setSchedule(payload.currentSchedule)
+        );
+        break;
       case 'currentVideo': {
         const video = payload.currentVideo;
         this.storeDispatch(
@@ -229,4 +242,4 @@ class GraphQlActor {
   }
 }
 
-export default GraphQlActor;
+export default ServiceActor;

@@ -67,12 +67,24 @@ const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const PUBLISH_LEAVE_CHANNEL = 'PUBLISH_LEAVE_CHANNEL';
 const LOAD_HISTORY = 'LOAD_HISTORY';
+const SET_SCHEDULE = 'SET_SCHEDULE';
 
 // Flow Type Definitions
 
 type GetInitData = {
   type: 'GET_INIT_DATA',
 };
+
+type ScheduleType = {
+  id: number,
+  startTime: number,
+  endTime: number,
+}
+
+type ScheduleType = {
+  type: 'SET_SCHEDULE',
+  schedule: Array<ScheduleType>,
+}
 
 type EventType = {
   title: string,
@@ -254,7 +266,8 @@ type FeedActionTypes =
   | SetOrganizationType
   | SetPubnubKeysType
   | LeaveChannelType
-  | PublishLeaveChannelType;
+  | PublishLeaveChannelType
+  | SetScheduleType;
 
 // Action Creators
 
@@ -262,6 +275,13 @@ const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOp
   {
     type: SET_LANGUAGE_OPTIONS,
     languageOptions,
+  }
+);
+
+const setSchedule = (schedule: Array<ScheduleType>): SetScheduleType => (
+  {
+    type: SET_SCHEDULE,
+    schedule,
   }
 );
 
@@ -420,6 +440,7 @@ const defaultState = {
     startTime: 0,
     title: '',
   },
+  schedule: [],
   organization: {
     id: 0,
     name: '',
@@ -514,6 +535,11 @@ const reducer = (
     return {
       ...state,
       event: action.event,
+    };
+  case SET_SCHEDULE :
+    return {
+      ...state,
+      schedule: action.schedule,
     };
   case CHANGE_CHANNEL:
     if (!state.channels[action.channel]) {
@@ -968,6 +994,7 @@ export {
   setLanguageOptions,
   setPubnubKeys,
   publishLeaveChannel,
+  setSchedule,
 };
 export type {
   AddChannelType,

@@ -13,6 +13,13 @@ currentEvent {
   title
   id
   startTime
+  sequence {
+    serverTime
+    steps {
+      timestamp
+      data
+    }
+  }
 }`;
 
 const currentVideo = `
