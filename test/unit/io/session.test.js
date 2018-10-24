@@ -52,7 +52,7 @@ describe('Session', () => {
             id: 67890,
             startTime: 200,
             endTime: 300,
-          }
+          },
         ],
         organization: {
           id: 3,

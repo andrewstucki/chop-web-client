@@ -36,6 +36,7 @@ class ServiceActor {
   cookies: Cookies
   handleDataFetchErrors: (payload: any) => void
   getInitialData: (payload: any) => void
+  scheduler: Scheduler
 
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;

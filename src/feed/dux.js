@@ -81,7 +81,7 @@ type ScheduleType = {
   endTime: number,
 }
 
-type ScheduleType = {
+type SetScheduleType = {
   type: 'SET_SCHEDULE',
   schedule: Array<ScheduleType>,
 }
