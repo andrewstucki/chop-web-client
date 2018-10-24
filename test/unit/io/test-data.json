@@ -4,6 +4,18 @@
     "id": 334494,
     "startTime": 1531864800
   },
+  "currentSchedule": [
+    {
+      "id": 12345,
+      "startTime": 0,
+      "endTime": 100
+    },
+    {
+      "id": 67890,
+      "startTime": 200,
+      "endTime": 300
+    }
+  ],
   "currentVideo": {
     "type": "StandardEmbed",
     "url": "https://www.youtube.com/embed/bz2kN31m_S0"

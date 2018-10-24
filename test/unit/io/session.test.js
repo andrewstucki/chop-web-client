@@ -42,6 +42,18 @@ describe('Session', () => {
           startTime: 1531864800,
           title: 'Fake Event',
         },
+        schedule: [
+          {
+            id: 12345,
+            startTime: 0,
+            endTime: 100,
+          },
+          {
+            id: 67890,
+            startTime: 200,
+            endTime: 300,
+          }
+        ],
         organization: {
           id: 3,
           name: 'Freedom Church',
