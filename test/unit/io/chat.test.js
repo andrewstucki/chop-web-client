@@ -263,8 +263,16 @@ describe('Chat2 Tests', () => {
       {
         channels: ['123456','789012'],
         state: {
-          language: 'ko',
-          prevLanguage: null,
+          available_help: true, // eslint-disable-line camelcase
+          available_prayer: true, // eslint-disable-line camelcase
+          avatarUrl: undefined,
+          clientIp: '205.236.56.99',
+          country_name: 'United States', // eslint-disable-line camelcase
+          lat: 35.6500,
+          lon: -97.4214,
+          nickname: '',
+          userId: null,
+          language: 'en',
         },
       }
     );
@@ -310,7 +318,16 @@ describe('Chat2 Tests', () => {
       {
         channels: ['123456','789012'],
         state: {
+          available_help: true, // eslint-disable-line camelcase
           available_prayer: true, // eslint-disable-line camelcase
+          avatarUrl: undefined,
+          clientIp: '205.236.56.99',
+          country_name: 'United States', // eslint-disable-line camelcase
+          lat: 35.6500,
+          lon: -97.4214,
+          nickname: '',
+          userId: null,
+          language: 'en',
         },
       }
     );
