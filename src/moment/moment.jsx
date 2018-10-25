@@ -25,11 +25,15 @@ type MomentPropType = {
 const Moment = ({ data, hostChannel }: MomentPropType) => {
   switch (data.type) {
   case MESSAGE:
-    return (
-      <Message
-        message={data}
-      />
-    );
+    if (!data.text) {
+      return null;
+    } else {
+      return (
+        <Message
+          message={data}
+        />
+      );
+    }
   case NOTIFICATION:
     return (
       <Notification

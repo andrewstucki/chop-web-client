@@ -721,7 +721,7 @@ const reducer = (
   case PUBLISH_ACCEPTED_PRAYER_REQUEST:
   case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
     // $FlowFixMe
-    const { id, channel} = action;
+    const { id, channel } = action;
     return {
       ...state,
       channels: {

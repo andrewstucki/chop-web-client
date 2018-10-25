@@ -14,7 +14,7 @@ const PUBLISH_MOMENT_TO_CHANNEL = 'PUBLISH_MOMENT_TO_CHANNEL';
 
 type PublishMomentToChannelType = {
   type: 'PUBLISH_MOMENT_TO_CHANNEL',
-  channel: string,
+  hostChannel: string,
   moment: MomentType,
 };
 
