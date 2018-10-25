@@ -568,7 +568,7 @@ const reducer = (
     if (state.channels[action.channel]) {
       return {
         ...state,
-        appendingMessage: false,
+        appendingMessage: true,
         animatingMoment: true,
         channels: {
           ...state.channels,
@@ -634,7 +634,7 @@ const reducer = (
     if (state.channels[action.channel]) {
       return {
         ...state,
-        appendingMessage: false,
+        appendingMessage: true,
         animatingMoment: false,
         channels: {
           ...state.channels,
@@ -659,6 +659,7 @@ const reducer = (
     const { id } = action;
     return {
       ...state,
+      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -675,11 +676,12 @@ const reducer = (
       },
     };
   }
-  case CLOSE_MESSAGE_TRAY: {
-    // $FlowFixMe
-    const { id } = action;
+  case 'MUTE_USER':
+  case 'DIRECT_CHAT':
+  case CLOSE_MESSAGE_TRAY:
     return {
       ...state,
+      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -688,19 +690,19 @@ const reducer = (
             message => (
               {
                 ...message,
-                messageTrayOpen: message.id === id ? false : message.messageTrayOpen,
+                messageTrayOpen: false,
               }
             )
           ),
         },
       },
     };
-  }
   case TOGGLE_CLOSE_TRAY_BUTTON: {
     // $FlowFixMe
     const { id } = action;
     return {
       ...state,
+      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
