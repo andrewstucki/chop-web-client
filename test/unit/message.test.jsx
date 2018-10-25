@@ -12,7 +12,7 @@ const otherUser = {
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {
-    label: '',
+    label: 'Host',
   },
 };
 
@@ -42,6 +42,33 @@ describe('Message', () => {
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
+  });
+
+  test('displays the role label', () => {
+    const wrapper = Enzyme.shallow(
+      <Message 
+        message={
+          {
+            type: MESSAGE,
+            id: '1234',
+            lang: 'en',
+            text: 'Go west young man!',
+            user: otherUser,
+            messageTrayOpen: false,
+            closeTrayButtonRendered: false,
+          }
+        }
+        currentChannel='public'
+        appendingMessage={false}
+        closeMessageTray={() => {}}
+        openMessageTray={() => {}}
+        deleteMessage={() => {}}
+        publishDeleteMessage={() => {}}
+        toggleCloseTrayButton={() => {}}
+        muteUser={() => {}}
+      />
+    );
+    expect(wrapper.find('span').last().text()).toEqual('Host');
   });
 
   test('has a tray open button and it can be clicked', () => {
