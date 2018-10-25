@@ -42,16 +42,22 @@ class Feed extends React.Component<FeedProps, FeedState> {
   // NOTE: Animations have been removed temporarily until they can be fixed
   // You can find the old code in commit ebb49cb3a96b3bb69e2475b120f99b0e842622d2
   // These two lines temporarily make sure your at the bottom of the feed
-  componentDidMount () {
+  scroll () {
     setTimeout(() => {
-      this.wrapperRef.current.scrollTop = 10000;
+      const listRect = this.listRef.current.getBoundingClientRect();
+      const listHeight = listRect.height;
+      if (this.props.appendingMessage) {
+        this.wrapperRef.current.scrollTop = listHeight;
+      }
     }, 300);
   }
 
+  componentDidMount () {
+    this.scroll();
+  }
+
   componentDidUpdate () {
-    setTimeout(() => {
-      this.wrapperRef.current.scrollTop = 10000;
-    }, 300);
+    this.scroll();
   }
 
   render () {

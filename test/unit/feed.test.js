@@ -229,7 +229,7 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('Hello there');
     expect(result.channels.host.moments[0].id.length).toEqual(5);
-    expect(result.appendingMessage).toBe(false);
+    expect(result.appendingMessage).toBe(true);
     expect(result.animatingMoment).toBe(true);
   });
 
@@ -272,7 +272,7 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments[0].timeStamp).toEqual('4:53pm');
     expect(result.channels.host.moments[0].active).toEqual(true);
     expect(result.channels.host.moments[0].action).toEqual(action);
-    expect(result.appendingMessage).toBe(false);
+    expect(result.appendingMessage).toBe(true);
     expect(result.animatingMoment).toBe(true);
   });
 
