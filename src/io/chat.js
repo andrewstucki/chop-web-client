@@ -113,38 +113,30 @@ class Chat {
     }).bind(this)));
   }
 
-  setPubnubState (state: any) {
+  setPubnubState () {
     this.pubnub.setState(
       {
         channels: Object.keys(this.getState().channels),
-        state: state,
+        state: {
+          available_help: true, // eslint-disable-line camelcase
+          available_prayer: true, // eslint-disable-line camelcase
+          avatarUrl: this.getState().currentUser.avatarUrl,
+          clientIp: '205.236.56.99',
+          country_name: 'United States', // eslint-disable-line camelcase
+          lat: 35.6500,
+          lon: -97.4214,
+          nickname: this.getState().currentUser.name,
+          userId: null,
+          language: this.getState().currentLanguage,
+        },
       }
-    );
-  }
-
-  setLanguage (languageCode: string) {
-    this.setPubnubState (
-      {
-        language: languageCode,
-        prevLanguage: this.previousLanguage,
-      },
-    );
-    this.previousLanguage = languageCode;
-  }
-
-  setAvailableForPrayer (status: boolean) {
-    this.setPubnubState (
-      {
-        available_prayer: status, // eslint-disable-line camelcase
-      },
     );
   }
 
   onStatus (event: PubnubStatusEventType) {
     switch (event.category) {
     case 'PNConnectedCategory':
-      this.setLanguage(this.getState().currentLanguage);
-      this.setAvailableForPrayer(true);
+      this.setPubnubState();
       this.storeDispatch({
         type: 'CHAT_CONNECTED',
       });
@@ -350,13 +342,12 @@ class Chat {
       this.init();
       return;
     case 'SET_LANGUAGE':
-      this.setLanguage(action.language);
+    case 'SET_AVATAR':
+    case 'SET_AVAILABLE_FOR_PRAYER':
+      this.setPubnubState();
       return;
     case 'ADD_CHANNEL':
       this.subscribe([action.channel.id]);
-      return;
-    case 'SET_AVAILABLE_FOR_PRAYER':
-      this.setAvailableForPrayer(action.status);
       return;
     case 'PUBLISH_REACTION':
       this.publishReaction(action.reaction, getChannelByName(this.getState().channels, 'Public'));
