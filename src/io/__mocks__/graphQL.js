@@ -6,6 +6,27 @@ const mockCurrentState = jest.fn().mockResolvedValue(testData);
 const mockAcceptPrayer = jest.fn().mockResolvedValue({acceptPrayer: true});
 const mockMuteUser = jest.fn().mockResolvedValue({muteUser: true});
 const mockLeaveChannel = jest.fn().mockResolvedValue({leaveFeed: true});
+const mockDirectChat = jest.fn().mockResolvedValue(
+  {
+    createDirectFeed: {
+      direct: true,
+      id: '67890',
+      name: null,
+      subscribers: [
+        {
+          pubnubToken: 4321,
+          nickname: 'Fred',
+          avatar: null,
+        },
+        {
+          pubnubToken: 5432,
+          nickname: 'Barny',
+          avatar: null,
+        },
+      ],
+    },
+  }
+);
 
 const mockGraphQl = jest.fn().mockImplementation(() => (
   {
@@ -14,6 +35,7 @@ const mockGraphQl = jest.fn().mockImplementation(() => (
     acceptPrayer: mockAcceptPrayer,
     muteUser: mockMuteUser,
     leaveChannel: mockLeaveChannel,
+    directChat: mockDirectChat,
   }
 ));
 
@@ -23,5 +45,6 @@ export {
   mockAcceptPrayer,
   mockMuteUser,
   mockLeaveChannel,
+  mockDirectChat,
 };
 export default mockGraphQl;

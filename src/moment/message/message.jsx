@@ -19,6 +19,7 @@ type MessagePropsType = {
   publishDeleteMessage: (id: string) => void,
   toggleCloseTrayButton: (id: string) => void,
   muteUser: (pubnubToken: string) => void,
+  directChat: (pubnubToken: string) => void,
 };
 
 const Message = (
@@ -31,6 +32,7 @@ const Message = (
     deleteMessage,
     toggleCloseTrayButton,
     muteUser,
+    directChat,
   }: MessagePropsType
 ) => {
   const { messageTrayOpen, closeTrayButtonRendered } = message;
@@ -70,6 +72,9 @@ const Message = (
         }}
         muteUser={() => {
           muteUser(message.user.pubnubToken);
+        }}
+        directChat={() => {
+          directChat(message.user.pubnubToken);
         }}
       />
       <div

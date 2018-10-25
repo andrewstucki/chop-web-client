@@ -7,6 +7,7 @@ import {
   deleteMessage,
   toggleCloseTrayButton,
   muteUser,
+  directChat,
   publishDeleteMessage,
 } from './dux';
 import { getCurrentChannel } from '../../feed/dux';
@@ -26,6 +27,7 @@ const mapDispatchToProps = dispatch => (
     publishDeleteMessage: id => dispatch(publishDeleteMessage(id)),
     toggleCloseTrayButton: id => dispatch(toggleCloseTrayButton(id)),
     muteUser: pubnubToken => dispatch(muteUser(pubnubToken)),
+    directChat: pubnubToken => dispatch(directChat(pubnubToken)),
   }
 );
 

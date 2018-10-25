@@ -17,7 +17,10 @@ import {
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   PublishAcceptedPrayerRequestType,
 } from '../moment';
-import { MUTE_USER } from '../moment/message/dux';
+import {
+  MUTE_USER,
+  DIRECT_CHAT,
+} from '../moment/message/dux';
 import type { MuteUserType } from '../moment/message/dux';
 import { avatarImageExists } from '../util';
 import Cookies from './cookies';
@@ -213,6 +216,21 @@ class ServiceActor {
     this.graph.muteUser(action.pubnubToken);
   }
 
+  directChat (action: any) {
+    this.graph.directChat(action.otherUserPubnubToken).
+      then(data => {
+        const { name, id, subscribers } = data.createDirectFeed;
+        const participants = subscribers.map(person => (
+          {
+            avatarUrl: person.avatar,
+            name: person.nickname,
+            pubnubToken: person.pubnubToken,
+          }
+        ));
+        this.storeDispatch(addChannel(name, id, participants));
+      });
+  }
+
   removeChannel (action:RemoveChannelType) {
     this.graph.leaveChannel(action.channel);
   }
@@ -233,6 +251,9 @@ class ServiceActor {
       return;
     case MUTE_USER:
       this.muteUser(action);
+      return;
+    case DIRECT_CHAT:
+      this.directChat(action);
       return;
     default:
       return;

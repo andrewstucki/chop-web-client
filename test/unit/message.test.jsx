@@ -39,6 +39,7 @@ describe('Message', () => {
         publishDeleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
@@ -66,6 +67,7 @@ describe('Message', () => {
         publishDeleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find('span').last().text()).toEqual('Host');
@@ -94,6 +96,7 @@ describe('Message', () => {
         publishDeleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
@@ -124,6 +127,7 @@ describe('Message', () => {
         publishDeleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find('button').length).toBe(1);

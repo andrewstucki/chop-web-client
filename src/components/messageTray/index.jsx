@@ -9,6 +9,7 @@ import styles from './style.css';
 type MessageTrayPropsType = {
   deleteMessage: (id: string, channel:string) => void,
   muteUser: (pubnubToken: string) => void,
+  directChat: (pubnubToken: string) => void,
 };
 
 const trayButton = (
@@ -16,7 +17,7 @@ const trayButton = (
   imageType: string,
   image,
   text: string,
-  onClick?,
+  onClick,
 ) => (
   <button
     className={buttonType}
@@ -34,16 +35,17 @@ const MessageTray = (
   {
     deleteMessage,
     muteUser,
+    directChat,
   }: MessageTrayPropsType
 ) => (
   <div className={styles.tray}>
-    
     {
       trayButton(
         styles.directChatButton,
         styles.directChatImage,
         DirectChatButton,
-        'Chat'
+        'Chat',
+        directChat
       )
     }
     {

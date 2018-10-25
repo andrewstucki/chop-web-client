@@ -12,6 +12,7 @@ const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const TOGGLE_CLOSE_TRAY_BUTTON = 'TOGGLE_CLOSE_TRAY_BUTTON';
 const MESSAGE = 'MESSAGE';
 const MUTE_USER = 'MUTE_USER';
+const DIRECT_CHAT = 'DIRECT_CHAT';
 const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
 // Flow Type Definitions
@@ -150,6 +151,13 @@ const muteUser = (pubnubToken:string): MuteUserType => (
   }
 );
 
+const directChat = (otherUserPubnubToken: string) => (
+  {
+    type: DIRECT_CHAT,
+    otherUserPubnubToken,
+  }
+);
+
 // Exports
 
 export {
@@ -159,6 +167,7 @@ export {
   TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
   MUTE_USER,
+  DIRECT_CHAT,
   PUBLISH_DELETE_MESSAGE,
 };
 
@@ -170,6 +179,7 @@ export {
   publishMessage,
   publishDeleteMessage,
   muteUser,
+  directChat,
 };
 
 export type {
