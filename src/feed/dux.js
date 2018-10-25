@@ -945,7 +945,7 @@ const feedContents = (state: FeedType): Array<MessageType> => (
         }
       }
       return moment;
-    }) :
+    }).filter(moment => moment.isMuted !== 'true') :
     []
 );
 

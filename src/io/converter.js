@@ -83,6 +83,7 @@ const Converter = {
       lang: message.language,
       text: message.messageText,
       translations: message.translations,
+      isMuted: message.isMuted,
       user: {
         id: message.userId,
         name: message.fromNickname,
