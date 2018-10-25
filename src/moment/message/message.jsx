@@ -82,7 +82,9 @@ const Message = (
         
         <div className={styles.body}>
           <strong className={styles.name}>{message.user.name}</strong>
-          <span className={styles.role}>Host</span>
+          {message.user.role.label &&
+            <span className={styles.role}>{message.user.role.label}</span>
+          }
           <div data-node="text" className={styles.text}>{message.text}</div>
         </div>
         {renderMessageButtons()}
