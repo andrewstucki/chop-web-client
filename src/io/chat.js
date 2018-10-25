@@ -2,13 +2,14 @@
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
 import type { FeedType, ChannelType, SharedUserType } from '../feed/dux';
-import { leaveChannel } from '../feed/dux';
+import { leaveChannel, loadHistory } from '../feed/dux';
 import type { ReactionType, LegacyReactionType } from '../reactions/reactionButton/dux';
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
 import { publishLeftChannelNotification } from '../moment/notification/dux';
-import type { LegacyMessageType } from '../moment/message/dux';
+import type { LegacyMessageType, LegacyDeleteMessageType } from '../moment/message/dux';
 import { getChannelByName } from '../util';
+import { deleteMessage } from '../moment/message/dux';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -24,7 +25,7 @@ type PubnubMessageEventType = {
   channel: string,
   message: {
     action: string,
-    data: MomentType | LegacyReactionType | LegacyMessageType,
+    data: MomentType | LegacyReactionType | LegacyMessageType | LegacyDeleteMessageType,
   },
   publisher: string,
   subscription: string,
@@ -59,6 +60,8 @@ class Chat {
     this.publishReaction = this.publishReaction.bind(this);
     // $FlowFixMe
     this.publishLeaveChannel = this.publishLeaveChannel.bind(this);
+    // $FlowFixMe
+    this.publishDeleteMessage = this.publishDeleteMessage.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
 
@@ -167,11 +170,9 @@ class Chat {
         return;
       }
     });
-    this.storeDispatch({
-      type: 'LOAD_HISTORY',
-      channel: channel,
-      moments: moments,
-    });
+    this.storeDispatch(
+      loadHistory(moments, channel)
+    );
   }
 
   onMessage (event: PubnubMessageEventType) {
@@ -181,8 +182,10 @@ class Chat {
     case 'newMessage': {
       const message = event.message.data;
       if (message.type === 'system') {
+        // $FlowFixMe
         this.storeDispatch(leaveChannel(message.userId, message.channelToken));
         this.storeDispatch(
+          // $FlowFixMe
           publishLeftChannelNotification(message.fromNickname, message.channelToken)
         );
       } else {
@@ -222,6 +225,15 @@ class Chat {
       if (event.message.data.type === 'prayer') {
         this.storeDispatch(
           Converter.legacyToCwcPrayer(event.message)
+        );
+      }
+      return;
+    case 'muteMessage':
+      // $FlowFixMe
+      if (this.getState().channels[event.message.data.channelToken].moments.find(moment => moment.id === event.message.data.umt) !== undefined) {
+        this.storeDispatch(
+          // $FlowFixMe
+          deleteMessage(event.message.data.umt, event.message.data.channelToken)
         );
       }
       return;
@@ -305,6 +317,22 @@ class Chat {
     );
   }
 
+  publishDeleteMessage (id: string, channelId: string) {
+    this.publish(
+      {
+        channel: channelId,
+        message: {
+          action: 'muteMessage',
+          channel: channelId,
+          data: {
+            umt: id,
+            channelToken: channelId,
+          },
+        },
+      }
+    );
+  }
+
   dispatch (action: any) {
     if (!action || !action.type) {
       return;
@@ -338,6 +366,9 @@ class Chat {
       return;
     case 'REMOVE_CHANNEL': 
       this.unsubscribe([action.channel]);
+      return;
+    case 'PUBLISH_DELETE_MESSAGE':
+      this.publishDeleteMessage(action.id, this.getState().currentChannel);
     }
   }
 }

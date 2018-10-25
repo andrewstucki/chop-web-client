@@ -12,6 +12,7 @@ const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const TOGGLE_CLOSE_TRAY_BUTTON = 'TOGGLE_CLOSE_TRAY_BUTTON';
 const MESSAGE = 'MESSAGE';
 const MUTE_USER = 'MUTE_USER';
+const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
 // Flow Type Definitions
 
@@ -49,6 +50,11 @@ type LegacyMessageType = {
   eventStartTime: string,
 };
 
+type LegacyDeleteMessageType = {
+  umt: string,
+  channelToken: string,
+}
+
 type OpenMessageTrayType = {
   type: 'OPEN_MESSAGE_TRAY',
   id: string,
@@ -62,6 +68,7 @@ type CloseMessageTrayType = {
 type DeleteMessageType = {
   type: 'DELETE_MESSAGE',
   id: string,
+  channel: string,
 };
 
 type ToggleCloseTrayButtonType = {
@@ -72,6 +79,11 @@ type ToggleCloseTrayButtonType = {
 type MuteUserType = {
   type: 'MUTE_USER',
   pubnubToken: string,
+}
+
+type PublishDeleteMessageType = {
+  type: 'PUBLISH_DELETE_MESSAGE',
+  id: string,
 }
 
 // Action Creators
@@ -116,9 +128,17 @@ const toggleCloseTrayButton = (id: string): ToggleCloseTrayButtonType => (
   }
 );
 
-const deleteMessage = (id:string): DeleteMessageType => (
+const deleteMessage = (id:string, channel:string): DeleteMessageType => (
   {
     type: DELETE_MESSAGE,
+    id,
+    channel,
+  }
+);
+
+const publishDeleteMessage = (id:string): PublishDeleteMessageType => (
+  {
+    type: PUBLISH_DELETE_MESSAGE,
     id,
   }
 );
@@ -139,6 +159,7 @@ export {
   TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
   MUTE_USER,
+  PUBLISH_DELETE_MESSAGE,
 };
 
 export {
@@ -147,6 +168,7 @@ export {
   deleteMessage,
   toggleCloseTrayButton,
   publishMessage,
+  publishDeleteMessage,
   muteUser,
 };
 
@@ -155,7 +177,9 @@ export type {
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
+  LegacyDeleteMessageType,
   ToggleCloseTrayButtonType,
   LegacyMessageType,
   MuteUserType,
+  PublishDeleteMessageType,
 };

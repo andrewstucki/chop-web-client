@@ -7,7 +7,7 @@ import MuteButton from '../../../assets/mute-button.svg';
 import styles from './style.css';
 
 type MessageTrayPropsType = {
-  deleteMessage: (id: string) => void,
+  deleteMessage: (id: string, channel:string) => void,
   muteUser: (pubnubToken: string) => void,
 };
 

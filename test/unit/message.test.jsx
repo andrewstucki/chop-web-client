@@ -31,10 +31,12 @@ describe('Message', () => {
             closeTrayButtonRendered: false,
           }
         }
+        currentChannel='public'
         appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
+        publishDeleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
       />
@@ -57,10 +59,12 @@ describe('Message', () => {
             closeTrayButtonRendered: false,
           }
         }
+        currentChannel='public'
         appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={openTray}
         deleteMessage={() => {}}
+        publishDeleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
       />
@@ -85,10 +89,12 @@ describe('Message', () => {
             closeTrayButtonRendered: true,
           }
         }
+        currentChannel='public'
         appendingMessage={false}
         closeMessageTray={closeTray}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
+        publishDeleteMessage={() => {}}
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
       />

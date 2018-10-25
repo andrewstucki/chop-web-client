@@ -83,17 +83,13 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!) {
 
 const muteUser = ` 
 mutation muteUser($pubnubToken: String!) {
-  muteUser(pubnub_token: $pubnubToken) {
-    success
-  }
+  muteUser(pubnubToken: $pubnubToken)
 }
 `;
 
 const leaveChannel = `
 mutation leaveFeed($feedId: String!) {
-  leaveFeed(feed_id: $feedId) {
-    success
-  }
+  leaveFeed(feedId: $feedId)
 }
 `;
 

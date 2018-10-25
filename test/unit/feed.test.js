@@ -1024,7 +1024,7 @@ describe('Feed tests', () => {
         },
         currentChannel: 'public',
       },
-      deleteMessage('123')
+      deleteMessage('123', 'public')
     );
     expect(result).toEqual(
       {
