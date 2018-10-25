@@ -35,6 +35,11 @@ describe('Reaction2 Tests', () => {
         name: 'Public',
         moments: [],
       },
+      legacy: {
+        id: '789012',
+        name: 'Legacy',
+        moments: [],
+      },
     },
   };
 
@@ -67,12 +72,12 @@ describe('Reaction2 Tests', () => {
     expect(mockPublish).toHaveBeenCalledTimes(1);
     expect(mockPublish.mock.calls[0][0]).toEqual(
       {
-        channel: 'public',
+        channel: 'legacy',
         message: {
           action: 'videoReaction',
-          channel: 'public',
+          channel: 'legacy',
           data: {
-            channelToken: 'public',
+            channelToken: 'legacy',
             nickname: 'Hillsong Young & Free',
             reactionId: '123456',
           },

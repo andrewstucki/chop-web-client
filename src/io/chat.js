@@ -354,7 +354,7 @@ class Chat {
       this.subscribe([action.channel.id]);
       return;
     case 'PUBLISH_REACTION':
-      this.publishReaction(action.reaction, getChannelByName(this.getState().channels, 'Public'));
+      this.publishReaction(action.reaction, getChannelByName(this.getState().channels, 'Legacy'));
       return;
     case 'PUBLISH_LEAVE_CHANNEL':
       this.publishLeaveChannel(action.user, action.channel);
