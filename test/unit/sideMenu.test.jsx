@@ -11,20 +11,6 @@ import LanguageSelector from '../../src/languageSelector';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-// TODO remove currentUser, publishPrayerRequestNotification
-// and hostChannel after demo prayer requests are gone
-
-const currentUser = {
-  id: 'string',
-  name: 'Ben Butters',
-  pubnubToken: 'string2',
-  pubnubAccessToken: 'string3',
-  role: {
-    label: 'Host',
-    permissions: [],
-  },
-};
-
 const languageOptions = [
   {
     code: 'en',
@@ -61,9 +47,6 @@ describe('SideBar tests', () => {
     const closeFunction = () => {};
     const wrapper = Enzyme.shallow(
       <SideMenu
-        currentUser={currentUser}
-        publishPrayerRequestNotification={() => {}}
-        hostChannel="host"
         logout={() => {}}
         close={closeFunction}
         isClosed={false}
@@ -80,9 +63,6 @@ describe('SideBar tests', () => {
   test('SideBar has link to guest experience', () => {
     const wrapper = Enzyme.shallow(
       <SideMenu
-        currentUser={currentUser}
-        publishPrayerRequestNotification={() => {}}
-        hostChannel="host"
         logout={() => {}}
         close={() => {}}
         isClosed={false}
@@ -101,9 +81,6 @@ describe('SideBar tests', () => {
   test('SideBar has link to give feedback', () => {
     const wrapper = Enzyme.shallow(
       <SideMenu
-        currentUser={currentUser}
-        publishPrayerRequestNotification={() => {}}
-        hostChannel="host"
         logout={() => {}}
         close={() => {}}
         isClosed={false}
@@ -123,9 +100,6 @@ describe('SideBar tests', () => {
     const logoutButton = sinon.spy();
     const wrapper = Enzyme.mount(
       <SideMenu
-        currentUser={currentUser}
-        publishPrayerRequestNotification={() => {}}
-        hostChannel="host"
         logout={logoutButton}
         close={() => {}}
         isClosed={false}
@@ -139,27 +113,6 @@ describe('SideBar tests', () => {
       .toBe('Log out');
     wrapper.find(Button).simulate('click');
     expect(logoutButton.calledOnce)
-      .toBe(true);
-  });
-
-  test('Prayer request button sends a prayer request', () => {
-    const prayerRequestButton = sinon.spy();
-    const wrapper = Enzyme.mount(
-      <SideMenu
-        currentUser={currentUser}
-        publishPrayerRequestNotification={prayerRequestButton}
-        hostChannel="host"
-        logout={() => {}}
-        close={() => {}}
-        isClosed={false}
-        languageOptions={languageOptions}
-        setLanguage={() => {}}
-      />
-    );
-    expect(wrapper.find('#prayerRequest').length)
-      .toBe(1);
-    wrapper.find('#prayerRequest').simulate('click');
-    expect(prayerRequestButton.calledOnce)
       .toBe(true);
   });
 });
