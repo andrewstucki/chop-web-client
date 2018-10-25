@@ -12,7 +12,7 @@ type ReactionsContainerProps = {
 const ReactionsContainer = ({reactions}: ReactionsContainerProps) => (
   <div className={style.container}>
     { reactions.map(reaction =>
-      <Reaction key={reaction.id} id={reaction.id}/>
+      <Reaction key={reaction.id} reactionId={reaction.id}/>
     )}
     <ReactionButton />
   </div>

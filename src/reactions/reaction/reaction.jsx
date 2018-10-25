@@ -15,7 +15,7 @@ class Reaction extends React.Component {
   }
 
   removeReaction () {
-    this.props.removeReaction(this.props.id);
+    this.props.removeReaction(this.props.reactionId);
   }
 
   render () {

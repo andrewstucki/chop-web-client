@@ -35,7 +35,7 @@ describe('Reaction tests', () => {
     );
     wrapper.find('button').first().simulate('click');
     expect(wrapper.find('ReactionsContainer').children().find('Reaction').length).toBe(1);
-    expect(wrapper.find('Reaction').get(0).props.id).toMatch(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/);
+    expect(wrapper.find('Reaction').get(0).props.reactionId).toMatch(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/);
     wrapper.find('Reaction').first().simulate('animationEnd');
     expect(wrapper.find('ReactionsContainer').children().find('Reaction').length).toBe(0);
   });
