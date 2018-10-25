@@ -243,6 +243,12 @@ type PublishLeaveChannelType = {
   type: 'PUBLISH_LEAVE_CHANNEL',
   user: SharedUserType,
   channel: string,
+};
+
+type LoadHistoryType = {
+  type: 'LOAD_HISTORY',
+  channel: string,
+  moments: MomentType,
 }
 
 type FeedActionTypes =
@@ -418,6 +424,14 @@ const publishLeaveChannel = (user: SharedUserType, channel: string): PublishLeav
     type: PUBLISH_LEAVE_CHANNEL,
     user,
     channel,
+  }
+);
+
+const loadHistory = (moments: MomentType, channel: string): LoadHistoryType => (
+  {
+    type: LOAD_HISTORY,
+    channel,
+    moments,
   }
 );
 
@@ -731,20 +745,20 @@ const reducer = (
   }
   case DELETE_MESSAGE: {
     // $FlowFixMe
-    const { id } = action;
-    const { channels, currentChannel } = state;
-    const messageIndex = channels[currentChannel].moments.findIndex(el => (
+    const { id, channel } = action;
+    const { channels } = state;
+    const messageIndex = channels[channel].moments.findIndex(el => (
       el.id === id
     ));
     return {
       ...state,
       channels: {
         ...channels,
-        [currentChannel]: {
-          ...channels[currentChannel],
+        [channel]: {
+          ...channels[channel],
           moments: [
-            ...channels[currentChannel].moments.slice(0, messageIndex),
-            ...channels[currentChannel].moments.slice(messageIndex + 1),
+            ...channels[channel].moments.slice(0, messageIndex),
+            ...channels[channel].moments.slice(messageIndex + 1),
           ],
         },
       },
@@ -915,6 +929,10 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   }
 );
 
+const getCurrentChannel = (state: FeedType): string => (
+  state.currentChannel
+);
+
 const feedContents = (state: FeedType): Array<MessageType> => (
   state.channels[state.currentChannel] && state.channels[state.currentChannel].moments ?
     state.channels[state.currentChannel].moments.map(moment => {
@@ -983,6 +1001,7 @@ export {
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
+  getCurrentChannel,
   togglePopUpModal,
   leaveChannel,
   getCurrentUserAsSharedUser,
@@ -994,6 +1013,7 @@ export {
   setLanguageOptions,
   setPubnubKeys,
   publishLeaveChannel,
+  loadHistory,
   setSchedule,
 };
 export type {

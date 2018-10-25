@@ -12,9 +12,11 @@ import styles from './style.css';
 
 type MessagePropsType = {
   message: MessageType,
+  currentChannel: string,
   openMessageTray: (id: string) => void,
   closeMessageTray: (id: string) => void,
-  deleteMessage: (id: string) => void,
+  deleteMessage: (id: string, channel: string) => void,
+  publishDeleteMessage: (id: string) => void,
   toggleCloseTrayButton: (id: string) => void,
   muteUser: (pubnubToken: string) => void,
 };
@@ -22,8 +24,10 @@ type MessagePropsType = {
 const Message = (
   {
     message,
+    currentChannel,
     openMessageTray,
     closeMessageTray,
+    publishDeleteMessage,
     deleteMessage,
     toggleCloseTrayButton,
     muteUser,
@@ -61,7 +65,8 @@ const Message = (
     
       <MessageTray
         deleteMessage={() => {
-          deleteMessage(message.id);
+          publishDeleteMessage(message.id);
+          deleteMessage(message.id, currentChannel);
         }}
         muteUser={() => {
           muteUser(message.user.pubnubToken);
