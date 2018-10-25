@@ -93,6 +93,19 @@ mutation leaveFeed($feedId: String!) {
 }
 `;
 
+const createDirectFeed = `
+mutation createDirectFeed($pubnubToken: String!) {
+  createDirectFeed(targetPubnubToken: $pubnubToken) {
+    id
+    name
+    subscribers {
+      pubnubToken
+      avatar
+      nickname
+    }
+  }
+}`;
+
 const currentState = `
 {
   ${currentEvent}
@@ -151,6 +164,15 @@ export default class GraphQl {
   muteUser (pubnubToken: string) {
     return this.request(
       muteUser,
+      {
+        pubnubToken,
+      }
+    );
+  }
+
+  directChat (pubnubToken: string) {
+    return this.request(
+      createDirectFeed,
       {
         pubnubToken,
       }

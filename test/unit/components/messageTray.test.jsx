@@ -15,6 +15,7 @@ describe('MessageTray tests', () => {
       <MessageTray 
         deleteMessage={() => {}}
         muteUser={muteUser}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('tray');
@@ -30,6 +31,7 @@ describe('MessageTray tests', () => {
       <MessageTray 
         deleteMessage={deleteMessage}
         muteUser={muteUser}
+        directChat={() => {}}
       />
     );
     wrapper.find('button').at(1).simulate('click');

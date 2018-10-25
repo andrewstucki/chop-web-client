@@ -12,5 +12,6 @@ storiesOf('MessageTray', module)
       closeMessageTray={() => {}}
       deleteMessage={() => {}}
       muteUser={() => {}}
+      directChat={() => {}}
     />
   ))
