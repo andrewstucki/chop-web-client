@@ -95,18 +95,21 @@ const Converter = {
     }
   ),
 
-  legacyToCwcPrayer: (message: any) => (
-    publishPrayerRequestNotification(
-      { 
+  legacyToCwcPrayer: (message: any) => {
+    const hostChannel = getChannelByName(_getState().channels, 'Host');
+
+    return publishPrayerRequestNotification(
+      {
         name: message.data.fromNickname,
         pubnubToken: message.data.fromToken,
         role: { 
           label: '',
         },
       }, 
-      getChannelByName(_getState().channels, 'Host')
-    )
-  ),
+      message.data.channel,
+      hostChannel,
+    );
+  },
 
   getTimestamp: (time:Date) => {
     const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();

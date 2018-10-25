@@ -187,13 +187,17 @@ class Chat {
             moment => moment.id === event.message.data.msgId));
 
         if (!hasMomentBeenRecieved) {
-          this.storeDispatch(
-            {
-              type: 'RECEIVE_MOMENT',
-              channel: event.channel,
-              moment: Converter.legacyToCwc(event.message.data),
-            }
-          );
+          const moment = Converter.legacyToCwc(event.message.data);
+
+          if (moment.text) {
+            this.storeDispatch(
+              {
+                type: 'RECEIVE_MOMENT',
+                channel: event.channel,
+                moment: Converter.legacyToCwc(event.message.data),
+              }
+            );
+          }
         }
       }
       return;

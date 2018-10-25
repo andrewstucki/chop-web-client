@@ -39,6 +39,7 @@ describe('ActionableNotification tests', () => {
             user: yablby,
             timeStamp: '9:33pm',
             active: true,
+            channel: 'direct-chat-1234',
           }
         }
         acceptPrayerRequest={acceptPrayerRequest}
@@ -72,6 +73,7 @@ describe('ActionableNotification tests', () => {
             user: yablby,
             timeStamp: '9:33pm',
             active: false,
+            channel: 'direct-chat-12345',
           }
         }
         acceptPrayerRequest={() => {}}

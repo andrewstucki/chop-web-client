@@ -20,6 +20,7 @@ type PrayerRequestNotificationType = {
   user: SharedUserType,
   timeStamp: string,
   active: boolean,
+  channel: string,
 };
 
 type ActionableNotificationType =
@@ -35,11 +36,12 @@ type PublishAcceptedPrayerRequestType = {
 
 const publishPrayerRequestNotification = (
   user: SharedUserType,
-  channel: string,
+  prayerChannel: string,
+  hostChannel: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
-    channel,
+    channel: hostChannel,
     moment: {
       type: ACTIONABLE_NOTIFICATION,
       notificationType: PRAYER_REQUEST,
@@ -47,6 +49,7 @@ const publishPrayerRequestNotification = (
       user,
       active: true,
       timeStamp: formatAMPM(new Date),
+      prayerChannel,
     },
   }
 );

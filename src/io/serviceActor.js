@@ -199,12 +199,9 @@ class ServiceActor {
     const { channels } = this.getStore();
     const currentMoments = channels[currentChannel].moments;
     const moment = currentMoments.find(moment => moment.id === action.id);
-    const { user } = moment;
-    const now = new Date().getTime();
-    const channel = `direct-chat-${now}`;
+    const { user, prayerChannel } = moment;
 
-
-    this.graph.acceptPrayer(channel, user.pubnubToken)
+    this.graph.acceptPrayer(prayerChannel, user.pubnubToken)
       .then(data => {
         const { name, id } = data.acceptPrayer;
         this.storeDispatch(addChannel(name, id));
