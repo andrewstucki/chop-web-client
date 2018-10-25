@@ -2,7 +2,7 @@
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React from 'react';
 
-import type { SharedUserType, LanguageType } from '../feed/dux';
+import type { LanguageType } from '../feed/dux';
 
 import SideMenuComponent from '../components/sideMenu';
 import Button from '../components/button';
@@ -17,12 +17,6 @@ type SideMenuType = {
   close: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   isClosed: boolean,
   onSwipe?: (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
-  publishPrayerRequestNotification: (
-    user: SharedUserType,
-    channel: string
-  ) => void,
-  currentUser: SharedUserType,
-  hostChannel: string,
   setLanguage: (language: string) => void,
   languageOptions: Array<LanguageType>,
 };
@@ -33,9 +27,6 @@ const SideMenu = (
     close,
     isClosed,
     onSwipe,
-    publishPrayerRequestNotification,
-    currentUser,
-    hostChannel,
     languageOptions,
     setLanguage,
   }: SideMenuType
@@ -45,26 +36,6 @@ const SideMenu = (
     isClosed={isClosed}
     swipe={onSwipe}
   >
-    {
-      // TODO: Remove this button after demo purposes
-      // also remove currentUser and publishPrayer from props
-    }
-    <button
-      id="prayerRequest"
-      style={
-        {
-          marginBottom: '100px',
-          border: '1px solid black',
-        }
-      }
-      onClick={
-        () => {
-          publishPrayerRequestNotification(currentUser, hostChannel);
-        }
-      }
-    >
-      I AM A PRAYER REQUEST!!!
-    </button>
     <a
       id="feedback"
       className={styles.feedbackLink}
