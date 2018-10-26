@@ -20,6 +20,19 @@ describe('Direct Chat Tests', () => {
     );
     const store = createStore(
       reducer,
+      {
+        feed: {
+          ...defaultState,
+          channels: {
+            abc: {
+              id: 'abc',
+              name: 'abc',
+              moments: [],
+            },
+          },
+          currentChannel: 'abc',
+        },
+      },
       applyMiddleware(actors)
     );
 
@@ -31,7 +44,13 @@ describe('Direct Chat Tests', () => {
     expect(store.getState().feed).toEqual(
       {
         ...defaultState,
+        currentChannel: 'abc',
         channels: {
+          abc: {
+            id: 'abc',
+            name: 'abc',
+            moments: [],
+          },
           '67890': {
             id: '67890',
             name: null,
