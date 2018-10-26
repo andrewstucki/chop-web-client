@@ -1,7 +1,7 @@
 // @flow
 
-import { getChannelByName } from '../util';
 import { publishPrayerRequestNotification } from '../moment/actionableNotification/dux';
+import { getHostChannel } from '../selectors/channelSelectors';
 
 let _getState;
 
@@ -97,7 +97,7 @@ const Converter = {
   ),
 
   legacyToCwcPrayer: (message: any) => {
-    const hostChannel = getChannelByName(_getState().channels, 'Host');
+    const hostChannel = getHostChannel(_getState());
 
     return publishPrayerRequestNotification(
       {

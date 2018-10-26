@@ -9,11 +9,11 @@ import {
 } from './dux';
 
 import Placeholder from './placeholder';
-import { getChannelByName } from '../util';
+import { getHostChannel } from '../selectors/channelSelectors';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
-  const hostChannel = Object.keys(feedState.channels).length ? getChannelByName(feedState.channels, 'Host') : '';
+  const hostChannel = getHostChannel(feedState);
 
   return {
     anchorMoment: placeholderContents(feedState),

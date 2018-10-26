@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishAcceptedPrayerRequest } from './dux';
 import { publishPrayerNotification } from '../notification/dux';
-import { getChannelByName } from '../../util';
+import { getHostChannel } from '../../selectors/channelSelectors';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
-  const hostChannel = Object.keys(feedState.channels).length ? getChannelByName(feedState.channels, 'Host') : '';
+  const hostChannel = getHostChannel(feedState);
 
   return {
     currentUser: getCurrentUserAsSharedUser(feedState),
