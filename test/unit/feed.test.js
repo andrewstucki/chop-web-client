@@ -106,7 +106,7 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'host',
-        appendingMessage: false,
+        appendingMessage: true,
       }
     );
   });

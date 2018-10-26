@@ -555,7 +555,7 @@ const reducer = (
     }
     return {
       ...state,
-      appendingMessage: false,
+      appendingMessage: true,
       currentChannel: action.channel,
     };
   case RECEIVE_MOMENT:

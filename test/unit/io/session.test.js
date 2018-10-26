@@ -23,14 +23,14 @@ describe('Session', () => {
     const actorMiddlewareApplied = actorMiddleware(
       GraphQlActor,
     );
-    
+
     const store = createStore(
       reducer,
       compose(
         applyMiddleware(actorMiddlewareApplied)
       )
     );
-    
+
     // await for both stages of starting up application
     await await store.dispatch({ type: 'INIT' });
 
@@ -103,6 +103,7 @@ describe('Session', () => {
             participants: [],
           },
         },
+        appendingMessage: true,
         currentChannel: '1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c',
         languageOptions: [
           {
