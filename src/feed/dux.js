@@ -46,6 +46,7 @@ import {
 } from '../placeholder/anchorMoment/dux';
 
 import { SET_LANGUAGE } from '../languageSelector/dux';
+import { getHostChannel, getPublicChannel } from '../selectors/channelSelectors';
 
 // Action Types
 
@@ -146,6 +147,12 @@ type SharedUserType = {
   role: {
     label: string,
   }
+};
+
+type SubscriberType = {
+  avatarUrl: string,
+  name: string,
+  pubnubToken: string,
 };
 
 type ChannelType = {
@@ -385,19 +392,6 @@ const addChannel = (
   }
 );
 
-const inviteToChannel = (
-  user: SharedUserType,
-  channelId: string,
-  channelName: string,
-): InviteToChannelType => (
-  {
-    type: INVITE_TO_CHANNEL,
-    user,
-    channelId,
-    channelName,
-  }
-);
-
 const removeChannel = (channel: string): RemoveChannelType => (
   {
     type: REMOVE_CHANNEL,
@@ -612,17 +606,18 @@ const reducer = (
       },
     };
   case REMOVE_CHANNEL: {
-    if (action.channel === 'public' ||
-      action.channel === 'host' || 
-      action.channel === 'request' ||
-      action.channel === 'command'
+    const publicChannel = getPublicChannel(state);
+    const hostChannel = getHostChannel(state);
+
+    if (action.channel === publicChannel ||
+      action.channel === hostChannel
     ) {
       return state;
     }
     const stateCopy = { ...state };
     if (action.channel === state.currentChannel) {
-      if (state.channels.public) {
-        stateCopy.currentChannel = 'public';
+      if (state.channels[publicChannel]) {
+        stateCopy.currentChannel = publicChannel;
       } else {
         stateCopy.currentChannel = '';
       }
@@ -836,6 +831,7 @@ const reducer = (
     };
   case LEAVE_CHANNEL: {
     const { channels, currentChannel } = state;
+    const publicChannel = getPublicChannel(state);
     if (currentChannel &&
       channels[currentChannel].participants &&
       channels[currentChannel].participants.length
@@ -850,6 +846,7 @@ const reducer = (
         // be undefined here even though we already checked for them
         return {
           ...state,
+          currentChannel: publicChannel,
           channels: {
             ...channels,
             [currentChannel]: {
@@ -997,7 +994,6 @@ export {
   feedContents,
   defaultState,
   appendMessage,
-  inviteToChannel,
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
@@ -1034,6 +1030,7 @@ export type {
   LanguageType,
   OrganizationType,
   PublishLeaveChannelType,
+  SubscriberType,
 };
 
 export default reducer;
