@@ -8,8 +8,8 @@ import Converter from './converter';
 import type { MomentType } from '../moment/dux';
 import { publishLeftChannelNotification } from '../moment/notification/dux';
 import type { LegacyMessageType, LegacyDeleteMessageType } from '../moment/message/dux';
-import { getChannelByName } from '../util';
 import { deleteMessage } from '../moment/message/dux';
+import { getLegacyChannel } from '../selectors/channelSelectors';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -354,7 +354,7 @@ class Chat {
       this.subscribe([action.channel.id]);
       return;
     case 'PUBLISH_REACTION':
-      this.publishReaction(action.reaction, getChannelByName(this.getState().channels, 'Legacy'));
+      this.publishReaction(action.reaction, getLegacyChannel(this.getState()));
       return;
     case 'PUBLISH_LEAVE_CHANNEL':
       this.publishLeaveChannel(action.user, action.channel);

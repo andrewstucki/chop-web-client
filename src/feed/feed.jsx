@@ -7,7 +7,8 @@ import type { MomentType } from '../moment/dux';
 import Moment from '../moment/moment';
 import FeedActionBanner from './feedActionBanner';
 import styles from './styles.css';
-
+import { createUid } from '../util';
+ 
 type FeedProps = {
   moments: Array<MomentType>,
   currentChannel: string,
@@ -67,7 +68,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         styles.withPlaceholder : styles.withoutPlaceholder;
 
     const listItems = moments.reverse().map(moment => (
-      <li key={moment.id}>
+      <li key={moment.id || createUid()}>
         <Moment
           data={moment}
         />

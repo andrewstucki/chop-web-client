@@ -7,7 +7,6 @@ import reducer, {
   feedContents,
   defaultState,
   appendMessage,
-  inviteToChannel,
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
@@ -1603,38 +1602,6 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Invite to channel', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        currentUser: currentUser,
-      },
-      inviteToChannel(otherUser, '12345', 'Prayer'));
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          '12345': {
-            id: '12345',
-            name: 'Prayer',
-            moments: [],
-            participants: [
-              {
-                pubnubToken: currentUser.pubnubToken,
-                name: currentUser.name,
-                role: {
-                  label: currentUser.role.label,
-                },
-              },
-              otherUser,
-            ],
-          },
-        },
-        currentUser: currentUser,
-      },
-    );
-  });
-
   test('hasParticipants channel with participants', () => {
     const result = hasParticipants(
       {
@@ -1739,6 +1706,12 @@ describe('Feed tests', () => {
               otherUser,
             ],
           },
+          public: {
+            id: '67890',
+            name: 'Public',
+            moments: [],
+            participants: [],
+          },
         },
         currentChannel: 'direct',
         currentUser: currentUser,
@@ -1757,8 +1730,14 @@ describe('Feed tests', () => {
               otherUser,
             ],
           },
+          public: {
+            id: '67890',
+            name: 'Public',
+            moments: [],
+            participants: [],
+          },
         },
-        currentChannel: 'direct',
+        currentChannel: 'public',
         currentUser: currentUser,
       }
     );

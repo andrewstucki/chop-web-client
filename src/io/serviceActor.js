@@ -1,7 +1,6 @@
 // @flow
 import {
   addChannel,
-  inviteToChannel,
   setEvent,
   setOrganization,
   setPubnubKeys,
@@ -22,7 +21,7 @@ import {
   DIRECT_CHAT,
 } from '../moment/message/dux';
 import type { MuteUserType } from '../moment/message/dux';
-import { avatarImageExists } from '../util';
+import { avatarImageExists, convertSubscribersToSharedUsers } from '../util';
 import Cookies from './cookies';
 import Location from './location';
 import GraphQl from './graphQL';
@@ -90,10 +89,12 @@ class ServiceActor {
       case 'currentFeeds': {
         const channels = payload.currentFeeds;
         channels.forEach(channel => {
+          const participants = convertSubscribersToSharedUsers(channel.subscribers);
           this.storeDispatch(
             addChannel(
               channel.name,
-              channel.id
+              channel.id,
+              participants
             )
           );
           if (channel.name === 'Public') {
@@ -206,9 +207,9 @@ class ServiceActor {
 
     this.graph.acceptPrayer(prayerChannel, user.pubnubToken)
       .then(data => {
-        const { name, id } = data.acceptPrayer;
-        this.storeDispatch(addChannel(name, id));
-        this.storeDispatch(inviteToChannel(user, id, name));
+        const { name, id, subscribers } = data.acceptPrayer;
+        const participants = convertSubscribersToSharedUsers(subscribers);
+        this.storeDispatch(addChannel(name, id, participants));
       });
   }
 
@@ -220,13 +221,7 @@ class ServiceActor {
     this.graph.directChat(action.otherUserPubnubToken).
       then(data => {
         const { name, id, subscribers } = data.createDirectFeed;
-        const participants = subscribers.map(person => (
-          {
-            avatarUrl: person.avatar,
-            name: person.nickname,
-            pubnubToken: person.pubnubToken,
-          }
-        ));
+        const participants = convertSubscribersToSharedUsers(subscribers);
         this.storeDispatch(addChannel(name, id, participants));
       });
   }

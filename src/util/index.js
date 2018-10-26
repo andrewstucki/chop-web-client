@@ -1,3 +1,5 @@
+import type { SubscriberType } from '../feed';
+
 const getFirstInitial = name => (
   name.charAt(0).toUpperCase()
 );
@@ -69,8 +71,21 @@ const isUsingIPhone678 = () =>
 const isUsingIPhone678plus = () =>
   (window.screen.height === 736 && window.screen.width === 414 && window.devicePixelRatio === 3);
 
-const getChannelByName = (channels: Array<string>, name) => 
-  Object.keys(channels).find(id => channels[id].name === name);
+const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => {
+  let users = [];
+
+  if (subscribers && subscribers.length) {
+    users = subscribers.map(person => (
+      {
+        avatarUrl: person.avatar,
+        name: person.nickname,
+        pubnubToken: person.pubnubToken,
+      }
+    ));
+  }
+
+  return users;
+};
 
 export {
   getFirstInitial,
@@ -82,5 +97,5 @@ export {
   isUsingIPhoneX,
   isUsingIPhone678,
   isUsingIPhone678plus,
-  getChannelByName,
+  convertSubscribersToSharedUsers,
 };

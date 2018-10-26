@@ -44,6 +44,11 @@ currentFeeds {
   id
   name
   type
+  subscribers {
+    pubnubToken
+    avatar
+    nickname
+  }
 }`;
 
 const currentOrganization = `
@@ -69,13 +74,10 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!) {
   acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken) {
     id
     name
-    type
-    direct
     subscribers {
-      pubnubAccessKey
       pubnubToken
       avatar
-      userId
+      nickname
     }
   }
 }
@@ -88,8 +90,8 @@ mutation muteUser($pubnubToken: String!) {
 `;
 
 const leaveChannel = `
-mutation leaveFeed($feedId: String!) {
-  leaveFeed(feedId: $feedId)
+mutation leaveFeed($feedToken: String!) {
+  leaveFeed(feedToken: $feedToken)
 }
 `;
 
@@ -183,7 +185,7 @@ export default class GraphQl {
     return this.request(
       leaveChannel,
       {
-        feedId: channelId,
+        feedToken: channelId,
       }
     );
   }
