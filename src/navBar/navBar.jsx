@@ -92,8 +92,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           {
             left: (left - parentLeft) + 20,
             width: width - 40,
-            opacity: this.selectedLink.current.id === 'nav-public' ||
-              this.selectedLink.current.id === 'nav-host' ? 1.0 : 0.0,
+            opacity: this.selectedLink.current.id === 'nav-Public' ||
+              this.selectedLink.current.id === 'nav-Host' ? 1.0 : 0.0,
           }
         );
       }
