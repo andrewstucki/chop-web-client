@@ -88,6 +88,8 @@
     "redux": "^3.7.2",
     "redux-beacon": "^2.0.3",
     "reselect": "^4.0.0",
-    "reset-css": "^3.0.0"
+    "reset-css": "^3.0.0",
+    "video.js": "^7.2.4",
+    "videojs-youtube": "^2.6.0"
   }
 }
