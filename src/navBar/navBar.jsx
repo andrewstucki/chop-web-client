@@ -38,7 +38,7 @@ const Underline = props => (
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: any
   channelLink: (channel: ChannelType) => React$Node | string;
-  
+
   constructor (props: NavBarProps) {
     super(props);
     // $FlowFixMe
@@ -61,7 +61,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     props.channels.forEach(channel => {
       if (channel.otherUsersNames.length > 0 &&
         state.directChatChannelNames[channel.id] !== channel.otherUsersNames[0]
-      ) { 
+      ) {
         hasUpdated = true;
         copyOfNames = {
           ...copyOfNames,
@@ -117,11 +117,12 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         </span>
       );
     } else if (channel.otherUsersNames.length > 0) {
-      const channelIconName = this.state.directChatChannelNames[channel.id];
+      const names = this.state.directChatChannelNames;
+      const channelIconName = names[channel.id] || '?';
 
       return (
         <div
-          className={styles.avatar} 
+          className={styles.avatar}
           style={
             {
               backgroundColor: getAvatarColor(channelIconName, opacity),
