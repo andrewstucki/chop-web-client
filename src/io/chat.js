@@ -164,7 +164,7 @@ class Chat {
         }
         return;
       case 'muteUser':
-        moments.push(receiveMuteUserNotification(message.entry.data.fromNickname, message.entry.data.nickname, message.entry.data.channelToken, message.entry.data.timestamp).moment);
+        moments.push(receiveMuteUserNotification(message.entry.data.fromNickname, message.entry.data.nickname, message.entry.data.channelToken, message.entry.data.cwcTimestamp).moment);
         return;
       }
     });
@@ -180,12 +180,11 @@ class Chat {
     case 'newMessage': {
       const message = event.message.data;
       if (message.type === 'system') {
-        // $FlowFixMe
         this.storeDispatch(
           // $FlowFixMe
-          leaveChannel(message.userId, message.channelToken, message.cwcTimestamp),
+          leaveChannel(message.userId, message.channelToken),
           // $FlowFixMe
-          receiveLeftChannelNotification(message.fromNickname, message.channelToken)
+          receiveLeftChannelNotification(message.fromNickname, message.channelToken, message.cwcTimestamp),
         );
       } else {
         hasMomentBeenRecieved = Object.keys(channels).find(
@@ -210,7 +209,7 @@ class Chat {
       if (this.getState().currentUser.name !== event.message.data.fromNickname) {
         this.storeDispatch(
           // $FlowFixMe
-          receiveMuteUserNotification(event.message.data.fromNickname, event.message.data.nickname, event.message.data.channelToken, event.message.data.timestamp)
+          receiveMuteUserNotification(event.message.data.fromNickname, event.message.data.nickname, event.message.data.channelToken, event.message.data.cwcTimestamp)
         );
       }
       return;
