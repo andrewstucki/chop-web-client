@@ -56,6 +56,24 @@ type LegacyDeleteMessageType = {
   channelToken: string,
 }
 
+type LegacyMuteUserType = {
+  nickname: string,
+  fromNickname: string,
+  channelToken: string,
+  cwcTimestamp: string,
+}
+
+type LegacyLeaveChannelType = {
+  messageText: string,
+  timestamp: string,
+  userId: string,
+  fromNickname: string,
+  type: string,
+  roomType: string,
+  channelToken: string,
+  cwcTimestamp: string,
+}
+
 type OpenMessageTrayType = {
   type: 'OPEN_MESSAGE_TRAY',
   id: string,
@@ -192,4 +210,6 @@ export type {
   LegacyMessageType,
   MuteUserType,
   PublishDeleteMessageType,
+  LegacyMuteUserType,
+  LegacyLeaveChannelType,
 };

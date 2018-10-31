@@ -2,6 +2,7 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
+import type { SharedUserType } from '../../feed/dux';
 import Avatar from '../../avatar';
 
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
@@ -13,12 +14,15 @@ import styles from './style.css';
 type MessagePropsType = {
   message: MessageType,
   currentChannel: string,
+  hostChannel: string,
+  currentUser: SharedUserType,
   openMessageTray: (id: string) => void,
   closeMessageTray: (id: string) => void,
   deleteMessage: (id: string, channel: string) => void,
   publishDeleteMessage: (id: string) => void,
   toggleCloseTrayButton: (id: string) => void,
   muteUser: (pubnubToken: string) => void,
+  publishMuteUserNotification: (host: string, guest: string, channel: string, date: Date) => void,
   directChat: (pubnubToken: string) => void,
 };
 
@@ -27,7 +31,10 @@ const Message = (
     message,
     currentChannel,
     openMessageTray,
+    hostChannel,
     closeMessageTray,
+    publishMuteUserNotification,
+    currentUser,
     publishDeleteMessage,
     deleteMessage,
     toggleCloseTrayButton,
@@ -72,6 +79,8 @@ const Message = (
         }}
         muteUser={() => {
           muteUser(message.user.pubnubToken);
+          publishMuteUserNotification(currentUser.name, message.user.name, hostChannel, new Date);
+          closeMessageTray(message.id);
         }}
         directChat={() => {
           directChat(message.user.pubnubToken);

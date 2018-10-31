@@ -4,6 +4,10 @@ import type {
   PublishAcceptedPrayerRequestType,
 } from './actionableNotification/dux';
 
+import type {
+  ReceiveMomentType,
+} from './dux';
+
 import {
   NOTIFICATION,
   PRAYER,
@@ -18,7 +22,10 @@ import {
   publishAcceptedPrayerRequest,
 } from './actionableNotification/dux';
 
-import { PUBLISH_MOMENT_TO_CHANNEL } from './dux';
+import { 
+  PUBLISH_MOMENT_TO_CHANNEL, 
+  RECEIVE_MOMENT, 
+} from './dux';
 
 // Component Imports
 
@@ -49,10 +56,12 @@ export {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
   PUBLISH_MOMENT_TO_CHANNEL,
+  RECEIVE_MOMENT,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   LEFT_CHANNEL,
 };
 
 export type {
   PublishAcceptedPrayerRequestType,
+  ReceiveMomentType,
 };

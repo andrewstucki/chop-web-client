@@ -6,9 +6,8 @@ import styles from './style.css';
 
 type PopUpModalPropsType = {
   togglePopUpModal: () => void,
-  publishLeftChannelNotification: (userName: string, channelName: string) => void,
+  publishLeftChannelNotification: (name: string, pubnubToke: string, channelName: string, date: Date) => void,
   removeChannel: (channelName: string) => void,
-  publishLeaveChannel: (user: SharedUserType, channel: string) => void,
   otherUser: SharedUserType,
   currentUser: SharedUserType,
   currentChannel: string,
@@ -19,7 +18,7 @@ const PopUpModal = (
   {
     togglePopUpModal,
     removeChannel,
-    publishLeaveChannel,
+    publishLeftChannelNotification,
     otherUser,
     currentUser,
     isPopUpModalVisible,
@@ -45,8 +44,8 @@ const PopUpModal = (
               className={styles.action}
               onClick={() => (
                 togglePopUpModal(),
-                removeChannel(currentChannel),
-                publishLeaveChannel(currentUser, currentChannel)
+                publishLeftChannelNotification(currentUser.name, currentUser.pubnubToken, currentChannel, new Date),
+                removeChannel(currentChannel)
               )}
             >
               Leave

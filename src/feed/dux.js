@@ -6,6 +6,8 @@ import type {
   DeleteMessageType,
   ToggleCloseTrayButtonType,
   MomentType,
+  ReceiveMomentType,
+  PublishLeaveChannelType,
   PublishAcceptedPrayerRequestType,
 } from '../moment';
 
@@ -24,6 +26,7 @@ import {
   MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
+  RECEIVE_MOMENT,
 } from '../moment';
 
 import {
@@ -51,7 +54,6 @@ import { getHostChannel, getPublicChannel } from '../selectors/channelSelectors'
 // Action Types
 
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
-const RECEIVE_MOMENT = 'RECEIVE_MOMENT';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
@@ -66,7 +68,6 @@ const SET_EVENT = 'SET_EVENT';
 const SET_ORGANIZATION = 'SET_ORGANIZATION';
 const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
-const PUBLISH_LEAVE_CHANNEL = 'PUBLISH_LEAVE_CHANNEL';
 const LOAD_HISTORY = 'LOAD_HISTORY';
 const SET_SCHEDULE = 'SET_SCHEDULE';
 
@@ -149,12 +150,6 @@ type SharedUserType = {
   }
 };
 
-type SubscriberType = {
-  avatarUrl: string,
-  name: string,
-  pubnubToken: string,
-};
-
 type ChannelType = {
   id: string,
   name: string,
@@ -189,12 +184,6 @@ type FeedType = {
 type ChangeChannelType = {
   type: 'CHANGE_CHANNEL',
   channel: string,
-};
-
-type ReceiveMomentType = {
-  type: 'RECEIVE_MOMENT',
-  channel: string,
-  moment: MomentType,
 };
 
 type ReceiveAcceptedPrayerRequestType = {
@@ -244,12 +233,6 @@ type SetPubnubKeysType = {
   type: 'SET_PUBNUB_KEYS',
   publish: string,
   subscribe: string,
-};
-
-type PublishLeaveChannelType = {
-  type: 'PUBLISH_LEAVE_CHANNEL',
-  user: SharedUserType,
-  channel: string,
 };
 
 type LoadHistoryType = {
@@ -354,17 +337,6 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const receiveMoment = (
-  channel: string,
-  moment: MomentType
-): ReceiveMomentType => (
-  {
-    type: RECEIVE_MOMENT,
-    channel,
-    moment,
-  }
-);
-
 const receiveAcceptedPrayerRequest = (
   id: string,
   channel: string
@@ -409,14 +381,6 @@ const leaveChannel = (pubnubToken: string, channel: string): LeaveChannelType =>
   {
     type: LEAVE_CHANNEL,
     pubnubToken,
-    channel,
-  }
-);
-
-const publishLeaveChannel = (user: SharedUserType, channel: string): PublishLeaveChannelType => (
-  {
-    type: PUBLISH_LEAVE_CHANNEL,
-    user,
     channel,
   }
 );
@@ -559,6 +523,7 @@ const reducer = (
       currentChannel: action.channel,
     };
   case RECEIVE_MOMENT:
+    // $FlowFixMe
     if (state.channels[action.channel]) {
       return {
         ...state,
@@ -566,10 +531,12 @@ const reducer = (
         animatingMoment: true,
         channels: {
           ...state.channels,
+          // $FlowFixMe
           [action.channel]: {
             ...state.channels[action.channel],
             moments: [
               ...state.channels[action.channel].moments,
+              // $FlowFixMe
               action.moment,
             ],
           },
@@ -979,18 +946,15 @@ const getOtherUser = (state: FeedType): SharedUserType | null => {
 
 export {
   CHANGE_CHANNEL,
-  RECEIVE_MOMENT,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
   INVITE_TO_CHANNEL,
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   GET_INIT_DATA,
-  PUBLISH_LEAVE_CHANNEL,
 };
 export {
   changeChannel,
-  receiveMoment,
   addChannel,
   removeChannel,
   feedContents,
@@ -1010,7 +974,6 @@ export {
   setOrganization,
   setLanguageOptions,
   setPubnubKeys,
-  publishLeaveChannel,
   loadHistory,
   setSchedule,
 };
@@ -1018,7 +981,6 @@ export type {
   AddChannelType,
   RemoveChannelType,
   MomentType,
-  ReceiveMomentType,
   ChangeChannelType,
   FeedType,
   InviteToChannelType,
@@ -1031,8 +993,6 @@ export type {
   GetInitData,
   LanguageType,
   OrganizationType,
-  PublishLeaveChannelType,
-  SubscriberType,
 };
 
 export default reducer;
