@@ -82,22 +82,45 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
   componentDidUpdate () {
     if (this.selectedLink && this.selectedLink.current) {
+      const marginWidth = 20;
+      const selectedLink = this.selectedLink.current;
       const {
         left,
         width,
-      } = this.selectedLink.current.getBoundingClientRect();
-      const parentLeft = this.selectedLink.current.parentElement.getBoundingClientRect().left;
-      if (this.state.left !== (left - parentLeft) + 20) {
+      } = selectedLink.getBoundingClientRect();
+      const wrapperDiv = selectedLink.parentElement;
+      const parentLeft = wrapperDiv.getBoundingClientRect().left;
+      const parentScroll = wrapperDiv.scrollLeft;
+      const wrapperLeftEdge = parentLeft + parentScroll;
+
+      const updatedLeft = (left - wrapperLeftEdge) + marginWidth;
+      const updatedWidth = width - (marginWidth * 2);
+      const updatedOpacity = this.selectedLinkHasVisibleUnderline() ? 1.0 : 0.0;
+
+      if (this.shouldUpdateState(updatedLeft, updatedWidth, updatedOpacity)) {
         this.setState(
           {
-            left: (left - parentLeft) + 20,
-            width: width - 40,
-            opacity: this.selectedLink.current.id === 'nav-Public' ||
-              this.selectedLink.current.id === 'nav-Host' ? 1.0 : 0.0,
+            left: updatedLeft,
+            width: updatedWidth,
+            opacity: updatedOpacity,
           }
         );
       }
     }
+  }
+
+  shouldUpdateState (
+    updatedLeft: number,
+    updatedWidth: number,
+    updatedOpacity: number) {
+    return this.state.left !== updatedLeft ||
+      this.state.width !== updatedWidth ||
+      this.state.opacity !== updatedOpacity;
+  }
+
+  selectedLinkHasVisibleUnderline () {
+    return this.selectedLink.current.id === 'nav-Public' ||
+      this.selectedLink.current.id === 'nav-Host';
   }
 
   channelLink (channel: ChannelType) {
