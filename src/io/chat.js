@@ -1,13 +1,14 @@
 // @flow
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
-import type { FeedType, ChannelType, SharedUserType } from '../feed/dux';
+import type { FeedType, ChannelType } from '../feed/dux';
 import { leaveChannel, loadHistory } from '../feed/dux';
 import type { ReactionType, LegacyReactionType } from '../reactions/reactionButton/dux';
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
-import { publishLeftChannelNotification } from '../moment/notification/dux';
-import type { LegacyMessageType, LegacyDeleteMessageType } from '../moment/message/dux';
+import { receiveMoment } from '../moment/dux';
+import { receiveLeftChannelNotification, receiveMuteUserNotification } from '../moment/notification/dux';
+import type { LegacyMessageType, LegacyDeleteMessageType, LegacyMuteUserType, LegacyLeaveChannelType } from '../moment/message/dux';
 import { deleteMessage } from '../moment/message/dux';
 import { getLegacyChannel } from '../selectors/channelSelectors';
 
@@ -25,7 +26,7 @@ type PubnubMessageEventType = {
   channel: string,
   message: {
     action: string,
-    data: MomentType | LegacyReactionType | LegacyMessageType | LegacyDeleteMessageType,
+    data: MomentType | LegacyReactionType | LegacyMessageType | LegacyDeleteMessageType | LegacyMuteUserType | LegacyLeaveChannelType,
   },
   publisher: string,
   subscription: string,
@@ -62,6 +63,8 @@ class Chat {
     this.publishLeaveChannel = this.publishLeaveChannel.bind(this);
     // $FlowFixMe
     this.publishDeleteMessage = this.publishDeleteMessage.bind(this);
+    // $FlowFixMe
+    this.publishMuteUser = this.publishMuteUser.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
 
@@ -150,7 +153,7 @@ class Chat {
       switch (message.entry.action) {
       case 'newMessage':
         if (message.entry.type === 'system') {
-          moments.push(publishLeftChannelNotification(message.entry.fromNickname, message.entry.channelToken).moment);
+          moments.push(receiveLeftChannelNotification(message.entry.fromNickname, message.entry.channelToken, message.entry.cwcTimestamp).moment);
         } else {
           moments.push(Converter.legacyToCwc(message.entry.data));
         }
@@ -159,6 +162,9 @@ class Chat {
         if (message.entry.data.type === 'prayer') {
           moments.push(Converter.legacyToCwcPrayer(message.entry));
         }
+        return;
+      case 'muteUser':
+        moments.push(receiveMuteUserNotification(message.entry.data.fromNickname, message.entry.data.nickname, message.entry.data.channelToken, message.entry.data.timestamp).moment);
         return;
       }
     });
@@ -175,10 +181,11 @@ class Chat {
       const message = event.message.data;
       if (message.type === 'system') {
         // $FlowFixMe
-        this.storeDispatch(leaveChannel(message.userId, message.channelToken));
         this.storeDispatch(
           // $FlowFixMe
-          publishLeftChannelNotification(message.fromNickname, message.channelToken)
+          leaveChannel(message.userId, message.channelToken, message.cwcTimestamp),
+          // $FlowFixMe
+          receiveLeftChannelNotification(message.fromNickname, message.channelToken)
         );
       } else {
         hasMomentBeenRecieved = Object.keys(channels).find(
@@ -191,17 +198,22 @@ class Chat {
 
           if (moment.text) {
             this.storeDispatch(
-              {
-                type: 'RECEIVE_MOMENT',
-                channel: event.channel,
-                moment: Converter.legacyToCwc(event.message.data),
-              }
+              receiveMoment(event.channel, Converter.legacyToCwc(event.message.data))
             );
           }
         }
       }
       return;
     }
+    case 'muteUser': 
+      // $FlowFixMe
+      if (this.getState().currentUser.name !== event.message.data.fromNickname) {
+        this.storeDispatch(
+          // $FlowFixMe
+          receiveMuteUserNotification(event.message.data.fromNickname, event.message.data.nickname, event.message.data.channelToken, event.message.data.timestamp)
+        );
+      }
+      return;
     case 'videoReaction':
       // $FlowFixMe
       if (this.getState().reactions.find(reaction => event.message.data.reactionId === reaction.id) === undefined) {
@@ -300,14 +312,27 @@ class Chat {
     );
   }
 
-  publishLeaveChannel (user: SharedUserType, channelId: string) {
+  publishLeaveChannel (moment: MomentType, channelId: string) {
     this.publish(
       {
         channel: channelId,
         message: {
           action: 'newMessage',
           channel: channelId,
-          data: Converter.cwcToLegacyLeaveChannel(user, channelId),
+          data: Converter.cwcToLegacyLeaveChannel(moment, channelId),
+        },
+      }
+    );
+  }
+
+  publishMuteUser (moment: MomentType, channelId: string) {
+    this.publish(
+      {
+        channel: channelId,
+        message: {
+          action: 'muteUser',
+          channel: channelId,
+          data: Converter.cwcToLegacyMuteUser(moment),
         },
       }
     );
@@ -337,6 +362,10 @@ class Chat {
     case 'PUBLISH_MOMENT_TO_CHANNEL':
       if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'PRAYER') {
         this.publishSystemMessage(action.moment, this.getState().channels[action.channel]);
+      } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
+        this.publishLeaveChannel(action.moment, action.channel);
+      } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'MUTE') {
+        this.publishMuteUser(action.moment, action.channel);
       } else {
         this.publishNewMessage(action.moment, this.getState().channels[action.channel]);
       }
@@ -355,9 +384,6 @@ class Chat {
       return;
     case 'PUBLISH_REACTION':
       this.publishReaction(action.reaction, getLegacyChannel(this.getState()));
-      return;
-    case 'PUBLISH_LEAVE_CHANNEL':
-      this.publishLeaveChannel(action.user, action.channel);
       return;
     case 'REMOVE_CHANNEL': 
       this.unsubscribe([action.channel]);

@@ -76,7 +76,7 @@ describe('Prayer Request Tests', () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch.mock.calls[0][0]).toMatchObject(
       {
-        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        type: 'RECEIVE_MOMENT',
         channel: '789012',
         moment: {
           type: 'ACTIONABLE_NOTIFICATION',

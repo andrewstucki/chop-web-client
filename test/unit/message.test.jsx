@@ -16,6 +16,14 @@ const otherUser = {
   },
 };
 
+const user = {
+  name: 'name',
+  pubnubToken: '123',
+  role: {
+    label: '',
+  },
+};
+
 describe('Message', () => {
   test('has correct text', () => {
     const wrapper = Enzyme.shallow(
@@ -40,6 +48,9 @@ describe('Message', () => {
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
         directChat={() => {}}
+        publishMuteUserNotification={() => {}}
+        hostChannel='host'
+        currentUser={user}
       />
     );
     expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
@@ -68,6 +79,9 @@ describe('Message', () => {
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
         directChat={() => {}}
+        publishMuteUserNotification={() => {}}
+        hostChannel='host'
+        currentUser={user}
       />
     );
     expect(wrapper.find('span').last().text()).toEqual('Host');
@@ -97,6 +111,9 @@ describe('Message', () => {
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
         directChat={() => {}}
+        publishMuteUserNotification={() => {}}
+        hostChannel='host'
+        currentUser={user}
       />
     );
     expect(wrapper.find('button').length).toBe(1);
@@ -128,6 +145,9 @@ describe('Message', () => {
         toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
         directChat={() => {}}
+        publishMuteUserNotification={() => {}}
+        hostChannel='host'
+        currentUser={user}
       />
     );
     expect(wrapper.find('button').length).toBe(1);

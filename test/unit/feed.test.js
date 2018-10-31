@@ -1,7 +1,6 @@
 // @flow
 import reducer, {
   changeChannel,
-  receiveMoment,
   addChannel,
   removeChannel,
   feedContents,
@@ -14,6 +13,10 @@ import reducer, {
   leaveChannel,
   setUser,
 } from '../../src/feed/dux';
+
+import {
+  receiveMoment,
+} from '../../src/moment/dux';
 
 import {
   closeMenu, 
