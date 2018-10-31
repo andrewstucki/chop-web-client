@@ -10,7 +10,10 @@ import { receiveMoment } from '../moment/dux';
 import { receiveLeftChannelNotification, receiveMuteUserNotification } from '../moment/notification/dux';
 import type { LegacyMessageType, LegacyDeleteMessageType, LegacyMuteUserType, LegacyLeaveChannelType } from '../moment/message/dux';
 import { deleteMessage } from '../moment/message/dux';
-import { getLegacyChannel } from '../selectors/channelSelectors';
+import {
+  getLegacyChannel,
+  getHostChannel,
+} from '../selectors/channelSelectors';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -164,7 +167,13 @@ class Chat {
         }
         return;
       case 'muteUser':
-        moments.push(receiveMuteUserNotification(message.entry.data.fromNickname, message.entry.data.nickname, message.entry.data.channelToken, message.entry.data.cwcTimestamp).moment);
+        moments.push(
+          receiveMuteUserNotification(
+            message.entry.data.fromNickname,
+            message.entry.data.nickname,
+            getHostChannel(this.getState()),
+            message.entry.data.cwcTimestamp
+          ).moment);
         return;
       }
     });
@@ -209,7 +218,16 @@ class Chat {
       if (this.getState().currentUser.name !== event.message.data.fromNickname) {
         this.storeDispatch(
           // $FlowFixMe
-          receiveMuteUserNotification(event.message.data.fromNickname, event.message.data.nickname, event.message.data.channelToken, event.message.data.cwcTimestamp)
+          receiveMuteUserNotification(
+            // $FlowFixMe
+            event.message.data.fromNickname,
+            // $FlowFixMe
+            event.message.data.nickname,
+            // $FlowFixMe
+            getHostChannel(this.getState()),
+            // $FlowFixMe
+            event.message.data.cwcTimestamp
+          )
         );
       }
       return;
