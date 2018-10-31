@@ -3,6 +3,7 @@ import React from 'react';
 import videojs from 'video.js';
 import 'videojs-youtube/dist/Youtube.min.js';
 import styles from './styles.css';
+import '!style-loader!css-loader!video.js/dist/video-js.css';
 
 type VideoFeedProps = {
   isVideoHidden: boolean,
@@ -38,6 +39,11 @@ class VideoFeed extends React.Component {
   render () {
     const setup = {
       "techOrder": ["youtube"],
+      "autoplay": "any",
+      "youtube": {
+        "ytControls": 0,
+        "modestbranding": 1 // does not seem to have any effect
+      },
       "sources": [
         {
           "type": "video/youtube",
