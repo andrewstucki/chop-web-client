@@ -4,16 +4,16 @@
     "id": 334494,
     "startTime": 1531864800
   },
-  "currentSchedule": [
+  "schedule": [
     {
       "id": 12345,
-      "startTime": 0,
-      "endTime": 100
+      "startTime": 1531864800,
+      "endTime": 1531894800
     },
     {
       "id": 67890,
-      "startTime": 200,
-      "endTime": 300
+      "startTime": 1531904800,
+      "endTime": 1531964800
     }
   ],
   "currentVideo": {
