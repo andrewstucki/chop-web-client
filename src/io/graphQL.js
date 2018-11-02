@@ -1,4 +1,4 @@
-import graphqlJs from 'graphql.js';
+import graphqlJs from './graphQLlib.js';
 
 const accessToken = `
 mutation AccessToken($token: String!) {
@@ -108,6 +108,15 @@ mutation createDirectFeed($pubnubToken: String!) {
   }
 }`;
 
+const schedule = `
+schedule {
+  startTime
+  endTime
+  id
+  title
+  scheduleTime
+}`;
+
 const currentState = `
 {
   ${currentEvent}
@@ -117,6 +126,7 @@ const currentState = `
   ${currentOrganization}
   ${pubnubKeys}
   ${currentLanguages}
+  ${schedule}
 }`;
 
 export default class GraphQl {
@@ -188,5 +198,9 @@ export default class GraphQl {
         feedToken: channelId,
       }
     );
+  }
+
+  schedule () {
+    return this.request.run(schedule);
   }
 }

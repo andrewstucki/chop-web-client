@@ -1,4 +1,5 @@
 // @flow
+/* global IntervalID */
 import {
   addChannel,
   setEvent,
@@ -39,6 +40,9 @@ class ServiceActor {
   handleDataFetchErrors: (payload: any) => void
   getInitialData: (payload: any) => void
   scheduler: Scheduler
+  startTimer: () => void
+  checkTime: () => void
+  timer: IntervalID
 
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
@@ -49,6 +53,8 @@ class ServiceActor {
 
     this.getInitialData = this._getInitialData.bind(this);
     this.handleDataFetchErrors = this._handleDataFetchErrors.bind(this);
+    this.startTimer = this._startTimer.bind(this);
+    this.checkTime = this._checkTime.bind(this);
   }
 
   getAccessToken () {
@@ -83,11 +89,53 @@ class ServiceActor {
     alert('It was not possible to get the event information.');
   }
 
+  _startTimer () {
+    if (!this.timer) {
+      this.timer = setInterval(this.checkTime, 60000);
+    }
+  }
+
+  _checkTime () {
+    const { schedule, sequence } = this.getStore();
+    if (sequence && sequence.steps && sequence.steps[0] &&  sequence.steps[0].timestamp * 1000 <= Date.now()) {
+      this.getInitialData(JSON.parse(sequence.steps[0].data).data);
+      const newSequence = {
+        serverTime: sequence.serverTime,
+        steps: sequence.steps.splice(1),
+      };
+      this.storeDispatch(
+        {
+          type: 'SET_SEQUENCE',
+          sequence: newSequence,
+        }
+      );
+    } else if (schedule[0].startTime * 1000 <= Date.now()) {
+      this.graph.currentState()
+        .then(this.getInitialData, this.handleDataFetchErrors);
+      const newSchedule = schedule.splice(1);
+      this.storeDispatch(
+        setSchedule(newSchedule)
+      );
+    }
+  }
+
   _getInitialData (payload: any) {
     Object.keys(payload).forEach(key => {
       switch (key) {
       case 'currentFeeds': {
         const channels = payload.currentFeeds;
+        const currentChannels = this.getStore().channels;
+        Object.keys(currentChannels).forEach(id => {
+          this.storeDispatch(
+            {
+              type: 'REMOVE_CHANNEL',
+              channel: id,
+            }
+          );
+        });
+        this.storeDispatch(
+          { type: 'CLEAR_CHANNEL' }
+        );
         channels.forEach(channel => {
           const participants = convertSubscribersToSharedUsers(channel.subscribers);
           this.storeDispatch(
@@ -107,34 +155,54 @@ class ServiceActor {
       }
       case 'currentEvent': {
         const event = payload.currentEvent;
-        this.storeDispatch(
-          setEvent(
-            event.title,
-            event.id,
-            event.startTime,
-          )
-        );
-        if (event.sequence) {
-          this.scheduler = new Scheduler(
-            event.sequence.serverTime,
-            this.getInitialData);
-          this.scheduler.run(event.sequence.steps);
+        if (!event) {
+          this.storeDispatch(setEvent('',0 ,0));
+        } else {
+          this.storeDispatch(
+            setEvent(
+              event.title,
+              event.id,
+              event.startTime,
+            )
+          );
+          if (event.sequence) {
+            const sequence = {
+              serverTime: event.sequence.serverTime,
+              steps: event.sequence.steps.filter(step =>
+                step.timestamp * 1000 > Date.now()),
+            };
+            this.storeDispatch(
+              {
+                type: 'SET_SEQUENCE',
+                sequence: sequence,
+              }
+            );
+            this.startTimer();
+          }
         }
         break;
       }
-      case 'currentSchedule':
+      case 'schedule':
         this.storeDispatch(
-          setSchedule(payload.currentSchedule)
+          setSchedule(payload.schedule.filter(item =>
+            item.startTime * 1000 > Date.now()))
         );
+        this.startTimer();
         break;
       case 'currentVideo': {
         const video = payload.currentVideo;
-        this.storeDispatch(
-          setVideo(
-            video.url,
-            video.type,
-          )
-        );
+        if (!video) {
+          this.storeDispatch(
+            setVideo('','')
+          );
+        } else {
+          this.storeDispatch(
+            setVideo(
+              video.url,
+              video.type,
+            )
+          );
+        }
         break;
       }
       case 'currentOrganization': {

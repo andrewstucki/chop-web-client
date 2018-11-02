@@ -381,36 +381,6 @@ describe('Feed tests', () => {
     expect(result).toEqual(defaultState);
   });
 
-
-  test('remove public', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [],
-          },
-        },
-      },
-      removeChannel('public')
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          ...defaultState.channels,
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [],
-          },
-        },
-      },
-    );
-  });
-
   test('remove current channel', () => {
     const result = reducer(
       {

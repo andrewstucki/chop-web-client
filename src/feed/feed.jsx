@@ -45,10 +45,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
   // These two lines temporarily make sure your at the bottom of the feed
   scroll () {
     setTimeout(() => {
-      const listRect = this.listRef.current.getBoundingClientRect();
-      const listHeight = listRect.height;
-      if (this.props.appendingMessage) {
-        this.wrapperRef.current.scrollTop = listHeight;
+      if (this.listRef.current) {
+        const listRect = this.listRef.current.getBoundingClientRect();
+        const listHeight = listRect.height;
+        if (this.props.appendingMessage) {
+          this.wrapperRef.current.scrollTop = listHeight;
+        }
       }
     }, 300);
   }

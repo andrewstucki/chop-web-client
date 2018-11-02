@@ -49,7 +49,7 @@ import {
 } from '../placeholder/anchorMoment/dux';
 
 import { SET_LANGUAGE } from '../languageSelector/dux';
-import { getHostChannel, getPublicChannel } from '../selectors/channelSelectors';
+import { getPublicChannel } from '../selectors/channelSelectors';
 
 // Action Types
 
@@ -474,6 +474,9 @@ const defaultState = {
     },
   ],
   reactions: [],
+  sequence: {
+    steps: [],
+  },
 };
 
 // Reducer
@@ -485,6 +488,11 @@ const reducer = (
     return state;
   }
   switch (action.type) {
+  case 'SET_SEQUENCE':
+    return {
+      ...state,
+      sequence: action.sequence,
+    };
   case SET_LANGUAGE_OPTIONS:
     return {
       ...state,
@@ -521,6 +529,11 @@ const reducer = (
       ...state,
       appendingMessage: true,
       currentChannel: action.channel,
+    };
+  case 'CLEAR_CHANNEL':
+    return {
+      ...state,
+      currentChannel: '',
     };
   case RECEIVE_MOMENT:
     // $FlowFixMe
@@ -574,13 +587,7 @@ const reducer = (
     };
   case REMOVE_CHANNEL: {
     const publicChannel = getPublicChannel(state);
-    const hostChannel = getHostChannel(state);
 
-    if (action.channel === publicChannel ||
-      action.channel === hostChannel
-    ) {
-      return state;
-    }
     const stateCopy = { ...state };
     if (action.channel === state.currentChannel) {
       if (state.channels[publicChannel]) {
@@ -920,7 +927,7 @@ const appendMessage = (state: FeedType): boolean => (
 );
 
 const hasParticipants = (state: FeedType): boolean => {
-  if (state.currentChannel) {
+  if (state.channels[state.currentChannel]) {
     const currentChannel = state.channels[state.currentChannel];
     return currentChannel.participants &&
       currentChannel.participants.length ? true : false;
