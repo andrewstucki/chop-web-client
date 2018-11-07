@@ -87,6 +87,16 @@ const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => 
   return users;
 };
 
+const objectFilter = (obj, predicate) => {
+  const result = {};
+  Object.keys(obj).forEach(key => {
+    if (obj.hasOwnProperty(key) && !predicate(key, obj[key])) {
+      result[key] = obj[key];
+    }
+  });
+  return result;
+};
+
 export {
   getFirstInitial,
   getAvatarColor,
@@ -98,4 +108,5 @@ export {
   isUsingIPhone678,
   isUsingIPhone678plus,
   convertSubscribersToSharedUsers,
+  objectFilter,
 };

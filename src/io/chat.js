@@ -2,17 +2,34 @@
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
 import type { FeedType, ChannelType } from '../feed/dux';
-import { leaveChannel, loadHistory } from '../feed/dux';
-import type { ReactionType, LegacyReactionType } from '../reactions/reactionButton/dux';
+import {
+  removeHereNow,
+  updateHereNow,
+  leaveChannel,
+  loadHistory,
+} from '../feed/dux';
+import type {
+  ReactionType,
+  LegacyReactionType,
+} from '../reactions/reactionButton/dux';
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
 import { receiveMoment } from '../moment/dux';
-import { receiveLeftChannelNotification, receiveMuteUserNotification } from '../moment/notification/dux';
-import type { LegacyMessageType, LegacyDeleteMessageType, LegacyMuteUserType, LegacyLeaveChannelType } from '../moment/message/dux';
+import {
+  receiveLeftChannelNotification,
+  receiveMuteUserNotification,
+} from '../moment/notification/dux';
+import type {
+  LegacyMessageType,
+  LegacyDeleteMessageType,
+  LegacyMuteUserType,
+  LegacyLeaveChannelType,
+} from '../moment/message/dux';
 import { deleteMessage } from '../moment/message/dux';
 import {
   getLegacyChannel,
   getHostChannel,
+  getPublicChannel,
 } from '../selectors/channelSelectors';
 
 type PubnubStatusEventType = {
@@ -25,11 +42,34 @@ type PubnubStatusEventType = {
   currentTimetoken: string,
 }
 
+type PubnubPresenceEventStateType = {
+  available_prayer: boolean, // eslint-disable-line camelcase
+}
+
+type PubnubPresenceEventType = {
+  action : string,
+  channel : string,
+  occupancy : number,
+  state : PubnubPresenceEventStateType,
+  channelGroup : string,
+  publishTime : number,
+  timetoken : number,
+  uuid : string,
+}
+
+type PubnubMessageEventDataType =
+  | MomentType
+  | LegacyReactionType
+  | LegacyMessageType
+  | LegacyDeleteMessageType
+  | LegacyMuteUserType
+  | LegacyLeaveChannelType;
+
 type PubnubMessageEventType = {
   channel: string,
   message: {
     action: string,
-    data: MomentType | LegacyReactionType | LegacyMessageType | LegacyDeleteMessageType | LegacyMuteUserType | LegacyLeaveChannelType,
+    data: PubnubMessageEventDataType,
   },
   publisher: string,
   subscription: string,
@@ -56,6 +96,8 @@ class Chat {
     this.onStatus = this.onStatus.bind(this);
     // $FlowFixMe
     this.onMessage = this.onMessage.bind(this);
+    // $FlowFixMe
+    this.onPresence = this.onPresence.bind(this);
     // $FlowFixMe
     this.loadHistory = this.loadHistory.bind(this);
     // $FlowFixMe
@@ -99,10 +141,34 @@ class Chat {
       }
     );
 
+    const publicChannel = getPublicChannel(this.getState());
+    this.pubnub.hereNow(
+      {
+        channels: [publicChannel],
+        includeState: true,
+      },
+      (status, results) => {
+        const users = results.channels[publicChannel].occupants;
+        users.forEach(user => {
+          const available_prayer = user.state ? user.state.available_prayer : false; // eslint-disable-line camelcase
+          this.storeDispatch(
+            updateHereNow(
+              user.uuid,
+              publicChannel,
+              {
+                available_prayer: available_prayer, // eslint-disable-line camelcase
+              }
+            )
+          );
+        });
+      }
+    );
+
     this.pubnub.addListener(
       {
         status: this.onStatus,
         message: this.onMessage,
+        presence: this.onPresence,
       }
     );
 
@@ -180,6 +246,33 @@ class Chat {
     this.storeDispatch(
       loadHistory(moments, channel)
     );
+  }
+
+  onPresence (event: PubnubPresenceEventType) {
+    const { action, channel, uuid } = event;
+    const available_prayer = event.state ? event.state.available_prayer : false; // eslint-disable-line camelcase
+    if (channel === getPublicChannel(this.getState())) {
+      switch (action) {
+      case 'join':
+      case 'state-change':
+        this.storeDispatch(
+          updateHereNow(
+            uuid,
+            channel,
+            {
+              available_prayer: available_prayer, // eslint-disable-line camelcase
+            }
+          )
+        );
+        break;
+      case 'timeout':
+      case 'leave':
+        this.storeDispatch(
+          removeHereNow(uuid, channel)
+        );
+        break;
+      }
+    }
   }
 
   onMessage (event: PubnubMessageEventType) {
@@ -317,6 +410,7 @@ class Chat {
     this.pubnub.subscribe (
       {
         channels,
+        withPresence: true,
       }
     );
   }

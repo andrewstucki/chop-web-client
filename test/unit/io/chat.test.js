@@ -112,6 +112,7 @@ describe('Chat2 Tests', () => {
     expect(mockSubscribe).toHaveBeenCalledWith(
       {
         channels: ['123456', '789012'],
+        withPresence: true,
       }
     );
     expect(mockAddListener).toHaveBeenCalledTimes(1);
@@ -119,6 +120,7 @@ describe('Chat2 Tests', () => {
       {
         status: chat.onStatus,
         message: chat.onMessage,
+        presence: chat.onPresence,
       }
     );
   });
@@ -293,6 +295,7 @@ describe('Chat2 Tests', () => {
     expect(mockSubscribe).toHaveBeenCalledWith(
       {
         channels: ['asd2389dhsdf'],
+        withPresence: true,
       }
     );
   });
