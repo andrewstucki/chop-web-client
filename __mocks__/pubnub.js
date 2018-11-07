@@ -8,6 +8,7 @@ export const mockAddListener = jest.fn().mockImplementation(obj => {
 export const mockPublish = jest.fn();
 export const mockSetState = jest.fn();
 export const mockHistory = jest.fn();
+export const mockHereNow = jest.fn();
 
 const __subscribeEvent = event => {
   if (typeof listeners.status === 'function') {
@@ -21,9 +22,16 @@ const __messageEvent = event => {
   }
 };
 
+const __presenceEvent = event => {
+  if (typeof listeners.presence === 'function') {
+    listeners.presence(event);
+  }
+};
+
 export {
   __subscribeEvent,
   __messageEvent,
+  __presenceEvent,
 };
 
 const mock = jest.fn().mockImplementation(() => (
@@ -34,6 +42,7 @@ const mock = jest.fn().mockImplementation(() => (
     publish: mockPublish,
     setState: mockSetState,
     history: mockHistory,
+    hereNow: mockHereNow,
   }
 ));
 

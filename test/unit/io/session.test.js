@@ -9,6 +9,7 @@ import reducer from '../../../src/chop/dux';
 import { defaultState } from '../../../src/feed/dux';
 import SideMenu from '../../../src/sideMenu';
 import { mockAuthenticate, mockCurrentState } from '../../../src/io/graphQL';
+import { mockDate } from '../../testUtils/index.js';
 import '../../../src/io/location';
 
 jest.mock('../../../src/io/graphQL');
@@ -18,6 +19,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Session', () => {
   test('Startup application', async () => {
+    mockDate(1531844800000);
     global.document.cookie  = 'legacy_token=12345; ';
 
     const actorMiddlewareApplied = actorMiddleware(
@@ -45,13 +47,13 @@ describe('Session', () => {
         schedule: [
           {
             id: 12345,
-            startTime: 0,
-            endTime: 100,
+            startTime: 1531864800,
+            endTime: 1531894800,
           },
           {
             id: 67890,
-            startTime: 200,
-            endTime: 300,
+            startTime: 1531904800,
+            endTime: 1531964800,
           },
         ],
         organization: {

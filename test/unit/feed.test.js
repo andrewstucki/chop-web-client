@@ -1,7 +1,6 @@
 // @flow
 import reducer, {
   changeChannel,
-  receiveMoment,
   addChannel,
   removeChannel,
   feedContents,
@@ -14,6 +13,10 @@ import reducer, {
   leaveChannel,
   setUser,
 } from '../../src/feed/dux';
+
+import {
+  receiveMoment,
+} from '../../src/moment/dux';
 
 import {
   closeMenu, 
@@ -376,36 +379,6 @@ describe('Feed tests', () => {
       },
       removeChannel('other'));
     expect(result).toEqual(defaultState);
-  });
-
-
-  test('remove public', () => {
-    const result = reducer(
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [],
-          },
-        },
-      },
-      removeChannel('public')
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          ...defaultState.channels,
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [],
-          },
-        },
-      },
-    );
   });
 
   test('remove current channel', () => {

@@ -5,8 +5,8 @@ import {
   getOtherUser,
   togglePopUpModal,
   removeChannel,
-  publishLeaveChannel,
 } from '../feed/dux';
+import { publishLeftChannelNotification } from '../moment/notification/dux';
 
 //import { publishLeftChannelNotification } from '../moment';
 
@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => (
   {
     togglePopUpModal: () => (dispatch(togglePopUpModal())),
     removeChannel: channelName => (dispatch(removeChannel(channelName))),
-    publishLeaveChannel: (user, channel) => (dispatch(publishLeaveChannel(user, channel))),
+    publishLeftChannelNotification: (name, pubnubToken, channel, date) => (dispatch(publishLeftChannelNotification(name, pubnubToken, channel, date))),
   }
 );
 

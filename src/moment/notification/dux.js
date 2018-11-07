@@ -1,6 +1,6 @@
 // @flow
-import type { PublishMomentToChannelType } from '../dux';
-import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
+import type { PublishMomentToChannelType, ReceiveMomentType } from '../dux';
+import { PUBLISH_MOMENT_TO_CHANNEL, RECEIVE_MOMENT } from '../dux';
 import { createUid } from '../../util';
 import type { SharedUserType } from '../../feed/dux';
 
@@ -10,13 +10,15 @@ const NOTIFICATION = 'NOTIFICATION';
 const LEFT_CHANNEL = 'LEFT_CHANNEL';
 const JOINED_CHAT = 'JOINED_CHAT';
 const PRAYER = 'PRAYER';
+const MUTE = 'MUTE';
 
 // Flow Type Definitions
 
 type NotificationType =
   | PrayerNotificationType
   | JoinedChatNotificationType
-  | LeftChannelNotificationType;
+  | LeftChannelNotificationType
+  | MuteUserNotificationType;
 
 type LeftChannelNotificationType = {
   type: 'NOTIFICATION',
@@ -43,6 +45,15 @@ type PrayerNotificationType = {
   timeStamp: string,
 };
 
+type MuteUserNotificationType = {
+  type: 'NOTIFICATION',
+  notificationType: 'MUTE',
+  id: string,
+  host: string,
+  guest: string,
+  timeStamp: string,
+}
+
 // Action Creators
 
 const formatAMPM = (date: Date) => {
@@ -59,7 +70,7 @@ const formatAMPM = (date: Date) => {
 const publishPrayerNotification = (
   host: string,
   guest: string,
-  channel: string
+  channel: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
@@ -77,7 +88,9 @@ const publishPrayerNotification = (
 
 const publishLeftChannelNotification = (
   name: string,
-  channel: string
+  pubnubToken: string,
+  channel: string,
+  date: Date,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
@@ -85,16 +98,35 @@ const publishLeftChannelNotification = (
     moment: {
       type: NOTIFICATION,
       notificationType: LEFT_CHANNEL,
+      pubnubToken,
       id: createUid(),
       name,
-      timeStamp: formatAMPM(new Date()),
+      timeStamp: formatAMPM(date),
+    },
+  }
+);
+
+const receiveLeftChannelNotification = (
+  name: string,
+  channel: string,
+  date: string,
+): ReceiveMomentType => (
+  {
+    type: RECEIVE_MOMENT,
+    channel,
+    moment: {
+      type: NOTIFICATION,
+      notificationType: LEFT_CHANNEL,
+      id: createUid(),
+      name,
+      timeStamp: date,
     },
   }
 );
 
 const publishJoinedChatNotification = (
   name: string,
-  channel: string
+  channel: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
@@ -104,7 +136,64 @@ const publishJoinedChatNotification = (
       notificationType: JOINED_CHAT,
       id: createUid(),
       name,
-      timeStamp: formatAMPM(new Date()),
+      timeStamp: formatAMPM(new Date),
+    },
+  }
+);
+
+const receiveJoinedChatNotification = (
+  name: string,
+  channel: string,
+): ReceiveMomentType => (
+  {
+    type: RECEIVE_MOMENT,
+    channel,
+    moment: {
+      type: NOTIFICATION,
+      notificationType: JOINED_CHAT,
+      id: createUid(),
+      name,
+      timeStamp: formatAMPM(new Date),
+    },
+  }
+);
+
+const publishMuteUserNotification = (
+  host: string,
+  guest: string,
+  channel: string,
+  date: Date,
+): PublishMomentToChannelType => (
+  {
+    type: PUBLISH_MOMENT_TO_CHANNEL,
+    channel,
+    moment: {
+      type: NOTIFICATION,
+      notificationType: MUTE,
+      id: createUid(),
+      host,
+      guest,
+      timeStamp: formatAMPM(date),
+    },
+  }
+);
+
+const receiveMuteUserNotification = (
+  host: string,
+  guest: string,
+  channel: string,
+  date: string,
+): ReceiveMomentType => (
+  {
+    type: RECEIVE_MOMENT,
+    channel,
+    moment: {
+      type: NOTIFICATION,
+      notificationType: MUTE,
+      id: createUid(),
+      host,
+      guest,
+      timeStamp: date,
     },
   }
 );
@@ -115,18 +204,24 @@ export type {
   NotificationType,
   LeftChannelNotificationType,
   JoinedChatNotificationType,
+  MuteUserNotificationType,
   PrayerNotificationType,
 };
 
 export {
   publishJoinedChatNotification,
+  receiveJoinedChatNotification,
+  publishMuteUserNotification,
+  receiveMuteUserNotification,
   publishLeftChannelNotification,
+  receiveLeftChannelNotification,
   publishPrayerNotification,
   formatAMPM,
 };
 
 export {
   PRAYER,
+  MUTE,
   JOINED_CHAT,
   LEFT_CHANNEL,
   NOTIFICATION,

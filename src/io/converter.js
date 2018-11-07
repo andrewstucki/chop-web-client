@@ -1,6 +1,6 @@
 // @flow
 
-import { publishPrayerRequestNotification } from '../moment/actionableNotification/dux';
+import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
 
 let _getState;
@@ -60,19 +60,30 @@ const Converter = {
     };
   },
 
-  cwcToLegacyLeaveChannel:(user: any, channelId: string) => {
+  cwcToLegacyLeaveChannel:(moment: any, channelId: string) => {
     const time = new Date();
     const timestamp = Converter.getTimestamp(time);
     const roomType = 'public';
 
     return {
-      messageText: `${user.name} has left the chat`,
+      messageText: `${moment.name} has left the chat`,
       timestamp: timestamp,
-      userId: user.pubnubToken,
-      fromNickname: user.name,
+      userId: moment.pubnubToken,
+      fromNickname: moment.name,
       type: 'system',
       roomType: roomType,
       channelToken: channelId,
+      cwcTimestamp: moment.timeStamp,
+    };
+  },
+
+  cwcToLegacyMuteUser:(moment: any) => {
+    const hostChannel = getHostChannel(_getState());
+    return {
+      nickname: moment.guest,
+      fromNickname: moment.host,
+      channelToken: hostChannel,
+      cwcTimestamp: moment.timeStamp,
     };
   },
 
@@ -99,7 +110,7 @@ const Converter = {
   legacyToCwcPrayer: (message: any) => {
     const hostChannel = getHostChannel(_getState());
 
-    return publishPrayerRequestNotification(
+    return receivePrayerRequestNotification(
       {
         name: message.data.fromNickname,
         pubnubToken: message.data.fromToken,

@@ -6,3 +6,5 @@ coverage
 /.eslintrc.json
 .idea
 .vscode/
+test/snapshots/__image_snapshots__/__diff_output__/
+

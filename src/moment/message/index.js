@@ -10,12 +10,16 @@ import {
   directChat,
   publishDeleteMessage,
 } from './dux';
-import { getCurrentChannel } from '../../feed/dux';
+import { getCurrentChannel, getCurrentUserAsSharedUser } from '../../feed/dux';
+import { publishMuteUserNotification } from '../notification/dux';
+import { getHostChannel } from '../../selectors/channelSelectors';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     currentChannel: getCurrentChannel(feedState),
+    hostChannel: getHostChannel(feedState),
+    currentUser: getCurrentUserAsSharedUser(feedState),
   };
 };
 
@@ -28,6 +32,7 @@ const mapDispatchToProps = dispatch => (
     toggleCloseTrayButton: id => dispatch(toggleCloseTrayButton(id)),
     muteUser: pubnubToken => dispatch(muteUser(pubnubToken)),
     directChat: pubnubToken => dispatch(directChat(pubnubToken)),
+    publishMuteUserNotification: (host, guest, channel, date) => dispatch(publishMuteUserNotification(host, guest, channel, date)),
   }
 );
 
