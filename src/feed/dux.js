@@ -18,6 +18,8 @@ import type {
 
 import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
 
+import { objectFilter } from '../util';
+
 import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
@@ -70,6 +72,8 @@ const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const LOAD_HISTORY = 'LOAD_HISTORY';
 const SET_SCHEDULE = 'SET_SCHEDULE';
+const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
+const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 
 // Flow Type Definitions
 
@@ -157,6 +161,16 @@ type ChannelType = {
   participants?: Array<SharedUserType>,
 };
 
+type HereNowChannels = {
+  [string]: HereNowUsers,
+};
+
+type HereNowUsers = {
+  [string]: {
+    available_prayer: boolean,
+  },
+};
+
 type FeedType = {
   pubnubKeys: PubnubKeysType,
   event: EventType,
@@ -164,6 +178,7 @@ type FeedType = {
   channels: {
     [string]: ChannelType,
   },
+  hereNow: HereNowChannels,
   currentChannel: string,
   currentUser: PrivateUserType,
   appendingMessage: boolean,
@@ -239,7 +254,24 @@ type LoadHistoryType = {
   type: 'LOAD_HISTORY',
   channel: string,
   moments: MomentType,
-}
+};
+
+type UserState = {
+  available_prayer: boolean,
+};
+
+type UpdateHereNowType = {
+  type: 'UPDATE_HERE_NOW',
+  channel: string,
+  userToken: string,
+  state: UserState,
+};
+
+type RemoveHereNowType = {
+  type: 'REMOVE_HERE_NOW',
+  userToken: string,
+  channel: string,
+};
 
 type FeedActionTypes =
   | ChangeChannelType
@@ -263,9 +295,28 @@ type FeedActionTypes =
   | SetPubnubKeysType
   | LeaveChannelType
   | PublishLeaveChannelType
-  | SetScheduleType;
+  | SetScheduleType
+  | UpdateHereNowType
+  | RemoveHereNowType;
 
 // Action Creators
+
+const updateHereNow = (userToken: string, channel: string, state: UserState): UpdateHereNowType => (
+  {
+    type: UPDATE_HERE_NOW,
+    channel,
+    userToken,
+    state,
+  }
+);
+
+const removeHereNow = (userToken: string, channel: string): RemoveHereNowType => (
+  {
+    type: REMOVE_HERE_NOW,
+    userToken,
+    channel,
+  }
+);
 
 const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOptionsType => (
   {
@@ -418,6 +469,7 @@ const defaultState = {
     name: '',
   },
   channels: {},
+  hereNow: {},
   currentChannel: '',
   currentUser: {
     id: '',
@@ -488,6 +540,28 @@ const reducer = (
     return state;
   }
   switch (action.type) {
+  case UPDATE_HERE_NOW:
+    return {
+      ...state,
+      hereNow: {
+        ...state.hereNow,
+        [action.channel]: {
+          ...state.hereNow[action.channel],
+          [action.userToken]: action.state,
+        },
+      },
+    };
+  case REMOVE_HERE_NOW:
+    return {
+      ...state,
+      hereNow: {
+        [action.channel]: objectFilter(
+          state.hereNow[action.channel],
+          // $FlowFixMe
+          userToken => userToken === action.userToken
+        ),
+      },
+    };
   case 'SET_SEQUENCE':
     return {
       ...state,
@@ -983,6 +1057,8 @@ export {
   setPubnubKeys,
   loadHistory,
   setSchedule,
+  updateHereNow,
+  removeHereNow,
 };
 export type {
   AddChannelType,

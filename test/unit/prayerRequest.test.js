@@ -1,11 +1,15 @@
 // @flow
-import { __messageEvent } from 'pubnub';
+import { createStore, applyMiddleware } from 'redux';
+import actorMiddleware from '../../src/middleware/actor-middleware';
+import reducer from '../../src/chop/dux';
+import { getAvailableForPrayer } from '../../src/selectors/hereNowSelector';
+import { __messageEvent, __presenceEvent, mockHereNow } from 'pubnub';
 import { defaultState } from '../../src/feed/dux';
 import Chat from '../../src/io/chat';
 jest.mock('pubnub');
 
 describe('Prayer Request Tests', () => {
-  const store = {
+  const _store = {
     ...defaultState,
     currentUser: {
       ...defaultState.currentUser,
@@ -45,7 +49,7 @@ describe('Prayer Request Tests', () => {
     const dispatch = jest.fn();
     const getState = jest.fn();
 
-    getState.mockReturnValue(store);
+    getState.mockReturnValue(_store);
 
     const chat = new Chat(dispatch, getState);
 
@@ -90,6 +94,101 @@ describe('Prayer Request Tests', () => {
           timeStamp: expect.stringMatching(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/),
         },
       }
+    );
+  });
+
+  test('Here Now', () => {
+    const actors = actorMiddleware(Chat);
+    const store = createStore(
+      reducer,
+      {
+        feed: _store,
+      },
+      applyMiddleware(actors)
+    );
+
+    mockHereNow.mockImplementation((config, callback) => {
+      callback(null, {
+        channels: {
+          '123456': {
+            occupants: [
+              {
+                uuid: 'xyz',
+                state: {
+                  available_prayer: false, // eslint-disable-line camelcase
+                },
+              },
+              {
+                uuid: 'abc',
+                state: {
+                  available_prayer: true, // eslint-disable-line camelcase
+                },
+              },
+            ],
+          },
+        },
+      });
+    });
+
+    store.dispatch(
+      {
+        type: 'SET_PUBNUB_KEYS',
+        publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+        subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+      }
+    );
+
+    expect(getAvailableForPrayer(store.getState().feed)).toEqual(
+      [
+        {
+          id: 'abc',
+          available_prayer: true, // eslint-disable-line camelcase
+        },
+      ]
+    );
+
+    __presenceEvent(
+      {
+        action: 'join',
+        channel: '123456',
+        state: {
+          available_prayer: true, // eslint-disable-line camelcase
+        },
+        uuid: 'nop',
+      }
+    );
+
+    expect(getAvailableForPrayer(store.getState().feed)).toEqual(
+      [
+        {
+          id: 'abc',
+          available_prayer: true, // eslint-disable-line camelcase
+        },
+        {
+          id: 'nop',
+          available_prayer: true, // eslint-disable-line camelcase
+        },
+      ]
+    );
+
+    __presenceEvent(
+      {
+        action: 'leave',
+        channel: '123456',
+        state: {
+          available_prayer: true, // eslint-disable-line camelcase
+        },
+        uuid: 'abc',
+      }
+    );
+
+    expect(getAvailableForPrayer(store.getState().feed)).toEqual(
+      [
+        {
+          id: 'nop',
+          available_prayer: true, // eslint-disable-line camelcase
+        },
+      ]
     );
   });
 });
