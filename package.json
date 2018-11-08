@@ -27,7 +27,8 @@
     "testRegex": "/test/unit/.*\\.test\\.jsx?$",
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy",
-      "\\.(svg)$": "<rootDir>/test/svg-stub.js"
+      "\\.(svg)$": "<rootDir>/test/svg-stub.js",
+      "Youtube\\.min\\.js$": "<rootDir>/test/fake-js-file.js"
     }
   },
   "devDependencies": {
