@@ -32,6 +32,7 @@ compile:app:
     expire_in: 1 day
     paths:
       - dist/
+      - .yarn/
   only:
     - branches
 lint:
