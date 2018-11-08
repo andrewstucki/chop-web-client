@@ -6,14 +6,9 @@ import { createEvents } from 'redux-beacon';
 describe('Tag Manager Middleware', () => {
   test('Init Event Definition loads GTM script', () => {
     expect.assertions(2);
-    const action = {
-      type: 'INIT',
-      payload: {},
-    };
 
-    const state = { feed: defaultFeedState, io: {} };
-
-    initEventDefinition(action, state);
+    global.GTM = {};
+    initEventDefinition();
 
     expect(window.dataLayer).toBeTruthy();
     expect(window.dataLayer[0]).toMatchObject({
