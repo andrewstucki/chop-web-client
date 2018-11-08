@@ -6,15 +6,15 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
-  mode: 'production',
+  mode: 'development',
   plugins: [
     new webpack.DefinePlugin({
-      ENV: JSON.stringify('production'),
-      GATEWAY_HOST: JSON.stringify('https://chopapi.com/graphql'),
+      ENV: JSON.stringify('staging'),
+      GATEWAY_HOST: JSON.stringify('https://staging.chopapi.com/graphql'),
       GTM: {
         gtmId: JSON.stringify('GTM-MQMRR25'),
-        auth: JSON.stringify('ZHTvYO-PubfNDm1dBAWrQA'),
-        preview: JSON.stringify('env-2')
+        auth: JSON.stringify('I28B6zHKm1IufUQpkVRF_w'),
+        preview: JSON.stringify('env-5')
       }
     }),
     new UglifyJSPlugin({
@@ -26,6 +26,6 @@ module.exports = merge(common, {
     ]),
   ],
   output: {
-    publicPath: 'https://churchonline.us'
+    publicPath: 'https://staging.churchonline.us'
   }
 });
