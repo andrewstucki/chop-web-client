@@ -21,12 +21,6 @@ type StateType = {
   io: any
 }
 
-type TagManagerType = {
-  gtmId: string,
-  auth: string,
-  preview: string
-}
-
 // Event Definitions
 const dataLayerEventDefinition = (action:ActionType, state:StateType) => ({
   hitType: 'event',
@@ -35,15 +29,9 @@ const dataLayerEventDefinition = (action:ActionType, state:StateType) => ({
   organization: state.feed.organization,
 }:EventDefinitionType);
 
-const initEventDefinition = (action:ActionType, state:StateType) => { // eslint-disable-line no-unused-vars
-  // TODO: These should come from an Environment Service. Currently they are hard coded to non-production.
-  const tagManagerArgs:TagManagerType = {
-    gtmId: 'GTM-MQMRR25',
-    auth: 'I28B6zHKm1IufUQpkVRF_w',
-    preview: 'env-5',
-  };
-
-  TagManager.initialize(tagManagerArgs);
+const initEventDefinition = () => {
+  declare var GTM;
+  TagManager.initialize(GTM);
 };
 
 // Map Event Definitions to Redux actions

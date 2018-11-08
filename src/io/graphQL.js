@@ -1,5 +1,7 @@
 import graphqlJs from './graphQLlib.js';
 
+declare var GATEWAY_HOST:string;
+
 const accessToken = `
 mutation AccessToken($token: String!) {
   authenticate(type: "LegacyAuth", legacy_token: $token) {
@@ -134,7 +136,7 @@ export default class GraphQl {
 
   authenticate (token: string, hostname: string): Promise<void> {
     return new Promise(resolve => {
-      const auth = graphqlJs('https://chopapi.com/graphql', {
+      const auth = graphqlJs(GATEWAY_HOST, {
         method: 'POST',
         headers: {
           'Application-Domain': hostname,
@@ -147,7 +149,7 @@ export default class GraphQl {
         }
       )
         .then(payload => {
-          this.request = graphqlJs('https://chopapi.com/graphql', {
+          this.request = graphqlJs(GATEWAY_HOST, {
             method: 'POST',
             headers: {
               Authorization: 'Bearer ' + payload.authenticate.access_token,

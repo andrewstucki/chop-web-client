@@ -22,18 +22,32 @@ cache:
     - .yarn
     - dist/
 
-compile:app:
+compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
   script: 
     - yarn install --pure-lockfile --cache-folder .yarn
-    - yarn build
+    - yarn build:staging
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/
+  except:
+    - master
+
+compile:app-production:
+  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  stage: compile
+  script: 
+    - yarn install --pure-lockfile --cache-folder .yarn
+    - yarn build:production
   artifacts:
     expire_in: 1 day
     paths:
       - dist/
   only:
-    - branches
+    - master
+
 lint:
   stage: test
   image: in.thewardro.be:4567/io/io-builder:1.0.1
@@ -61,7 +75,7 @@ test:
   except:
     - master
 
-build:image:
+build:image-staging:
   stage: build
   cache:
     untracked: false
@@ -69,9 +83,24 @@ build:image:
   script: 
     - command build Dockerfile-app
   dependencies: 
-    - compile:app
+    - compile:app-staging
   only:
     - branches
+  except:
+    - master
+
+build:image-production:
+  stage: build
+  cache:
+    untracked: false
+    policy: pull  
+  script: 
+    - command build Dockerfile-app
+  dependencies: 
+    - compile:app-production
+  only:
+    - master
+  
 
 review:
   stage: review
@@ -90,6 +119,7 @@ review:
     - branches
   except:
     - master
+    - integration
 
 stop_review:
   stage: review
@@ -105,6 +135,7 @@ stop_review:
     - branches
   except:
     - master
+    - integration
 
 staging:
   stage: staging
@@ -119,7 +150,7 @@ staging:
     name: staging
     url: https://staging.$KUBE_DOMAIN
   only:
-    - master
+    - integration
 
 code_coverage_report_master:
   stage: coverage

@@ -6,7 +6,13 @@ module.exports = merge(common, {
   mode: 'development',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
+      ENV: JSON.stringify('development'),
+      GATEWAY_HOST: JSON.stringify('https://staging.chopapi.com/graphql'),
+      GTM: {
+        gtmId: JSON.stringify('GTM-XXXXXXX'),
+        auth: JSON.stringify('XXXXXXXXXXXXXXXXXX'),
+        preview: JSON.stringify('env-X')
+      }
     }),
   ],
   devtool: 'inline-source-map',
