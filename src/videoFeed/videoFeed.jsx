@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import styles from './styles.css';
+import YouTubePlayer from './youTubePlayer';
 
 type VideoFeedProps = {
   isVideoHidden: boolean,
@@ -8,18 +9,19 @@ type VideoFeedProps = {
 };
 
 const VideoFeed = ({isVideoHidden, url}: VideoFeedProps) => {
-  const style = isVideoHidden ? styles.hideVideo : styles.showVideo;
+  const style = isVideoHidden ?
+    styles.hideVideo :
+    styles.showVideo;
+
   return (
     <div className={style}>
-      <iframe
-        className={styles.frame}
-        src={url}
-        width="100%"
-        frameBorder="0"
-      ></iframe>
+      { url !== '' &&
+        <div className={styles.frame}>
+          <YouTubePlayer url={url} />
+        </div>    
+      }
     </div>
   );
 };
 
 export default VideoFeed;
-
