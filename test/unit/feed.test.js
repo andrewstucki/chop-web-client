@@ -5,7 +5,6 @@ import reducer, {
   removeChannel,
   feedContents,
   defaultState,
-  appendMessage,
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
@@ -109,7 +108,6 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'host',
-        appendingMessage: true,
       }
     );
   });
@@ -129,7 +127,6 @@ describe('Feed tests', () => {
         currentChannel: 'public',
         chatInput: 'this is a message',
         currentUser: currentUser,
-        animatingMoment: false,
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -148,8 +145,6 @@ describe('Feed tests', () => {
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
     expect(result.channels.public.moments[0].user.id).toEqual('12345');
     expect(result.channels.public.moments[0].user.name).toEqual('Joan Jet');
-    expect(result.appendingMessage).toBe(true);
-    expect(result.animatingMoment).toBe(true);
   });
 
   test('adds a message to current channel not public from current user', () => {
@@ -191,7 +186,6 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments[0].text).toEqual('this is a string');
     expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
     expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
-    expect(result.appendingMessage).toBe(true);
   });
 
   test('receives a message and adds it to the appropriate channel', () => {
@@ -212,8 +206,6 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'public',
-        animatingMoment: false,
-        appeningMessage: true,
       },
       receiveMoment('host', {
         type: 'MESSAGE',
@@ -231,8 +223,6 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('Hello there');
     expect(result.channels.host.moments[0].id.length).toEqual(5);
-    expect(result.appendingMessage).toBe(true);
-    expect(result.animatingMoment).toBe(true);
   });
 
   test('adds a prayer request to host', () => {
@@ -254,8 +244,6 @@ describe('Feed tests', () => {
           },
         },
         currentChannel: 'public',
-        animatingMoment: false,
-        appendingMessage: true,
       },
       receiveMoment('host', {
         type: 'ACTIONABLE_NOTIFICATION',
@@ -274,8 +262,6 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments[0].timeStamp).toEqual('4:53pm');
     expect(result.channels.host.moments[0].active).toEqual(true);
     expect(result.channels.host.moments[0].action).toEqual(action);
-    expect(result.appendingMessage).toBe(true);
-    expect(result.animatingMoment).toBe(true);
   });
 
   test('add a channel', () => {
@@ -567,14 +553,6 @@ describe('Feed tests', () => {
         currentUser: currentUser,
       }
     );
-  });
-
-  test('Appends a message', () => {
-    const result = appendMessage({
-      ...defaultState,
-      appendingMessage: true,
-    });
-    expect(result).toEqual(true);
   });
 
   test('Opens only the correct message tray public channel', () => {
@@ -1112,7 +1090,6 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        animatingMoment: true,
         channels: {
           public: {
             id: '12345',
@@ -1161,7 +1138,6 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        animatingMoment: true,
         channels: {
           host: {
             id: '12345',
@@ -1210,7 +1186,6 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        animatingMoment: true,
         channels: {
           public: {
             id: '12345',
@@ -1260,7 +1235,6 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: {
@@ -1312,7 +1286,6 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           public: {
@@ -1368,7 +1341,6 @@ describe('Feed tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        animatingMoment: true,
         channels: {
           ...defaultState.channels,
           host: {
@@ -1442,7 +1414,6 @@ describe('Feed tests', () => {
           text: 'I commit my life to Christ.',
           subText: '1 hand raised',
         },
-        animatingMoment: true,
         isPlaceholderPresent: true,
       },
       releaseAnchorMoment('12345')
@@ -1464,7 +1435,6 @@ describe('Feed tests', () => {
             ],
           },
         },
-        animatingMoment: false,
         isPlaceholderPresent: false,
         currentChannel: '12345',
       }

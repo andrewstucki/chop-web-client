@@ -123,7 +123,6 @@ describe('Event Sequence Test', () => {
       {
         feed: {
           ...defaultState,
-          appendingMessage: true,
           event: {
             title: 'Fake Event',
             id: 334494,

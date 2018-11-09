@@ -12,11 +12,13 @@ import { createUid } from '../util';
 type FeedProps = {
   moments: Array<MomentType>,
   currentChannel: string,
-  appendingMessage: boolean,
-  animatingMoment: boolean,
   isPlaceholderPresent: boolean,
   hasParticipants: boolean,
   togglePopUpModal: () => void,
+};
+
+type SnapshotType = {
+  scroll: boolean,
 };
 
 type RefObject = { current: any };
@@ -29,6 +31,7 @@ type FeedState = {
 class Feed extends React.Component<FeedProps, FeedState> {
   listRef: RefObject
   wrapperRef: RefObject
+  height: number
 
   constructor (props: FeedProps) {
     super(props);
@@ -48,19 +51,28 @@ class Feed extends React.Component<FeedProps, FeedState> {
       if (this.listRef.current) {
         const listRect = this.listRef.current.getBoundingClientRect();
         const listHeight = listRect.height;
-        if (this.props.appendingMessage) {
-          this.wrapperRef.current.scrollTop = listHeight;
-        }
+        this.wrapperRef.current.scrollTop = listHeight;
       }
     }, 300);
+  }
+
+  getSnapshotBeforeUpdate (prevProps: FeedProps) {
+    if (prevProps.moments.length < this.props.moments.length) {
+      return { scroll: true };
+    }
+    return { scroll: false };
   }
 
   componentDidMount () {
     this.scroll();
   }
 
-  componentDidUpdate () {
-    this.scroll();
+  componentDidUpdate (prevProps: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
+    if (snapshot.scroll ||
+        this.height !== this.wrapperRef.current.getBoundingClientRect().height) {
+      this.scroll();
+    }
+    this.height = this.wrapperRef.current.getBoundingClientRect().height;
   }
 
   render () {

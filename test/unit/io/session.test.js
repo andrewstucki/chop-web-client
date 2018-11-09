@@ -105,7 +105,6 @@ describe('Session', () => {
             participants: [],
           },
         },
-        appendingMessage: true,
         currentChannel: '1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c',
         languageOptions: [
           {
