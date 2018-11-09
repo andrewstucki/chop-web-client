@@ -40,7 +40,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
@@ -71,7 +70,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
@@ -103,7 +101,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={openTray}
         deleteMessage={() => {}}
@@ -137,7 +134,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={closeTray}
         openMessageTray={() => {}}
         deleteMessage={() => {}}

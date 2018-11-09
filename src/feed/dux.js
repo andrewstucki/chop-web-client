@@ -181,9 +181,7 @@ type FeedType = {
   hereNow: HereNowChannels,
   currentChannel: string,
   currentUser: PrivateUserType,
-  appendingMessage: boolean,
   anchorMoment: AnchorMomentType | null,
-  animatingMoment: boolean,
   isPlaceholderPresent: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
@@ -481,9 +479,7 @@ const defaultState = {
       permissions: [],
     },
   },
-  appendingMessage: false,
   anchorMoment: null,
-  animatingMoment: true,
   isPlaceholderPresent: false,
   isPopUpModalVisible: false,
   isChatFocused: false,
@@ -601,7 +597,6 @@ const reducer = (
     }
     return {
       ...state,
-      appendingMessage: true,
       currentChannel: action.channel,
     };
   case 'CLEAR_CHANNEL':
@@ -614,8 +609,6 @@ const reducer = (
     if (state.channels[action.channel]) {
       return {
         ...state,
-        appendingMessage: true,
-        animatingMoment: true,
         channels: {
           ...state.channels,
           // $FlowFixMe
@@ -677,8 +670,6 @@ const reducer = (
     if (state.channels[action.channel]) {
       return {
         ...state,
-        appendingMessage: true,
-        animatingMoment: false,
         channels: {
           ...state.channels,
           [action.channel]: {
@@ -702,7 +693,6 @@ const reducer = (
     const { id } = action;
     return {
       ...state,
-      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -724,7 +714,6 @@ const reducer = (
   case CLOSE_MESSAGE_TRAY:
     return {
       ...state,
-      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -745,7 +734,6 @@ const reducer = (
     const { id } = action;
     return {
       ...state,
-      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -815,8 +803,6 @@ const reducer = (
       if ([action.moment.text].toString().length > 0) {
         return {
           ...state,
-          appendingMessage: true,
-          animatingMoment: true,
           channels: {
             ...state.channels,
             [state.currentChannel]: {
@@ -834,7 +820,6 @@ const reducer = (
     }
     return {
       ...state,
-      animatingMoment: true,
       channels: {
         ...state.channels,
         // $FlowFixMe
@@ -861,7 +846,6 @@ const reducer = (
     return {
       ...state,
       isPlaceholderPresent: false,
-      animatingMoment: false,
       channels: {
         ...state.channels,
         [action.channel]: {
@@ -996,10 +980,6 @@ const feedContents = (state: FeedType): Array<MessageType> => (
     []
 );
 
-const appendMessage = (state: FeedType): boolean => (
-  state.appendingMessage
-);
-
 const hasParticipants = (state: FeedType): boolean => {
   if (state.channels[state.currentChannel]) {
     const currentChannel = state.channels[state.currentChannel];
@@ -1040,7 +1020,6 @@ export {
   removeChannel,
   feedContents,
   defaultState,
-  appendMessage,
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
