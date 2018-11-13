@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import styles from './styles.css';
-import YouTubePlayer from './youTubePlayer';
+import Player from './youTubePlayer';
+//import Player from './vimeoPlayer.jsx';
 
 type VideoFeedProps = {
   isVideoHidden: boolean,
@@ -17,7 +18,7 @@ const VideoFeed = ({isVideoHidden, url}: VideoFeedProps) => {
     <div className={style}>
       { url !== '' &&
         <div className={styles.frame}>
-          <YouTubePlayer url={url} />
+          <Player url={url} />
         </div>    
       }
     </div>

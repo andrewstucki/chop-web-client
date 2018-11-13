@@ -74,11 +74,18 @@ const LOAD_HISTORY = 'LOAD_HISTORY';
 const SET_SCHEDULE = 'SET_SCHEDULE';
 const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
+const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 
 // Flow Type Definitions
 
 type GetInitData = {
   type: 'GET_INIT_DATA',
+};
+
+type SetScheduleDataType = {
+  type: 'SET_SCHEDULE_DATA',
+  time: number,
+  data: any,
 };
 
 type ScheduleType = {
@@ -192,6 +199,7 @@ type FeedType = {
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
   reactions: Array<ReactionType>,
+  sequence: any,
 };
 
 type ChangeChannelType = {
@@ -295,7 +303,8 @@ type FeedActionTypes =
   | PublishLeaveChannelType
   | SetScheduleType
   | UpdateHereNowType
-  | RemoveHereNowType;
+  | RemoveHereNowType
+  | SetScheduleDataType;
 
 // Action Creators
 
@@ -320,6 +329,14 @@ const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOp
   {
     type: SET_LANGUAGE_OPTIONS,
     languageOptions,
+  }
+);
+
+const setScheduleData = (time: number, data: any):SetScheduleDataType => (
+  {
+    type: SET_SCHEDULE_DATA,
+    time,
+    data,
   }
 );
 
@@ -586,6 +603,22 @@ const reducer = (
       ...state,
       event: action.event,
     };
+  case SET_SCHEDULE_DATA : {
+    const newState = {
+      ...state,
+      sequence: {
+        ...state.sequence,
+        steps: [
+          {
+            ...state.sequence.steps[0],
+            data: action.data,
+          },
+          ...state.sequence.steps.slice(1),
+        ],
+      },
+    };
+    return newState;
+  }
   case SET_SCHEDULE :
     return {
       ...state,
@@ -1036,6 +1069,7 @@ export {
   setPubnubKeys,
   loadHistory,
   setSchedule,
+  setScheduleData,
   updateHereNow,
   removeHereNow,
 };

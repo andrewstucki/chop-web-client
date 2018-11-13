@@ -7,7 +7,7 @@ import YouTubePlayer from '../../src/videoFeed/youTubePlayer';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe('VideoFeed tests', () => {
+describe.skip('VideoFeed tests', () => {
   test('VideoFeed shows video', () => {
     const wrapper = Enzyme.shallow(
       <VideoFeed isVideoHidden={false} url="" />

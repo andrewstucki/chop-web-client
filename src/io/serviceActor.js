@@ -10,6 +10,7 @@ import {
   setLanguageOptions,
   REMOVE_CHANNEL,
   setSchedule,
+  setScheduleData,
 } from '../feed/dux';
 import type { RemoveChannelType } from '../feed/dux';
 import { setVideo } from '../videoFeed/dux';
@@ -97,18 +98,34 @@ class ServiceActor {
 
   _checkTime () {
     const { schedule, sequence } = this.getStore();
-    if (sequence && sequence.steps && sequence.steps[0] &&  sequence.steps[0].timestamp * 1000 <= Date.now()) {
-      this.getInitialData(JSON.parse(sequence.steps[0].data).data);
-      const newSequence = {
-        serverTime: sequence.serverTime,
-        steps: sequence.steps.splice(1),
-      };
-      this.storeDispatch(
-        {
-          type: 'SET_SEQUENCE',
-          sequence: newSequence,
-        }
-      );
+    if (sequence && sequence.steps && sequence.steps[0]) {
+      const [ step ] = sequence.steps;
+      if (step.transitionTime * 1000 <= Date.now()) {
+        this.getInitialData(step.data);
+
+        const newSequence = {
+          serverTime: sequence.serverTime,
+          steps: sequence.steps.splice(1),
+        };
+        this.storeDispatch(
+          {
+            type: 'SET_SEQUENCE',
+            sequence: newSequence,
+          }
+        );
+      } else if (step.fetchTime * 1000 <= Date.now()) {
+        const includeFeed = step.query.indexOf('feed') > -1;
+        const includeVideo = step.query.indexOf('video') > -1;
+        this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo)
+          .then(result => {
+            this.storeDispatch(
+              setScheduleData(
+                step.transitionTime,
+                result
+              )
+            );
+          });
+      }
     } else if (schedule[0].startTime * 1000 <= Date.now()) {
       this.graph.currentState()
         .then(this.getInitialData, this.handleDataFetchErrors);
@@ -169,7 +186,7 @@ class ServiceActor {
             const sequence = {
               serverTime: event.sequence.serverTime,
               steps: event.sequence.steps.filter(step =>
-                step.timestamp * 1000 > Date.now()),
+                step.transitionTime * 1000 > Date.now()),
             };
             this.storeDispatch(
               {
@@ -178,6 +195,51 @@ class ServiceActor {
               }
             );
             this.startTimer();
+          }
+          if (event.feeds) {
+            const channels = event.feeds;
+            const currentChannels = this.getStore().channels;
+            Object.keys(currentChannels).forEach(id => {
+              this.storeDispatch(
+                {
+                  type: 'REMOVE_CHANNEL',
+                  channel: id,
+                }
+              );
+            });
+            this.storeDispatch(
+              { type: 'CLEAR_CHANNEL' }
+            );
+            channels.forEach(channel => {
+              const participants = convertSubscribersToSharedUsers(channel.subscribers);
+              this.storeDispatch(
+                addChannel(
+                  channel.name,
+                  channel.id,
+                  participants
+                )
+              );
+              if (channel.name === 'Public') {
+                this.storeDispatch(
+                  changeChannel(channel.id)
+                );
+              }
+            });
+          }
+          if (event.video) {
+            const { video } = event;
+            if (!video) {
+              this.storeDispatch(
+                setVideo('','')
+              );
+            } else {
+              this.storeDispatch(
+                setVideo(
+                  video.url,
+                  video.type,
+                )
+              );
+            }
           }
         }
         break;
