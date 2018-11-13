@@ -87,6 +87,8 @@ const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => 
   return users;
 };
 
+const capitalizeFirstLetter = (string: string) => 
+  (string.charAt(0).toUpperCase() + string.slice(1));
 const objectFilter = (obj, predicate) => {
   const result = {};
   Object.keys(obj).forEach(key => {
@@ -108,5 +110,6 @@ export {
   isUsingIPhone678,
   isUsingIPhone678plus,
   convertSubscribersToSharedUsers,
+  capitalizeFirstLetter,
   objectFilter,
 };

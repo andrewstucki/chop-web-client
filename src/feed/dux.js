@@ -50,6 +50,8 @@ import {
   SET_ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
+import type { BannerType } from '../banner/dux';
+
 import { SET_LANGUAGE } from '../languageSelector/dux';
 import { getPublicChannel } from '../selectors/channelSelectors';
 
@@ -72,6 +74,8 @@ const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const LOAD_HISTORY = 'LOAD_HISTORY';
 const SET_SCHEDULE = 'SET_SCHEDULE';
+const CLEAR_NOTIFICATION_BANNER = 'CLEAR_NOTIFICATION_BANNER';
+const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
 const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
@@ -199,6 +203,7 @@ type FeedType = {
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
   reactions: Array<ReactionType>,
+  notificationBanner: BannerType,
   sequence: any,
 };
 
@@ -278,6 +283,16 @@ type RemoveHereNowType = {
   userToken: string,
   channel: string,
 };
+
+type ClearNotificationBannerType = {
+  type: 'CLEAR_NOTIFICATION_BANNER',
+}
+
+type SetNotificationBannerType = {
+  type: 'SET_NOTIFICATION_BANNER',
+  message: string,
+  bannerType: string,
+}
 
 type FeedActionTypes =
   | ChangeChannelType
@@ -459,6 +474,20 @@ const loadHistory = (moments: MomentType, channel: string): LoadHistoryType => (
   }
 );
 
+const setNotificationBanner = (message: string, bannerType: string): SetNotificationBannerType => (
+  {
+    type: SET_NOTIFICATION_BANNER,
+    message,
+    bannerType,
+  }
+);
+
+const clearNotificationBanner = (): ClearNotificationBannerType => (
+  {
+    type: CLEAR_NOTIFICATION_BANNER,
+  }
+);
+
 // Default State
 
 const getLanguage = () => {
@@ -539,6 +568,10 @@ const defaultState = {
     },
   ],
   reactions: [],
+  notificationBanner: {
+    message: '',
+    bannerType: '',
+  },
   sequence: {
     steps: [],
   },
@@ -975,6 +1008,22 @@ const reducer = (
       // $FlowFixMe
       reactions: state.reactions.filter(reaction => reaction.id !== action.id),
     };
+  case SET_NOTIFICATION_BANNER:
+    return {
+      ...state,
+      notificationBanner: {
+        message: action.message,
+        bannerType: action.bannerType,
+      },
+    };
+  case CLEAR_NOTIFICATION_BANNER:
+    return {
+      ...state,
+      notificationBanner: {
+        message: '',
+        bannerType: '',
+      },
+    };
   default:
     return state;
   }
@@ -1036,6 +1085,10 @@ const getOtherUser = (state: FeedType): SharedUserType | null => {
   return null;
 };
 
+const getNotificationBanner = (state: FeedType): BannerType => (
+  state.notificationBanner
+);
+
 // Exports
 
 export {
@@ -1046,6 +1099,7 @@ export {
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   GET_INIT_DATA,
+  SET_NOTIFICATION_BANNER,
 };
 export {
   changeChannel,
@@ -1069,6 +1123,9 @@ export {
   setPubnubKeys,
   loadHistory,
   setSchedule,
+  getNotificationBanner,
+  clearNotificationBanner,
+  setNotificationBanner,
   setScheduleData,
   updateHereNow,
   removeHereNow,
@@ -1089,6 +1146,7 @@ export type {
   GetInitData,
   LanguageType,
   OrganizationType,
+  SetNotificationBannerType,
 };
 
 export default reducer;
