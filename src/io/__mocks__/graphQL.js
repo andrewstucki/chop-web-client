@@ -27,6 +27,7 @@ const mockDirectChat = jest.fn().mockResolvedValue(
     },
   }
 );
+const mockEventAtTime = jest.fn();
 
 const mockGraphQl = jest.fn().mockImplementation(() => (
   {
@@ -36,6 +37,7 @@ const mockGraphQl = jest.fn().mockImplementation(() => (
     muteUser: mockMuteUser,
     leaveChannel: mockLeaveChannel,
     directChat: mockDirectChat,
+    eventAtTime: mockEventAtTime,
   }
 ));
 
@@ -46,5 +48,6 @@ export {
   mockMuteUser,
   mockLeaveChannel,
   mockDirectChat,
+  mockEventAtTime,
 };
 export default mockGraphQl;

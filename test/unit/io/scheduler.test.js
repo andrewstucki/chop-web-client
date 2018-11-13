@@ -4,7 +4,10 @@ import mockSequenceData from '../../mockData/sequence.json';
 import actorMiddleware from '../../../src/middleware/actor-middleware';
 import { createStore, applyMiddleware } from 'redux';
 import serviceActor from '../../../src/io/serviceActor';
-import { mockCurrentState } from '../../../src/io/graphQL';
+import {
+  mockCurrentState,
+  mockEventAtTime,
+} from '../../../src/io/graphQL';
 import reducer from '../../../src/chop/dux';
 import { defaultState } from '../../../src/feed/dux';
 
@@ -75,7 +78,7 @@ describe('Event Sequence Test', () => {
 
   test('Schedule from file', async () => {
     jest.useFakeTimers();
-    mockDate(1539966236305);
+    mockDate(1539966236000);
     global.document.cookie  = 'legacy_token=12345; ';
     mockCurrentState.mockResolvedValue(mockSequenceData);
     const actors = actorMiddleware(serviceActor);
@@ -95,20 +98,27 @@ describe('Event Sequence Test', () => {
             id: 334494,
             startTime: 1531864800,
           },
+          pubnubKeys: {
+            publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
+            subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
+          },
           sequence: {
             serverTime: 1539966236,
             steps: [
               {
-                data: '{ "data": {            "pubnubKeys": {              "publishKey": "pub-9b402341-30c2-459f-9bed-69fd684a5e00",              "subscribeKey": "sub-5ef6daa3-9490-11e1-bef7-45383605a8b5"            },            "currentFeeds": [{              "id": "1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c",              "name": "Public",              "type": "public"            }, {              "id": "a70c52181da2f13f1f8313894c6125e2cdb87f1844fc785fb87988bc4725f2bc",              "name": "Host",              "type": "host"            }, {              "id": "4944bf368d26faf882940ee0811964cd357a37ccf468cd8ccdf25b95b0b52a28",              "name": "Legacy",              "type": "legacy"            }, {              "id": "26a7b967c49cff813f5449271c8a1158bb430a09bf6db5847f88abf301ea9cb1",              "name": "Personal",              "type": "personal"            }],            "currentVideo": {              "type": "StandardEmbed",              "url": "https://www.youtube.com/embed/bz2kN31m_S0"            }          } }',
-                timestamp: 1539966237,
+                fetchTime: 1539966237,
+                query: ['feed'],
+                transitionTime: 1539966238,
               },
               {
-                data: '{ "data": {            "currentVideo": {              "type": "StandardEmbed",              "url": "https://www.youtube.com/embed/uw_JA75to30"            }          } }',
-                timestamp: 1539966238,
+                fetchTime: 1539966239,
+                query: ['event', 'video'],
+                transitionTime: 1539966240,
               },
               {
-                data: '{ "data": {            "currentFeeds": [{              "id": "26a7b967c49cff813f5449271c8a1158bb430a09bf6db5847f88abf301ea9cb1",              "name": "Personal",              "type": "personal"            }],            "currentVideo": {              "type": "",              "url": ""            }          } }',
-                timestamp: 1539966239,
+                fetchTime: 1539966241,
+                query: ['event', 'video', 'feed'],
+                transitionTime: 1539966242,
               },
             ],
           },
@@ -116,8 +126,37 @@ describe('Event Sequence Test', () => {
       }
     );
 
+
+    mockEventAtTime.mockResolvedValue(
+      {
+        currentEvent: {
+          title: 'Fake Event',
+          id: 334494,
+          startTime: 1531864800,
+          feeds: [
+            {
+              id: '1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c',
+              name: 'Public',
+            },
+            {
+              id: '26a7b967c49cff813f5449271c8a1158bb430a09bf6db5847f88abf301ea9cb1',
+              name: 'Personal',
+            },
+            {
+              id: '4944bf368d26faf882940ee0811964cd357a37ccf468cd8ccdf25b95b0b52a28',
+              name: 'Legacy',
+            },
+            {
+              id: 'a70c52181da2f13f1f8313894c6125e2cdb87f1844fc785fb87988bc4725f2bc',
+              name: 'Host',
+            },
+          ],
+        },
+      }
+    );
+
     mockDate(1539966237000);
-    jest.advanceTimersByTime(60000);
+    await jest.advanceTimersByTime(60000);
 
     expect(store.getState()).toEqual(
       {
@@ -132,12 +171,79 @@ describe('Event Sequence Test', () => {
             serverTime: 1539966236,
             steps: [
               {
-                data: '{ "data": {            "currentVideo": {              "type": "StandardEmbed",              "url": "https://www.youtube.com/embed/uw_JA75to30"            }          } }',
-                timestamp: 1539966238,
+                fetchTime: 1539966237,
+                query: ['feed'],
+                transitionTime: 1539966238,
+                data: {
+                  currentEvent: {
+                    title: 'Fake Event',
+                    id: 334494,
+                    startTime: 1531864800,
+                    feeds: [
+                      {
+                        id: '1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c',
+                        name: 'Public',
+                      },
+                      {
+                        id: '26a7b967c49cff813f5449271c8a1158bb430a09bf6db5847f88abf301ea9cb1',
+                        name: 'Personal',
+                      },
+                      {
+                        id: '4944bf368d26faf882940ee0811964cd357a37ccf468cd8ccdf25b95b0b52a28',
+                        name: 'Legacy',
+                      },
+                      {
+                        id: 'a70c52181da2f13f1f8313894c6125e2cdb87f1844fc785fb87988bc4725f2bc',
+                        name: 'Host',
+                      },
+                    ],
+                  },
+                },
               },
               {
-                data: '{ "data": {            "currentFeeds": [{              "id": "26a7b967c49cff813f5449271c8a1158bb430a09bf6db5847f88abf301ea9cb1",              "name": "Personal",              "type": "personal"            }],            "currentVideo": {              "type": "",              "url": ""            }          } }',
-                timestamp: 1539966239,
+                fetchTime: 1539966239,
+                query: ['event', 'video'],
+                transitionTime: 1539966240,
+              },
+              {
+                fetchTime: 1539966241,
+                query: ['event', 'video', 'feed'],
+                transitionTime: 1539966242,
+              },
+            ],
+          },
+          pubnubKeys: {
+            publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
+            subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
+          },
+        },
+      }
+    );
+
+    mockDate(1539966238000);
+    jest.advanceTimersByTime(60000);
+    
+    expect(store.getState()).toEqual(
+      {
+        feed: {
+          ...defaultState,
+          event: {
+            title: 'Fake Event',
+            id: 334494,
+            startTime: 1531864800,
+          },
+          sequence: {
+            serverTime: 1539966236,
+            steps: [
+              {
+                fetchTime: 1539966239,
+                query: ['event', 'video'],
+                transitionTime: 1539966240,
+              },
+              {
+                fetchTime: 1539966241,
+                query: ['event', 'video', 'feed'],
+                transitionTime: 1539966242,
               },
             ],
           },
@@ -172,10 +278,6 @@ describe('Event Sequence Test', () => {
             },
           },
           currentChannel: '1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c',
-          video: {
-            type: 'StandardEmbed',
-            url: 'https://www.youtube.com/embed/bz2kN31m_S0',
-          },
         },
       }
     );

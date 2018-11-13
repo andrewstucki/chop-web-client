@@ -18,16 +18,56 @@ currentEvent {
   sequence {
     serverTime
     steps {
-      timestamp
-      data
+      fetchTime
+      queries
+      transitionTime
+    }
+  }
+  video {
+    type
+    url
+  }
+  feeds {
+    id
+    name
+    type
+    subscribers {
+      pubnubToken
+      avatar
+      nickname
     }
   }
 }`;
 
-const currentVideo = `
-currentVideo {
-  type
-  url
+const eventAt = `
+query EventAt($time: Timestamp, $includeFeed: Boolean, $includeVideo: Boolean) {
+  eventAt {
+    title
+    id
+    startTime
+    sequence {
+      serverTime
+      steps {
+        fetchTime
+        queries
+        transitionTime
+      }
+    }
+    video (@include: $includeVideo) {
+      type
+      url
+    }
+    feeds (@include: $includeFeed) {
+      id
+      name
+      type
+      subscribers {
+        pubnubToken
+        avatar
+        nickname
+      }
+    }
+  }
 }`;
 
 const currentUser = `
@@ -38,18 +78,6 @@ currentUser {
   pubnubToken
   role {
     label
-  }
-}`;
-
-const currentChannels = `
-currentFeeds {
-  id
-  name
-  type
-  subscribers {
-    pubnubToken
-    avatar
-    nickname
   }
 }`;
 
@@ -122,9 +150,7 @@ schedule {
 const currentState = `
 {
   ${currentEvent}
-  ${currentVideo}
   ${currentUser}
-  ${currentChannels}
   ${currentOrganization}
   ${pubnubKeys}
   ${currentLanguages}
@@ -204,5 +230,16 @@ export default class GraphQl {
 
   schedule () {
     return this.request.run(schedule);
+  }
+
+  eventAtTime (time, includeFeed, includeVideo) {
+    return this.request(
+      eventAt,
+      {
+        time,
+        includeFeed,
+        includeVideo,
+      }
+    );
   }
 }
