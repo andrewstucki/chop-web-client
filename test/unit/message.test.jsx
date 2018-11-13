@@ -48,6 +48,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />
@@ -78,6 +79,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />
@@ -109,6 +111,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />
@@ -142,6 +145,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />

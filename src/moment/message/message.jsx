@@ -24,6 +24,7 @@ type MessagePropsType = {
   muteUser: (pubnubToken: string) => void,
   publishMuteUserNotification: (host: string, guest: string, channel: string, date: Date) => void,
   directChat: (pubnubToken: string) => void,
+  mutedNotificationBanner: (guestName: string) => void,
 };
 
 const Message = (
@@ -40,6 +41,7 @@ const Message = (
     toggleCloseTrayButton,
     muteUser,
     directChat,
+    mutedNotificationBanner,
   }: MessagePropsType
 ) => {
   const { messageTrayOpen, closeTrayButtonRendered } = message;
@@ -79,6 +81,7 @@ const Message = (
         }}
         muteUser={() => {
           muteUser(message.user.pubnubToken);
+          mutedNotificationBanner(message.user.name);
           publishMuteUserNotification(currentUser.name, message.user.name, hostChannel, new Date);
           closeMessageTray(message.id);
         }}

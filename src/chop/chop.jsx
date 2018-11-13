@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 
+import Banner from '../banner';
 import Chat from '../chat';
 import Feed from '../feed';
 import NavBar from '../navBar';
@@ -31,6 +32,7 @@ class ChopContainer extends React.Component<any> {
         <SideMenu />
         <div className={styles.chop}>
           <PopUpModal />
+          <Banner />
           <NavBar />
           <VideoFeed />
           <Feed />
