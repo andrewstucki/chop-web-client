@@ -52,7 +52,7 @@ const SideMenu = (
     <a
       id="guest-experience"
       className={styles.guestLink}
-      href="https://live.life.church/"
+      href={window.location.origin.toString()}
     >
       Switch to guest experience
       <span

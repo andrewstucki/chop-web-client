@@ -1,14 +1,7 @@
 @import '../../../assets/theme.css';
 
 :root {
-  --wrapper: {
-    margin: 8px 0;
-    position: relative;
-    min-height: 54px;
-    display: flex;
-  }
-
-  --button {
+  --button: {
     line-height: 0;
     padding: 0 8px;
     border: none;
@@ -17,13 +10,18 @@
 
   --message {
     width: 100%;
-    min-height: 56px;
+    min-height: 40px;
     display: flex;
-    align-items: center;
     background: #fff;
     overflow: hidden;
+    padding: 8px 0 8px;
     transition: transform var(--animation-duration);
   }
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
 }
 
 .body {

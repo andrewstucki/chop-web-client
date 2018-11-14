@@ -74,8 +74,6 @@ describe('SideBar tests', () => {
       .toBe(1);
     expect(wrapper.find('#guest-experience').text())
       .toBe('Switch to guest experience');
-    expect(wrapper.find('#guest-experience').props().href)
-      .toBe('https://live.life.church/');
   });
 
   test('SideBar has link to give feedback', () => {

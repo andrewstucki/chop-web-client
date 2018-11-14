@@ -2,9 +2,9 @@
 
 .icon {
   border-radius: var(--borderRadius);
-  height: 36px;
-  width: 36px;
+  height: 40px;
+  width: 40px;
   color: var(--backgroundColor);
   text-align: center;
-  line-height: 36px;
+  line-height: 40px;
 }
