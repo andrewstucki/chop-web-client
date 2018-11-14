@@ -1,12 +1,14 @@
 import Scheduler from '../../../src/io/scheduler';
 import { mockDate } from '../../testUtils';
 import mockSequenceData from '../../mockData/sequence.json';
+import mockScheduleData from '../../mockData/schedule.json';
 import actorMiddleware from '../../../src/middleware/actor-middleware';
 import { createStore, applyMiddleware } from 'redux';
 import serviceActor from '../../../src/io/serviceActor';
 import {
   mockCurrentState,
   mockEventAtTime,
+  mockGetSequence,
 } from '../../../src/io/graphQL';
 import reducer from '../../../src/chop/dux';
 import { defaultState } from '../../../src/feed/dux';
@@ -76,7 +78,7 @@ describe('Event Sequence Test', () => {
     expect(callback).toHaveBeenCalledWith(42);
   });
 
-  test('Schedule from file', async () => {
+  test('Sequence from file', async () => {
     jest.useFakeTimers();
     mockDate(1539966236000);
     global.document.cookie  = 'legacy_token=12345; ';
@@ -93,11 +95,6 @@ describe('Event Sequence Test', () => {
       {
         feed: {
           ...defaultState,
-          event: {
-            title: 'Fake Event',
-            id: 334494,
-            startTime: 1531864800,
-          },
           pubnubKeys: {
             publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
             subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
@@ -106,19 +103,19 @@ describe('Event Sequence Test', () => {
             serverTime: 1539966236,
             steps: [
               {
-                fetchTime: 1539966237,
+                fetchTime: 1542289491,
                 query: ['feed'],
-                transitionTime: 1539966238,
+                transitionTime: 1542289492,
               },
               {
-                fetchTime: 1539966239,
+                fetchTime: 1542289493,
                 query: ['event', 'video'],
-                transitionTime: 1539966240,
+                transitionTime: 1542289494,
               },
               {
-                fetchTime: 1539966241,
+                fetchTime: 1542289495,
                 query: ['event', 'video', 'feed'],
-                transitionTime: 1539966242,
+                transitionTime: 1542289496,
               },
             ],
           },
@@ -155,25 +152,24 @@ describe('Event Sequence Test', () => {
       }
     );
 
-    mockDate(1539966237000);
-    await jest.advanceTimersByTime(60000);
+    mockDate(1542289491000);
+    await jest.advanceTimersByTime(1000);
 
     expect(store.getState()).toEqual(
       {
         feed: {
           ...defaultState,
-          event: {
-            title: 'Fake Event',
-            id: 334494,
-            startTime: 1531864800,
+          pubnubKeys: {
+            publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
+            subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
           },
           sequence: {
             serverTime: 1539966236,
             steps: [
               {
-                fetchTime: 1539966237,
+                fetchTime: 1542289491,
                 query: ['feed'],
-                transitionTime: 1539966238,
+                transitionTime: 1542289492,
                 data: {
                   currentEvent: {
                     title: 'Fake Event',
@@ -201,32 +197,32 @@ describe('Event Sequence Test', () => {
                 },
               },
               {
-                fetchTime: 1539966239,
+                fetchTime: 1542289493,
                 query: ['event', 'video'],
-                transitionTime: 1539966240,
+                transitionTime: 1542289494,
               },
               {
-                fetchTime: 1539966241,
+                fetchTime: 1542289495,
                 query: ['event', 'video', 'feed'],
-                transitionTime: 1539966242,
+                transitionTime: 1542289496,
               },
             ],
-          },
-          pubnubKeys: {
-            publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
-            subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
           },
         },
       }
     );
 
-    mockDate(1539966238000);
-    jest.advanceTimersByTime(60000);
+    mockDate(1542289492000);
+    jest.advanceTimersByTime(1000);
     
     expect(store.getState()).toEqual(
       {
         feed: {
           ...defaultState,
+          pubnubKeys: {
+            publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
+            subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
+          },
           event: {
             title: 'Fake Event',
             id: 334494,
@@ -236,20 +232,16 @@ describe('Event Sequence Test', () => {
             serverTime: 1539966236,
             steps: [
               {
-                fetchTime: 1539966239,
+                fetchTime: 1542289493,
                 query: ['event', 'video'],
-                transitionTime: 1539966240,
+                transitionTime: 1542289494,
               },
               {
-                fetchTime: 1539966241,
+                fetchTime: 1542289495,
                 query: ['event', 'video', 'feed'],
-                transitionTime: 1539966242,
+                transitionTime: 1542289496,
               },
             ],
-          },
-          pubnubKeys: {
-            publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
-            subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
           },
           channels: {
             '1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c': {
@@ -279,6 +271,216 @@ describe('Event Sequence Test', () => {
           },
           currentChannel: '1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c',
         },
+      }
+    );
+  });
+
+  test('Schedule from file', async () => {
+    jest.useFakeTimers();
+    mockDate(1542289489000);
+    global.document.cookie  = 'legacy_token=12345; ';
+    mockCurrentState.mockResolvedValue(mockScheduleData);
+    mockGetSequence.mockResolvedValue(mockSequenceData);
+    const actors = actorMiddleware(serviceActor);
+    const store = createStore(
+      reducer,
+      applyMiddleware(actors)
+    );
+
+    await await store.dispatch({type: 'INIT'});
+
+    expect(store.getState().feed).toEqual(
+      {
+        ...defaultState,
+        schedule: [
+          {
+            endTime: 1542376800,
+            fetchTime: 1542289490,
+            id: '129073',
+            scheduleTime: 1542290400,
+            startTime: 1542289500,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542463200,
+            fetchTime: 1542375890,
+            id: '129073',
+            scheduleTime: 1542376800,
+            startTime: 1542375900,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542549600,
+            fetchTime: 1542462290,
+            id: '129073',
+            scheduleTime: 1542463200,
+            startTime: 1542462300,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542636000,
+            fetchTime: 1542548690,
+            id: '129073',
+            scheduleTime: 1542549600,
+            startTime: 1542548700,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542722400,
+            fetchTime: 1542635090,
+            id: '129073',
+            scheduleTime: 1542636000,
+            startTime: 1542635100,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542808800,
+            fetchTime: 1542721490,
+            id: '129073',
+            scheduleTime: 1542722400,
+            startTime: 1542721500,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542895200,
+            fetchTime: 1542807890,
+            id: '129073',
+            scheduleTime: 1542808800,
+            startTime: 1542807900,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542981600,
+            fetchTime: 1542894290,
+            id: '129073',
+            scheduleTime: 1542895200,
+            startTime: 1542894300,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1543068000,
+            fetchTime: 1542980690,
+            id: '129073',
+            scheduleTime: 1542981600,
+            startTime: 1542980700,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1543154400,
+            fetchTime: 1543067090,
+            id: '129073',
+            scheduleTime: 1543068000,
+            startTime: 1543067100,
+            title: 'Mastermind',
+          },
+        ],
+      }
+    );
+
+    mockDate(1542289490000);
+    await jest.advanceTimersByTime(1000);
+
+    expect(store.getState().feed).toEqual(
+      {
+        ...defaultState,
+        pubnubKeys: {
+          publish: 'pub-9b402341-30c2-459f-9bed-69fd684a5e00',
+          subscribe: 'sub-5ef6daa3-9490-11e1-bef7-45383605a8b5',
+        },
+        sequence: {
+          serverTime: 1539966236,
+          steps: [
+            {
+              fetchTime: 1542289491,
+              query: ['feed'],
+              transitionTime: 1542289492,
+            },
+            {
+              fetchTime: 1542289493,
+              query: ['event', 'video'],
+              transitionTime: 1542289494,
+            },
+            {
+              fetchTime: 1542289495,
+              query: ['event', 'video', 'feed'],
+              transitionTime: 1542289496,
+            },
+          ],
+        },
+        schedule: [
+          {
+            endTime: 1542463200,
+            fetchTime: 1542375890,
+            id: '129073',
+            scheduleTime: 1542376800,
+            startTime: 1542375900,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542549600,
+            fetchTime: 1542462290,
+            id: '129073',
+            scheduleTime: 1542463200,
+            startTime: 1542462300,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542636000,
+            fetchTime: 1542548690,
+            id: '129073',
+            scheduleTime: 1542549600,
+            startTime: 1542548700,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542722400,
+            fetchTime: 1542635090,
+            id: '129073',
+            scheduleTime: 1542636000,
+            startTime: 1542635100,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542808800,
+            fetchTime: 1542721490,
+            id: '129073',
+            scheduleTime: 1542722400,
+            startTime: 1542721500,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542895200,
+            fetchTime: 1542807890,
+            id: '129073',
+            scheduleTime: 1542808800,
+            startTime: 1542807900,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1542981600,
+            fetchTime: 1542894290,
+            id: '129073',
+            scheduleTime: 1542895200,
+            startTime: 1542894300,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1543068000,
+            fetchTime: 1542980690,
+            id: '129073',
+            scheduleTime: 1542981600,
+            startTime: 1542980700,
+            title: 'Mastermind',
+          },
+          {
+            endTime: 1543154400,
+            fetchTime: 1543067090,
+            id: '129073',
+            scheduleTime: 1543068000,
+            startTime: 1543067100,
+            title: 'Mastermind',
+          },
+        ],
       }
     );
   });

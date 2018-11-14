@@ -1,4 +1,4 @@
-// @flow
+// @Flow
 /* global IntervalID */
 import {
   addChannel,
@@ -92,7 +92,7 @@ class ServiceActor {
 
   _startTimer () {
     if (!this.timer) {
-      this.timer = setInterval(this.checkTime, 60000);
+      this.timer = setInterval(this.checkTime, 1000);
     }
   }
 
@@ -114,7 +114,7 @@ class ServiceActor {
           }
         );
       } else if (step.fetchTime * 1000 <= Date.now()) {
-        const includeFeed = step.query.indexOf('feed') > -1;
+        const includeFeed = step.query.indexOf('feeds') > -1;
         const includeVideo = step.query.indexOf('video') > -1;
         this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo)
           .then(result => {
@@ -126,8 +126,8 @@ class ServiceActor {
             );
           });
       }
-    } else if (schedule[0].startTime * 1000 <= Date.now()) {
-      this.graph.currentState()
+    } else if (schedule[0].fetchTime * 1000 <= Date.now()) {
+      this.graph.sequence()
         .then(this.getInitialData, this.handleDataFetchErrors);
       const newSchedule = schedule.splice(1);
       this.storeDispatch(
@@ -175,19 +175,33 @@ class ServiceActor {
         if (!event) {
           this.storeDispatch(setEvent('',0 ,0));
         } else {
-          this.storeDispatch(
-            setEvent(
-              event.title,
-              event.id,
-              event.startTime,
-            )
-          );
+          if (event.title && event.id && event.startTime) {
+            this.storeDispatch(
+              setEvent(
+                event.title,
+                event.id,
+                event.startTime,
+              )
+            );
+          }
+          let hasVideo = false;
+          let hasFeed = false;
           if (event.sequence) {
+            const now = Date.now();
             const sequence = {
               serverTime: event.sequence.serverTime,
               steps: event.sequence.steps.filter(step =>
-                step.transitionTime * 1000 > Date.now()),
+                step.transitionTime * 1000 > now),
             };
+            event.sequence.steps.filter(step =>
+              step.transitionTime * 1000 <= now).forEach(step => {
+              if (step.queries.indexOf('feeds') > -1) {
+                hasFeed = true;
+              }
+              if (step.queries.indexOf('video') > -1) {
+                hasVideo = true;
+              }
+            });
             this.storeDispatch(
               {
                 type: 'SET_SEQUENCE',
@@ -196,7 +210,7 @@ class ServiceActor {
             );
             this.startTimer();
           }
-          if (event.feeds) {
+          if (event.feeds && (hasFeed || !event.sequence)) {
             const channels = event.feeds;
             const currentChannels = this.getStore().channels;
             Object.keys(currentChannels).forEach(id => {
@@ -226,7 +240,7 @@ class ServiceActor {
               }
             });
           }
-          if (event.video) {
+          if (event.video && (hasVideo || !event.sequence)) {
             const { video } = event;
             if (!video) {
               this.storeDispatch(

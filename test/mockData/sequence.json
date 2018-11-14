@@ -4,26 +4,23 @@
     "subscribeKey": "sub-5ef6daa3-9490-11e1-bef7-45383605a8b5"
   },
   "currentEvent": {
-    "title": "Fake Event",
-    "id": 334494,
-    "startTime": 1531864800,
     "sequence": {
       "serverTime": 1539966236,
       "steps": [
         {
-          "fetchTime": 1539966237,
+          "fetchTime": 1542289491,
           "query": ["feed"],
-          "transitionTime": 1539966238
+          "transitionTime": 1542289492
         },
         {
-          "fetchTime": 1539966239,
+          "fetchTime": 1542289493,
           "query": ["event", "video"],
-          "transitionTime": 1539966240
+          "transitionTime": 1542289494
         },
         {
-          "fetchTime": 1539966241,
+          "fetchTime": 1542289495,
           "query": ["event", "video", "feed"],
-          "transitionTime": 1539966242
+          "transitionTime": 1542289496
         }
       ]
     }
