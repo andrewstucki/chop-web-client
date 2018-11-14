@@ -10,6 +10,18 @@ mutation AccessToken($token: String!) {
 }
 `;
 
+const sequence = `
+currentEvent {
+  sequence {
+    serverTime
+    steps {
+      fetchTime
+      queries
+      transitionTime
+    }
+  }
+}`;
+
 const currentEvent = `
 currentEvent {
   title
@@ -241,5 +253,9 @@ export default class GraphQl {
         includeVideo,
       }
     );
+  }
+
+  sequence () {
+    return this.request(sequence);
   }
 }

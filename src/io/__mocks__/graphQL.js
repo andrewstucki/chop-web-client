@@ -28,6 +28,8 @@ const mockDirectChat = jest.fn().mockResolvedValue(
   }
 );
 const mockEventAtTime = jest.fn();
+const mockGetSchedule = jest.fn();
+const mockGetSequence = jest.fn();
 
 const mockGraphQl = jest.fn().mockImplementation(() => (
   {
@@ -38,6 +40,8 @@ const mockGraphQl = jest.fn().mockImplementation(() => (
     leaveChannel: mockLeaveChannel,
     directChat: mockDirectChat,
     eventAtTime: mockEventAtTime,
+    schedule: mockGetSchedule,
+    sequence: mockGetSequence,
   }
 ));
 
@@ -49,5 +53,7 @@ export {
   mockLeaveChannel,
   mockDirectChat,
   mockEventAtTime,
+  mockGetSchedule,
+  mockGetSequence,
 };
 export default mockGraphQl;
