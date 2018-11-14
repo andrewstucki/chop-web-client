@@ -17,6 +17,7 @@ import styles from './styles.css';
 
 class ChopContainer extends React.Component<any> {
   render () {
+    document.title = 'Live ' + this.props.organization;
     let wrapperstyle = styles.wrapper;
     if (this.props.focused) {
       if (isUsingIPhone()) {
