@@ -126,7 +126,7 @@ stop_review:
   variables:
     GIT_STRATEGY: none
   script:
-    - command destroy
+    - command destroy app
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
