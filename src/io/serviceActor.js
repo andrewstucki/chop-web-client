@@ -97,25 +97,36 @@ class ServiceActor {
   }
 
   _checkTime () {
+    const now = Date.now();
     const { schedule, sequence } = this.getStore();
     if (sequence && sequence.steps && sequence.steps[0]) {
       const [ step ] = sequence.steps;
-      if (step.transitionTime * 1000 <= Date.now()) {
+      if (step.transitionTime * 1000 <= now) {
         this.getInitialData(step.data);
 
-        const newSequence = {
+        let newSequence = {
           serverTime: sequence.serverTime,
           steps: sequence.steps.splice(1),
         };
+        if (newSequence.steps.length === 0) {
+          newSequence = {
+            steps: [],
+          };
+          const nextEvent = schedule.shift();
+          this.storeDispatch(setSchedule(schedule));
+          this.graph.sequence(nextEvent.startTime)
+            .then(this.getInitialData, this.handleDataFetchErrors);          
+        }
         this.storeDispatch(
           {
             type: 'SET_SEQUENCE',
             sequence: newSequence,
           }
         );
-      } else if (step.fetchTime * 1000 <= Date.now()) {
-        const includeFeed = step.query.indexOf('feeds') > -1;
-        const includeVideo = step.query.indexOf('video') > -1;
+      }
+      if (!step.data && step.fetchTime * 1000 <= now) {
+        const includeFeed = step.queries.indexOf('feeds') > -1;
+        const includeVideo = step.queries.indexOf('video') > -1;
         this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo)
           .then(result => {
             this.storeDispatch(
@@ -126,18 +137,12 @@ class ServiceActor {
             );
           });
       }
-    } else if (schedule[0].fetchTime * 1000 <= Date.now()) {
-      this.graph.sequence()
-        .then(this.getInitialData, this.handleDataFetchErrors);
-      const newSchedule = schedule.splice(1);
-      this.storeDispatch(
-        setSchedule(newSchedule)
-      );
     }
   }
 
   _getInitialData (payload: any) {
-    Object.keys(payload).forEach(key => {
+    Object.keys(payload).forEach(objKey => {
+      const key = objKey === 'eventAt' ? 'currentEvent' : objKey;
       switch (key) {
       case 'currentFeeds': {
         const channels = payload.currentFeeds;
@@ -171,22 +176,19 @@ class ServiceActor {
         break;
       }
       case 'currentEvent': {
-        const event = payload.currentEvent;
-        if (!event) {
-          this.storeDispatch(setEvent('',0 ,0));
-        } else {
-          if (event.title && event.id && event.startTime) {
-            this.storeDispatch(
-              setEvent(
-                event.title,
-                event.id,
-                event.startTime,
-              )
-            );
-          }
-          let hasVideo = false;
-          let hasFeed = false;
-          if (event.sequence) {
+        const event = payload.currentEvent || payload.eventAt;
+        let hasVideo = false;
+        let hasFeed = false;
+        if (event !== undefined) {
+          this.storeDispatch(
+            setEvent(
+              event.title || '',
+              event.id || 0,
+              event.startTime || 0,
+            )
+          );
+          const hasSequence = event.sequence && event.sequence.steps && event.sequence.steps.length;
+          if (hasSequence) {
             const now = Date.now();
             const sequence = {
               serverTime: event.sequence.serverTime,
@@ -210,7 +212,7 @@ class ServiceActor {
             );
             this.startTimer();
           }
-          if (event.feeds && (hasFeed || !event.sequence)) {
+          if (event.feeds !== undefined && (!hasSequence || hasFeed)) {
             const channels = event.feeds;
             const currentChannels = this.getStore().channels;
             Object.keys(currentChannels).forEach(id => {
@@ -240,7 +242,7 @@ class ServiceActor {
               }
             });
           }
-          if (event.video && (hasVideo || !event.sequence)) {
+          if (event.video !== undefined && (!hasSequence || hasVideo)) {
             const { video } = event;
             if (!video) {
               this.storeDispatch(
@@ -258,12 +260,16 @@ class ServiceActor {
         }
         break;
       }
-      case 'schedule':
-        this.storeDispatch(
-          setSchedule(payload.schedule.filter(item =>
-            item.startTime * 1000 > Date.now()))
-        );
-        this.startTimer();
+      case 'schedule': {
+        const schedule = payload.schedule.filter(item =>
+          item.startTime * 1000 > Date.now());
+        const nextEvent = schedule.shift();
+        this.storeDispatch(setSchedule(schedule));
+        if (nextEvent) {
+          this.graph.sequence(nextEvent.startTime)
+            .then(this.getInitialData, this.handleDataFetchErrors);
+        }
+      }
         break;
       case 'currentVideo': {
         const video = payload.currentVideo;
@@ -274,7 +280,7 @@ class ServiceActor {
         } else {
           this.storeDispatch(
             setVideo(
-              video.url,
+              'https://vimeo.com/65107797',
               video.type,
             )
           );

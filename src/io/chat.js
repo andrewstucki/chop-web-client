@@ -148,19 +148,21 @@ class Chat {
         includeState: true,
       },
       (status, results) => {
-        const users = results.channels[publicChannel].occupants;
-        users.forEach(user => {
-          const available_prayer = user.state ? user.state.available_prayer : false; // eslint-disable-line camelcase
-          this.storeDispatch(
-            updateHereNow(
-              user.uuid,
-              publicChannel,
-              {
-                available_prayer: available_prayer, // eslint-disable-line camelcase
-              }
-            )
-          );
-        });
+        if (results) {
+          const users = results.channels[publicChannel].occupants;
+          users.forEach(user => {
+            const available_prayer = user.state ? user.state.available_prayer : false; // eslint-disable-line camelcase
+            this.storeDispatch(
+              updateHereNow(
+                user.uuid,
+                publicChannel,
+                {
+                  available_prayer: available_prayer, // eslint-disable-line camelcase
+                }
+              )
+            );
+          });
+        }
       }
     );
 
