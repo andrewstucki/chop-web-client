@@ -1,0 +1,207 @@
+{
+  "currentState":{
+    "currentEvent": {
+      "description": null,
+      "duration": null,
+      "endTime": null,
+      "eventTime": {
+        "id": null
+      },
+      "feeds": [],
+      "id": null,
+      "sequence": {
+        "serverTime": 1542320263,
+        "steps": []
+      },
+      "speaker": null,
+      "startTime": null,
+      "title": null,
+      "video": null,
+      "videoType": null
+    },
+    "currentUser": {
+      "id": 1014574,
+      "nickname": "Scott H",
+      "pubnubToken": null,
+      "role": {
+        "label": "Host",
+        "permissions": []
+      }
+    },
+    "currentOrganization": {
+      "id": 28116,
+      "name": "Grace Bible Church",
+      "slug": "gracebiblechurch"
+    },
+    "pubnubKeys": {
+      "publishKey": "pub-c-5d166bf0-07cf-4e5b-81e6-797b7f01bf83",
+      "subscribeKey": "sub-c-12f3b1fe-e04d-11e7-b7e7-02872c090099"
+    },
+    "schedule": [
+      {
+        "endTime": 1542323700,
+        "fetchTime": 1542322120,
+        "id": "132487",
+        "scheduleTime": 1542322800,
+        "startTime": 1542322200,
+        "title": "Church Service"
+      },
+      {
+        "endTime": 1542325500,
+        "fetchTime": 1542323905,
+        "id": "132487",
+        "scheduleTime": 1542324600,
+        "startTime": 1542324000,
+        "title": "Church Service"
+      }
+    ]
+  },
+  "authenticate": {
+      "authenticate": {
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjaG9wLWF1dGgiLCJleHAiOjE1NDI5MjUzNTAsInVzZXJfaWQiOjEwNzEwMjN9.zHAMRgZlA3CBCJhQYxYptOzw6prFazmB2yPm_PdOWp4",
+        "refreshToken": "85c24e5b4867bf94f4c9219b749f90509fc13727d4274c4962acd4639f3fdc27"
+      }
+    },
+    "cookie": "legacy_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsZWdhY3ktY2hvcCIsImV4cCI6MTU0MjkyNTMyMiwidXNlcl9pZCI6MTA3MTAyM30.vsGrgUBGcVsq_6EONSbb8E2uf3qFc-HAez81tp7tSSU",
+    "sequenceNum1": {
+    "eventAt": {
+      "sequence": {
+        "serverTime": 1542322000,
+        "steps": [
+          {
+            "fetchTime": 1542322074,
+            "queries": [
+              "feeds",
+              "event"
+            ],
+            "transitionTime": 1542322200
+          },
+          {
+            "fetchTime": 1542322434,
+            "queries": [
+              "video"
+            ],
+            "transitionTime": 1542322500
+          },
+          {
+            "fetchTime": 1542323594,
+            "queries": [
+              "event",
+              "video",
+              "feeds"
+            ],
+            "transitionTime": 1542323700
+          }
+        ]
+      }
+    }
+  },
+  "eventAtNum1": {
+    "eventAt": {
+      "description": "",
+      "duration": 15,
+      "endTime": 1542323700,
+      "eventTime": {
+        "id": "357468"
+      },
+      "feeds": [
+        {
+          "direct": false,
+          "id": "5fd7123ee2ff4432cafbac4331b643a65839b941ef19e4b60b7f8973e13511ff",
+          "name": "Public",
+          "type": "public"
+        },
+        {
+          "direct": false,
+          "id": "98aeacf6bb5acaeb343ee467f0366ac1617b3452d5d56b246c0c261d1b52d483",
+          "name": "Legacy",
+          "type": "legacy"
+        },
+        {
+          "direct": false,
+          "id": "27644bb96278163e92e6ac5f74dcaaa0a11cd7cd3cba78a3f12f622ed76f7464",
+          "name": "Host",
+          "type": "host"
+        }
+      ],
+      "id": "132487",
+      "speaker": "",
+      "startTime": 1542322200,
+      "title": "Church Service",
+      "videoType": "simulated"
+    }
+  },
+  "eventAtNum2": {
+    "eventAt": {
+      "description": "",
+      "duration": 15,
+      "endTime": 1542323700,
+      "eventTime": {
+        "id": "357468"
+      },
+      "id": "132487",
+      "speaker": "",
+      "startTime": 1542322200,
+      "title": "Church Service",
+      "video": {
+        "type": "simulated",
+        "url": "https://www.youtube.com/embed/M9SLpXu5Xik"
+      },
+      "videoType": "simulated"
+    }
+  },
+  "eventAtNum3": {
+    "eventAt": {
+      "description": null,
+      "duration": null,
+      "endTime": null,
+      "eventTime": {
+        "id": null
+      },
+      "feeds": [],
+      "id": null,
+      "sequence": {
+        "serverTime": 1542321767,
+        "steps": []
+      },
+      "speaker": null,
+      "startTime": null,
+      "title": null,
+      "video": null,
+      "videoType": null
+    }
+  },
+  "sequenceNum2": {
+    "eventAt": {
+      "sequence": {
+        "serverTime": 1542323244,
+        "steps": [
+          {
+            "fetchTime": 1542323864,
+            "queries": [
+              "feeds",
+              "event"
+            ],
+            "transitionTime": 1542324000
+          },
+          {
+            "fetchTime": 1542324218,
+            "queries": [
+              "video"
+            ],
+            "transitionTime": 1542324300
+          },
+          {
+            "fetchTime": 1542325455,
+            "queries": [
+              "event",
+              "video",
+              "feeds"
+            ],
+            "transitionTime": 1542325500
+          }
+        ]
+      }
+    }
+  }
+}

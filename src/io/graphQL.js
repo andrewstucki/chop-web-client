@@ -4,20 +4,22 @@ declare var GATEWAY_HOST:string;
 
 const accessToken = `
 mutation AccessToken($token: String!) {
-  authenticate(type: "LegacyAuth", legacy_token: $token) {
-    access_token
+  authenticate(type: "LegacyAuth", legacyToken: $token) {
+    accessToken
   }
 }
 `;
 
 const sequence = `
-currentEvent {
-  sequence {
-    serverTime
-    steps {
-      fetchTime
-      queries
-      transitionTime
+query Sequence($time: Timestamp) {
+  eventAt(time: $time) {
+    sequence {
+      serverTime
+      steps {
+        fetchTime
+        transitionTime
+        queries
+      }
     }
   }
 }`;
@@ -52,24 +54,16 @@ currentEvent {
 }`;
 
 const eventAt = `
-query EventAt($time: Timestamp, $includeFeed: Boolean, $includeVideo: Boolean) {
-  eventAt {
+query EventAt($time: Timestamp, $includeFeed: Boolean!, $includeVideo: Boolean!) {
+  eventAt (time: $time){
     title
     id
     startTime
-    sequence {
-      serverTime
-      steps {
-        fetchTime
-        queries
-        transitionTime
-      }
-    }
-    video (@include: $includeVideo) {
+    video @include(if: $includeVideo) {
       type
       url
     }
-    feeds (@include: $includeFeed) {
+    feeds @include(if: $includeFeed) {
       id
       name
       type
@@ -152,6 +146,7 @@ mutation createDirectFeed($pubnubToken: String!) {
 
 const schedule = `
 schedule {
+  fetchTime
   startTime
   endTime
   id
@@ -190,7 +185,7 @@ export default class GraphQl {
           this.request = graphqlJs(GATEWAY_HOST, {
             method: 'POST',
             headers: {
-              Authorization: 'Bearer ' + payload.authenticate.access_token,
+              Authorization: 'Bearer ' + payload.authenticate.accessToken,
               'Application-Domain': hostname,
             },
           });
@@ -255,7 +250,12 @@ export default class GraphQl {
     );
   }
 
-  sequence () {
-    return this.request(sequence);
+  sequence (time) {
+    return this.request(
+      sequence,
+      {
+        time,
+      }
+    );
   }
 }
