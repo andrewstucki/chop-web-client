@@ -1,8 +1,8 @@
-// @flow
+/* @flow*/
 import React from 'react';
 import styles from './styles.css';
-import Player from './youTubePlayer';
-//import Player from './vimeoPlayer.jsx';
+import Player from './player';
+//import Player from './player.jsx';
 
 type VideoFeedProps = {
   isVideoHidden: boolean,
