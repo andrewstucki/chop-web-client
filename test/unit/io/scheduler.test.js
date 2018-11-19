@@ -228,8 +228,8 @@ const phase1 = {
     },
   },
   organization: {
-    id: 3,
-    name: 'Freedom Church',
+    id: 28116,
+    name: 'Grace Bible Church',
   },
   pubnubKeys: {
     publish: 'pub-c-5d166bf0-07cf-4e5b-81e6-797b7f01bf83',
