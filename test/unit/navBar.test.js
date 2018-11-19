@@ -40,7 +40,6 @@ describe('NavBar tests', () => {
         currentChannel: '1234',
         chatInput: '',
         currentUser: currentUser,
-        appendingMessage: false,
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
           id: '12345',
@@ -48,7 +47,6 @@ describe('NavBar tests', () => {
           subText: '1 hand raised',
           anchorMomentAnchored: true,
         },
-        animatingMoment: false,
         placeholderPresent: false,
       }
     );
@@ -94,7 +92,6 @@ describe('NavBar tests', () => {
         currentChannel: '1234',
         chatInput: '',
         currentUser: currentUser,
-        appendingMessage: false,
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
           id: '12345',
@@ -102,7 +99,6 @@ describe('NavBar tests', () => {
           subText: '1 hand raised',
           anchorMomentAnchored: true,
         },
-        animatingMoment: false,
         placeholderPresent: false,
       }
     );
@@ -153,7 +149,6 @@ describe('NavBar tests', () => {
         currentChannel: '1234',
         chatInput: '',
         currentUser: currentUser,
-        appendingMessage: false,
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
           id: '12345',
@@ -161,7 +156,6 @@ describe('NavBar tests', () => {
           subText: '1 hand raised',
           anchorMomentAnchored: true,
         },
-        animatingMoment: false,
         placeholderPresent: false,
       }
     );

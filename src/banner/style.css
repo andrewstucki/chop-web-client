@@ -1,0 +1,32 @@
+@import url('../../assets/theme.css');
+
+.banner {
+  color: #ffffff;
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  align-items: center;
+  z-index: 2;
+  width: 100%;
+  animation-name: slideOpen;
+  animation-duration: .5s;
+  transition: transform .5s var(--ease-out);
+}
+
+.message {
+  line-height: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+.closeBannerButton svg {
+  width: 28px;
+  height: 40px;
+}
+
+@keyframes slideOpen {
+  from {transform: translateY(-100%)}
+  to {transform: translateY(0%)}
+}

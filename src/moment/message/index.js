@@ -13,6 +13,7 @@ import {
 import { getCurrentChannel, getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishMuteUserNotification } from '../notification/dux';
 import { getHostChannel } from '../../selectors/channelSelectors';
+import { mutedNotificationBanner } from '../../banner/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
@@ -33,6 +34,7 @@ const mapDispatchToProps = dispatch => (
     muteUser: pubnubToken => dispatch(muteUser(pubnubToken)),
     directChat: pubnubToken => dispatch(directChat(pubnubToken)),
     publishMuteUserNotification: (host, guest, channel, date) => dispatch(publishMuteUserNotification(host, guest, channel, date)),
+    mutedNotificationBanner: guestName => dispatch(mutedNotificationBanner(guestName)),
   }
 );
 

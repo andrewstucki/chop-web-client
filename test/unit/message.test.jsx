@@ -40,7 +40,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
@@ -49,6 +48,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />
@@ -71,7 +71,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
@@ -80,6 +79,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />
@@ -103,7 +103,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={() => {}}
         openMessageTray={openTray}
         deleteMessage={() => {}}
@@ -112,6 +111,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />
@@ -137,7 +137,6 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        appendingMessage={false}
         closeMessageTray={closeTray}
         openMessageTray={() => {}}
         deleteMessage={() => {}}
@@ -146,6 +145,7 @@ describe('Message', () => {
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
+        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
       />

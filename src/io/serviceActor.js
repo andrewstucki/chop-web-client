@@ -1,4 +1,4 @@
-// @flow
+// @Flow
 /* global IntervalID */
 import {
   addChannel,
@@ -10,6 +10,7 @@ import {
   setLanguageOptions,
   REMOVE_CHANNEL,
   setSchedule,
+  setScheduleData,
 } from '../feed/dux';
 import type { RemoveChannelType } from '../feed/dux';
 import { setVideo } from '../videoFeed/dux';
@@ -91,36 +92,57 @@ class ServiceActor {
 
   _startTimer () {
     if (!this.timer) {
-      this.timer = setInterval(this.checkTime, 60000);
+      this.timer = setInterval(this.checkTime, 1000);
     }
   }
 
   _checkTime () {
+    const now = Date.now();
     const { schedule, sequence } = this.getStore();
-    if (sequence && sequence.steps && sequence.steps[0] &&  sequence.steps[0].timestamp * 1000 <= Date.now()) {
-      this.getInitialData(JSON.parse(sequence.steps[0].data).data);
-      const newSequence = {
-        serverTime: sequence.serverTime,
-        steps: sequence.steps.splice(1),
-      };
-      this.storeDispatch(
-        {
-          type: 'SET_SEQUENCE',
-          sequence: newSequence,
+    if (sequence && sequence.steps && sequence.steps[0]) {
+      const [ step ] = sequence.steps;
+      if (step.transitionTime * 1000 <= now) {
+        this.getInitialData(step.data);
+
+        let newSequence = {
+          serverTime: sequence.serverTime,
+          steps: sequence.steps.splice(1),
+        };
+        if (newSequence.steps.length === 0) {
+          newSequence = {
+            steps: [],
+          };
+          const nextEvent = schedule.shift();
+          this.storeDispatch(setSchedule(schedule));
+          this.graph.sequence(nextEvent.startTime)
+            .then(this.getInitialData, this.handleDataFetchErrors);          
         }
-      );
-    } else if (schedule[0].startTime * 1000 <= Date.now()) {
-      this.graph.currentState()
-        .then(this.getInitialData, this.handleDataFetchErrors);
-      const newSchedule = schedule.splice(1);
-      this.storeDispatch(
-        setSchedule(newSchedule)
-      );
+        this.storeDispatch(
+          {
+            type: 'SET_SEQUENCE',
+            sequence: newSequence,
+          }
+        );
+      }
+      if (!step.data && step.fetchTime * 1000 <= now) {
+        const includeFeed = step.queries.indexOf('feeds') > -1;
+        const includeVideo = step.queries.indexOf('video') > -1;
+        this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo)
+          .then(result => {
+            this.storeDispatch(
+              setScheduleData(
+                step.transitionTime,
+                result
+              )
+            );
+          });
+      }
     }
   }
 
   _getInitialData (payload: any) {
-    Object.keys(payload).forEach(key => {
+    Object.keys(payload).forEach(objKey => {
+      const key = objKey === 'eventAt' ? 'currentEvent' : objKey;
       switch (key) {
       case 'currentFeeds': {
         const channels = payload.currentFeeds;
@@ -154,23 +176,34 @@ class ServiceActor {
         break;
       }
       case 'currentEvent': {
-        const event = payload.currentEvent;
-        if (!event) {
-          this.storeDispatch(setEvent('',0 ,0));
-        } else {
+        const event = payload.currentEvent || payload.eventAt;
+        let hasVideo = false;
+        let hasFeed = false;
+        if (event !== undefined) {
           this.storeDispatch(
             setEvent(
-              event.title,
-              event.id,
-              event.startTime,
+              event.title || '',
+              event.id || 0,
+              event.startTime || 0,
             )
           );
-          if (event.sequence) {
+          const hasSequence = event.sequence && event.sequence.steps && event.sequence.steps.length;
+          if (hasSequence) {
+            const now = Date.now();
             const sequence = {
               serverTime: event.sequence.serverTime,
               steps: event.sequence.steps.filter(step =>
-                step.timestamp * 1000 > Date.now()),
+                step.transitionTime * 1000 > now),
             };
+            event.sequence.steps.filter(step =>
+              step.transitionTime * 1000 <= now).forEach(step => {
+              if (step.queries.indexOf('feeds') > -1) {
+                hasFeed = true;
+              }
+              if (step.queries.indexOf('video') > -1) {
+                hasVideo = true;
+              }
+            });
             this.storeDispatch(
               {
                 type: 'SET_SEQUENCE',
@@ -179,15 +212,64 @@ class ServiceActor {
             );
             this.startTimer();
           }
+          if (event.feeds !== undefined && (!hasSequence || hasFeed)) {
+            const channels = event.feeds;
+            const currentChannels = this.getStore().channels;
+            Object.keys(currentChannels).forEach(id => {
+              this.storeDispatch(
+                {
+                  type: 'REMOVE_CHANNEL',
+                  channel: id,
+                }
+              );
+            });
+            this.storeDispatch(
+              { type: 'CLEAR_CHANNEL' }
+            );
+            channels.forEach(channel => {
+              const participants = convertSubscribersToSharedUsers(channel.subscribers);
+              this.storeDispatch(
+                addChannel(
+                  channel.name,
+                  channel.id,
+                  participants
+                )
+              );
+              if (channel.name === 'Public') {
+                this.storeDispatch(
+                  changeChannel(channel.id)
+                );
+              }
+            });
+          }
+          if (event.video !== undefined && (!hasSequence || hasVideo)) {
+            const { video } = event;
+            if (!video) {
+              this.storeDispatch(
+                setVideo('','')
+              );
+            } else {
+              this.storeDispatch(
+                setVideo(
+                  video.url,
+                  video.type,
+                )
+              );
+            }
+          }
         }
         break;
       }
-      case 'schedule':
-        this.storeDispatch(
-          setSchedule(payload.schedule.filter(item =>
-            item.startTime * 1000 > Date.now()))
-        );
-        this.startTimer();
+      case 'schedule': {
+        const schedule = payload.schedule.filter(item =>
+          item.startTime * 1000 > Date.now());
+        const nextEvent = schedule.shift();
+        this.storeDispatch(setSchedule(schedule));
+        if (nextEvent) {
+          this.graph.sequence(nextEvent.startTime)
+            .then(this.getInitialData, this.handleDataFetchErrors);
+        }
+      }
         break;
       case 'currentVideo': {
         const video = payload.currentVideo;
@@ -206,12 +288,11 @@ class ServiceActor {
         break;
       }
       case 'currentOrganization': {
-        // const organization = payload.currentOrganization;
+        const organization = payload.currentOrganization;
         this.storeDispatch(
           setOrganization(
-            3, 'Freedom Church'
-            // organization.id,
-            // organization.name,
+            organization.id,
+            organization.name,
           )
         );
         break;

@@ -4,11 +4,25 @@ declare var GATEWAY_HOST:string;
 
 const accessToken = `
 mutation AccessToken($token: String!) {
-  authenticate(type: "LegacyAuth", legacy_token: $token) {
-    access_token
+  authenticate(type: "LegacyAuth", legacyToken: $token) {
+    accessToken
   }
 }
 `;
+
+const sequence = `
+query Sequence($time: Timestamp) {
+  eventAt(time: $time) {
+    sequence {
+      serverTime
+      steps {
+        fetchTime
+        transitionTime
+        queries
+      }
+    }
+  }
+}`;
 
 const currentEvent = `
 currentEvent {
@@ -18,16 +32,48 @@ currentEvent {
   sequence {
     serverTime
     steps {
-      timestamp
-      data
+      fetchTime
+      queries
+      transitionTime
+    }
+  }
+  video {
+    type
+    url
+  }
+  feeds {
+    id
+    name
+    type
+    subscribers {
+      pubnubToken
+      avatar
+      nickname
     }
   }
 }`;
 
-const currentVideo = `
-currentVideo {
-  type
-  url
+const eventAt = `
+query EventAt($time: Timestamp, $includeFeed: Boolean!, $includeVideo: Boolean!) {
+  eventAt (time: $time){
+    title
+    id
+    startTime
+    video @include(if: $includeVideo) {
+      type
+      url
+    }
+    feeds @include(if: $includeFeed) {
+      id
+      name
+      type
+      subscribers {
+        pubnubToken
+        avatar
+        nickname
+      }
+    }
+  }
 }`;
 
 const currentUser = `
@@ -38,18 +84,6 @@ currentUser {
   pubnubToken
   role {
     label
-  }
-}`;
-
-const currentChannels = `
-currentFeeds {
-  id
-  name
-  type
-  subscribers {
-    pubnubToken
-    avatar
-    nickname
   }
 }`;
 
@@ -112,6 +146,7 @@ mutation createDirectFeed($pubnubToken: String!) {
 
 const schedule = `
 schedule {
+  fetchTime
   startTime
   endTime
   id
@@ -122,9 +157,7 @@ schedule {
 const currentState = `
 {
   ${currentEvent}
-  ${currentVideo}
   ${currentUser}
-  ${currentChannels}
   ${currentOrganization}
   ${pubnubKeys}
   ${currentLanguages}
@@ -152,7 +185,7 @@ export default class GraphQl {
           this.request = graphqlJs(GATEWAY_HOST, {
             method: 'POST',
             headers: {
-              Authorization: 'Bearer ' + payload.authenticate.access_token,
+              Authorization: 'Bearer ' + payload.authenticate.accessToken,
               'Application-Domain': hostname,
             },
           });
@@ -204,5 +237,25 @@ export default class GraphQl {
 
   schedule () {
     return this.request.run(schedule);
+  }
+
+  eventAtTime (time, includeFeed, includeVideo) {
+    return this.request(
+      eventAt,
+      {
+        time,
+        includeFeed,
+        includeVideo,
+      }
+    );
+  }
+
+  sequence (time) {
+    return this.request(
+      sequence,
+      {
+        time,
+      }
+    );
   }
 }

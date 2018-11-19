@@ -3,7 +3,6 @@ import Feed from './feed';
 import { connect } from 'react-redux';
 import {
   feedContents,
-  appendMessage,
   hasParticipants,
   togglePopUpModal,
 } from './dux';
@@ -13,8 +12,6 @@ const mapStateToProps = state => {
   return {
     moments: feedContents(feedState),
     currentChannel: feedState.currentChannel,
-    appendingMessage: appendMessage(feedState),
-    animatingMoment: feedState.renderingAnchorMoment,
     isPlaceholderPresent: feedState.isPlaceholderPresent,
     hasParticipants: hasParticipants(feedState),
   };

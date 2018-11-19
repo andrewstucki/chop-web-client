@@ -1,0 +1,84 @@
+{
+  "schedule": [
+    {
+      "endTime": 1542376800,
+      "id": "129073",
+      "scheduleTime": 1542290400,
+      "startTime": 1542289500,
+      "fetchTime": 1542289490,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1542463200,
+      "id": "129073",
+      "scheduleTime": 1542376800,
+      "startTime": 1542375900,
+      "fetchTime": 1542375890,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1542549600,
+      "id": "129073",
+      "scheduleTime": 1542463200,
+      "startTime": 1542462300,
+      "fetchTime": 1542462290,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1542636000,
+      "id": "129073",
+      "scheduleTime": 1542549600,
+      "startTime": 1542548700,
+      "fetchTime": 1542548690,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1542722400,
+      "id": "129073",
+      "scheduleTime": 1542636000,
+      "startTime": 1542635100,
+      "fetchTime": 1542635090,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1542808800,
+      "id": "129073",
+      "scheduleTime": 1542722400,
+      "startTime": 1542721500,
+      "fetchTime": 1542721490,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1542895200,
+      "id": "129073",
+      "scheduleTime": 1542808800,
+      "startTime": 1542807900,
+      "fetchTime": 1542807890,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1542981600,
+      "id": "129073",
+      "scheduleTime": 1542895200,
+      "startTime": 1542894300,
+      "fetchTime": 1542894290,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1543068000,
+      "id": "129073",
+      "scheduleTime": 1542981600,
+      "startTime": 1542980700,
+      "fetchTime": 1542980690,
+      "title": "Mastermind"
+    },
+    {
+      "endTime": 1543154400,
+      "id": "129073",
+      "scheduleTime": 1543068000,
+      "startTime": 1543067100,
+      "fetchTime": 1543067090,
+      "title": "Mastermind"
+    }
+  ]
+}

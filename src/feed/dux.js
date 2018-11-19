@@ -50,6 +50,8 @@ import {
   SET_ANCHOR_MOMENT,
 } from '../placeholder/anchorMoment/dux';
 
+import type { BannerType } from '../banner/dux';
+
 import { SET_LANGUAGE } from '../languageSelector/dux';
 import { getPublicChannel } from '../selectors/channelSelectors';
 
@@ -72,13 +74,22 @@ const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const LOAD_HISTORY = 'LOAD_HISTORY';
 const SET_SCHEDULE = 'SET_SCHEDULE';
+const CLEAR_NOTIFICATION_BANNER = 'CLEAR_NOTIFICATION_BANNER';
+const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
 const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
+const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 
 // Flow Type Definitions
 
 type GetInitData = {
   type: 'GET_INIT_DATA',
+};
+
+type SetScheduleDataType = {
+  type: 'SET_SCHEDULE_DATA',
+  time: number,
+  data: any,
 };
 
 type ScheduleType = {
@@ -181,9 +192,7 @@ type FeedType = {
   hereNow: HereNowChannels,
   currentChannel: string,
   currentUser: PrivateUserType,
-  appendingMessage: boolean,
   anchorMoment: AnchorMomentType | null,
-  animatingMoment: boolean,
   isPlaceholderPresent: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
@@ -194,6 +203,8 @@ type FeedType = {
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
   reactions: Array<ReactionType>,
+  notificationBanner: BannerType,
+  sequence: any,
 };
 
 type ChangeChannelType = {
@@ -273,6 +284,16 @@ type RemoveHereNowType = {
   channel: string,
 };
 
+type ClearNotificationBannerType = {
+  type: 'CLEAR_NOTIFICATION_BANNER',
+}
+
+type SetNotificationBannerType = {
+  type: 'SET_NOTIFICATION_BANNER',
+  message: string,
+  bannerType: string,
+}
+
 type FeedActionTypes =
   | ChangeChannelType
   | ReceiveMomentType
@@ -297,7 +318,8 @@ type FeedActionTypes =
   | PublishLeaveChannelType
   | SetScheduleType
   | UpdateHereNowType
-  | RemoveHereNowType;
+  | RemoveHereNowType
+  | SetScheduleDataType;
 
 // Action Creators
 
@@ -322,6 +344,14 @@ const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOp
   {
     type: SET_LANGUAGE_OPTIONS,
     languageOptions,
+  }
+);
+
+const setScheduleData = (time: number, data: any):SetScheduleDataType => (
+  {
+    type: SET_SCHEDULE_DATA,
+    time,
+    data,
   }
 );
 
@@ -444,6 +474,20 @@ const loadHistory = (moments: MomentType, channel: string): LoadHistoryType => (
   }
 );
 
+const setNotificationBanner = (message: string, bannerType: string): SetNotificationBannerType => (
+  {
+    type: SET_NOTIFICATION_BANNER,
+    message,
+    bannerType,
+  }
+);
+
+const clearNotificationBanner = (): ClearNotificationBannerType => (
+  {
+    type: CLEAR_NOTIFICATION_BANNER,
+  }
+);
+
 // Default State
 
 const getLanguage = () => {
@@ -481,9 +525,7 @@ const defaultState = {
       permissions: [],
     },
   },
-  appendingMessage: false,
   anchorMoment: null,
-  animatingMoment: true,
   isPlaceholderPresent: false,
   isPopUpModalVisible: false,
   isChatFocused: false,
@@ -526,6 +568,10 @@ const defaultState = {
     },
   ],
   reactions: [],
+  notificationBanner: {
+    message: '',
+    bannerType: '',
+  },
   sequence: {
     steps: [],
   },
@@ -590,6 +636,22 @@ const reducer = (
       ...state,
       event: action.event,
     };
+  case SET_SCHEDULE_DATA : {
+    const newState = {
+      ...state,
+      sequence: {
+        ...state.sequence,
+        steps: [
+          {
+            ...state.sequence.steps[0],
+            data: action.data,
+          },
+          ...state.sequence.steps.slice(1),
+        ],
+      },
+    };
+    return newState;
+  }
   case SET_SCHEDULE :
     return {
       ...state,
@@ -601,7 +663,6 @@ const reducer = (
     }
     return {
       ...state,
-      appendingMessage: true,
       currentChannel: action.channel,
     };
   case 'CLEAR_CHANNEL':
@@ -614,8 +675,6 @@ const reducer = (
     if (state.channels[action.channel]) {
       return {
         ...state,
-        appendingMessage: true,
-        animatingMoment: true,
         channels: {
           ...state.channels,
           // $FlowFixMe
@@ -677,8 +736,6 @@ const reducer = (
     if (state.channels[action.channel]) {
       return {
         ...state,
-        appendingMessage: true,
-        animatingMoment: false,
         channels: {
           ...state.channels,
           [action.channel]: {
@@ -702,7 +759,6 @@ const reducer = (
     const { id } = action;
     return {
       ...state,
-      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -724,7 +780,6 @@ const reducer = (
   case CLOSE_MESSAGE_TRAY:
     return {
       ...state,
-      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -745,7 +800,6 @@ const reducer = (
     const { id } = action;
     return {
       ...state,
-      appendingMessage: false,
       channels: {
         ...state.channels,
         [state.currentChannel]: {
@@ -815,8 +869,6 @@ const reducer = (
       if ([action.moment.text].toString().length > 0) {
         return {
           ...state,
-          appendingMessage: true,
-          animatingMoment: true,
           channels: {
             ...state.channels,
             [state.currentChannel]: {
@@ -834,7 +886,6 @@ const reducer = (
     }
     return {
       ...state,
-      animatingMoment: true,
       channels: {
         ...state.channels,
         // $FlowFixMe
@@ -861,7 +912,6 @@ const reducer = (
     return {
       ...state,
       isPlaceholderPresent: false,
-      animatingMoment: false,
       channels: {
         ...state.channels,
         [action.channel]: {
@@ -958,6 +1008,22 @@ const reducer = (
       // $FlowFixMe
       reactions: state.reactions.filter(reaction => reaction.id !== action.id),
     };
+  case SET_NOTIFICATION_BANNER:
+    return {
+      ...state,
+      notificationBanner: {
+        message: action.message,
+        bannerType: action.bannerType,
+      },
+    };
+  case CLEAR_NOTIFICATION_BANNER:
+    return {
+      ...state,
+      notificationBanner: {
+        message: '',
+        bannerType: '',
+      },
+    };
   default:
     return state;
   }
@@ -996,10 +1062,6 @@ const feedContents = (state: FeedType): Array<MessageType> => (
     []
 );
 
-const appendMessage = (state: FeedType): boolean => (
-  state.appendingMessage
-);
-
 const hasParticipants = (state: FeedType): boolean => {
   if (state.channels[state.currentChannel]) {
     const currentChannel = state.channels[state.currentChannel];
@@ -1023,6 +1085,10 @@ const getOtherUser = (state: FeedType): SharedUserType | null => {
   return null;
 };
 
+const getNotificationBanner = (state: FeedType): BannerType => (
+  state.notificationBanner
+);
+
 // Exports
 
 export {
@@ -1033,6 +1099,7 @@ export {
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   GET_INIT_DATA,
+  SET_NOTIFICATION_BANNER,
 };
 export {
   changeChannel,
@@ -1040,7 +1107,6 @@ export {
   removeChannel,
   feedContents,
   defaultState,
-  appendMessage,
   receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
@@ -1057,6 +1123,10 @@ export {
   setPubnubKeys,
   loadHistory,
   setSchedule,
+  getNotificationBanner,
+  clearNotificationBanner,
+  setNotificationBanner,
+  setScheduleData,
   updateHereNow,
   removeHereNow,
 };
@@ -1076,6 +1146,7 @@ export type {
   GetInitData,
   LanguageType,
   OrganizationType,
+  SetNotificationBannerType,
 };
 
 export default reducer;
