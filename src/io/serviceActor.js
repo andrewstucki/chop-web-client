@@ -280,7 +280,7 @@ class ServiceActor {
         } else {
           this.storeDispatch(
             setVideo(
-              'https://vimeo.com/65107797',
+              video.url,
               video.type,
             )
           );
@@ -288,12 +288,11 @@ class ServiceActor {
         break;
       }
       case 'currentOrganization': {
-        // const organization = payload.currentOrganization;
+        const organization = payload.currentOrganization;
         this.storeDispatch(
           setOrganization(
-            3, 'Freedom Church'
-            // organization.id,
-            // organization.name,
+            organization.id,
+            organization.name,
           )
         );
         break;
