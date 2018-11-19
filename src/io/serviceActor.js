@@ -144,37 +144,6 @@ class ServiceActor {
     Object.keys(payload).forEach(objKey => {
       const key = objKey === 'eventAt' ? 'currentEvent' : objKey;
       switch (key) {
-      case 'currentFeeds': {
-        const channels = payload.currentFeeds;
-        const currentChannels = this.getStore().channels;
-        Object.keys(currentChannels).forEach(id => {
-          this.storeDispatch(
-            {
-              type: 'REMOVE_CHANNEL',
-              channel: id,
-            }
-          );
-        });
-        this.storeDispatch(
-          { type: 'CLEAR_CHANNEL' }
-        );
-        channels.forEach(channel => {
-          const participants = convertSubscribersToSharedUsers(channel.subscribers);
-          this.storeDispatch(
-            addChannel(
-              channel.name,
-              channel.id,
-              participants
-            )
-          );
-          if (channel.name === 'Public') {
-            this.storeDispatch(
-              changeChannel(channel.id)
-            );
-          }
-        });
-        break;
-      }
       case 'currentEvent': {
         const event = payload.currentEvent || payload.eventAt;
         let hasVideo = false;
@@ -271,22 +240,6 @@ class ServiceActor {
         }
       }
         break;
-      case 'currentVideo': {
-        const video = payload.currentVideo;
-        if (!video) {
-          this.storeDispatch(
-            setVideo('','')
-          );
-        } else {
-          this.storeDispatch(
-            setVideo(
-              video.url,
-              video.type,
-            )
-          );
-        }
-        break;
-      }
       case 'currentOrganization': {
         const organization = payload.currentOrganization;
         this.storeDispatch(
