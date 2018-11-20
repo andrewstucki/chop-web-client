@@ -11,6 +11,8 @@ import { defaultState } from '../../src/feed/dux';
 import Message from '../../src/moment/message';
 import actorMiddleware from '../../src/middleware/actor-middleware';
 import '../../src/io/location';
+import { REHYDRATE } from 'redux-persist/lib/constants';
+import { promisifyMiddleware } from '../testUtils';
 
 jest.mock('../../src/io/graphQL');
 jest.mock('../../src/io/location');
@@ -39,12 +41,13 @@ describe('Test mute user', () => {
       closeTrayButtonRendered: true,
     };
 
+    const middlewareList = [promisifyMiddleware, actorMiddlewareApplied];
     const store = createStore(
       reducer,
       {
         feed: defaultState,
       },
-      applyMiddleware(actorMiddlewareApplied)
+      applyMiddleware(...middlewareList)
     );
 
     const wrapper = Enzyme.mount(
@@ -55,14 +58,14 @@ describe('Test mute user', () => {
       </Provider>
     );
 
-    await await store.dispatch({type:'INIT'});
+    store.dispatch({type: REHYDRATE}).then(() => {
+      wrapper.find('button.muteButton').simulate('click');
 
-    wrapper.find('button.muteButton').simulate('click');
-
-    expect(mockAuthenticate).toHaveBeenCalledTimes(1);
-    expect(mockAuthenticate).toHaveBeenCalledWith(
-      '12345',
-      'digerati.churchonline.org');
-    expect(mockMuteUser).toHaveBeenCalledTimes(1);
+      expect(mockAuthenticate).toHaveBeenCalledTimes(1);
+      expect(mockAuthenticate).toHaveBeenCalledWith(
+        '12345',
+        'digerati.churchonline.org');
+      expect(mockMuteUser).toHaveBeenCalledTimes(1);
+    });
   });
 });

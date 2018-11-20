@@ -12,6 +12,8 @@ import actorMiddleware from '../../src/middleware/actor-middleware';
 import testData from './io/test-data.json';
 import accessToken from './io/access-token.json';
 import { mockPublish, __messageEvent } from 'pubnub';
+import { REHYDRATE } from 'redux-persist/lib/constants';
+import { promisifyMiddleware } from '../testUtils';
 
 jest.mock('../../src/io/location');
 jest.mock('graphql.js');
@@ -74,46 +76,37 @@ describe('Test delete message', () => {
         role: { label: '' },
       },
     ];
+
+    const middlewareList = [promisifyMiddleware, actorMiddlewareApplied];
     const store = createStore(
       reducer,
       compose(
-        applyMiddleware(actorMiddlewareApplied)
+        applyMiddleware(...middlewareList)
       )
     );
 
-    // await for both stages of starting up application
-    await await store.dispatch({ type: 'INIT' });
+    store.dispatch({ type: REHYDRATE }).then(() => {
+      store.dispatch(addChannel('test', 'test', participants));
+      store.dispatch(changeChannel('test'));
+      store.dispatch(loadHistory(moments, 'test'));
+      store.dispatch(deleteMessage('123456', 'test'));
+      store.dispatch(publishDeleteMessage('123456'));
+      
+      mockFetch.mockResolvedValueOnce(accessToken);
 
-    store.dispatch(
-      addChannel('test', 'test', participants)
-    );
-    store.dispatch(
-      changeChannel('test')
-    );
-    store.dispatch(
-      loadHistory(moments, 'test')
-    );
-    store.dispatch(
-      deleteMessage('123456', 'test')
-    );
-    store.dispatch(
-      publishDeleteMessage('123456')
-    );
-
-    mockFetch.mockResolvedValueOnce(accessToken);
-
-    expect(mockPublish).toHaveBeenCalledTimes(1);
-    expect(mockPublish.mock.calls[0][0]).toEqual(
-      {
-        channel: 'test',
-        message: {
-          action: 'muteMessage',
+      expect(mockPublish).toHaveBeenCalledTimes(1);
+      expect(mockPublish.mock.calls[0][0]).toEqual(
+        {
           channel: 'test',
-          data: message,
-        },
-      }
-    );
-    expect(store.getState().feed.channels.test.moments.length).toEqual(1);
+          message: {
+            action: 'muteMessage',
+            channel: 'test',
+            data: message,
+          },
+        }
+      );
+      expect(store.getState().feed.channels.test.moments.length).toEqual(1);
+    });
   });
 
   test('Receive delete message notification and delete message', () => {

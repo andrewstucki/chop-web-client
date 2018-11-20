@@ -61,10 +61,10 @@ const SideMenu = (
       />
     </a>
     <Button
-      id="logout"
+      buttonId="logout"
       onClick={logout}
       text="Log out"
-      buttonType="default"
+      buttonStyle="secondary"
     />
     <LanguageSelector
       setLanguage={setLanguage}

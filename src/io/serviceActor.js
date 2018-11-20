@@ -10,14 +10,20 @@ import {
   setLanguageOptions,
   REMOVE_CHANNEL,
   setSchedule,
+  setAuthentication,
+  removeAuthentication,
   setScheduleData,
 } from '../feed/dux';
+import { REHYDRATE } from 'redux-persist/lib/constants';
+import { BASIC_AUTH_LOGIN } from '../login/dux';
+import type { BasicAuthLoginType } from '../login/dux';
 import type { RemoveChannelType } from '../feed/dux';
 import { setVideo } from '../videoFeed/dux';
 import {
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   PublishAcceptedPrayerRequestType,
 } from '../moment';
+import { addError } from '../errors/dux';
 import {
   MUTE_USER,
   DIRECT_CHAT,
@@ -39,6 +45,7 @@ class ServiceActor {
   getAuthentication: (variables: any) => any
   cookies: Cookies
   handleDataFetchErrors: (payload: any) => void
+  setCurrentState: (payload: any) => void
   getInitialData: (payload: any) => void
   scheduler: Scheduler
   startTimer: () => void
@@ -56,38 +63,109 @@ class ServiceActor {
     this.handleDataFetchErrors = this._handleDataFetchErrors.bind(this);
     this.startTimer = this._startTimer.bind(this);
     this.checkTime = this._checkTime.bind(this);
+    this.setCurrentState = this._setCurrentState.bind(this);
   }
 
-  getAccessToken () {
-    const token = this.cookies.legacyToken();
-    if (!token) {
-      alert('You have no token. You should get one.');
-      return;
-    }
+  async init () {
+    const { accessToken, refreshToken } = this.getStore().auth;
+    const legacyToken = this.cookies.legacyToken();
     const hostname = this.location.hostname();
-    this.graph.authenticate(token, hostname).then(() => {
-      this.graph.currentState()
-        .then(this.getInitialData, this.handleDataFetchErrors);
+
+    if (accessToken) {
+      await this.initWithAccessToken(accessToken, refreshToken, hostname);
+    } else if (legacyToken) {
+      await this.initWithLegacyToken(legacyToken, hostname);
+    }
+  }
+
+  async initWithAccessToken (accessToken: string, refreshToken:string, hostname:string) {
+    this.graph.setClient(accessToken, hostname);
+    this.setCurrentState().catch(error => {
+      if (refreshToken) {
+        this.getAccessTokenByRefreshToken(refreshToken, hostname);
+      } else {
+        this.storeDispatch(removeAuthentication());
+        this.handleDataFetchErrors(error);
+      }
     });
   }
 
-  _handleDataFetchErrors (payload: any) {
-    // TODO: log these errors better (new-relic?)
-    if (payload.errors) {
+  async initWithLegacyToken (legacyToken:string , hostname: string) {
+    try {
+      const auth = await this.graph.authenticateByLegacyToken(legacyToken, hostname);
+      const { accessToken, refreshToken } = auth.authenticate;
+      this.storeDispatch(setAuthentication(accessToken, refreshToken));
+      this.setCurrentState();
+    } catch (error) {
+      this.storeDispatch(removeAuthentication());
+      this.handleDataFetchErrors(error);
+    }
+  }
+
+  async getAccessTokenByBasicAuth (action:BasicAuthLoginType) {
+    const hostname = this.location.hostname();
+
+    try {
+      const auth = await this.graph.authenticateByBasicAuth(action.email, action.password, hostname);
+      const { accessToken, refreshToken } = auth.authenticate;
+      this.storeDispatch(setAuthentication(accessToken, refreshToken));
+      this.setCurrentState();
+    } catch (error) {
+      this.handleDataFetchErrors(error);
+    }
+  }
+
+  async getAccessTokenByRefreshToken (token: string, hostname: string) {
+    try {
+      const auth = await this.graph.authenticateByRefreshToken(token, hostname);
+      const { accessToken, refreshToken } = auth.authenticate;
+      this.storeDispatch(setAuthentication(accessToken, refreshToken));
+      this.setCurrentState();
+    } catch (error) {
+      this.storeDispatch(removeAuthentication());
+      this.handleDataFetchErrors(error);
+    }
+  }
+
+  async _setCurrentState () {
+    return new Promise((resolve, reject) => {
+      this.graph.currentState().then(data => {
+        this.getInitialData(data);
+        resolve(data);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  _handleDataFetchErrors (payload: any) {  
+    const { errors } = payload.response;
+    if (errors) {
       // eslint-disable-next-line no-console
       console.log('The graphql response returned errors:');
-      for (const err in payload.errors) {
-        const errorMessage = payload.errors[err].message;
-        // eslint-disable-next-line no-console
-        if (payload.errors[err].message) console.log(` - ${errorMessage}`);
+      for (const err in errors) {
+        const { message, extensions } = errors[err];
+        
+        if (message) {
+          this.storeDispatch(addError(message));
+          // eslint-disable-next-line no-console
+          console.log(` - ${message}`);
+        }
+
+        const { code } = extensions;
+        if (code) {
+          switch (code) {
+          case 'UNAUTHORIZED':
+            this.storeDispatch(removeAuthentication());
+            return;
+          }
+        }
       }
     } else {
       // eslint-disable-next-line no-console
       console.log('The graphql response returned' +
         'an error code but no error messages.');
     }
-    // TODO: give a nicer error message to the user
-    alert('It was not possible to get the event information.');
   }
 
   _startTimer () {
@@ -96,7 +174,7 @@ class ServiceActor {
     }
   }
 
-  _checkTime () {
+  async _checkTime () {
     const now = Date.now();
     const { schedule, sequence } = this.getStore();
     if (sequence && sequence.steps && sequence.steps[0]) {
@@ -113,9 +191,13 @@ class ServiceActor {
             steps: [],
           };
           const nextEvent = schedule.shift();
-          this.storeDispatch(setSchedule(schedule));
-          this.graph.sequence(nextEvent.startTime)
-            .then(this.getInitialData, this.handleDataFetchErrors);          
+          this.storeDispatch(setScheduleData(schedule));
+          try {
+            const sequenceResponse = await this.graph.sequence(nextEvent.startTime);
+            this.getInitialData(sequenceResponse);
+          } catch (error) {
+            this.handleDataFetchErrors(error);
+          }
         }
         this.storeDispatch(
           {
@@ -127,15 +209,16 @@ class ServiceActor {
       if (!step.data && step.fetchTime * 1000 <= now) {
         const includeFeed = step.queries.indexOf('feeds') > -1;
         const includeVideo = step.queries.indexOf('video') > -1;
-        this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo)
-          .then(result => {
-            this.storeDispatch(
-              setScheduleData(
-                step.transitionTime,
-                result
-              )
-            );
-          });
+
+        try {
+          const eventAtTime = await this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo);
+          this.storeDispatch(setScheduleData(
+            step.transitionTime,
+            eventAtTime
+          ));
+        } catch (error) {
+          this.handleDataFetchErrors(error);
+        }
       }
     }
   }
@@ -235,8 +318,11 @@ class ServiceActor {
         const nextEvent = schedule.shift();
         this.storeDispatch(setSchedule(schedule));
         if (nextEvent) {
-          this.graph.sequence(nextEvent.startTime)
-            .then(this.getInitialData, this.handleDataFetchErrors);
+          try {
+            this.graph.sequence(nextEvent.startTime).then(this.getInitialData, this.handleDataFetchErrors);
+          } catch (error) {
+            this.handleDataFetchErrors(error);
+          }
         }
       }
         break;
@@ -300,36 +386,48 @@ class ServiceActor {
     });
   }
 
-  publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {
+  async publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {
     const { currentChannel } = this.getStore();
     const { channels } = this.getStore();
     const currentMoments = channels[currentChannel].moments;
     const moment = currentMoments.find(moment => moment.id === action.id);
     const { user, prayerChannel } = moment;
 
-    this.graph.acceptPrayer(prayerChannel, user.pubnubToken)
-      .then(data => {
-        const { name, id, subscribers } = data.acceptPrayer;
-        const participants = convertSubscribersToSharedUsers(subscribers);
-        this.storeDispatch(addChannel(name, id, participants));
-      });
+    try {
+      const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken);
+      const { name, id, subscribers } = data.acceptPrayer;
+      const participants = convertSubscribersToSharedUsers(subscribers);
+      this.storeDispatch(addChannel(name, id, participants));
+    } catch (error) {
+      this.handleDataFetchErrors(error);
+    }
   }
 
-  muteUser (action:MuteUserType) {
-    this.graph.muteUser(action.pubnubToken);
+  async muteUser (action:MuteUserType) {
+    try {
+      await this.graph.muteUser(action.pubnubToken);
+    } catch (error) {
+      this.handleDataFetchErrors(error);
+    }
   }
 
-  directChat (action: any) {
-    this.graph.directChat(action.otherUserPubnubToken).
-      then(data => {
-        const { name, id, subscribers } = data.createDirectFeed;
-        const participants = convertSubscribersToSharedUsers(subscribers);
-        this.storeDispatch(addChannel(name, id, participants));
-      });
+  async directChat (action: any) {
+    try {
+      const directChat = await this.graph.directChat(action.otherUserPubnubToken);
+      const { name, id, subscribers } = directChat.createDirectFeed;
+      const participants = convertSubscribersToSharedUsers(subscribers);
+      this.storeDispatch(addChannel(name, id, participants));
+    } catch (error) {
+      this.handleDataFetchErrors(error);
+    }
   }
 
-  removeChannel (action:RemoveChannelType) {
-    this.graph.leaveChannel(action.channel);
+  async removeChannel (action:RemoveChannelType) {
+    try {
+      await this.graph.leaveChannel(action.channel);
+    } catch (error) {
+      this.handleDataFetchErrors(error);
+    }
   }
 
   dispatch (action: any) {
@@ -337,8 +435,11 @@ class ServiceActor {
       return;
     }
     switch (action.type) {
-    case 'INIT':
-      this.getAccessToken();
+    case REHYDRATE:
+      this.init();
+      return;
+    case BASIC_AUTH_LOGIN:
+      this.getAccessTokenByBasicAuth(action);
       return;
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
       this.publishAcceptedPrayerRequest(action);

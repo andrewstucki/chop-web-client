@@ -30,7 +30,8 @@
       "\\.(css)$": "identity-obj-proxy",
       "\\.(svg)$": "<rootDir>/test/svg-stub.js",
       "Youtube\\.min\\.js$": "<rootDir>/test/fake-js-file.js"
-    }
+    },
+    "testURL": "https://live.life.church"
   },
   "devDependencies": {
     "@alshakero/ez-s": "^0.0.3",
@@ -78,18 +79,25 @@
   "dependencies": {
     "@redux-beacon/google-tag-manager": "^1.0.1",
     "@vimeo/player": "^2.6.5",
+    "babel-polyfill": "^6.26.0",
     "bezier-easing": "^2.1.0",
     "bugsnag-js": "^4.7.3",
     "bugsnag-react": "^1.1.1",
     "chat-engine": "^0.9.5",
+    "graphql-request": "^1.8.2",
     "graphql.js": "^0.4.20",
+    "moment": "^2.22.2",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-gtm-module": "^2.0.2",
     "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
     "react-touch-events": "^2.1.0",
     "redux": "^3.7.2",
     "redux-beacon": "^2.0.3",
+    "redux-persist": "^5.10.0",
+    "redux-persist-transform-expire": "^0.0.2",
+    "redux-persist-transform-filter": "^0.0.18",
     "reselect": "^4.0.0",
     "reset-css": "^3.0.0",
     "video.js": "^7.2.4",
