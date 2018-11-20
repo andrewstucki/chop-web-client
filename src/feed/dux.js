@@ -1075,7 +1075,7 @@ const getOtherUser = (state: FeedType): SharedUserType | null => {
   const currentChannel = state.channels[state.currentChannel];
   if (currentChannel &&
     currentChannel.participants
-    && currentChannel.participants.length === 2
+    && currentChannel.participants.length >= 2
   ) {
     const [ otherUser ] = currentChannel.participants.filter(
       participant => participant.pubnubToken !== state.currentUser.pubnubToken
