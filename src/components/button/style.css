@@ -1,27 +1,69 @@
 @import url('../../../assets/theme.css');
 
+.button {
+  border: 1px solid transparent;
+  border-radius: var(--borderRadius);
+  padding: 8px 16px;
+  height: 40px;
+  outline: none;
+}
+
+.button:hover:not(:disabled) {
+  box-shadow: 0px 2px 6px rgba(45, 45, 46, 0.25);
+}
+
 .icon {
   width: 36px;
   height: 36px;
   color: var(--backgroundColor);
   background: var(--primaryColor);
-  border-radius: var(--borderRadius);
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
 }
+
+.icon:hover {
+  box-shadow: none;
+}
+
 .icon svg {
   width: 16px;
   margin: auto;
 }
 
-.default {
-  height: 36px;
-  padding: 8px 16px;
-  border-radius: 2px;
-  border: solid 1px #d8d8d9;
-  background-color: var(--backgroundColor);
-  color: var(--textColor);
+.primary {
+  background-color: var(--primaryColor);
+  color: white;
+}
+
+.primary:hover {
+  background-color: #2EA4FF;
+}
+
+.primary:active {
+  background-color: #2583CC;
+}
+
+.primary:focus {
+  outline: 1px solid var(--primaryColor);
+  border: 1px solid white;
+}
+
+.primary:disabled {
+  background-color: #ECECEC;
+  color: var(--disabledTextColor);
+}
+
+.secondary {
+  background-color: white;
+  border-color: #C6C6C6;
+  color: var(--primaryColor);
+}
+
+.tertiary {
+  background-color: var(--tertiaryColor);
+  border-color: #666667;
+  color: white;
 }

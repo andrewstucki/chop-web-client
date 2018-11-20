@@ -4,41 +4,49 @@ import React from 'react';
 import styles from './style.css';
 
 type ButtonType = {
+  buttonId?: string,
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  buttonStyle: 'primary' | 'secondary' | 'tertiary' | 'icon',
   text?: string,
   image?: any,
-  buttonType?: string,
+  disabled?: boolean
 };
 
 const Button =
 (
   {
+    buttonId,
     onClick,
     text,
     image,
-    buttonType,
+    buttonStyle,
+    disabled,
   }: ButtonType
 ) => {
-  const style = styles[buttonType];
-  if (image) {
+  const style = `${styles.button} ${styles[buttonStyle]}`;
+  if (buttonStyle === 'icon') {
     return (
       <button
-        id="chat-button"
+        id={buttonId}
         className={style}
         onClick={onClick}
         onTouchStart={onClick}
         dangerouslySetInnerHTML={{ __html: image }}
+        disabled={disabled}
       />
     );
+  } else {
+    return (
+      <button
+        id={buttonId}
+        className={style}
+        onClick={onClick}
+        disabled={disabled}
+      >
+        {text}
+      </button>
+    );
   }
-  return (
-    <button
-      className={style}
-      onClick={onClick}
-    >
-      {text}
-    </button>
-  );
 };
 
 export default Button;

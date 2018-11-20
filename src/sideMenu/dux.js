@@ -30,7 +30,7 @@ const openMenu = (): OpenMenuType => (
 );
 
 const logout = (): void => 
-  global.location.assign('https://live.life.church/sessions/sign_out');
+  global.location.assign(`${global.location.origin}/sessions/sign_out`);
 
 // Exports
 

@@ -13,14 +13,14 @@ type MessageTrayPropsType = {
 };
 
 const trayButton = (
-  buttonType: string,
+  buttonStyle: string,
   imageType: string,
   image,
   text: string,
   onClick,
 ) => (
   <button
-    className={buttonType}
+    className={buttonStyle}
     onClick={onClick}
   >
     <span

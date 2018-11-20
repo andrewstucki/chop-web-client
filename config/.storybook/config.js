@@ -14,6 +14,7 @@ function loadStories() {
   require('../../stories/feedActionBanner.jsx');
   require('../../stories/placeholder.jsx');
   require('../../stories/reactionButton.jsx');
+  //require('../../stories/errors.jsx');
 }
 
 configure(loadStories, module);

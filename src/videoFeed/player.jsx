@@ -2,6 +2,7 @@
 import React from 'react';
 import videojs from 'video.js';
 import '../../lib/Vimeo.js';
+import '../../lib/wistia.js';
 import 'videojs-youtube/dist/Youtube.min.js';
 // $FlowFixMe
 import '!style-loader!css-loader!video.js/dist/video-js.css';
@@ -34,9 +35,16 @@ class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
 
   render () {
     const { url } = this.props;
-    const type = url.indexOf('youtube') > -1 ? 'video/youtube' : 'video/vimeo';
+
+    let type = 'video/youtube';
+    if (url.indexOf('vimeo') > -1) {
+      type = 'video/vimeo';
+    } else if (url.indexOf('wistia') > -1) {
+      type = 'video/wistia';
+    }
+
     const setup = {
-      techOrder: ['youtube', 'Vimeo'],
+      techOrder: ['youtube', 'Vimeo', 'wistia'],
       autoplay: 'any',
       vimeo: {
         color: '#fbc51b',

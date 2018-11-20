@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
+const path = require('path');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -21,6 +22,13 @@ module.exports = merge(common, {
     allowedHosts: [
       '.local',
     ],
-    contentBase: './dist'
+    contentBase: './dist',
+    historyApiFallback: true,
+    compress: true
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/'
   }
 });

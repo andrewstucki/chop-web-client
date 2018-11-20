@@ -15,7 +15,8 @@ import actorMiddleware from '../../src/middleware/actor-middleware';
 import testData from './io/test-data.json';
 import accessToken from './io/access-token.json';
 import { mockPublish, mockUnsubscribe, __messageEvent } from 'pubnub';
-import { mockDate } from '../testUtils';
+import { mockDate, promisifyMiddleware } from '../testUtils';
+import { REHYDRATE } from 'redux-persist/lib/constants';
 
 jest.mock('../../src/io/location');
 jest.mock('graphql.js');
@@ -57,48 +58,50 @@ describe('Test leave channel', () => {
         role: { label: '' },
       },
     ];
+
+    const middlewareList = [promisifyMiddleware, actorMiddlewareApplied];
     const store = createStore(
       reducer,
       compose(
-        applyMiddleware(actorMiddlewareApplied)
+        applyMiddleware(...middlewareList)
       )
     );
 
     // await for both stages of starting up application
-    await await store.dispatch({ type: 'INIT' });
+    store.dispatch({ type: REHYDRATE }).then(() => {
+      store.dispatch(
+        addChannel('test', 'test', participants)
+      );
+      store.dispatch(
+        changeChannel('test')
+      );
+      store.dispatch(
+        togglePopUpModal()
+      );
 
-    store.dispatch(
-      addChannel('test', 'test', participants)
-    );
-    store.dispatch(
-      changeChannel('test')
-    );
-    store.dispatch(
-      togglePopUpModal()
-    );
+      mockFetch.mockResolvedValueOnce(accessToken);
 
-    mockFetch.mockResolvedValueOnce(accessToken);
+      const wrapper = Enzyme.mount(
+        <Provider store={store}>
+          <div>
+            <PopUpModal />
+          </div>
+        </Provider>
+      );
 
-    const wrapper = Enzyme.mount(
-      <Provider store={store}>
-        <div>
-          <PopUpModal />
-        </div>
-      </Provider>
-    );
-
-    wrapper.find('button').at(1).simulate('click');
-    expect(mockPublish).toHaveBeenCalledTimes(1);
-    expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
-    expect(mockUnsubscribe).toHaveBeenCalledWith(
-      {
-        channels: ['test'],
-      }
-    );
-    expect(Object.keys(store.getState().feed.channels).length).toEqual(4);
-    expect(store.getState().feed.currentChannel).toEqual('1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c');
-    expect(mockLeaveChannel).toHaveBeenCalledTimes(1);
-    expect(mockLeaveChannel).toHaveBeenCalledWith('test');
+      wrapper.find('button').at(1).simulate('click');
+      expect(mockPublish).toHaveBeenCalledTimes(1);
+      expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(mockUnsubscribe).toHaveBeenCalledWith(
+        {
+          channels: ['test'],
+        }
+      );
+      expect(Object.keys(store.getState().feed.channels).length).toEqual(4);
+      expect(store.getState().feed.currentChannel).toEqual('1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c');
+      expect(mockLeaveChannel).toHaveBeenCalledTimes(1);
+      expect(mockLeaveChannel).toHaveBeenCalledWith('test');
+    });
   });
 
   test('Receive leave channel and publish notification', () => {
