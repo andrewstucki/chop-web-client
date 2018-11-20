@@ -5,7 +5,8 @@
   --backgroundColor:   #ffffff;
   --textColor:         #404041;
   --disabledTextColor: #9f9fa0;
-  --dangerTextColor: #dd3131;
+  --dangerTextColor:   #dd3131;
+  --tertiaryColor:       #404041;
   --borderRadius:      24px;
 
   /* Animation */

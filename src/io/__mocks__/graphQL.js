@@ -34,6 +34,9 @@ const mockGetSequence = jest.fn();
 const mockGraphQl = jest.fn().mockImplementation(() => (
   {
     authenticate: mockAuthenticate,
+    authenticateByLegacyToken: mockAuthenticate,
+    authenticateByBasicAuth: mockAuthenticate,
+    authenticatedByRefreshToken: mockAuthenticate,
     currentState: mockCurrentState,
     acceptPrayer: mockAcceptPrayer,
     muteUser: mockMuteUser,

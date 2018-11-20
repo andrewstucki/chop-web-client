@@ -7,7 +7,7 @@ describe('Tag Manager Middleware', () => {
   test('Init Event Definition loads GTM script', () => {
     expect.assertions(2);
 
-    global.GTM = {};
+    global.GTM = {gtmId: 'XXXXXXX'};
     initEventDefinition();
 
     expect(window.dataLayer).toBeTruthy();

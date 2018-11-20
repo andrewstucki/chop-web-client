@@ -89,6 +89,7 @@ const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => 
 
 const capitalizeFirstLetter = (string: string) => 
   (string.charAt(0).toUpperCase() + string.slice(1));
+
 const objectFilter = (obj, predicate) => {
   const result = {};
   Object.keys(obj).forEach(key => {
@@ -98,6 +99,9 @@ const objectFilter = (obj, predicate) => {
   });
   return result;
 };
+
+const isEmpty = (string: string) =>
+  (!string || string.length === 0);
 
 export {
   getFirstInitial,
@@ -112,4 +116,5 @@ export {
   convertSubscribersToSharedUsers,
   capitalizeFirstLetter,
   objectFilter,
+  isEmpty,
 };

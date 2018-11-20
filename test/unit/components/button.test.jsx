@@ -10,9 +10,10 @@ Enzyme.configure({ adapter: new Adapter() });
 test('Button has correct text', () => {
   const wrapper = Enzyme.shallow(
     <Button
+      buttonId="login"
+      onClick={() => {}}
       text="Maranatha"
-      onClick={function () {}}
-      buttonType="default"
+      buttonStyle="primary"
     />
   );
   expect(wrapper.text()).toEqual('Maranatha');
@@ -24,7 +25,7 @@ test('Button clickable', () => {
     <Button
       text="Love"
       onClick={onButtonClick}
-      buttonType="default"
+      buttonStyle="primary"
     />);
   wrapper.find('button').simulate('click');
   expect(onButtonClick.calledOnce).toEqual(true);
@@ -35,11 +36,11 @@ test('Button default type', () => {
     <Button
       text="Click Me"
       onClick={function () {}}
-      buttonType="default"
+      buttonStyle="primary"
     />
   );
   expect(wrapper.find('button').props().className)
-    .toEqual('default');
+    .toEqual('button primary');
 });
 
 test('Button icon type', () => {
@@ -47,9 +48,9 @@ test('Button icon type', () => {
     <Button
       text="Click Me"
       onClick={function () {}}
-      buttonType="icon"
+      buttonStyle="icon"
     />
   );
   expect(wrapper.find('button').props().className)
-    .toEqual('icon');
+    .toEqual('button icon');
 });

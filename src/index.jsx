@@ -2,8 +2,21 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import { createWhitelistFilter } from 'redux-persist-transform-filter';
+import createExpirationTransform from 'redux-persist-transform-expire';
+import { defaultState } from './feed/dux';
+import storage from 'redux-persist/lib/storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import Chop from './chop';
+import Login from './login';
 import reducer from './chop/dux';
 import actorMiddleware from './middleware/actor-middleware';
 import ChatActor from './io/chat';
@@ -13,6 +26,8 @@ import bugsnag from 'bugsnag-js';
 import createPlugin from 'bugsnag-react';
 
 declare var ENV:string;
+window.dataLayer = window.dataLayer || [];
+
 const bugsnagClient = bugsnag({
   apiKey: '2403ac729529750d296e1e4ee022f7dc',
   releaseStage: ENV,
@@ -28,23 +43,45 @@ const actorMiddlewareApplied = actorMiddleware(
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middlewareList = [actorMiddlewareApplied, tagManagerMiddleware];
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  stateReconciler: autoMergeLevel2,
+  transforms: [
+    createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt']),
+    createExpirationTransform({
+      defaultState,
+    }),
+  ],
+};
+
+const persistedReducer = persistReducer(persistConfig, reducer);
+
 const store = createStore(
-  reducer,
+  persistedReducer,
   composeEnhancers(
     applyMiddleware(...middlewareList)
   )
 );
 
-store.dispatch({ type: 'INIT' });
+const persistor = persistStore(store);
 
 const content = document.getElementById('content');
 
 if (content) {
   ReactDOM.render(
     <Provider store={store}>
-      <ErrorBoundary>
-        <Chop />
-      </ErrorBoundary>
+      <PersistGate loading={null} persistor={persistor}>
+        <ErrorBoundary>
+          <Router>
+            <Switch>
+              <Route exact path='/' component={Chop}/>
+              <Route exact path='/login' component={Login}/>
+            </Switch>
+          </Router>
+        </ErrorBoundary>
+      </PersistGate>
     </Provider>,
     content);
 }

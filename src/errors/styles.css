@@ -1,0 +1,9 @@
+@import url('../../assets/theme.css');
+
+.errors {
+  margin: 1rem 0;
+}
+
+.errors p {
+  color: var(--dangerTextColor);
+}
