@@ -8,6 +8,7 @@ const mapStateToProps = state => {
   return {
     isVideoHidden: feedState.isVideoHidden,
     url: feedState.video.url,
+    useIframe: feedState.video.type === 'live',
   };
 };
 

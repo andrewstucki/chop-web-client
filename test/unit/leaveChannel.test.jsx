@@ -89,16 +89,6 @@ describe('Test leave channel', () => {
 
     wrapper.find('button').at(1).simulate('click');
     expect(mockPublish).toHaveBeenCalledTimes(1);
-    // expect(mockPublish.mock.calls[0][0]).toEqual(
-    //   {
-    //     channel: 'test',
-    //     message: {
-    //       action: 'newMessage',
-    //       channel: 'test',
-    //       data: message,
-    //     },
-    //   }
-    // );
     expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
     expect(mockUnsubscribe).toHaveBeenCalledWith(
       {

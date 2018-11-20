@@ -2,6 +2,7 @@
 import React from 'react';
 import videojs from 'video.js';
 import '../../lib/Vimeo.js';
+import 'videojs-youtube/dist/Youtube.min.js';
 // $FlowFixMe
 import '!style-loader!css-loader!video.js/dist/video-js.css';
 
@@ -10,8 +11,8 @@ type YouTubePlayerPropsType = {
 };
 
 class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
-  videoNode: HTMLVideoElement | null
-  player: any
+  videoNode: HTMLVideoElement | null;
+  player: any;
 
   componentDidMount () {
     if (this.props.url !== '') {
@@ -32,8 +33,10 @@ class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
   }
 
   render () {
+    const { url } = this.props;
+    const type = url.indexOf('youtube') > -1 ? 'video/youtube' : 'video/vimeo';
     const setup = {
-      techOrder: ['Vimeo'],
+      techOrder: ['youtube', 'Vimeo'],
       autoplay: 'any',
       vimeo: {
         color: '#fbc51b',
@@ -41,8 +44,8 @@ class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
       fluid: true,
       sources: [
         {
-          type: 'video/vimeo',
-          src: this.props.url,
+          type: type,
+          src: url,
         },
       ],
     };
