@@ -90,7 +90,7 @@ const Converter = {
   legacyToCwc: (message: any) => (
     {
       type: 'MESSAGE',
-      id: message.msgId,
+      id: message.uniqueMessageToken,
       lang: message.language,
       text: message.messageText,
       translations: message.translations,
