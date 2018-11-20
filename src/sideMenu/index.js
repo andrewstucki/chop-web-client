@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { closeMenu, logout } from './dux';
 import { setLanguage } from '../languageSelector/dux';
 import SideMenu from './sideMenu';
+import { removeAuthentication } from '../feed/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
@@ -16,7 +17,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => (
   {
     close: () => dispatch(closeMenu()),
-    logout: () => logout(),
+    logout: () => {
+      dispatch(removeAuthentication());
+      logout();
+    },
     onSwipe: direction => {
       if (direction === 'left') return dispatch(closeMenu());
     },

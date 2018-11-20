@@ -1,4 +1,4 @@
-import { mockDate } from '../../testUtils';
+import { mockDate, promisifyMiddleware } from '../../testUtils';
 import data from '../../mockData/scheduleTestData.json';
 import actorMiddleware from '../../../src/middleware/actor-middleware';
 import { createStore, applyMiddleware } from 'redux';
@@ -11,6 +11,7 @@ import {
 } from '../../../src/io/graphQL';
 import reducer from '../../../src/chop/dux';
 import { defaultState } from '../../../src/feed/dux';
+import { REHYDRATE } from 'redux-persist/lib/constants';
 
 jest.mock('../../../src/io/graphQL');
 
@@ -36,182 +37,183 @@ describe('Service Run through', () => {
     mockGetSequence.mockResolvedValueOnce(data.sequenceNum2);
     
     const actors = actorMiddleware(serviceActor);
+    const middlewareList = [promisifyMiddleware, actors];
     const store = createStore(
       reducer,
-      applyMiddleware(actors)
+      applyMiddleware(...middlewareList)
     );
 
-    await await store.dispatch({type: 'INIT'});
+    store.dispatch({type: REHYDRATE}).then( async () => {
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+        }
+      );
 
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-      }
-    );
+      await true; // an expression is required for the await statement
+      
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+          ...phase2,
+        }
+      );
 
-    await true; // an expression is required for the await statement
-    
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-        ...phase2,
-      }
-    );
+      fastForwardTime(73);
+      await fastForwardTime(1);
 
-    fastForwardTime(73);
-    await fastForwardTime(1);
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+          ...phase3,
+        }
+      );
 
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-        ...phase3,
-      }
-    );
+      fastForwardTime(125);
+      await fastForwardTime(1);
 
-    fastForwardTime(125);
-    await fastForwardTime(1);
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+          ...phase4,
+        }
+      );
 
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-        ...phase4,
-      }
-    );
+      fastForwardTime(233);
+      await fastForwardTime(1);
 
-    fastForwardTime(233);
-    await fastForwardTime(1);
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+          ...phase4,
+          ...phase5,
+        }
+      );
 
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-        ...phase4,
-        ...phase5,
-      }
-    );
+      fastForwardTime(65);
+      await fastForwardTime(1);
 
-    fastForwardTime(65);
-    await fastForwardTime(1);
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+          ...phase4,
+          sequence: {
+            serverTime: 1542322000,
+            steps: [
+              {
+                fetchTime: 1542323594,
+                queries: [
+                  'event',
+                  'video',
+                  'feeds',
+                ],
+                transitionTime: 1542323700,
+              },
+            ],
+          },
+          video: {
+            type: 'simulated',
+            url: 'https://www.youtube.com/embed/M9SLpXu5Xik',
+          },
+        }
+      );
 
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-        ...phase4,
-        sequence: {
-          serverTime: 1542322000,
-          steps: [
-            {
-              fetchTime: 1542323594,
-              queries: [
-                'event',
-                'video',
-                'feeds',
-              ],
-              transitionTime: 1542323700,
-            },
-          ],
-        },
-        video: {
-          type: 'simulated',
-          url: 'https://www.youtube.com/embed/M9SLpXu5Xik',
-        },
-      }
-    );
+      fastForwardTime(1093);
+      await fastForwardTime(1);
 
-    fastForwardTime(1093);
-    await fastForwardTime(1);
-
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-        ...phase4,
-        sequence: {
-          serverTime: 1542322000,
-          steps: [
-            {
-              fetchTime: 1542323594,
-              queries: [
-                'event',
-                'video',
-                'feeds',
-              ],
-              transitionTime: 1542323700,
-              data: {
-                eventAt: {
-                  description: null,
-                  duration: null,
-                  endTime: null,
-                  eventTime: {
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+          ...phase4,
+          sequence: {
+            serverTime: 1542322000,
+            steps: [
+              {
+                fetchTime: 1542323594,
+                queries: [
+                  'event',
+                  'video',
+                  'feeds',
+                ],
+                transitionTime: 1542323700,
+                data: {
+                  eventAt: {
+                    description: null,
+                    duration: null,
+                    endTime: null,
+                    eventTime: {
+                      id: null,
+                    },
+                    feeds: [],
                     id: null,
+                    sequence: {
+                      serverTime: 1542321767,
+                      steps: [],
+                    },
+                    speaker: null,
+                    startTime: null,
+                    title: null,
+                    video: null,
+                    videoType: null,
                   },
-                  feeds: [],
-                  id: null,
-                  sequence: {
-                    serverTime: 1542321767,
-                    steps: [],
-                  },
-                  speaker: null,
-                  startTime: null,
-                  title: null,
-                  video: null,
-                  videoType: null,
                 },
               },
-            },
-          ],
-        },
-        video: {
-          type: 'simulated',
-          url: 'https://www.youtube.com/embed/M9SLpXu5Xik',
-        },
-      }
-    );
+            ],
+          },
+          video: {
+            type: 'simulated',
+            url: 'https://www.youtube.com/embed/M9SLpXu5Xik',
+          },
+        }
+      );
 
-    fastForwardTime(105);
-    await await fastForwardTime(1);
+      fastForwardTime(105);
+      await await fastForwardTime(1);
 
-    expect(store.getState().feed).toEqual(
-      {
-        ...defaultState,
-        ...phase1,
-        schedule: [],
-        sequence: {
-          serverTime: 1542323244,
-          steps: [
-            {
-              fetchTime: 1542323864,
-              queries: [
-                'feeds',
-                'event',
-              ],
-              transitionTime: 1542324000,
-            },
-            {
-              fetchTime: 1542324218,
-              queries: [
-                'video',
-              ],
-              transitionTime: 1542324300,
-            },
-            {
-              fetchTime: 1542325455,
-              queries: [
-                'event',
-                'video',
-                'feeds',
-              ],
-              transitionTime: 1542325500,
-            },
-          ],
-        },
-      }
-    );
+      expect(store.getState().feed).toEqual(
+        {
+          ...defaultState,
+          ...phase1,
+          schedule: [],
+          sequence: {
+            serverTime: 1542323244,
+            steps: [
+              {
+                fetchTime: 1542323864,
+                queries: [
+                  'feeds',
+                  'event',
+                ],
+                transitionTime: 1542324000,
+              },
+              {
+                fetchTime: 1542324218,
+                queries: [
+                  'video',
+                ],
+                transitionTime: 1542324300,
+              },
+              {
+                fetchTime: 1542325455,
+                queries: [
+                  'event',
+                  'video',
+                  'feeds',
+                ],
+                transitionTime: 1542325500,
+              },
+            ],
+          },
+        }
+      );
+    });
   });
 });
 

@@ -1,11 +1,21 @@
-import graphqlJs from './graphQLlib.js';
+import { GraphQLClient } from 'graphql-request';
 
 declare var GATEWAY_HOST:string;
 
+type AuthenticateType = {
+  type: 'LegacyAuth' | 'BasicAuth' | 'Refresh',
+  hostname: string,
+  legacyToken?: string,
+  refreshToken?: string,
+  email?: string,
+  password?: string
+}
+
 const accessToken = `
-mutation AccessToken($token: String!) {
-  authenticate(type: "LegacyAuth", legacyToken: $token) {
+mutation AccessToken($type: String!, $email: String, $password: String, $legacyToken: String, $refreshToken: String) {
+  authenticate(type: $type, email: $email, password: $password, legacyToken: $legacyToken, refreshToken: $refreshToken) {
     accessToken
+    refreshToken
   }
 }
 `;
@@ -165,41 +175,68 @@ const currentState = `
 }`;
 
 export default class GraphQl {
-  request: (query: string, variables: any) => Promise<any>
+  client: GraphQLClient
 
-  authenticate (token: string, hostname: string): Promise<void> {
-    return new Promise(resolve => {
-      const auth = graphqlJs(GATEWAY_HOST, {
-        method: 'POST',
-        headers: {
-          'Application-Domain': hostname,
-        },
-      });
-      auth(
-        accessToken,
-        {
-          token,
-        }
-      )
-        .then(payload => {
-          this.request = graphqlJs(GATEWAY_HOST, {
-            method: 'POST',
-            headers: {
-              Authorization: 'Bearer ' + payload.authenticate.accessToken,
-              'Application-Domain': hostname,
-            },
-          });
-          resolve();
-        });
+  async authenticate ({type, hostname, legacyToken, refreshToken, email, password}:AuthenticateType): Promise<void> {
+    const client = new GraphQLClient(GATEWAY_HOST, {
+      headers: {
+        'Application-Domain': hostname,
+      },
+    });
+
+    const data = await client.request(accessToken, {
+      type,
+      legacyToken,
+      refreshToken,
+      email,
+      password,
+    });
+
+    this.setClient(data.authenticate.accessToken, hostname);
+
+    return data;
+  }
+
+  setClient (accessToken:string, hostname:string) {
+    this.client = new GraphQLClient(GATEWAY_HOST, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Application-Domain': hostname,
+      },
     });
   }
 
-  currentState (): Promise<any> {
-    return this.request.run(currentState);
+  async authenticateByLegacyToken (legacyToken: string, hostname: string): Promise<void> {
+    return await this.authenticate({
+      type: 'LegacyAuth',
+      hostname,
+      legacyToken,
+    });
   }
 
-  acceptPrayer (channelId: string, requesterPubnubToken: string): Promise<any> {
-    return this.request(
+  async authenticateByBasicAuth (email: string, password: string, hostname: string): Promise<void> {
+    return await this.authenticate({
+      type: 'BasicAuth',
+      hostname,
+      email,
+      password,
+    });
+  }
+
+  async authenticateByRefreshToken (refreshToken: string, hostname: string): Promise<void> {
+    return await this.authenticate({
+      type: 'Refresh',
+      hostname,
+      refreshToken,
+    });
+  }
+
+  async currentState (): Promise<any> {
+    return await this.client.request(currentState);
+  }
+
+  async acceptPrayer (channelId: string, requesterPubnubToken: string): Promise<any> {
+    return await this.client.request(
       acceptPrayer,
       {
         feedToken: channelId,
@@ -208,8 +245,8 @@ export default class GraphQl {
     );
   }
 
-  muteUser (pubnubToken: string) {
-    return this.request(
+  async muteUser (pubnubToken: string) {
+    return await this.client.request(
       muteUser,
       {
         pubnubToken,
@@ -217,8 +254,8 @@ export default class GraphQl {
     );
   }
 
-  directChat (pubnubToken: string) {
-    return this.request(
+  async directChat (pubnubToken: string) {
+    return await this.client.request(
       createDirectFeed,
       {
         pubnubToken,
@@ -226,8 +263,8 @@ export default class GraphQl {
     );
   }
 
-  leaveChannel (channelId: string) {
-    return this.request(
+  async leaveChannel (channelId: string) {
+    return await this.client.request(
       leaveChannel,
       {
         feedToken: channelId,
@@ -235,12 +272,12 @@ export default class GraphQl {
     );
   }
 
-  schedule () {
-    return this.request.run(schedule);
+  async schedule () {
+    return await this.client.request(schedule);
   }
 
-  eventAtTime (time, includeFeed, includeVideo) {
-    return this.request(
+  async eventAtTime (time, includeFeed, includeVideo) {
+    return await this.client.request(
       eventAt,
       {
         time,
@@ -250,8 +287,8 @@ export default class GraphQl {
     );
   }
 
-  sequence (time) {
-    return this.request(
+  async sequence (time) {
+    return await this.client.request(
       sequence,
       {
         time,

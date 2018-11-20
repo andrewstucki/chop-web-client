@@ -55,6 +55,10 @@ import type { BannerType } from '../banner/dux';
 import { SET_LANGUAGE } from '../languageSelector/dux';
 import { getPublicChannel } from '../selectors/channelSelectors';
 
+import { ADD_ERROR, REMOVE_ERROR } from '../errors/dux';
+import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
+import moment from 'moment';
+
 // Action Types
 
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
@@ -74,6 +78,8 @@ const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const LOAD_HISTORY = 'LOAD_HISTORY';
 const SET_SCHEDULE = 'SET_SCHEDULE';
+const SET_AUTHENTICATION = 'SET_AUTHENTICATION';
+const REMOVE_AUTHENTICATION = 'REMOVE_AUTHENTICATION';
 const CLEAR_NOTIFICATION_BANNER = 'CLEAR_NOTIFICATION_BANNER';
 const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
 const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
@@ -203,8 +209,11 @@ type FeedType = {
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
   reactions: Array<ReactionType>,
+  errors: Array<ErrorType>,
   notificationBanner: BannerType,
   sequence: any,
+  isAuthenticated: boolean,
+  auth: AuthenticationType
 };
 
 type ChangeChannelType = {
@@ -284,6 +293,19 @@ type RemoveHereNowType = {
   channel: string,
 };
 
+type AuthenticationType = {
+  accessToken: string,
+  refreshToken: string
+}
+
+type SetAuthenticationType = {
+  type: 'SET_AUTHENTICATION',
+  auth: AuthenticationType
+};
+
+type RemoveAuthenticationType = {
+  type: 'REMOVE_AUTHENTICATION',
+}
 type ClearNotificationBannerType = {
   type: 'CLEAR_NOTIFICATION_BANNER',
 }
@@ -319,9 +341,28 @@ type FeedActionTypes =
   | SetScheduleType
   | UpdateHereNowType
   | RemoveHereNowType
+  | SetAuthenticationType
+  | RemoveAuthenticationType
+  | AddErrorType
+  | RemoveErrorType
   | SetScheduleDataType;
 
 // Action Creators
+const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
+  {
+    type: SET_AUTHENTICATION,
+    auth: {
+      accessToken,
+      refreshToken,
+    },
+  }
+);
+
+const removeAuthentication = (): RemoveAuthenticationType => (
+  {
+    type: REMOVE_AUTHENTICATION,
+  }
+);
 
 const updateHereNow = (userToken: string, channel: string, state: UserState): UpdateHereNowType => (
   {
@@ -532,6 +573,7 @@ const defaultState = {
   isSideMenuClosed: true,
   isVideoHidden: false,
   isLanguageSelectorVisible: false,
+  isAuthenticated: false,
   video: {
     type: '',
     url: '',
@@ -575,6 +617,12 @@ const defaultState = {
   sequence: {
     steps: [],
   },
+  errors: [],
+  auth: {
+    accessToken: '',
+    refreshToken: '',
+  },
+  persistExpiresAt: moment().add(1, 'months').format(),
 };
 
 // Reducer
@@ -656,6 +704,24 @@ const reducer = (
     return {
       ...state,
       schedule: action.schedule,
+    };
+  case SET_AUTHENTICATION:
+    return {
+      ...state,
+      auth: {
+        accessToken: action.auth.accessToken,
+        refreshToken: action.auth.refreshToken,
+      },
+      isAuthenticated: true,
+    };
+  case REMOVE_AUTHENTICATION:
+    return {
+      ...state,
+      auth: {
+        accessToken: '',
+        refreshToken: '',
+      },
+      isAuthenticated: false,
     };
   case CHANGE_CHANNEL:
     if (!state.channels[action.channel]) {
@@ -1008,6 +1074,17 @@ const reducer = (
       // $FlowFixMe
       reactions: state.reactions.filter(reaction => reaction.id !== action.id),
     };
+  case ADD_ERROR:
+    return {
+      ...state,
+      errors: [...state.errors, action.error],
+    };
+  case REMOVE_ERROR:
+    return {
+      ...state,
+      // $FlowFixMe
+      errors: state.errors.filter(error => error.id !== action.id),
+    };
   case SET_NOTIFICATION_BANNER:
     return {
       ...state,
@@ -1129,6 +1206,8 @@ export {
   setScheduleData,
   updateHereNow,
   removeHereNow,
+  setAuthentication,
+  removeAuthentication,
 };
 export type {
   AddChannelType,

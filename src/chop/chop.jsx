@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { Redirect } from 'react-router-dom';
 
 import Banner from '../banner';
 import Chat from '../chat';
@@ -28,23 +29,29 @@ class ChopContainer extends React.Component<any> {
       }
     }
 
-    return (
-      <div id="wrapper" className={wrapperstyle}>
-        <SideMenu />
-        <div className={styles.chop}>
-          <PopUpModal />
-          <Banner />
-          <NavBar />
-          <VideoFeed />
-          <Feed />
-          <Placeholder />
-          <div className={styles.inputs}>
-            <Chat />
-            <ReactionsContainer />
+    if (this.props.authenticated) {
+      return (
+        <div id="wrapper" className={wrapperstyle}>
+          <SideMenu />
+          <div className={styles.chop}>
+            <PopUpModal />
+            <Banner />
+            <NavBar />
+            <VideoFeed />
+            <Feed />
+            <Placeholder />
+            <div className={styles.inputs}>
+              <Chat />
+              <ReactionsContainer />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <Redirect to='/login'/>
+      );
+    }
   }
 }
 
