@@ -16,7 +16,11 @@ import type {
   ReactionType,
 } from '../reactions/reactionButton/dux';
 
-import type { AnchorMomentType } from '../placeholder/anchorMoment/dux';
+import type { 
+  AnchorMomentType,
+  PublishSalvationType,
+  ReleaseAnchorMomentType,
+} from '../anchorMoment/dux';
 
 import { objectFilter } from '../util';
 
@@ -48,7 +52,7 @@ import type { SetVideoType, VideoType } from '../videoFeed/dux';
 import {
   RELEASE_ANCHOR_MOMENT,
   SET_ANCHOR_MOMENT,
-} from '../placeholder/anchorMoment/dux';
+} from '../anchorMoment/dux';
 
 import type { BannerType } from '../banner/dux';
 
@@ -84,6 +88,7 @@ const CLEAR_NOTIFICATION_BANNER = 'CLEAR_NOTIFICATION_BANNER';
 const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
 const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
+const SET_SALVATIONS = 'SET_SALVATIONS';
 const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 
 // Flow Type Definitions
@@ -176,6 +181,7 @@ type ChannelType = {
   name: string,
   moments: Array<MomentType>,
   participants?: Array<SharedUserType>,
+  anchorMoments: Array<AnchorMomentType>,
 };
 
 type HereNowChannels = {
@@ -198,8 +204,7 @@ type FeedType = {
   hereNow: HereNowChannels,
   currentChannel: string,
   currentUser: PrivateUserType,
-  anchorMoment: AnchorMomentType | null,
-  isPlaceholderPresent: boolean,
+  animatingMoment: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
   isSideMenuClosed: boolean,
@@ -209,6 +214,7 @@ type FeedType = {
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
   reactions: Array<ReactionType>,
+  salvations: number,
   errors: Array<ErrorType>,
   notificationBanner: BannerType,
   sequence: any,
@@ -293,6 +299,11 @@ type RemoveHereNowType = {
   channel: string,
 };
 
+type SetSalvationsType = {
+  type: 'SET_SALVATIONS',
+  count: number,
+};
+
 type AuthenticationType = {
   accessToken: string,
   refreshToken: string
@@ -308,13 +319,13 @@ type RemoveAuthenticationType = {
 }
 type ClearNotificationBannerType = {
   type: 'CLEAR_NOTIFICATION_BANNER',
-}
+};
 
 type SetNotificationBannerType = {
   type: 'SET_NOTIFICATION_BANNER',
   message: string,
   bannerType: string,
-}
+};
 
 type FeedActionTypes =
   | ChangeChannelType
@@ -340,6 +351,9 @@ type FeedActionTypes =
   | PublishLeaveChannelType
   | SetScheduleType
   | UpdateHereNowType
+  | PublishSalvationType
+  | ReleaseAnchorMomentType
+  | SetSalvationsType
   | RemoveHereNowType
   | SetAuthenticationType
   | RemoveAuthenticationType
@@ -482,6 +496,7 @@ const addChannel = (
       name,
       moments: [],
       participants,
+      anchorMoments: [],
     },
   }
 );
@@ -512,6 +527,13 @@ const loadHistory = (moments: MomentType, channel: string): LoadHistoryType => (
     type: LOAD_HISTORY,
     channel,
     moments,
+  }
+);
+
+const setSalvations = (count:number): SetSalvationsType => (
+  {
+    type: SET_SALVATIONS,
+    count,
   }
 );
 
@@ -566,8 +588,7 @@ const defaultState = {
       permissions: [],
     },
   },
-  anchorMoment: null,
-  isPlaceholderPresent: false,
+  animatingMoment: true,
   isPopUpModalVisible: false,
   isChatFocused: false,
   isSideMenuClosed: true,
@@ -617,6 +638,7 @@ const defaultState = {
   sequence: {
     steps: [],
   },
+  salvations: 0,
   errors: [],
   auth: {
     accessToken: '',
@@ -968,33 +990,54 @@ const reducer = (
       },
     };
   }
-  case SET_ANCHOR_MOMENT:
+  case SET_ANCHOR_MOMENT: {
+    const { channel, anchorMoment } = action;
     return {
       ...state,
-      isPlaceholderPresent: true,
-      anchorMoment: action.anchorMoment,
+      channels: {
+        ...state.channels,
+        [channel]: {
+          ...state.channels[channel],
+          anchorMoments: [
+            ...state.channels[channel].anchorMoments,
+            anchorMoment,
+          ],
+        },
+      },
     };
-  case RELEASE_ANCHOR_MOMENT:
+  }
+  case RELEASE_ANCHOR_MOMENT: {
+    const { channels } = state;
+    const messageIndex = channels[action.channel].anchorMoments.findIndex(el => (
+      // $FlowFixMe
+      el.id === action.id
+    ));
+    // $FlowFixMe
+    const moment = channels[action.channel].anchorMoments.find(anchorMoment => anchorMoment.id === action.id);
     return {
       ...state,
-      isPlaceholderPresent: false,
       channels: {
         ...state.channels,
         [action.channel]: {
           ...state.channels[action.channel],
           moments: [
             ...state.channels[action.channel].moments,
-            state.anchorMoment,
+            moment,
+          ],
+          anchorMoments: [
+            ...channels[action.channel].anchorMoments.slice(0, messageIndex),
+            ...channels[action.channel].anchorMoments.slice(messageIndex + 1),
           ],
         },
       },
-      anchorMoment: null,
     };
-  case TOGGLE_POP_UP_MODAL:
+  }
+  case TOGGLE_POP_UP_MODAL: {
     return {
       ...state,
       isPopUpModalVisible: !state.isPopUpModalVisible,
     };
+  }
   case LEAVE_CHANNEL: {
     const { channels, currentChannel } = state;
     const publicChannel = getPublicChannel(state);
@@ -1074,6 +1117,11 @@ const reducer = (
       // $FlowFixMe
       reactions: state.reactions.filter(reaction => reaction.id !== action.id),
     };
+  case SET_SALVATIONS:
+    return {
+      ...state,
+      salvations: action.count,
+    };
   case ADD_ERROR:
     return {
       ...state,
@@ -1137,6 +1185,11 @@ const feedContents = (state: FeedType): Array<MessageType> => (
       return moment;
     }).filter(moment => moment.isMuted !== 'true') :
     []
+);
+
+const feedAnchorMoments = (state: FeedType): Array<AnchorMomentType> => (
+  state.channels[state.currentChannel] && state.channels[state.currentChannel].anchorMoments ? 
+    state.channels[state.currentChannel].anchorMoments : []
 );
 
 const hasParticipants = (state: FeedType): boolean => {
@@ -1206,6 +1259,8 @@ export {
   setScheduleData,
   updateHereNow,
   removeHereNow,
+  feedAnchorMoments,
+  setSalvations,
   setAuthentication,
   removeAuthentication,
 };
@@ -1225,6 +1280,7 @@ export type {
   GetInitData,
   LanguageType,
   OrganizationType,
+  SetSalvationsType,
   SetNotificationBannerType,
 };
 
