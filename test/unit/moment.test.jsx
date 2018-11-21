@@ -12,7 +12,7 @@ import {
   AvatarMoment,
 } from '../../src/moment';
 
-import AnchorMoment from '../../src/placeholder/anchorMoment';
+import AnchorMoment from '../../src/anchorMoment';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -183,20 +183,21 @@ describe('Moment tests', () => {
         data={
           {
             type: 'ANCHOR_MOMENT',
+            anchorMomentType: 'SALVATION',
             id: '12345',
             text: 'I commit my life to Christ',
-            subText: '1 hand raised',
           }
         }
+        isAnchorMomentAnchored={false}
       />
     );
     expect(wrapper.find(AnchorMoment).at(0).props()).toEqual(
       {
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
+          anchorMomentType: 'SALVATION',
           id: '12345',
           text: 'I commit my life to Christ',
-          subText: '1 hand raised',
         },
         isAnchorMomentAnchored: false,
       }

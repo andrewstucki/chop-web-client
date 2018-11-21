@@ -13,16 +13,15 @@ import { NOTIFICATION } from './notification/dux';
 import { ACTIONABLE_NOTIFICATION } from './actionableNotification/dux';
 import { BASIC_TEXT } from './text/dux';
 import { AVATAR_MOMENT } from './avatarMoment/dux';
-import AnchorMoment from '../placeholder/anchorMoment';
-import { ANCHOR_MOMENT } from '../placeholder/anchorMoment/dux';
+import AnchorMoment from '../anchorMoment';
+import { ANCHOR_MOMENT } from '../anchorMoment/dux';
 import type { MomentType } from './dux';
 
 type MomentPropType = {
   data: MomentType,
-  hostChannel?: string,
 };
 
-const Moment = ({ data, hostChannel }: MomentPropType) => {
+const Moment = ({ data }: MomentPropType) => {
   switch (data.type) {
   case MESSAGE:
     if (!data.text) {
@@ -57,7 +56,6 @@ const Moment = ({ data, hostChannel }: MomentPropType) => {
       <AnchorMoment
         anchorMoment={data}
         isAnchorMomentAnchored={false}
-        hostChannel={hostChannel}
       />
     );
   case BASIC_TEXT:

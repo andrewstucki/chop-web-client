@@ -31,6 +31,7 @@ describe('Direct Chat Tests', () => {
               id: 'abc',
               name: 'abc',
               moments: [],
+              anchorMoments: [],
             },
           },
           currentChannel: 'abc',
@@ -52,11 +53,13 @@ describe('Direct Chat Tests', () => {
               id: 'abc',
               name: 'abc',
               moments: [],
+              anchorMoments: [],
             },
             '67890': {
               id: '67890',
               name: null,
               moments: [],
+              anchorMoments: [],
               participants: [
                 {
                   pubnubToken: 4321,
@@ -76,3 +79,4 @@ describe('Direct Chat Tests', () => {
     });
   });
 });
+

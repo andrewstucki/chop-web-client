@@ -15,14 +15,16 @@ describe('Feed tests', () => {
     const wrapper = Enzyme.shallow(
       <Feed
         moments={[]}
+        anchorMoments={[]}
         currentChannel="default"
-        isPlaceholderPresent={true}
+        appendingMessage={false}
+        animatingMoment={false}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
       />
     );
-    expect(wrapper.find('ul').children().length).toBe(0);
+    expect(wrapper.find('ul').children().length).toBe(1);
   });
 
   test('has a single message', () => {
@@ -42,9 +44,11 @@ describe('Feed tests', () => {
       <Feed
         offset={0}
         moments={moments}
+        anchorMoments={[]}
         onMessageRender={function () {}}
         currentChannel="default"
-        isPlaceholderPresent={true}
+        appendingMessage={false}
+        animatingMoment={true}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -70,9 +74,11 @@ describe('Feed tests', () => {
       <Feed
         offset={0}
         moments={[]}
+        anchorMoments={[]}
         onMessageRender={function () {}}
         currentChannel="default"
-        isPlaceholderPresent={true}
+        appendingMessage={false}
+        animatingMoment={false}
         hasParticipants={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -81,62 +87,16 @@ describe('Feed tests', () => {
     expect(wrapper.find('ul').key()).toEqual('default');
   });
 
-  test('Feed with placeholder present on host channel', () => {
-    const wrapper = Enzyme.shallow(
-      <Feed
-        offset={0}
-        moments={[]}
-        onMessageRender={function () {}}
-        currentChannel="host"
-        isPlaceholderPresent={true}
-        hasParticipants={false}
-        isPopUpModalVisible={false}
-        togglePopUpModal={() => {}}
-      />
-    );
-    expect(wrapper.find('div').at(0).props().className).toEqual('withPlaceholder');
-  });
-
-  test('Feed with placeholder present on event channel', () => {
-    const wrapper = Enzyme.shallow(
-      <Feed
-        offset={0}
-        moments={[]}
-        onMessageRender={function () {}}
-        currentChannel="public"
-        isPlaceholderPresent={true}
-        hasParticipants={false}
-        isPopUpModalVisible={false}
-        togglePopUpModal={() => {}}
-      />
-    );
-    expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
-  });
-
-  test('Feed without placeholder present on host channel', () => {
-    const wrapper = Enzyme.shallow(
-      <Feed
-        offset={0}
-        moments={[]}
-        onMessageRender={function () {}}
-        currentChannel="host"
-        isPlaceholderPresent={false}
-        hasParticipants={false}
-        isPopUpModalVisible={false}
-        togglePopUpModal={() => {}}
-      />
-    );
-    expect(wrapper.find('div').at(0).props().className).toEqual('withoutPlaceholder');
-  });
-
   test('Feed with participants', () => {
     const wrapper = Enzyme.shallow(
       <Feed
         offset={0}
         moments={[]}
+        anchorMoments={[]}
         onMessageRender={function () {}}
         currentChannel="host"
-        isPlaceholderPresent={false}
+        appendingMessage={false}
+        animatingMoment={false}
         hasParticipants={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}

@@ -11,6 +11,7 @@ import reducer, {
   togglePopUpModal,
   leaveChannel,
   setUser,
+  setSalvations,
 } from '../../src/feed/dux';
 
 import {
@@ -37,9 +38,8 @@ import {
 
 import {
   releaseAnchorMoment,
-  publishSalvation,
   SET_ANCHOR_MOMENT,
-} from '../../src/placeholder/anchorMoment/dux';
+} from '../../src/anchorMoment/dux';
 
 import { mockDate } from '../testUtils';
 
@@ -81,11 +81,13 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
           host: {
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'pubic',
@@ -100,11 +102,13 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
           host: {
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -122,6 +126,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -157,11 +162,13 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
           host: {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -198,11 +205,13 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
           host: {
             id: '67890',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -236,11 +245,13 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
           host: {
             id: '67890',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -273,6 +284,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
         },
       },
@@ -286,10 +298,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
           '12345': {
             id: '12345',
             moments: [],
+            anchorMoments: [],
             name: 'host',
             participants: undefined,
           },
@@ -312,6 +326,7 @@ describe('Feed tests', () => {
           '12345': {
             id: '12345',
             moments: [],
+            anchorMoments: [],
             name: 'direct',
             participants: [
               otherUser,
@@ -332,6 +347,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
       }
@@ -345,6 +361,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
       }
@@ -360,6 +377,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'other',
             moments: [],
+            anchorMoments: [],
           },
         },
       },
@@ -377,6 +395,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'other',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'other',
@@ -394,19 +413,19 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
-            moments:
-              [
-                {
-                  type: MESSAGE,
+            moments: [
+              {
+                type: MESSAGE,
+                id: '12345',
+                text: 'I like socks',
+                user: {
                   id: '12345',
-                  text: 'I like socks',
-                  user: {
-                    id: '12345',
-                    name: 'Billy Bob',
-                  },
-                  messageTrayOpen: false,
+                  name: 'Billy Bob',
                 },
-              ],
+                messageTrayOpen: false,
+              },
+            ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -438,23 +457,24 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
           host: {
             id: '12345',
             name: 'host',
-            moments:
-              [
-                {
-                  type: MESSAGE,
+            moments: [
+              {
+                type: MESSAGE,
+                id: '12345',
+                text: 'I like socks',
+                user: {
                   id: '12345',
-                  text: 'I like socks',
-                  user: {
-                    id: '12345',
-                    name: 'Billy Bob',
-                  },
-                  messageTrayOpen: false,
+                  name: 'Billy Bob',
                 },
-              ],
+                messageTrayOpen: false,
+              },
+            ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -489,29 +509,29 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
-            moments:
-              [
-                {
-                  type: MESSAGE,
+            moments: [
+              {
+                type: MESSAGE,
+                id: '12345',
+                text: 'I like socks',
+                user: {
                   id: '12345',
-                  text: 'I like socks',
-                  user: {
-                    id: '12345',
-                    name: 'Billy Bob',
-                  },
-                  messageTrayOpen: false,
-                  translations: [
-                    {
-                      languageCode: 'en',
-                      text: 'I like socks',
-                    },
-                    {
-                      languageCode: 'ko',
-                      text: '나는 양말을 좋아한다.',
-                    },
-                  ],
+                  name: 'Billy Bob',
                 },
-              ],
+                messageTrayOpen: false,
+                translations: [
+                  {
+                    languageCode: 'en',
+                    text: 'I like socks',
+                  },
+                  {
+                    languageCode: 'ko',
+                    text: '나는 양말을 좋아한다.',
+                  },
+                ],
+              },
+            ],
+            anchorMoments: [],
           },
         },
         currentLanguage: 'ko',
@@ -587,6 +607,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -623,6 +644,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -662,6 +684,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -698,6 +721,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -737,6 +761,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -773,6 +798,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -812,6 +838,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -848,6 +875,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -887,6 +915,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -923,6 +952,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: false,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -970,6 +1000,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1005,6 +1036,7 @@ describe('Feed tests', () => {
                 messageTrayOpen: true,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1021,6 +1053,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1055,6 +1088,7 @@ describe('Feed tests', () => {
                 timeStamp: '4:53pm',
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1071,6 +1105,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1103,6 +1138,7 @@ describe('Feed tests', () => {
                 timeStamp: '4:53pm',
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1119,6 +1155,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1151,6 +1188,7 @@ describe('Feed tests', () => {
                 timeStamp: '4:53pm',
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1167,6 +1205,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1199,6 +1238,7 @@ describe('Feed tests', () => {
                 timeStamp: '4:53pm',
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1216,6 +1256,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1249,6 +1290,7 @@ describe('Feed tests', () => {
                 timeStamp: '4:53pm',
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1266,6 +1308,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1301,6 +1344,7 @@ describe('Feed tests', () => {
                 },
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'public',
@@ -1314,10 +1358,10 @@ describe('Feed tests', () => {
         ...defaultState,
         channels: {
           host: {
-
             id: '12345',
             name: 'host',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1359,6 +1403,7 @@ describe('Feed tests', () => {
                 active: true,
               },
             ],
+            anchorMoments: [],
           },
         },
         currentChannel: 'host',
@@ -1370,29 +1415,45 @@ describe('Feed tests', () => {
     const result = reducer(
       {
         ...defaultState,
-        isPlaceholderPresent: false,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [],
+          },
+        },
       },
       {
         type: SET_ANCHOR_MOMENT,
+        channel: 'public',
         anchorMoment: {
           type: 'ANCHOR_MOMENT',
+          anchorMomentType: 'SALVATION',
           id: '12345',
           text: 'I commit my life to Christ.',
-          subText: '1 hand raised',
         },
       },
     );
     expect(result).toEqual(
       {
         ...defaultState,
-        anchorMoment: {
-          type: 'ANCHOR_MOMENT',
-          id: '12345',
-          text: 'I commit my life to Christ.',
-          subText: '1 hand raised',
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [
+              {
+                type: 'ANCHOR_MOMENT',
+                anchorMomentType: 'SALVATION',
+                id: '12345',
+                text: 'I commit my life to Christ.',
+              },
+            ],
+          },
         },
-        isPlaceholderPresent: true,
-      }
+      },
     );
   });
 
@@ -1401,42 +1462,56 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          ['12345']: {
+          public: {
             id: '12345',
-            name: 'Host',
+            name: 'public',
             moments: [],
+            anchorMoments: [
+              {
+                type: 'ANCHOR_MOMENT',
+                anchorMomentType: 'SALVATION',
+                id: '12345',
+                text: 'I commit my life to Christ.',
+              },
+            ],
           },
         },
-        currentChannel: '12345',
-        anchorMoment: {
-          type: 'ANCHOR_MOMENT',
-          id: 'moment1',
-          text: 'I commit my life to Christ.',
-          subText: '1 hand raised',
-        },
-        isPlaceholderPresent: true,
       },
-      releaseAnchorMoment('12345')
+      releaseAnchorMoment('public', '12345')
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          ['12345']: {
+          public: {
             id: '12345',
-            name: 'Host',
+            name: 'public',
             moments: [
               {
                 type: 'ANCHOR_MOMENT',
-                id: 'moment1',
+                anchorMomentType: 'SALVATION',
+                id: '12345',
                 text: 'I commit my life to Christ.',
-                subText: '1 hand raised',
               },
             ],
+            anchorMoments: [],
           },
         },
-        isPlaceholderPresent: false,
-        currentChannel: '12345',
+      }
+    );
+  });
+
+  test('Set salvations', () => {
+    const result = reducer(
+      {
+        ...defaultState,
+      },
+      setSalvations(4),
+    );
+    expect(result).toEqual(
+      {
+        ...defaultState,
+        salvations: 4,
       }
     );
   });
@@ -1462,6 +1537,7 @@ describe('Feed tests', () => {
                 active: true,
               },
             ],
+            anchorMoments: [],
           },
         },
       },
@@ -1487,6 +1563,7 @@ describe('Feed tests', () => {
                 active: false,
               },
             ],
+            anchorMoments: [],
           },
         },
       },
@@ -1514,6 +1591,7 @@ describe('Feed tests', () => {
                 active: true,
               },
             ],
+            anchorMoments: [],
           },
         },
       },
@@ -1539,6 +1617,7 @@ describe('Feed tests', () => {
                 active: false,
               },
             ],
+            anchorMoments: [],
           },
         },
       },
@@ -1554,6 +1633,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Carl',
             moments: [],
+            anchorMoments: [],
             participants: [
               otherUser,
               otherUser,
@@ -1575,6 +1655,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Carl',
             moments: [],
+            anchorMoments: [],
           },
         },
         currentChannel: 'direct',
@@ -1592,6 +1673,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Carl',
             moments: [],
+            anchorMoments: [],
             participants: [
               {
                 pubnubToken: currentUser.pubnubToken,
@@ -1638,6 +1720,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Carl',
             moments: [],
+            anchorMoments: [],
             participants: [
               {
                 pubnubToken: currentUser.pubnubToken,
@@ -1653,6 +1736,7 @@ describe('Feed tests', () => {
             id: '67890',
             name: 'Public',
             moments: [],
+            anchorMoments: [],
             participants: [],
           },
         },
@@ -1669,6 +1753,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Carl',
             moments: [],
+            anchorMoments: [],
             participants: [
               otherUser,
             ],
@@ -1677,6 +1762,7 @@ describe('Feed tests', () => {
             id: '67890',
             name: 'Public',
             moments: [],
+            anchorMoments: [],
             participants: [],
           },
         },
@@ -1718,44 +1804,6 @@ describe('Chat tests', () => {
         focus: false,
       });
     expect(result2).toEqual(defaultState);
-  });
-});
-
-describe('Placeholder tests', () => {
-  test('Publish salvation anchorMoment 1 hand raised', () => {
-    const result = reducer(defaultState, publishSalvation(1));
-    expect(result.anchorMoment ? result.anchorMoment.subText : '')
-      .toEqual('1 hand raised');
-  });
-
-  test('Publish salvation anchorMoment multiple hands raised', () => {
-    const result = reducer(defaultState, publishSalvation(4));
-    expect(result.anchorMoment ? result.anchorMoment.subText : '')
-      .toBe('4 hands raised');
-  });
-
-  test('Sets salvation anchor moment', () => {
-    const result = reducer(
-      defaultState,
-      {
-        type: 'SET_ANCHOR_MOMENT',
-        anchorMoment: {
-          type: 'ANCHOR_MOMENT',
-          id: '12345',
-          text: 'I commit my life to Christ.',
-          subText: '1 hand raised',
-        },
-      }
-    );
-    expect(result.isPlaceholderPresent).toBe(true);
-    expect(result.anchorMoment).toEqual(
-      {
-        type: 'ANCHOR_MOMENT',
-        id: '12345',
-        text: 'I commit my life to Christ.',
-        subText: '1 hand raised',
-      }
-    );
   });
 });
 

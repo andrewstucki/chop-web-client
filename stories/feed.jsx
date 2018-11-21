@@ -26,6 +26,7 @@ storiesOf('Feed', module)
       <div style={{display:'flex', height: '500px', flexDirection: 'column'}}>
         <Feed
           moments={[]}
+          anchorMoments={[]}
           currentChannel="default"
           appendingMessage={false}
           animatingMoment={false}
@@ -60,6 +61,7 @@ storiesOf('Feed', module)
               },
             ]
           }
+          anchorMoments={[]}
           animatingMoment={false}
           isPlaceholderPresent={false}
           hasParticipants={false}
@@ -93,6 +95,7 @@ storiesOf('Feed', module)
               },
             ]
           }
+          anchorMoments={[]}
           animatingMoment={false}
           isPlaceholderPresent={false}
           hasParticipants={true}

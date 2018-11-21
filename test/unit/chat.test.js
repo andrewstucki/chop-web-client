@@ -34,6 +34,7 @@ describe('Chat', () => {
             id: '12345',
             name: 'direct',
             moments: [],
+            anchorMoments: [],
             participants: [
               {
                 pubnubToken: '12345',

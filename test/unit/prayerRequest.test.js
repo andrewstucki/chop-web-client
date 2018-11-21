@@ -36,11 +36,13 @@ describe('Prayer Request Tests', () => {
         name: 'public',
         id: '123456',
         moments: [],
+        anchorMoments: [],
       },
       '789012': {
         name: 'Host',
         id: '789012',
         moments: [],
+        anchorMoments: [],
       },
     },
   };
