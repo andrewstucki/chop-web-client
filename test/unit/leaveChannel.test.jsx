@@ -131,6 +131,7 @@ describe('Test leave channel', () => {
           name: 'test',
           id: 'test',
           moments: [],
+          anchorMoments: [],
           participants: [
             {
               pubnubToken: 'abc123xyz',

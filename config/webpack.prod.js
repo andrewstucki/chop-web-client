@@ -15,7 +15,8 @@ module.exports = merge(common, {
         gtmId: JSON.stringify('GTM-MQMRR25'),
         auth: JSON.stringify('ZHTvYO-PubfNDm1dBAWrQA'),
         preview: JSON.stringify('env-2')
-      }
+      },
+      ROUTE_BASENAME: JSON.stringify('/host_mobile')
     }),
     new UglifyJSPlugin({
       sourceMap: true

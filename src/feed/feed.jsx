@@ -3,16 +3,18 @@ import React from 'react';
 import BezierEasing from 'bezier-easing';
 
 import type { MomentType } from '../moment/dux';
+import type { AnchorMomentType } from '../anchorMoment/dux';
 
 import Moment from '../moment/moment';
+import AnchorMoment from '../anchorMoment/';
 import FeedActionBanner from './feedActionBanner';
 import styles from './styles.css';
 import { createUid } from '../util';
  
 type FeedProps = {
   moments: Array<MomentType>,
+  anchorMoments: Array<AnchorMomentType>,
   currentChannel: string,
-  isPlaceholderPresent: boolean,
   hasParticipants: boolean,
   togglePopUpModal: () => void,
 };
@@ -79,28 +81,32 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const {
       currentChannel,
       moments,
-      isPlaceholderPresent,
+      anchorMoments,
       hasParticipants,
       togglePopUpModal,
     } = this.props;
-    const feedStyle =
-      currentChannel === 'host' && isPlaceholderPresent ?
-        styles.withPlaceholder : styles.withoutPlaceholder;
 
-    const listItems = moments.reverse().map(moment => (
+    const momentListItems = moments.map(moment => (
       <li key={moment.id || createUid()}>
         <Moment
           data={moment}
         />
       </li>
     ));
-
+    const anchorMomentListItems = anchorMoments.map(anchorMoment => (
+      <li key={anchorMoment.id}>
+        <AnchorMoment
+          anchorMoment={anchorMoment}
+          isAnchorMomentAnchored={true}
+        />
+      </li>
+    ));
     return (
       <div
         data-component="feed"
         // $FlowFixMe
         ref={this.wrapperRef}
-        className={feedStyle}
+        className={styles.scroll}
       >
         {
           hasParticipants &&
@@ -116,7 +122,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
             key={currentChannel}
             className={styles.feed}
           >
-            {listItems}
+            {anchorMomentListItems}
+            <span style={{margin: '0 8px 0'}}>{momentListItems}</span>
           </ul>
         </div>
       </div>

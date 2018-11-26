@@ -8,7 +8,6 @@ import Feed from '../feed';
 import NavBar from '../navBar';
 import VideoFeed from '../videoFeed';
 import SideMenu from '../sideMenu';
-import Placeholder from '../placeholder';
 import PopUpModal from '../popUpModal';
 import ReactionsContainer from '../reactions/reactionsContainer';
 import { isUsingIPhone, isUsingIPhoneX, isUsingIPhone678, isUsingIPhone678plus } from '../util';
@@ -39,7 +38,6 @@ class ChopContainer extends React.Component<any> {
             <NavBar />
             <VideoFeed />
             <Feed />
-            <Placeholder />
             <div className={styles.inputs}>
               <Chat />
               <ReactionsContainer />

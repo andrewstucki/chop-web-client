@@ -7,6 +7,7 @@ import {
   updateHereNow,
   leaveChannel,
   loadHistory,
+  setSalvations,
 } from '../feed/dux';
 import type {
   ReactionType,
@@ -26,6 +27,13 @@ import type {
   LegacyLeaveChannelType,
 } from '../moment/message/dux';
 import { deleteMessage } from '../moment/message/dux';
+import { 
+  publishSalvation,
+  salvationMomentExists, 
+} from '../anchorMoment/dux';
+import type {
+  LegacySalvationType,
+} from '../anchorMoment/dux';
 import {
   getLegacyChannel,
   getHostChannel,
@@ -63,7 +71,8 @@ type PubnubMessageEventDataType =
   | LegacyMessageType
   | LegacyDeleteMessageType
   | LegacyMuteUserType
-  | LegacyLeaveChannelType;
+  | LegacyLeaveChannelType
+  | LegacySalvationType;
 
 type PubnubMessageEventType = {
   channel: string,
@@ -110,6 +119,8 @@ class Chat {
     this.publishDeleteMessage = this.publishDeleteMessage.bind(this);
     // $FlowFixMe
     this.publishMuteUser = this.publishMuteUser.bind(this);
+    // $FlowFixMe
+    this.receiveSalvation = this.receiveSalvation.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
 
@@ -243,6 +254,9 @@ class Chat {
             message.entry.data.cwcTimestamp
           ).moment);
         return;
+      case 'pollVote': 
+        this.receiveSalvation(message.entry.data);
+        return;
       }
     });
     this.storeDispatch(
@@ -357,6 +371,10 @@ class Chat {
         );
       }
       return;
+    case 'pollVote':
+      // $FlowFixMe
+      this.receiveSalvation(event.message.data);
+      return;
     }
   }
 
@@ -465,6 +483,24 @@ class Chat {
         },
       }
     );
+  }
+
+  receiveSalvation (data:LegacySalvationType) {
+    const publicChannel = getPublicChannel(this.getState());
+    if (salvationMomentExists(this.getState(), publicChannel)) {
+      this.storeDispatch(
+        // $FlowFixMe
+        setSalvations(data.count)
+      );
+    } else {
+      this.storeDispatch(
+        // $FlowFixMe
+        setSalvations(data.count),
+      );
+      this.storeDispatch(
+        publishSalvation(publicChannel),
+      );
+    }
   }
 
   dispatch (action: any) {
