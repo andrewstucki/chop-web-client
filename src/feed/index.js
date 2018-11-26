@@ -5,14 +5,16 @@ import {
   feedContents,
   hasParticipants,
   togglePopUpModal,
+  feedAnchorMoments,
 } from './dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     moments: feedContents(feedState),
+    anchorMoments: feedAnchorMoments(feedState),
     currentChannel: feedState.currentChannel,
-    isPlaceholderPresent: feedState.isPlaceholderPresent,
+    animatingMoment: feedState.renderingAnchorMoment,
     hasParticipants: hasParticipants(feedState),
   };
 };

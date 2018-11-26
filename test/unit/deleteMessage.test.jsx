@@ -136,6 +136,7 @@ describe('Test delete message', () => {
           name: 'test',
           id: 'test',
           moments: moments,
+          anchorMoments: [],
         },
       },
     };

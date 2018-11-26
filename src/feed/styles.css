@@ -1,7 +1,7 @@
 @import url('../../assets/theme.css');
 
 :root {
-  --wrapper {
+  --wrapper: {
     display: flex;
     flex: 1;
     position: relative;
@@ -10,14 +10,9 @@
   }
 }
 
-.withPlaceholder {
+.scroll {
   @apply --wrapper;
-  margin: 0 8px 60px;
-}
-
-.withoutPlaceholder {
-  @apply --wrapper;
-  margin: 0 8px 0;
+  margin: 0;
 }
 
 .feed {

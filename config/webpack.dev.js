@@ -13,7 +13,8 @@ module.exports = merge(common, {
         gtmId: JSON.stringify('GTM-XXXXXXX'),
         auth: JSON.stringify('XXXXXXXXXXXXXXXXXX'),
         preview: JSON.stringify('env-X')
-      }
+      },
+      ROUTE_BASENAME: JSON.stringify('/')
     }),
   ],
   devtool: 'inline-source-map',

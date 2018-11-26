@@ -26,6 +26,7 @@ import bugsnag from 'bugsnag-js';
 import createPlugin from 'bugsnag-react';
 
 declare var ENV:string;
+declare var ROUTE_BASENAME:string;
 window.dataLayer = window.dataLayer || [];
 
 const bugsnagClient = bugsnag({
@@ -74,7 +75,7 @@ if (content) {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ErrorBoundary>
-          <Router>
+          <Router basename={ROUTE_BASENAME}>
             <Switch>
               <Route exact path='/' component={Chop}/>
               <Route exact path='/login' component={Login}/>

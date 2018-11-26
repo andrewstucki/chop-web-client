@@ -1,7 +1,7 @@
-@import url('../../../assets/theme.css');
+@import url('../../assets/theme.css');
 
 :root {
-  --anchorMoment {
+  --anchorMoment: {
     display: flex;
     align-items: center;
     height: 60px;
@@ -11,9 +11,7 @@
 
 .anchored {
   @apply --anchorMoment;
-  position: absolute;
   width: 100%;
-  bottom: 74px;
 }
 
 .released {

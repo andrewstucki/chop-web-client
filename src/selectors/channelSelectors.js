@@ -5,7 +5,11 @@ const getChannels = state => state.channels;
 const getChannelByNameFactory = name => (
   createSelector(
     getChannels,
-    channels => Object.keys(channels).find(channel => channels[channel].name.toUpperCase() === name)
+    channels => { 
+      if (channels !== null) {
+        return Object.keys(channels).find(channel => channels[channel].name.toUpperCase() === name);
+      }
+    }
   )
 );
 
