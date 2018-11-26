@@ -8,7 +8,6 @@ import createExpirationTransform from 'redux-persist-transform-expire';
 import { defaultState } from './feed/dux';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -72,16 +71,14 @@ const content = document.getElementById('content');
 if (content) {
   ReactDOM.render(
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ErrorBoundary>
-          <Router>
-            <Switch>
-              <Route exact path='/' component={Chop}/>
-              <Route exact path='/login' component={Login}/>
-            </Switch>
-          </Router>
-        </ErrorBoundary>
-      </PersistGate>
+      <ErrorBoundary>
+        <Router>
+          <Switch>
+            <Route exact path='/' component={Chop}/>
+            <Route exact path='/login' component={Login}/>
+          </Switch>
+        </Router>
+      </ErrorBoundary>
     </Provider>,
     content);
 }
@@ -94,3 +91,5 @@ if (document.body) {
     window.scrollTo({top:0, behavior:'instant'});
   });
 }
+
+export { persistor };
