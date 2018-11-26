@@ -37,7 +37,11 @@ import {
 
 import {
   SET_PANE_CONTENT,
-} from '../pane/dux.js';
+} from '../pane/dux';
+
+import type {
+  PaneContentType,
+} from '../pane/dux';
 
 import {
   PUBLISH_REACTION,
@@ -223,7 +227,10 @@ type FeedType = {
   notificationBanner: BannerType,
   sequence: any,
   isAuthenticated: boolean,
-  auth: AuthenticationType
+  auth: AuthenticationType,
+  panes: {
+    [string]: PaneContentType,
+  },
 };
 
 type ChangeChannelType = {

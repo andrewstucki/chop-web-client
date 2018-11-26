@@ -1,17 +1,21 @@
 //@flow
 import React from 'react';
-import type PaneContentType from './dux';
+import type { PaneContentType } from './dux';
 
 type PanePropsType = {
   type: string,
   content: PaneContentType,
 };
 
-const Pane = ({type, content}) => {
-  switch(type) {
+const Pane = ({type, content}:PanePropsType) => {
+  switch (type) {
+  case 'FAKE':
+    return (
+      <div>{content}</div>
+    );
   default:
     return null;
   }
 };
 
-export Pane;
+export default Pane;

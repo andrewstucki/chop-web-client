@@ -10,4 +10,4 @@ const paneContentSelector = createSelector(
 
 export {
   paneContentSelector,
-}
+};

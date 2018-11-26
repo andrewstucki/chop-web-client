@@ -19,8 +19,8 @@ export {
   setPaneToChat,
   SET_PANE_CONTENT,
   CHAT,
-}
+};
 
 export type {
   PaneContentType,
-}
+};
