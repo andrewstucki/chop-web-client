@@ -15,6 +15,12 @@ import reducer, {
 } from '../../src/feed/dux';
 
 import {
+  hasParticipants as hasParticipantsSelector,
+  feedContents as feedContentsSelector,
+  feedAnchorMoments,
+} from '../../src/selectors/channelSelectors';
+
+import {
   receiveMoment,
 } from '../../src/moment/dux';
 
@@ -565,6 +571,113 @@ describe('Feed tests', () => {
     );
   });
 
+  test('feedContents selector works without a channel', () => {
+    expect(feedContentsSelector(defaultState, 'public')).toEqual([]);
+  });
+
+  test('feedContents selector returns translations', () => {
+    const result = feedContentsSelector(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [
+              {
+                type: MESSAGE,
+                id: '12345',
+                text: 'I like socks',
+                user: {
+                  id: '12345',
+                  name: 'Billy Bob',
+                },
+                messageTrayOpen: false,
+                translations: [
+                  {
+                    languageCode: 'en',
+                    text: 'I like socks',
+                  },
+                  {
+                    languageCode: 'ko',
+                    text: '나는 양말을 좋아한다.',
+                  },
+                ],
+              },
+            ],
+            anchorMoments: [],
+          },
+        },
+        currentLanguage: 'ko',
+        currentChannel: 'public',
+        currentUser: currentUser,
+      },
+      'public'
+    );
+    expect(result).toEqual(
+      [
+        {
+          type: MESSAGE,
+          id: '12345',
+          text: '나는 양말을 좋아한다.',
+          user: {
+            id: '12345',
+            name: 'Billy Bob',
+          },
+          messageTrayOpen: false,
+          translations: [
+            {
+              languageCode: 'en',
+              text: 'I like socks',
+            },
+            {
+              languageCode: 'ko',
+              text: '나는 양말을 좋아한다.',
+            },
+          ],
+        },
+      ],
+    );
+  });
+
+  test('feedAnchorMoments selector with no anchor moments', () => {
+    expect(feedAnchorMoments(defaultState, 'public')).toEqual([]);    
+  });
+
+  test('feedAncorMoments selector with moments', () => {
+    const result = feedAnchorMoments(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [
+              {
+                id: '1234',
+              },
+              {
+                id: '6789',
+              },
+            ],
+          },
+        },
+      },
+      'public'
+    );
+    expect(result).toEqual(
+      [
+        {
+          id: '1234',
+        },
+        {
+          id: '6789',
+        },
+      ]
+    );
+  });
+  
   test('Accepts a user', () => {
     const result = reducer(defaultState, setUser(currentUser));
     expect(result).toEqual(
@@ -1660,6 +1773,46 @@ describe('Feed tests', () => {
         },
         currentChannel: 'direct',
       }
+    );
+    expect(result).toEqual(false);
+  });
+
+  test('hasParticipants selector channel with participants', () => {
+    const result = hasParticipantsSelector(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            anchorMoments: [],
+            participants: [
+              otherUser,
+              otherUser,
+            ],
+          },
+        },
+      },
+      'direct'
+    );
+    expect(result).toEqual(true);
+  });
+
+  test('hasParticipants selector channel without participants', () => {
+    const result = hasParticipantsSelector(
+      {
+        ...defaultState,
+        channels: {
+          direct: {
+            id: '12345',
+            name: 'Carl',
+            moments: [],
+            anchorMoments: [],
+          },
+        },
+      },
+      'direct'
     );
     expect(result).toEqual(false);
   });

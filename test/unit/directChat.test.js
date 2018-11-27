@@ -15,7 +15,7 @@ import { promisifyMiddleware } from '../testUtils';
 jest.mock('../../src/io/graphQL');
 
 describe('Direct Chat Tests', () => {
-  test('Direct chat calls server', async () => {
+  test('Direct chat calls server', () => {
     const actors = actorMiddleware(
       ServiceActor
     );
