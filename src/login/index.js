@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import Login from './login';
 import { basicAuthLogin } from './dux';
+import { clearErrors } from '../errors/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
@@ -13,6 +14,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => (
   {
     basicAuthLogin: (email, password) => dispatch(basicAuthLogin(email, password)),
+    clearErrors: () => dispatch(clearErrors()),
   }
 );
 

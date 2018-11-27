@@ -69,7 +69,7 @@ import type { BannerType } from '../banner/dux';
 import { SET_LANGUAGE } from '../languageSelector/dux';
 import { getPublicChannel } from '../selectors/channelSelectors';
 
-import { ADD_ERROR, REMOVE_ERROR } from '../errors/dux';
+import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
 import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
 import moment from 'moment';
 
@@ -1146,6 +1146,11 @@ const reducer = (
       ...state,
       // $FlowFixMe
       errors: state.errors.filter(error => error.id !== action.id),
+    };
+  case CLEAR_ERRORS:
+    return {
+      ...state,
+      errors: [],
     };
   case SET_NOTIFICATION_BANNER:
     return {

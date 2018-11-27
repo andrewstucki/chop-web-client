@@ -3,6 +3,7 @@ import { createUid } from '../util';
 
 const ADD_ERROR = 'ADD_ERROR';
 const REMOVE_ERROR = 'REMOVE_ERROR';
+const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 type ErrorType = {
   id: string,
@@ -17,7 +18,11 @@ type AddErrorType = {
 type RemoveErrorType = {
   type: 'REMOVE_ERROR',
   id: string,
-}
+};
+
+type ClearErrorsType = {
+  type: 'CLEAR_ERRORS',
+};
 
 const addError = (message: string): AddErrorType => (
   {
@@ -36,15 +41,24 @@ const removeError = (id: string): RemoveErrorType => (
   }
 );
 
+const clearErrors = (): ClearErrorsType => (
+  {
+    type: CLEAR_ERRORS,
+  }
+);
+
 export {
   ADD_ERROR,
   REMOVE_ERROR,
+  CLEAR_ERRORS,
   addError,
   removeError,
+  clearErrors,
 };
 
 export type {
   ErrorType,
   AddErrorType,
   RemoveErrorType,
+  ClearErrorsType,
 };

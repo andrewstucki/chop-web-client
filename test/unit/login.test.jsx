@@ -13,7 +13,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Login tests', () => {
   test('Component renders', () => {
     const wrapper = Enzyme.shallow(
-      <Login basicAuthLogin={() => {}} isAuthenticated={false}/>
+      <Login basicAuthLogin={() => {}} isAuthenticated={false} clearErrors={() => {}}/>
     );
     expect(wrapper.find('.login').type()).toEqual('div');
   });
@@ -32,7 +32,7 @@ describe('Login tests', () => {
     const wrapper = Enzyme.mount(
       <Provider store={store}>
         <div>
-          <Login basicAuthLogin={basicAuthLogin} isAuthenticated={false}/>
+          <Login basicAuthLogin={basicAuthLogin} isAuthenticated={false} clearErrors={() => {}}/>
         </div>   
       </Provider>
     );

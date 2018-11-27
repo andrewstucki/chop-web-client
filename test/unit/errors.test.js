@@ -1,6 +1,6 @@
 // @flow
 import { createStore } from 'redux';
-import { addError, removeError } from '../../src/errors/dux';
+import { addError, removeError, clearErrors } from '../../src/errors/dux';
 import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
 
@@ -49,6 +49,35 @@ describe('Errors tests', () => {
     
     store.dispatch(
       removeError('12345')
+    );
+
+    expect(store.getState().feed).toEqual(
+      defaultState
+    );
+  });
+
+  test('Error messages are cleared.', () => {
+    const store = createStore(
+      reducer,
+      {
+        feed: {
+          ...defaultState,
+          errors: [
+            {
+              id: '12345',
+              message: 'Email address is required.',
+            },
+            {
+              id: '67890',
+              message: 'You are not authorized.',
+            },
+          ],
+        },
+      }
+    );
+
+    store.dispatch(
+      clearErrors()
     );
 
     expect(store.getState().feed).toEqual(
