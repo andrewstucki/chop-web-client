@@ -38,6 +38,14 @@ import {
 } from '../moment';
 
 import {
+  SET_PANE_CONTENT,
+} from '../pane/dux';
+
+import type {
+  PaneContentType,
+} from '../pane/dux';
+
+import {
   PUBLISH_REACTION,
 } from '../reactions/reactionButton/dux';
 
@@ -220,7 +228,10 @@ type FeedType = {
   notificationBanner: BannerType,
   sequence: any,
   isAuthenticated: boolean,
-  auth: AuthenticationType
+  auth: AuthenticationType,
+  panes: {
+    [string]: PaneContentType,
+  },
 };
 
 type ChangeChannelType = {
@@ -614,6 +625,7 @@ const defaultState = {
       name: 'Korean',
     },
   ],
+  panes: {},
   reactions: [],
   notificationBanner: {
     message: '',
@@ -640,6 +652,14 @@ const reducer = (
     return state;
   }
   switch (action.type) {
+  case SET_PANE_CONTENT:
+    return {
+      ...state,
+      panes: {
+        ...state.panes,
+        [action.name]: action.content,
+      },
+    };
   case UPDATE_HERE_NOW:
     return {
       ...state,
