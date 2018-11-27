@@ -33,7 +33,7 @@ describe('Message', () => {
             type: MESSAGE,
             id: '1234',
             lang: 'en',
-            text: 'Go west young man!',
+            text: 'Go to https://live.life.church young man!<script>sinister script</script>',
             user: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
@@ -53,7 +53,7 @@ describe('Message', () => {
         currentUser={user}
       />
     );
-    expect(wrapper.find('div').last().text()).toEqual('Go west young man!');
+    expect(wrapper.find('div').last().html()).toEqual('<div data-node="text" class="text">Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!</div>');
   });
 
   test('displays the role label', () => {
