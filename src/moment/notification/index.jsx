@@ -40,7 +40,7 @@ const prayerNotificationText = (
     />
     <div className={styles.text}>
       <div>
-        <strong>{host.name} </strong>started a live prayer with<strong> {guest.name}</strong>
+        <strong>{host} </strong>started a live prayer with<strong> {guest}</strong>
       </div>
       <div className={styles.timeStamp}>{timeStamp}</div>
     </div>
