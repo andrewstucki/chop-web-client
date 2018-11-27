@@ -122,10 +122,11 @@ const muteUser = (pubnubToken:string): MuteUserType => (
   }
 );
 
-const directChat = (otherUserPubnubToken: string) => (
+const directChat = (otherUserPubnubToken: string, otherUserNickname: string) => (
   {
     type: DIRECT_CHAT,
     otherUserPubnubToken,
+    otherUserNickname,
   }
 );
 
