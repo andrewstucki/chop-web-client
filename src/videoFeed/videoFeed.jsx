@@ -56,7 +56,7 @@ const VideoFeed = ({isVideoHidden, url, useIframe}: VideoFeedProps) => {
   return (
     <div className={style}>
       { url !== '' &&
-        <VideoPlayer useIframe={useIframe} style={styles.feed} url={url} />
+        <VideoPlayer useIframe={useIframe} style={styles.frame} url={url} />
       }
     </div>
   );

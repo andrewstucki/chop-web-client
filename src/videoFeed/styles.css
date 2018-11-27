@@ -34,6 +34,9 @@
 /* THIN SCREENS: image is full width, height is proportional.  */
 /* This max-width should always match the width in the standard variant above. */
 @media only screen and (max-width: 455px) {
+  .showVideo {
+    padding-bottom: 56vw;  /* Leaves space for a 16:9 image under any other content */
+  }
   .frame { /* Place the video in the padding defined just above. */
     position: absolute;
     width: 100%;
