@@ -1,4 +1,5 @@
 import type { SubscriberType } from '../feed';
+import createDOMPurify from 'dompurify';
 
 const getFirstInitial = name => (
   name.charAt(0).toUpperCase()
@@ -103,6 +104,16 @@ const objectFilter = (obj, predicate) => {
 const isEmpty = (string: string) =>
   (!string || string.length === 0);
 
+const DOMPurify = createDOMPurify();
+
+const sanitizeConfig = {
+  ADD_ATTR: ['target'],
+};
+
+const sanitizeString = (string: string, config:any = sanitizeConfig) => 
+  DOMPurify.sanitize(string, config)
+;
+
 export {
   getFirstInitial,
   getAvatarColor,
@@ -117,4 +128,5 @@ export {
   capitalizeFirstLetter,
   objectFilter,
   isEmpty,
+  sanitizeString,
 };
