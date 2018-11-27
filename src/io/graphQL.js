@@ -142,8 +142,8 @@ mutation leaveFeed($feedToken: String!) {
 `;
 
 const createDirectFeed = `
-mutation createDirectFeed($pubnubToken: String!) {
-  createDirectFeed(targetPubnubToken: $pubnubToken) {
+mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
+  createDirectFeed(targetPubnubToken: $pubnubToken, targetNickname: $nickname) {
     id
     name
     subscribers {
@@ -256,11 +256,12 @@ export default class GraphQl {
     );
   }
 
-  async directChat (pubnubToken: string) {
+  async directChat (pubnubToken: string, nickname: string) {
     return await this.client.request(
       createDirectFeed,
       {
         pubnubToken,
+        nickname,
       }
     );
   }

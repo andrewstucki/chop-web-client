@@ -415,7 +415,8 @@ class ServiceActor {
 
   async directChat (action: any) {
     try {
-      const directChat = await this.graph.directChat(action.otherUserPubnubToken);
+      const { otherUserPubnubToken, otherUserNickname } = action;
+      const directChat = await this.graph.directChat(otherUserPubnubToken, otherUserNickname);
       const { name, id, subscribers } = directChat.createDirectFeed;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, participants));
