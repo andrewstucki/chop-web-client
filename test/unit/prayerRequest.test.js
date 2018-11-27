@@ -99,6 +99,111 @@ describe('Prayer Request Tests', () => {
     );
   });
 
+  test('Receive accepted prayer request', () => {
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    getState.mockReturnValue(_store);
+
+    const chat = new Chat(dispatch, getState);
+
+    chat.init();
+
+    __messageEvent(
+      {
+        channel: 'Host',
+        message: {
+          action: 'removeLiveResponseRequest',
+          channel: 'Host',
+          data: {
+            messageId: '123456',
+            channel: '123456',
+            fromToken: '789012',
+            fromNickname: 'G. Boole',
+            roomType: 'public',
+          },
+        },
+      }
+    );
+
+    __messageEvent(
+      {
+        channel: 'Host',
+        message: {
+          action: 'removeLiveResponseRequest',
+          channel: 'Host',
+          data: {
+            messageId: '123456',
+            channel: '123456',
+            fromToken: '789012',
+            fromNickname: 'G. Boole',
+            roomType: 'public',
+            leave: true,
+          },
+        },
+      }
+    );
+
+    expect(dispatch).toHaveBeenCalledTimes(2);
+    expect(dispatch.mock.calls[0][0]).toEqual(
+      {
+        type: 'RECEIVE_ACCEPTED_PRAYER_REQUEST',
+        prayerChannel: '123456',
+        hostChannel: '789012',
+        cancelled: false,
+      }
+    );
+    expect(dispatch.mock.calls[1][0]).toEqual(
+      {
+        type: 'RECEIVE_ACCEPTED_PRAYER_REQUEST',
+        prayerChannel: '123456',
+        hostChannel: '789012',
+        cancelled: true,
+      }
+    );
+  });
+
+  test('Receive publish notification to host channel', () => {
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    getState.mockReturnValue(_store);
+
+    const chat = new Chat(dispatch, getState);
+
+    chat.init();
+
+    __messageEvent(
+      {
+        channel: 'Host',
+        message: {
+          action: 'livePrayerAccepted',
+          channel: 'Host',
+          data: {
+            hostName: 'G. Boole',
+            guestName: 'Billy',
+            channel: 'Host',
+            timestamp: '1543253210',
+          },
+        },
+      }
+    );
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    // expect(dispatch.mock.calls[0][0]).toEqual(
+    //   {
+    //     type: 'RECEIVE_MOMENT',
+    //     channel: '789012',
+    //     moment: {
+    //       type: 'NOTIFICATION',
+    //       notificationType: 'PRAYER',
+    //       id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
+    //       host: 'G. Boole',
+    //       guest: 'Billy',
+    //       timeStamp: '11:26am',
+    //     },
+    //   }
+    // );
+  });
+
   test('Here Now', () => {
     const actors = actorMiddleware(Chat);
     const store = createStore(
@@ -192,5 +297,9 @@ describe('Prayer Request Tests', () => {
         },
       ]
     );
+  });
+
+  test('Accept prayer request', () => {
+  
   });
 });

@@ -5,7 +5,6 @@ import reducer, {
   removeChannel,
   feedContents,
   defaultState,
-  receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
   togglePopUpModal,
@@ -33,6 +32,7 @@ import {
   deleteMessage,
   toggleCloseTrayButton,
   publishAcceptedPrayerRequest,
+  receiveAcceptedPrayerRequest,
   MESSAGE,
 } from '../../src/moment';
 
@@ -1535,13 +1535,14 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: true,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
           },
         },
       },
-      publishAcceptedPrayerRequest('moment1', '12345')
+      publishAcceptedPrayerRequest('123456', '12345')
     );
     expect(result).toEqual(
       {
@@ -1561,6 +1562,7 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: false,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
@@ -1589,13 +1591,14 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: true,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
           },
         },
       },
-      receiveAcceptedPrayerRequest('moment1', '12345')
+      receiveAcceptedPrayerRequest('123456', '12345')
     );
     expect(result).toEqual(
       {
@@ -1615,6 +1618,7 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: false,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],

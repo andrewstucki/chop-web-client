@@ -16,13 +16,6 @@ type ReactionType = {
   user?: SharedUserType,
 };
 
-type LegacyReactionType = {
-  type: 'REACTION',
-  nickname: string,
-  channelToken: string,
-  reactionId: string,
-}
-
 const publishReaction = (currentUser: SharedUserType): PublishReactionActionType => (
   {
     type: PUBLISH_REACTION,
@@ -46,5 +39,4 @@ export {
 export type {
   PublishReactionActionType,
   ReactionType,
-  LegacyReactionType,
 };

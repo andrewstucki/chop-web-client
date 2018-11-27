@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 
-import type { SharedUserType } from '../../feed/dux';
 import type { ActionableNotificationType } from './dux';
 
 import ChatNotification from '../../../assets/chat-notification.svg';
@@ -9,9 +8,7 @@ import styles from './style.css';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
-  acceptPrayerRequest: (SharedUserType, id: string, channel:string) => void,
-  publishPrayerNotification: (host:SharedUserType, guest: SharedUserType, channel:string) => void,
-  currentUser: SharedUserType,
+  acceptPrayerRequest: (prayerChannel: string, hostChannel:string, accepted: boolean) => void,
   hostChannel: string,
 };
 
@@ -19,16 +16,15 @@ const ActionableNotification = (
   {
     notification,
     acceptPrayerRequest,
-    publishPrayerNotification,
-    currentUser,
     hostChannel,
   }: ActionableNotificationPropsType
 ) => {
   const {
     active,
+    cancelled,
     user,
     timeStamp,
-    id,
+    prayerChannel,
   } = notification;
 
   const notificationStyle =
@@ -36,6 +32,9 @@ const ActionableNotification = (
 
   const acceptedTextStyle =
     !active ? styles.showText : styles.hideText;
+
+  const acceptedText = 
+    cancelled ? 'Cancelled' : 'Accepted';
 
   return (
     <div className={notificationStyle}>
@@ -57,15 +56,14 @@ const ActionableNotification = (
             className={styles.acceptButton}
             onClick={
               () => (
-                acceptPrayerRequest(user, id, hostChannel),
-                publishPrayerNotification(currentUser, user, hostChannel)
+                acceptPrayerRequest(prayerChannel, hostChannel, false)
               )
             }
           >
             Accept
           </button>
       }
-      <div className={acceptedTextStyle}>Accepted</div>
+      <div className={acceptedTextStyle}>{acceptedText}</div>
     </div>
   );
 };

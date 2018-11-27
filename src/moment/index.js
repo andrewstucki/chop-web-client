@@ -2,6 +2,7 @@
 
 import type {
   PublishAcceptedPrayerRequestType,
+  ReceiveAcceptedPrayerRequestType,
 } from './actionableNotification/dux';
 
 import type {
@@ -13,13 +14,16 @@ import {
   PRAYER,
   LEFT_CHANNEL,
   publishLeftChannelNotification,
+  receivePrayerNotification,
 } from './notification/dux';
 
 import {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  RECEIVE_ACCEPTED_PRAYER_REQUEST,
   publishAcceptedPrayerRequest,
+  receiveAcceptedPrayerRequest,
 } from './actionableNotification/dux';
 
 import { 
@@ -47,7 +51,9 @@ export {
   Text,
   AvatarMoment,
   publishAcceptedPrayerRequest,
+  receiveAcceptedPrayerRequest,
   publishLeftChannelNotification,
+  receivePrayerNotification,
 };
 
 export {
@@ -58,10 +64,12 @@ export {
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  RECEIVE_ACCEPTED_PRAYER_REQUEST,
   LEFT_CHANNEL,
 };
 
 export type {
   PublishAcceptedPrayerRequestType,
+  ReceiveAcceptedPrayerRequestType,
   ReceiveMomentType,
 };

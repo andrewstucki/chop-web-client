@@ -9,6 +9,7 @@ import type {
   ReceiveMomentType,
   PublishLeaveChannelType,
   PublishAcceptedPrayerRequestType,
+  ReceiveAcceptedPrayerRequestType,
 } from '../moment';
 
 import type {
@@ -31,6 +32,7 @@ import {
   TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
 } from '../moment';
@@ -69,7 +71,6 @@ const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
-const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const GET_INIT_DATA = 'GET_INIT_DATA';
@@ -227,12 +228,6 @@ type ChangeChannelType = {
   channel: string,
 };
 
-type ReceiveAcceptedPrayerRequestType = {
-  type: 'RECEIVE_ACCEPTED_PRAYER_REQUEST',
-  id: string,
-  channel: string,
-};
-
 type AddChannelType = {
   type: 'ADD_CHANNEL',
   channel: ChannelType,
@@ -279,7 +274,7 @@ type SetPubnubKeysType = {
 type LoadHistoryType = {
   type: 'LOAD_HISTORY',
   channel: string,
-  moments: MomentType,
+  moments: Array<MomentType>,
 };
 
 type UserState = {
@@ -473,17 +468,6 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const receiveAcceptedPrayerRequest = (
-  id: string,
-  channel: string
-): ReceiveAcceptedPrayerRequestType => (
-  {
-    type: RECEIVE_ACCEPTED_PRAYER_REQUEST,
-    id,
-    channel,
-  }
-);
-
 const addChannel = (
   name: string,
   id: string,
@@ -522,7 +506,7 @@ const leaveChannel = (pubnubToken: string, channel: string): LeaveChannelType =>
   }
 );
 
-const loadHistory = (moments: MomentType, channel: string): LoadHistoryType => (
+const loadHistory = (moments: Array<MomentType>, channel: string): LoadHistoryType => (
   {
     type: LOAD_HISTORY,
     channel,
@@ -908,27 +892,37 @@ const reducer = (
   case PUBLISH_ACCEPTED_PRAYER_REQUEST:
   case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
     // $FlowFixMe
-    const { id, channel } = action;
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        // $FlowFixMe
-        [channel]: {
+    const { prayerChannel, hostChannel, cancelled } = action;
+    const messageIndex = state.channels[hostChannel].moments.findIndex(el => (
+      el.prayerChannel === prayerChannel && el.active === true
+    ));
+    if (messageIndex >= 0) {
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
           // $FlowFixMe
-          ...state.channels[channel],
-          // $FlowFixMe
-          moments: state.channels[channel].moments.map(
-            moment => (
+          [hostChannel]: {
+            // $FlowFixMe
+            ...state.channels[hostChannel],
+            // $FlowFixMe
+            moments: [
+              ...state.channels[hostChannel].moments.slice(0, messageIndex),
               {
-                ...moment,
-                active: moment.id === id ? !moment.active : moment.active,
-              }
-            )
-          ),
+                ...state.channels[hostChannel].moments[messageIndex],
+                active: false,
+                cancelled: cancelled,
+              },
+              ...state.channels[hostChannel].moments.slice(messageIndex + 1),
+            ],
+          },
         },
-      },
-    };
+      };
+    } else {
+      return {
+        ...state,
+      };
+    }
   }
   case DELETE_MESSAGE: {
     // $FlowFixMe
@@ -1237,7 +1231,6 @@ export {
   removeChannel,
   feedContents,
   defaultState,
-  receiveAcceptedPrayerRequest,
   hasParticipants,
   getOtherUser,
   getCurrentChannel,
@@ -1271,7 +1264,6 @@ export type {
   ChangeChannelType,
   FeedType,
   InviteToChannelType,
-  ReceiveAcceptedPrayerRequestType,
   ChannelType,
   PrivateUserType,
   SharedUserType,

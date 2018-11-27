@@ -34,6 +34,7 @@ import Cookies from './cookies';
 import Location from './location';
 import GraphQl from './graphQL';
 import Scheduler from './scheduler';
+import { getAvailableForPrayer } from '../selectors/hereNowSelector';
 
 class ServiceActor {
   storeDispatch: (action: any) => void
@@ -390,11 +391,12 @@ class ServiceActor {
     const { currentChannel } = this.getStore();
     const { channels } = this.getStore();
     const currentMoments = channels[currentChannel].moments;
-    const moment = currentMoments.find(moment => moment.id === action.id);
+    const moment = currentMoments.find(moment => moment.prayerChannel === action.prayerChannel);
     const { user, prayerChannel } = moment;
+    const hosts = getAvailableForPrayer(this.getStore()).map(user => user.id);
 
     try {
-      const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken);
+      const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken, hosts, user.name);
       const { name, id, subscribers } = data.acceptPrayer;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, participants));

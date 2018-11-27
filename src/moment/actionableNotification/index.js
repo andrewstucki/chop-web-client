@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishAcceptedPrayerRequest } from './dux';
-import { publishPrayerNotification } from '../notification/dux';
 import { getHostChannel } from '../../selectors/channelSelectors';
 
 const mapStateToProps = state => {
@@ -19,12 +18,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    acceptPrayerRequest: (user, prayerRequestId, channel) => {
-      dispatch(publishAcceptedPrayerRequest(prayerRequestId, channel));
+    acceptPrayerRequest: (prayerChannel, hostChannel, cancelled) => {
+      dispatch(publishAcceptedPrayerRequest(prayerChannel, hostChannel, cancelled));
     },
-    publishPrayerNotification: (host, guest, channel) => dispatch(
-      publishPrayerNotification(host, guest, channel)
-    ),
   }
 );
 

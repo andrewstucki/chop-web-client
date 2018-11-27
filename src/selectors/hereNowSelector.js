@@ -25,8 +25,6 @@ const getAvailableForPrayer = createSelector(
   users => users.filter(user => user.available_prayer)
 );
 
-
-
 export {
   getAvailableForPrayer,
 };

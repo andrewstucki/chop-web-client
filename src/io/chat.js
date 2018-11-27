@@ -1,7 +1,6 @@
 // @flow
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
-import type { FeedType, ChannelType } from '../feed/dux';
 import {
   removeHereNow,
   updateHereNow,
@@ -9,23 +8,22 @@ import {
   loadHistory,
   setSalvations,
 } from '../feed/dux';
+import type { 
+  FeedType, 
+  ChannelType,
+} from '../feed/dux';
 import type {
   ReactionType,
-  LegacyReactionType,
 } from '../reactions/reactionButton/dux';
 import Converter from './converter';
 import type { MomentType } from '../moment/dux';
 import { receiveMoment } from '../moment/dux';
+import { receiveAcceptedPrayerRequest } from '../moment/actionableNotification/dux';
 import {
   receiveLeftChannelNotification,
   receiveMuteUserNotification,
+  receivePrayerNotification,
 } from '../moment/notification/dux';
-import type {
-  LegacyMessageType,
-  LegacyDeleteMessageType,
-  LegacyMuteUserType,
-  LegacyLeaveChannelType,
-} from '../moment/message/dux';
 import { deleteMessage } from '../moment/message/dux';
 import { 
   publishSalvation,
@@ -65,6 +63,75 @@ type PubnubPresenceEventType = {
   uuid : string,
 }
 
+type LegacyReactionType = {
+  type: 'REACTION',
+  nickname: string,
+  channelToken: string,
+  reactionId: string,
+}
+
+type LegacyMessageType = {
+  messageText: string,
+  language: string,
+  eventTimeId: string,
+  eventTimeOffset: string,
+  eventTitle: string,
+  uniqueMessageToken: string,
+  fromNickname: string,
+  fromToken: string,
+  msgId: string,
+  timestamp: string,
+  fromAvatar: string,
+  isHost: boolean,
+  label: string,
+  isVolunteer: boolean,
+  isUser: boolean,
+  userId: string,
+  organizationId: string,
+  organizationName: string,
+  roomType: string,
+  channelToken: string,
+  eventStartTime: string,
+};
+
+type LegacyDeleteMessageType = {
+  umt: string,
+  channelToken: string,
+}
+
+type LegacyMuteUserType = {
+  nickname: string,
+  fromNickname: string,
+  channelToken: string,
+  cwcTimestamp: string,
+}
+
+type LegacyLeaveChannelType = {
+  messageText: string,
+  timestamp: string,
+  userId: string,
+  fromNickname: string,
+  type: string,
+  roomType: string,
+  channelToken: string,
+  cwcTimestamp: string,
+};
+
+type LegacyAcceptPrayerRequestType = {
+  timestamp: number,
+  hostName: string,
+  guestName: string,
+}
+
+type LegacyPrayerNotificationType = {
+  messageText: string,
+  hostName: string,
+  guestName: string,
+  channel: string,
+  timestamp: string,
+  fromNickname: string,
+}
+
 type PubnubMessageEventDataType =
   | MomentType
   | LegacyReactionType
@@ -72,6 +139,8 @@ type PubnubMessageEventDataType =
   | LegacyDeleteMessageType
   | LegacyMuteUserType
   | LegacyLeaveChannelType
+  | LegacyAcceptPrayerRequestType
+  | LegacyPrayerNotificationType
   | LegacySalvationType;
 
 type PubnubMessageEventType = {
@@ -254,6 +323,13 @@ class Chat {
             message.entry.data.cwcTimestamp
           ).moment);
         return;
+      case 'livePrayerAccepted': {
+        const hostChannel = getHostChannel(this.getState());
+        moments.push(
+          receivePrayerNotification(message.entry.data.hostName, message.entry.data.guestName, hostChannel, message.entry.data.timestamp).moment
+        );
+        return;
+      }
       case 'pollVote': 
         this.receiveSalvation(message.entry.data);
         return;
@@ -371,6 +447,23 @@ class Chat {
         );
       }
       return;
+    case 'removeLiveResponseRequest': {
+      const cancelled = event.message.data.leave ? true : false;
+      const hostChannel = getHostChannel(this.getState());
+      this.storeDispatch(
+        // $FlowFixMe
+        receiveAcceptedPrayerRequest(event.message.data.channel, hostChannel, cancelled)
+      );
+      return;
+    }
+    case 'livePrayerAccepted': {
+      const hostChannel = getHostChannel(this.getState());
+      this.storeDispatch(
+        // $FlowFixMe
+        receivePrayerNotification(event.message.data.hostName, event.message.data.guestName, hostChannel, event.message.data.timestamp)
+      );
+      return;
+    }
     case 'pollVote':
       // $FlowFixMe
       this.receiveSalvation(event.message.data);
@@ -397,13 +490,13 @@ class Chat {
     );
   }
 
-  publishSystemMessage (moment:MomentType, channel: ChannelType) {
+  publishSystemMessage (moment:MomentType, channelId: string) {
     this.publish(
       {
-        channel: channel.id,
+        channel: channelId,
         message: {
           action: 'systemMessage',
-          channel: channel.id,
+          channel: channelId,
           data: Converter.cwcToLegacySystemMessage(moment),
         },
       }
@@ -510,7 +603,7 @@ class Chat {
     switch (action.type) {
     case 'PUBLISH_MOMENT_TO_CHANNEL':
       if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'PRAYER') {
-        this.publishSystemMessage(action.moment, this.getState().channels[action.channel]);
+        this.publishSystemMessage(action.moment, action.channel);
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
         this.publishLeaveChannel(action.moment, action.channel);
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'MUTE') {
@@ -539,6 +632,7 @@ class Chat {
       return;
     case 'PUBLISH_DELETE_MESSAGE':
       this.publishDeleteMessage(action.id, this.getState().currentChannel);
+      return;
     }
   }
 }
