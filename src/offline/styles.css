@@ -1,0 +1,23 @@
+@import url('../../assets/theme.css');
+
+.offline {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--disabledColor);
+}
+
+.heading {
+  text-transform: uppercase;
+  color: var(--disabledTextColor);
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+}
+
+.eventName {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
