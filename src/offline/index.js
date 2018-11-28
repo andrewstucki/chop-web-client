@@ -6,16 +6,24 @@ import moment from 'moment';
 
 const mapStateToProps = state => {
   const nextEvent = getNextEventData(state);
-  const { title, scheduleTime } = nextEvent;
+  if (nextEvent) {
+    const { title, scheduleTime } = nextEvent;
 
-  const unixTime = moment.unix(scheduleTime);
-  const localTime = unixTime.local().format('h:mma dddd, MMM. D');
+    const unixTime = moment.unix(scheduleTime);
+    const localTime = unixTime.local().format('h:mma dddd, MMM. D');
 
-  return {
-    isOffline: false,
-    eventName: title,
-    eventTime: localTime,
-  };
+    return {
+      isOffline: false,
+      eventName: title,
+      eventTime: localTime,
+    };
+  } else {
+    return {
+      isOffline: false,
+      eventName: '',
+      eventTime: '',
+    };
+  }
 };
 
 const mapDispatchToProps = dispatch => ({
