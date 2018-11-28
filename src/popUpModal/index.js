@@ -2,13 +2,14 @@
 import { connect } from 'react-redux';
 
 import {
-  getOtherUser,
   togglePopUpModal,
   removeChannel,
 } from '../feed/dux';
 import { publishLeftChannelNotification } from '../moment/notification/dux';
 
-//import { publishLeftChannelNotification } from '../moment';
+import {
+  getOtherUsers,
+} from '../selectors/chatSelectors';
 
 import PopUpModal from './popUpModal';
 
@@ -16,7 +17,7 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     isPopUpModalVisible: feedState.isPopUpModalVisible,
-    otherUser: getOtherUser(feedState),
+    otherUser: getOtherUsers(feedState, feedState.currentChannel)[0],
     currentUser: feedState.currentUser,
     currentChannel: feedState.currentChannel,
   };

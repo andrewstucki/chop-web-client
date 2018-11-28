@@ -1,6 +1,5 @@
 // @flow
 import type {
-  MessageType,
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
@@ -1189,51 +1188,6 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
 const getCurrentChannel = (state: FeedType): string => (
   state.currentChannel
 );
-
-const feedContents = (state: FeedType): Array<MessageType> => (
-  state.channels[state.currentChannel] && state.channels[state.currentChannel].moments ?
-    state.channels[state.currentChannel].moments.map(moment => {
-      if (moment.type === 'MESSAGE' && moment.lang !== state.currentLanguage && moment.translations) {
-        const [ translation ] = moment.translations.filter(translation => 
-          translation.languageCode === state.currentLanguage
-        );
-        if (translation && translation.text) {
-          moment.text = translation.text;
-        }
-      }
-      return moment;
-    }).filter(moment => moment.isMuted !== 'true') :
-    []
-);
-
-const feedAnchorMoments = (state: FeedType): Array<AnchorMomentType> => (
-  state.channels[state.currentChannel] && state.channels[state.currentChannel].anchorMoments ? 
-    state.channels[state.currentChannel].anchorMoments : []
-);
-
-const hasParticipants = (state: FeedType): boolean => {
-  if (state.channels[state.currentChannel]) {
-    const currentChannel = state.channels[state.currentChannel];
-    return currentChannel.participants &&
-      currentChannel.participants.length ? true : false;
-  }
-  return false;
-};
-
-const getOtherUser = (state: FeedType): SharedUserType | null => {
-  const currentChannel = state.channels[state.currentChannel];
-  if (currentChannel &&
-    currentChannel.participants
-    && currentChannel.participants.length >= 2
-  ) {
-    const [ otherUser ] = currentChannel.participants.filter(
-      participant => participant.pubnubToken !== state.currentUser.pubnubToken
-    );
-    return otherUser;
-  }
-  return null;
-};
-
 const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
@@ -1254,10 +1208,7 @@ export {
   changeChannel,
   addChannel,
   removeChannel,
-  feedContents,
   defaultState,
-  hasParticipants,
-  getOtherUser,
   getCurrentChannel,
   togglePopUpModal,
   leaveChannel,
@@ -1277,7 +1228,6 @@ export {
   setScheduleData,
   updateHereNow,
   removeHereNow,
-  feedAnchorMoments,
   setSalvations,
   setAuthentication,
   removeAuthentication,

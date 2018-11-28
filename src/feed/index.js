@@ -4,18 +4,22 @@ import { connect } from 'react-redux';
 import {
   feedContents,
   hasParticipants,
-  togglePopUpModal,
   feedAnchorMoments,
+} from '../selectors/channelSelectors';
+
+import {
+  togglePopUpModal,
 } from './dux';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
+  const { channel } = ownProps;
   return {
-    moments: feedContents(feedState),
-    anchorMoments: feedAnchorMoments(feedState),
-    currentChannel: feedState.currentChannel,
+    moments: feedContents(feedState, channel),
+    anchorMoments: feedAnchorMoments(feedState, channel),
+    currentChannel: channel,
     animatingMoment: feedState.renderingAnchorMoment,
-    hasParticipants: hasParticipants(feedState),
+    hasParticipants: hasParticipants(feedState, channel),
   };
 };
 

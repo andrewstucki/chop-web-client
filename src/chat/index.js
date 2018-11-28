@@ -3,21 +3,24 @@ import { connect } from 'react-redux';
 
 import {
   toggleChatFocus,
-  getPlaceholder,
 } from './dux';
+
+import {
+  getPlaceholder,
+} from '../selectors/chatSelectors';
 
 import { publishMessage } from '../moment';
 
 import Chat from './chat';
 import { getCurrentUserAsSharedUser } from '../feed/dux';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
   return {
     focused: feedState.isChatFocused,
-    currentPlaceholder: getPlaceholder(feedState),
+    currentPlaceholder: getPlaceholder(feedState, ownProps.channel),
     currentUser: getCurrentUserAsSharedUser(feedState),
-    currentChannel: feedState.currentChannel,
+    currentChannel: ownProps.channel,
   };
 };
 

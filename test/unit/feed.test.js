@@ -3,10 +3,7 @@ import reducer, {
   changeChannel,
   addChannel,
   removeChannel,
-  feedContents,
   defaultState,
-  hasParticipants,
-  getOtherUser,
   togglePopUpModal,
   leaveChannel,
   setUser,
@@ -18,6 +15,10 @@ import {
   feedContents as feedContentsSelector,
   feedAnchorMoments,
 } from '../../src/selectors/channelSelectors';
+
+import {
+  getOtherUsers,
+} from '../../src/selectors/chatSelectors';
 
 import {
   receiveMoment,
@@ -412,7 +413,7 @@ describe('Feed tests', () => {
   });
 
   test('Feed contents', () => {
-    const result = feedContents(
+    const result = feedContentsSelector(
       {
         ...defaultState,
         channels: {
@@ -434,9 +435,9 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
         currentUser: currentUser,
-      }
+      },
+      'public'
     );
     expect(result).toEqual(
       [
@@ -455,7 +456,7 @@ describe('Feed tests', () => {
   });
 
   test('Feed contents not public', () => {
-    const result = feedContents(
+    const result = feedContentsSelector(
       {
         ...defaultState,
         channels: {
@@ -483,9 +484,9 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
         currentUser: currentUser,
-      }
+      },
+      'host'
     );
     expect(result).toEqual(
       [
@@ -500,74 +501,6 @@ describe('Feed tests', () => {
           messageTrayOpen: false,
         },
       ]
-    );
-  });
-
-  test('feedContents works without a channel', () => {
-    expect(feedContents(defaultState)).toEqual([]);
-  });
-
-  test('feedContents returns translations', () => {
-    const result = feedContents(
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                user: {
-                  id: '12345',
-                  name: 'Billy Bob',
-                },
-                messageTrayOpen: false,
-                translations: [
-                  {
-                    languageCode: 'en',
-                    text: 'I like socks',
-                  },
-                  {
-                    languageCode: 'ko',
-                    text: '나는 양말을 좋아한다.',
-                  },
-                ],
-              },
-            ],
-            anchorMoments: [],
-          },
-        },
-        currentLanguage: 'ko',
-        currentChannel: 'public',
-        currentUser: currentUser,
-      }
-    );
-    expect(result).toEqual(
-      [
-        {
-          type: MESSAGE,
-          id: '12345',
-          text: '나는 양말을 좋아한다.',
-          user: {
-            id: '12345',
-            name: 'Billy Bob',
-          },
-          messageTrayOpen: false,
-          translations: [
-            {
-              languageCode: 'en',
-              text: 'I like socks',
-            },
-            {
-              languageCode: 'ko',
-              text: '나는 양말을 좋아한다.',
-            },
-          ],
-        },
-      ],
     );
   });
 
@@ -1741,46 +1674,6 @@ describe('Feed tests', () => {
     );
   });
 
-  test('hasParticipants channel with participants', () => {
-    const result = hasParticipants(
-      {
-        ...defaultState,
-        channels: {
-          direct: {
-            id: '12345',
-            name: 'Carl',
-            moments: [],
-            anchorMoments: [],
-            participants: [
-              otherUser,
-              otherUser,
-            ],
-          },
-        },
-        currentChannel: 'direct',
-      }
-    );
-    expect(result).toEqual(true);
-  });
-
-  test('hasParticipants channel without participants', () => {
-    const result = hasParticipants(
-      {
-        ...defaultState,
-        channels: {
-          direct: {
-            id: '12345',
-            name: 'Carl',
-            moments: [],
-            anchorMoments: [],
-          },
-        },
-        currentChannel: 'direct',
-      }
-    );
-    expect(result).toEqual(false);
-  });
-
   test('hasParticipants selector channel with participants', () => {
     const result = hasParticipantsSelector(
       {
@@ -1821,8 +1714,8 @@ describe('Feed tests', () => {
     expect(result).toEqual(false);
   });
 
-  test('getOtherUser', () => {
-    const result = getOtherUser(
+  test('getOtherUsers', () => {
+    const result = getOtherUsers(
       {
         ...defaultState,
         channels: {
@@ -1845,10 +1738,11 @@ describe('Feed tests', () => {
         },
         currentChannel: 'direct',
         currentUser: currentUser,
-      }
+      },
+      'direct'
     );
     expect(result).toEqual(
-      otherUser
+      [otherUser]
     );
   });
 
