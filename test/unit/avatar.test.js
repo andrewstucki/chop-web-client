@@ -24,7 +24,7 @@ describe('Test Avatar', () => {
 
     const wrapper = Enzyme.mount(
       <Provider store={store}>
-        <Feed />
+        <Feed channel="public"/>
       </Provider>
     );
 
@@ -63,7 +63,7 @@ describe('Test Avatar', () => {
 
     const wrapper = Enzyme.mount(
       <Provider store={store}>
-        <Feed />
+        <Feed channel="public" />
       </Provider>
     );
 
