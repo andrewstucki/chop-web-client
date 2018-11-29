@@ -9,7 +9,8 @@ import { Redirect } from 'react-router-dom';
 
 type LoginProps = {
   basicAuthLogin: (email: string, password: string) => void,
-  isAuthenticated: boolean
+  isAuthenticated: boolean,
+  clearErrors: () => void,
 };
 
 type LoginState = {
@@ -61,6 +62,7 @@ class Login extends Component<LoginProps, LoginState> {
   handleLogin (event: SyntheticKeyboardEvent<HTMLInputElement>) {
     event.preventDefault();
     const { email, password } = this.state;
+    this.props.clearErrors();
     this.props.basicAuthLogin(email, password);
   }
 

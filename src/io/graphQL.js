@@ -116,8 +116,8 @@ currentLanguages {
 }`;
 
 const acceptPrayer = `
-mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!) {
-  acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken) {
+mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $hostTokens: [String!]!, $requesterNickname: String!) {
+  acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken, hostTokens: $hostTokens, requesterNickname: $requesterNickname) {
     id
     name
     subscribers {
@@ -142,8 +142,8 @@ mutation leaveFeed($feedToken: String!) {
 `;
 
 const createDirectFeed = `
-mutation createDirectFeed($pubnubToken: String!) {
-  createDirectFeed(targetPubnubToken: $pubnubToken) {
+mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
+  createDirectFeed(targetPubnubToken: $pubnubToken, targetNickname: $nickname) {
     id
     name
     subscribers {
@@ -235,12 +235,14 @@ export default class GraphQl {
     return await this.client.request(currentState);
   }
 
-  async acceptPrayer (channelId: string, requesterPubnubToken: string): Promise<any> {
+  async acceptPrayer (channelId: string, requesterPubnubToken: string, hostTokens: Array<string>, requesterName: string): Promise<any> {
     return await this.client.request(
       acceptPrayer,
       {
         feedToken: channelId,
         requesterPubnubToken,
+        hostTokens,
+        requesterNickname: requesterName,
       }
     );
   }
@@ -254,11 +256,12 @@ export default class GraphQl {
     );
   }
 
-  async directChat (pubnubToken: string) {
+  async directChat (pubnubToken: string, nickname: string) {
     return await this.client.request(
       createDirectFeed,
       {
         pubnubToken,
+        nickname,
       }
     );
   }

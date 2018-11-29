@@ -7,7 +7,7 @@ import sinon from 'sinon';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-test('Form errors render.', () => {
+test('InputField renders.', () => {
   const onInputChange = sinon.spy();
   const wrapper = Enzyme.shallow(
     <InputField 
@@ -23,3 +23,18 @@ test('Form errors render.', () => {
   wrapper.find('input').simulate('change');
   expect(onInputChange.calledOnce).toEqual(true);
 });
+
+test('InputField chat type renders.', () => {
+  const onInputChange = sinon.spy();
+  const wrapper = Enzyme.shallow(
+    <InputField 
+      type='chat'
+      onChange={onInputChange}/>
+  );
+
+  expect(wrapper.find('input').prop('id')).toEqual('chat');
+  expect(wrapper.find('input').prop('type')).toEqual('text');
+  wrapper.find('input').simulate('change');
+  expect(onInputChange.calledOnce).toEqual(true);
+});
+

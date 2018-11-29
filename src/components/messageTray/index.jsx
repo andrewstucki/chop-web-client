@@ -9,7 +9,7 @@ import styles from './style.css';
 type MessageTrayPropsType = {
   deleteMessage: (id: string, channel:string) => void,
   muteUser: (pubnubToken: string) => void,
-  directChat: (pubnubToken: string) => void,
+  directChat: (pubnubToken: string, nickname: string) => void,
 };
 
 const trayButton = (

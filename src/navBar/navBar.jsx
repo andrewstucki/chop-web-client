@@ -148,7 +148,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           className={styles.avatar}
           style={
             {
-              backgroundColor: getAvatarColor(channelIconName, opacity),
+              backgroundColor: getAvatarColor(channelIconName),
+              opacity: opacity,
             }
           }
         >

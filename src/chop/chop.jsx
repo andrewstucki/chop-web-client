@@ -3,13 +3,12 @@ import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import Banner from '../banner';
-import Chat from '../chat';
-import Feed from '../feed';
+import Chat from '../pane/content/chat';
 import NavBar from '../navBar';
 import VideoFeed from '../videoFeed';
 import SideMenu from '../sideMenu';
 import PopUpModal from '../popUpModal';
-import ReactionsContainer from '../reactions/reactionsContainer';
+import Offline from '../offline';
 import { isUsingIPhone, isUsingIPhoneX, isUsingIPhone678, isUsingIPhone678plus } from '../util';
 
 import '../../assets/global.css';
@@ -37,11 +36,8 @@ class ChopContainer extends React.Component<any> {
             <Banner />
             <NavBar />
             <VideoFeed />
-            <Feed />
-            <div className={styles.inputs}>
-              <Chat />
-              <ReactionsContainer />
-            </div>
+            <Offline />
+            <Chat />
           </div>
         </div>
       );

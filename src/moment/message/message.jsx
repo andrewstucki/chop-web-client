@@ -8,6 +8,8 @@ import Avatar from '../../avatar';
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
 import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
 import MessageTray from '../../components/messageTray';
+import linkifyHtml from 'linkifyjs/html';
+import { sanitizeString } from '../../util';
 
 import styles from './style.css';
 
@@ -23,7 +25,7 @@ type MessagePropsType = {
   toggleCloseTrayButton: (id: string) => void,
   muteUser: (pubnubToken: string) => void,
   publishMuteUserNotification: (host: string, guest: string, channel: string, date: Date) => void,
-  directChat: (pubnubToken: string) => void,
+  directChat: (pubnubToken: string, nickname: string) => void,
   mutedNotificationBanner: (guestName: string) => void,
 };
 
@@ -44,7 +46,7 @@ const Message = (
     mutedNotificationBanner,
   }: MessagePropsType
 ) => {
-  const { messageTrayOpen, closeTrayButtonRendered } = message;
+  const { messageTrayOpen, closeTrayButtonRendered, text } = message;
   const messageStyle = 
     messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
 
@@ -71,6 +73,8 @@ const Message = (
     );
   };
 
+  const renderText = linkifyHtml(text, { target: '_blank' });
+
   return (
     <div data-component="messageContainer" className={styles.wrapper}>
     
@@ -86,7 +90,7 @@ const Message = (
           closeMessageTray(message.id);
         }}
         directChat={() => {
-          directChat(message.user.pubnubToken);
+          directChat(message.user.pubnubToken, message.user.name);
         }}
       />
       <div
@@ -102,7 +106,7 @@ const Message = (
           {message.user.role.label &&
             <span className={styles.role}>{message.user.role.label}</span>
           }
-          <div data-node="text" className={styles.text}>{message.text}</div>
+          <div key={message.id} data-node="text" className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
         </div>
         {renderMessageButtons()}
       </div>

@@ -10,6 +10,7 @@ import { createUid } from '../../util';
 const ACTIONABLE_NOTIFICATION = 'ACTIONABLE_NOTIFICATION';
 const PRAYER_REQUEST = 'PRAYER_REQUEST';
 const PUBLISH_ACCEPTED_PRAYER_REQUEST = 'PUBLISH_ACCEPTED_PRAYER_REQUEST';
+const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 
 // Flow Type Definitions
 
@@ -20,7 +21,8 @@ type PrayerRequestNotificationType = {
   user: SharedUserType,
   timeStamp: string,
   active: boolean,
-  channel: string,
+  cancelled: boolean,
+  prayerChannel: string,
 };
 
 type ActionableNotificationType =
@@ -28,8 +30,14 @@ type ActionableNotificationType =
 
 type PublishAcceptedPrayerRequestType = {
   type: 'PUBLISH_ACCEPTED_PRAYER_REQUEST',
-  id: string,
-  channel: string,
+  prayerChannel: string,
+  hostChannel: string,
+};
+
+type ReceiveAcceptedPrayerRequestType = {
+  type: 'RECEIVE_ACCEPTED_PRAYER_REQUEST',
+  prayerChannel: string,
+  hostChannel: string,
 };
 
 // Action Creators
@@ -48,6 +56,7 @@ const receivePrayerRequestNotification = (
       id: createUid(),
       user,
       active: true,
+      cancelled: false,
       timeStamp: formatAMPM(new Date),
       prayerChannel,
     },
@@ -55,13 +64,28 @@ const receivePrayerRequestNotification = (
 );
 
 const publishAcceptedPrayerRequest = (
-  id: string,
-  channel: string
+  prayerChannel: string,
+  hostChannel: string,
+  cancelled: boolean,
 ): PublishAcceptedPrayerRequestType => (
   {
     type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
-    id,
-    channel,
+    prayerChannel,
+    hostChannel,
+    cancelled,
+  }
+);
+
+const receiveAcceptedPrayerRequest = (
+  prayerChannel: string,
+  hostChannel: string,
+  cancelled: boolean,
+): ReceiveAcceptedPrayerRequestType => (
+  {
+    type: RECEIVE_ACCEPTED_PRAYER_REQUEST,
+    prayerChannel,
+    hostChannel,
+    cancelled,
   }
 );
 
@@ -71,15 +95,18 @@ export type {
   ActionableNotificationType,
   PrayerRequestNotificationType,
   PublishAcceptedPrayerRequestType,
+  ReceiveAcceptedPrayerRequestType,
 };
 
 export {
   receivePrayerRequestNotification,
   publishAcceptedPrayerRequest,
+  receiveAcceptedPrayerRequest,
 };
 
 export {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  RECEIVE_ACCEPTED_PRAYER_REQUEST,
 };

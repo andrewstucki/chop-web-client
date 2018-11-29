@@ -1,6 +1,5 @@
 // @flow
 import type {
-  MessageType,
   OpenMessageTrayType,
   CloseMessageTrayType,
   DeleteMessageType,
@@ -9,6 +8,7 @@ import type {
   ReceiveMomentType,
   PublishLeaveChannelType,
   PublishAcceptedPrayerRequestType,
+  ReceiveAcceptedPrayerRequestType,
 } from '../moment';
 
 import type {
@@ -31,9 +31,18 @@ import {
   TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
 } from '../moment';
+
+import {
+  SET_PANE_CONTENT,
+} from '../pane/dux';
+
+import type {
+  PaneContentType,
+} from '../pane/dux';
 
 import {
   PUBLISH_REACTION,
@@ -59,7 +68,7 @@ import type { BannerType } from '../banner/dux';
 import { SET_LANGUAGE } from '../languageSelector/dux';
 import { getPublicChannel } from '../selectors/channelSelectors';
 
-import { ADD_ERROR, REMOVE_ERROR } from '../errors/dux';
+import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
 import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
 import moment from 'moment';
 
@@ -69,7 +78,6 @@ const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
-const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const GET_INIT_DATA = 'GET_INIT_DATA';
@@ -219,17 +227,14 @@ type FeedType = {
   notificationBanner: BannerType,
   sequence: any,
   isAuthenticated: boolean,
-  auth: AuthenticationType
+  auth: AuthenticationType,
+  panes: {
+    [string]: PaneContentType,
+  },
 };
 
 type ChangeChannelType = {
   type: 'CHANGE_CHANNEL',
-  channel: string,
-};
-
-type ReceiveAcceptedPrayerRequestType = {
-  type: 'RECEIVE_ACCEPTED_PRAYER_REQUEST',
-  id: string,
   channel: string,
 };
 
@@ -279,7 +284,7 @@ type SetPubnubKeysType = {
 type LoadHistoryType = {
   type: 'LOAD_HISTORY',
   channel: string,
-  moments: MomentType,
+  moments: Array<MomentType>,
 };
 
 type UserState = {
@@ -473,17 +478,6 @@ const changeChannel = (newChannel: string): ChangeChannelType => (
   }
 );
 
-const receiveAcceptedPrayerRequest = (
-  id: string,
-  channel: string
-): ReceiveAcceptedPrayerRequestType => (
-  {
-    type: RECEIVE_ACCEPTED_PRAYER_REQUEST,
-    id,
-    channel,
-  }
-);
-
 const addChannel = (
   name: string,
   id: string,
@@ -522,7 +516,7 @@ const leaveChannel = (pubnubToken: string, channel: string): LeaveChannelType =>
   }
 );
 
-const loadHistory = (moments: MomentType, channel: string): LoadHistoryType => (
+const loadHistory = (moments: Array<MomentType>, channel: string): LoadHistoryType => (
   {
     type: LOAD_HISTORY,
     channel,
@@ -630,6 +624,7 @@ const defaultState = {
       name: 'Korean',
     },
   ],
+  panes: {},
   reactions: [],
   notificationBanner: {
     message: '',
@@ -656,6 +651,14 @@ const reducer = (
     return state;
   }
   switch (action.type) {
+  case SET_PANE_CONTENT:
+    return {
+      ...state,
+      panes: {
+        ...state.panes,
+        [action.name]: action.content,
+      },
+    };
   case UPDATE_HERE_NOW:
     return {
       ...state,
@@ -908,27 +911,37 @@ const reducer = (
   case PUBLISH_ACCEPTED_PRAYER_REQUEST:
   case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
     // $FlowFixMe
-    const { id, channel } = action;
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        // $FlowFixMe
-        [channel]: {
+    const { prayerChannel, hostChannel, cancelled } = action;
+    const messageIndex = state.channels[hostChannel].moments.findIndex(el => (
+      el.prayerChannel === prayerChannel && el.active === true
+    ));
+    if (messageIndex >= 0) {
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
           // $FlowFixMe
-          ...state.channels[channel],
-          // $FlowFixMe
-          moments: state.channels[channel].moments.map(
-            moment => (
+          [hostChannel]: {
+            // $FlowFixMe
+            ...state.channels[hostChannel],
+            // $FlowFixMe
+            moments: [
+              ...state.channels[hostChannel].moments.slice(0, messageIndex),
               {
-                ...moment,
-                active: moment.id === id ? !moment.active : moment.active,
-              }
-            )
-          ),
+                ...state.channels[hostChannel].moments[messageIndex],
+                active: false,
+                cancelled: cancelled,
+              },
+              ...state.channels[hostChannel].moments.slice(messageIndex + 1),
+            ],
+          },
         },
-      },
-    };
+      };
+    } else {
+      return {
+        ...state,
+      };
+    }
   }
   case DELETE_MESSAGE: {
     // $FlowFixMe
@@ -1133,6 +1146,11 @@ const reducer = (
       // $FlowFixMe
       errors: state.errors.filter(error => error.id !== action.id),
     };
+  case CLEAR_ERRORS:
+    return {
+      ...state,
+      errors: [],
+    };
   case SET_NOTIFICATION_BANNER:
     return {
       ...state,
@@ -1170,51 +1188,6 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
 const getCurrentChannel = (state: FeedType): string => (
   state.currentChannel
 );
-
-const feedContents = (state: FeedType): Array<MessageType> => (
-  state.channels[state.currentChannel] && state.channels[state.currentChannel].moments ?
-    state.channels[state.currentChannel].moments.map(moment => {
-      if (moment.type === 'MESSAGE' && moment.lang !== state.currentLanguage && moment.translations) {
-        const [ translation ] = moment.translations.filter(translation => 
-          translation.languageCode === state.currentLanguage
-        );
-        if (translation && translation.text) {
-          moment.text = translation.text;
-        }
-      }
-      return moment;
-    }).filter(moment => moment.isMuted !== 'true') :
-    []
-);
-
-const feedAnchorMoments = (state: FeedType): Array<AnchorMomentType> => (
-  state.channels[state.currentChannel] && state.channels[state.currentChannel].anchorMoments ? 
-    state.channels[state.currentChannel].anchorMoments : []
-);
-
-const hasParticipants = (state: FeedType): boolean => {
-  if (state.channels[state.currentChannel]) {
-    const currentChannel = state.channels[state.currentChannel];
-    return currentChannel.participants &&
-      currentChannel.participants.length ? true : false;
-  }
-  return false;
-};
-
-const getOtherUser = (state: FeedType): SharedUserType | null => {
-  const currentChannel = state.channels[state.currentChannel];
-  if (currentChannel &&
-    currentChannel.participants
-    && currentChannel.participants.length >= 2
-  ) {
-    const [ otherUser ] = currentChannel.participants.filter(
-      participant => participant.pubnubToken !== state.currentUser.pubnubToken
-    );
-    return otherUser;
-  }
-  return null;
-};
-
 const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
@@ -1235,11 +1208,7 @@ export {
   changeChannel,
   addChannel,
   removeChannel,
-  feedContents,
   defaultState,
-  receiveAcceptedPrayerRequest,
-  hasParticipants,
-  getOtherUser,
   getCurrentChannel,
   togglePopUpModal,
   leaveChannel,
@@ -1259,7 +1228,6 @@ export {
   setScheduleData,
   updateHereNow,
   removeHereNow,
-  feedAnchorMoments,
   setSalvations,
   setAuthentication,
   removeAuthentication,
@@ -1271,7 +1239,6 @@ export type {
   ChangeChannelType,
   FeedType,
   InviteToChannelType,
-  ReceiveAcceptedPrayerRequestType,
   ChannelType,
   PrivateUserType,
   SharedUserType,

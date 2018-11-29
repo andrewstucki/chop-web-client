@@ -16,20 +16,8 @@ describe('Notification test', () => {
             type: 'NOTIFICATION',
             notificationType: 'PRAYER',
             id: '12345',
-            host: {
-              name: 'yablby',
-              pubnubToken: '1234',
-              role: {
-                label: 'host',
-              },
-            },
-            guest: {
-              name: 'cookietree',
-              pubnubToken: '5678',
-              role: {
-                label: 'host',
-              },
-            },
+            host: 'yablby',
+            guest: 'cookietree',
             timeStamp: '9:33pm',
           }
         }

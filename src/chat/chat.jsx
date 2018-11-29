@@ -7,7 +7,7 @@ import type { SharedUserType } from '../feed/dux';
 import { isUsingIPad, isUsingIPhone } from '../util';
 
 import Button from '../components/button';
-import TextField from '../components/text-field';
+import InputField from '../components/inputField';
 import UpArrow from '../../assets/large-arrow-up.svg';
 import styles from './styles.css';
 
@@ -27,6 +27,8 @@ type ChatState = {
 };
 
 class Chat extends Component<ChatProps, ChatState> {
+  inputField: { current: any };
+
   constructor (props: ChatProps) {
     super(props);
     // $FlowFixMe
@@ -39,6 +41,10 @@ class Chat extends Component<ChatProps, ChatState> {
     this.onFocus = this.onFocus.bind(this);
     // $FlowFixMe
     this.noScrollFunction = this.noScrollFunction.bind(this);
+    // $FlowFixMe
+    this.sendMessage = this.sendMessage.bind(this);
+    // $FlowFixMe
+    this.inputField = React.createRef();
 
     if (props.initialState) {
       this.state = props.initialState;
@@ -125,13 +131,24 @@ class Chat extends Component<ChatProps, ChatState> {
     }
   }
 
-  render () {
+  sendMessage (event: SyntheticEvent<HTMLButtonElement>) {
     const {
       publishMessage,
-      focused = false,
-      currentPlaceholder,
       currentUser,
       currentChannel,
+    } = this.props;
+
+    event.preventDefault();
+    // Must force blur to prevent iOS from displaying 'select all' in text field
+    this.inputField.current.props.onBlur();
+    publishMessage(currentChannel, this.state.chatInput, currentUser);
+    this.setState({chatInput: ''});
+  }
+
+  render () {
+    const {
+      focused = false,
+      currentPlaceholder,
     } = this.props;
 
     const style = focused ? styles.focused : styles.default;
@@ -139,22 +156,21 @@ class Chat extends Component<ChatProps, ChatState> {
     return (
       <div className={styles.background}>
         <div className={style}>
-          <TextField
-            onInput={this.onTextEntered}
+          <InputField
+            type='chat'
+            onChange={this.onTextEntered}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             value={this.state.chatInput}
             placeholder={currentPlaceholder}
             enterDetect={this.onKeyPressed}
+            // $FlowFixMe
+            ref={this.inputField}
           />
           {this.state.chatInput &&
             <Button
               buttonId='chat-button'
-              onClick={event => (
-                event.preventDefault(),
-                publishMessage(currentChannel, this.state.chatInput, currentUser),
-                this.setState({chatInput: ''})
-              )}
+              onClick={this.sendMessage}
               image={UpArrow}
               buttonStyle="icon"
               imageType="arrow"

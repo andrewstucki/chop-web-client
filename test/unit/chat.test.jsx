@@ -1,7 +1,7 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
 import Button from '../../src/components/button';
-import TextField from '../../src/components/text-field';
+import InputField from '../../src/components/inputField';
 import Chat from '../../src/chat/chat';
 import Enzyme from 'enzyme';
 import React from 'react';
@@ -17,7 +17,7 @@ const otherUser = {
 };
 
 describe('Chat tests', () => {
-  test('has a TextField and Button', () => {
+  test('has a InputField and Button', () => {
     const wrapper = Enzyme.shallow(
       <Chat
         textOnBlur={function () {}}
@@ -34,11 +34,11 @@ describe('Chat tests', () => {
     wrapper.setState({
       chatInput: 'Hello',
     });
-    expect(wrapper.find(TextField).length).toBe(1);
+    expect(wrapper.find(InputField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(1);
   });
 
-  test('has a TextField but not a Button', () => {
+  test('has a InputField but not a Button', () => {
     const wrapper = Enzyme.shallow(
       <Chat
         textOnBlur={function () {}}
@@ -52,7 +52,7 @@ describe('Chat tests', () => {
         publishMessage={() => {}}
       />
     );
-    expect(wrapper.find(TextField).length).toBe(1);
+    expect(wrapper.find(InputField).length).toBe(1);
     expect(wrapper.find(Button).length).toBe(0);
   });
 });

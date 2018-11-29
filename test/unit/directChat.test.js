@@ -15,7 +15,7 @@ import { promisifyMiddleware } from '../testUtils';
 jest.mock('../../src/io/graphQL');
 
 describe('Direct Chat Tests', () => {
-  test('Direct chat calls server', async () => {
+  test('Direct chat calls server', () => {
     const actors = actorMiddleware(
       ServiceActor
     );
@@ -40,42 +40,44 @@ describe('Direct Chat Tests', () => {
       applyMiddleware(...middlewareList)
     );
 
-    store.dispatch(directChat(123456)).then(() => {
-      expect(mockDirectChat).toHaveBeenCalledTimes(1);
-      expect(mockDirectChat).toHaveBeenCalledWith(123456);
+    return store.dispatch(directChat(123456, 'abc')).then(async () => {
+      store.subscribe(() => {
+        expect(mockDirectChat).toHaveBeenCalledTimes(1);
+        expect(mockDirectChat).toHaveBeenCalledWith(123456, 'abc');
 
-      expect(store.getState().feed).toEqual(
-        {
-          ...defaultState,
-          currentChannel: 'abc',
-          channels: {
-            abc: {
-              id: 'abc',
-              name: 'abc',
-              moments: [],
-              anchorMoments: [],
+        expect(store.getState().feed).toEqual(
+          {
+            ...defaultState,
+            currentChannel: 'abc',
+            channels: {
+              abc: {
+                id: 'abc',
+                name: 'abc',
+                moments: [],
+                anchorMoments: [],
+              },
+              '67890': {
+                id: '67890',
+                name: null,
+                moments: [],
+                anchorMoments: [],
+                participants: [
+                  {
+                    pubnubToken: 4321,
+                    name: 'Fred',
+                    avatarUrl: null,
+                  },
+                  {
+                    pubnubToken: 5432,
+                    name: 'Barny',
+                    avatarUrl: null,
+                  },
+                ],
+              },
             },
-            '67890': {
-              id: '67890',
-              name: null,
-              moments: [],
-              anchorMoments: [],
-              participants: [
-                {
-                  pubnubToken: 4321,
-                  name: 'Fred',
-                  avatarUrl: null,
-                },
-                {
-                  pubnubToken: 5432,
-                  name: 'Barny',
-                  avatarUrl: null,
-                },
-              ],
-            },
-          },
-        }
-      );
+          }
+        );
+      });
     });
   });
 });

@@ -3,16 +3,22 @@ import reducer, {
   changeChannel,
   addChannel,
   removeChannel,
-  feedContents,
   defaultState,
-  receiveAcceptedPrayerRequest,
-  hasParticipants,
-  getOtherUser,
   togglePopUpModal,
   leaveChannel,
   setUser,
   setSalvations,
 } from '../../src/feed/dux';
+
+import {
+  hasParticipants as hasParticipantsSelector,
+  feedContents as feedContentsSelector,
+  feedAnchorMoments,
+} from '../../src/selectors/channelSelectors';
+
+import {
+  getOtherUsers,
+} from '../../src/selectors/chatSelectors';
 
 import {
   receiveMoment,
@@ -33,6 +39,7 @@ import {
   deleteMessage,
   toggleCloseTrayButton,
   publishAcceptedPrayerRequest,
+  receiveAcceptedPrayerRequest,
   MESSAGE,
 } from '../../src/moment';
 
@@ -406,7 +413,7 @@ describe('Feed tests', () => {
   });
 
   test('Feed contents', () => {
-    const result = feedContents(
+    const result = feedContentsSelector(
       {
         ...defaultState,
         channels: {
@@ -428,9 +435,9 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
         currentUser: currentUser,
-      }
+      },
+      'public'
     );
     expect(result).toEqual(
       [
@@ -449,7 +456,7 @@ describe('Feed tests', () => {
   });
 
   test('Feed contents not public', () => {
-    const result = feedContents(
+    const result = feedContentsSelector(
       {
         ...defaultState,
         channels: {
@@ -477,9 +484,9 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
         currentUser: currentUser,
-      }
+      },
+      'host'
     );
     expect(result).toEqual(
       [
@@ -497,12 +504,12 @@ describe('Feed tests', () => {
     );
   });
 
-  test('feedContents works without a channel', () => {
-    expect(feedContents(defaultState)).toEqual([]);
+  test('feedContents selector works without a channel', () => {
+    expect(feedContentsSelector(defaultState, 'public')).toEqual([]);
   });
 
-  test('feedContents returns translations', () => {
-    const result = feedContents(
+  test('feedContents selector returns translations', () => {
+    const result = feedContentsSelector(
       {
         ...defaultState,
         channels: {
@@ -537,7 +544,8 @@ describe('Feed tests', () => {
         currentLanguage: 'ko',
         currentChannel: 'public',
         currentUser: currentUser,
-      }
+      },
+      'public'
     );
     expect(result).toEqual(
       [
@@ -565,6 +573,44 @@ describe('Feed tests', () => {
     );
   });
 
+  test('feedAnchorMoments selector with no anchor moments', () => {
+    expect(feedAnchorMoments(defaultState, 'public')).toEqual([]);    
+  });
+
+  test('feedAncorMoments selector with moments', () => {
+    const result = feedAnchorMoments(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [
+              {
+                id: '1234',
+              },
+              {
+                id: '6789',
+              },
+            ],
+          },
+        },
+      },
+      'public'
+    );
+    expect(result).toEqual(
+      [
+        {
+          id: '1234',
+        },
+        {
+          id: '6789',
+        },
+      ]
+    );
+  });
+  
   test('Accepts a user', () => {
     const result = reducer(defaultState, setUser(currentUser));
     expect(result).toEqual(
@@ -1535,13 +1581,14 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: true,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
           },
         },
       },
-      publishAcceptedPrayerRequest('moment1', '12345')
+      publishAcceptedPrayerRequest('123456', '12345')
     );
     expect(result).toEqual(
       {
@@ -1561,6 +1608,7 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: false,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
@@ -1589,13 +1637,14 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: true,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
           },
         },
       },
-      receiveAcceptedPrayerRequest('moment1', '12345')
+      receiveAcceptedPrayerRequest('123456', '12345')
     );
     expect(result).toEqual(
       {
@@ -1615,6 +1664,7 @@ describe('Feed tests', () => {
                 },
                 timeStamp: '4:53pm',
                 active: false,
+                prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
@@ -1624,8 +1674,8 @@ describe('Feed tests', () => {
     );
   });
 
-  test('hasParticipants channel with participants', () => {
-    const result = hasParticipants(
+  test('hasParticipants selector channel with participants', () => {
+    const result = hasParticipantsSelector(
       {
         ...defaultState,
         channels: {
@@ -1640,14 +1690,14 @@ describe('Feed tests', () => {
             ],
           },
         },
-        currentChannel: 'direct',
-      }
+      },
+      'direct'
     );
     expect(result).toEqual(true);
   });
 
-  test('hasParticipants channel without participants', () => {
-    const result = hasParticipants(
+  test('hasParticipants selector channel without participants', () => {
+    const result = hasParticipantsSelector(
       {
         ...defaultState,
         channels: {
@@ -1658,14 +1708,14 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'direct',
-      }
+      },
+      'direct'
     );
     expect(result).toEqual(false);
   });
 
-  test('getOtherUser', () => {
-    const result = getOtherUser(
+  test('getOtherUsers', () => {
+    const result = getOtherUsers(
       {
         ...defaultState,
         channels: {
@@ -1688,10 +1738,11 @@ describe('Feed tests', () => {
         },
         currentChannel: 'direct',
         currentUser: currentUser,
-      }
+      },
+      'direct'
     );
     expect(result).toEqual(
-      otherUser
+      [otherUser]
     );
   });
 
