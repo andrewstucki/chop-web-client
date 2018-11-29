@@ -9,7 +9,6 @@ import {
 
 import {
   togglePopUpModal,
-  feedAnchorMoments,
 } from './dux';
 
 const mapStateToProps = (state, ownProps) => {
