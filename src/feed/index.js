@@ -19,7 +19,7 @@ const mapStateToProps = (state, ownProps) => {
     anchorMoments: feedAnchorMoments(feedState, channel),
     currentChannel: channel,
     animatingMoment: feedState.renderingAnchorMoment,
-    hasParticipants: hasParticipants(feedState, channel),
+    showLeaveChat: hasParticipants(feedState, channel),
   };
 };
 

@@ -26,6 +26,7 @@ storiesOf('PopUpModal', module)
       removeChannel={action('clicked')}
       currentChannel="direct"
       otherUser={otherUser}
+      hasOtherUsers={true}
       currentUser={currentUser}
       isPopUpModalVisible={true}
       publishLeftChannelNotification={() => {}}
@@ -41,6 +42,7 @@ storiesOf('PopUpModal', module)
       removeChannel={action('clicked')}
       currentChannel="direct"
       otherUser={otherUser}
+      hasOtherUsers={true}
       currentUser={currentUser}
       isPopUpModalVisible={false}
       publishLeftChannelNotification={() => {}}
