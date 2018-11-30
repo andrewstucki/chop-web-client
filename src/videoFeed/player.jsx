@@ -7,11 +7,13 @@ import 'videojs-youtube/dist/Youtube.min.js';
 // $FlowFixMe
 import '!style-loader!css-loader!video.js/dist/video-js.css';
 
-type YouTubePlayerPropsType = {
+
+type PlayerPropsType = {
   url: string,
+  startAt: number,
 };
 
-class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
+class Player extends React.Component<PlayerPropsType, void> {
   videoNode: HTMLVideoElement | null;
   player: any;
 
@@ -22,8 +24,8 @@ class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
   }
 
   componentDidUpdate () {
-    if (this.props.url !== '') {
-      this.player = videojs(this.videoNode, this.props);
+    if (this.player) {
+      this.player = videojs(this.videoNode);
     }
   }
 
@@ -34,7 +36,7 @@ class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
   }
 
   render () {
-    const { url } = this.props;
+    const { url, startAt } = this.props;
 
     let type = 'video/youtube';
     if (url.indexOf('vimeo') > -1) {
@@ -46,6 +48,7 @@ class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
     const setup = {
       techOrder: ['youtube', 'Vimeo', 'wistia'],
       autoplay: 'any',
+      startTime: startAt,
       vimeo: {
         color: '#fbc51b',
       },
@@ -68,4 +71,4 @@ class YouTubePlayer extends React.Component<YouTubePlayerPropsType, void> {
   }
 }
 
-export default YouTubePlayer;
+export default Player;

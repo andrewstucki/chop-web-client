@@ -39,6 +39,7 @@ currentEvent {
   title
   id
   startTime
+  videoStartTime
   sequence {
     serverTime
     steps {
@@ -69,6 +70,7 @@ query EventAt($time: Timestamp, $includeFeed: Boolean!, $includeVideo: Boolean!)
     title
     id
     startTime
+    videoStartTime
     video @include(if: $includeVideo) {
       type
       url

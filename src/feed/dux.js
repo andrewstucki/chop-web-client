@@ -440,13 +440,14 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
   }
 );
 
-const setEvent = (title: string, id: number, startTime: number): SetEventType => (
+const setEvent = (title: string, id: number, startTime: number, videoStartTime: number): SetEventType => (
   {
     type: SET_EVENT,
     event: {
       title,
       id,
       startTime,
+      videoStartTime,
     },
   }
 );
