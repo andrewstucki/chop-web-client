@@ -232,12 +232,13 @@ class ServiceActor {
         const event = payload.currentEvent || payload.eventAt;
         let hasVideo = false;
         let hasFeed = false;
-        if (event !== undefined) {
+        if (event.title && event.id && event.startTime && event.videoStartTime) {
           this.storeDispatch(
             setEvent(
               event.title || '',
               event.id || 0,
               event.startTime || 0,
+              event.videoStartTime || 0,
             )
           );
           const hasSequence = event.sequence && event.sequence.steps && event.sequence.steps.length;
