@@ -12,12 +12,6 @@ const SALVATION = 'SALVATION';
 
 // Flow Type Definitions
 
-type LegacySalvationType = {
-  slideId: string,
-  slideKind: string,
-  count: number,
-}
-
 type SalvationType = {
   type: 'ANCHOR_MOMENT',
   anchorMomentType: 'SALVATION',
@@ -85,7 +79,6 @@ export type {
   ReleaseAnchorMomentType,
   SalvationType,
   PublishSalvationType,
-  LegacySalvationType,
 };
 
 export {
