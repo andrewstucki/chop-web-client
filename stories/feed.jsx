@@ -31,7 +31,7 @@ storiesOf('Feed', module)
           appendingMessage={false}
           animatingMoment={false}
           isPlaceholderPresent={false}
-          hasParticipants={false}
+          showLeaveChat={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
         />
@@ -64,7 +64,7 @@ storiesOf('Feed', module)
           anchorMoments={[]}
           animatingMoment={false}
           isPlaceholderPresent={false}
-          hasParticipants={false}
+          showLeaveChat={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
         />
@@ -98,7 +98,7 @@ storiesOf('Feed', module)
           anchorMoments={[]}
           animatingMoment={false}
           isPlaceholderPresent={false}
-          hasParticipants={true}
+          showLeaveChat={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
         />

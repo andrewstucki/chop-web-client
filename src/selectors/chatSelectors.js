@@ -34,6 +34,11 @@ const getOtherUsers = createSelector(
     : []
 );
 
+const hasOtherUsers = createSelector(
+  getOtherUsers,
+  users => users.length > 0
+);
+
 const getOtherUsersNames = createSelector(
   getOtherUsers,
   users => users.map(participant => participant.name)
@@ -58,4 +63,5 @@ const getPlaceholder = createSelector(
 export {
   getPlaceholder,
   getOtherUsers,
+  hasOtherUsers,
 };

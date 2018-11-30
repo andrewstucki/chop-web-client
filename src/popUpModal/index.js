@@ -10,6 +10,7 @@ import { getCurrentChannel } from '../selectors/channelSelectors';
 
 import {
   getOtherUsers,
+  hasOtherUsers,
 } from '../selectors/chatSelectors';
 
 import PopUpModal from './popUpModal';
@@ -20,6 +21,7 @@ const mapStateToProps = state => {
   return {
     isPopUpModalVisible: feedState.isPopUpModalVisible,
     otherUser: getOtherUsers(feedState, currentChannel)[0],
+    hasOtherUsers: hasOtherUsers(feedState, currentChannel),
     currentUser: feedState.currentUser,
     currentChannel,
   };
