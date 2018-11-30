@@ -1,5 +1,8 @@
 // @flow
 import type { FeedType } from '../feed/dux';
+import { getHostChannel } from '../selectors/channelSelectors';
+import { paneContentSelector } from '../selectors/paneSelectors';
+import { PRIMARY_PANE } from '../pane/dux';
 
 // Action Types
 
@@ -24,9 +27,13 @@ const toggleChatFocus = (focus: boolean): ToggleChatFocusType => (
 // Selectors
 
 const getPlaceholder = (state: FeedType) => {
-  const currentChannelObj = state.channels[state.currentChannel];
+  const primaryPane = paneContentSelector(state, PRIMARY_PANE);
+  const { channelId:currentChannel } = primaryPane;
+  const currentChannelObj = state.channels[currentChannel];
+
+  const hostChannel = getHostChannel(state);
   let otherUserName = [];
-  if (state.currentChannel === 'host') {
+  if (currentChannel === hostChannel) {
     return 'Chat with hosts';
   } else if (currentChannelObj &&
     currentChannelObj.participants &&

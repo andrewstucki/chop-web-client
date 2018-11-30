@@ -1,5 +1,6 @@
 // @flow
 import type { FeedType } from '../feed/dux';
+import { getCurrentChannel } from '../selectors/channelSelectors';
 
 // Flow Type Definitions
 
@@ -32,10 +33,12 @@ const getChannels = (state: FeedType): ChannelsListType => (
       }
     };
 
+    const currentChannel = getCurrentChannel(state);
+
     return {
       name,
       id,
-      isCurrent: state.currentChannel === id,
+      isCurrent: currentChannel === id,
       hasActions: moments.filter(moment => (
         moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
       )).length > 0,

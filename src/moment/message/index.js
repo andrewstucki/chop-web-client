@@ -10,9 +10,9 @@ import {
   directChat,
   publishDeleteMessage,
 } from './dux';
-import { getCurrentChannel, getCurrentUserAsSharedUser } from '../../feed/dux';
+import { getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishMuteUserNotification } from '../notification/dux';
-import { getHostChannel } from '../../selectors/channelSelectors';
+import { getHostChannel, getCurrentChannel } from '../../selectors/channelSelectors';
 import { mutedNotificationBanner } from '../../banner/dux';
 
 const mapStateToProps = state => {

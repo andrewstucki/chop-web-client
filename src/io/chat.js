@@ -33,6 +33,7 @@ import {
   getLegacyChannel,
   getHostChannel,
   getPublicChannel,
+  getCurrentChannel,
 } from '../selectors/channelSelectors';
 
 type PubnubStatusEventType = {
@@ -635,9 +636,11 @@ class Chat {
     case 'REMOVE_CHANNEL': 
       this.unsubscribe([action.channel]);
       return;
-    case 'PUBLISH_DELETE_MESSAGE':
-      this.publishDeleteMessage(action.id, this.getState().currentChannel);
+    case 'PUBLISH_DELETE_MESSAGE': {
+      const currentChannel = getCurrentChannel(this.getState());
+      this.publishDeleteMessage(action.id, currentChannel);
       return;
+    }
     }
   }
 }

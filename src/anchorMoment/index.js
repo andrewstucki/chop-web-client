@@ -6,12 +6,15 @@ import {
 } from './dux';
 
 import AnchorMoment from './anchorMoment';
+import { paneContentSelector } from '../selectors/paneSelectors';
+import { PRIMARY_PANE } from '../pane/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
+  const primaryPane = paneContentSelector(feedState, PRIMARY_PANE);
   
   return {
-    currentChannel: feedState.currentChannel,
+    currentChannel: primaryPane.channelId,
     salvations: feedState.salvations,
   };
 };

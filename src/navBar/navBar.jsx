@@ -5,10 +5,12 @@ import type { ChannelType } from './dux';
 import styles from './styles.css';
 import hamburger from '../../assets/hamburger.svg';
 import { getAvatarColor, getFirstInitial } from '../util';
+import { EVENT } from '../pane/content/event/dux';
+import { CHAT } from '../pane/content/chat/dux';
 
 type NavBarProps = {
   channels: Array<ChannelType>,
-  onClick: (id: string) => void,
+  onClick: (id: string, type: 'EVENT' | 'CHAT') => void,
   openMenu: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
@@ -38,7 +40,7 @@ const Underline = props => (
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: any
   channelLink: (channel: ChannelType) => React$Node | string;
-  channelTab: (channel: ChannelType, onclick: (id: string) => void) => React$Node;
+  channelTab: (channel: ChannelType) => React$Node;
 
   constructor (props: NavBarProps) {
     super(props);
@@ -50,6 +52,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       opacity: 1.0,
       directChatChannelNames: {},
     };
+
+    this.channelTab = this.channelTab.bind(this);
   }
 
   static getDerivedStateFromProps (
@@ -160,8 +164,9 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     }
   }
 
-  channelTab (channel: ChannelType, onClick: (id: string) => void) {
+  channelTab (channel: ChannelType) {
     const selectedLink = channel.isCurrent ? this.selectedLink : null;
+    const { onClick } = this.props;
     return (
       <a
         // $FlowFixMe
@@ -170,7 +175,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         href="javascript:void(0)"
         key={channel.id}
         className={styles.link}
-        onClick={() => onClick(channel.id)}
+        onClick={() => onClick(channel.id, channel.name === 'Public' ? EVENT : CHAT)}
       >
         { channel.hasActions
           ? <span className={styles.pip}></span>
@@ -183,7 +188,6 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
   render () {
     const {
       channels,
-      onClick,
       openMenu,
     } = this.props;
     const publicChannel = channels.find(channel => channel.name.toUpperCase() === 'PUBLIC');
@@ -200,15 +204,15 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         <div className={styles.channelLinks}>
           {
             publicChannel !== undefined &&
-              this.channelTab(publicChannel, onClick)
+              this.channelTab(publicChannel)
           }
           {
             hostChannel !== undefined &&
-              this.channelTab(hostChannel, onClick)
+              this.channelTab(hostChannel)
           }
           {
             otherChannels.map(channel => (
-              this.channelTab(channel, onClick)
+              this.channelTab(channel)
             ))
           }
           {channels.length &&

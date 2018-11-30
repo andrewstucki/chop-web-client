@@ -6,6 +6,8 @@ const getChannelById = (state, id) => getChannels(state)[id];
 
 const getCurrentLanguage = state => state.currentLanguage;
 
+const getPrimaryPane = state => state.panes.primary;
+
 const getChannelByNameFactory = name => (
   createSelector(
     getChannels,
@@ -49,6 +51,11 @@ const getLegacyChannel = createSelector(
   channel => channel
 );
 
+const getCurrentChannel = createSelector(
+  getPrimaryPane,
+  pane => pane.channelId,
+);
+
 const hasParticipants = createSelector(
   getChannelById,
   channel => channel && channel.participants && channel.participants.length ? true : false
@@ -73,6 +80,7 @@ export {
   getHostChannel,
   getPublicChannel,
   getLegacyChannel,
+  getCurrentChannel,
   hasParticipants,
   feedContents,
   feedAnchorMoments,

@@ -2,9 +2,9 @@
 import NavBar from './navBar';
 import { connect } from 'react-redux';
 
-import { changeChannel } from '../feed/dux';
 import { getChannels } from '../navBar/dux';
 import { openMenu } from '../sideMenu/dux';
+import { setPrimaryPane } from '../pane/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
@@ -15,8 +15,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    onClick: id => dispatch(changeChannel(id)),
     openMenu: () => dispatch(openMenu()),
+    onClick: (id, type) => dispatch(setPrimaryPane(id, type)),
   }
 );
 

@@ -1,24 +1,29 @@
 //@flow
+import type { EventType } from './content/event/dux';
+import type { ChatType } from './content/chat/dux';
+
 const SET_PANE_CONTENT = 'SET_PANE_CONTENT';
-const CHAT = 'CHAT';
+const PRIMARY_PANE = 'primary';
 
-type PaneContentType = any;
+type PaneContentType = 
+  EventType |
+  ChatType;
 
-const setPaneToChat = (name: string, channelId: string) => (
+const setPrimaryPane = (channelId: string, type: 'EVENT' | 'CHAT') => (
   {
     type: SET_PANE_CONTENT,
-    name,
+    name: PRIMARY_PANE,
     content: {
-      type: CHAT,
+      type,
       channelId,
     },
   }
 );
 
 export {
-  setPaneToChat,
   SET_PANE_CONTENT,
-  CHAT,
+  PRIMARY_PANE,
+  setPrimaryPane,
 };
 
 export type {
