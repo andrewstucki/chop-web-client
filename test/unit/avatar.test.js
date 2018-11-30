@@ -5,11 +5,12 @@ import Enzyme from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
-import { defaultState, changeChannel, addChannel } from '../../src/feed/dux';
+import { defaultState, addChannel } from '../../src/feed/dux';
 import { publishMessage } from '../../src/moment/message/dux';
 import ImageAvatar from '../../src/avatar/imageAvatar';
 import InitialAvatar from '../../src/avatar/initialAvatar';
 import Feed from '../../src/feed';
+import { setPrimaryPane } from '../../src/pane/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -33,7 +34,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      changeChannel('public')
+      setPrimaryPane('public', 'EVENT')
     );
 
     store.dispatch(
@@ -72,7 +73,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      changeChannel('public')
+      setPrimaryPane('public', 'EVENT')
     );
 
     store.dispatch(

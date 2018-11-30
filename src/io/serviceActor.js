@@ -6,7 +6,6 @@ import {
   setOrganization,
   setPubnubKeys,
   setUser,
-  changeChannel,
   setLanguageOptions,
   REMOVE_CHANNEL,
   setSchedule,
@@ -35,6 +34,9 @@ import Location from './location';
 import GraphQl from './graphQL';
 import Scheduler from './scheduler';
 import { getAvailableForPrayer } from '../selectors/hereNowSelector';
+import { getCurrentChannel } from '../selectors/channelSelectors';
+import { setPrimaryPane } from '../pane/dux';
+import { EVENT } from '../pane/content/event/dux';
 
 class ServiceActor {
   storeDispatch: (action: any) => void
@@ -152,13 +154,14 @@ class ServiceActor {
           // eslint-disable-next-line no-console
           console.log(` - ${message}`);
         }
-
-        const { code } = extensions;
-        if (code) {
-          switch (code) {
-          case 'UNAUTHORIZED':
-            this.storeDispatch(removeAuthentication());
-            return;
+        if (extensions) {
+          const { code = '' } = extensions;
+          if (code) {
+            switch (code) {
+            case 'UNAUTHORIZED':
+              this.storeDispatch(removeAuthentication());
+              return;
+            }
           }
         }
       }
@@ -277,9 +280,6 @@ class ServiceActor {
                 }
               );
             });
-            this.storeDispatch(
-              { type: 'CLEAR_CHANNEL' }
-            );
             channels.forEach(channel => {
               const participants = convertSubscribersToSharedUsers(channel.subscribers);
               this.storeDispatch(
@@ -291,7 +291,7 @@ class ServiceActor {
               );
               if (channel.name === 'Public') {
                 this.storeDispatch(
-                  changeChannel(channel.id)
+                  setPrimaryPane(channel.id, EVENT)
                 );
               }
             });
@@ -389,7 +389,7 @@ class ServiceActor {
   }
 
   async publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {
-    const { currentChannel } = this.getStore();
+    const currentChannel = getCurrentChannel(this.getStore());
     const { channels } = this.getStore();
     const currentMoments = channels[currentChannel].moments;
     const moment = currentMoments.find(moment => moment.prayerChannel === action.prayerChannel);

@@ -7,12 +7,13 @@ import Enzyme from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
+import { defaultState, addChannel } from '../../src/feed/dux';
 import Message from '../../src/moment/message';
 import actorMiddleware from '../../src/middleware/actor-middleware';
 import '../../src/io/location';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import { promisifyMiddleware } from '../testUtils';
+import { setPrimaryPane } from '../../src/pane/dux';
 
 jest.mock('../../src/io/graphQL');
 jest.mock('../../src/io/location');
@@ -50,6 +51,22 @@ describe('Test mute user', () => {
       applyMiddleware(...middlewareList)
     );
 
+    const participants = [
+      {
+        pubnubToken: 'abc123xyz',
+        name: 'Tony Hoare',
+        role: { label: '' },
+      },
+      {
+        pubnubToken: '54353',
+        name: 'Shaq O.',
+        role: { label: '' },
+      },
+    ];
+
+    store.dispatch(addChannel('test', 'test', participants));
+    store.dispatch(setPrimaryPane('test', 'CHAT'));
+
     const wrapper = Enzyme.mount(
       <Provider store={store}>
         <div>
@@ -58,7 +75,7 @@ describe('Test mute user', () => {
       </Provider>
     );
 
-    store.dispatch({type: REHYDRATE}).then(() => {
+    return store.dispatch({type: REHYDRATE}).then(() => {
       wrapper.find('button.muteButton').simulate('click');
 
       expect(mockAuthenticate).toHaveBeenCalledTimes(1);

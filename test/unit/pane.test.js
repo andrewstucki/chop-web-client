@@ -1,7 +1,7 @@
 //@flow
 import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
-import { setPaneToChat } from '../../src/pane/dux.js';
+import { setPaneToChat } from '../../src/pane/content/chat/dux.js';
 import { paneContentSelector } from '../../src/selectors/paneSelectors.js';
 
 describe('Testing Pane and Pane Content', () => {

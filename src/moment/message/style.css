@@ -81,5 +81,6 @@
 .text {
   line-height: 19.2px;
   overflow-wrap: break-word;
+  word-break: break-word;
 }
 

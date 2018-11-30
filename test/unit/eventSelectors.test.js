@@ -1,5 +1,5 @@
 // @flow
-import { isOffline } from '../../src/selectors/offlineSelector';
+import { isOffline } from '../../src/selectors/eventSelectors';
 import { defaultState } from '../../src/feed/dux';
 
 describe('Offline Selector Tests', () => {

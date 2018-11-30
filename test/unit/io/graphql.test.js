@@ -75,7 +75,12 @@ describe('Test GraphQL', () => {
           publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
           subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
         },
-        currentChannel: '123456',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: '123456',
+          },
+        },
         languageOptions: [
           {
             code: 'af',
