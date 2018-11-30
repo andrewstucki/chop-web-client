@@ -29,9 +29,6 @@ import {
   publishSalvation,
   salvationMomentExists, 
 } from '../anchorMoment/dux';
-import type {
-  LegacySalvationType,
-} from '../anchorMoment/dux';
 import {
   getLegacyChannel,
   getHostChannel,
@@ -132,6 +129,12 @@ type LegacyPrayerNotificationType = {
   fromNickname: string,
 }
 
+type LegacyPollVoteType = {
+  slideId: string,
+  slideKind: string,
+  count: number,
+}
+
 type PubnubMessageEventDataType =
   | MomentType
   | LegacyReactionType
@@ -141,7 +144,7 @@ type PubnubMessageEventDataType =
   | LegacyLeaveChannelType
   | LegacyAcceptPrayerRequestType
   | LegacyPrayerNotificationType
-  | LegacySalvationType;
+  | LegacyPollVoteType;
 
 type PubnubMessageEventType = {
   channel: string,
@@ -189,7 +192,7 @@ class Chat {
     // $FlowFixMe
     this.publishMuteUser = this.publishMuteUser.bind(this);
     // $FlowFixMe
-    this.receiveSalvation = this.receiveSalvation.bind(this);
+    this.receivePollVote = this.receivePollVote.bind(this);
     // $FlowFixMe
     this.init = this.init.bind(this);
 
@@ -331,7 +334,7 @@ class Chat {
         return;
       }
       case 'pollVote': 
-        this.receiveSalvation(message.entry.data);
+        this.receivePollVote(message.entry.data);
         return;
       }
     });
@@ -466,7 +469,7 @@ class Chat {
     }
     case 'pollVote':
       // $FlowFixMe
-      this.receiveSalvation(event.message.data);
+      this.receivePollVote(event.message.data);
       return;
     }
   }
@@ -578,21 +581,23 @@ class Chat {
     );
   }
 
-  receiveSalvation (data:LegacySalvationType) {
-    const publicChannel = getPublicChannel(this.getState());
-    if (salvationMomentExists(this.getState(), publicChannel)) {
-      this.storeDispatch(
-        // $FlowFixMe
-        setSalvations(data.count)
-      );
-    } else {
-      this.storeDispatch(
-        // $FlowFixMe
-        setSalvations(data.count),
-      );
-      this.storeDispatch(
-        publishSalvation(publicChannel),
-      );
+  receivePollVote (data:LegacyPollVoteType) {
+    if (data.slideKind === 'Salvation') {
+      const publicChannel = getPublicChannel(this.getState());
+      if (salvationMomentExists(this.getState(), publicChannel)) {
+        this.storeDispatch(
+          // $FlowFixMe
+          setSalvations(data.count)
+        );
+      } else {
+        this.storeDispatch(
+          // $FlowFixMe
+          setSalvations(data.count),
+        );
+        this.storeDispatch(
+          publishSalvation(publicChannel),
+        );
+      }
     }
   }
 
