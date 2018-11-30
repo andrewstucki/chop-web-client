@@ -12,7 +12,9 @@ WORKDIR /usr/src/app
 
 COPY dist/index.html* /usr/src/app/
 
-COPY dist/bundle.* /usr/src/app/
+COPY dist/main.* /usr/src/app/
+COPY dist/runtime.* /usr/src/app/
+COPY dist/vendor.* /usr/src/app/
 
 COPY dist/manifest.* /usr/src/app/
 
