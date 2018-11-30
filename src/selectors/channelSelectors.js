@@ -4,7 +4,6 @@ const getChannels = state => state.channels;
 
 const getChannelById = (state, id) => getChannels(state)[id];
 
-
 const getCurrentLanguage = state => state.currentLanguage;
 
 const getChannelByNameFactory = name => (
