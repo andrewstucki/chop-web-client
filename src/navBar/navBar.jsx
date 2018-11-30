@@ -38,6 +38,7 @@ const Underline = props => (
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: any
   channelLink: (channel: ChannelType) => React$Node | string;
+  channelTab: (channel: ChannelType, onclick: (id: string) => void) => React$Node;
 
   constructor (props: NavBarProps) {
     super(props);
@@ -57,7 +58,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
   ): NavBarState | null {
     let copyOfNames = { ...state.directChatChannelNames };
     let hasUpdated = false;
-
+    
     props.channels.forEach(channel => {
       if (channel.otherUsersNames.length > 0 &&
         state.directChatChannelNames[channel.id] !== channel.otherUsersNames[0]
@@ -159,12 +160,35 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     }
   }
 
+  channelTab (channel: ChannelType, onClick: (id: string) => void) {
+    const selectedLink = channel.isCurrent ? this.selectedLink : null;
+    return (
+      <a
+        // $FlowFixMe
+        ref={selectedLink}
+        id={'nav-' + channel.name}
+        href="javascript:void(0)"
+        key={channel.id}
+        className={styles.link}
+        onClick={() => onClick(channel.id)}
+      >
+        { channel.hasActions
+          ? <span className={styles.pip}></span>
+          : null }
+        {this.channelLink(channel)}
+      </a>
+    );
+  }
+
   render () {
     const {
       channels,
       onClick,
       openMenu,
     } = this.props;
+    const publicChannel = channels.find(channel => channel.name.toUpperCase() === 'PUBLIC');
+    const hostChannel = channels.find(channel => channel.name.toUpperCase() === 'HOST');
+    const otherChannels = channels.filter(channel => channel.name.toUpperCase() !== 'PUBLIC' && channel.name.toUpperCase() !== 'HOST');
     return (
       <div id="nav-bar" className={styles.navBar}>
         <a
@@ -175,25 +199,17 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         />
         <div className={styles.channelLinks}>
           {
-            channels.map(channel => {
-              const selectedLink = channel.isCurrent ? this.selectedLink : null;
-              return (
-                <a
-                  // $FlowFixMe
-                  ref={selectedLink}
-                  id={'nav-' + channel.name}
-                  href="javascript:void(0)"
-                  key={channel.id}
-                  className={styles.link}
-                  onClick={() => onClick(channel.id)}
-                >
-                  { channel.hasActions
-                    ? <span className={styles.pip}></span>
-                    : null }
-                  {this.channelLink(channel)}
-                </a>
-              );
-            })
+            publicChannel !== undefined &&
+              this.channelTab(publicChannel, onClick)
+          }
+          {
+            hostChannel !== undefined &&
+              this.channelTab(hostChannel, onClick)
+          }
+          {
+            otherChannels.map(channel => (
+              this.channelTab(channel, onClick)
+            ))
           }
           {channels.length &&
             <Underline

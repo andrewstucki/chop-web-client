@@ -233,4 +233,36 @@ describe('NavBar tests', () => {
     );
     expect(wrapper.find('#nav-direct1').text()).toEqual('B');
   });
+
+  test('channels display in the proper order', () => {
+    const wrapper = Enzyme.shallow(
+      <NavBar
+        channels={[
+          {
+            id: '123456',
+            name: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: ['bob'],
+          },
+          {
+            id: '123456',
+            name: 'direct1',
+            isCurrent: false,
+            hasActions: false,
+            otherUsersNames: ['bill'],
+          },
+          {id: '123456', name: 'Public', isCurrent: true, hasActions: false, otherUsersNames: []},
+          {id: '123456', name: 'Host', isCurrent: false, hasActions: false, otherUsersNames: []},
+        ]}
+        onClick={function () {}}
+        openMenu={() => {}}
+        barWidth={100}
+        barX={50}
+      />
+    );
+    expect(wrapper.find('.navBar a').length).toBe(5);
+    expect(wrapper.find('.navBar a').at(1).text()).toBe('event');
+    expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
+  });
 });
