@@ -25,6 +25,7 @@ module.exports = merge(common, {
     new CopyWebpackPlugin([
       { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
     ]),
+    new webpack.HashedModuleIdsPlugin(),
   ],
   output: {
     publicPath: 'https://staging.churchonline.us'
