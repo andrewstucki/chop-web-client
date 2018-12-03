@@ -18,15 +18,13 @@ module.exports = merge(common, {
       },
       ROUTE_BASENAME: JSON.stringify('/host_mobile')
     }),
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
     new CompressionPlugin(),
     new CopyWebpackPlugin([
       { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
     ]),
     new webpack.HashedModuleIdsPlugin(),
   ],
+  devtool: 'source-map',
   output: {
     publicPath: 'https://churchonline.us'
   }

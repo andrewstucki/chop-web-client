@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: ['babel-polyfill', './src/index.jsx'],
@@ -54,6 +55,7 @@ module.exports = {
     path: path.resolve(__dirname, '../dist')
   },
   optimization: {
+    minimizer: [new UglifyJSPlugin({ sourceMap: true })],
     runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
@@ -63,6 +65,6 @@ module.exports = {
           chunks: 'all'
         }
       }
-    }
+    },
   }
 };
