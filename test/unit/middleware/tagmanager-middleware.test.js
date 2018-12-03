@@ -1,14 +1,15 @@
 // @flow
-import { dataLayerEventDefinition, initEventDefinition } from '../../../src/middleware/tagmanager-middleware';
+import { dataLayerEventDefinition } from '../../../src/middleware/tagmanager-middleware';
 import { defaultState as defaultFeedState } from '../../../src/feed/dux';
 import { createEvents } from 'redux-beacon';
+import TagManager from 'react-gtm-module';
 
 describe('Tag Manager Middleware', () => {
   test('Init Event Definition loads GTM script', () => {
     expect.assertions(2);
 
     global.GTM = {gtmId: 'XXXXXXX'};
-    initEventDefinition();
+    TagManager.initialize(global.GTM);
 
     expect(window.dataLayer).toBeTruthy();
     expect(window.dataLayer[0]).toMatchObject({

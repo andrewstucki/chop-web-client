@@ -2,7 +2,6 @@
 import type { FeedType, OrganizationType } from '../feed/dux';
 import { createMiddleware } from 'redux-beacon';
 import GoogleTagManager from '@redux-beacon/google-tag-manager';
-import TagManager from 'react-gtm-module';
 
 // Type Definitions
 type ActionType = {
@@ -29,14 +28,8 @@ const dataLayerEventDefinition = (action:ActionType, state:StateType) => ({
   organization: state.feed.organization,
 }:EventDefinitionType);
 
-const initEventDefinition = () => {
-  declare var GTM;
-  TagManager.initialize(GTM);
-};
-
 // Map Event Definitions to Redux actions
 const eventsMap = {
-  INIT: initEventDefinition,
   '*': dataLayerEventDefinition,
 };
 
@@ -46,5 +39,4 @@ export default tagManagerMiddleware;
 
 export {
   dataLayerEventDefinition,
-  initEventDefinition,
 };

@@ -24,10 +24,13 @@ import serviceActor from './io/serviceActor';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import bugsnag from 'bugsnag-js';
 import createPlugin from 'bugsnag-react';
+import TagManager from 'react-gtm-module';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
-window.dataLayer = window.dataLayer || [];
+declare var GTM;
+
+TagManager.initialize(GTM);
 
 const bugsnagClient = bugsnag({
   apiKey: '2403ac729529750d296e1e4ee022f7dc',
