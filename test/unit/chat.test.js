@@ -1,5 +1,5 @@
 // @flow
-import { getPlaceholder }  from '../../src/chat/dux';
+import { getPlaceholder }  from '../../src/selectors/chatSelectors';
 
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
@@ -32,7 +32,7 @@ describe('Chat', () => {
         channels: {
           host: {
             id: '12345',
-            name: 'host',
+            name: 'Host',
             moments: [],
             anchorMoments: [],
             participants: [
@@ -50,6 +50,7 @@ describe('Chat', () => {
           },
         },
       },
+      'host',
     );
     expect(result).toEqual('Chat with hosts');
   });
@@ -62,7 +63,7 @@ describe('Chat', () => {
           ...defaultFeedState.channels,
           direct: {
             id: '12345',
-            name: 'direct',
+            name: 'Direct',
             moments: [],
             anchorMoments: [],
             participants: [
@@ -96,6 +97,7 @@ describe('Chat', () => {
           },
         },
       },
+      'direct',
     );
     expect(result).toEqual('Chat with Shaq O.');
   });
