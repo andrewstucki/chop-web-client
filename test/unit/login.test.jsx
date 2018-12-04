@@ -37,8 +37,6 @@ describe('Login tests', () => {
       </Provider>
     );
 
-    expect(wrapper.find('#login').prop('disabled')).toBeTruthy();
-
     const emailInput = wrapper.find('input[name="email"]');
     emailInput.instance().value = 'test@life.church';
     emailInput.simulate('change');

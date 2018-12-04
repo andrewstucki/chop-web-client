@@ -6,20 +6,24 @@ import {
   removeChannel,
 } from '../feed/dux';
 import { publishLeftChannelNotification } from '../moment/notification/dux';
+import { getCurrentChannel } from '../selectors/channelSelectors';
 
 import {
   getOtherUsers,
+  hasOtherUsers,
 } from '../selectors/chatSelectors';
 
 import PopUpModal from './popUpModal';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
+  const currentChannel = getCurrentChannel(feedState);
   return {
     isPopUpModalVisible: feedState.isPopUpModalVisible,
-    otherUser: getOtherUsers(feedState, feedState.currentChannel)[0],
+    otherUser: getOtherUsers(feedState, currentChannel)[0],
+    hasOtherUsers: hasOtherUsers(feedState, currentChannel),
     currentUser: feedState.currentUser,
-    currentChannel: feedState.currentChannel,
+    currentChannel,
   };
 };
 

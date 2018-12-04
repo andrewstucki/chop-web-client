@@ -1,5 +1,5 @@
 // @flow
-import { getPlaceholder }  from '../../src/chat/dux';
+import { getPlaceholder }  from '../../src/selectors/chatSelectors';
 
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
@@ -8,7 +8,12 @@ describe('Chat', () => {
     const result = getPlaceholder(
       {
         ...defaultFeedState,
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       },
     );
     expect(result).toEqual('Chat');
@@ -18,21 +23,16 @@ describe('Chat', () => {
     const result = getPlaceholder(
       {
         ...defaultFeedState,
-        currentChannel: 'host',
-      },
-    );
-    expect(result).toEqual('Chat with hosts');
-  });
-
-  test('get placeholder for direct chat', () => {
-    const result = getPlaceholder(
-      {
-        ...defaultFeedState,
+        panes: {
+          primary: {
+            type: 'CHAT',
+            channelId: 'host',
+          },
+        },
         channels: {
-          ...defaultFeedState.channels,
-          direct: {
+          host: {
             id: '12345',
-            name: 'direct',
+            name: 'Host',
             moments: [],
             anchorMoments: [],
             participants: [
@@ -49,7 +49,43 @@ describe('Chat', () => {
             ],
           },
         },
-        currentChannel: 'direct',
+      },
+      'host',
+    );
+    expect(result).toEqual('Chat with hosts');
+  });
+
+  test('get placeholder for direct chat', () => {
+    const result = getPlaceholder(
+      {
+        ...defaultFeedState,
+        channels: {
+          ...defaultFeedState.channels,
+          direct: {
+            id: '12345',
+            name: 'Direct',
+            moments: [],
+            anchorMoments: [],
+            participants: [
+              {
+                pubnubToken: '12345',
+                name: 'Bobby G.',
+                role: { label: '' },
+              },
+              {
+                pubnubToken: '54353',
+                name: 'Shaq O.',
+                role: { label: '' },
+              },
+            ],
+          },
+        },
+        panes: {
+          primary: {
+            type: 'CHAT',
+            channelId: 'direct',
+          },
+        },
         currentUser: {
           id: '12345',
           pubnubToken: '12345',
@@ -61,6 +97,7 @@ describe('Chat', () => {
           },
         },
       },
+      'direct',
     );
     expect(result).toEqual('Chat with Shaq O.');
   });

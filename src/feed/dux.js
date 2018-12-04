@@ -66,11 +66,14 @@ import {
 import type { BannerType } from '../banner/dux';
 
 import { SET_LANGUAGE } from '../languageSelector/dux';
-import { getPublicChannel } from '../selectors/channelSelectors';
+import { getPublicChannel, getHostChannel } from '../selectors/channelSelectors';
 
 import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
 import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
 import moment from 'moment';
+
+import { EVENT } from '../pane/content/event/dux';
+import { CHAT } from '../pane/content/chat/dux';
 
 // Action Types
 
@@ -210,7 +213,6 @@ type FeedType = {
     [string]: ChannelType,
   },
   hereNow: HereNowChannels,
-  currentChannel: string,
   currentUser: PrivateUserType,
   animatingMoment: boolean,
   isPopUpModalVisible: boolean,
@@ -231,11 +233,6 @@ type FeedType = {
   panes: {
     [string]: PaneContentType,
   },
-};
-
-type ChangeChannelType = {
-  type: 'CHANGE_CHANNEL',
-  channel: string,
 };
 
 type AddChannelType = {
@@ -333,7 +330,6 @@ type SetNotificationBannerType = {
 };
 
 type FeedActionTypes =
-  | ChangeChannelType
   | ReceiveMomentType
   | AddChannelType
   | RemoveChannelType
@@ -440,13 +436,14 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
   }
 );
 
-const setEvent = (title: string, id: number, startTime: number): SetEventType => (
+const setEvent = (title: string, id: number, startTime: number, videoStartTime: number): SetEventType => (
   {
     type: SET_EVENT,
     event: {
       title,
       id,
       startTime,
+      videoStartTime,
     },
   }
 );
@@ -468,13 +465,6 @@ const setUser = (user: PrivateUserType): SetUser => (
   {
     type: SET_USER,
     user,
-  }
-);
-
-const changeChannel = (newChannel: string): ChangeChannelType => (
-  {
-    type: CHANGE_CHANNEL,
-    channel: newChannel,
   }
 );
 
@@ -571,7 +561,6 @@ const defaultState = {
   },
   channels: {},
   hereNow: {},
-  currentChannel: '',
   currentUser: {
     id: '',
     name: '',
@@ -624,7 +613,12 @@ const defaultState = {
       name: 'Korean',
     },
   ],
-  panes: {},
+  panes: {
+    primary: {
+      type: EVENT,
+      channelId: '',
+    },
+  },
   reactions: [],
   notificationBanner: {
     message: '',
@@ -748,19 +742,6 @@ const reducer = (
       },
       isAuthenticated: false,
     };
-  case CHANGE_CHANNEL:
-    if (!state.channels[action.channel]) {
-      return state;
-    }
-    return {
-      ...state,
-      currentChannel: action.channel,
-    };
-  case 'CLEAR_CHANNEL':
-    return {
-      ...state,
-      currentChannel: '',
-    };
   case RECEIVE_MOMENT:
     // $FlowFixMe
     if (state.channels[action.channel]) {
@@ -810,17 +791,26 @@ const reducer = (
       },
     };
   case REMOVE_CHANNEL: {
-    const publicChannel = getPublicChannel(state);
-
     const stateCopy = { ...state };
-    if (action.channel === state.currentChannel) {
-      if (state.channels[publicChannel]) {
-        stateCopy.currentChannel = publicChannel;
-      } else {
-        stateCopy.currentChannel = '';
-      }
-    }
     delete stateCopy.channels[action.channel];
+
+    const publicChannel = getPublicChannel(stateCopy);
+    const hostChannel = getHostChannel(stateCopy);
+
+    if (action.channel === state.panes.primary.channelId) {
+      if (action.channel === publicChannel) {
+        stateCopy.panes.primary = {
+          channelId: hostChannel || '',
+          type: CHAT,
+        };
+      } else {
+        stateCopy.panes.primary = {
+          channelId: publicChannel || '',
+          type: EVENT,
+        };
+      }
+    } 
+
     return stateCopy;
   }
   case LOAD_HISTORY:
@@ -852,9 +842,9 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: {
-          ...state.channels[state.currentChannel],
-          moments: state.channels[state.currentChannel].moments.map(
+        [state.panes.primary.channelId]: {
+          ...state.channels[state.panes.primary.channelId],
+          moments: state.channels[state.panes.primary.channelId].moments.map(
             message => (
               {
                 ...message,
@@ -873,9 +863,9 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: {
-          ...state.channels[state.currentChannel],
-          moments: state.channels[state.currentChannel].moments.map(
+        [state.panes.primary.channelId]: {
+          ...state.channels[state.panes.primary.channelId],
+          moments: state.channels[state.panes.primary.channelId].moments.map(
             message => (
               {
                 ...message,
@@ -893,9 +883,9 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.currentChannel]: {
-          ...state.channels[state.currentChannel],
-          moments: state.channels[state.currentChannel].moments.map(
+        [state.panes.primary.channelId]: {
+          ...state.channels[state.panes.primary.channelId],
+          moments: state.channels[state.panes.primary.channelId].moments.map(
             message => (
               {
                 ...message,
@@ -972,10 +962,10 @@ const reducer = (
           ...state,
           channels: {
             ...state.channels,
-            [state.currentChannel]: {
-              ...state.channels[state.currentChannel],
+            [state.panes.primary.channelId]: {
+              ...state.channels[state.panes.primary.channelId],
               moments: [
-                ...state.channels[state.currentChannel].moments,
+                ...state.channels[state.panes.primary.channelId].moments,
                 // $FlowFixMe
                 action.moment,
               ],
@@ -1052,7 +1042,8 @@ const reducer = (
     };
   }
   case LEAVE_CHANNEL: {
-    const { channels, currentChannel } = state;
+    const { channels } = state;
+    const { channelId:currentChannel } = state.panes.primary;
     const publicChannel = getPublicChannel(state);
     if (currentChannel &&
       channels[currentChannel].participants &&
@@ -1068,7 +1059,6 @@ const reducer = (
         // be undefined here even though we already checked for them
         return {
           ...state,
-          currentChannel: publicChannel,
           channels: {
             ...channels,
             [currentChannel]: {
@@ -1077,6 +1067,12 @@ const reducer = (
                 ...participants.slice(0, userIndex),
                 ...participants.slice(userIndex + 1),
               ],
+            },
+          },
+          panes: {
+            primary: {
+              type: EVENT,
+              channelId: publicChannel,
             },
           },
         };
@@ -1185,9 +1181,6 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   }
 );
 
-const getCurrentChannel = (state: FeedType): string => (
-  state.currentChannel
-);
 const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
@@ -1205,11 +1198,9 @@ export {
   SET_NOTIFICATION_BANNER,
 };
 export {
-  changeChannel,
   addChannel,
   removeChannel,
   defaultState,
-  getCurrentChannel,
   togglePopUpModal,
   leaveChannel,
   getCurrentUserAsSharedUser,
@@ -1236,7 +1227,6 @@ export type {
   AddChannelType,
   RemoveChannelType,
   MomentType,
-  ChangeChannelType,
   FeedType,
   InviteToChannelType,
   ChannelType,

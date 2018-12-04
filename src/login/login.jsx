@@ -16,12 +16,10 @@ type LoginProps = {
 type LoginState = {
   email: string,
   password: string,
-  isFormValid: boolean,
   errors: Array<string>
 }
 
 class Login extends Component<LoginProps, LoginState> {
-  checkForm: () => boolean
   handleLogin: () => void
   handleUserInput: (event:SyntheticKeyboardEvent<HTMLInputElement>) => void
 
@@ -30,21 +28,10 @@ class Login extends Component<LoginProps, LoginState> {
     this.state = {
       email: '',
       password: '',
-      isFormValid: false,
       errors: [],
     };
     this.handleUserInput = this.handleUserInput.bind(this);
-    this.checkForm = this.checkForm.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-  }
-
-  componentDidUpdate (prevProps:LoginProps, prevState:LoginState) {
-    const isFormValid = this.checkForm();
-    if (prevState.isFormValid !== isFormValid) {
-      this.setState({
-        isFormValid,
-      });
-    }
   }
 
   handleUserInput (event: SyntheticKeyboardEvent<HTMLInputElement>) {
@@ -52,11 +39,6 @@ class Login extends Component<LoginProps, LoginState> {
     this.setState({
       [name]: value,
     });
-  }
-
-  checkForm () {
-    const { email, password } = this.state;
-    return (email.length > 0 && password.length > 0);
   }
 
   handleLogin (event: SyntheticKeyboardEvent<HTMLInputElement>) {
@@ -67,8 +49,6 @@ class Login extends Component<LoginProps, LoginState> {
   }
 
   render () {
-    const { isFormValid } = this.state;
-    
     if (this.props.isAuthenticated) {
       return (
         <Redirect to='/'/>
@@ -95,7 +75,6 @@ class Login extends Component<LoginProps, LoginState> {
                 onClick={this.handleLogin}
                 text="Log In"
                 buttonStyle="primary"
-                disabled={!isFormValid}
               />
             </div>
           </form>

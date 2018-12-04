@@ -15,7 +15,7 @@ type FeedProps = {
   moments: Array<MomentType>,
   anchorMoments: Array<AnchorMomentType>,
   currentChannel: string,
-  hasParticipants: boolean,
+  showLeaveChat: boolean,
   togglePopUpModal: () => void,
 };
 
@@ -82,7 +82,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       currentChannel,
       moments,
       anchorMoments,
-      hasParticipants,
+      showLeaveChat,
       togglePopUpModal,
     } = this.props;
 
@@ -109,7 +109,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         className={styles.scroll}
       >
         {
-          hasParticipants &&
+          showLeaveChat &&
             <FeedActionBanner
               text="Leave"
               togglePopUpModal={togglePopUpModal}

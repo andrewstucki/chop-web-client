@@ -9,6 +9,7 @@ type PopUpModalPropsType = {
   publishLeftChannelNotification: (name: string, pubnubToke: string, channelName: string, date: Date) => void,
   removeChannel: (channelName: string) => void,
   otherUser: SharedUserType,
+  hasOtherUsers: boolean,
   currentUser: SharedUserType,
   currentChannel: string,
   isPopUpModalVisible: boolean,
@@ -20,6 +21,7 @@ const PopUpModal = (
     removeChannel,
     publishLeftChannelNotification,
     otherUser,
+    hasOtherUsers,
     currentUser,
     isPopUpModalVisible,
     currentChannel,
@@ -29,10 +31,17 @@ const PopUpModal = (
     return (
       <div className={styles.popUpModal}>
         <div className={styles.alert}>
-          <div className={styles.text}>
-            Are you sure you want to end your chat with
-            <strong> {otherUser.name}</strong>?
-          </div>
+          { hasOtherUsers &&
+            <div className={styles.text}>
+              Are you sure you want to end your chat with
+              <strong> {otherUser.name}</strong>?
+            </div>
+          }
+          { !hasOtherUsers &&
+            <div className={styles.text}>
+              Are you sure you want to end your chat?
+            </div>
+          }
           <div className={styles.actionContainer}>
             <button
               className={styles.action}

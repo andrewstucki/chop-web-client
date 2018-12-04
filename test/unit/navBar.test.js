@@ -39,7 +39,12 @@ describe('NavBar tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: '1234',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: '1234',
+          },
+        },
         chatInput: '',
         currentUser: currentUser,
         anchorMoment: {
@@ -93,7 +98,12 @@ describe('NavBar tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: '1234',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: '1234',
+          },
+        },
         chatInput: '',
         currentUser: currentUser,
         anchorMoment: {
@@ -152,7 +162,12 @@ describe('NavBar tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: '1234',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: '1234',
+          },
+        },
         chatInput: '',
         currentUser: currentUser,
         anchorMoment: {
@@ -241,7 +256,12 @@ describe('NavBar tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: '12345',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: '12345',
+          },
+        },
       }
     )).toEqual(
       [

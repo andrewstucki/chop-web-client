@@ -43,7 +43,7 @@ describe('Service Run through', () => {
       applyMiddleware(...middlewareList)
     );
 
-    store.dispatch({type: REHYDRATE}).then( async () => {
+    return store.dispatch({type: REHYDRATE}).then( async () => {
       expect(store.getState().feed).toEqual(
         {
           ...defaultState,
@@ -377,7 +377,12 @@ const phase4 = {
     startTime: 1542322200,
     title: 'Church Service',
   },
-  currentChannel: '5fd7123ee2ff4432cafbac4331b643a65839b941ef19e4b60b7f8973e13511ff',
+  panes: {
+    primary: {
+      type: 'EVENT',
+      channelId: '5fd7123ee2ff4432cafbac4331b643a65839b941ef19e4b60b7f8973e13511ff',
+    },
+  },
   sequence: {
     serverTime: 1542322000,
     steps: [

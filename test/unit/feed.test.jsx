@@ -19,7 +19,7 @@ describe('Feed tests', () => {
         currentChannel="default"
         appendingMessage={false}
         animatingMoment={false}
-        hasParticipants={false}
+        showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
       />
@@ -49,7 +49,7 @@ describe('Feed tests', () => {
         currentChannel="default"
         appendingMessage={false}
         animatingMoment={true}
-        hasParticipants={false}
+        showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
       />
@@ -79,7 +79,7 @@ describe('Feed tests', () => {
         currentChannel="default"
         appendingMessage={false}
         animatingMoment={false}
-        hasParticipants={false}
+        showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
       />
@@ -97,7 +97,7 @@ describe('Feed tests', () => {
         currentChannel="host"
         appendingMessage={false}
         animatingMoment={false}
-        hasParticipants={true}
+        showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
       />

@@ -1,5 +1,4 @@
 // @flow
-import type { FeedType } from '../feed/dux';
 
 // Action Types
 
@@ -21,28 +20,6 @@ const toggleChatFocus = (focus: boolean): ToggleChatFocusType => (
   }
 );
 
-// Selectors
-
-const getPlaceholder = (state: FeedType) => {
-  const currentChannelObj = state.channels[state.currentChannel];
-  let otherUserName = [];
-  if (state.currentChannel === 'host') {
-    return 'Chat with hosts';
-  } else if (currentChannelObj &&
-    currentChannelObj.participants &&
-    currentChannelObj.participants.length === 2
-  ) {
-    const [ getOtherUser ] = currentChannelObj.participants.filter(participant =>
-      participant.pubnubToken !== state.currentUser.pubnubToken
-    );
-    otherUserName.push(getOtherUser.name);
-    return `Chat with ${otherUserName[0]}`;
-  } else {
-    otherUserName = [];
-    return 'Chat';
-  }
-};
-
 // Exports
 
 export {
@@ -55,5 +32,4 @@ export type {
 
 export {
   toggleChatFocus,
-  getPlaceholder,
 };

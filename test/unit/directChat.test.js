@@ -34,7 +34,12 @@ describe('Direct Chat Tests', () => {
               anchorMoments: [],
             },
           },
-          currentChannel: 'abc',
+          panes: {
+            primary: {
+              type: 'EVENT',
+              channelId: 'abc',
+            },
+          },
         },
       },
       applyMiddleware(...middlewareList)
@@ -48,7 +53,12 @@ describe('Direct Chat Tests', () => {
         expect(store.getState().feed).toEqual(
           {
             ...defaultState,
-            currentChannel: 'abc',
+            panes: {
+              primary: {
+                type: 'EVENT',
+                channelId: 'abc',
+              },
+            },
             channels: {
               abc: {
                 id: 'abc',

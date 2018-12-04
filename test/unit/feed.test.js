@@ -1,6 +1,5 @@
 // @flow
 import reducer, {
-  changeChannel,
   addChannel,
   removeChannel,
   defaultState,
@@ -51,6 +50,8 @@ import {
 import { mockDate } from '../testUtils';
 
 import { setLanguage } from '../../src/languageSelector/dux';
+ 
+import { setPrimaryPane } from '../../src/pane/dux';
 
 const otherUser = {
   pubnubToken: '12345',
@@ -97,9 +98,9 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'pubic',
       }
-      , changeChannel('host'));
+      , setPrimaryPane('host', 'CHAT'));
+
     expect(result).toEqual(
       {
         ...defaultState,
@@ -118,7 +119,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
+        panes: {
+          primary: {
+            type: 'CHAT',
+            channelId: 'host',
+          },
+        },
       }
     );
   });
@@ -136,7 +142,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
         chatInput: 'this is a message',
         currentUser: currentUser,
       },
@@ -178,7 +189,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
+        panes: {
+          primary: {
+            type: 'CHAT',
+            channelId: 'host',
+          },
+        },
         chatInput: 'this is a string',
         currentUser: currentUser,
       },
@@ -221,7 +237,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       },
       receiveMoment('host', {
         type: 'MESSAGE',
@@ -261,7 +276,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       },
       receiveMoment('host', {
         type: 'ACTIONABLE_NOTIFICATION',
@@ -405,7 +419,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'other',
       },
       removeChannel('other')
     );
@@ -542,7 +555,6 @@ describe('Feed tests', () => {
           },
         },
         currentLanguage: 'ko',
-        currentChannel: 'public',
         currentUser: currentUser,
       },
       'public'
@@ -656,7 +668,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       },
       openMessageTray('123'));
     expect(result).toEqual(
@@ -693,7 +710,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       }
     );
   });
@@ -733,7 +755,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
+        panes: {
+          primary: {
+            type: 'CHAT',
+            channelId: 'host',
+          },
+        },
       },
       openMessageTray('123'));
     expect(result).toEqual(
@@ -770,7 +797,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
+        panes: {
+          primary: {
+            type: 'CHAT',
+            channelId: 'host',
+          },
+        },
       }
     );
   });
@@ -810,7 +842,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       },
       closeMessageTray('123'));
     expect(result).toEqual(
@@ -847,7 +884,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       }
     );
   });
@@ -887,7 +929,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       },
       toggleCloseTrayButton('123'));
     expect(result).toEqual(
@@ -924,7 +971,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       }
     );
   });
@@ -964,7 +1016,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       },
       toggleCloseTrayButton('123'));
     expect(result).toEqual(
@@ -1001,7 +1058,12 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
       }
     );
   });
@@ -1049,7 +1111,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       },
       deleteMessage('123', 'public')
     );
@@ -1085,7 +1146,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       },
     );
   });
@@ -1102,7 +1162,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -1137,7 +1196,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       }
     );
   });
@@ -1154,7 +1212,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -1187,7 +1244,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       }
     );
   });
@@ -1204,7 +1260,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -1237,7 +1292,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       }
     );
   });
@@ -1254,7 +1308,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -1287,7 +1340,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       }
     );
   });
@@ -1305,7 +1357,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -1339,7 +1390,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       }
     );
   });
@@ -1357,7 +1407,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -1393,7 +1442,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'public',
       }
     );
   });
@@ -1410,7 +1458,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -1452,7 +1499,6 @@ describe('Feed tests', () => {
             anchorMoments: [],
           },
         },
-        currentChannel: 'host',
       },
     );
   });
@@ -1736,7 +1782,6 @@ describe('Feed tests', () => {
             ],
           },
         },
-        currentChannel: 'direct',
         currentUser: currentUser,
       },
       'direct'
@@ -1791,7 +1836,12 @@ describe('Feed tests', () => {
             participants: [],
           },
         },
-        currentChannel: 'direct',
+        panes: {
+          primary: {
+            type: 'CHAT',
+            channelId: 'direct',
+          },
+        },
         currentUser: currentUser,
       },
       leaveChannel(currentUser.pubnubToken, 'direct')
@@ -1817,7 +1867,12 @@ describe('Feed tests', () => {
             participants: [],
           },
         },
-        currentChannel: 'public',
+        panes: {
+          primary: {
+            type: 'EVENT',
+            channelId: 'public',
+          },
+        },
         currentUser: currentUser,
       }
     );

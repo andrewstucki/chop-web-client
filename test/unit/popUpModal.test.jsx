@@ -35,6 +35,7 @@ describe('PopUpModal tests', () => {
         removeChannel={() => {}}
         currentChannel="direct"
         otherUser={otherUser}
+        hasOtherUsers={true}
         currentUser={currentUser}
         isPopUpModalVisible={true}
         publishLeftChannelNotification={() => {}}
@@ -59,6 +60,7 @@ describe('PopUpModal tests', () => {
         removeChannel={removeChannel}
         currentChannel="direct"
         otherUser={otherUser}
+        hasOtherUsers={true}
         currentUser={currentUser}
         isPopUpModalVisible={true}
         publishLeftChannelNotification={publishLeftChannelNotification}
@@ -79,6 +81,7 @@ describe('PopUpModal tests', () => {
         removeChannel={() => {}}
         currentChannel="direct"
         otherUser={otherUser}
+        hasOtherUsers={true}
         currentUser={currentUser}
         isPopUpModalVisible={false}
         publishLeftChannelNotification={() => {}}
