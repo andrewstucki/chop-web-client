@@ -318,6 +318,9 @@ class Chat {
           moments.push(Converter.legacyToCwcPrayer(message.entry));
         }
         return;
+      case 'muteMessage':
+        moments.splice(moments.findIndex(moment => moment.id === message.entry.data.umt));
+        return;
       case 'muteUser':
         moments.push(
           receiveMuteUserNotification(
