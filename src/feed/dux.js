@@ -66,13 +66,14 @@ import {
 import type { BannerType } from '../banner/dux';
 
 import { SET_LANGUAGE } from '../languageSelector/dux';
-import { getPublicChannel } from '../selectors/channelSelectors';
+import { getPublicChannel, getHostChannel } from '../selectors/channelSelectors';
 
 import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
 import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
 import moment from 'moment';
 
 import { EVENT } from '../pane/content/event/dux';
+import { CHAT } from '../pane/content/chat/dux';
 
 // Action Types
 
@@ -790,16 +791,26 @@ const reducer = (
       },
     };
   case REMOVE_CHANNEL: {
-    const publicChannel = getPublicChannel(state);
-
     const stateCopy = { ...state };
-    if (action.channel === state.panes.primary.channelId) {
-      stateCopy.panes.primary = {
-        channelId: publicChannel || '',
-        type: EVENT,
-      };
-    }
     delete stateCopy.channels[action.channel];
+
+    const publicChannel = getPublicChannel(stateCopy);
+    const hostChannel = getHostChannel(stateCopy);
+
+    if (action.channel === state.panes.primary.channelId) {
+      if (action.channel === publicChannel) {
+        stateCopy.panes.primary = {
+          channelId: hostChannel || '',
+          type: CHAT,
+        };
+      } else {
+        stateCopy.panes.primary = {
+          channelId: publicChannel || '',
+          type: EVENT,
+        };
+      }
+    } 
+
     return stateCopy;
   }
   case LOAD_HISTORY:
