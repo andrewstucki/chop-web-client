@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -18,15 +17,13 @@ module.exports = merge(common, {
       },
       ROUTE_BASENAME: JSON.stringify('/host_mobile')
     }),
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
     new CompressionPlugin(),
     new CopyWebpackPlugin([
       { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
     ]),
     new webpack.HashedModuleIdsPlugin(),
   ],
+  devtool: 'inline-source-map',
   output: {
     publicPath: 'https://staging.churchonline.us'
   }
