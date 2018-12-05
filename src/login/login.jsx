@@ -22,6 +22,8 @@ type LoginState = {
 class Login extends Component<LoginProps, LoginState> {
   handleLogin: () => void
   handleUserInput: (event:SyntheticKeyboardEvent<HTMLInputElement>) => void
+  emailInput: { current: InputField }
+  passwordInput: { current: InputField } 
 
   constructor (props:LoginProps) {
     super(props);
@@ -30,6 +32,12 @@ class Login extends Component<LoginProps, LoginState> {
       password: '',
       errors: [],
     };
+
+    // $FlowFixMe
+    this.emailInput = React.createRef();
+    // $FlowFixMe
+    this.passwordInput = React.createRef();
+    
     this.handleUserInput = this.handleUserInput.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
@@ -43,7 +51,16 @@ class Login extends Component<LoginProps, LoginState> {
 
   handleLogin (event: SyntheticKeyboardEvent<HTMLInputElement>) {
     event.preventDefault();
-    const { email, password } = this.state;
+    let { email, password } = this.state;
+
+    // Fallback to React Uncontrolled DOM components for AutoFill
+    if ( email === '' ) {
+      email = this.emailInput.current.value(); 
+    } 
+    if ( password === '') {
+      password = this.passwordInput.current.value(); 
+    }
+
     this.props.clearErrors();
     this.props.basicAuthLogin(email, password);
   }
@@ -63,12 +80,16 @@ class Login extends Component<LoginProps, LoginState> {
               type='email'
               name='email'
               label='Email'
-              onChange={event => this.handleUserInput(event)}/>
+              onChange={event => this.handleUserInput(event)}
+              // $FlowFixMe
+              ref={this.emailInput}/>
             <InputField
               type='password'
               name='password'
               label='Password'
-              onChange={event => this.handleUserInput(event)} />
+              onChange={event => this.handleUserInput(event)}
+              // $FlowFixMe
+              ref={this.passwordInput} />
             <div style={{display: 'flex', placeContent: 'flex-end'}}>
               <Button
                 buttonId="login"

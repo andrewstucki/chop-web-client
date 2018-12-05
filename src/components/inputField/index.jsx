@@ -16,6 +16,18 @@ type InputFieldProps = {
 };
 
 class InputField extends Component<InputFieldProps, void> {
+  input: { current: HTMLInputElement }
+
+  constructor (props:InputFieldProps) {
+    super(props);
+    // $FlowFixMe
+    this.input = React.createRef();
+  }
+
+  value () {
+    return this.input.current.value;
+  }
+
   render () {
     const {
       type,
@@ -40,6 +52,8 @@ class InputField extends Component<InputFieldProps, void> {
           onBlur={onBlur}
           value={value}
           placeholder={placeholder}
+          // $FlowFixMe
+          ref={this.input}
         />
       );
     } else {
@@ -56,6 +70,8 @@ class InputField extends Component<InputFieldProps, void> {
             onBlur={onBlur}
             value={value}
             placeholder={placeholder}
+            // $FlowFixMe
+            ref={this.input}
           />
         </div>
       );
