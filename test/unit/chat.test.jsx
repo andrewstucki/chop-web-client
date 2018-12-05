@@ -38,7 +38,7 @@ describe('Chat tests', () => {
     expect(wrapper.find(Button).length).toBe(1);
   });
 
-  test('has a InputField but not a Button', () => {
+  test('has a InputField and disabled Button', () => {
     const wrapper = Enzyme.shallow(
       <Chat
         textOnBlur={function () {}}
@@ -53,6 +53,8 @@ describe('Chat tests', () => {
       />
     );
     expect(wrapper.find(InputField).length).toBe(1);
-    expect(wrapper.find(Button).length).toBe(0);
+    const button = wrapper.find(Button);
+    expect(button.length).toBe(1);
+    expect(button.props()).toHaveProperty('disabled');
   });
 });

@@ -27,8 +27,6 @@ type ChatState = {
 };
 
 class Chat extends Component<ChatProps, ChatState> {
-  inputField: { current: any };
-
   constructor (props: ChatProps) {
     super(props);
     // $FlowFixMe
@@ -43,8 +41,6 @@ class Chat extends Component<ChatProps, ChatState> {
     this.noScrollFunction = this.noScrollFunction.bind(this);
     // $FlowFixMe
     this.sendMessage = this.sendMessage.bind(this);
-    // $FlowFixMe
-    this.inputField = React.createRef();
 
     if (props.initialState) {
       this.state = props.initialState;
@@ -139,8 +135,6 @@ class Chat extends Component<ChatProps, ChatState> {
     } = this.props;
 
     event.preventDefault();
-    // Must force blur to prevent iOS from displaying 'select all' in text field
-    this.inputField.current.props.onBlur();
     publishMessage(currentChannel, this.state.chatInput, currentUser);
     this.setState({chatInput: ''});
   }
@@ -164,18 +158,18 @@ class Chat extends Component<ChatProps, ChatState> {
             value={this.state.chatInput}
             placeholder={currentPlaceholder}
             enterDetect={this.onKeyPressed}
-            // $FlowFixMe
-            ref={this.inputField}
           />
-          {this.state.chatInput &&
-            <Button
-              buttonId='chat-button'
-              onClick={this.sendMessage}
-              image={UpArrow}
-              buttonStyle="icon"
-              imageType="arrow"
-            />
-          }
+
+          <Button
+            buttonId='chat-button'
+            onClick={this.sendMessage}
+            image={UpArrow}
+            buttonStyle="icon"
+            imageType="arrow"
+            disabled={!this.state.chatInput}
+            additionalStyles={styles.sendMessage}
+          />
+
         </div>
       </div>
     );

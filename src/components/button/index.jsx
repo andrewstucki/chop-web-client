@@ -9,7 +9,9 @@ type ButtonType = {
   buttonStyle: 'primary' | 'secondary' | 'tertiary' | 'icon',
   text?: string,
   image?: any,
-  disabled?: boolean
+  disabled?: boolean,
+  hidden?: boolean,
+  additionalStyles?: string,
 };
 
 const Button =
@@ -21,9 +23,11 @@ const Button =
     image,
     buttonStyle,
     disabled,
+    hidden,
+    additionalStyles = '',
   }: ButtonType
 ) => {
-  const style = `${styles.button} ${styles[buttonStyle]}`;
+  const style = `${styles.button} ${styles[buttonStyle]} ${additionalStyles}`.trim();
   if (buttonStyle === 'icon') {
     return (
       <button
@@ -33,6 +37,7 @@ const Button =
         onTouchStart={onClick}
         dangerouslySetInnerHTML={{ __html: image }}
         disabled={disabled}
+        hidden={hidden}
       />
     );
   } else {
@@ -42,6 +47,7 @@ const Button =
         className={style}
         onClick={onClick}
         disabled={disabled}
+        hidden={hidden}
       >
         {text}
       </button>
