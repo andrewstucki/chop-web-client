@@ -34,7 +34,6 @@ const Button =
         id={buttonId}
         className={style}
         onClick={onClick}
-        onTouchStart={onClick}
         dangerouslySetInnerHTML={{ __html: image }}
         disabled={disabled}
         hidden={hidden}

@@ -31,6 +31,18 @@
   border: 1px solid var(--primaryColor);
 }
 
+.sendMessage {
+  width: 36px;
+  height: 36px;
+  color: var(--backgroundColor);
+  background: var(--primaryColor);
+}
+
 .sendMessage:disabled {
   z-index: -1;
+}
+
+.sendMessage svg {
+  width: 16px;
+  margin: auto;
 }

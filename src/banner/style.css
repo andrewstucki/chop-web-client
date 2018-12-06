@@ -12,6 +12,7 @@
   animation-name: slideOpen;
   animation-duration: .5s;
   transition: transform .5s var(--ease-out);
+  min-height: 48px;
 }
 
 .message {
@@ -21,9 +22,17 @@
   padding-right: 10px;
 }
 
+.closeBannerButton {
+  background: none;
+  width: 32px;
+  height: 32px;
+  margin: 8px 6px 8px 6px;
+}
+
 .closeBannerButton svg {
-  width: 28px;
-  height: 40px;
+  width: 12px;
+  height: 12px;
+  padding: 10px;
 }
 
 @keyframes slideOpen {
