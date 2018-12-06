@@ -84,7 +84,7 @@ describe('Feed tests', () => {
         togglePopUpModal={() => {}}
       />
     );
-    expect(wrapper.find('ul').key()).toEqual('default');
+    expect(wrapper.find('ul').first().key()).toEqual('default');
   });
 
   test('Feed with participants', () => {
