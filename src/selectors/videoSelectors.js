@@ -2,7 +2,9 @@ import { createSelector } from 'reselect';
 
 const JW_PLAYER = 'JW_PLAYER';
 const IFRAME_PLAYER = 'IFRAME_PLAYER';
-const VIDEO_JS_PLAYER = 'VIDEO_JS_PLAYER';
+const YOU_TUBE = 'YOU_TUBE';
+const WISTIA = 'WISTIA';
+const VIMEO = 'VIMEO';
 
 const getVideo = state => state.video;
 
@@ -13,8 +15,12 @@ const videoType = createSelector(
       return IFRAME_PLAYER;
     } else if (video.url.indexOf('jwplayer') > -1) {
       return JW_PLAYER;
+    } else if (video.url.indexOf('vimeo') > -1) {
+      return VIMEO;
+    } else if (video.url.indexOf('wistia') > -1) {
+      return WISTIA;
     } else {
-      return VIDEO_JS_PLAYER;
+      return YOU_TUBE;
     }
   }
 );
@@ -30,7 +36,9 @@ const videoStartAtTime = createSelector(
 export {
   JW_PLAYER,
   IFRAME_PLAYER,
-  VIDEO_JS_PLAYER,
+  VIMEO,
+  WISTIA,
+  YOU_TUBE,
   videoType,
   videoStartAtTime,
 };

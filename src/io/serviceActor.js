@@ -349,7 +349,7 @@ class ServiceActor {
               pubnubAccessKey: user.pubnubAccessKey,
               pubnubToken: user.pubnubToken,
               role: {
-                label: user.role.label,
+                label: user.role ? user.role.label : '',
                 permissions: [],
               },
             }
