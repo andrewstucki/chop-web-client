@@ -11,7 +11,7 @@ const getVideo = state => state.video;
 const videoType = createSelector(
   getVideo,
   video => {
-    if (video.type === 'live') {
+    if (video.type === 'live' || video.type === 'offline') {
       return IFRAME_PLAYER;
     } else if (video.url.indexOf('jwplayer') > -1) {
       return JW_PLAYER;
