@@ -3,16 +3,14 @@ import React from 'react';
 import styles from './styles.css';
 import Player from './player';
 import {
-  JW_PLAYER,
-  VIDEO_JS_PLAYER,
   IFRAME_PLAYER,
+  PlayerTypes,
 } from '../selectors/videoSelectors';
-//import Player from './player.jsx';
 
 type VideoFeedProps = {
   isVideoHidden: boolean,
   url: string,
-  playerType: IFRAME_PLAYER | JW_PLAYER | VIDEO_JS_PLAYER,
+  playerType: PlayerTypes,
   startAt: number,
 };
 
@@ -20,6 +18,7 @@ type SimVideoPlayerProps = {
   style: string,
   url: string,
   startAt: number,
+  playerType: PlayerTypes,
 };
 
 type VideoPlayerProps = {
@@ -30,7 +29,7 @@ type VideoPlayerProps = {
 type VideoPlayerWrapperProps = {
   style: string,
   url: string,
-  playerType: IFRAME_PLAYER | JW_PLAYER | VIDEO_JS_PLAYER,
+  playerType: PlayerTypes,
   startAt: number,
 };
 
@@ -43,26 +42,20 @@ const Iframe = ({style, url}: VideoPlayerProps) => (
   ></iframe>
 );
 
-const VideoJSPlayer = ({style, url, startAt}: SimVideoPlayerProps) => (
+const VideoJSPlayer = ({style, url, startAt, playerType}: SimVideoPlayerProps) => (
   <div className={style}>
-    <Player url={url} startAt={startAt}/>
+    <Player url={url} startAt={startAt} playerType={playerType} />
   </div>
 );
 
 const VideoPlayer = ({playerType, style, url, startAt}: VideoPlayerWrapperProps) => {
-  switch (playerType) {
-  case IFRAME_PLAYER:
+  if (playerType === IFRAME_PLAYER) {
     return (
       <Iframe url={url} style={style} />
     );
-  case JW_PLAYER:
+  } else {
     return (
-      null
-      // JWPlayer here
-    );
-  case VIDEO_JS_PLAYER:
-    return (
-      <VideoJSPlayer url={url} style={style} startAt={startAt} />
+      <VideoJSPlayer url={url} style={style} startAt={startAt} playerType={playerType} />
     );
   }
 };
