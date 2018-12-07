@@ -15,7 +15,7 @@ class VimeoPlayer extends React.Component<PlayerPropsType> {
 
   render () {
     const { url, style } = this.props;
-    const src = `${url}?badge=0&byline=0&portrait=0&title=0`;
+    const src = `${ url.replace('vimeo.com', 'player.vimeo.com/video') }?badge=0&byline=0&portrait=0&title=0`;
 
     return (
       <div className={style}>
