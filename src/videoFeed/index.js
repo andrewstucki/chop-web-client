@@ -4,16 +4,16 @@ import { connect } from 'react-redux';
 import VideoFeed from './videoFeed';
 
 import {
-  videoType,
+  videoPlayerFactory,
   videoStartAtTime,
-} from '../selectors/videoSelectors';
+} from './dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
   return {
     isVideoHidden: feedState.isVideoHidden,
     url: feedState.video.url,
-    playerType: videoType(feedState),
+    Player: videoPlayerFactory(feedState),
     startAt: videoStartAtTime(feedState, Date.now()),
   };
 };
