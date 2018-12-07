@@ -135,6 +135,7 @@ class Chat extends Component<ChatProps, ChatState> {
     } = this.props;
 
     event.preventDefault();
+    event.stopPropagation();
     publishMessage(currentChannel, this.state.chatInput, currentUser);
     this.setState({chatInput: ''});
   }
@@ -163,6 +164,7 @@ class Chat extends Component<ChatProps, ChatState> {
           <Button
             buttonId='chat-button'
             onClick={this.sendMessage}
+            onTouchStart={this.sendMessage}
             image={UpArrow}
             buttonStyle="icon"
             imageType="arrow"
