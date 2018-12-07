@@ -31,9 +31,9 @@ type FeedState = {
 };
 
 class Feed extends React.Component<FeedProps, FeedState> {
-  listRef: RefObject
-  wrapperRef: RefObject
-  height: number
+  listRef: RefObject;
+  wrapperRef: RefObject;
+  height: number;
 
   constructor (props: FeedProps) {
     super(props);
@@ -52,8 +52,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     setTimeout(() => {
       if (this.listRef.current) {
         const listRect = this.listRef.current.getBoundingClientRect();
-        const listHeight = listRect.height;
-        this.wrapperRef.current.scrollTop = listHeight;
+        this.wrapperRef.current.scrollTop = listRect.height;
       }
     }, 300);
   }
@@ -122,8 +121,10 @@ class Feed extends React.Component<FeedProps, FeedState> {
             key={currentChannel}
             className={styles.feed}
           >
-            {anchorMomentListItems}
             <span style={{margin: '0 8px 0'}}>{momentListItems}</span>
+          </ul>
+          <ul className={styles.anchorMoments}>
+            {anchorMomentListItems}
           </ul>
         </div>
       </div>

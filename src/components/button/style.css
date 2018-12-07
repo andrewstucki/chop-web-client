@@ -3,8 +3,6 @@
 .button {
   border: 1px solid transparent;
   border-radius: var(--borderRadius);
-  padding: 8px 16px;
-  height: 40px;
   outline: none;
 }
 
@@ -13,10 +11,6 @@
 }
 
 .icon {
-  width: 36px;
-  height: 36px;
-  color: var(--backgroundColor);
-  background: var(--primaryColor);
   border: none;
   display: flex;
   align-items: center;
@@ -26,11 +20,6 @@
 
 .icon:hover {
   box-shadow: none;
-}
-
-.icon svg {
-  width: 16px;
-  margin: auto;
 }
 
 .primary {
@@ -66,4 +55,8 @@
   background-color: var(--tertiaryColor);
   border-color: #666667;
   color: white;
+}
+
+.button.primary, .button.secondary, .button.tertiary { 
+  padding: 8px 16px;
 }

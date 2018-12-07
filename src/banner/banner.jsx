@@ -3,6 +3,7 @@ import style from './style.css';
 import Dismiss from '../../assets/dismiss-banner-button.svg';
 import type { BannerType } from './dux';
 import { capitalizeFirstLetter } from '../util/index';
+import Button from '../components/button';
 
 type BannerProps = {
   banner: BannerType,
@@ -24,12 +25,11 @@ const Banner = (
   }: BannerProps
 ) => {
   const dismissButton = () => (
-    <button
-      className={style.closeBannerButton}
-      dangerouslySetInnerHTML={{ __html: Dismiss }}
-      onClick={() => {
-        dismissNotification();
-      }}
+    <Button
+      onClick={dismissNotification}
+      image={Dismiss}
+      buttonStyle="icon"
+      additionalStyles={style.closeBannerButton}
     />
   );
   if (banner.message !== '' && banner.bannerType !== '') {
