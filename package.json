@@ -29,6 +29,7 @@
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy",
       "\\.(svg)$": "<rootDir>/test/svg-stub.js",
+      "iframe_api": "<rootDir>/test/fake-js-file.js",
       "Youtube\\.min\\.js$": "<rootDir>/test/fake-js-file.js"
     },
     "testURL": "https://live.life.church"
@@ -92,6 +93,7 @@
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-gtm-module": "^2.0.2",
+    "react-player": "^1.7.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-touch-events": "^2.1.0",
