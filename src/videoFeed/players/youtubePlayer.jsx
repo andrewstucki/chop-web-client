@@ -24,8 +24,7 @@ class YouTubePlayer extends React.Component<PlayerPropsType> {
 
   render () {
     const { url, style } = this.props;
-    const src = `${url}?enablejsapi=1&controls=0&disablekb=1&modestbranding=1`;
-
+    const src = `${url}?enablejsapi=1&controls=0&disablekb=1&modestbranding=1&fs=0&playsinline=1&origin=${global.location.origin}`;
     return (
       <div className={style}>
         <iframe
