@@ -31,7 +31,7 @@ const mapDispatchToProps = dispatch => (
     deleteMessage: (id, channel) => dispatch(deleteMessage(id, channel)),
     publishDeleteMessage: id => dispatch(publishDeleteMessage(id)),
     toggleCloseTrayButton: id => dispatch(toggleCloseTrayButton(id)),
-    muteUser: pubnubToken => dispatch(muteUser(pubnubToken)),
+    muteUser: (channel, nickname) => dispatch(muteUser(channel, nickname)),
     directChat: (pubnubToken, nickname) => dispatch(directChat(pubnubToken, nickname)),
     publishMuteUserNotification: (host, guest, channel, date) => dispatch(publishMuteUserNotification(host, guest, channel, date)),
     mutedNotificationBanner: guestName => dispatch(mutedNotificationBanner(guestName)),

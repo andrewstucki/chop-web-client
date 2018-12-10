@@ -39,21 +39,21 @@ import { setPrimaryPane } from '../pane/dux';
 import { EVENT } from '../pane/content/event/dux';
 
 class ServiceActor {
-  storeDispatch: (action: any) => void
-  graph: GraphQl
-  location: Location
-  getAll: any
-  graphAuth: any
-  getStore: () => any
-  getAuthentication: (variables: any) => any
-  cookies: Cookies
-  handleDataFetchErrors: (payload: any) => void
-  setCurrentState: (payload: any) => void
-  getInitialData: (payload: any) => void
-  scheduler: Scheduler
-  startTimer: () => void
-  checkTime: () => void
-  timer: IntervalID
+  storeDispatch: (action: any) => void;
+  graph: GraphQl;
+  location: Location;
+  getAll: any;
+  graphAuth: any;
+  getStore: () => any;
+  getAuthentication: (variables: any) => any;
+  cookies: Cookies;
+  handleDataFetchErrors: (payload: any) => void;
+  setCurrentState: (payload: any) => void;
+  getInitialData: (payload: any) => void;
+  scheduler: Scheduler;
+  startTimer: () => void;
+  checkTime: () => void;
+  timer: IntervalID;
 
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
@@ -408,7 +408,9 @@ class ServiceActor {
 
   async muteUser (action:MuteUserType) {
     try {
-      await this.graph.muteUser(action.pubnubToken);
+      const { feedToken, nickname } = action;
+      const ip = '0.0.0.0';
+      await this.graph.muteUser(feedToken, nickname, ip);
     } catch (error) {
       this.handleDataFetchErrors(error);
     }

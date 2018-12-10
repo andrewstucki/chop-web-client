@@ -50,7 +50,8 @@ type ToggleCloseTrayButtonType = {
 
 type MuteUserType = {
   type: 'MUTE_USER',
-  pubnubToken: string,
+  feedToken: string,
+  nickname: string,
 }
 
 type PublishDeleteMessageType = {
@@ -115,10 +116,11 @@ const publishDeleteMessage = (id:string): PublishDeleteMessageType => (
   }
 );
 
-const muteUser = (pubnubToken:string): MuteUserType => (
+const muteUser = (feedToken:string, nickname:string): MuteUserType => (
   {
     type: MUTE_USER,
-    pubnubToken,
+    feedToken,
+    nickname,
   }
 );
 

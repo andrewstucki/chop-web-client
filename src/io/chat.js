@@ -168,9 +168,9 @@ type PubnubPublishMessageType = {
 }
 
 class Chat {
-  pubnub: Pubnub
-  storeDispatch: Dispatch
-  getState: () => FeedType
+  pubnub: Pubnub;
+  storeDispatch: Dispatch;
+  getState: () => FeedType;
   previousLanguage: string | null;
 
   constructor (dispatch: Dispatch, getState: () => FeedType) {
@@ -307,6 +307,7 @@ class Chat {
     messages.map(message => {
       switch (message.entry.action) {
       case 'newMessage':
+        
         if (message.entry.type === 'system') {
           moments.push(receiveLeftChannelNotification(message.entry.fromNickname, message.entry.channelToken, message.entry.cwcTimestamp).moment);
         } else {
@@ -319,9 +320,11 @@ class Chat {
         }
         return;
       case 'muteMessage':
+        
         moments.splice(moments.findIndex(moment => moment.id === message.entry.data.umt));
         return;
       case 'muteUser':
+        
         moments.push(
           receiveMuteUserNotification(
             message.entry.data.fromNickname,
@@ -611,6 +614,7 @@ class Chat {
     }
     switch (action.type) {
     case 'PUBLISH_MOMENT_TO_CHANNEL':
+      
       if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'PRAYER') {
         this.publishSystemMessage(action.moment, action.channel);
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
