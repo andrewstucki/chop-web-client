@@ -101,6 +101,7 @@ const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
+const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 
 // Flow Type Definitions
 
@@ -205,6 +206,17 @@ type HereNowUsers = {
   },
 };
 
+type ClientInfoType = {
+  countryCode?: string,
+  countryName?: string,
+  city?: string,
+  postal?: string,
+  latitude?: number,
+  longitude?: number,
+  ip?: string,
+  state?: string,
+}
+
 type FeedType = {
   pubnubKeys: PubnubKeysType,
   event: EventType,
@@ -233,6 +245,7 @@ type FeedType = {
   panes: {
     [string]: PaneContentType,
   },
+  clientInfo: ClientInfoType,
 };
 
 type AddChannelType = {
@@ -329,6 +342,11 @@ type SetNotificationBannerType = {
   bannerType: string,
 };
 
+type SetClientInfoType = {
+  type: 'SET_CLIENT_INFO',
+  data: ClientInfoType,
+}
+
 type FeedActionTypes =
   | ReceiveMomentType
   | AddChannelType
@@ -360,7 +378,8 @@ type FeedActionTypes =
   | RemoveAuthenticationType
   | AddErrorType
   | RemoveErrorType
-  | SetScheduleDataType;
+  | SetScheduleDataType
+  | SetClientInfoType;
 
 // Action Creators
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
@@ -535,6 +554,12 @@ const clearNotificationBanner = (): ClearNotificationBannerType => (
   }
 );
 
+const setClientInfo = (data: ClientInfoType) => (
+  {
+    type: SET_CLIENT_INFO,
+    data,
+  }
+);
 // Default State
 
 const getLanguage = () => {
@@ -634,6 +659,16 @@ const defaultState = {
     refreshToken: '',
   },
   persistExpiresAt: moment().add(1, 'months').format(),
+  clientInfo: {
+    countryCode: '',
+    countryName: '',
+    city: '',
+    postal: '',
+    latitude: 0,
+    longitude: 0,
+    ip: '',
+    state: '',
+  },
 };
 
 // Reducer
@@ -1163,6 +1198,11 @@ const reducer = (
         bannerType: '',
       },
     };
+  case SET_CLIENT_INFO:
+    return {
+      ...state,
+      clientInfo: action.data,
+    };
   default:
     return state;
   }
@@ -1222,6 +1262,7 @@ export {
   setSalvations,
   setAuthentication,
   removeAuthentication,
+  setClientInfo,
 };
 export type {
   AddChannelType,
@@ -1239,6 +1280,7 @@ export type {
   OrganizationType,
   SetSalvationsType,
   SetNotificationBannerType,
+  ClientInfoType,
 };
 
 export default reducer;
