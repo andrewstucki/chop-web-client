@@ -102,6 +102,7 @@ const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
+const SET_HERE_NOW = 'SET_HERE_NOW';
 
 // Flow Type Definitions
 
@@ -152,6 +153,18 @@ type PubnubKeysType = {
   subscribe: string,
 };
 
+type PrivateUserType = {
+  id: string,
+  name: string,
+  avatarUrl?: string,
+  pubnubToken: string,
+  pubnubAccessKey: string,
+  role: {
+    label: string,
+    permissions: Array<string>,
+  }
+};
+
 type SetUser = {
   type: 'SET_USER',
   user: PrivateUserType,
@@ -166,18 +179,6 @@ type ReceiveReactionType = {
   type: 'RECEIVE_REACTION',
   reaction: ReactionType,
 }
-
-type PrivateUserType = {
-  id: string,
-  name: string,
-  avatarUrl?: string,
-  pubnubToken: string,
-  pubnubAccessKey: string,
-  role: {
-    label: string,
-    permissions: Array<string>,
-  }
-};
 
 type SharedUserType = {
   name: string,
@@ -196,14 +197,14 @@ type ChannelType = {
   anchorMoments: Array<AnchorMomentType>,
 };
 
-type HereNowChannels = {
-  [string]: HereNowUsers,
-};
-
 type HereNowUsers = {
   [string]: {
     available_prayer: boolean,
   },
+};
+
+type HereNowChannels = {
+  [string]: HereNowUsers,
 };
 
 type ClientInfoType = {
@@ -215,6 +216,11 @@ type ClientInfoType = {
   longitude?: number,
   ip?: string,
   state?: string,
+}
+
+type AuthenticationType = {
+  accessToken: string,
+  refreshToken: string
 }
 
 type FeedType = {
@@ -301,6 +307,16 @@ type UserState = {
   available_prayer: boolean,
 };
 
+type HereNowUsersType = {
+  [string]: UserState,
+};
+
+type SetHereNow = {
+  type: 'SET_HERE_NOW',
+  channel: string,
+  users: HereNowUsersType
+};
+
 type UpdateHereNowType = {
   type: 'UPDATE_HERE_NOW',
   channel: string,
@@ -318,11 +334,6 @@ type SetSalvationsType = {
   type: 'SET_SALVATIONS',
   count: number,
 };
-
-type AuthenticationType = {
-  accessToken: string,
-  refreshToken: string
-}
 
 type SetAuthenticationType = {
   type: 'SET_AUTHENTICATION',
@@ -379,7 +390,8 @@ type FeedActionTypes =
   | AddErrorType
   | RemoveErrorType
   | SetScheduleDataType
-  | SetClientInfoType;
+  | SetClientInfoType
+  | SetHereNow;
 
 // Action Creators
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
@@ -395,6 +407,14 @@ const setAuthentication = (accessToken: string, refreshToken: string): SetAuthen
 const removeAuthentication = (): RemoveAuthenticationType => (
   {
     type: REMOVE_AUTHENTICATION,
+  }
+);
+
+const setHereNow = (channel: string, users: HereNowUsersType): SetHereNow => (
+  {
+    type: SET_HERE_NOW,
+    channel,
+    users,
   }
 );
 
@@ -686,6 +706,14 @@ const reducer = (
       panes: {
         ...state.panes,
         [action.name]: action.content,
+      },
+    };
+  case SET_HERE_NOW:
+    return {
+      ...state,
+      hereNow: {
+        ...state.hereNow,
+        [action.channel]: action.users,
       },
     };
   case UPDATE_HERE_NOW:
@@ -1263,6 +1291,7 @@ export {
   setAuthentication,
   removeAuthentication,
   setClientInfo,
+  setHereNow,
 };
 export type {
   AddChannelType,
