@@ -4,6 +4,7 @@ import { Dispatch  } from 'redux';
 import {
   removeHereNow,
   updateHereNow,
+  setHereNow,
   leaveChannel,
   loadHistory,
   setSalvations,
@@ -234,18 +235,14 @@ class Chat {
       (status, results) => {
         if (results) {
           const users = results.channels[publicChannel].occupants;
+          const hereNowUsers = {};
           users.forEach(user => {
             const available_prayer = user.state ? user.state.available_prayer : false; // eslint-disable-line camelcase
-            this.storeDispatch(
-              updateHereNow(
-                user.uuid,
-                publicChannel,
-                {
-                  available_prayer: available_prayer, // eslint-disable-line camelcase
-                }
-              )
-            );
+            hereNowUsers[user.uuid] = {
+              available_prayer: available_prayer, // eslint-disable-line camelcase
+            };
           });
+          this.storeDispatch(setHereNow(publicChannel, hereNowUsers));
         }
       }
     );
