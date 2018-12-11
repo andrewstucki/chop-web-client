@@ -5,7 +5,6 @@ import {
   removeHereNow,
   updateHereNow,
   setHereNow,
-  leaveChannel,
   loadHistory,
   setSalvations,
 } from '../feed/dux';
@@ -36,6 +35,7 @@ import {
   getPublicChannel,
   getCurrentChannel,
 } from '../selectors/channelSelectors';
+import { getMessageTimestamp } from '../util';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -303,14 +303,15 @@ class Chat {
     const moments = [];
     messages.map(message => {
       switch (message.entry.action) {
-      case 'newMessage':
-        
-        if (message.entry.type === 'system') {
-          moments.push(receiveLeftChannelNotification(message.entry.fromNickname, message.entry.channelToken, message.entry.cwcTimestamp).moment);
+      case 'newMessage': {
+        const {fromNickname, channelToken, timestamp} = message.entry.data;
+        if (message.entry.data.type === 'system') {
+          moments.push(receiveLeftChannelNotification(fromNickname, channelToken, getMessageTimestamp(new Date(timestamp))).moment);
         } else {
           moments.push(Converter.legacyToCwc(message.entry.data));
         }
         return;
+      }
       case 'newLiveResponseRequest':
         if (message.entry.data.type === 'prayer') {
           moments.push(Converter.legacyToCwcPrayer(message.entry));
@@ -321,7 +322,6 @@ class Chat {
         moments.splice(moments.findIndex(moment => moment.id === message.entry.data.umt));
         return;
       case 'muteUser':
-        
         moments.push(
           receiveMuteUserNotification(
             message.entry.data.fromNickname,
@@ -383,9 +383,7 @@ class Chat {
       if (message.type === 'system') {
         this.storeDispatch(
           // $FlowFixMe
-          leaveChannel(message.userId, message.channelToken),
-          // $FlowFixMe
-          receiveLeftChannelNotification(message.fromNickname, message.channelToken, message.cwcTimestamp),
+          receiveLeftChannelNotification(message.fromNickname, message.channelToken, getMessageTimestamp(new Date(message.timestamp))),
         );
       } else {
         hasMomentBeenRecieved = Object.keys(channels).find(

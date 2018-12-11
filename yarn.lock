@@ -485,10 +485,10 @@ agent-base@4, agent-base@^4.1.0, agent-base@^4.2.0:
   dependencies:
     es6-promisify "^5.0.0"
 
-agentkeepalive@^3.1.0:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-3.4.1.tgz#aa95aebc3a749bca5ed53e3880a09f5235b48f0c"
-  integrity sha512-MPIwsZU9PP9kOrZpyu2042kYA8Fdt/AedQYkYXucHgF9QoD9dXVp0ypuGnHXSR0hTstBxdt85Xkh4JolYfK5wg==
+agentkeepalive@^3.5.1:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-3.5.2.tgz#a113924dd3fa24a0bc3b78108c450c2abee00f67"
+  integrity sha512-e0L/HNe6qkQ7H19kTlRRqUibEAwDK5AFk6y3PtMsuut2VAH6+Q4xZml1tNDJD7kSAyqmbG/K08K5WEJYtUrSlQ==
   dependencies:
     humanize-ms "^1.2.1"
 
@@ -935,14 +935,6 @@ aws4@^1.2.1, aws4@^1.6.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.7.0.tgz#d4d0e9b9dbfca77bf08eeb0a8a471550fe39e289"
   integrity sha512-32NDda82rhwD9/JBCCkB+MRYDp0oSvlo2IL6rQWA10PQi7tDUM3eqMSltXmY+Oyl/7N3P3qNtAlv7X0d9bI28w==
-
-axios@^0.16.2:
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.16.2.tgz#ba4f92f17167dfbab40983785454b9ac149c3c6d"
-  integrity sha1-uk+S8XFn37q0CYN4VFS5rBScPG0=
-  dependencies:
-    follow-redirects "^1.2.3"
-    is-buffer "^1.1.5"
 
 babel-cli@^6.26.0:
   version "6.26.0"
@@ -2651,16 +2643,6 @@ charenc@~0.0.1:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
-
-chat-engine@^0.9.5:
-  version "0.9.5"
-  resolved "https://registry.yarnpkg.com/chat-engine/-/chat-engine-0.9.5.tgz#b01832ee71a413d0a99bfd836af6f0d2c5f0f44a"
-  integrity sha1-sBgy7nGkE9Cpm/2Davbw0sXw9Eo=
-  dependencies:
-    async "^2.1.2"
-    axios "^0.16.2"
-    eventemitter2 "^2.2.1"
-    pubnub "^4.20.1"
 
 cheerio@^1.0.0-rc.2:
   version "1.0.0-rc.2"
@@ -4470,11 +4452,6 @@ event-emitter@~0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
-eventemitter2@^2.2.1:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/eventemitter2/-/eventemitter2-2.2.2.tgz#407ea71c2020cd57538203ab7e7a6bdcfb7692d5"
-  integrity sha1-QH6nHCAgzVdTggOrfnpr3Pt2ktU=
-
 eventemitter3@1.x.x:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-1.2.0.tgz#1c86991d816ad1e504750e73874224ecf3bec508"
@@ -4972,13 +4949,6 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
-
-follow-redirects@^1.2.3:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.4.1.tgz#d8120f4518190f55aac65bb6fc7b85fcd666d6aa"
-  integrity sha512-uxYePVPogtya1ktGnAAXOacnbIuRMB4dkvqeNz2qTtTQsuzSfbDolV+wMMKxAmCx0bLgAKLbBOkjItMbbkR1vg==
-  dependencies:
-    debug "^3.1.0"
 
 for-each@^0.3.2:
   version "0.3.3"
@@ -9762,15 +9732,15 @@ public-encrypt@^4.0.0:
     parse-asn1 "^5.0.0"
     randombytes "^2.0.1"
 
-pubnub@^4.20.1:
-  version "4.20.3"
-  resolved "https://registry.yarnpkg.com/pubnub/-/pubnub-4.20.3.tgz#d062a8ecb2cb07094466bf9bfc87ca61da799da8"
-  integrity sha512-iLD+z1GwbYztYnyBM3m8Sxu72ldl8pZmg1FTt+PgFLGNi/mSbppSamiON3F22n38wQTJlm6KvUeMLpPHRBJ0lQ==
+pubnub@^4.21.6:
+  version "4.21.6"
+  resolved "https://registry.yarnpkg.com/pubnub/-/pubnub-4.21.6.tgz#121216c735d3c697d994aa99d87009659825917f"
+  integrity sha512-Q2kg45xDfcDhtNa1cg4jsryjYCtJrAgnIoahMo3/cuWtO7WkqfnsA/Kbx37PQzv1pugXPC8vx3GTHYLEt0XxFQ==
   dependencies:
-    agentkeepalive "^3.1.0"
+    agentkeepalive "^3.5.1"
     lil-uuid "^0.1.1"
     superagent "^3.8.1"
-    superagent-proxy "^1.0.2"
+    superagent-proxy "^1.0.3"
 
 pump@^2.0.0, pump@^2.0.1:
   version "2.0.1"
@@ -11654,7 +11624,7 @@ sugarss@^1.0.1:
   dependencies:
     postcss "^6.0.14"
 
-superagent-proxy@^1.0.2:
+superagent-proxy@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/superagent-proxy/-/superagent-proxy-1.0.3.tgz#acfa776672f11c24a90ad575e855def8be44f741"
   integrity sha512-79Ujg1lRL2ICfuHUdX+H2MjIw73kB7bXsIkxLwHURz3j0XUmEEEoJ+u/wq+mKwna21Uejsm2cGR3OESA00TIjA==
