@@ -1,5 +1,6 @@
 import type { SubscriberType } from '../feed';
 import createDOMPurify from 'dompurify';
+import moment from 'moment';
 
 const getFirstInitial = name => (
   name.charAt(0).toUpperCase()
@@ -114,6 +115,12 @@ const sanitizeString = (string: string, config:any = sanitizeConfig) =>
   DOMPurify.sanitize(string, config)
 ;
 
+const getMessageTimestamp = (timestamp: Date) => {
+  const format = moment().diff(moment(timestamp), 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
+  return moment(timestamp).format(format);
+};
+
+
 export {
   getFirstInitial,
   getAvatarColor,
@@ -129,4 +136,5 @@ export {
   objectFilter,
   isEmpty,
   sanitizeString,
+  getMessageTimestamp,
 };
