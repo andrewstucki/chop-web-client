@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 const currentEventExists = state => (
-  state.event.id !== 0 && state.event.title !== ''
+  !!state.event.id
 );
 
 const getSchedule = state => state.schedule;

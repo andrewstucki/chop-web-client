@@ -23,6 +23,7 @@ mutation AccessToken($type: String!, $email: String, $password: String, $legacyT
 const sequence = `
 query Sequence($time: Timestamp) {
   eventAt(time: $time) {
+    id
     sequence {
       serverTime
       steps {
@@ -65,17 +66,17 @@ currentEvent {
 }`;
 
 const eventAt = `
-query EventAt($time: Timestamp, $includeFeed: Boolean!, $includeVideo: Boolean!) {
+query EventAt($time: Timestamp) {
   eventAt (time: $time){
     title
     id
     startTime
     videoStartTime
-    video @include(if: $includeVideo) {
+    video {
       type
       url
     }
-    feeds @include(if: $includeFeed) {
+    feeds {
       id
       name
       type
@@ -283,13 +284,11 @@ export default class GraphQl {
     return await this.client.request(schedule);
   }
 
-  async eventAtTime (time, includeFeed, includeVideo) {
+  async eventAtTime (time) {
     return await this.client.request(
       eventAt,
       {
         time,
-        includeFeed,
-        includeVideo,
       }
     );
   }
