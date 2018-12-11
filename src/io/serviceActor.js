@@ -67,6 +67,7 @@ class ServiceActor {
     this.startTimer = this._startTimer.bind(this);
     this.checkTime = this._checkTime.bind(this);
     this.setCurrentState = this._setCurrentState.bind(this);
+    this.handelEvent = this._handelEvent.bind(this);
   }
 
   async init () {
@@ -194,7 +195,8 @@ class ServiceActor {
           newSequence = {
             steps: [],
           };
-          const nextEvent = schedule.shift();
+          schedule.shift();
+          const [ nextEvent ] = schedule;
           this.storeDispatch(setScheduleData(schedule));
           try {
             const sequenceResponse = await this.graph.sequence(nextEvent.startTime);
@@ -202,20 +204,18 @@ class ServiceActor {
           } catch (error) {
             this.handleDataFetchErrors(error);
           }
+        } else {
+          this.storeDispatch(
+            {
+              type: 'SET_SEQUENCE',
+              sequence: newSequence,
+            }
+          );
         }
-        this.storeDispatch(
-          {
-            type: 'SET_SEQUENCE',
-            sequence: newSequence,
-          }
-        );
       }
       if (!step.data && step.fetchTime * 1000 <= now) {
-        const includeFeed = step.queries.indexOf('feeds') > -1;
-        const includeVideo = step.queries.indexOf('video') > -1;
-
         try {
-          const eventAtTime = await this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo);
+          const eventAtTime = await this.graph.eventAtTime(step.transitionTime);
           this.storeDispatch(setScheduleData(
             step.transitionTime,
             eventAtTime
@@ -228,105 +228,16 @@ class ServiceActor {
   }
 
   _getInitialData (payload: any) {
-    Object.keys(payload).forEach(objKey => {
-      const key = objKey === 'eventAt' ? 'currentEvent' : objKey;
+    let hasHandledEvent = false;
+    Object.keys(payload).forEach(key => {
       switch (key) {
-      case 'currentEvent': {
-        const event = payload.currentEvent || payload.eventAt;
-        let hasVideo = false;
-        let hasFeed = false;
-        if (event.title && event.id && event.startTime && event.videoStartTime) {
-          this.storeDispatch(
-            setEvent(
-              event.title || '',
-              event.id || 0,
-              event.startTime || 0,
-              event.videoStartTime || 0,
-            )
-          );
-          const hasSequence = event.sequence && event.sequence.steps && event.sequence.steps.length;
-          if (hasSequence) {
-            const now = Date.now();
-            const sequence = {
-              serverTime: event.sequence.serverTime,
-              steps: event.sequence.steps.filter(step =>
-                step.transitionTime * 1000 > now),
-            };
-            event.sequence.steps.filter(step =>
-              step.transitionTime * 1000 <= now).forEach(step => {
-              if (step.queries.indexOf('feeds') > -1) {
-                hasFeed = true;
-              }
-              if (step.queries.indexOf('video') > -1) {
-                hasVideo = true;
-              }
-            });
-            this.storeDispatch(
-              {
-                type: 'SET_SEQUENCE',
-                sequence: sequence,
-              }
-            );
-            this.startTimer();
-          }
-          if (event.feeds !== undefined && (!hasSequence || hasFeed)) {
-            const channels = event.feeds;
-            const currentChannels = this.getStore().channels;
-            Object.keys(currentChannels).forEach(id => {
-              this.storeDispatch(
-                {
-                  type: 'REMOVE_CHANNEL',
-                  channel: id,
-                }
-              );
-            });
-            channels.forEach(channel => {
-              const participants = convertSubscribersToSharedUsers(channel.subscribers);
-              this.storeDispatch(
-                addChannel(
-                  channel.name,
-                  channel.id,
-                  participants
-                )
-              );
-              if (channel.name === 'Public') {
-                this.storeDispatch(
-                  setPrimaryPane(channel.id, EVENT)
-                );
-              }
-            });
-          }
-          if (event.video !== undefined && (!hasSequence || hasVideo)) {
-            const { video } = event;
-            if (!video) {
-              this.storeDispatch(
-                setVideo('','')
-              );
-            } else {
-              this.storeDispatch(
-                setVideo(
-                  video.url,
-                  video.type,
-                )
-              );
-            }
-          }
+      case 'eventAt':
+      case 'currentEvent':
+      case 'schedule':
+        if (!hasHandledEvent) {
+          this.handelEvent(payload);
+          hasHandledEvent = true;
         }
-        break;
-      }
-      case 'schedule': {
-        const schedule = payload.schedule.filter(item =>
-          item.startTime * 1000 > Date.now());
-        const nextEvent = schedule.shift();
-        this.storeDispatch(setSchedule(schedule));
-        if (nextEvent) {
-          try {
-            this.graph.sequence(nextEvent.startTime).then(this.getInitialData, this.handleDataFetchErrors);
-          } catch (error) {
-            this.handleDataFetchErrors(error);
-          }
-        }
-      }
         break;
       case 'currentOrganization': {
         const organization = payload.currentOrganization;
@@ -386,6 +297,97 @@ class ServiceActor {
       }
       }
     });
+  }
+
+  _handelEvent (payload) {
+    const event = payload.currentEvent || payload.eventAt;
+    if (event) {
+      this.storeDispatch(
+        setEvent(
+          event.title,
+          event.id,
+          event.startTime,
+          event.videoStartTime,
+        )
+      );
+      const { sequence } = event;
+      if (sequence && sequence.steps && sequence.steps.length > 0) {
+        const now = Date.now();
+        const updatedSequence = {
+          ...sequence,
+          steps: sequence.steps.filter(step =>
+            step.transitionTime * 1000 > now),
+        };
+
+        this.storeDispatch(
+          {
+            type: 'SET_SEQUENCE',
+            sequence: updatedSequence,
+          }
+        );
+
+        this.startTimer();
+      }
+      if (event.feeds) {
+        const { feeds:newChannels } = event;
+        const { channels:currentChannels } = this.getStore();
+
+        Object.keys(currentChannels).forEach(id => {
+          if (!newChannels.some(channel => channel.id === id)) {
+            this.storeDispatch(
+              {
+                type: 'REMOVE_CHANNEL',
+                channel: id,
+              }
+            );
+          }
+        });
+
+        newChannels.forEach(channel => {
+          if (!(channel.id in currentChannels)) {
+            const participants = convertSubscribersToSharedUsers(channel.subscribers);
+            this.storeDispatch(
+              addChannel(
+                channel.name,
+                channel.id,
+                participants
+              )
+            );
+            if (channel.name === 'Public') {
+              this.storeDispatch(
+                setPrimaryPane(channel.id, EVENT)
+              );
+            }
+          }
+        });
+
+        const { video } = event;
+        if (video) {
+          this.storeDispatch(
+            setVideo(
+              video.url,
+              video.type,
+            )
+          );
+        }
+      }
+    }
+    const { schedule } = payload;
+    if (schedule) {
+      const updatedSchedule = schedule.filter(item =>
+        item.startTime * 1000 > Date.now());
+
+      this.storeDispatch(setSchedule(updatedSchedule));
+
+      const [ nextEvent ] = schedule;
+      if (nextEvent) {
+        try {
+          this.graph.sequence(nextEvent.startTime).then(this.getInitialData, this.handleDataFetchErrors);
+        } catch (error) {
+          this.handleDataFetchErrors(error);
+        }
+      }
+    }
   }
 
   async publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {
