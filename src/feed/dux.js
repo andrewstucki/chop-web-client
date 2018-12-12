@@ -16,7 +16,7 @@ import type {
   ReactionType,
 } from '../reactions/reactionButton/dux';
 
-import type { 
+import type {
   AnchorMomentType,
   PublishSalvationType,
   ReleaseAnchorMomentType,
@@ -34,6 +34,7 @@ import {
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
+  MUTE_USER,
 } from '../moment';
 
 import {
@@ -252,6 +253,7 @@ type FeedType = {
     [string]: PaneContentType,
   },
   clientInfo: ClientInfoType,
+  mutedUsers: Array<string>,
 };
 
 type AddChannelType = {
@@ -689,6 +691,7 @@ const defaultState = {
     ip: '',
     state: '',
   },
+  mutedUsers: [],
 };
 
 // Reducer
@@ -766,8 +769,8 @@ const reducer = (
       ...state,
       event: action.event,
     };
-  case SET_SCHEDULE_DATA : {
-    const newState = {
+  case SET_SCHEDULE_DATA:
+    return {
       ...state,
       sequence: {
         ...state.sequence,
@@ -780,8 +783,6 @@ const reducer = (
         ],
       },
     };
-    return newState;
-  }
   case SET_SCHEDULE :
     return {
       ...state,
@@ -872,7 +873,7 @@ const reducer = (
           type: EVENT,
         };
       }
-    } 
+    }
 
     return stateCopy;
   }
@@ -919,7 +920,29 @@ const reducer = (
       },
     };
   }
-  case 'MUTE_USER':
+  case MUTE_USER: {
+    // $FlowFixMe
+    const newArray = [...state.mutedUsers, action.nickname];
+    return {
+      ...state,
+      // ensure no duplicates in the array
+      mutedUsers: [...new Set(newArray)],
+      channels: {
+        ...state.channels,
+        [state.panes.primary.channelId]: {
+          ...state.channels[state.panes.primary.channelId],
+          moments: state.channels[state.panes.primary.channelId].moments.map(
+            message => (
+              {
+                ...message,
+                messageTrayOpen: false,
+              }
+            )
+          ),
+        },
+      },
+    };
+  }
   case 'DIRECT_CHAT':
   case CLOSE_MESSAGE_TRAY:
     return {

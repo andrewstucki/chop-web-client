@@ -64,4 +64,5 @@ export {
   getPlaceholder,
   getOtherUsers,
   hasOtherUsers,
+  getCurrentUser,
 };

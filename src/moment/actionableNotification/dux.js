@@ -2,8 +2,7 @@
 import type { SharedUserType } from '../../feed/dux';
 import type { ReceiveMomentType } from '../dux';
 import { RECEIVE_MOMENT } from '../dux';
-import { formatAMPM } from '../notification/dux';
-import { createUid } from '../../util';
+import { createUid, getMessageTimestamp } from '../../util';
 
 // Action Types
 
@@ -19,7 +18,7 @@ type PrayerRequestNotificationType = {
   notificationType: 'PRAYER_REQUEST',
   id: string,
   user: SharedUserType,
-  timeStamp: string,
+  timestamp: string,
   active: boolean,
   cancelled: boolean,
   prayerChannel: string,
@@ -57,7 +56,7 @@ const receivePrayerRequestNotification = (
       user,
       active: true,
       cancelled: false,
-      timeStamp: formatAMPM(new Date),
+      timestamp: getMessageTimestamp(),
       prayerChannel,
     },
   }

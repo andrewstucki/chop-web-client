@@ -37,6 +37,7 @@ import { getAvailableForPrayer } from '../selectors/hereNowSelector';
 import { getCurrentChannel } from '../selectors/channelSelectors';
 import { setPrimaryPane } from '../pane/dux';
 import { EVENT } from '../pane/content/event/dux';
+import { CHAT } from '../pane/content/chat/dux';
 
 class ServiceActor {
   storeDispatch: (action: any) => void;
@@ -73,7 +74,7 @@ class ServiceActor {
   async init () {
     const { accessToken, refreshToken } = this.getStore().auth;
     const legacyToken = this.cookies.legacyToken();
-    const hostname = this.location.hostname();
+    const hostname = Location.hostname();
 
     if (accessToken) {
       await this.initWithAccessToken(accessToken, refreshToken, hostname);
@@ -107,7 +108,7 @@ class ServiceActor {
   }
 
   async getAccessTokenByBasicAuth (action:BasicAuthLoginType) {
-    const hostname = this.location.hostname();
+    const hostname = Location.hostname();
 
     try {
       const auth = await this.graph.authenticateByBasicAuth(action.email, action.password, hostname);
@@ -406,6 +407,7 @@ class ServiceActor {
       const { name, id, subscribers } = data.acceptPrayer;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);
     }
@@ -428,6 +430,7 @@ class ServiceActor {
       const { name, id, subscribers } = directChat.createDirectFeed;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);
     }

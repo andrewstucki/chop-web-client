@@ -18,7 +18,7 @@ describe('Notification test', () => {
             id: '12345',
             host: 'yablby',
             guest: 'cookietree',
-            timeStamp: '9:33pm',
+            timestamp: '9:33pm',
           }
         }
       />
@@ -40,7 +40,7 @@ describe('Notification test', () => {
             notificationType: 'JOINED_CHAT',
             id: '12345',
             name: 'cookietree',
-            timeStamp: '9:33pm',
+            timestamp: '9:33pm',
           }
         }
       />
@@ -62,7 +62,7 @@ describe('Notification test', () => {
             notificationType: 'LEFT_CHANNEL',
             id: '12345',
             name: 'cookietree',
-            timeStamp: '9:33pm',
+            timestamp: '9:33pm',
           }
         }
       />
@@ -71,6 +71,52 @@ describe('Notification test', () => {
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
     expect(wrapper.find('div').at(2).text()).toEqual(
       'cookietree has left the chat'
+    );
+    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+  });
+
+  test('Mute notification renders with a host', () => {
+    const wrapper = Enzyme.shallow(
+      <Notification
+        notification={
+          {
+            type: 'NOTIFICATION',
+            notificationType: 'MUTE',
+            id: '12345',
+            host: 'host',
+            guest: 'guest',
+            timestamp: '9:33pm',
+          }
+        }
+      />
+    );
+    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
+    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
+    expect(wrapper.find('div').at(2).text()).toEqual(
+      'host muted guest'
+    );
+    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+  });
+
+  test('Mute notification renders without a host', () => {
+    const wrapper = Enzyme.shallow(
+      <Notification
+        notification={
+          {
+            type: 'NOTIFICATION',
+            notificationType: 'MUTE',
+            id: '12345',
+            host: '',
+            guest: 'guest',
+            timestamp: '9:33pm',
+          }
+        }
+      />
+    );
+    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
+    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
+    expect(wrapper.find('div').at(2).text()).toEqual(
+      'guest was muted'
     );
     expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
   });

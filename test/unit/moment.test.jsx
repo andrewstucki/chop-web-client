@@ -82,7 +82,7 @@ describe('Moment tests', () => {
             notificationType: 'PRAYER',
             host: 'Billy',
             guest: 'Bobby',
-            timeStamp: '4:53pm',
+            timestamp: '4:53pm',
           }
         }
       />
@@ -94,7 +94,7 @@ describe('Moment tests', () => {
           notificationType: 'PRAYER',
           host: 'Billy',
           guest: 'Bobby',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -108,7 +108,7 @@ describe('Moment tests', () => {
             type: 'NOTIFICATION',
             notificationType: 'JOINED_CHAT',
             name: 'Billy',
-            timeStamp: '4:53pm',
+            timestamp: '4:53pm',
           }
         }
       />
@@ -119,7 +119,7 @@ describe('Moment tests', () => {
           type: 'NOTIFICATION',
           notificationType: 'JOINED_CHAT',
           name: 'Billy',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -133,7 +133,7 @@ describe('Moment tests', () => {
             type: 'NOTIFICATION',
             notificationType: 'LEFT_CHAT',
             name: 'Billy',
-            timeStamp: '4:53pm',
+            timestamp: '4:53pm',
           }
         }
       />
@@ -144,7 +144,7 @@ describe('Moment tests', () => {
           type: 'NOTIFICATION',
           notificationType: 'LEFT_CHAT',
           name: 'Billy',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -158,7 +158,7 @@ describe('Moment tests', () => {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             name: 'Billy',
-            timeStamp: '4:53pm',
+            timestamp: '4:53pm',
             active: true,
           }
         }
@@ -170,7 +170,7 @@ describe('Moment tests', () => {
           type: 'ACTIONABLE_NOTIFICATION',
           notificationType: 'PRAYER_REQUEST',
           name: 'Billy',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
           active: true,
         },
       }

@@ -102,9 +102,6 @@ const objectFilter = (obj, predicate) => {
   return result;
 };
 
-const isEmpty = (string: string) =>
-  (!string || string.length === 0);
-
 const DOMPurify = createDOMPurify();
 
 const sanitizeConfig = {
@@ -115,11 +112,13 @@ const sanitizeString = (string: string, config:any = sanitizeConfig) =>
   DOMPurify.sanitize(string, config)
 ;
 
-const getMessageTimestamp = (timestamp: Date) => {
-  const format = moment().diff(moment(timestamp), 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
-  return moment(timestamp).format(format);
-};
+const UTC_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss ZZ';
 
+const getMessageTimestamp = (timestamp: string = moment().format(UTC_DATE_FORMAT)) => {
+  const date = moment(timestamp, UTC_DATE_FORMAT);
+  const format = moment().diff(date, 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
+  return date.format(format);
+};
 
 export {
   getFirstInitial,
@@ -134,7 +133,7 @@ export {
   convertSubscribersToSharedUsers,
   capitalizeFirstLetter,
   objectFilter,
-  isEmpty,
   sanitizeString,
   getMessageTimestamp,
+  UTC_DATE_FORMAT,
 };
