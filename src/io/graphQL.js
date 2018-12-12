@@ -23,7 +23,6 @@ mutation AccessToken($type: String!, $email: String, $password: String, $legacyT
 const sequence = `
 query Sequence($time: Timestamp) {
   eventAt(time: $time) {
-    id
     sequence {
       serverTime
       steps {
