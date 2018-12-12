@@ -102,6 +102,9 @@ const objectFilter = (obj, predicate) => {
   return result;
 };
 
+const isEmpty = (string: string) =>
+  (!string || string.length === 0);
+
 const DOMPurify = createDOMPurify();
 
 const sanitizeConfig = {
@@ -133,6 +136,7 @@ export {
   convertSubscribersToSharedUsers,
   capitalizeFirstLetter,
   objectFilter,
+  isEmpty,
   sanitizeString,
   getMessageTimestamp,
   UTC_DATE_FORMAT,
