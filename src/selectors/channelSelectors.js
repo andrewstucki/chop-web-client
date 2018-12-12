@@ -8,6 +8,8 @@ const getCurrentLanguage = state => state.currentLanguage;
 
 const getPrimaryPane = state => state.panes.primary;
 
+const getMutedUsers = state => state.mutedUsers;
+
 const getChannelByNameFactory = name => (
   createSelector(
     getChannels,
@@ -36,6 +38,14 @@ const translateMoment = currentLanguage => moment => {
 
 const mutedMoment = moment => moment.isMuted !== 'true';
 
+const removeMutedUsers = mutedUsers => moment => {
+  if (moment.user) {
+    return !mutedUsers.includes(moment.user.name);
+  } else {
+    return true;
+  }
+};
+
 const getHostChannel = createSelector(
   getChannelByNameFactory('HOST'),
   channel => channel
@@ -58,7 +68,7 @@ const getCurrentChannel = createSelector(
 
 const hasParticipants = createSelector(
   getChannelById,
-  channel => channel && channel.participants && channel.participants.length ? true : false
+  channel => !!(channel && channel.participants && channel.participants.length)
 );
 
 const feedAnchorMoments = createSelector(
@@ -69,10 +79,12 @@ const feedAnchorMoments = createSelector(
 const feedContents = createSelector(
   getChannelById,
   getCurrentLanguage,
-  (channel, currentLanguage) => channel && channel.moments ?
+  getMutedUsers,
+  (channel, currentLanguage, mutedUsers) => channel && channel.moments ?
     channel.moments
       .map(translateMoment(currentLanguage))
       .filter(mutedMoment)
+      .filter(removeMutedUsers(mutedUsers))
     : []
 );
 
@@ -85,4 +97,5 @@ export {
   feedContents,
   feedAnchorMoments,
   getChannelById,
+  getMutedUsers,
 };

@@ -14,6 +14,7 @@ import { getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishMuteUserNotification } from '../notification/dux';
 import { getHostChannel, getCurrentChannel } from '../../selectors/channelSelectors';
 import { mutedNotificationBanner } from '../../banner/dux';
+import { getMessageTimestamp } from '../../util';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
@@ -33,7 +34,7 @@ const mapDispatchToProps = dispatch => (
     toggleCloseTrayButton: id => dispatch(toggleCloseTrayButton(id)),
     muteUser: (channel, nickname) => dispatch(muteUser(channel, nickname)),
     directChat: (pubnubToken, nickname) => dispatch(directChat(pubnubToken, nickname)),
-    publishMuteUserNotification: (host, guest, channel, date) => dispatch(publishMuteUserNotification(host, guest, channel, date)),
+    publishMuteUserNotification: (host, guest, channel) => dispatch(publishMuteUserNotification(host, guest, channel, getMessageTimestamp())),
     mutedNotificationBanner: guestName => dispatch(mutedNotificationBanner(guestName)),
   }
 );

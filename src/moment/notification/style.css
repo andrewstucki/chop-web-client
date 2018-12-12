@@ -1,7 +1,7 @@
 @import url('../../../assets/theme.css');
 
 :root {
-  --notification {
+  --notification: {
     display: flex;
     align-items: center;
     width: 100%;
@@ -22,7 +22,7 @@
   padding-left: 13px;
 }
 
-.timeStamp {
+.timestamp {
   font-size: 10.24px;
 }
 

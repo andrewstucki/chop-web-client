@@ -282,7 +282,7 @@ describe('Feed tests', () => {
         notificationType: 'PRAYER_REQUEST',
         id: '12345',
         user: otherUser,
-        timeStamp: '4:53pm',
+        timestamp: '4:53pm',
         active: true,
         action: action,
       })
@@ -291,7 +291,7 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments[0].id.length).toEqual(5);
     expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
     expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
-    expect(result.channels.host.moments[0].timeStamp).toEqual('4:53pm');
+    expect(result.channels.host.moments[0].timestamp).toEqual('4:53pm');
     expect(result.channels.host.moments[0].active).toEqual(true);
     expect(result.channels.host.moments[0].action).toEqual(action);
   });
@@ -1172,7 +1172,7 @@ describe('Feed tests', () => {
           id: '12345',
           host: 'Boofie',
           guest: 'Beefie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1190,7 +1190,7 @@ describe('Feed tests', () => {
                 id: '12345',
                 host: 'Boofie',
                 guest: 'Beefie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
@@ -1221,7 +1221,7 @@ describe('Feed tests', () => {
           notificationType: 'JOINED_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1238,7 +1238,7 @@ describe('Feed tests', () => {
                 notificationType: 'JOINED_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
@@ -1269,7 +1269,7 @@ describe('Feed tests', () => {
           notificationType: 'JOINED_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1286,7 +1286,7 @@ describe('Feed tests', () => {
                 notificationType: 'JOINED_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
@@ -1317,7 +1317,7 @@ describe('Feed tests', () => {
           notificationType: 'LEFT_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1334,7 +1334,7 @@ describe('Feed tests', () => {
                 notificationType: 'LEFT_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
@@ -1366,7 +1366,7 @@ describe('Feed tests', () => {
           notificationType: 'LEFT_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1384,7 +1384,7 @@ describe('Feed tests', () => {
                 notificationType: 'LEFT_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
@@ -1470,7 +1470,7 @@ describe('Feed tests', () => {
             name: 'Boofie',
           },
           id: '12345',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
           active: true,
         },
       }
@@ -1492,7 +1492,7 @@ describe('Feed tests', () => {
                   id: '5893',
                   name: 'Boofie',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: true,
               },
             ],
@@ -1625,7 +1625,7 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: true,
                 prayerChannel: '123456',
               },
@@ -1652,7 +1652,7 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: false,
                 prayerChannel: '123456',
               },
@@ -1681,7 +1681,7 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: true,
                 prayerChannel: '123456',
               },
@@ -1708,7 +1708,7 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: false,
                 prayerChannel: '123456',
               },
