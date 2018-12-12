@@ -184,17 +184,14 @@ class ServiceActor {
     const { schedule, sequence } = this.getStore();
     if (sequence && sequence.steps && sequence.steps[0]) {
       const [ step ] = sequence.steps;
-      if (step.transitionTime * 1000 <= now) {
+      if (step.transitionTime * 1000 <= now && step.data) {
         this.getInitialData(step.data);
 
-        let newSequence = {
+        const newSequence = {
           serverTime: sequence.serverTime,
           steps: sequence.steps.splice(1),
         };
         if (newSequence.steps.length === 0) {
-          newSequence = {
-            steps: [],
-          };
           schedule.shift();
           const [ nextEvent ] = schedule;
           this.storeDispatch(setScheduleData(schedule));
@@ -302,14 +299,20 @@ class ServiceActor {
   _handelEvent (payload) {
     const event = payload.currentEvent || payload.eventAt;
     if (event) {
-      this.storeDispatch(
-        setEvent(
-          event.title,
-          event.id,
-          event.startTime,
-          event.videoStartTime,
-        )
-      );
+      if (event.title !== undefined &&
+        event.id !== undefined &&
+        event.startTime !== undefined &&
+        event.videoStartTime !== undefined) {
+        this.storeDispatch(
+          setEvent(
+            event.title,
+            event.id,
+            event.startTime,
+            event.videoStartTime,
+          )
+        );
+      }
+
       const { sequence } = event;
       if (sequence && sequence.steps && sequence.steps.length > 0) {
         const now = Date.now();
