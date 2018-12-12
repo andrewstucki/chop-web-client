@@ -28,7 +28,11 @@ import {
   DIRECT_CHAT,
 } from '../moment/message/dux';
 import type { MuteUserType } from '../moment/message/dux';
-import { avatarImageExists, convertSubscribersToSharedUsers } from '../util';
+import {
+  avatarImageExists,
+  convertSubscribersToSharedUsers,
+  isEmpty,
+} from '../util';
 import Cookies from './cookies';
 import Location from './location';
 import GraphQl from './graphQL';
@@ -188,28 +192,16 @@ class ServiceActor {
       if (step.transitionTime * 1000 <= now && step.data) {
         this.getInitialData(step.data);
 
-        const newSequence = {
-          serverTime: sequence.serverTime,
-          steps: sequence.steps.splice(1),
-        };
-        if (newSequence.steps.length === 0) {
-          schedule.shift();
-          const [ nextEvent ] = schedule;
-          this.storeDispatch(setScheduleData(schedule));
-          try {
-            const sequenceResponse = await this.graph.sequence(nextEvent.startTime);
-            this.getInitialData(sequenceResponse);
-          } catch (error) {
-            this.handleDataFetchErrors(error);
+        const newSteps = sequence.steps.splice(1);
+        this.storeDispatch(
+          {
+            type: 'SET_SEQUENCE',
+            sequence: {
+              ...sequence,
+              steps: newSteps,
+            },
           }
-        } else {
-          this.storeDispatch(
-            {
-              type: 'SET_SEQUENCE',
-              sequence: newSequence,
-            }
-          );
-        }
+        );
       }
       if (!step.data && step.fetchTime * 1000 <= now) {
         try {
@@ -223,78 +215,81 @@ class ServiceActor {
         }
       }
     }
+    if (sequence && sequence.steps && sequence.steps.length === 0) {
+      if (schedule[0] && schedule[0].startTime * 1000 < now) {
+        schedule.shift();
+      }
+      const [ nextEvent ] = schedule;
+      this.storeDispatch(setScheduleData(schedule));
+      try {
+        const sequenceResponse = await this.graph.sequence(nextEvent.startTime);
+        this.getInitialData(sequenceResponse);
+      } catch (error) {
+        this.handleDataFetchErrors(error);
+      }
+    }
   }
 
   _getInitialData (payload: any) {
-    let hasHandledEvent = false;
-    Object.keys(payload).forEach(key => {
-      switch (key) {
-      case 'eventAt':
-      case 'currentEvent':
-      case 'schedule':
-        if (!hasHandledEvent) {
-          this.handelEvent(payload);
-          hasHandledEvent = true;
-        }
-        break;
-      case 'currentOrganization': {
-        const organization = payload.currentOrganization;
-        this.storeDispatch(
-          setOrganization(
-            organization.id,
-            organization.name,
-          )
-        );
-        break;
-      }
-      case 'currentUser': {
-        const user = payload.currentUser;
-        this.storeDispatch(
-          setUser(
-            {
-              id: user.id,
-              name: user.nickname,
-              avatar: user.avatar,
-              pubnubAccessKey: user.pubnubAccessKey,
-              pubnubToken: user.pubnubToken,
-              role: {
-                label: user.role ? user.role.label : '',
-                permissions: [],
-              },
-            }
-          )
-        );
-        avatarImageExists(payload.currentUser.id).then(exists => {
-          if (exists) {
-            this.storeDispatch(
-              {
-                type: 'SET_AVATAR',
-                url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${payload.currentUser.id}/thumb/photo.jpg`,
-              }
-            );
+    const { pubnubKeys } = payload;
+    if (pubnubKeys) {
+      const { publishKey, subscribeKey } = pubnubKeys;
+      this.storeDispatch(
+        setPubnubKeys(
+          publishKey,
+          subscribeKey
+        )
+      );
+    }
+    const { currentUser } = payload;
+    if (currentUser) {
+      const user = currentUser;
+      this.storeDispatch(
+        setUser(
+          {
+            id: user.id,
+            name: user.nickname,
+            avatar: user.avatar,
+            pubnubAccessKey: user.pubnubAccessKey,
+            pubnubToken: user.pubnubToken,
+            role: {
+              label: user.role ? user.role.label : '',
+              permissions: [],
+            },
           }
-        }) ;
-        break;
-      }
-      case 'pubnubKeys': {
-        const { publishKey, subscribeKey } = payload.pubnubKeys;
-        this.storeDispatch(
-          setPubnubKeys(
-            publishKey,
-            subscribeKey
-          )
-        );
-        break;
-      }
-      case 'currentLanguages': {
-        const languages = payload.currentLanguages;
-        this.storeDispatch(
-          setLanguageOptions(languages)
-        );
-        break;
-      }
-      }
-    });
+        )
+      );
+      avatarImageExists(payload.currentUser.id).then(exists => {
+        if (exists) {
+          this.storeDispatch(
+            {
+              type: 'SET_AVATAR',
+              url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${payload.currentUser.id}/thumb/photo.jpg`,
+            }
+          );
+        }
+      });
+    }
+    if (payload.eventAt || payload.currentEvent || payload.schedule) {
+      this.handelEvent(payload);
+    }
+    const { currentOrganization } = payload;
+    if (currentOrganization) {
+      const organization = currentOrganization;
+      this.storeDispatch(
+        setOrganization(
+          organization.id,
+          organization.name,
+        )
+      );
+    }
+    const { currentLanguages } = payload;
+    if (currentLanguages) {
+      const languages = currentLanguages;
+      this.storeDispatch(
+        setLanguageOptions(languages)
+      );
+    }
   }
 
   _handelEvent (payload) {
@@ -378,17 +373,20 @@ class ServiceActor {
     }
     const { schedule } = payload;
     if (schedule) {
+      const isBetweenEvents = isEmpty(event.id) && isEmpty(this.getStore().event.id);
       const updatedSchedule = schedule.filter(item =>
         item.startTime * 1000 > Date.now());
 
       this.storeDispatch(setSchedule(updatedSchedule));
 
-      const [ nextEvent ] = schedule;
-      if (nextEvent) {
-        try {
-          this.graph.sequence(nextEvent.startTime).then(this.getInitialData, this.handleDataFetchErrors);
-        } catch (error) {
-          this.handleDataFetchErrors(error);
+      if (isBetweenEvents) {
+        const [nextEvent] = schedule;
+        if (nextEvent) {
+          try {
+            this.graph.sequence(nextEvent.startTime).then(this.getInitialData, this.handleDataFetchErrors);
+          } catch (error) {
+            this.handleDataFetchErrors(error);
+          }
         }
       }
     }

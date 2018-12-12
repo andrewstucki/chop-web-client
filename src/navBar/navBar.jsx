@@ -38,7 +38,7 @@ const Underline = props => (
 );
 
 class NavBar extends React.Component<NavBarProps, NavBarState> {
-  selectedLink: any
+  selectedLink: any;
   channelLink: (channel: ChannelType) => React$Node | string;
   channelTab: (channel: ChannelType) => React$Node;
 
