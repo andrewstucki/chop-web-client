@@ -84,7 +84,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@redux-beacon/google-tag-manager": "^1.0.1",
-    "@vimeo/player": "^2.6.5",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
@@ -110,8 +109,6 @@
     "redux-persist-transform-expire": "^0.0.2",
     "redux-persist-transform-filter": "^0.0.18",
     "reselect": "^4.0.0",
-    "reset-css": "^3.0.0",
-    "video.js": "^7.2.4",
-    "videojs-youtube": "^2.6.0"
+    "reset-css": "^3.0.0"
   }
 }

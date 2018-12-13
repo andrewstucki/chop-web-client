@@ -1,29 +1,56 @@
 /* @flow*/
 import React from 'react';
 import styles from './styles.css';
-import type { PlayerPropsType } from './dux';
+import type { SimulatedLivePlayerPropsType } from './dux';
+import IframeEmbedPlayer from './players/iframeEmbedPlayer';
+import SimulatedLivePlayer from './players/simulatedLivePlayer';
 
 type VideoFeedProps = {
-  isVideoHidden: boolean,
+  type: string,
   url: string,
+  isVideoHidden: boolean,
   // $FlowFixMe
-  Player: React.ComponentType<PlayerPropsType>,
+  Player?: React.ComponentType<SimulatedLivePlayerPropsType>,
   startAt: number,
+  onPause: () => void,
+  onPlay: () => void,
+  isVideoPlaying: boolean,
+  isMobileDevice: boolean,
 };
 
-const VideoFeed = ({isVideoHidden, url, Player, startAt}: VideoFeedProps) => {
-  const wrapperStyle = isVideoHidden ?
-    styles.hideVideo :
-    styles.showVideo;
-  const frameStyle = styles.frame;
+class VideoFeed extends React.Component<VideoFeedProps> {
+  render () {
+    const { type, Player, url, isVideoHidden, isMobileDevice, onPlay, onPause, startAt, isVideoPlaying } = this.props;
+    const wrapperStyle = isVideoHidden ?
+      styles.hideVideo :
+      styles.showVideo;
+    const frameStyle = styles.frame;
 
-  return (
-    <div className={wrapperStyle}>
-      { url !== '' &&
-        <Player url={url} startAt={startAt} style={frameStyle} />
-      }
-    </div>
-  );
-};
+    return (
+      <div className={wrapperStyle}>
+        { url !== '' && type === 'simulated' &&
+          <SimulatedLivePlayer
+            Player={Player}
+            url={url}
+            startAt={startAt}
+            style={frameStyle}
+            onPlay={onPlay}
+            onPause={onPause}
+            isMobileDevice={isMobileDevice}
+            isVideoPlaying={isVideoPlaying}
+          />
+        }
+
+        { url !== '' && type === 'live' &&
+          <IframeEmbedPlayer
+            url={url}
+            style={frameStyle}
+          />
+        }
+
+      </div>
+    );
+  }
+}
 
 export default VideoFeed;
