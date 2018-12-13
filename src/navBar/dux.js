@@ -1,6 +1,11 @@
 // @flow
-import type { FeedType } from '../feed/dux';
-import { getCurrentChannel } from '../selectors/channelSelectors';
+import { 
+  getCurrentChannel, 
+  getPublicChannelObject as publicChannel, 
+  getHostChannelObject as hostChannel, 
+  getDirectChannels as directChannels,
+} from '../selectors/channelSelectors';
+import { createSelector } from 'reselect';
 
 // Flow Type Definitions
 
@@ -12,45 +17,65 @@ type ChannelType = {
   otherUsersNames: Array<string>,
 };
 
-type ChannelsListType = Array<ChannelType>;
-
 // Selectors
 
-const getChannels = (state: FeedType): ChannelsListType => (
-  Object.keys(state.channels).filter(
-    id => state.channels[id].name &&
-      state.channels[id].name !== 'Legacy' &&
-      state.channels[id].name !== 'Personal'
-  ).map(id => {
-    const { participants, moments, name } = state.channels[id];
+const getOtherUserNames = (channel, currentUser) => {
+  const { participants } = channel;
+  if (participants && participants.length) {
+    return participants
+      .filter(user => user.pubnubToken !== currentUser.pubnubToken)
+      .map(user => user.name);
+  } else {
+    return [];
+  }
+};
 
-    const getOtherUserNames = () => {
-      if (participants && participants.length) {
-        return participants.filter(user => user.pubnubToken !== state.currentUser.pubnubToken)
-          .map(user => user.name);
-      } else {
-        return [];
-      }
-    };
+// eslint is dumb when it comes to optional chaining
+const hasAction = channel => channel?.moments // eslint-disable-line no-undef
+  ?.filter(moment => ( // eslint-disable-line no-undef
+    moment.type === 'ACTIONABLE_NOTIFICATION' &&
+    moment.active === true)).length > 0;
 
-    const currentChannel = getCurrentChannel(state);
+const getCurrentUser = state => state.currentUser;
 
-    return {
-      name,
-      id,
-      isCurrent: currentChannel === id,
-      hasActions: moments.filter(moment => (
-        moment.type === 'ACTIONABLE_NOTIFICATION' && moment.active === true
-      )).length > 0,
-      otherUsersNames: getOtherUserNames(),
-    };
-  })
+const createNavChannel = (channel, currentChannel, currentUser) => (
+  {
+    name: channel.name,
+    id: channel.id,
+    isCurrent: currentChannel === channel.id,
+    hasActions: hasAction(channel),
+    otherUsersNames: getOtherUserNames(channel, currentUser),
+  }
+);
+
+const getPublicChannel = createSelector(
+  state => publicChannel(state) || { name: 'Public', id: 'event', moments: [] },
+  getCurrentChannel,
+  getCurrentUser,
+  createNavChannel
+);
+
+const getHostChannel = createSelector(
+  state => hostChannel(state) || { name: 'Host', id: 'host', moments: [] },
+  getCurrentChannel,
+  getCurrentUser,
+  createNavChannel
+);
+
+const getDirectChannels = createSelector(
+  directChannels,
+  getCurrentChannel,
+  getCurrentUser,
+  (channels, currentChannel, currentUser) => 
+    Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentUser))
 );
 
 // Exports
 
 export {
-  getChannels,
+  getHostChannel,
+  getPublicChannel,
+  getDirectChannels,
 };
 export type {
   ChannelType,
