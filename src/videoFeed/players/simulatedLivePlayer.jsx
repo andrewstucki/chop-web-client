@@ -26,9 +26,10 @@ class SimulatedLivePlayer extends React.Component<SimulatedLivePlayerPropsType, 
 
   shouldComponentUpdate (nextProps:SimulatedLivePlayerPropsType) {
     const { isReady, duration } = this.state;
+    const { isVideoPlaying } = this.props;
     if (!isReady || this.props.url !== nextProps.url) {
       return true;
-    } else if (nextProps.isVideoPlaying && nextProps.startAt <= duration) {
+    } else if (!isVideoPlaying && nextProps.isVideoPlaying && nextProps.startAt <= duration) {
       this.player.current.seekTo(nextProps.startAt);
     }
     return false;
