@@ -112,13 +112,6 @@ describe('Chat2 Tests', () => {
         uuid: '123456',
       }
     );
-    expect(mockSubscribe).toHaveBeenCalledTimes(1);
-    expect(mockSubscribe).toHaveBeenCalledWith(
-      {
-        channels: ['123456', '789012'],
-        withPresence: true,
-      }
-    );
     expect(mockAddListener).toHaveBeenCalledTimes(1);
     expect(mockAddListener).toHaveBeenCalledWith(
       {
@@ -295,7 +288,7 @@ describe('Chat2 Tests', () => {
 
     chat.dispatch(addChannel('direct', 'asd2389dhsdf'));
 
-    expect(mockSubscribe).toHaveBeenCalledTimes(2);
+    expect(mockSubscribe).toHaveBeenCalledTimes(1);
     expect(mockSubscribe).toHaveBeenCalledWith(
       {
         channels: ['asd2389dhsdf'],

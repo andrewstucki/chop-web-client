@@ -257,18 +257,6 @@ class Chat {
         presence: this.onPresence,
       }
     );
-
-    const channels = Object.keys(state.channels)
-      .map(name => state.channels[name].id);
-
-    this.subscribe(channels);
-
-    channels.map(channel => this.pubnub.history({
-      channel: channel,
-    }, 
-    ((status, response) => {
-      this.loadHistory(response.messages, channel);
-    }).bind(this)));
   }
 
   setPubnubState () {
@@ -661,9 +649,15 @@ class Chat {
     case 'SET_AVAILABLE_FOR_PRAYER':
       this.setPubnubState();
       return;
-    case 'ADD_CHANNEL':
-      this.subscribe([action.channel.id]);
+    case 'ADD_CHANNEL': {
+      const { id } = action.channel;
+      this.subscribe([id]);
+      this.pubnub.history({channel: id},
+        ((status, response) => {
+          this.loadHistory(response.messages, id);
+        }).bind(this));
       return;
+    }
     case 'PUBLISH_REACTION':
       this.publishReaction(action.reaction, getLegacyChannel(this.getState()));
       return;
