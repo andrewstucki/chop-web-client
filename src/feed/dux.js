@@ -102,6 +102,7 @@ const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
+const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
 
@@ -196,6 +197,7 @@ type ChannelType = {
   moments: Array<MomentType>,
   participants?: Array<SharedUserType>,
   anchorMoments: Array<AnchorMomentType>,
+  scrollPosition: number,
 };
 
 type HereNowUsers = {
@@ -355,10 +357,16 @@ type SetNotificationBannerType = {
   bannerType: string,
 };
 
+type UpdateScrollPositionType = {
+  type: 'UPDATE_SCROLL_POSITION',
+  scrollPosition: number,
+  channel: string,
+};
+
 type SetClientInfoType = {
   type: 'SET_CLIENT_INFO',
   data: ClientInfoType,
-}
+};
 
 type FeedActionTypes =
   | ReceiveMomentType
@@ -522,6 +530,7 @@ const addChannel = (
       moments: [],
       participants,
       anchorMoments: [],
+      scrollPosition: -1,
     },
   }
 );
@@ -576,12 +585,21 @@ const clearNotificationBanner = (): ClearNotificationBannerType => (
   }
 );
 
+const updateScrollPosition = (scrollPosition: number, channel: string): UpdateScrollPositionType => (
+  {
+    type: UPDATE_SCROLL_POSITION,
+    scrollPosition,
+    channel,
+  }
+);
+
 const setClientInfo = (data: ClientInfoType) => (
   {
     type: SET_CLIENT_INFO,
     data,
   }
 );
+
 // Default State
 
 const getLanguage = () => {
@@ -703,7 +721,7 @@ const reducer = (
     return state;
   }
   switch (action.type) {
-  case SET_PANE_CONTENT:
+  case SET_PANE_CONTENT: 
     return {
       ...state,
       panes: {
@@ -1249,6 +1267,18 @@ const reducer = (
         bannerType: '',
       },
     };
+  case UPDATE_SCROLL_POSITION: {
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: {
+          ...state.channels[action.channel],
+          scrollPosition: action.scrollPosition,
+        },
+      },
+    };
+  }
   case SET_CLIENT_INFO:
     return {
       ...state,
@@ -1275,6 +1305,14 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
 const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
+
+const getScrollPosition = (state: FeedType, channel: string): number => {
+  if (state.channels[channel]) {
+    return state.channels[channel].scrollPosition;
+  } else {
+    return -1;
+  }
+};
 
 // Exports
 
@@ -1313,6 +1351,8 @@ export {
   setSalvations,
   setAuthentication,
   removeAuthentication,
+  updateScrollPosition,
+  getScrollPosition,
   setClientInfo,
   setHereNow,
 };

@@ -50,12 +50,14 @@ describe('Chat2 Tests', () => {
         id: '123456',
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
       },
       '789012': {
         name: 'Host',
         id: '789012',
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
       },
     },
   };
