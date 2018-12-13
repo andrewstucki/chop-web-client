@@ -9,6 +9,8 @@ import {
 
 import {
   togglePopUpModal,
+  updateScrollPosition,
+  getScrollPosition,
 } from './dux';
 
 const mapStateToProps = (state, ownProps) => {
@@ -20,12 +22,14 @@ const mapStateToProps = (state, ownProps) => {
     currentChannel: channel,
     animatingMoment: feedState.renderingAnchorMoment,
     showLeaveChat: hasParticipants(feedState, channel),
+    scrollPosition: getScrollPosition(feedState, channel),
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
     togglePopUpModal: () => (dispatch(togglePopUpModal())),
+    updateScrollPosition: (scrollPosition, channel) => (dispatch(updateScrollPosition(scrollPosition, channel))),
   }
 );
 

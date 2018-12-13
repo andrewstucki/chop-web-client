@@ -15,8 +15,11 @@ type FeedProps = {
   moments: Array<MomentType>,
   anchorMoments: Array<AnchorMomentType>,
   currentChannel: string,
+  channel: string,
   showLeaveChat: boolean,
+  scrollPosition: number,
   togglePopUpModal: () => void,
+  updateScrollPosition: (scrollPosition: number, channel: string) => void,
 };
 
 type SnapshotType = {
@@ -57,23 +60,40 @@ class Feed extends React.Component<FeedProps, FeedState> {
     }, 300);
   }
 
+  componentDidMount () {
+    if (this.wrapperRef.current) {
+      this.wrapperRef.current.addEventListener('scroll', () => {
+        this.props.updateScrollPosition(this.wrapperRef.current.scrollTop, this.props.channel);
+      }, false);
+      if (this.props.scrollPosition >= 0) {
+        this.wrapperRef.current.scrollTop = this.props.scrollPosition;
+      } else {
+        setTimeout(() => {
+          this.scroll();
+        }, 500);
+      }
+    }
+  }
+
   getSnapshotBeforeUpdate (prevProps: FeedProps) {
-    if (prevProps.moments.length < this.props.moments.length) {
+    if (prevProps.moments.length < this.props.moments.length && (this.wrapperRef.current.scrollHeight - this.wrapperRef.current.clientHeight) === this.props.scrollPosition) {
       return { scroll: true };
     }
     return { scroll: false };
   }
 
-  componentDidMount () {
-    this.scroll();
+  componentDidUpdate (prevProps: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
+    if (snapshot.scroll) {
+      this.scroll();
+    } 
   }
 
-  componentDidUpdate (prevProps: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
-    if (snapshot.scroll ||
-        this.height !== this.wrapperRef.current.getBoundingClientRect().height) {
-      this.scroll();
+  componentWillUnmount () {
+    if (this.wrapperRef.current) {
+      this.wrapperRef.current.removeEventListener('scroll', () => {
+        this.props.updateScrollPosition(this.wrapperRef.current.scrollTop, this.props.channel);
+      }, false);
     }
-    this.height = this.wrapperRef.current.getBoundingClientRect().height;
   }
 
   render () {
@@ -83,7 +103,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       anchorMoments,
       showLeaveChat,
       togglePopUpModal,
-    } = this.props;
+    } = this.props; 
 
     const momentListItems = moments.map(moment => (
       <li key={moment.id || createUid()}>

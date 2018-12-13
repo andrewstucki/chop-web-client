@@ -13,6 +13,7 @@ describe('Mute User tests', () => {
             name: 'test',
             anchorMoments: [],
             moments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -33,6 +34,7 @@ describe('Mute User tests', () => {
             name: 'test',
             anchorMoments: [],
             moments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -58,6 +60,7 @@ describe('Mute User tests', () => {
             name: 'test',
             anchorMoments: [],
             moments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -79,6 +82,7 @@ describe('Mute User tests', () => {
             name: 'test',
             anchorMoments: [],
             moments: [],
+            scrollPosition: 0,
           },
         },
         panes: {

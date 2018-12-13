@@ -7,6 +7,7 @@ import reducer, {
   leaveChannel,
   setUser,
   setSalvations,
+  updateScrollPosition,
 } from '../../src/feed/dux';
 
 import {
@@ -90,12 +91,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -111,12 +114,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -140,6 +145,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -181,12 +187,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -229,12 +237,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '67890',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -268,12 +278,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '67890',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -306,6 +318,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -320,6 +333,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           '12345': {
             id: '12345',
@@ -327,6 +341,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             name: 'host',
             participants: undefined,
+            scrollPosition: -1,
           },
         },
       },
@@ -352,6 +367,7 @@ describe('Feed tests', () => {
             participants: [
               otherUser,
             ],
+            scrollPosition: -1,
           },
         },
       },
@@ -369,6 +385,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -383,6 +400,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -399,6 +417,7 @@ describe('Feed tests', () => {
             name: 'other',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -417,6 +436,7 @@ describe('Feed tests', () => {
             name: 'other',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -446,6 +466,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         currentUser: currentUser,
@@ -478,6 +499,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
@@ -495,6 +517,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         currentUser: currentUser,
@@ -552,6 +575,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         currentLanguage: 'ko',
@@ -606,6 +630,7 @@ describe('Feed tests', () => {
                 id: '6789',
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -666,6 +691,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -708,6 +734,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -753,6 +780,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -795,6 +823,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -840,6 +869,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -882,6 +912,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -927,6 +958,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -969,6 +1001,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1014,6 +1047,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1056,6 +1090,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1109,6 +1144,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1144,6 +1180,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1160,6 +1197,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1194,6 +1232,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1210,6 +1249,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1242,6 +1282,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1258,6 +1299,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1290,6 +1332,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1306,6 +1349,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1338,6 +1382,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1355,6 +1400,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1388,6 +1434,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1405,6 +1452,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1440,6 +1488,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1456,6 +1505,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1497,6 +1547,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1513,6 +1564,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1543,6 +1595,7 @@ describe('Feed tests', () => {
                 text: 'I commit my life to Christ.',
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -1566,6 +1619,7 @@ describe('Feed tests', () => {
                 text: 'I commit my life to Christ.',
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -1587,6 +1641,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1631,6 +1686,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1658,6 +1714,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1687,6 +1744,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1714,6 +1772,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1827,6 +1886,7 @@ describe('Feed tests', () => {
               },
               otherUser,
             ],
+            scrollPosition: 0,
           },
           public: {
             id: '67890',
@@ -1834,6 +1894,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             participants: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1858,6 +1919,7 @@ describe('Feed tests', () => {
             participants: [
               otherUser,
             ],
+            scrollPosition: 0,
           },
           public: {
             id: '67890',
@@ -1865,6 +1927,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             participants: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1974,6 +2037,38 @@ describe('SideMenu tests', () => {
       {
         ...defaultState,
         isSideMenuClosed: false,
+      }
+    );
+  });
+
+  test('Update scroll position', () => {
+    const results = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: -1,
+          },
+        },
+      },
+      updateScrollPosition(31, 'public')
+    );
+    expect(results).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 31,
+          },
+        },
       }
     );
   });

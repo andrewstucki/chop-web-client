@@ -31,12 +31,14 @@ describe('NavBar tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           '12345': {
             id: '12345',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -90,12 +92,14 @@ describe('NavBar tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           '12345': {
             id: '12345',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -149,6 +153,7 @@ describe('NavBar tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           '12345': {
             id: '12345',
@@ -160,6 +165,7 @@ describe('NavBar tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -214,6 +220,7 @@ describe('NavBar tests', () => {
               otherUser,
               otherUser,
             ],
+            scrollPosition: 0,
           },
         },
         currentUser: currentUser,
@@ -242,18 +249,21 @@ describe('NavBar tests', () => {
             name: 'Legacy',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           '123456': {
             id: '12345',
             name: 'Personal',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           '12345': {
             id: '12345',
             name: 'Public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {

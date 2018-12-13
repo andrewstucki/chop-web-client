@@ -145,6 +145,7 @@ describe('Test leave channel', () => {
               role: { label: '' },
             },
           ],
+          scrollPosition: 0,
         },
       },
     };

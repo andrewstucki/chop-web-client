@@ -34,6 +34,7 @@ describe('Salvation Moment Tests', () => {
           id: '123456',
           moments: [],
           anchorMoments: [],
+          scrollPosition: 0,
         },
       },
     };
@@ -122,6 +123,7 @@ describe('Salvation Moment Tests', () => {
               text: 'I commit my life to Christ.',
             },
           ],
+          scrollPosition: 0,
         },
       },
       salvations: 3,
@@ -199,6 +201,7 @@ describe('Salvation Moment Tests', () => {
             },
           ],
           anchorMoments: [],
+          scrollPosition: 0,
         },
       },
       salvations: 3,

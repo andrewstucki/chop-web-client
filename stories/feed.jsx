@@ -34,6 +34,9 @@ storiesOf('Feed', module)
           showLeaveChat={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
+          scrollPosition={0}
+          updateScrollPosition={() => {}}
+          channel="default"
         />
       </div>
     </Provider>
@@ -67,6 +70,9 @@ storiesOf('Feed', module)
           showLeaveChat={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
+          scrollPosition={0}
+          updateScrollPosition={() => {}}
+          channel="default"
         />
       </div>
     </Provider>
@@ -101,6 +107,9 @@ storiesOf('Feed', module)
           showLeaveChat={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
+          scrollPosition={0}
+          updateScrollPosition={() => {}}
+          channel="default"
         />
       </div>
     </Provider>
