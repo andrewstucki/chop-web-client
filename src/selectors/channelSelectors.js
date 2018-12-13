@@ -79,7 +79,7 @@ const getDirectChannels = createSelector(
   getChannels,
   channels =>
     channels ?
-      objectFilter(channels, id => !channels[id].otherUsersNames || channels[id].otherUsersNames.length === 0) :
+      objectFilter(channels, id => !channels[id].participants || channels[id].participants.length === 0) :
       []
 );
 
