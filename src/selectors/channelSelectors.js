@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { objectFilter } from '../util';
 
 const getChannels = state => state.channels;
 
@@ -10,7 +11,7 @@ const getPrimaryPane = state => state.panes.primary;
 
 const getMutedUsers = state => state.mutedUsers;
 
-const getChannelByNameFactory = name => (
+const getChannelIdByNameFactory = name => (
   createSelector(
     getChannels,
     channels => { 
@@ -18,6 +19,14 @@ const getChannelByNameFactory = name => (
         return Object.keys(channels).find(channel => channels[channel].name.toUpperCase() === name);
       }
     }
+  )
+);
+
+const getChannelByNameFactory = name => (
+  createSelector(
+    getChannels,
+    getChannelIdByNameFactory(name),
+    (channels, id) => channels[id]
   )
 );
 
@@ -46,19 +55,41 @@ const removeMutedUsers = mutedUsers => moment => {
   }
 };
 
-const getHostChannel = createSelector(
+const getHostChannelObject = createSelector(
   getChannelByNameFactory('HOST'),
   channel => channel
 );
 
-const getPublicChannel = createSelector(
+const getHostChannel = createSelector(
+  getChannelIdByNameFactory('HOST'),
+  channel => channel
+);
+
+const getPublicChannelObject = createSelector(
   getChannelByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const getLegacyChannel = createSelector(
-  getChannelByNameFactory('LEGACY'),
+const getPublicChannel = createSelector(
+  getChannelIdByNameFactory('PUBLIC'),
   channel => channel
+);
+
+const getDirectChannels = createSelector(
+  getChannels,
+  channels =>
+    channels ?
+      objectFilter(channels, id => !channels[id].otherUsersNames || channels[id].otherUsersNames.length === 0) :
+      []
+);
+
+const getLegacyChannel = createSelector(
+  getChannelIdByNameFactory('LEGACY'),
+  channel => channel ? channel : {
+    name: 'Public',
+    id: null,
+    moments: [],
+  }
 );
 
 const getCurrentChannel = createSelector(
@@ -92,10 +123,13 @@ export {
   getHostChannel,
   getPublicChannel,
   getLegacyChannel,
+  getDirectChannels,
   getCurrentChannel,
   hasParticipants,
   feedContents,
   feedAnchorMoments,
   getChannelById,
   getMutedUsers,
+  getHostChannelObject,
+  getPublicChannelObject,
 };
