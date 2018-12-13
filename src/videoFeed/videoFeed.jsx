@@ -41,7 +41,7 @@ class VideoFeed extends React.Component<VideoFeedProps> {
           />
         }
 
-        { url !== '' && type === 'live' &&
+        { url !== '' && (type === 'live' || type === 'offline') &&
           <IframeEmbedPlayer
             url={url}
             style={frameStyle}
