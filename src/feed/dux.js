@@ -241,6 +241,7 @@ type FeedType = {
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
+  isVideoPlaying: boolean,
   video: VideoType,
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
@@ -643,6 +644,7 @@ const defaultState = {
   isVideoHidden: false,
   isLanguageSelectorVisible: false,
   isAuthenticated: false,
+  isVideoPlaying: false,
   video: {
     type: '',
     url: '',
@@ -1283,6 +1285,16 @@ const reducer = (
     return {
       ...state,
       clientInfo: action.data,
+    };
+  case 'PLAY_VIDEO':
+    return {
+      ...state,
+      isVideoPlaying: true,
+    };
+  case 'PAUSE_VIDEO':
+    return {
+      ...state,
+      isVideoPlaying: false,
     };
   default:
     return state;
