@@ -84,6 +84,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@redux-beacon/google-tag-manager": "^1.0.1",
+    "@storybook/addon-actions": "^4.1.1",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
