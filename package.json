@@ -8,8 +8,8 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build:staging": "webpack --config config/webpack.staging.js && yarn export-storybook",
-    "build:production": "webpack --config config/webpack.prod.js && yarn export-storybook",
+    "build:staging": "webpack --config config/webpack.staging.js",
+    "build:production": "webpack --config config/webpack.prod.js",
     "start": "webpack-dev-server --open --config config/webpack.dev.js",
     "server": "node ./node_modules/.bin/ez-s ./dist",
     "functional": "jest --testRegex='/test/functional/.*\\.test\\.jsx?$'",
