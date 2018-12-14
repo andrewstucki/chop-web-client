@@ -18,8 +18,6 @@ COPY dist/vendor.* /usr/src/app/
 
 COPY dist/manifest.* /usr/src/app/
 
-COPY dist/storybook* /usr/src/app/storybook/
-
 RUN groupadd --gid 1001 cwc && useradd --uid 1001 --gid cwc --shell /bin/bash --create-home cwc && \
 	chown -R cwc:cwc /usr/src/app
 
