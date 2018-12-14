@@ -50,12 +50,14 @@ describe('Chat2 Tests', () => {
         id: '123456',
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
       },
       '789012': {
         name: 'Host',
         id: '789012',
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
       },
     },
   };
@@ -108,13 +110,6 @@ describe('Chat2 Tests', () => {
         subscribeKey: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
         authKey: '1533912921585',
         uuid: '123456',
-      }
-    );
-    expect(mockSubscribe).toHaveBeenCalledTimes(1);
-    expect(mockSubscribe).toHaveBeenCalledWith(
-      {
-        channels: ['123456', '789012'],
-        withPresence: true,
       }
     );
     expect(mockAddListener).toHaveBeenCalledTimes(1);
@@ -293,7 +288,7 @@ describe('Chat2 Tests', () => {
 
     chat.dispatch(addChannel('direct', 'asd2389dhsdf'));
 
-    expect(mockSubscribe).toHaveBeenCalledTimes(2);
+    expect(mockSubscribe).toHaveBeenCalledTimes(1);
     expect(mockSubscribe).toHaveBeenCalledWith(
       {
         channels: ['asd2389dhsdf'],

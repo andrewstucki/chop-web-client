@@ -22,6 +22,9 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
+        scrollPosition={0}
+        updateScrollPosition={() => {}}
+        channel="default"
       />
     );
     expect(wrapper.find('ul').children().length).toBe(1);
@@ -52,6 +55,9 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
+        scrollPosition={0}
+        updateScrollPosition={() => {}}
+        channel="default"
       />
     );
     
@@ -82,6 +88,9 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
+        scrollPosition={0}
+        updateScrollPosition={() => {}}
+        channel="default"
       />
     );
     expect(wrapper.find('ul').first().key()).toEqual('default');
@@ -100,6 +109,9 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
+        scrollPosition={0}
+        updateScrollPosition={() => {}}
+        channel="default"
       />
     );
     expect(wrapper.find(FeedActionBanner).length).toBe(1);

@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import type { PlayerPropsType } from '../dux';
+import type {IFramePlayerPropsType } from '../dux';
 
-const IframeEmbedPlayer = ({style, url}: PlayerPropsType) => (
+const IframeEmbedPlayer = ({style, url}: IFramePlayerPropsType) => (
   <iframe
     className={style}
     src={url}

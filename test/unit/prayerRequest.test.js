@@ -37,12 +37,14 @@ describe('Prayer Request Tests', () => {
         id: '123456',
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
       },
       '789012': {
         name: 'Host',
         id: '789012',
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
       },
     },
   };
@@ -93,7 +95,7 @@ describe('Prayer Request Tests', () => {
             pubnubToken: 'jarjartoken',
           },
           active: true,
-          timeStamp: expect.stringMatching(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/),
+          timestamp: expect.stringMatching(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/),
         },
       }
     );
@@ -198,7 +200,7 @@ describe('Prayer Request Tests', () => {
     //       id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
     //       host: 'G. Boole',
     //       guest: 'Billy',
-    //       timeStamp: '11:26am',
+    //       timestamp: '11:26am',
     //     },
     //   }
     // );

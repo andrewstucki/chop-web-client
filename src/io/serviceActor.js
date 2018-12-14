@@ -28,7 +28,11 @@ import {
   DIRECT_CHAT,
 } from '../moment/message/dux';
 import type { MuteUserType } from '../moment/message/dux';
-import { avatarImageExists, convertSubscribersToSharedUsers } from '../util';
+import {
+  avatarImageExists,
+  convertSubscribersToSharedUsers,
+  isEmpty,
+} from '../util';
 import Cookies from './cookies';
 import Location from './location';
 import GraphQl from './graphQL';
@@ -37,23 +41,24 @@ import { getAvailableForPrayer } from '../selectors/hereNowSelector';
 import { getCurrentChannel } from '../selectors/channelSelectors';
 import { setPrimaryPane } from '../pane/dux';
 import { EVENT } from '../pane/content/event/dux';
+import { CHAT } from '../pane/content/chat/dux';
 
 class ServiceActor {
-  storeDispatch: (action: any) => void
-  graph: GraphQl
-  location: Location
-  getAll: any
-  graphAuth: any
-  getStore: () => any
-  getAuthentication: (variables: any) => any
-  cookies: Cookies
-  handleDataFetchErrors: (payload: any) => void
-  setCurrentState: (payload: any) => void
-  getInitialData: (payload: any) => void
-  scheduler: Scheduler
-  startTimer: () => void
-  checkTime: () => void
-  timer: IntervalID
+  storeDispatch: (action: any) => void;
+  graph: GraphQl;
+  location: Location;
+  getAll: any;
+  graphAuth: any;
+  getStore: () => any;
+  getAuthentication: (variables: any) => any;
+  cookies: Cookies;
+  handleDataFetchErrors: (payload: any) => void;
+  setCurrentState: (payload: any) => void;
+  getInitialData: (payload: any) => void;
+  scheduler: Scheduler;
+  startTimer: () => void;
+  checkTime: () => void;
+  timer: IntervalID;
 
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
@@ -67,12 +72,13 @@ class ServiceActor {
     this.startTimer = this._startTimer.bind(this);
     this.checkTime = this._checkTime.bind(this);
     this.setCurrentState = this._setCurrentState.bind(this);
+    this.handelEvent = this._handelEvent.bind(this);
   }
 
   async init () {
     const { accessToken, refreshToken } = this.getStore().auth;
     const legacyToken = this.cookies.legacyToken();
-    const hostname = this.location.hostname();
+    const hostname = Location.hostname();
 
     if (accessToken) {
       await this.initWithAccessToken(accessToken, refreshToken, hostname);
@@ -106,7 +112,7 @@ class ServiceActor {
   }
 
   async getAccessTokenByBasicAuth (action:BasicAuthLoginType) {
-    const hostname = this.location.hostname();
+    const hostname = Location.hostname();
 
     try {
       const auth = await this.graph.authenticateByBasicAuth(action.email, action.password, hostname);
@@ -183,39 +189,23 @@ class ServiceActor {
     const { schedule, sequence } = this.getStore();
     if (sequence && sequence.steps && sequence.steps[0]) {
       const [ step ] = sequence.steps;
-      if (step.transitionTime * 1000 <= now) {
+      if (step.transitionTime * 1000 <= now && step.data) {
         this.getInitialData(step.data);
 
-        let newSequence = {
-          serverTime: sequence.serverTime,
-          steps: sequence.steps.splice(1),
-        };
-        if (newSequence.steps.length === 0) {
-          newSequence = {
-            steps: [],
-          };
-          const nextEvent = schedule.shift();
-          this.storeDispatch(setScheduleData(schedule));
-          try {
-            const sequenceResponse = await this.graph.sequence(nextEvent.startTime);
-            this.getInitialData(sequenceResponse);
-          } catch (error) {
-            this.handleDataFetchErrors(error);
-          }
-        }
+        const newSteps = sequence.steps.splice(1);
         this.storeDispatch(
           {
             type: 'SET_SEQUENCE',
-            sequence: newSequence,
+            sequence: {
+              ...sequence,
+              steps: newSteps,
+            },
           }
         );
       }
       if (!step.data && step.fetchTime * 1000 <= now) {
-        const includeFeed = step.queries.indexOf('feeds') > -1;
-        const includeVideo = step.queries.indexOf('video') > -1;
-
         try {
-          const eventAtTime = await this.graph.eventAtTime(step.transitionTime, includeFeed, includeVideo);
+          const eventAtTime = await this.graph.eventAtTime(step.transitionTime);
           this.storeDispatch(setScheduleData(
             step.transitionTime,
             eventAtTime
@@ -225,100 +215,172 @@ class ServiceActor {
         }
       }
     }
+    if (sequence && sequence.steps && sequence.steps.length === 0) {
+      if (schedule[0] && schedule[0].startTime * 1000 < now) {
+        schedule.shift();
+      }
+      const [ nextEvent ] = schedule;
+      this.storeDispatch(setScheduleData(schedule));
+      try {
+        const sequenceResponse = await this.graph.sequence(nextEvent.startTime);
+        this.getInitialData(sequenceResponse);
+      } catch (error) {
+        this.handleDataFetchErrors(error);
+      }
+    }
   }
 
   _getInitialData (payload: any) {
-    Object.keys(payload).forEach(objKey => {
-      const key = objKey === 'eventAt' ? 'currentEvent' : objKey;
-      switch (key) {
-      case 'currentEvent': {
-        const event = payload.currentEvent || payload.eventAt;
-        let hasVideo = false;
-        let hasFeed = false;
-        if (event.title && event.id && event.startTime && event.videoStartTime) {
+    const { pubnubKeys } = payload;
+    if (pubnubKeys) {
+      const { publishKey, subscribeKey } = pubnubKeys;
+      this.storeDispatch(
+        setPubnubKeys(
+          publishKey,
+          subscribeKey
+        )
+      );
+    }
+    const { currentUser } = payload;
+    if (currentUser) {
+      const user = currentUser;
+      this.storeDispatch(
+        setUser(
+          {
+            id: user.id,
+            name: user.nickname,
+            avatar: user.avatar,
+            pubnubAccessKey: user.pubnubAccessKey,
+            pubnubToken: user.pubnubToken,
+            role: {
+              label: user.role ? user.role.label : '',
+              permissions: [],
+            },
+          }
+        )
+      );
+      avatarImageExists(payload.currentUser.id).then(exists => {
+        if (exists) {
           this.storeDispatch(
-            setEvent(
-              event.title || '',
-              event.id || 0,
-              event.startTime || 0,
-              event.videoStartTime || 0,
-            )
+            {
+              type: 'SET_AVATAR',
+              url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${payload.currentUser.id}/thumb/photo.jpg`,
+            }
           );
-          const hasSequence = event.sequence && event.sequence.steps && event.sequence.steps.length;
-          if (hasSequence) {
-            const now = Date.now();
-            const sequence = {
-              serverTime: event.sequence.serverTime,
-              steps: event.sequence.steps.filter(step =>
-                step.transitionTime * 1000 > now),
-            };
-            event.sequence.steps.filter(step =>
-              step.transitionTime * 1000 <= now).forEach(step => {
-              if (step.queries.indexOf('feeds') > -1) {
-                hasFeed = true;
-              }
-              if (step.queries.indexOf('video') > -1) {
-                hasVideo = true;
-              }
-            });
+        }
+      });
+    }
+    if (payload.eventAt || payload.currentEvent || payload.schedule) {
+      this.handelEvent(payload);
+    }
+    const { currentOrganization } = payload;
+    if (currentOrganization) {
+      const organization = currentOrganization;
+      this.storeDispatch(
+        setOrganization(
+          organization.id,
+          organization.name,
+        )
+      );
+    }
+    const { currentLanguages } = payload;
+    if (currentLanguages) {
+      const languages = currentLanguages;
+      this.storeDispatch(
+        setLanguageOptions(languages)
+      );
+    }
+  }
+
+  _handelEvent (payload) {
+    const event = payload.currentEvent || payload.eventAt;
+    if (event) {
+      if (event.title !== undefined &&
+        event.id !== undefined &&
+        event.startTime !== undefined &&
+        event.videoStartTime !== undefined) {
+        this.storeDispatch(
+          setEvent(
+            event.title,
+            event.id,
+            event.startTime,
+            event.videoStartTime,
+          )
+        );
+      }
+
+      const { sequence } = event;
+      if (sequence && sequence.steps && sequence.steps.length > 0) {
+        const now = Date.now();
+        const updatedSequence = {
+          ...sequence,
+          steps: sequence.steps.filter(step =>
+            step.transitionTime * 1000 > now),
+        };
+
+        this.storeDispatch(
+          {
+            type: 'SET_SEQUENCE',
+            sequence: updatedSequence,
+          }
+        );
+
+        this.startTimer();
+      }
+      if (event.feeds) {
+        const { feeds:newChannels } = event;
+        const { channels:currentChannels } = this.getStore();
+
+        Object.keys(currentChannels).forEach(id => {
+          if (!newChannels.some(channel => channel.id === id)) {
             this.storeDispatch(
               {
-                type: 'SET_SEQUENCE',
-                sequence: sequence,
+                type: 'REMOVE_CHANNEL',
+                channel: id,
               }
             );
-            this.startTimer();
           }
-          if (event.feeds !== undefined && (!hasSequence || hasFeed)) {
-            const channels = event.feeds;
-            const currentChannels = this.getStore().channels;
-            Object.keys(currentChannels).forEach(id => {
+        });
+
+        newChannels.forEach(channel => {
+          if (!(channel.id in currentChannels)) {
+            const participants = convertSubscribersToSharedUsers(channel.subscribers);
+            this.storeDispatch(
+              addChannel(
+                channel.name,
+                channel.id,
+                participants
+              )
+            );
+            if (channel.name === 'Public') {
               this.storeDispatch(
-                {
-                  type: 'REMOVE_CHANNEL',
-                  channel: id,
-                }
-              );
-            });
-            channels.forEach(channel => {
-              const participants = convertSubscribersToSharedUsers(channel.subscribers);
-              this.storeDispatch(
-                addChannel(
-                  channel.name,
-                  channel.id,
-                  participants
-                )
-              );
-              if (channel.name === 'Public') {
-                this.storeDispatch(
-                  setPrimaryPane(channel.id, EVENT)
-                );
-              }
-            });
-          }
-          if (event.video !== undefined && (!hasSequence || hasVideo)) {
-            const { video } = event;
-            if (!video) {
-              this.storeDispatch(
-                setVideo('','')
-              );
-            } else {
-              this.storeDispatch(
-                setVideo(
-                  video.url,
-                  video.type,
-                )
+                setPrimaryPane(channel.id, EVENT)
               );
             }
           }
+        });
+
+        const { video } = event;
+        if (video) {
+          this.storeDispatch(
+            setVideo(
+              video.url,
+              video.type,
+            )
+          );
         }
-        break;
       }
-      case 'schedule': {
-        const schedule = payload.schedule.filter(item =>
-          item.startTime * 1000 > Date.now());
-        const nextEvent = schedule.shift();
-        this.storeDispatch(setSchedule(schedule));
+    }
+    const { schedule } = payload;
+    if (schedule) {
+      const isBetweenEvents = isEmpty(event.id) && isEmpty(this.getStore().event.id);
+      const updatedSchedule = schedule.filter(item =>
+        item.startTime * 1000 > Date.now());
+
+      this.storeDispatch(setSchedule(updatedSchedule));
+
+      if (isBetweenEvents) {
+        const [nextEvent] = schedule;
         if (nextEvent) {
           try {
             this.graph.sequence(nextEvent.startTime).then(this.getInitialData, this.handleDataFetchErrors);
@@ -327,65 +389,7 @@ class ServiceActor {
           }
         }
       }
-        break;
-      case 'currentOrganization': {
-        const organization = payload.currentOrganization;
-        this.storeDispatch(
-          setOrganization(
-            organization.id,
-            organization.name,
-          )
-        );
-        break;
-      }
-      case 'currentUser': {
-        const user = payload.currentUser;
-        this.storeDispatch(
-          setUser(
-            {
-              id: user.id,
-              name: user.nickname,
-              avatar: user.avatar,
-              pubnubAccessKey: user.pubnubAccessKey,
-              pubnubToken: user.pubnubToken,
-              role: {
-                label: user.role ? user.role.label : '',
-                permissions: [],
-              },
-            }
-          )
-        );
-        avatarImageExists(payload.currentUser.id).then(exists => {
-          if (exists) {
-            this.storeDispatch(
-              {
-                type: 'SET_AVATAR',
-                url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${payload.currentUser.id}/thumb/photo.jpg`,
-              }
-            );
-          }
-        }) ;
-        break;
-      }
-      case 'pubnubKeys': {
-        const { publishKey, subscribeKey } = payload.pubnubKeys;
-        this.storeDispatch(
-          setPubnubKeys(
-            publishKey,
-            subscribeKey
-          )
-        );
-        break;
-      }
-      case 'currentLanguages': {
-        const languages = payload.currentLanguages;
-        this.storeDispatch(
-          setLanguageOptions(languages)
-        );
-        break;
-      }
-      }
-    });
+    }
   }
 
   async publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {
@@ -401,6 +405,7 @@ class ServiceActor {
       const { name, id, subscribers } = data.acceptPrayer;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);
     }
@@ -408,7 +413,9 @@ class ServiceActor {
 
   async muteUser (action:MuteUserType) {
     try {
-      await this.graph.muteUser(action.pubnubToken);
+      const { feedToken, nickname } = action;
+      const ip = '0.0.0.0';
+      await this.graph.muteUser(feedToken, nickname, ip);
     } catch (error) {
       this.handleDataFetchErrors(error);
     }
@@ -421,6 +428,7 @@ class ServiceActor {
       const { name, id, subscribers } = directChat.createDirectFeed;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);
     }

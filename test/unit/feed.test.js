@@ -7,6 +7,7 @@ import reducer, {
   leaveChannel,
   setUser,
   setSalvations,
+  updateScrollPosition,
 } from '../../src/feed/dux';
 
 import {
@@ -90,12 +91,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -111,12 +114,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -140,6 +145,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -181,12 +187,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -229,12 +237,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '67890',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -268,12 +278,14 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '67890',
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -282,7 +294,7 @@ describe('Feed tests', () => {
         notificationType: 'PRAYER_REQUEST',
         id: '12345',
         user: otherUser,
-        timeStamp: '4:53pm',
+        timestamp: '4:53pm',
         active: true,
         action: action,
       })
@@ -291,7 +303,7 @@ describe('Feed tests', () => {
     expect(result.channels.host.moments[0].id.length).toEqual(5);
     expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
     expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
-    expect(result.channels.host.moments[0].timeStamp).toEqual('4:53pm');
+    expect(result.channels.host.moments[0].timestamp).toEqual('4:53pm');
     expect(result.channels.host.moments[0].active).toEqual(true);
     expect(result.channels.host.moments[0].action).toEqual(action);
   });
@@ -306,6 +318,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -320,6 +333,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           '12345': {
             id: '12345',
@@ -327,6 +341,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             name: 'host',
             participants: undefined,
+            scrollPosition: -1,
           },
         },
       },
@@ -352,6 +367,7 @@ describe('Feed tests', () => {
             participants: [
               otherUser,
             ],
+            scrollPosition: -1,
           },
         },
       },
@@ -369,6 +385,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -383,6 +400,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -399,6 +417,7 @@ describe('Feed tests', () => {
             name: 'other',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -417,6 +436,7 @@ describe('Feed tests', () => {
             name: 'other',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -446,6 +466,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         currentUser: currentUser,
@@ -478,6 +499,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
           host: {
             id: '12345',
@@ -495,6 +517,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         currentUser: currentUser,
@@ -552,6 +575,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         currentLanguage: 'ko',
@@ -606,6 +630,7 @@ describe('Feed tests', () => {
                 id: '6789',
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -666,6 +691,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -708,6 +734,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -753,6 +780,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -795,6 +823,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -840,6 +869,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -882,6 +912,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -927,6 +958,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -969,6 +1001,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1014,6 +1047,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1056,6 +1090,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1109,6 +1144,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1144,6 +1180,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1160,6 +1197,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1172,7 +1210,7 @@ describe('Feed tests', () => {
           id: '12345',
           host: 'Boofie',
           guest: 'Beefie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1190,10 +1228,11 @@ describe('Feed tests', () => {
                 id: '12345',
                 host: 'Boofie',
                 guest: 'Beefie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1210,6 +1249,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1221,7 +1261,7 @@ describe('Feed tests', () => {
           notificationType: 'JOINED_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1238,10 +1278,11 @@ describe('Feed tests', () => {
                 notificationType: 'JOINED_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1258,6 +1299,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1269,7 +1311,7 @@ describe('Feed tests', () => {
           notificationType: 'JOINED_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1286,10 +1328,11 @@ describe('Feed tests', () => {
                 notificationType: 'JOINED_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1306,6 +1349,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1317,7 +1361,7 @@ describe('Feed tests', () => {
           notificationType: 'LEFT_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1334,10 +1378,11 @@ describe('Feed tests', () => {
                 notificationType: 'LEFT_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1355,6 +1400,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1366,7 +1412,7 @@ describe('Feed tests', () => {
           notificationType: 'LEFT_CHAT',
           id: '12345',
           name: 'Boofie',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
         },
       }
     );
@@ -1384,10 +1430,11 @@ describe('Feed tests', () => {
                 notificationType: 'LEFT_CHAT',
                 id: '12345',
                 name: 'Boofie',
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1405,6 +1452,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1440,6 +1488,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1456,6 +1505,7 @@ describe('Feed tests', () => {
             name: 'host',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1470,7 +1520,7 @@ describe('Feed tests', () => {
             name: 'Boofie',
           },
           id: '12345',
-          timeStamp: '4:53pm',
+          timestamp: '4:53pm',
           active: true,
         },
       }
@@ -1492,11 +1542,12 @@ describe('Feed tests', () => {
                   id: '5893',
                   name: 'Boofie',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: true,
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1513,6 +1564,7 @@ describe('Feed tests', () => {
             name: 'public',
             moments: [],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1543,6 +1595,7 @@ describe('Feed tests', () => {
                 text: 'I commit my life to Christ.',
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -1566,6 +1619,7 @@ describe('Feed tests', () => {
                 text: 'I commit my life to Christ.',
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -1587,6 +1641,7 @@ describe('Feed tests', () => {
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       }
@@ -1625,12 +1680,13 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: true,
                 prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1652,12 +1708,13 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: false,
                 prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1681,12 +1738,13 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: true,
                 prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1708,12 +1766,13 @@ describe('Feed tests', () => {
                   id: '67890',
                   name: 'Burglekutt',
                 },
-                timeStamp: '4:53pm',
+                timestamp: '4:53pm',
                 active: false,
                 prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
+            scrollPosition: 0,
           },
         },
       },
@@ -1827,6 +1886,7 @@ describe('Feed tests', () => {
               },
               otherUser,
             ],
+            scrollPosition: 0,
           },
           public: {
             id: '67890',
@@ -1834,6 +1894,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             participants: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1858,6 +1919,7 @@ describe('Feed tests', () => {
             participants: [
               otherUser,
             ],
+            scrollPosition: 0,
           },
           public: {
             id: '67890',
@@ -1865,6 +1927,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             participants: [],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -1974,6 +2037,38 @@ describe('SideMenu tests', () => {
       {
         ...defaultState,
         isSideMenuClosed: false,
+      }
+    );
+  });
+
+  test('Update scroll position', () => {
+    const results = reducer(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: -1,
+          },
+        },
+      },
+      updateScrollPosition(31, 'public')
+    );
+    expect(results).toEqual(
+      {
+        ...defaultState,
+        channels: {
+          public: {
+            id: '12345',
+            name: 'public',
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 31,
+          },
+        },
       }
     );
   });

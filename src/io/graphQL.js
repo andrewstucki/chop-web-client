@@ -65,17 +65,17 @@ currentEvent {
 }`;
 
 const eventAt = `
-query EventAt($time: Timestamp, $includeFeed: Boolean!, $includeVideo: Boolean!) {
+query EventAt($time: Timestamp) {
   eventAt (time: $time){
     title
     id
     startTime
     videoStartTime
-    video @include(if: $includeVideo) {
+    video {
       type
       url
     }
-    feeds @include(if: $includeFeed) {
+    feeds {
       id
       name
       type
@@ -132,8 +132,8 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $host
 `;
 
 const muteUser = ` 
-mutation muteUser($pubnubToken: String!) {
-  muteUser(pubnubToken: $pubnubToken)
+mutation muteUser($feedToken: String!, $nickname: String!, $clientIp: String!) {
+  muteUser(feedToken: $feedToken, nickname: $nickname, clientIp: $clientIp)
 }
 `;
 
@@ -177,7 +177,7 @@ const currentState = `
 }`;
 
 export default class GraphQl {
-  client: GraphQLClient
+  client: GraphQLClient;
 
   async authenticate ({type, hostname, legacyToken, refreshToken, email, password}:AuthenticateType): Promise<void> {
     const client = new GraphQLClient(GATEWAY_HOST, {
@@ -249,11 +249,13 @@ export default class GraphQl {
     );
   }
 
-  async muteUser (pubnubToken: string) {
+  async muteUser (feedToken: string, nickname: string, clientIp: string) {
     return await this.client.request(
       muteUser,
       {
-        pubnubToken,
+        feedToken,
+        nickname,
+        clientIp,
       }
     );
   }
@@ -281,13 +283,11 @@ export default class GraphQl {
     return await this.client.request(schedule);
   }
 
-  async eventAtTime (time, includeFeed, includeVideo) {
+  async eventAtTime (time) {
     return await this.client.request(
       eventAt,
       {
         time,
-        includeFeed,
-        includeVideo,
       }
     );
   }

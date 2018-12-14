@@ -47,6 +47,7 @@ describe('Chat', () => {
                 role: { label: '' },
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -78,6 +79,7 @@ describe('Chat', () => {
                 role: { label: '' },
               },
             ],
+            scrollPosition: 0,
           },
         },
         panes: {

@@ -2,14 +2,16 @@
 import NavBar from './navBar';
 import { connect } from 'react-redux';
 
-import { getChannels } from '../navBar/dux';
+import { getHostChannel, getPublicChannel, getDirectChannels } from '../navBar/dux';
 import { openMenu } from '../sideMenu/dux';
 import { setPrimaryPane } from '../pane/dux';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
   return {
-    channels: getChannels(feedState),
+    directChannels: getDirectChannels(feedState),
+    hostChannel: getHostChannel(feedState),
+    publicChannel: getPublicChannel(feedState),
   };
 };
 

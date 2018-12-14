@@ -45,8 +45,8 @@ describe('Direct Chat Tests', () => {
       applyMiddleware(...middlewareList)
     );
 
-    return store.dispatch(directChat(123456, 'abc')).then(async () => {
-      store.subscribe(() => {
+    return store.dispatch(directChat(123456, 'abc')).then(() => {
+      setTimeout(() => {
         expect(mockDirectChat).toHaveBeenCalledTimes(1);
         expect(mockDirectChat).toHaveBeenCalledWith(123456, 'abc');
 
@@ -55,8 +55,8 @@ describe('Direct Chat Tests', () => {
             ...defaultState,
             panes: {
               primary: {
-                type: 'EVENT',
-                channelId: 'abc',
+                type: 'CHAT',
+                channelId: '67890',
               },
             },
             channels: {
@@ -87,7 +87,7 @@ describe('Direct Chat Tests', () => {
             },
           }
         );
-      });
+      }, 1000);
     });
   });
 });

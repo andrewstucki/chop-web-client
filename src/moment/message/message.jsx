@@ -23,8 +23,8 @@ type MessagePropsType = {
   deleteMessage: (id: string, channel: string) => void,
   publishDeleteMessage: (id: string) => void,
   toggleCloseTrayButton: (id: string) => void,
-  muteUser: (pubnubToken: string) => void,
-  publishMuteUserNotification: (host: string, guest: string, channel: string, date: Date) => void,
+  muteUser: (channel: string, nickname: string) => void,
+  publishMuteUserNotification: (host: string, guest: string, channel: string) => void,
   directChat: (pubnubToken: string, nickname: string) => void,
   mutedNotificationBanner: (guestName: string) => void,
 };
@@ -84,9 +84,9 @@ const Message = (
           deleteMessage(message.id, currentChannel);
         }}
         muteUser={() => {
-          muteUser(message.user.pubnubToken);
+          muteUser(currentChannel, message.user.name);
           mutedNotificationBanner(message.user.name);
-          publishMuteUserNotification(currentUser.name, message.user.name, hostChannel, new Date);
+          publishMuteUserNotification(currentUser.name, message.user.name, hostChannel);
           closeMessageTray(message.id);
         }}
         directChat={() => {

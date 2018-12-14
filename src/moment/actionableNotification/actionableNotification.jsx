@@ -23,7 +23,7 @@ const ActionableNotification = (
     active,
     cancelled,
     user,
-    timeStamp,
+    timestamp,
     prayerChannel,
   } = notification;
 
@@ -48,7 +48,7 @@ const ActionableNotification = (
         <div>
           <strong>{user.name} </strong>has requested prayer
         </div>
-        <div className={styles.timeStamp}>{timeStamp}</div>
+        <div className={styles.timestamp}>{timestamp}</div>
       </div>
       {
         active &&

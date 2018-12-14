@@ -2,6 +2,8 @@
 
 import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
+import { UTC_DATE_FORMAT } from '../util';
+import moment from 'moment';
 
 let _getState;
 
@@ -13,7 +15,6 @@ const Converter = {
   cwcToLegacy:( message: any, channelId: string) => {
     const time = new Date();
     const offset = (time.getTime() - _getState().event.startTime).toString();
-    const timestamp = Converter.getTimestamp(time);
     const roomType = 'public';
 
     return {
@@ -26,7 +27,7 @@ const Converter = {
       fromNickname: message.user.name,
       fromToken: message.user.pubnubToken,
       msgId: message.id,
-      timestamp,
+      timestamp: Converter.getTimestamp(),
       fromAvatar: message.user.avatarUrl,
       isHost: true,
       label: message.user.role.label,
@@ -49,33 +50,25 @@ const Converter = {
     }
   ),
 
-  cwcToLegacySystemMessage:(message: any) => {
-    const time = new Date();
-    const timestamp = Converter.getTimestamp(time);
-
-    return {
+  cwcToLegacySystemMessage:(message: any) => (
+    {
       fromNickname: 'System',
       messageText: `${message.host.name} started a live prayer with ${message.guest.name}`,
-      timestamp: timestamp,
-    };
-  },
+      timestamp: Converter.getTimestamp(),
+    }
+  ),
 
-  cwcToLegacyLeaveChannel:(moment: any, channelId: string) => {
-    const time = new Date();
-    const timestamp = Converter.getTimestamp(time);
-    const roomType = 'public';
-
-    return {
+  cwcToLegacyLeaveChannel:(moment: any, channelId: string) => (
+    {
       messageText: `${moment.name} has left the chat`,
-      timestamp: timestamp,
+      timestamp: Converter.getTimestamp(),
       userId: moment.pubnubToken,
       fromNickname: moment.name,
       type: 'system',
-      roomType: roomType,
+      roomType: 'public',
       channelToken: channelId,
-      cwcTimestamp: moment.timeStamp,
-    };
-  },
+    }
+  ),
 
   cwcToLegacyMuteUser:(moment: any) => {
     const hostChannel = getHostChannel(_getState());
@@ -83,7 +76,7 @@ const Converter = {
       nickname: moment.guest,
       fromNickname: moment.host,
       channelToken: hostChannel,
-      cwcTimestamp: moment.timeStamp,
+      timestamp: Converter.getTimestamp(),
     };
   },
 
@@ -123,11 +116,8 @@ const Converter = {
     );
   },
 
-  getTimestamp: (time:Date) => {
-    const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();
-    const month = monthIndex => twoDigitNumber(monthIndex + 1);
-    return `${time.getUTCFullYear()}-${month(time.getUTCMonth())}-${twoDigitNumber(time.getUTCDate())} ${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()} +0000`;
-  },
+  getTimestamp: () => moment().utc().format(UTC_DATE_FORMAT),
+
 };
 
 export default Converter;

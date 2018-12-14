@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { objectFilter } from '../util';
 
 const getChannels = state => state.channels;
 
@@ -8,7 +9,9 @@ const getCurrentLanguage = state => state.currentLanguage;
 
 const getPrimaryPane = state => state.panes.primary;
 
-const getChannelByNameFactory = name => (
+const getMutedUsers = state => state.mutedUsers;
+
+const getChannelIdByNameFactory = name => (
   createSelector(
     getChannels,
     channels => { 
@@ -16,6 +19,14 @@ const getChannelByNameFactory = name => (
         return Object.keys(channels).find(channel => channels[channel].name.toUpperCase() === name);
       }
     }
+  )
+);
+
+const getChannelByNameFactory = name => (
+  createSelector(
+    getChannels,
+    getChannelIdByNameFactory(name),
+    (channels, id) => channels[id]
   )
 );
 
@@ -36,19 +47,49 @@ const translateMoment = currentLanguage => moment => {
 
 const mutedMoment = moment => moment.isMuted !== 'true';
 
-const getHostChannel = createSelector(
+const removeMutedUsers = mutedUsers => moment => {
+  if (moment.user) {
+    return !mutedUsers.includes(moment.user.name);
+  } else {
+    return true;
+  }
+};
+
+const getHostChannelObject = createSelector(
   getChannelByNameFactory('HOST'),
   channel => channel
 );
 
-const getPublicChannel = createSelector(
+const getHostChannel = createSelector(
+  getChannelIdByNameFactory('HOST'),
+  channel => channel
+);
+
+const getPublicChannelObject = createSelector(
   getChannelByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const getLegacyChannel = createSelector(
-  getChannelByNameFactory('LEGACY'),
+const getPublicChannel = createSelector(
+  getChannelIdByNameFactory('PUBLIC'),
   channel => channel
+);
+
+const getDirectChannels = createSelector(
+  getChannels,
+  channels =>
+    channels ?
+      objectFilter(channels, id => !channels[id].participants || channels[id].participants.length === 0) :
+      []
+);
+
+const getLegacyChannel = createSelector(
+  getChannelIdByNameFactory('LEGACY'),
+  channel => channel ? channel : {
+    name: 'Public',
+    id: null,
+    moments: [],
+  }
 );
 
 const getCurrentChannel = createSelector(
@@ -58,7 +99,7 @@ const getCurrentChannel = createSelector(
 
 const hasParticipants = createSelector(
   getChannelById,
-  channel => channel && channel.participants && channel.participants.length ? true : false
+  channel => !!(channel && channel.participants && channel.participants.length)
 );
 
 const feedAnchorMoments = createSelector(
@@ -69,10 +110,12 @@ const feedAnchorMoments = createSelector(
 const feedContents = createSelector(
   getChannelById,
   getCurrentLanguage,
-  (channel, currentLanguage) => channel && channel.moments ?
+  getMutedUsers,
+  (channel, currentLanguage, mutedUsers) => channel && channel.moments ?
     channel.moments
       .map(translateMoment(currentLanguage))
       .filter(mutedMoment)
+      .filter(removeMutedUsers(mutedUsers))
     : []
 );
 
@@ -80,9 +123,13 @@ export {
   getHostChannel,
   getPublicChannel,
   getLegacyChannel,
+  getDirectChannels,
   getCurrentChannel,
   hasParticipants,
   feedContents,
   feedAnchorMoments,
   getChannelById,
+  getMutedUsers,
+  getHostChannelObject,
+  getPublicChannelObject,
 };

@@ -16,7 +16,7 @@ import type {
   ReactionType,
 } from '../reactions/reactionButton/dux';
 
-import type { 
+import type {
   AnchorMomentType,
   PublishSalvationType,
   ReleaseAnchorMomentType,
@@ -34,6 +34,7 @@ import {
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
+  MUTE_USER,
 } from '../moment';
 
 import {
@@ -101,6 +102,9 @@ const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
+const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
+const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
+const SET_HERE_NOW = 'SET_HERE_NOW';
 
 // Flow Type Definitions
 
@@ -151,6 +155,18 @@ type PubnubKeysType = {
   subscribe: string,
 };
 
+type PrivateUserType = {
+  id: string,
+  name: string,
+  avatarUrl?: string,
+  pubnubToken: string,
+  pubnubAccessKey: string,
+  role: {
+    label: string,
+    permissions: Array<string>,
+  }
+};
+
 type SetUser = {
   type: 'SET_USER',
   user: PrivateUserType,
@@ -165,18 +181,6 @@ type ReceiveReactionType = {
   type: 'RECEIVE_REACTION',
   reaction: ReactionType,
 }
-
-type PrivateUserType = {
-  id: string,
-  name: string,
-  avatarUrl?: string,
-  pubnubToken: string,
-  pubnubAccessKey: string,
-  role: {
-    label: string,
-    permissions: Array<string>,
-  }
-};
 
 type SharedUserType = {
   name: string,
@@ -193,10 +197,7 @@ type ChannelType = {
   moments: Array<MomentType>,
   participants?: Array<SharedUserType>,
   anchorMoments: Array<AnchorMomentType>,
-};
-
-type HereNowChannels = {
-  [string]: HereNowUsers,
+  scrollPosition: number,
 };
 
 type HereNowUsers = {
@@ -204,6 +205,26 @@ type HereNowUsers = {
     available_prayer: boolean,
   },
 };
+
+type HereNowChannels = {
+  [string]: HereNowUsers,
+};
+
+type ClientInfoType = {
+  countryCode?: string,
+  countryName?: string,
+  city?: string,
+  postal?: string,
+  latitude?: number,
+  longitude?: number,
+  ip?: string,
+  state?: string,
+}
+
+type AuthenticationType = {
+  accessToken: string,
+  refreshToken: string
+}
 
 type FeedType = {
   pubnubKeys: PubnubKeysType,
@@ -220,6 +241,7 @@ type FeedType = {
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
+  isVideoPlaying: boolean,
   video: VideoType,
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
@@ -233,6 +255,8 @@ type FeedType = {
   panes: {
     [string]: PaneContentType,
   },
+  clientInfo: ClientInfoType,
+  mutedUsers: Array<string>,
 };
 
 type AddChannelType = {
@@ -288,6 +312,16 @@ type UserState = {
   available_prayer: boolean,
 };
 
+type HereNowUsersType = {
+  [string]: UserState,
+};
+
+type SetHereNow = {
+  type: 'SET_HERE_NOW',
+  channel: string,
+  users: HereNowUsersType
+};
+
 type UpdateHereNowType = {
   type: 'UPDATE_HERE_NOW',
   channel: string,
@@ -306,11 +340,6 @@ type SetSalvationsType = {
   count: number,
 };
 
-type AuthenticationType = {
-  accessToken: string,
-  refreshToken: string
-}
-
 type SetAuthenticationType = {
   type: 'SET_AUTHENTICATION',
   auth: AuthenticationType
@@ -327,6 +356,17 @@ type SetNotificationBannerType = {
   type: 'SET_NOTIFICATION_BANNER',
   message: string,
   bannerType: string,
+};
+
+type UpdateScrollPositionType = {
+  type: 'UPDATE_SCROLL_POSITION',
+  scrollPosition: number,
+  channel: string,
+};
+
+type SetClientInfoType = {
+  type: 'SET_CLIENT_INFO',
+  data: ClientInfoType,
 };
 
 type FeedActionTypes =
@@ -360,7 +400,9 @@ type FeedActionTypes =
   | RemoveAuthenticationType
   | AddErrorType
   | RemoveErrorType
-  | SetScheduleDataType;
+  | SetScheduleDataType
+  | SetClientInfoType
+  | SetHereNow;
 
 // Action Creators
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
@@ -376,6 +418,14 @@ const setAuthentication = (accessToken: string, refreshToken: string): SetAuthen
 const removeAuthentication = (): RemoveAuthenticationType => (
   {
     type: REMOVE_AUTHENTICATION,
+  }
+);
+
+const setHereNow = (channel: string, users: HereNowUsersType): SetHereNow => (
+  {
+    type: SET_HERE_NOW,
+    channel,
+    users,
   }
 );
 
@@ -481,6 +531,7 @@ const addChannel = (
       moments: [],
       participants,
       anchorMoments: [],
+      scrollPosition: -1,
     },
   }
 );
@@ -535,6 +586,21 @@ const clearNotificationBanner = (): ClearNotificationBannerType => (
   }
 );
 
+const updateScrollPosition = (scrollPosition: number, channel: string): UpdateScrollPositionType => (
+  {
+    type: UPDATE_SCROLL_POSITION,
+    scrollPosition,
+    channel,
+  }
+);
+
+const setClientInfo = (data: ClientInfoType) => (
+  {
+    type: SET_CLIENT_INFO,
+    data,
+  }
+);
+
 // Default State
 
 const getLanguage = () => {
@@ -578,6 +644,7 @@ const defaultState = {
   isVideoHidden: false,
   isLanguageSelectorVisible: false,
   isAuthenticated: false,
+  isVideoPlaying: false,
   video: {
     type: '',
     url: '',
@@ -634,6 +701,17 @@ const defaultState = {
     refreshToken: '',
   },
   persistExpiresAt: moment().add(1, 'months').format(),
+  clientInfo: {
+    countryCode: '',
+    countryName: '',
+    city: '',
+    postal: '',
+    latitude: 0,
+    longitude: 0,
+    ip: '',
+    state: '',
+  },
+  mutedUsers: [],
 };
 
 // Reducer
@@ -645,12 +723,20 @@ const reducer = (
     return state;
   }
   switch (action.type) {
-  case SET_PANE_CONTENT:
+  case SET_PANE_CONTENT: 
     return {
       ...state,
       panes: {
         ...state.panes,
         [action.name]: action.content,
+      },
+    };
+  case SET_HERE_NOW:
+    return {
+      ...state,
+      hereNow: {
+        ...state.hereNow,
+        [action.channel]: action.users,
       },
     };
   case UPDATE_HERE_NOW:
@@ -703,8 +789,8 @@ const reducer = (
       ...state,
       event: action.event,
     };
-  case SET_SCHEDULE_DATA : {
-    const newState = {
+  case SET_SCHEDULE_DATA:
+    return {
       ...state,
       sequence: {
         ...state.sequence,
@@ -717,8 +803,6 @@ const reducer = (
         ],
       },
     };
-    return newState;
-  }
   case SET_SCHEDULE :
     return {
       ...state,
@@ -809,7 +893,7 @@ const reducer = (
           type: EVENT,
         };
       }
-    } 
+    }
 
     return stateCopy;
   }
@@ -856,7 +940,29 @@ const reducer = (
       },
     };
   }
-  case 'MUTE_USER':
+  case MUTE_USER: {
+    // $FlowFixMe
+    const newArray = [...state.mutedUsers, action.nickname];
+    return {
+      ...state,
+      // ensure no duplicates in the array
+      mutedUsers: [...new Set(newArray)],
+      channels: {
+        ...state.channels,
+        [state.panes.primary.channelId]: {
+          ...state.channels[state.panes.primary.channelId],
+          moments: state.channels[state.panes.primary.channelId].moments.map(
+            message => (
+              {
+                ...message,
+                messageTrayOpen: false,
+              }
+            )
+          ),
+        },
+      },
+    };
+  }
   case 'DIRECT_CHAT':
   case CLOSE_MESSAGE_TRAY:
     return {
@@ -1163,6 +1269,33 @@ const reducer = (
         bannerType: '',
       },
     };
+  case UPDATE_SCROLL_POSITION: {
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: {
+          ...state.channels[action.channel],
+          scrollPosition: action.scrollPosition,
+        },
+      },
+    };
+  }
+  case SET_CLIENT_INFO:
+    return {
+      ...state,
+      clientInfo: action.data,
+    };
+  case 'PLAY_VIDEO':
+    return {
+      ...state,
+      isVideoPlaying: true,
+    };
+  case 'PAUSE_VIDEO':
+    return {
+      ...state,
+      isVideoPlaying: false,
+    };
   default:
     return state;
   }
@@ -1184,6 +1317,14 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
 const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
+
+const getScrollPosition = (state: FeedType, channel: string): number => {
+  if (state.channels[channel]) {
+    return state.channels[channel].scrollPosition;
+  } else {
+    return -1;
+  }
+};
 
 // Exports
 
@@ -1222,6 +1363,10 @@ export {
   setSalvations,
   setAuthentication,
   removeAuthentication,
+  updateScrollPosition,
+  getScrollPosition,
+  setClientInfo,
+  setHereNow,
 };
 export type {
   AddChannelType,
@@ -1239,6 +1384,7 @@ export type {
   OrganizationType,
   SetSalvationsType,
   SetNotificationBannerType,
+  ClientInfoType,
 };
 
 export default reducer;
