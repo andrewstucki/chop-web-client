@@ -116,9 +116,18 @@ const sanitizeString = (string: string, config:any = sanitizeConfig) =>
 ;
 
 const UTC_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss ZZ';
+const EPOCH_DATE_FORMAT = 'x';
 
 const getMessageTimestamp = (timestamp: string = moment().format(UTC_DATE_FORMAT)) => {
-  const date = moment(timestamp, UTC_DATE_FORMAT);
+  const isEpoch = timestamp.toString().match(/^\d{10}$/);
+  let time = timestamp;
+
+  if (isEpoch) {
+    time = parseInt(time) * 1000;
+  }
+
+  const inputFormat = isEpoch ? EPOCH_DATE_FORMAT : UTC_DATE_FORMAT;
+  const date = moment(time, inputFormat);
   const format = moment().diff(date, 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
   return date.format(format);
 };
