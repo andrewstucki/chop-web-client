@@ -13,13 +13,14 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        sideEffects: true,
         use: [
-          'style-loader',
+          { loader: 'style-loader' },
           { 
             loader: 'css-loader',
-            options: { 
-              module: true,
-              importLoaders: 1 
+            options: {
+              modules: true,
+              importLoaders: 1
             }
           },
           {

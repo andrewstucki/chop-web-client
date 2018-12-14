@@ -87,6 +87,6 @@ describe('PopUpModal tests', () => {
         publishLeftChannelNotification={() => {}}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual(undefined);
+    expect(wrapper.find('div').exists()).toEqual(false);
   });
 });
