@@ -6,6 +6,8 @@
     flex: 1;
     position: relative;
     overflow-y: scroll;
+    overscroll-behavior-y: contain;
+    -ms-scroll-chaining: none;
     -webkit-overflow-scrolling: touch;
   }
 }

@@ -14,6 +14,8 @@ body,html {
   box-sizing: border-box;
   webkit-overflow-scrolling: touch; /* momentum scrolling */
   touch-action: manipulation;
+  overscroll-behavior: none;
+  -ms-scroll-chaining: none;
 }
 
 input {
