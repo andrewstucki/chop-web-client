@@ -11,6 +11,17 @@ import FeedActionBanner from '../../src/feed/feedActionBanner';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Feed tests', () => {
+  const user = {
+    pubnubToken: '12345',
+    id: '01928374',
+    pubnubAccessKey: '098765',
+    name: 'Billy Bob',
+    role: { 
+      label: '',
+      permissions: [],
+    },
+  };
+
   test('has an empty feed', () => {
     const wrapper = Enzyme.shallow(
       <Feed
@@ -23,6 +34,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scrollPosition={0}
+        currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
       />
@@ -56,6 +68,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scrollPosition={0}
+        currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
       />
@@ -89,6 +102,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scrollPosition={0}
+        currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
       />
@@ -110,6 +124,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scrollPosition={0}
+        currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
       />
