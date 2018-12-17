@@ -8,6 +8,7 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
+    "build:review": "webpack --config config/webpack.review.js",
     "build:staging": "webpack --config config/webpack.staging.js",
     "build:production": "webpack --config config/webpack.prod.js",
     "start": "webpack-dev-server --open --config config/webpack.dev.js",
