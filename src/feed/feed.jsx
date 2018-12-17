@@ -53,14 +53,18 @@ class Feed extends React.Component<FeedProps, FeedState> {
     this.maxScrollTop = this.maxScrollTop.bind(this);
   }
 
-  saveScrollPosition (channel: string) {
+  scrollPosition () {
     let { scrollTop } = this.wrapperRef.current;
     const maxScrollTop = this.maxScrollTop();
     scrollTop = (scrollTop > 0) ? scrollTop : 0;
-    scrollTop = (scrollTop < maxScrollTop) ? scrollTop : maxScrollTop;
+    return (scrollTop < maxScrollTop) ? scrollTop : maxScrollTop;
+  }
+
+  saveScrollPosition (channel: string) {
+    const scrollPosition = this.scrollAtBottom() ? -1 : this.scrollPosition();
 
     this.props.updateScrollPosition(
-      scrollTop, 
+      scrollPosition, 
       channel
     );
   }
@@ -69,7 +73,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const { scrollPosition } = this.props;
     const { current:scrollWrapper } = this.wrapperRef;
     if (scrollWrapper) {
-      if (scrollPosition === 0 || scrollPosition) {
+      if ((scrollPosition || scrollPosition === 0) && scrollPosition !== -1) {
         scrollWrapper.scrollTop = scrollPosition;
       } else {
         this.scrollToBottom();
@@ -82,10 +86,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const channelChanged = prevProps.channel !== this.props.channel;
     const lastMoment = this.props.moments[this.props.moments.length - 1];
     const lastMessageFromCurrentUser = lastMoment?.user?.pubnubToken === this.props?.currentUser?.pubnubToken;
-    const { current:scrollWrapper } = this.wrapperRef;
-    const { scrollTop, scrollHeight, clientHeight } = scrollWrapper;
-    const scrollBottom = scrollHeight - clientHeight;
-    const scrollAtBottom = (scrollBottom <= 0) || (scrollTop === scrollBottom);
+    const scrollAtBottom = this.scrollAtBottom();
 
     if (channelChanged && prevProps.channel) {
       this.saveScrollPosition(prevProps.channel);
@@ -99,12 +100,21 @@ class Feed extends React.Component<FeedProps, FeedState> {
     };
   }
 
+  scrollAtBottom () {
+    const { current:scrollWrapper } = this.wrapperRef;
+    const { scrollTop, scrollHeight, clientHeight } = scrollWrapper;
+    const scrollBottom = scrollHeight - clientHeight;
+    return (scrollBottom <= 0) || (scrollTop === scrollBottom);
+  }
+
   componentDidUpdate (props: FeedProps, state: FeedState, snapshot: SnapshotType) {
     const { momentAdded, scrollAtBottom, channelChanged, lastMessageFromCurrentUser } = snapshot;
     const { current:scrollWrapper } = this.wrapperRef;
     const { scrollPosition } = props;
-    if (channelChanged && scrollWrapper) {
+    if (channelChanged && scrollWrapper && scrollPosition !== -1) {
       scrollWrapper.scrollTop = scrollPosition;
+    } else if (channelChanged && scrollWrapper && scrollPosition === -1) {
+      this.scrollToBottom();
     } else if (momentAdded && (scrollAtBottom || lastMessageFromCurrentUser)) {
       this.scrollToBottom();
     }
