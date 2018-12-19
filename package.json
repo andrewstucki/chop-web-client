@@ -8,6 +8,7 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
+    "build:review": "webpack --config config/webpack.review.js",
     "build:staging": "webpack --config config/webpack.staging.js",
     "build:production": "webpack --config config/webpack.prod.js",
     "start": "webpack-dev-server --open --config config/webpack.dev.js",
@@ -50,7 +51,7 @@
     "@storybook/addon-storyshots": "^3.4.1",
     "@storybook/addons": "3.4.1",
     "@storybook/react": "^3.4.1",
-    "babel-eslint": "^8.2.3",
+    "babel-eslint": "8.2.1",
     "compression-webpack-plugin": "^1.1.11",
     "copy-webpack-plugin": "^4.5.3",
     "css-loader": "^2.0.1",
