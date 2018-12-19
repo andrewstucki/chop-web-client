@@ -22,6 +22,20 @@ cache:
     - .yarn
     - dist/
 
+compile:app-review:
+  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  stage: compile
+  script: 
+    - yarn install --pure-lockfile --cache-folder .yarn
+    - yarn build:review
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/
+  except:
+    - master
+    - integration
+
 compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
@@ -32,8 +46,8 @@ compile:app-staging:
     expire_in: 1 day
     paths:
       - dist/
-  except:
-    - master
+  only:
+    - integration
 
 compile:app-production:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
@@ -75,6 +89,21 @@ test:
   except:
     - master
 
+build:image-review:
+  stage: build
+  cache:
+    untracked: false
+    policy: pull  
+  script: 
+    - command build Dockerfile-app
+  dependencies: 
+    - compile:app-review
+  only:
+    - branches
+  except:
+    - master
+    - integration
+
 build:image-staging:
   stage: build
   cache:
@@ -85,9 +114,7 @@ build:image-staging:
   dependencies: 
     - compile:app-staging
   only:
-    - branches
-  except:
-    - master
+    - integration
 
 build:image-production:
   stage: build
@@ -101,7 +128,6 @@ build:image-production:
   only:
     - master
   
-
 review:
   stage: review
   cache:

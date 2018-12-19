@@ -23,6 +23,7 @@ const mapStateToProps = (state, ownProps) => {
     animatingMoment: feedState.renderingAnchorMoment,
     showLeaveChat: hasParticipants(feedState, channel),
     scrollPosition: getScrollPosition(feedState, channel),
+    currentUser: feedState.currentUser,
   };
 };
 

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import BezierEasing from 'bezier-easing';
+import type { PrivateUserType } from './dux';
 
 import type { MomentType } from '../moment/dux';
 import type { AnchorMomentType } from '../anchorMoment/dux';
@@ -18,12 +18,16 @@ type FeedProps = {
   channel: string,
   showLeaveChat: boolean,
   scrollPosition: number,
+  currentUser: PrivateUserType,
   togglePopUpModal: () => void,
   updateScrollPosition: (scrollPosition: number, channel: string) => void,
 };
 
 type SnapshotType = {
-  scroll: boolean,
+  momentAdded: boolean,
+  channelChanged: boolean,
+  scrollAtBottom: boolean,
+  lastMessageFromCurrentUser: boolean,
 };
 
 type RefObject = { current: any };
@@ -34,66 +38,103 @@ type FeedState = {
 };
 
 class Feed extends React.Component<FeedProps, FeedState> {
-  listRef: RefObject;
   wrapperRef: RefObject;
-  height: number;
 
   constructor (props: FeedProps) {
     super(props);
     // $FlowFixMe
-    this.listRef = React.createRef();
-    // $FlowFixMe
     this.wrapperRef = React.createRef();
+
     // $FlowFixMe
-    this.easeout = BezierEasing(0.2, 0.7, 0.4, 1);
+    this.saveScrollPosition = this.saveScrollPosition.bind(this);
+    // $FlowFixMe
+    this.scrollToBottom = this.scrollToBottom.bind(this);
+    // $FlowFixMe
+    this.maxScrollTop = this.maxScrollTop.bind(this);
   }
 
-  // NOTE: Animations have been removed temporarily until they can be fixed
-  // You can find the old code in commit ebb49cb3a96b3bb69e2475b120f99b0e842622d2
-  // These two lines temporarily make sure your at the bottom of the feed
-  scroll () {
-    setTimeout(() => {
-      if (this.listRef.current) {
-        const listRect = this.listRef.current.getBoundingClientRect();
-        this.wrapperRef.current.scrollTop = listRect.height;
-      }
-    }, 300);
+  scrollPosition () {
+    let { scrollTop } = this.wrapperRef.current;
+    const maxScrollTop = this.maxScrollTop();
+    scrollTop = (scrollTop > 0) ? scrollTop : 0;
+    return (scrollTop < maxScrollTop) ? scrollTop : maxScrollTop;
+  }
+
+  saveScrollPosition (channel: string) {
+    const scrollPosition = this.scrollAtBottom() ? -1 : this.scrollPosition();
+
+    this.props.updateScrollPosition(
+      scrollPosition, 
+      channel
+    );
   }
 
   componentDidMount () {
-    if (this.wrapperRef.current) {
-      this.wrapperRef.current.addEventListener('scroll', () => {
-        this.props.updateScrollPosition(this.wrapperRef.current.scrollTop, this.props.channel);
-      }, false);
-      if (this.props.scrollPosition >= 0) {
-        this.wrapperRef.current.scrollTop = this.props.scrollPosition;
+    const { scrollPosition } = this.props;
+    const { current:scrollWrapper } = this.wrapperRef;
+    if (scrollWrapper) {
+      if ((scrollPosition || scrollPosition === 0) && scrollPosition !== -1) {
+        scrollWrapper.scrollTop = scrollPosition;
       } else {
-        setTimeout(() => {
-          this.scroll();
-        }, 500);
+        this.scrollToBottom();
       }
     }
   }
 
   getSnapshotBeforeUpdate (prevProps: FeedProps) {
-    if (prevProps.moments.length < this.props.moments.length && (this.wrapperRef.current.scrollHeight - this.wrapperRef.current.clientHeight) === this.props.scrollPosition) {
-      return { scroll: true };
+    const momentAdded = prevProps.moments.length < this.props.moments.length;
+    const channelChanged = prevProps.channel !== this.props.channel;
+    const lastMoment = this.props.moments[this.props.moments.length - 1];
+    const lastMessageFromCurrentUser = lastMoment?.user?.pubnubToken === this.props?.currentUser?.pubnubToken;
+    const scrollAtBottom = this.scrollAtBottom();
+
+    if (channelChanged && prevProps.channel) {
+      this.saveScrollPosition(prevProps.channel);
     }
-    return { scroll: false };
+
+    return {
+      momentAdded,
+      channelChanged,
+      scrollAtBottom,
+      lastMessageFromCurrentUser,
+    };
   }
 
-  componentDidUpdate (prevProps: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
-    if (snapshot.scroll) {
-      this.scroll();
-    } 
+  scrollAtBottom () {
+    const { current:scrollWrapper } = this.wrapperRef;
+    const { scrollTop, scrollHeight, clientHeight } = scrollWrapper;
+    const scrollBottom = scrollHeight - clientHeight;
+    return (scrollBottom <= 0) || (scrollTop === scrollBottom);
+  }
+
+  componentDidUpdate (prevPros: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
+    const { momentAdded, scrollAtBottom, channelChanged, lastMessageFromCurrentUser } = snapshot;
+    const { current:scrollWrapper } = this.wrapperRef;
+    const { scrollPosition } = this.props;
+    if (channelChanged && scrollWrapper && scrollPosition !== -1) {
+      scrollWrapper.scrollTop = scrollPosition;
+    } else if (channelChanged && scrollWrapper && scrollPosition === -1) {
+      this.scrollToBottom();
+    } else if (momentAdded && (scrollAtBottom || lastMessageFromCurrentUser)) {
+      this.scrollToBottom();
+    }
   }
 
   componentWillUnmount () {
-    if (this.wrapperRef.current) {
-      this.wrapperRef.current.removeEventListener('scroll', () => {
-        this.props.updateScrollPosition(this.wrapperRef.current.scrollTop, this.props.channel);
-      }, false);
-    }
+    this.saveScrollPosition(this.props.channel);
+  }
+
+  maxScrollTop () {
+    const { current:scrollWrapper } = this.wrapperRef;
+    const { scrollHeight } = scrollWrapper;
+    const { clientHeight:height } = scrollWrapper;
+    return scrollHeight - height;
+  }
+
+  scrollToBottom () {
+    const { current:scrollWrapper } = this.wrapperRef;
+    const maxScrollTop = this.maxScrollTop();
+    scrollWrapper.scrollTop = (maxScrollTop > 0) ? maxScrollTop : 0;
   }
 
   render () {
@@ -107,6 +148,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
     const momentListItems = moments.map(moment => (
       <li key={moment.id || createUid()}>
+        
         <Moment
           data={moment}
         />
@@ -136,8 +178,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
         }
         <div style={{width: '100%'}}>
           <ul
-            // $FlowFixMe
-            ref={this.listRef}
             key={currentChannel}
             className={styles.feed}
           >
