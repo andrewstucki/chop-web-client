@@ -107,10 +107,10 @@ class Feed extends React.Component<FeedProps, FeedState> {
     return (scrollBottom <= 0) || (scrollTop === scrollBottom);
   }
 
-  componentDidUpdate (props: FeedProps, state: FeedState, snapshot: SnapshotType) {
+  componentDidUpdate (prevPros: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
     const { momentAdded, scrollAtBottom, channelChanged, lastMessageFromCurrentUser } = snapshot;
     const { current:scrollWrapper } = this.wrapperRef;
-    const { scrollPosition } = props;
+    const { scrollPosition } = this.props;
     if (channelChanged && scrollWrapper && scrollPosition !== -1) {
       scrollWrapper.scrollTop = scrollPosition;
     } else if (channelChanged && scrollWrapper && scrollPosition === -1) {
