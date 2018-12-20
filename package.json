@@ -22,7 +22,6 @@
     "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/functional/ test/unit/",
     "validate": "yarn test && yarn flow && yarn lint && yarn snap",
     "ftest": "yarn test && yarn flow && yarn lint",
-    "plato": "es6-plato -r -d ./report src",
     "export-storybook": "build-storybook -c ./config/.storybook -o ./dist/storybook"
   },
   "jest": {
@@ -57,7 +56,6 @@
     "css-loader": "^2.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "es6-plato": "^1.0.18",
     "eslint": "^4.19.1",
     "eslint-plugin-flowtype": "^2.46.2",
     "eslint-plugin-import": "^2.11.0",
@@ -84,13 +82,15 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "@bugsnag/browser": "^5.0.2",
+    "@bugsnag/js": "^5.0.2",
+    "@bugsnag/plugin-react": "^5.0.2",
     "@redux-beacon/google-tag-manager": "^1.0.1",
     "@storybook/addon-actions": "^4.1.1",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "bezier-easing": "^2.1.0",
-    "bugsnag-js": "^4.7.3",
     "bugsnag-react": "^1.1.1",
     "dompurify": "^1.0.8",
     "graphql-request": "^1.8.2",

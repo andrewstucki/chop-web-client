@@ -4,6 +4,7 @@ import styles from './styles.css';
 import type { SimulatedLivePlayerPropsType } from './dux';
 import IframeEmbedPlayer from './players/iframeEmbedPlayer';
 import SimulatedLivePlayer from './players/simulatedLivePlayer';
+import OfflinePlayer from './players/offlinePlayer';
 
 type VideoFeedProps = {
   type: string,
@@ -41,13 +42,19 @@ class VideoFeed extends React.Component<VideoFeedProps> {
           />
         }
 
-        { url !== '' && (type === 'live' || type === 'offline') &&
+        { url !== '' && type === 'live' &&
           <IframeEmbedPlayer
             url={url}
             style={frameStyle}
           />
         }
 
+        { url !== '' && type === 'offline' &&
+          <OfflinePlayer
+            url={url}
+            style={frameStyle}
+            Player={Player}/>
+        }
       </div>
     );
   }
