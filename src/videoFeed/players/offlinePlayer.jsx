@@ -14,7 +14,6 @@ const OfflinePlayer = ({ Player, url, style }: OfflinePlayerPropsType) => {
         frameBorder='0'
         controls
         playsinline
-        loop
         config={{
           youtube: {
             playerVars: {
