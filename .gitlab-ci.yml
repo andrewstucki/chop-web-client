@@ -49,9 +49,6 @@ compile:app-staging:
       - dist/
   only:
     - integration
-  except:
-    changes:
-      - package.json
 
 compile:app-production:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
