@@ -349,6 +349,7 @@ class ServiceActor {
               addChannel(
                 channel.name,
                 channel.id,
+                channel.direct,
                 participants
               )
             );
@@ -402,9 +403,9 @@ class ServiceActor {
 
     try {
       const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken, hosts, user.name);
-      const { name, id, subscribers } = data.acceptPrayer;
+      const { name, id, direct, subscribers } = data.acceptPrayer;
       const participants = convertSubscribersToSharedUsers(subscribers);
-      this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(addChannel(name, id, direct, participants));
       this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);
@@ -425,9 +426,9 @@ class ServiceActor {
     try {
       const { otherUserPubnubToken, otherUserNickname } = action;
       const directChat = await this.graph.directChat(otherUserPubnubToken, otherUserNickname);
-      const { name, id, subscribers } = directChat.createDirectFeed;
+      const { name, id, direct, subscribers } = directChat.createDirectFeed;
       const participants = convertSubscribersToSharedUsers(subscribers);
-      this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(addChannel(name, id, direct, participants));
       this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);

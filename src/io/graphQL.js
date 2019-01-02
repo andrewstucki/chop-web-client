@@ -56,6 +56,7 @@ currentEvent {
     id
     name
     type
+    direct
     subscribers {
       pubnubToken
       avatar
@@ -78,6 +79,7 @@ query EventAt($time: Timestamp) {
     feeds {
       id
       name
+      direct
       type
       subscribers {
         pubnubToken
@@ -122,6 +124,7 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $host
   acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken, hostTokens: $hostTokens, requesterNickname: $requesterNickname) {
     id
     name
+    direct
     subscribers {
       pubnubToken
       avatar
@@ -148,6 +151,7 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
   createDirectFeed(targetPubnubToken: $pubnubToken, targetNickname: $nickname) {
     id
     name
+    direct
     subscribers {
       pubnubToken
       avatar
@@ -167,7 +171,7 @@ schedule {
 }`;
 
 const currentState = `
-{
+query CurrentState {
   ${currentEvent}
   ${currentUser}
   ${currentOrganization}
