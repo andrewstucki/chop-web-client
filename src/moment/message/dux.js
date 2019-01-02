@@ -11,7 +11,8 @@ const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const TOGGLE_CLOSE_TRAY_BUTTON = 'TOGGLE_CLOSE_TRAY_BUTTON';
 const MESSAGE = 'MESSAGE';
-const MUTE_USER = 'MUTE_USER';
+const RECEIVE_MUTE_USER = 'RECEIVE_MUTE_USER';
+const PUBLISH_MUTE_USER = 'PUBLISH_MUTE_USER';
 const DIRECT_CHAT = 'DIRECT_CHAT';
 const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
@@ -48,11 +49,16 @@ type ToggleCloseTrayButtonType = {
   id: string,
 };
 
-type MuteUserType = {
-  type: 'MUTE_USER',
+type ReceiveMuteUserType = {
+  type: 'RECEIVE_MUTE_USER',
+  nickname: string,
+};
+
+type PublishMuteUserType = {
+  type: 'PUBLISH_MUTE_USER',
   feedToken: string,
   nickname: string,
-}
+};
 
 type PublishDeleteMessageType = {
   type: 'PUBLISH_DELETE_MESSAGE',
@@ -116,9 +122,16 @@ const publishDeleteMessage = (id:string): PublishDeleteMessageType => (
   }
 );
 
-const muteUser = (feedToken:string, nickname:string): MuteUserType => (
+const receiveMuteUser = (nickname:string): ReceiveMuteUserType => (
   {
-    type: MUTE_USER,
+    type: RECEIVE_MUTE_USER,
+    nickname,
+  }
+);
+
+const publishMuteUser = (feedToken:string, nickname:string): PublishMuteUserType => (
+  {
+    type: PUBLISH_MUTE_USER,
     feedToken,
     nickname,
   }
@@ -140,7 +153,8 @@ export {
   DELETE_MESSAGE,
   TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
-  MUTE_USER,
+  PUBLISH_MUTE_USER,
+  RECEIVE_MUTE_USER,
   DIRECT_CHAT,
   PUBLISH_DELETE_MESSAGE,
 };
@@ -152,7 +166,8 @@ export {
   toggleCloseTrayButton,
   publishMessage,
   publishDeleteMessage,
-  muteUser,
+  publishMuteUser,
+  receiveMuteUser,
   directChat,
 };
 
@@ -162,6 +177,7 @@ export type {
   CloseMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
-  MuteUserType,
+  PublishMuteUserType,
+  ReceiveMuteUserType,
   PublishDeleteMessageType,
 };

@@ -25,7 +25,7 @@ import {
   receiveMuteUserNotification,
   receivePrayerNotification,
 } from '../moment/notification/dux';
-import { deleteMessage, muteUser } from '../moment/message/dux';
+import { deleteMessage, receiveMuteUser } from '../moment/message/dux';
 import { 
   publishSalvation,
   salvationMomentExists, 
@@ -314,19 +314,22 @@ class Chat {
         return;
       case 'muteUser': {
         const mutedUsers = getMutedUsers(this.getState());
-        if (!mutedUsers.includes(message.entry.data.nickname)) {
+        const { nickname, fromNickname, timestamp } = message.entry.data;
+        const { name:currentUserName } = this.getState().currentUser;
+
+        if (!mutedUsers.includes(nickname) && currentUserName !== nickname) {
           this.storeDispatch(
             // $FlowFixMe
-            muteUser(channel, message.entry.data.nickname)
+            receiveMuteUser(nickname)
           );
 
           if (channel === hostChannel) {
             moments.push(
               receiveMuteUserNotification(
-                message.entry.data.fromNickname,
-                message.entry.data.nickname,
+                fromNickname,
+                nickname,
                 hostChannel,
-                getMessageTimestamp(message.entry.data.timestamp)
+                getMessageTimestamp(timestamp)
               ).moment);
           }
         }
@@ -421,13 +424,14 @@ class Chat {
       const mutedUsers = getMutedUsers(this.getState());
       // $FlowFixMe
       const { nickname, fromNickname, timestamp } = event.message.data;
+      const { name:currentUserName } = this.getState().currentUser;
 
-      if (!mutedUsers.includes(nickname)) {
+      if (!mutedUsers.includes(nickname) && currentUserName !== nickname) {
         this.storeDispatch(
-          muteUser(event.channel, nickname)
+          receiveMuteUser(nickname)
         );
 
-        if (this.getState().currentUser.name !== fromNickname) {
+        if (currentUserName !== fromNickname) {
           this.storeDispatch(
             receiveMuteUserNotification(
               fromNickname,

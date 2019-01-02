@@ -34,7 +34,8 @@ import {
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
-  MUTE_USER,
+  PUBLISH_MUTE_USER,
+  RECEIVE_MUTE_USER,
 } from '../moment';
 
 import {
@@ -945,29 +946,16 @@ const reducer = (
       },
     };
   }
-  case MUTE_USER: {
+  case RECEIVE_MUTE_USER: {
     // $FlowFixMe
     const newArray = [...state.mutedUsers, action.nickname];
     return {
       ...state,
       // ensure no duplicates in the array
       mutedUsers: [...new Set(newArray)],
-      channels: {
-        ...state.channels,
-        [state.panes.primary.channelId]: {
-          ...state.channels[state.panes.primary.channelId],
-          moments: state.channels[state.panes.primary.channelId].moments.map(
-            message => (
-              {
-                ...message,
-                messageTrayOpen: false,
-              }
-            )
-          ),
-        },
-      },
     };
   }
+  case PUBLISH_MUTE_USER:
   case 'DIRECT_CHAT':
   case CLOSE_MESSAGE_TRAY:
     return {
