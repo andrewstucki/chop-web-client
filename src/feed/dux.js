@@ -82,7 +82,6 @@ import { CHAT } from '../pane/content/chat/dux';
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
-const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const GET_INIT_DATA = 'GET_INIT_DATA';
@@ -266,13 +265,6 @@ type AddChannelType = {
   channel: ChannelType,
 };
 
-type InviteToChannelType = {
-  type: 'INVITE_TO_CHANNEL',
-  user: SharedUserType,
-  channelId: string,
-  channelName: string,
-};
-
 type RemoveChannelType = {
   type: 'REMOVE_CHANNEL',
   channel: string,
@@ -381,7 +373,6 @@ type FeedActionTypes =
   | DeleteMessageType
   | ToggleCloseTrayButtonType
   | PublishAcceptedPrayerRequestType
-  | InviteToChannelType
   | ReceiveAcceptedPrayerRequestType
   | PublishReactionActionType
   | RemoveReactionType
@@ -754,17 +745,18 @@ const reducer = (
         },
       },
     };
-  case REMOVE_HERE_NOW:
+  case REMOVE_HERE_NOW: {
+    const { userToken: token } = action;
     return {
       ...state,
       hereNow: {
         [action.channel]: objectFilter(
           state.hereNow[action.channel],
-          // $FlowFixMe
-          userToken => userToken === action.userToken
+          userToken => userToken === token
         ),
       },
     };
+  }
   case 'SET_SEQUENCE':
     return {
       ...state,
@@ -859,25 +851,6 @@ const reducer = (
       channels: {
         ...state.channels,
         [action.channel.id]: action.channel,
-      },
-    };
-  case INVITE_TO_CHANNEL:
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [action.channelId]: {
-          ...state[action.channelId],
-          id: action.channelId,
-          name: action.channelName,
-          // $FlowFixMe
-          direct: action.direct,
-          moments: [],
-          participants: [
-            getCurrentUserAsSharedUser(state),
-            action.user,
-          ],
-        },
       },
     };
   case REMOVE_CHANNEL: {
@@ -1110,25 +1083,24 @@ const reducer = (
   }
   case RELEASE_ANCHOR_MOMENT: {
     const { channels } = state;
-    const messageIndex = channels[action.channel].anchorMoments.findIndex(el => (
-      // $FlowFixMe
-      el.id === action.id
+    const { id, channel } = action;
+    const messageIndex = channels[channel].anchorMoments.findIndex(el => (
+      el.id === id
     ));
-    // $FlowFixMe
-    const moment = channels[action.channel].anchorMoments.find(anchorMoment => anchorMoment.id === action.id);
+    const moment = channels[channel].anchorMoments.find(anchorMoment => anchorMoment.id === id);
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: {
-          ...state.channels[action.channel],
+        [channel]: {
+          ...state.channels[channel],
           moments: [
-            ...state.channels[action.channel].moments,
+            ...state.channels[channel].moments,
             moment,
           ],
           anchorMoments: [
-            ...channels[action.channel].anchorMoments.slice(0, messageIndex),
-            ...channels[action.channel].anchorMoments.slice(messageIndex + 1),
+            ...channels[channel].anchorMoments.slice(0, messageIndex),
+            ...channels[channel].anchorMoments.slice(messageIndex + 1),
           ],
         },
       },
@@ -1143,6 +1115,7 @@ const reducer = (
   case LEAVE_CHANNEL: {
     const { channels } = state;
     const { channelId:currentChannel } = state.panes.primary;
+    const { pubnubToken } = action;
     const publicChannel = getPublicChannel(state);
     if (currentChannel &&
       channels[currentChannel].participants &&
@@ -1150,12 +1123,9 @@ const reducer = (
     ) {
       const { participants } = channels[currentChannel];
       const userIndex = participants.findIndex(el => (
-        // $FlowFixMe
-        el.pubnubToken === action.pubnubToken
+        el.pubnubToken === pubnubToken
       ));
       if (participants) {
-        // Flow complains that participants can still
-        // be undefined here even though we already checked for them
         return {
           ...state,
           channels: {
@@ -1219,12 +1189,13 @@ const reducer = (
       ...state,
       reactions: [...state.reactions, action.reaction],
     };
-  case REMOVE_REACTION:
+  case REMOVE_REACTION: {
+    const { id } = action;
     return {
       ...state,
-      // $FlowFixMe
-      reactions: state.reactions.filter(reaction => reaction.id !== action.id),
+      reactions: state.reactions.filter(reaction => reaction.id !== id),
     };
+  }
   case SET_SALVATIONS:
     return {
       ...state,
@@ -1235,12 +1206,13 @@ const reducer = (
       ...state,
       errors: [...state.errors, action.error],
     };
-  case REMOVE_ERROR:
+  case REMOVE_ERROR: {
+    const { id } = action;
     return {
       ...state,
-      // $FlowFixMe
-      errors: state.errors.filter(error => error.id !== action.id),
+      errors: state.errors.filter(error => error.id !== id),
     };
+  }
   case CLEAR_ERRORS:
     return {
       ...state,
@@ -1325,7 +1297,6 @@ export {
   CHANGE_CHANNEL,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
-  INVITE_TO_CHANNEL,
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   GET_INIT_DATA,
@@ -1366,7 +1337,6 @@ export type {
   RemoveChannelType,
   MomentType,
   FeedType,
-  InviteToChannelType,
   ChannelType,
   PrivateUserType,
   SharedUserType,
