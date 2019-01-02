@@ -40,8 +40,8 @@ compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
   script:
-    - git config user.email "gitlabci@life.church"
-    - git config user.name "Gitlab CI"
+    - git config user.email "$GITLAB_USER_EMAIL"
+    - git config user.name "$GITLAB_USER_NAME"
     - yarn version --patch
     - git push --tags
     - yarn install --pure-lockfile --cache-folder .yarn
