@@ -43,6 +43,7 @@ compile:app-staging:
     - git config user.email "gitlabci@life.church"
     - git config user.name "Gitlab CI"
     - yarn version --patch
+    - git push --tags
     - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build:staging
   artifacts:
