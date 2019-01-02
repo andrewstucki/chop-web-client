@@ -87,7 +87,7 @@ describe('Test delete message', () => {
     );
 
     return store.dispatch({ type: REHYDRATE }).then(() => {
-      store.dispatch(addChannel('test', 'test', participants));
+      store.dispatch(addChannel('test', 'test', false, participants));
       store.dispatch(setPrimaryPane('test', 'EVENT'));
       store.dispatch(loadHistory(moments, 'test'));
       store.dispatch(deleteMessage('123456', 'test'));
@@ -136,6 +136,7 @@ describe('Test delete message', () => {
         test: {
           name: 'test',
           id: 'test',
+          direct: false,
           moments: moments,
           anchorMoments: [],
           scrollPosition: 0,

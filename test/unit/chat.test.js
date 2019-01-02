@@ -101,6 +101,6 @@ describe('Chat', () => {
       },
       'direct',
     );
-    expect(result).toEqual('Chat with Shaq O.');
+    expect(result).toEqual('Chat');
   });
 });

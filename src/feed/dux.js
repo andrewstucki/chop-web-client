@@ -194,6 +194,7 @@ type SharedUserType = {
 type ChannelType = {
   id: string,
   name: string,
+  direct: boolean,
   moments: Array<MomentType>,
   participants?: Array<SharedUserType>,
   anchorMoments: Array<AnchorMomentType>,
@@ -521,6 +522,7 @@ const setUser = (user: PrivateUserType): SetUser => (
 const addChannel = (
   name: string,
   id: string,
+  direct: boolean,
   participants?: Array<SharedUserType>
 ): AddChannelType => (
   {
@@ -528,6 +530,7 @@ const addChannel = (
     channel: {
       id,
       name,
+      direct,
       moments: [],
       participants,
       anchorMoments: [],
@@ -866,6 +869,8 @@ const reducer = (
           ...state[action.channelId],
           id: action.channelId,
           name: action.channelName,
+          // $FlowFixMe
+          direct: action.direct,
           moments: [],
           participants: [
             getCurrentUserAsSharedUser(state),

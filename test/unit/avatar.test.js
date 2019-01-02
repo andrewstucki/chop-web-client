@@ -30,7 +30,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      addChannel('public', 'public', [])
+      addChannel('public', 'public', false, [])
     );
 
     store.dispatch(
@@ -69,7 +69,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      addChannel('public', 'public', [])
+      addChannel('public', 'public', false, [])
     );
 
     store.dispatch(

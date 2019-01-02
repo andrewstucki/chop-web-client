@@ -11,6 +11,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
@@ -32,6 +33,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
@@ -58,6 +60,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
@@ -80,6 +83,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,

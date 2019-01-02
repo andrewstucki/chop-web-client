@@ -3,7 +3,6 @@ import Feed from './feed';
 import { connect } from 'react-redux';
 import {
   feedContents,
-  hasParticipants,
   feedAnchorMoments,
 } from '../selectors/channelSelectors';
 
@@ -21,7 +20,7 @@ const mapStateToProps = (state, ownProps) => {
     anchorMoments: feedAnchorMoments(feedState, channel),
     currentChannel: channel,
     animatingMoment: feedState.renderingAnchorMoment,
-    showLeaveChat: hasParticipants(feedState, channel),
+    showLeaveChat: feedState?.channels?.[channel]?.direct,
     scrollPosition: getScrollPosition(feedState, channel),
     currentUser: feedState.currentUser,
   };

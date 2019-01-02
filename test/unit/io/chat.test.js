@@ -48,6 +48,7 @@ describe('Chat2 Tests', () => {
       '123456': {
         name: 'public',
         id: '123456',
+        direct: false,
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
@@ -55,6 +56,7 @@ describe('Chat2 Tests', () => {
       '789012': {
         name: 'Host',
         id: '789012',
+        direct: false,
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
@@ -286,7 +288,7 @@ describe('Chat2 Tests', () => {
 
     chat.init();
 
-    chat.dispatch(addChannel('direct', 'asd2389dhsdf'));
+    chat.dispatch(addChannel('direct', 'asd2389dhsdf', true));
 
     expect(mockSubscribe).toHaveBeenCalledTimes(1);
     expect(mockSubscribe).toHaveBeenCalledWith(

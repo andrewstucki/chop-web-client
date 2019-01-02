@@ -113,6 +113,7 @@ describe('Load history', () => {
         '123456': {
           name: 'public',
           id: '123456',
+          direct: false,
           moments: [],
           anchorMoments: [],
           scrollPosition: 0,
@@ -120,6 +121,7 @@ describe('Load history', () => {
         '789012': {
           name: 'Host',
           id: '789012',
+          direct: false,
           moments: [],
           anchorMoments: [],
           scrollPosition: 0,
