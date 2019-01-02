@@ -40,6 +40,8 @@ compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
   script:
+    - git config user.email "gitlabci@life.church"
+    - git config user.name "Gitlab CI"
     - yarn version --patch
     - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build:staging
@@ -49,6 +51,10 @@ compile:app-staging:
       - dist/
   only:
     - integration
+  except:
+    variables:
+      # Do not run the pipeline again because of the `yarn version --patch`
+      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 compile:app-production:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
