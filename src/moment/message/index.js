@@ -6,7 +6,7 @@ import {
   closeMessageTray,
   deleteMessage,
   toggleCloseTrayButton,
-  muteUser,
+  publishMuteUser,
   directChat,
   publishDeleteMessage,
 } from './dux';
@@ -32,7 +32,7 @@ const mapDispatchToProps = dispatch => (
     deleteMessage: (id, channel) => dispatch(deleteMessage(id, channel)),
     publishDeleteMessage: id => dispatch(publishDeleteMessage(id)),
     toggleCloseTrayButton: id => dispatch(toggleCloseTrayButton(id)),
-    muteUser: (channel, nickname) => dispatch(muteUser(channel, nickname)),
+    muteUser: (channel, nickname) => dispatch(publishMuteUser(channel, nickname)),
     directChat: (pubnubToken, nickname) => dispatch(directChat(pubnubToken, nickname)),
     publishMuteUserNotification: (host, guest, channel) => dispatch(publishMuteUserNotification(host, guest, channel, getMessageTimestamp())),
     mutedNotificationBanner: guestName => dispatch(mutedNotificationBanner(guestName)),

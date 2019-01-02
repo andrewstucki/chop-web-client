@@ -24,10 +24,10 @@ import {
 } from '../moment';
 import { addError } from '../errors/dux';
 import {
-  MUTE_USER,
+  PUBLISH_MUTE_USER,
   DIRECT_CHAT,
 } from '../moment/message/dux';
-import type { MuteUserType } from '../moment/message/dux';
+import type { PublishMuteUserType } from '../moment/message/dux';
 import {
   avatarImageExists,
   convertSubscribersToSharedUsers,
@@ -412,7 +412,7 @@ class ServiceActor {
     }
   }
 
-  async muteUser (action:MuteUserType) {
+  async muteUser (action:PublishMuteUserType) {
     try {
       const { feedToken, nickname } = action;
       const ip = '0.0.0.0';
@@ -460,7 +460,7 @@ class ServiceActor {
     case REMOVE_CHANNEL:
       this.removeChannel(action);
       return;
-    case MUTE_USER:
+    case PUBLISH_MUTE_USER:
       this.muteUser(action);
       return;
     case DIRECT_CHAT:

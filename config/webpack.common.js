@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const constants = require('./webpack.constants.js');
+const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 
 module.exports = {
   entry: ['babel-polyfill', './src/index.jsx'],
@@ -49,7 +51,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './assets/index.html'
-    })
+    }),
+    new BugsnagSourceMapUploaderPlugin(constants.BUGSNAG),
   ],
   output: {
     filename: '[name].[contenthash].js',
@@ -67,5 +70,6 @@ module.exports = {
         }
       }
     },
-  }
+  },
+
 };
