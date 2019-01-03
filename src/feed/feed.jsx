@@ -21,6 +21,7 @@ type FeedProps = {
   currentUser: PrivateUserType,
   togglePopUpModal: () => void,
   updateScrollPosition: (scrollPosition: number, channel: string) => void,
+  isChatFocused: boolean,
 };
 
 type SnapshotType = {
@@ -61,12 +62,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   saveScrollPosition (channel: string) {
-    const scrollPosition = this.scrollAtBottom() ? -1 : this.scrollPosition();
+    if (channel !== undefined) {
+      const scrollPosition = this.scrollAtBottom() ? -1 : this.scrollPosition();
 
-    this.props.updateScrollPosition(
-      scrollPosition, 
-      channel
-    );
+      this.props.updateScrollPosition(
+        scrollPosition, 
+        channel
+      );
+    }
   }
 
   componentDidMount () {
@@ -86,8 +89,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const channelChanged = prevProps.channel !== this.props.channel;
     const lastMoment = this.props.moments[this.props.moments.length - 1];
     const lastMessageFromCurrentUser = lastMoment?.user?.pubnubToken === this.props?.currentUser?.pubnubToken;
-    const scrollAtBottom = this.scrollAtBottom();
-
+    const scrollAtBottom = this.scrollAtBottom() || this.props.scrollPosition === -1;
     if (channelChanged && prevProps.channel) {
       this.saveScrollPosition(prevProps.channel);
     }
@@ -116,6 +118,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
     } else if (channelChanged && scrollWrapper && scrollPosition === -1) {
       this.scrollToBottom();
     } else if (momentAdded && (scrollAtBottom || lastMessageFromCurrentUser)) {
+      this.scrollToBottom();
+    } else if (this.props.isChatFocused && scrollAtBottom) {
       this.scrollToBottom();
     }
   }
@@ -168,6 +172,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         // $FlowFixMe
         ref={this.wrapperRef}
         className={styles.scroll}
+        onScroll={() => this.saveScrollPosition(currentChannel)}
       >
         {
           showLeaveChat &&
