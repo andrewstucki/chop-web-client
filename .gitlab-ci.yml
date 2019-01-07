@@ -39,15 +39,25 @@ compile:app-review:
 compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
-  script: 
+  script:
     - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build:staging
+  after_script:
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git config user.name "${GITLAB_USER_NAME}"
+    - yarn version --patch
+    # TODO: We need access to Gitlab user to make this push
+    # - git push https://gitlab-ci-token:${GIT_SECRET_KEY}@in.thewardro.be/io/opennetwork/chop-web-client.git/ HEAD:integration
   artifacts:
     expire_in: 1 day
     paths:
       - dist/
   only:
     - integration
+  except:
+    variables:
+      # Do not run the pipeline again because of the `yarn version --patch`
+      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 compile:app-production:
   image: in.thewardro.be:4567/io/io-builder:1.0.1

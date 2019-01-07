@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import VideoFeed from './videoFeed';
 import {
-  simulatedLivePlayerFactory,
+  videoPlayerFactory,
   videoStartAtTime,
   playVideo,
   pauseVideo,
@@ -28,7 +28,7 @@ const mapStateToProps = state => {
     isVideoHidden: feedState.isVideoHidden,
     type,
     url,
-    Player: simulatedLivePlayerFactory(feedState),
+    Player: videoPlayerFactory(feedState),
     startAt: videoStartAtTime(feedState, Date.now()),
     isVideoPlaying: feedState.isVideoPlaying,
     isMobileDevice: isMobileDevice(),

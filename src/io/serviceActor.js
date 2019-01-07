@@ -24,10 +24,10 @@ import {
 } from '../moment';
 import { addError } from '../errors/dux';
 import {
-  MUTE_USER,
+  PUBLISH_MUTE_USER,
   DIRECT_CHAT,
 } from '../moment/message/dux';
-import type { MuteUserType } from '../moment/message/dux';
+import type { PublishMuteUserType } from '../moment/message/dux';
 import {
   avatarImageExists,
   convertSubscribersToSharedUsers,
@@ -349,6 +349,7 @@ class ServiceActor {
               addChannel(
                 channel.name,
                 channel.id,
+                channel.direct,
                 participants
               )
             );
@@ -402,16 +403,16 @@ class ServiceActor {
 
     try {
       const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken, hosts, user.name);
-      const { name, id, subscribers } = data.acceptPrayer;
+      const { name, id, direct, subscribers } = data.acceptPrayer;
       const participants = convertSubscribersToSharedUsers(subscribers);
-      this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(addChannel(name, id, direct, participants));
       this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);
     }
   }
 
-  async muteUser (action:MuteUserType) {
+  async muteUser (action:PublishMuteUserType) {
     try {
       const { feedToken, nickname } = action;
       const ip = '0.0.0.0';
@@ -425,9 +426,9 @@ class ServiceActor {
     try {
       const { otherUserPubnubToken, otherUserNickname } = action;
       const directChat = await this.graph.directChat(otherUserPubnubToken, otherUserNickname);
-      const { name, id, subscribers } = directChat.createDirectFeed;
+      const { name, id, direct, subscribers } = directChat.createDirectFeed;
       const participants = convertSubscribersToSharedUsers(subscribers);
-      this.storeDispatch(addChannel(name, id, participants));
+      this.storeDispatch(addChannel(name, id, direct, participants));
       this.storeDispatch(setPrimaryPane(id, CHAT));
     } catch (error) {
       this.handleDataFetchErrors(error);
@@ -459,7 +460,7 @@ class ServiceActor {
     case REMOVE_CHANNEL:
       this.removeChannel(action);
       return;
-    case MUTE_USER:
+    case PUBLISH_MUTE_USER:
       this.muteUser(action);
       return;
     case DIRECT_CHAT:

@@ -32,6 +32,7 @@ describe('Salvation Moment Tests', () => {
         '123456': {
           name: 'public',
           id: '123456',
+          direct: false,
           moments: [],
           anchorMoments: [],
           scrollPosition: 0,
@@ -114,6 +115,7 @@ describe('Salvation Moment Tests', () => {
         '123456': {
           name: 'public',
           id: '123456',
+          direct: false,
           moments: [],
           anchorMoments: [
             {
@@ -192,6 +194,7 @@ describe('Salvation Moment Tests', () => {
         '123456': {
           name: 'public',
           id: '123456',
+          direct: false,
           moments: [
             {
               type: 'ANCHOR_MOMENT',

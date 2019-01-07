@@ -30,7 +30,7 @@ type IFramePlayerPropsType = {
 
 type SimulatedLivePlayerPropsType = {
   url: string,
-  style: any,
+  style: string,
   // $FlowFixMe
   Player: React.ComponentType<SimulatedLivePlayerPropsType>,
   startAt: number,
@@ -39,6 +39,13 @@ type SimulatedLivePlayerPropsType = {
   isVideoPlaying: boolean,
   isMobileDevice: boolean,
 };
+
+type OfflinePlayerPropsType = {
+  url: string,
+  style: string,
+  // $FlowFixMe
+  Player: React.ComponentType<OfflinePlayerPropsType>,
+}
 
 // Action Creators
 
@@ -68,7 +75,7 @@ const pauseVideo = () => (
 
 const getVideo = state => state.video;
 
-const simulatedLivePlayerFactory = createSelector(
+const videoPlayerFactory = createSelector(
   getVideo,
   video => {
     if (video.url.indexOf('jwplayer') > -1) {
@@ -77,8 +84,10 @@ const simulatedLivePlayerFactory = createSelector(
       return VimeoPlayer;
     } else if (video.url.indexOf('wistia') > -1) {
       return WistiaPlayer;
-    } else {
+    } else if (video.url.indexOf('youtube') > -1) {
       return YouTubePlayer;
+    } else {
+      return null;
     }
   }
 );
@@ -96,7 +105,7 @@ const videoStartAtTime = createSelector(
 export {
   setVideo,
   videoStartAtTime,
-  simulatedLivePlayerFactory,
+  videoPlayerFactory,
   playVideo,
   pauseVideo,
 };
@@ -106,6 +115,7 @@ export type {
   VideoType,
   IFramePlayerPropsType,
   SimulatedLivePlayerPropsType,
+  OfflinePlayerPropsType,
 };
 
 export {

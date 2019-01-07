@@ -22,8 +22,8 @@ import actorMiddleware from './middleware/actor-middleware';
 import ChatActor from './io/chat';
 import serviceActor from './io/serviceActor';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
-import bugsnag from 'bugsnag-js';
-import createPlugin from 'bugsnag-react';
+import bugsnag from '@bugsnag/js';
+import bugsnagReact from '@bugsnag/plugin-react';
 import TagManager from 'react-gtm-module';
 
 declare var ENV:string;
@@ -38,7 +38,9 @@ const bugsnagClient = bugsnag({
   notifyReleaseStages: [ 'production', 'staging' ],
 });
 
-const ErrorBoundary = bugsnagClient.use(createPlugin(React));
+bugsnagClient.use(bugsnagReact, React);
+
+const ErrorBoundary = bugsnagClient.getPlugin('react');
 
 const actorMiddlewareApplied = actorMiddleware(
   ChatActor,

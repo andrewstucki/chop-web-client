@@ -15,8 +15,8 @@ const getChannelIdByNameFactory = name => (
   createSelector(
     getChannels,
     channels => { 
-      if (channels !== null) {
-        return Object.keys(channels).find(channel => channels[channel].name.toUpperCase() === name);
+      if (channels) {
+        return Object.keys(channels).find(channel => channels[channel] ? channels[channel].name.toUpperCase() === name : null);
       }
     }
   )
@@ -79,7 +79,7 @@ const getDirectChannels = createSelector(
   getChannels,
   channels =>
     channels ?
-      objectFilter(channels, id => !channels[id].participants || channels[id].participants.length === 0) :
+      objectFilter(channels, id => !channels[id].direct) :
       []
 );
 
@@ -95,11 +95,6 @@ const getLegacyChannel = createSelector(
 const getCurrentChannel = createSelector(
   getPrimaryPane,
   pane => pane.channelId,
-);
-
-const hasParticipants = createSelector(
-  getChannelById,
-  channel => !!(channel && channel.participants && channel.participants.length)
 );
 
 const feedAnchorMoments = createSelector(
@@ -125,7 +120,6 @@ export {
   getLegacyChannel,
   getDirectChannels,
   getCurrentChannel,
-  hasParticipants,
   feedContents,
   feedAnchorMoments,
   getChannelById,

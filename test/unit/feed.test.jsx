@@ -37,6 +37,7 @@ describe('Feed tests', () => {
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
+        isChatFocused={false}
       />
     );
     expect(wrapper.find('ul').children().length).toBe(1);
@@ -71,6 +72,7 @@ describe('Feed tests', () => {
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
+        isChatFocused={false}
       />
     );
     
@@ -105,6 +107,7 @@ describe('Feed tests', () => {
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
+        isChatFocused={false}
       />
     );
     expect(wrapper.find('ul').first().key()).toEqual('default');
@@ -127,6 +130,7 @@ describe('Feed tests', () => {
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
+        isChatFocused={false}
       />
     );
     expect(wrapper.find(FeedActionBanner).length).toBe(1);

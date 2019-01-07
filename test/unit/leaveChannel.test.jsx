@@ -69,7 +69,7 @@ describe('Test leave channel', () => {
 
     return store.dispatch({ type: REHYDRATE }).then(() => {
       store.dispatch(
-        addChannel('test', 'test', participants)
+        addChannel('test', 'test', false, participants)
       );
 
       store.dispatch(
@@ -131,6 +131,7 @@ describe('Test leave channel', () => {
         test: {
           name: 'test',
           id: 'test',
+          direct: false,
           moments: [],
           anchorMoments: [],
           participants: [

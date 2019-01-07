@@ -107,11 +107,6 @@ To view code coverage.
 yarn coverage
 ```
 
-To generate updated code quality and complexity report
-```
-yarn plato
-```
-
 To run the Snapshot and Visual Regression Tests. Snapshot tests create a copy of
 the markup created by React UI and compare it to the previous copy and validate
 there are no differences. Visual Regression tests take a screenshot of each

@@ -11,7 +11,6 @@ import reducer, {
 } from '../../src/feed/dux';
 
 import {
-  hasParticipants as hasParticipantsSelector,
   feedContents as feedContentsSelector,
   feedAnchorMoments,
 } from '../../src/selectors/channelSelectors';
@@ -89,6 +88,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -96,6 +96,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -112,6 +113,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -119,6 +121,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -143,6 +146,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -185,6 +189,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -192,6 +197,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -235,6 +241,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -242,6 +249,7 @@ describe('Feed tests', () => {
           host: {
             id: '67890',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -276,6 +284,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -283,6 +292,7 @@ describe('Feed tests', () => {
           host: {
             id: '67890',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -316,13 +326,14 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
           },
         },
       },
-      addChannel('host', '12345')
+      addChannel('host', '12345', false)
     );
     expect(result).toEqual(
       {
@@ -331,6 +342,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -340,6 +352,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             name: 'host',
+            direct: false,
             participants: undefined,
             scrollPosition: -1,
           },
@@ -353,7 +366,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
       },
-      addChannel('direct', '12345', [otherUser])
+      addChannel('direct', '12345', true, [otherUser])
     );
     expect(result).toEqual(
       {
@@ -361,6 +374,7 @@ describe('Feed tests', () => {
         channels: {
           '12345': {
             id: '12345',
+            direct: true,
             moments: [],
             anchorMoments: [],
             name: 'direct',
@@ -383,13 +397,14 @@ describe('Feed tests', () => {
           '12345': {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
           },
         },
       }
-      , addChannel('host', '12345'));
+      , addChannel('host', '12345', false));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -398,6 +413,7 @@ describe('Feed tests', () => {
           '12345': {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -415,6 +431,7 @@ describe('Feed tests', () => {
           other: {
             id: '12345',
             name: 'other',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -434,6 +451,7 @@ describe('Feed tests', () => {
           other: {
             id: '12345',
             name: 'other',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -666,6 +684,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -709,6 +728,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -755,6 +775,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -798,6 +819,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -844,6 +866,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -887,6 +910,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -933,6 +957,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -976,6 +1001,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -1022,6 +1048,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -1065,6 +1092,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -1111,6 +1139,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -1157,6 +1186,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: MESSAGE,
@@ -1195,6 +1225,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1221,6 +1252,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1247,6 +1279,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1272,6 +1305,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1297,6 +1331,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1322,6 +1357,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1347,6 +1383,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1372,6 +1409,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1398,6 +1436,7 @@ describe('Feed tests', () => {
 
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1424,6 +1463,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1450,6 +1490,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1477,6 +1518,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: 'AVATAR_MOMENT',
@@ -1503,6 +1545,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1533,6 +1576,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
+            direct: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -1562,6 +1606,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -1586,6 +1631,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [
               {
@@ -1610,6 +1656,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [
               {
@@ -1632,6 +1679,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [
               {
                 type: 'ANCHOR_MOMENT',
@@ -1671,6 +1719,7 @@ describe('Feed tests', () => {
           ['12345']: {
             id: '12345',
             name: 'Host',
+            direct: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -1699,6 +1748,7 @@ describe('Feed tests', () => {
           ['12345']: {
             id: '12345',
             name: 'Host',
+            direct: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -1729,6 +1779,7 @@ describe('Feed tests', () => {
           ['12345']: {
             id: '12345',
             name: 'Host',
+            direct: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -1757,6 +1808,7 @@ describe('Feed tests', () => {
           ['12345']: {
             id: '12345',
             name: 'Host',
+            direct: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -1777,46 +1829,6 @@ describe('Feed tests', () => {
         },
       },
     );
-  });
-
-  test('hasParticipants selector channel with participants', () => {
-    const result = hasParticipantsSelector(
-      {
-        ...defaultState,
-        channels: {
-          direct: {
-            id: '12345',
-            name: 'Carl',
-            moments: [],
-            anchorMoments: [],
-            participants: [
-              otherUser,
-              otherUser,
-            ],
-          },
-        },
-      },
-      'direct'
-    );
-    expect(result).toEqual(true);
-  });
-
-  test('hasParticipants selector channel without participants', () => {
-    const result = hasParticipantsSelector(
-      {
-        ...defaultState,
-        channels: {
-          direct: {
-            id: '12345',
-            name: 'Carl',
-            moments: [],
-            anchorMoments: [],
-          },
-        },
-      },
-      'direct'
-    );
-    expect(result).toEqual(false);
   });
 
   test('getOtherUsers', () => {
@@ -1874,6 +1886,7 @@ describe('Feed tests', () => {
           direct: {
             id: '12345',
             name: 'Carl',
+            direct: true,
             moments: [],
             anchorMoments: [],
             participants: [
@@ -1891,6 +1904,7 @@ describe('Feed tests', () => {
           public: {
             id: '67890',
             name: 'Public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             participants: [],
@@ -1914,6 +1928,7 @@ describe('Feed tests', () => {
           direct: {
             id: '12345',
             name: 'Carl',
+            direct: true,
             moments: [],
             anchorMoments: [],
             participants: [
@@ -1924,6 +1939,7 @@ describe('Feed tests', () => {
           public: {
             id: '67890',
             name: 'Public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             participants: [],
@@ -2049,6 +2065,7 @@ describe('SideMenu tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: -1,
@@ -2064,6 +2081,7 @@ describe('SideMenu tests', () => {
           public: {
             id: '12345',
             name: 'public',
+            direct: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 31,

@@ -1,6 +1,6 @@
 // @flow
-import { muteUser } from '../../src/moment/message/dux';
-import reducer, { defaultState } from '../../src/feed/dux';
+import { receiveMuteUser } from '../../src/moment/message/dux';
+import reducer, { defaultState} from '../../src/feed/dux';
 
 describe('Mute User tests', () => {
   test('User is added when a mute message is received.', () => {
@@ -11,6 +11,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
@@ -23,7 +24,7 @@ describe('Mute User tests', () => {
           },
         },
       },
-      muteUser('test', 'blockme'));
+      receiveMuteUser('blockme'));
 
     expect(result).toEqual(
       {
@@ -32,6 +33,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
@@ -58,6 +60,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
@@ -71,7 +74,7 @@ describe('Mute User tests', () => {
         },
         mutedUsers: ['blockme'],
       },
-      muteUser('test', 'blockme'));
+      receiveMuteUser('blockme'));
 
     expect(result).toEqual(
       {
@@ -80,6 +83,7 @@ describe('Mute User tests', () => {
           test: {
             id: 'test',
             name: 'test',
+            direct: false,
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
