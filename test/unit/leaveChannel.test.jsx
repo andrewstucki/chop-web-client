@@ -48,11 +48,13 @@ describe('Test leave channel', () => {
   test.skip('Remove channel and send pubnub notification', () => {
     const participants = [
       {
+        id: '12345',
         pubnubToken: 'abc123xyz',
         name: 'Tony Hoare',
         role: { label: '' },
       },
       {
+        id: '12345',
         pubnubToken: '54353',
         name: 'Shaq O.',
         role: { label: '' },
@@ -136,11 +138,13 @@ describe('Test leave channel', () => {
           anchorMoments: [],
           participants: [
             {
+              id: '12345',
               pubnubToken: 'abc123xyz',
               name: 'Tony Hoare',
               role: { label: '' },
             },
             {
+              id: '12345',
               pubnubToken: '54353',
               name: 'Shaq O.',
               role: { label: '' },

@@ -77,6 +77,8 @@ import moment from 'moment';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
+import type { UIDType } from '../cwc-types';
+
 // Action Types
 
 const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
@@ -183,8 +185,9 @@ type ReceiveReactionType = {
 }
 
 type SharedUserType = {
+  id: UIDType | null,
   name: string,
-  avatarUrl?: string,
+  avatarUrl?: string | null,
   pubnubToken: string,
   role: {
     label: string,
@@ -1270,6 +1273,7 @@ const reducer = (
 
 const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   {
+    id: state.currentUser.id,
     pubnubToken: state.currentUser.pubnubToken,
     name: state.currentUser.name,
     avatarUrl: state.currentUser.avatarUrl,

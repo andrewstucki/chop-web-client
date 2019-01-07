@@ -49,7 +49,7 @@ describe('Feed tests', () => {
         type: MESSAGE,
         id: 'string',
         text: 'This is a message',
-        user: {
+        sender: {
           id: '12345',
           nickname: 'Billy Bob',
         },
@@ -81,7 +81,7 @@ describe('Feed tests', () => {
       {
         id: 'string',
         text: 'This is a message',
-        user: {
+        sender: {
           id: '12345',
           nickname: 'Billy Bob',
         },

@@ -84,13 +84,13 @@ const Message = (
           deleteMessage(message.id, currentChannel);
         }}
         muteUser={() => {
-          muteUser(currentChannel, message.user.name);
-          mutedNotificationBanner(message.user.name);
-          publishMuteUserNotification(currentUser.name, message.user.name, hostChannel);
+          muteUser(currentChannel, message.sender.name);
+          mutedNotificationBanner(message.sender.name);
+          publishMuteUserNotification(currentUser.name, message.sender.name, hostChannel);
           closeMessageTray(message.id);
         }}
         directChat={() => {
-          directChat(message.user.pubnubToken, message.user.name);
+          directChat(message.sender.pubnubToken, message.sender.name);
         }}
       />
       <div
@@ -99,12 +99,12 @@ const Message = (
           toggleCloseTrayButton(message.id);
         }}
       >
-        <Avatar user={message.user} />
+        <Avatar user={message.sender} />
         
         <div className={styles.body}>
-          <strong className={styles.name}>{message.user.name}</strong>
-          {message.user.role.label &&
-            <span className={styles.role}>{message.user.role.label}</span>
+          <strong className={styles.name}>{message.sender.name}</strong>
+          {message.sender.role.label &&
+            <span className={styles.role}>{message.sender.role.label}</span>
           }
           <div key={message.id} data-node="text" className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
         </div>

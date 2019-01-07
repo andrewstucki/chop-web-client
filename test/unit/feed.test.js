@@ -54,6 +54,7 @@ import { setLanguage } from '../../src/languageSelector/dux';
 import { setPrimaryPane } from '../../src/pane/dux';
 
 const otherUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {
@@ -168,7 +169,7 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a message',
-          user: currentUser,
+          sender: currentUser,
           messageTrayOpen: false,
           closeTrayButtonRendered: false,
         },
@@ -176,8 +177,8 @@ describe('Feed tests', () => {
     );
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
-    expect(result.channels.public.moments[0].user.id).toEqual('12345');
-    expect(result.channels.public.moments[0].user.name).toEqual('Joan Jet');
+    expect(result.channels.public.moments[0].sender.id).toEqual('12345');
+    expect(result.channels.public.moments[0].sender.name).toEqual('Joan Jet');
   });
 
   test('adds a message to current channel not public from current user', () => {
@@ -219,7 +220,7 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a string',
-          user: otherUser,
+          sender: otherUser,
           messageTrayOpen: false,
           closeTrayButtonRendered: false,
         },
@@ -228,8 +229,8 @@ describe('Feed tests', () => {
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('this is a string');
-    expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
-    expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
+    expect(result.channels.host.moments[0].sender.pubnubToken).toEqual('12345');
+    expect(result.channels.host.moments[0].sender.name).toEqual('Billy Bob');
   });
 
   test('receives a message and adds it to the appropriate channel', () => {
@@ -260,7 +261,7 @@ describe('Feed tests', () => {
         type: 'MESSAGE',
         id: '12345',
         text: 'Hello there',
-        user: {
+        sender: {
           id: '',
           name: '',
         },
@@ -476,7 +477,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '12345',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -497,7 +498,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: 'I like socks',
-          user: {
+          sender: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -527,7 +528,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '12345',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -548,7 +549,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: 'I like socks',
-          user: {
+          sender: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -575,7 +576,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '12345',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -607,7 +608,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: '나는 양말을 좋아한다.',
-          user: {
+          sender: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -690,7 +691,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -701,7 +702,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -734,7 +735,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -745,7 +746,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -781,7 +782,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -792,7 +793,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -825,7 +826,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -836,7 +837,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -872,7 +873,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -883,7 +884,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -916,7 +917,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -927,7 +928,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -963,7 +964,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -974,7 +975,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1007,7 +1008,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1018,7 +1019,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1054,7 +1055,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1065,7 +1066,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1098,7 +1099,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1109,7 +1110,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1145,7 +1146,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1155,7 +1156,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                user: {
+                sender: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -1165,7 +1166,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                user: {
+                sender: {
                   id: '18475',
                   name: 'George Costanza',
                 },
@@ -1192,7 +1193,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                user: {
+                sender: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -1202,7 +1203,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                user: {
+                sender: {
                   id: '18475',
                   name: 'George Costanza',
                 },
@@ -1891,6 +1892,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             participants: [
               {
+                id: '12345',
                 pubnubToken: currentUser.pubnubToken,
                 name: currentUser.name,
                 role: {

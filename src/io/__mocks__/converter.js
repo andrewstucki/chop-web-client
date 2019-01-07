@@ -1,7 +1,7 @@
 const mock = {
   config: jest.fn(),
-  cwcToLegacy: jest.fn().mockImplementation(value => value),
-  legacyToCwc: jest.fn().mockImplementation(value => value),
+  cwcMessageToLegacyNewMessage: jest.fn().mockImplementation(value => value),
+  legacyNewMessageToCwcMessage: jest.fn().mockImplementation(value => value),
 };
 
 export default mock;

@@ -10,6 +10,7 @@ import Moment from '../src/moment/moment';
 import '../assets/global.css';
 
 const user = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: { label: '' },
@@ -39,7 +40,7 @@ storiesOf('Moment', module)
             type: 'MESSAGE',
             id: '12345',
             text: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            user: user,
+            sender: user,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
           }
@@ -55,7 +56,7 @@ storiesOf('Moment', module)
             type: 'MESSAGE',
             id: '12345',
             text: 'Maecenas sed diam eget risus varius blandit sit amet non magna.',
-            user: user,
+            sender: user,
             messageTrayOpen: true,
             closeTrayButtonRendered: true,
           }
@@ -117,7 +118,7 @@ storiesOf('Moment', module)
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: user,
+            sender: user,
             timeStamp: '9:33pm',
             active: true,
           }
@@ -133,7 +134,7 @@ storiesOf('Moment', module)
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: user,
+            sender: user,
             timeStamp: '9:33pm',
             active: false,
             action: action('clicked'),
@@ -176,7 +177,7 @@ storiesOf('Moment', module)
           {
             type: 'AVATAR_MOMENT',
             id: '12345',
-            user: user,
+            sender: user,
           }
         }
       />

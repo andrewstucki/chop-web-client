@@ -9,11 +9,13 @@ import ActionableNotification from '../../src/moment/actionableNotification/acti
 Enzyme.configure({ adapter: new Adapter() });
 
 const yablby = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'yablby',
   role: { label: '' },
 };
 const billBogus = {
+  id: '12345',
   pubnubToken: '5483',
   name: 'Bill Bogus',
   role: { label: '' },

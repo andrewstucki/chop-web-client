@@ -7,11 +7,13 @@ import PopUpModal from '../src/popUpModal/popUpModal';
 import '../assets/global.css';
 
 const otherUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Walker, Texas Ranger',
   role: { label: '' },
 };
 const currentUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Jimmy Trivette',
   role: { label: '' },
