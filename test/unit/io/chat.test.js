@@ -52,6 +52,7 @@ describe('Chat2 Tests', () => {
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
       '789012': {
         name: 'Host',
@@ -60,6 +61,7 @@ describe('Chat2 Tests', () => {
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
     },
   };

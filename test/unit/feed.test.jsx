@@ -40,6 +40,7 @@ describe('Feed tests', () => {
         channel="default"
         showNewMessageButton={false}
         isChatFocused={false}
+        setSawLastMomentAt={() => {}}
       />
     );
     expect(wrapper.find('ul').children().length).toBe(1);
@@ -76,6 +77,7 @@ describe('Feed tests', () => {
         channel="default"
         showNewMessageButton={false}
         isChatFocused={false}
+        setSawLastMomentAt={() => {}}
       />
     );
     
@@ -112,6 +114,7 @@ describe('Feed tests', () => {
         channel="default"
         showNewMessageButton={false}
         isChatFocused={false}
+        setSawLastMomentAt={() => {}}
       />
     );
     expect(wrapper.find('ul').first().key()).toEqual('default');
@@ -136,6 +139,7 @@ describe('Feed tests', () => {
         channel="default"
         showNewMessageButton={false}
         isChatFocused={false}
+        setSawLastMomentAt={() => {}}
       />
     );
     expect(wrapper.find(FeedActionBanner).length).toBe(1);
@@ -160,6 +164,7 @@ describe('Feed tests', () => {
         channel="default"
         showNewMessageButton={true}
         isChatFocused={false}
+        setSawLastMomentAt={() => {}}
       />
     );
     const button = wrapper.find(Button);

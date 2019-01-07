@@ -142,6 +142,7 @@ describe('Test delete message', () => {
           moments: moments,
           anchorMoments: [],
           scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
     };

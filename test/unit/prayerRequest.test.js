@@ -39,6 +39,7 @@ describe('Prayer Request Tests', () => {
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
       '789012': {
         name: 'Host',
@@ -47,6 +48,7 @@ describe('Prayer Request Tests', () => {
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
     },
   };

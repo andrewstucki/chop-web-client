@@ -10,7 +10,12 @@ import {
   togglePopUpModal,
   updateScrollPosition,
   getScrollPosition,
+  setSawLastMomentAt,
 } from './dux';
+import type {
+  DateTimeType,
+  ChannelIdType,
+} from '../cwc-types';
 
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
@@ -32,6 +37,7 @@ const mapDispatchToProps = dispatch => (
   {
     togglePopUpModal: () => (dispatch(togglePopUpModal())),
     updateScrollPosition: (scrollPosition, channel) => (dispatch(updateScrollPosition(scrollPosition, channel))),
+    setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => (dispatch(setSawLastMomentAt(timestamp, channelId))),
   }
 );
 

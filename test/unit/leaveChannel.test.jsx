@@ -151,6 +151,7 @@ describe('Test leave channel', () => {
             },
           ],
           scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
     };
