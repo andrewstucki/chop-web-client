@@ -9,6 +9,7 @@ import PopUpModal from '../../src/popUpModal/popUpModal';
 Enzyme.configure({ adapter: new Adapter() });
 
 const otherUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {

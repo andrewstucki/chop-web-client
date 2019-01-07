@@ -32,7 +32,8 @@ describe('Test mute user', () => {
       id: '123456',
       lang: 'EN',
       text: 'text',
-      user: {
+      sender: {
+        id: '12345',
         pubnubToken: '123456',
         name: 'name',
         role: { label: '' },

@@ -9,6 +9,7 @@ import sinon from 'sinon';
 Enzyme.configure({ adapter: new Adapter() });
 
 const otherUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {
@@ -17,6 +18,7 @@ const otherUser = {
 };
 
 const user = {
+  id: '12345',
   name: 'name',
   pubnubToken: '123',
   role: {
@@ -32,9 +34,10 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            timestamp: 1546570485391,
             lang: 'en',
             text: 'Go to https://live.life.church young man!<script>sinister script</script>',
-            user: otherUser,
+            sender: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
           }
@@ -63,9 +66,10 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            timestamp: 1546570485391,
             lang: 'en',
             text: 'Go west young man!',
-            user: otherUser,
+            sender: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
           }
@@ -95,9 +99,10 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            timestamp: 1546570485391,
             lang: 'en',
             text: 'Go west young man!',
-            user: otherUser,
+            sender: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
           }
@@ -129,9 +134,10 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            timestamp: 1546570485391,
             lang: 'en',
             text: 'Go west young man!',
-            user: otherUser,
+            sender: otherUser,
             messageTrayOpen: true,
             closeTrayButtonRendered: true,
           }

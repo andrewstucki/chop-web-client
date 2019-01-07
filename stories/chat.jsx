@@ -6,6 +6,7 @@ import { storiesOf } from '@storybook/react';
 import Chat from '../src/chat/chat';
 
 const user = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: { label: '' },

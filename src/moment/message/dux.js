@@ -2,7 +2,14 @@
 import type { SharedUserType } from '../../feed/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
-import { createUid } from '../../util';
+import { createUid, newTimestamp } from '../../util';
+import type { 
+  UIDType, 
+  DateTimeType, 
+  System, 
+  MomentNameType, 
+  LanguageType,
+} from '../../cwc-types';
 
 // Action Types
 
@@ -18,15 +25,21 @@ const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
 // Flow Type Definitions
 
+type SenderType = System | SharedUserType;
+
+type BaseMomentType<T: MomentNameType, S: SenderType> = {
+  id: UIDType,
+  timestamp: DateTimeType,
+  sender: S,
+  type: T,
+};
+
 type MessageType = {
-  type: 'MESSAGE',
-  id: string,
-  lang: string,
+  lang: LanguageType,
   text: string,
-  user: SharedUserType,
   messageTrayOpen: boolean,
   closeTrayButtonRendered: boolean,
-};
+} & BaseMomentType<typeof MESSAGE, SharedUserType>;
 
 type OpenMessageTrayType = {
   type: 'OPEN_MESSAGE_TRAY',
@@ -67,6 +80,23 @@ type PublishDeleteMessageType = {
 
 // Action Creators
 
+const newMessage = (
+  text: string,
+  sender: SharedUserType,
+  lang: LanguageType
+): MessageType => (
+  {
+    type: MESSAGE,
+    id: createUid(),
+    timestamp: newTimestamp(),
+    lang,
+    text,
+    sender,
+    messageTrayOpen: false,
+    closeTrayButtonRendered: false,
+  }
+);
+
 const publishMessage = (
   channel: string,
   text: string,
@@ -75,14 +105,7 @@ const publishMessage = (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
-    moment: {
-      type: MESSAGE,
-      id: createUid(),
-      text,
-      user,
-      messageTrayOpen: false,
-      closeTrayButtonRendered: false,
-    },
+    moment: newMessage(text, user, 'en'),
   }
 );
 
@@ -169,6 +192,7 @@ export {
   publishMuteUser,
   receiveMuteUser,
   directChat,
+  newMessage,
 };
 
 export type {

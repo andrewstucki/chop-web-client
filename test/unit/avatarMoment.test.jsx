@@ -16,6 +16,7 @@ describe('AvatarMoment tests', () => {
             type: 'AVATAR_MOMENT',
             id: '12345',
             user: {
+              id: '12345',
               pubnubToken: '6789',
               name: 'Madmartigan',
               role: { label: '' },

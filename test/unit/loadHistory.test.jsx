@@ -182,15 +182,19 @@ describe('Load history', () => {
       { 
         type: 'MESSAGE',
         id: '16e434d2-7d53-4b64-b2d7-b61bd91a433b',
+        timestamp: 1539961090000,
         lang: 'en',
         text: 'Hello',
+        closeTrayButtonRendered: false,
+        messageTrayOpen: false,
+        isMuted: false,
         translations: [
           {
             languageCode: 'en',
             text: 'Hello',
           },
         ],
-        user:
+        sender:
         { 
           id: undefined,
           name: 'G. Boole',

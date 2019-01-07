@@ -55,6 +55,8 @@ const createUid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
 
+const newTimestamp = () => Date.now();
+
 const isUsingIPad = () => 
   !!navigator.platform && /iPad/.test(navigator.platform);
 
@@ -144,6 +146,7 @@ export {
   getFirstInitial,
   getAvatarColor,
   createUid,
+  newTimestamp,
   avatarImageExists,
   isUsingIPad,
   isUsingIPhone,

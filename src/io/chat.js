@@ -39,6 +39,10 @@ import {
 } from '../selectors/channelSelectors';
 import { getMessageTimestamp } from '../util';
 import { getCurrentUser } from '../selectors/chatSelectors';
+import type {
+  PubnubReciveMessageType,
+  LegacyNewMessageType,
+} from './converter';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -151,7 +155,7 @@ type PubnubMessageEventDataType =
   | LegacyPrayerNotificationType
   | LegacyPollVoteType;
 
-type PubnubMessageEventType = {
+export type PubnubMessageEventType = {
   channel: string,
   message: {
     action: string,
@@ -300,7 +304,7 @@ class Chat {
         if (message.entry.data.type === 'system') {
           moments.push(receiveLeftChannelNotification(fromNickname, channelToken, getMessageTimestamp(timestamp)).moment);
         } else {
-          moments.push(Converter.legacyToCwc(message.entry.data));
+          moments.push(Converter.legacyNewMessageToCwcMessage(message.entry.data));
         }
         return;
       }
@@ -391,7 +395,7 @@ class Chat {
     }
   }
 
-  onMessage (event: PubnubMessageEventType) {
+  onMessage (event: PubnubReciveMessageType<LegacyNewMessageType>) {
     const { channels } = this.getState();
     let hasMomentBeenRecieved = false;
     switch (event.message.action) {
@@ -409,11 +413,11 @@ class Chat {
             moment => moment.id === event.message.data.msgId));
 
         if (!hasMomentBeenRecieved) {
-          const moment = Converter.legacyToCwc(event.message.data);
+          const moment = Converter.legacyNewMessageToCwcMessage(event.message.data);
 
           if (moment.text) {
             this.storeDispatch(
-              receiveMoment(event.channel, Converter.legacyToCwc(event.message.data))
+              receiveMoment(event.channel, Converter.legacyNewMessageToCwcMessage(event.message.data))
             );
           }
         }
@@ -513,7 +517,7 @@ class Chat {
         message: {
           action: 'newMessage',
           channel: channel.id,
-          data: Converter.cwcToLegacy(moment, channel.id),
+          data: Converter.cwcMessageToLegacyNewMessage(moment, channel.id),
         },
       }
     );

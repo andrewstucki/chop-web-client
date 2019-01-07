@@ -4,8 +4,6 @@ import { mockDate } from '../../testUtils';
 
 describe('Converter Tests', () => {
   test('CWC to Legacy', () => {
-    mockDate('2018-06-19 16:11:36 GMT-0000');
-
     Converter.config(
       () => (
         {
@@ -29,14 +27,17 @@ describe('Converter Tests', () => {
     );
 
     expect(
-      Converter.cwcToLegacy(
+      Converter.cwcMessageToLegacyNewMessage(
         {
           type: 'MESSAGE',
           id: '80299c76-b08f-4700-b660-df8691969042',
+          timestamp: 1546629813280,
           lang: 'en',
           text: 'Hello',
-          user: {
-            id: 1234567,
+          closeTrayButtonRendered: false,
+          messageTrayOpen: false,
+          sender: {
+            id: '1234567',
             name: 'Jackie Chan',
             avatarUrl: null,
             pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
@@ -52,19 +53,19 @@ describe('Converter Tests', () => {
         messageText: 'Hello',
         language: 'en',
         eventTimeId: '320418',
-        eventTimeOffset: '-1104000',
+        eventTimeOffset: '17204013280',
         eventTitle: 'When Pigs Fly - Week 2',
         uniqueMessageToken: '80299c76-b08f-4700-b660-df8691969042',
         fromNickname: 'Jackie Chan',
         fromToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
         msgId: '80299c76-b08f-4700-b660-df8691969042',
-        timestamp: '2018-06-19 16:11:36 +0000',
-        fromAvatar: null,
+        timestamp: '2019-01-04 19:23:33 +0000',
+        fromAvatar: 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
         isHost: true,
         label: 'HOST',
         isVolunteer: true,
         isUser: true,
-        userId: 1234567,
+        userId: '1234567',
         organizationId: 2,
         organizationName: 'Life.Church',
         roomType: 'public',
@@ -99,7 +100,7 @@ describe('Converter Tests', () => {
     );
 
     expect(
-      Converter.legacyToCwc(
+      Converter.legacyNewMessageToCwcMessage(
         {
           messageText: 'Hello',
           language: 'en',
@@ -111,12 +112,13 @@ describe('Converter Tests', () => {
           fromToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
           msgId: '80299c76-b08f-4700-b660-df8691969042',
           timestamp: '2018-06-19 16:11:36 +0000',
-          fromAvatar: null,
+          fromAvatar: '',
           isHost: true,
           label: 'HOST',
           isVolunteer: true,
           isUser: true,
-          userId: 1234567,
+          isMuted: false,
+          userId: '1234567',
           organizationId: 2,
           organizationName: 'Life.Church',
           roomType: 'public',
@@ -128,12 +130,17 @@ describe('Converter Tests', () => {
       {
         type: 'MESSAGE',
         id: '80299c76-b08f-4700-b660-df8691969042',
+        timestamp: 1529424696000,
         lang: 'en',
         text: 'Hello',
-        user: {
-          id: 1234567,
+        messageTrayOpen: false,
+        isMuted: false,
+        closeTrayButtonRendered: false,
+        translations: [],
+        sender: {
+          id: '1234567',
           name: 'Jackie Chan',
-          avatarUrl: null,
+          avatarUrl: '',
           pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
           role: {
             label: 'HOST',

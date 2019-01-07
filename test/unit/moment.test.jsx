@@ -25,7 +25,7 @@ describe('Moment tests', () => {
             type: 'MESSAGE',
             id: '12345',
             text: 'Hello',
-            user: {
+            sender: {
               id: '54321',
               nickname: 'Wilbur Wagner',
             },
@@ -47,7 +47,7 @@ describe('Moment tests', () => {
             id: '12345',
             lang: 'en',
             text: 'Hello',
-            user: {
+            sender: {
               id: '54321',
               nickname: 'Wilbur Wagner',
             },
@@ -63,7 +63,7 @@ describe('Moment tests', () => {
         id: '12345',
         lang: 'en',
         text: 'Hello',
-        user: {
+        sender: {
           id: '54321',
           nickname: 'Wilbur Wagner',
         },
