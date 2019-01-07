@@ -35,3 +35,14 @@
   bottom: 0;
   z-index: 1;
 }
+
+.newMessageButtonContainer {
+  position: absolute;
+  bottom: 68px;
+  width: 100%;
+  text-align: center;
+}
+
+.newMessageButtonWrapper {
+  display: inline-block;
+}

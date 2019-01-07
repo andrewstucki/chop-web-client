@@ -57,6 +57,14 @@
   color: white;
 }
 
-.button.primary, .button.secondary, .button.tertiary { 
-  padding: 8px 16px;
+.default.primary, .default.secondary, .default.tertiary { 
+  padding: 9px 24px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.small.primary, .small.secondary, .small.tertiary {
+  font-size: 12.8px;
+  line-height: 16px;
+  padding: 6px 16px 8px 16px;
 }
