@@ -22,6 +22,14 @@
         "flowtype",
         "import"
     ],
+    "settings": {
+        "react": {
+            "createClass": "createReactClass",
+            "pragma": "React",
+            "version": "16.6.3",
+            "flowVersion": "0.69.0"
+        }
+    },
     "rules": {
         "arrow-body-style": [
             "error",

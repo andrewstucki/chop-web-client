@@ -10,6 +10,7 @@ import AnchorMoment from '../anchorMoment/';
 import FeedActionBanner from './feedActionBanner';
 import styles from './styles.css';
 import { createUid } from '../util';
+import Button from '../components/button';
  
 type FeedProps = {
   moments: Array<MomentType>,
@@ -21,6 +22,7 @@ type FeedProps = {
   currentUser: PrivateUserType,
   togglePopUpModal: () => void,
   updateScrollPosition: (scrollPosition: number, channel: string) => void,
+  showNewMessageButton: boolean,
   isChatFocused: boolean,
 };
 
@@ -148,6 +150,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       anchorMoments,
       showLeaveChat,
       togglePopUpModal,
+      showNewMessageButton,
     } = this.props; 
 
     const momentListItems = moments.map(moment => (
@@ -167,32 +170,43 @@ class Feed extends React.Component<FeedProps, FeedState> {
       </li>
     ));
     return (
-      <div
-        data-component="feed"
-        // $FlowFixMe
-        ref={this.wrapperRef}
-        className={styles.scroll}
-        onScroll={() => this.saveScrollPosition(currentChannel)}
-      >
-        {
-          showLeaveChat &&
-            <FeedActionBanner
-              text="Leave"
-              togglePopUpModal={togglePopUpModal}
-            />
-        }
-        <div style={{width: '100%'}}>
-          <ul
-            key={currentChannel}
-            className={styles.feed}
-          >
-            <span style={{margin: '0 8px 0'}}>{momentListItems}</span>
-          </ul>
-          <ul className={styles.anchorMoments}>
-            {anchorMomentListItems}
-          </ul>
+      // $FlowFixMe Fragment has been added to flow 0.7.1 so we need to upgrade
+      <React.Fragment>
+        <div
+          data-component="feed"
+          // $FlowFixMe
+          ref={this.wrapperRef}
+          className={styles.scroll}
+          onScroll={() => this.saveScrollPosition(currentChannel)}
+        >
+          {
+            showLeaveChat &&
+              <FeedActionBanner
+                text="Leave"
+                togglePopUpModal={togglePopUpModal}
+              />
+          }
+          <div style={{width: '100%'}}>
+            <ul
+              key={currentChannel}
+              className={styles.feed}
+            >
+              <span style={{margin: '0 8px 0'}}>{momentListItems}</span>
+            </ul>
+            <ul className={styles.anchorMoments}>
+              {anchorMomentListItems}
+            </ul>
+          </div>
         </div>
-      </div>
+        { showNewMessageButton &&
+          <div className={styles.newMessageButtonContainer
+          }>
+            <div className={styles.newMessageButtonWrapper}>
+              <Button onClick={this.scrollToBottom} buttonStyle='secondary' text='New Messages' small />
+            </div>
+          </div>
+        }
+      </React.Fragment>
     );
   }
 }

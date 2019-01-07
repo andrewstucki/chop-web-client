@@ -40,7 +40,7 @@ test('Button default type', () => {
     />
   );
   expect(wrapper.find('button').props().className)
-    .toEqual('button primary');
+    .toEqual('button primary  default');
 });
 
 test('Button icon type', () => {
@@ -52,5 +52,5 @@ test('Button icon type', () => {
     />
   );
   expect(wrapper.find('button').props().className)
-    .toEqual('button icon');
+    .toEqual('button icon  default');
 });

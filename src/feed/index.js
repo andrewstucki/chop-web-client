@@ -23,6 +23,7 @@ const mapStateToProps = (state, ownProps) => {
     showLeaveChat: feedState?.channels?.[channel]?.direct,
     scrollPosition: getScrollPosition(feedState, channel),
     currentUser: feedState.currentUser,
+    showNewMessageButton: false,
     isChatFocused: feedState.isChatFocused,
   };
 };
