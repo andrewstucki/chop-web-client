@@ -4,6 +4,10 @@ import type { PrivateUserType } from './dux';
 
 import type { MomentType } from '../moment/dux';
 import type { AnchorMomentType } from '../anchorMoment/dux';
+import type {
+  DateTimeType,
+  ChannelIdType,
+} from '../cwc-types';
 
 import Moment from '../moment/moment';
 import AnchorMoment from '../anchorMoment/';
@@ -22,6 +26,7 @@ type FeedProps = {
   currentUser: PrivateUserType,
   togglePopUpModal: () => void,
   updateScrollPosition: (scrollPosition: number, channel: string) => void,
+  setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => void,
   showNewMessageButton: boolean,
   isChatFocused: boolean,
 };
@@ -42,18 +47,15 @@ type FeedState = {
 
 class Feed extends React.Component<FeedProps, FeedState> {
   wrapperRef: RefObject;
+  saveScrollPosition: (channel: string) => void;
+  scrollToBottom: void => void;
+  maxScrollTop: void => number;
+
 
   constructor (props: FeedProps) {
     super(props);
     // $FlowFixMe
     this.wrapperRef = React.createRef();
-
-    // $FlowFixMe
-    this.saveScrollPosition = this.saveScrollPosition.bind(this);
-    // $FlowFixMe
-    this.scrollToBottom = this.scrollToBottom.bind(this);
-    // $FlowFixMe
-    this.maxScrollTop = this.maxScrollTop.bind(this);
   }
 
   scrollPosition () {
@@ -63,7 +65,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     return (scrollTop < maxScrollTop) ? scrollTop : maxScrollTop;
   }
 
-  saveScrollPosition (channel: string) {
+  saveScrollPosition = (channel: string) => {
     if (channel !== undefined) {
       const scrollPosition = this.scrollAtBottom() ? -1 : this.scrollPosition();
 
@@ -71,6 +73,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
         scrollPosition, 
         channel
       );
+      if (scrollPosition === -1) {
+        this.props.setSawLastMomentAt(
+          Date.now(),
+          channel
+        );
+      }
     }
   }
 
@@ -137,7 +145,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     return scrollHeight - height;
   }
 
-  scrollToBottom () {
+  scrollToBottom = () => {
     const { current:scrollWrapper } = this.wrapperRef;
     const maxScrollTop = this.maxScrollTop();
     scrollWrapper.scrollTop = (maxScrollTop > 0) ? maxScrollTop : 0;

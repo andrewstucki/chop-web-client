@@ -15,6 +15,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -37,6 +38,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -64,6 +66,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -87,6 +90,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {

@@ -73,7 +73,7 @@ const currentUser = {
 };
 
 describe('Feed tests', () => {
-  mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
+  // mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
 
   test('default state', () => {
     const result = reducer();
@@ -93,6 +93,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -101,6 +102,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -118,6 +120,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -126,6 +129,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -151,6 +155,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -194,6 +199,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -202,6 +208,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -246,6 +253,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '67890',
@@ -254,6 +262,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -289,6 +298,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '67890',
@@ -297,6 +307,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -320,6 +331,8 @@ describe('Feed tests', () => {
   });
 
   test('add a channel', () => {
+    mockDate(1546896104521);
+
     const result = reducer(
       {
         ...defaultState,
@@ -331,6 +344,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -347,6 +361,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           '12345': {
             id: '12345',
@@ -356,6 +371,7 @@ describe('Feed tests', () => {
             direct: false,
             participants: undefined,
             scrollPosition: -1,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -363,6 +379,7 @@ describe('Feed tests', () => {
   });
 
   test('add a channel', () => {
+    mockDate(1546896104521);
     const result = reducer(
       {
         ...defaultState,
@@ -383,6 +400,7 @@ describe('Feed tests', () => {
               otherUser,
             ],
             scrollPosition: -1,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -402,6 +420,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -418,6 +437,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -436,6 +456,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -456,6 +477,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -486,6 +508,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         currentUser: currentUser,
@@ -519,6 +542,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -595,6 +619,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         currentLanguage: 'ko',
@@ -650,6 +675,7 @@ describe('Feed tests', () => {
               },
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -712,6 +738,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -756,6 +783,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -803,6 +831,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -847,6 +876,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -894,6 +924,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -938,6 +969,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -985,6 +1017,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1029,6 +1062,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1076,6 +1110,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1120,6 +1155,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1175,6 +1211,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1212,6 +1249,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1230,6 +1268,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1266,6 +1305,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1284,6 +1324,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1318,6 +1359,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1336,6 +1378,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1370,6 +1413,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1388,6 +1432,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1422,6 +1467,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1441,6 +1487,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1476,6 +1523,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1495,6 +1543,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1532,6 +1581,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1550,6 +1600,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1593,6 +1644,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1611,6 +1663,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1643,6 +1696,7 @@ describe('Feed tests', () => {
               },
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1668,6 +1722,7 @@ describe('Feed tests', () => {
               },
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1691,6 +1746,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1737,6 +1793,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1766,6 +1823,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1797,6 +1855,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1826,6 +1885,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1902,6 +1962,7 @@ describe('Feed tests', () => {
               otherUser,
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           public: {
             id: '67890',
@@ -1911,6 +1972,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             participants: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1937,6 +1999,7 @@ describe('Feed tests', () => {
               otherUser,
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           public: {
             id: '67890',
@@ -1946,6 +2009,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             participants: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -2071,6 +2135,7 @@ describe('SideMenu tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: -1,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -2087,6 +2152,7 @@ describe('SideMenu tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 31,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }

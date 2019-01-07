@@ -77,7 +77,11 @@ import moment from 'moment';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
-import type { UIDType } from '../cwc-types';
+import type {
+  UIDType,
+  DateTimeType,
+  ChannelIdType,
+} from '../cwc-types';
 
 // Action Types
 
@@ -107,6 +111,7 @@ const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
+const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 
 // Flow Type Definitions
 
@@ -202,6 +207,7 @@ type ChannelType = {
   participants?: Array<SharedUserType>,
   anchorMoments: Array<AnchorMomentType>,
   scrollPosition: number,
+  sawLastMomentAt: DateTimeType,
 };
 
 type HereNowUsers = {
@@ -366,6 +372,12 @@ type SetClientInfoType = {
   data: ClientInfoType,
 };
 
+type SetSawLastMomentAt = {
+  type: typeof SET_SAW_LAST_MOMENT_AT,
+  timestamp: DateTimeType,
+  channelId: ChannelIdType,
+};
+
 type FeedActionTypes =
   | ReceiveMomentType
   | AddChannelType
@@ -398,9 +410,18 @@ type FeedActionTypes =
   | RemoveErrorType
   | SetScheduleDataType
   | SetClientInfoType
-  | SetHereNow;
+  | SetHereNow
+  | SetSawLastMomentAt;
 
 // Action Creators
+export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
+  {
+    type: SET_SAW_LAST_MOMENT_AT,
+    timestamp,
+    channelId,
+  }
+);
+
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
   {
     type: SET_AUTHENTICATION,
@@ -530,6 +551,7 @@ const addChannel = (
       participants,
       anchorMoments: [],
       scrollPosition: -1,
+      sawLastMomentAt: Date.now(),
     },
   }
 );
@@ -721,6 +743,20 @@ const reducer = (
     return state;
   }
   switch (action.type) {
+  case SET_SAW_LAST_MOMENT_AT: {
+    const { timestamp, channelId } = action;
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        // $FlowFixMe
+        [channelId]: {
+          ...state.channels[channelId],
+          sawLastMomentAt: timestamp,
+        },
+      },
+    };
+  }
   case SET_PANE_CONTENT: 
     return {
       ...state,
