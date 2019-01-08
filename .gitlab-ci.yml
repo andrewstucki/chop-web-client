@@ -138,7 +138,7 @@ build:image-staging:
     - compile:app-staging
   only:
     - integration
-  execpt:
+  except:
     variables:
       # Do not run the pipeline again because of the `yarn version --patch`
       - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
