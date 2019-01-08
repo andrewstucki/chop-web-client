@@ -40,7 +40,6 @@ compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
   variables:
-    GIT_SSH_COMMAND: "ssh -i /root/.ssh/id_rsa_gitlab_ci"
     GIT_STRATEGY: clone
 
   script:
@@ -48,8 +47,8 @@ compile:app-staging:
     - yarn build:staging
   after_script:
     - mkdir -pvm 0700 /root/.ssh  && touch /root/.ssh/known_hosts
-    - echo "$SSH_DEPLOY_KEY" > /root/.ssh/id_rsa_gitlab_ci
-    - chmod 0400 /root/.ssh/id_rsa_gitlab_ci
+    - echo "$SSH_DEPLOY_KEY" > /root/.ssh/id_rsa
+    - chmod 0600 /root/.ssh/id_rsa
     - git config user.email "${GITLAB_USER_EMAIL}"
     - git config user.name "${GITLAB_USER_NAME}"
     - git remote set-url --push origin git@in.thewardro.be:io/opennetwork/chop-web-client.git
