@@ -106,7 +106,8 @@ test:
     - yarn coverage
     - ./cc-test-reporter after-build -t lcov --exit-code $? || echo "Skipping Code Climate Coverage Upload"
   except:
-    - master
+    refs:
+      - master
     variables:
         # Do not run the pipeline again because of the `yarn version --patch`
         - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
