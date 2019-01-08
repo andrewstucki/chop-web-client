@@ -55,7 +55,7 @@ compile:app-staging:
     - git remote set-url --push origin git@in.thewardro.be:io/opennetwork/chop-web-client.git
     - yarn version --patch
     # TODO: We need access to Gitlab user to make this push
-    - ssh-keyscan -H in.thewardro.be >> ~/.ssh/known_hosts
+    - ssh-keyscan -H in.thewardro.be >> .ssh/known_hosts
     - git push origin HEAD:integration
     - rm -Rfv .ssh
   artifacts:
