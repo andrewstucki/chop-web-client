@@ -39,15 +39,23 @@ compile:app-review:
 compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
+  variables:
+    GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no -i .ssh/id_rsa_gitlab_ci"
+    GIT_STRATEGY: clone
+
   script:
     - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build:staging
   after_script:
+    - mkdir -pvm 0700 .ssh
+    - echo "$SSH_DEPLOY_KEY" > .ssh/id_rsa_gitlab_ci
+    - chmod 0400 .ssh/id_rsa_gitlab_ci
     - git config user.email "${GITLAB_USER_EMAIL}"
     - git config user.name "${GITLAB_USER_NAME}"
     - yarn version --patch
     # TODO: We need access to Gitlab user to make this push
-    # - git push https://gitlab-ci-token:${GIT_SECRET_KEY}@in.thewardro.be/io/opennetwork/chop-web-client.git/ HEAD:integration
+    - git push https://in.thewardro.be/io/opennetwork/chop-web-client.git/ HEAD:integration
+    - rm -Rfv .ssh
   artifacts:
     expire_in: 1 day
     paths:
