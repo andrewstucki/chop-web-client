@@ -236,13 +236,15 @@ type AuthenticationType = {
   refreshToken: string
 }
 
+type ChannelsObjectType = {
+  [string]: ChannelType,
+};
+
 type FeedType = {
   pubnubKeys: PubnubKeysType,
   event: EventType,
   organization: OrganizationType,
-  channels: {
-    [string]: ChannelType,
-  },
+  channels: ChannelsObjectType,
   hereNow: HereNowChannels,
   currentUser: PrivateUserType,
   animatingMoment: boolean,
@@ -1388,6 +1390,7 @@ export type {
   SetSalvationsType,
   SetNotificationBannerType,
   ClientInfoType,
+  ChannelsObjectType,
 };
 
 export default reducer;
