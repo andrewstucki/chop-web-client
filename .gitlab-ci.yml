@@ -40,7 +40,7 @@ compile:app-staging:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
   variables:
-    GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no -i .ssh/id_rsa_gitlab_ci"
+    GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -i .ssh/id_rsa_gitlab_ci"
     GIT_STRATEGY: clone
 
   script:
