@@ -52,6 +52,7 @@ compile:app-staging:
     - chmod 0400 .ssh/id_rsa_gitlab_ci
     - git config user.email "${GITLAB_USER_EMAIL}"
     - git config user.name "${GITLAB_USER_NAME}"
+    - git remote set-url --push origin git@in.thewardro.be:io/opennetwork/chop-web-client.git
     - yarn version --patch
     # TODO: We need access to Gitlab user to make this push
     - git push https://in.thewardro.be/io/opennetwork/chop-web-client.git/ HEAD:integration
