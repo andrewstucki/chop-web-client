@@ -47,7 +47,7 @@ compile:app-staging:
     - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build:staging
   after_script:
-    - mkdir -pvm 0700 .ssh
+    - mkdir -pvm 0700 .ssh  && touch .ssh/known_hosts
     - echo "$SSH_DEPLOY_KEY" > .ssh/id_rsa_gitlab_ci
     - chmod 0400 .ssh/id_rsa_gitlab_ci
     - git config user.email "${GITLAB_USER_EMAIL}"
