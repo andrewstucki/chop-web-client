@@ -38,7 +38,7 @@ describe('NavBar tests', () => {
       />
     );
     expect(wrapper.find('.navBar a').length).toBe(3);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('event');
+    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
     expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
   });
 
@@ -299,7 +299,7 @@ describe('NavBar tests', () => {
       />
     );
     expect(wrapper.find('.navBar a').length).toBe(5);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('event');
+    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
     expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
   });
 });
