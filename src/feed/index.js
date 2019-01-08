@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {
   feedContents,
   feedAnchorMoments,
+  hasNotSeenLatestMoments,
 } from '../selectors/channelSelectors';
 
 import {
@@ -20,6 +21,7 @@ import type {
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
   const { channel } = ownProps;
+  const scrollPosition = getScrollPosition(feedState, channel);
   return {
     moments: feedContents(feedState, channel),
     anchorMoments: feedAnchorMoments(feedState, channel),
@@ -28,7 +30,7 @@ const mapStateToProps = (state, ownProps) => {
     showLeaveChat: feedState?.channels?.[channel]?.direct,
     scrollPosition: getScrollPosition(feedState, channel),
     currentUser: feedState.currentUser,
-    showNewMessageButton: false,
+    showNewMessageButton: hasNotSeenLatestMoments(feedState, channel) && scrollPosition !== -1,
     isChatFocused: feedState.isChatFocused,
   };
 };

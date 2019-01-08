@@ -13,6 +13,7 @@ import reducer, {
 import {
   feedContents as feedContentsSelector,
   feedAnchorMoments,
+  hasNotSeenLatestMoments,
 } from '../../src/selectors/channelSelectors';
 
 import {
@@ -2195,5 +2196,91 @@ describe('LanguageSelector tests', () => {
         currentLanguage: 'ko',
       }
     );
+  });
+
+  describe('hasNotSeenLatestMoments', () => {
+    test('is true when message timestamps are newer then sawLastMomentAt' , () => {
+      const state = {
+        ...defaultState,
+        channels: {
+          '12345': {
+            id: '12345',
+            name: 'public',
+            direct: false,
+            moments: [
+              {
+                type: MESSAGE,
+                id: '189',
+                text: 'Hello Billy Bob',
+                sender: {
+                  id: '14543',
+                  name: 'Jenny Jane',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104520,
+              },
+              {
+                type: MESSAGE,
+                id: '204',
+                text: 'George is very angry',
+                sender: {
+                  id: '18475',
+                  name: 'George Costanza',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104522,
+              },
+            ],
+            anchorMoments: [],
+            scrollPosition: 31,
+            sawLastMomentAt: 1546896104521,
+          },
+        },
+      };
+      const channelId = '12345';
+      expect(hasNotSeenLatestMoments(state, channelId)).toBeTruthy();
+    });
+
+    test('is false when message timestamps are older then sawLastMomentAt' , () => {
+      const state = {
+        ...defaultState,
+        channels: {
+          '12345': {
+            id: '12345',
+            name: 'public',
+            direct: false,
+            moments: [
+              {
+                type: MESSAGE,
+                id: '189',
+                text: 'Hello Billy Bob',
+                sender: {
+                  id: '14543',
+                  name: 'Jenny Jane',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104519,
+              },
+              {
+                type: MESSAGE,
+                id: '204',
+                text: 'George is very angry',
+                sender: {
+                  id: '18475',
+                  name: 'George Costanza',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104520,
+              },
+            ],
+            anchorMoments: [],
+            scrollPosition: 31,
+            sawLastMomentAt: 1546896104521,
+          },
+        },
+      };
+      const channelId = '12345';
+      expect(hasNotSeenLatestMoments(state, channelId)).toBeFalsy();
+    });
   });
 });
