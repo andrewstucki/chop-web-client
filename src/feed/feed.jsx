@@ -161,6 +161,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
       showNewMessageButton,
     } = this.props; 
 
+    const hasAnchorMoments = anchorMoments?.length > 0;
+
     const momentListItems = moments.map(moment => (
       <li key={moment.id || createUid()}>
         
@@ -201,11 +203,17 @@ class Feed extends React.Component<FeedProps, FeedState> {
             >
               <span style={{margin: '0 8px 0'}}>{momentListItems}</span>
             </ul>
-            <ul className={styles.anchorMoments}>
-              {anchorMomentListItems}
-            </ul>
           </div>
         </div>
+        { hasAnchorMoments &&
+          <div className={styles.nonScroll}>
+            <div style={{width: '100%'}}>
+              <ul className={styles.anchorMoments}>
+                {anchorMomentListItems}
+              </ul>
+            </div>
+          </div>
+        }
         { showNewMessageButton &&
           <div className={styles.newMessageButtonContainer
           }>
