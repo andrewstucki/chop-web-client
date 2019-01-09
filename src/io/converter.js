@@ -82,7 +82,7 @@ let _getState;
 
 const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => moment(inTimestamp).utc().format('YYYY-MM-DD HH:mm:ss +0000');
 
-const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => moment(inTimestamp, 'YYYY-MM-DD HH:mm:ss Z', true).valueOf();
+const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => moment.utc(inTimestamp, ['YYYY-MM-DD HH:mm:ss UTC', 'YYYY-MM-DD HH:mm:ss +0000'], true).valueOf();
 
 const Converter = {
   config: (getState: () => any) => {
