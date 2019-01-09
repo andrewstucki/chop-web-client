@@ -17,6 +17,13 @@
   margin: 0;
 }
 
+.nonScroll {
+  display: flex;
+  flex: 0 0 auto;
+  position: relative;
+  overflow-y: scroll;
+}
+
 .feed {
   margin: 0;
   background-color: #fff;
