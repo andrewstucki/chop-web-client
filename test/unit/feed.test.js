@@ -25,7 +25,7 @@ import {
 } from '../../src/moment/dux';
 
 import {
-  closeMenu, 
+  closeMenu,
   openMenu,
 } from '../../src/sideMenu/dux';
 
@@ -51,7 +51,7 @@ import {
 import { mockDate } from '../testUtils';
 
 import { setLanguage } from '../../src/languageSelector/dux';
- 
+
 import { setPrimaryPane } from '../../src/pane/dux';
 
 const otherUser = {
@@ -537,7 +537,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: { 
+          public: {
             id: '12345',
             name: 'public',
             moments: [],
@@ -655,7 +655,7 @@ describe('Feed tests', () => {
   });
 
   test('feedAnchorMoments selector with no anchor moments', () => {
-    expect(feedAnchorMoments(defaultState, 'public')).toEqual([]);    
+    expect(feedAnchorMoments(defaultState, 'public')).toEqual([]);
   });
 
   test('feedAncorMoments selector with moments', () => {
@@ -693,7 +693,7 @@ describe('Feed tests', () => {
       ]
     );
   });
-  
+
   test('Accepts a user', () => {
     const result = reducer(defaultState, setUser(currentUser));
     expect(result).toEqual(
@@ -2031,7 +2031,6 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: false,
-        isVideoHidden: false,
       },
       {
         type: TOGGLE_CHAT_FOCUS,
@@ -2041,7 +2040,6 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
-        isVideoHidden: true,
       }
     );
 
@@ -2049,7 +2047,6 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
-        isVideoHidden: true,
       },
       {
         type: TOGGLE_CHAT_FOCUS,

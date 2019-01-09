@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
 import ChopContainer from './chop';
+import {toggleHideVideo} from '../videoFeed/dux';
 
 const mapStateToProps = state => ({
-  state: state,
-  focused: state.feed.isChatFocused,
   authenticated: state.feed.isAuthenticated,
   organization: state.feed.organization.name,
+  isVideoHidden: state.feed.isVideoHidden,
 });
 
 const mapDispatchToProps = dispatch => ({
-  dispatch: dispatch,
+  toggleHideVideo: hidden => dispatch(toggleHideVideo(hidden)),
 });
 
 export default connect(
