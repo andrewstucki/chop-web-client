@@ -1,6 +1,6 @@
 {
   "name": "chop-web-client",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Church Online Platform (ChOP) web client",
   "main": "index.tsx",
   "repository": "git@in.thewardro.be:kenny.heaton/chop-web-client.git",
@@ -33,7 +33,9 @@
       "Youtube\\.min\\.js$": "<rootDir>/test/fake-js-file.js"
     },
     "testURL": "https://live.life.church",
-    "setupFiles": ["<rootDir>/test/setupFile.js"]
+    "setupFiles": [
+      "<rootDir>/test/setupFile.js"
+    ]
   },
   "devDependencies": {
     "@alshakero/ez-s": "^0.0.3",
