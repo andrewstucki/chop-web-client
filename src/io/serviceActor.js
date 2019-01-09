@@ -189,19 +189,39 @@ class ServiceActor {
     const { schedule, sequence } = this.getStore();
     if (sequence && sequence.steps && sequence.steps[0]) {
       const [ step ] = sequence.steps;
-      if (step.transitionTime * 1000 <= now && step.data) {
-        this.getInitialData(step.data);
+      if (step.transitionTime * 1000 <= now) {
+        if (step.data) {
+          this.getInitialData(step.data);
 
-        const newSteps = sequence.steps.splice(1);
-        this.storeDispatch(
-          {
-            type: 'SET_SEQUENCE',
-            sequence: {
-              ...sequence,
-              steps: newSteps,
-            },
+          const newSteps = sequence.steps.splice(1);
+          this.storeDispatch(
+            {
+              type: 'SET_SEQUENCE',
+              sequence: {
+                ...sequence,
+                steps: newSteps,
+              },
+            }
+          );
+        } else {
+          try {
+            const eventAtTime = await this.graph.eventAtTime(step.transitionTime);
+            this.getInitialData(eventAtTime);
+
+            const newSteps = sequence.steps.splice(1);
+            this.storeDispatch(
+              {
+                type: 'SET_SEQUENCE',
+                sequence: {
+                  ...sequence,
+                  steps: newSteps,
+                },
+              }
+            );
+          } catch (error) {
+            this.handleDataFetchErrors(error);
           }
-        );
+        }
       }
       if (!step.data && step.fetchTime * 1000 <= now) {
         try {
@@ -231,6 +251,9 @@ class ServiceActor {
   }
 
   _getInitialData (payload: any) {
+    if (payload === undefined || payload === null) {
+      return;
+    }
     const { pubnubKeys } = payload;
     if (pubnubKeys) {
       const { publishKey, subscribeKey } = pubnubKeys;

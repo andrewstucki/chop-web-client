@@ -747,6 +747,9 @@ const reducer = (
   switch (action.type) {
   case SET_SAW_LAST_MOMENT_AT: {
     const { timestamp, channelId } = action;
+    if (!state.channels[channelId]) {
+      return state;
+    }
     return {
       ...state,
       channels: {
@@ -914,7 +917,6 @@ const reducer = (
         };
       }
     }
-
     return stateCopy;
   }
   case LOAD_HISTORY:
@@ -1276,6 +1278,9 @@ const reducer = (
       },
     };
   case UPDATE_SCROLL_POSITION: {
+    if (!state.channels[action.channel]) {
+      return state;
+    }
     return {
       ...state,
       channels: {
