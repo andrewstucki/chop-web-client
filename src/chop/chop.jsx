@@ -9,27 +9,63 @@ import SideMenu from '../sideMenu';
 import PopUpModal from '../popUpModal';
 import Pane from '../pane';
 import { PRIMARY_PANE } from '../pane/dux';
-import { isUsingIPhone, isUsingIPhoneX, isUsingIPhone678, isUsingIPhone678plus } from '../util';
 
 import '../../assets/global.css';
 import styles from './styles.css';
 
-class ChopContainer extends React.Component<any> {
+type ChopContainerProps = {
+  authenticated: boolean,
+  organization: string,
+  isVideoHidden: boolean,
+  toggleHideVideo: (hidden:boolean) => void,
+};
+
+type ChopContainerState = {
+  previousInnerHeight: number,
+};
+
+class ChopContainer extends React.Component<ChopContainerProps, ChopContainerState> {
+  handleResize: () => void;
+
+  constructor (props:ChopContainerProps) {
+    super(props);
+
+    this.handleResize = this.handleResize.bind(this);
+
+    this.state = {
+      previousInnerHeight: window.innerHeight,
+    };
+  }
+
+  componentDidMount () {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount (): void {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize (): void {
+    const { isVideoHidden, toggleHideVideo } = this.props;
+    const { previousInnerHeight } = this.state;
+    const { innerHeight: currentInnerHeight } = window;
+    const resizeSmaller = currentInnerHeight < previousInnerHeight;
+
+    if (resizeSmaller && !isVideoHidden) {
+      toggleHideVideo(true);
+    } else if (isVideoHidden) {
+      toggleHideVideo(false);
+    }
+
+    this.setState({previousInnerHeight: currentInnerHeight});
+  }
+
   render () {
     document.title = 'Live ' + this.props.organization;
-    let wrapperstyle = styles.wrapper;
-    if (this.props.focused) {
-      if (isUsingIPhone()) {
-        if (isUsingIPhoneX()) wrapperstyle = styles.wrapperfocused_iphonex;
-        else if (isUsingIPhone678()) wrapperstyle = styles.wrapperfocused_iphone678;  
-        else if (isUsingIPhone678plus()) wrapperstyle = styles.wrapperfocused_iphone678plus;
-        else wrapperstyle = styles.wrapperfocused_generic_iphone;
-      }
-    }
 
     if (this.props.authenticated) {
       return (
-        <div id="wrapper" className={wrapperstyle}>
+        <div id="wrapper" className={styles.wrapper}>
           <SideMenu />
           <div className={styles.chop}>
             <PopUpModal />

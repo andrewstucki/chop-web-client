@@ -15,7 +15,7 @@ import FeedActionBanner from './feedActionBanner';
 import styles from './styles.css';
 import { createUid } from '../util';
 import Button from '../components/button';
- 
+
 type FeedProps = {
   moments: Array<MomentType>,
   anchorMoments: Array<AnchorMomentType>,
@@ -50,12 +50,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
   saveScrollPosition: (channel: string) => void;
   scrollToBottom: void => void;
   maxScrollTop: void => number;
-
+  lastMessage: RefObject;
 
   constructor (props: FeedProps) {
     super(props);
     // $FlowFixMe
     this.wrapperRef = React.createRef();
+    // $FlowFixMe
+    this.lastMessage = React.createRef();
   }
 
   scrollPosition () {
@@ -70,7 +72,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       const scrollPosition = this.scrollAtBottom() ? -1 : this.scrollPosition();
 
       this.props.updateScrollPosition(
-        scrollPosition, 
+        scrollPosition,
         channel
       );
       if (scrollPosition === -1) {
@@ -80,7 +82,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
         );
       }
     }
-  }
+  };
 
   componentDidMount () {
     const { scrollPosition } = this.props;
@@ -113,16 +115,26 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 
   scrollAtBottom () {
-    const { current:scrollWrapper } = this.wrapperRef;
-    const { scrollTop, scrollHeight, clientHeight } = scrollWrapper;
-    const scrollBottom = scrollHeight - clientHeight;
-    return (scrollBottom <= 0) || (scrollTop === scrollBottom);
+    const { current:lastMessage } = this.lastMessage;
+
+    if (lastMessage === null) {
+      return false;
+    }
+
+    const rect = lastMessage.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || (document.documentElement && document.documentElement.clientHeight)) &&
+      rect.right <= (window.innerWidth || (document.documentElement && document.documentElement.clientWidth))
+    );
   }
 
-  componentDidUpdate (prevPros: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
+  componentDidUpdate (prevProps: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
     const { momentAdded, scrollAtBottom, channelChanged, lastMessageFromCurrentUser } = snapshot;
     const { current:scrollWrapper } = this.wrapperRef;
     const { scrollPosition } = this.props;
+
     if (channelChanged && scrollWrapper && scrollPosition !== -1) {
       scrollWrapper.scrollTop = scrollPosition;
     } else if (channelChanged && scrollWrapper && scrollPosition === -1) {
@@ -130,6 +142,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
     } else if (momentAdded && (scrollAtBottom || lastMessageFromCurrentUser)) {
       this.scrollToBottom();
     } else if (this.props.isChatFocused && scrollAtBottom) {
+      // Give some time for the keyboard to come up
+      setTimeout(() => this.scrollToBottom(), 500);
+    } else if (!this.props.isChatFocused && prevProps.isChatFocused && scrollAtBottom) {
       this.scrollToBottom();
     }
   }
@@ -147,9 +162,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   scrollToBottom = () => {
     const { current:scrollWrapper } = this.wrapperRef;
-    const maxScrollTop = this.maxScrollTop();
-    scrollWrapper.scrollTop = (maxScrollTop > 0) ? maxScrollTop : 0;
-  }
+    const { current:lastMessage } = this.lastMessage;
+    const scrollElement = lastMessage ? lastMessage : scrollWrapper;
+    if (scrollElement) {
+      scrollElement.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+    }
+  };
 
   render () {
     const {
@@ -159,13 +177,13 @@ class Feed extends React.Component<FeedProps, FeedState> {
       showLeaveChat,
       togglePopUpModal,
       showNewMessageButton,
-    } = this.props; 
+    } = this.props;
 
     const hasAnchorMoments = anchorMoments?.length > 0;
-
-    const momentListItems = moments.map(moment => (
-      <li key={moment.id || createUid()}>
-        
+    const lastIndex = moments.length - 1;
+    const momentListItems = moments.map((moment, index) => (
+      // $FlowFixMe
+      <li key={moment.id || createUid()} ref={lastIndex === index ? this.lastMessage : undefined}>
         <Moment
           data={moment}
         />

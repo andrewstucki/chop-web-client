@@ -57,8 +57,8 @@ import {
 
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
-import { SET_VIDEO } from '../videoFeed/dux';
-import type { SetVideoType, VideoType } from '../videoFeed/dux';
+import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
+import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
 
 import {
   RELEASE_ANCHOR_MOMENT,
@@ -85,12 +85,10 @@ import type {
 
 // Action Types
 
-const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
-const GET_INIT_DATA = 'GET_INIT_DATA';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
 const SET_USER = 'SET_USER';
@@ -114,10 +112,6 @@ const SET_HERE_NOW = 'SET_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 
 // Flow Type Definitions
-
-type GetInitData = {
-  type: 'GET_INIT_DATA',
-};
 
 type SetScheduleDataType = {
   type: 'SET_SCHEDULE_DATA',
@@ -413,7 +407,8 @@ type FeedActionTypes =
   | SetScheduleDataType
   | SetClientInfoType
   | SetHereNow
-  | SetSawLastMomentAt;
+  | SetSawLastMomentAt
+  | ToggleHideVideoType;
 
 // Action Creators
 export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
@@ -514,12 +509,6 @@ const setEvent = (title: string, id: number, startTime: number, videoStartTime: 
       startTime,
       videoStartTime,
     },
-  }
-);
-
-const getInitData = (): GetInitData => (
-  {
-    type: GET_INIT_DATA,
   }
 );
 
@@ -759,7 +748,7 @@ const reducer = (
       },
     };
   }
-  case SET_PANE_CONTENT: 
+  case SET_PANE_CONTENT:
     return {
       ...state,
       panes: {
@@ -1202,7 +1191,11 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
-      isVideoHidden: action.focus,
+    };
+  case TOGGLE_HIDE_VIDEO:
+    return {
+      ...state,
+      isVideoHidden: action.hidden,
     };
   case CLOSE_SIDE_MENU:
     return {
@@ -1336,12 +1329,10 @@ const getScrollPosition = (state: FeedType, channel: string): number => {
 // Exports
 
 export {
-  CHANGE_CHANNEL,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
-  GET_INIT_DATA,
   SET_NOTIFICATION_BANNER,
 };
 export {
@@ -1351,7 +1342,6 @@ export {
   togglePopUpModal,
   leaveChannel,
   getCurrentUserAsSharedUser,
-  getInitData,
   removeReaction,
   setUser,
   setEvent,
@@ -1384,7 +1374,6 @@ export type {
   SharedUserType,
   TogglePopUpModalType,
   LeaveChannelType,
-  GetInitData,
   LanguageType,
   OrganizationType,
   SetSalvationsType,

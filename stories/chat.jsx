@@ -20,8 +20,8 @@ storiesOf('Chat', module)
       currentUser={user}
       focused={false}
       publishMessage={() => {}}
-      textOnBlur={() => {}}
-      textOnFocus={() => {}}
+      toggleChatFocus={() => {}}
+      toggleHideVideo={() => {}}
 
     />
   ))
@@ -32,8 +32,8 @@ storiesOf('Chat', module)
       currentUser={user}
       focused={true}
       publishMessage={() => {}}
-      textOnBlur={() => {}}
-      textOnFocus={() => {}}
+      toggleChatFocus={() => {}}
+      toggleHideVideo={() => {}}
     />
   ))
   .add('focused and text entered', () => (
@@ -43,8 +43,8 @@ storiesOf('Chat', module)
       currentUser={user}
       focused={true}
       publishMessage={() => {}}
-      textOnBlur={() => {}}
-      textOnFocus={() => {}}
+      toggleChatFocus={() => {}}
+      toggleHideVideo={() => {}}
       initialState={{ chatInput: 'Hello my peeps'}}
     />
   ))
@@ -55,8 +55,8 @@ storiesOf('Chat', module)
       currentUser={user}
       focused={false}
       publishMessage={() => {}}
-      textOnBlur={() => {}}
-      textOnFocus={() => {}}
+      toggleChatFocus={() => {}}
+      toggleHideVideo={() => {}}
       initialState={{ chatInput: 'Hello my peeps' }}
     />
   ));

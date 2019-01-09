@@ -10,6 +10,7 @@ import WistiaPlayer from 'react-player/lib/players/Wistia';
 const SET_VIDEO = 'SET_VIDEO';
 const PLAY_VIDEO = 'PLAY_VIDEO';
 const PAUSE_VIDEO = 'PAUSE_VIDEO';
+const TOGGLE_HIDE_VIDEO = 'TOGGLE_HIDE_VIDEO';
 
 // Type Definitions
 
@@ -45,7 +46,12 @@ type OfflinePlayerPropsType = {
   style: string,
   // $FlowFixMe
   Player: React.ComponentType<OfflinePlayerPropsType>,
-}
+};
+
+type ToggleHideVideoType = {
+  type: 'TOGGLE_HIDE_VIDEO',
+  hidden: boolean,
+};
 
 // Action Creators
 
@@ -68,6 +74,13 @@ const playVideo = () => (
 const pauseVideo = () => (
   {
     type: PAUSE_VIDEO,
+  }
+);
+
+const toggleHideVideo = (hidden: boolean): ToggleHideVideoType => (
+  {
+    type: TOGGLE_HIDE_VIDEO,
+    hidden,
   }
 );
 
@@ -108,6 +121,7 @@ export {
   videoPlayerFactory,
   playVideo,
   pauseVideo,
+  toggleHideVideo,
 };
 
 export type {
@@ -116,8 +130,10 @@ export type {
   IFramePlayerPropsType,
   SimulatedLivePlayerPropsType,
   OfflinePlayerPropsType,
+  ToggleHideVideoType,
 };
 
 export {
   SET_VIDEO,
+  TOGGLE_HIDE_VIDEO,
 };

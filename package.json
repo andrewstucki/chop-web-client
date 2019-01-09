@@ -32,7 +32,8 @@
       "iframe_api": "<rootDir>/test/fake-js-file.js",
       "Youtube\\.min\\.js$": "<rootDir>/test/fake-js-file.js"
     },
-    "testURL": "https://live.life.church"
+    "testURL": "https://live.life.church",
+    "setupFiles": ["<rootDir>/test/setupFile.js"]
   },
   "devDependencies": {
     "@alshakero/ez-s": "^0.0.3",
