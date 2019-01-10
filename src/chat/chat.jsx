@@ -136,6 +136,10 @@ class Chat extends Component<ChatProps, ChatState> {
     this.setState({chatInput: ''});
   }
 
+  componentWillUnmount (): void {
+    window.removeEventListener('scroll', this.preventScroll);
+  }
+
   render () {
     const {
       focused = false,
@@ -167,7 +171,6 @@ class Chat extends Component<ChatProps, ChatState> {
             disabled={!this.state.chatInput}
             additionalStyles={styles.sendMessage}
           />
-
         </div>
       </div>
     );
