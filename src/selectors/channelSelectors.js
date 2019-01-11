@@ -12,7 +12,6 @@ import type {
   UIDType,
 } from '../cwc-types';
 import type { PaneContentType } from '../pane/dux';
-import type { MomentType } from '../moment';
 
 const getChannels = (state: FeedType): ChannelsObjectType => state.channels;
 
@@ -115,6 +114,11 @@ const getCurrentChannel = createSelector(
   pane => pane.channelId,
 );
 
+const getCurrentChannelObj = createSelector(
+  [ getCurrentChannel, getChannels ],
+  (channelId, channels) => channels[channelId]
+)
+
 const feedAnchorMoments = createSelector(
   getChannelById,
   channel => channel && channel.anchorMoments ? channel.anchorMoments : []
@@ -144,7 +148,53 @@ const hasNotSeenLatestMoments = createSelector(
   }
 );
 
+const getCurrentUser = (state) => state.currentUser;
+
+const lastInArray = <I>(array: Array<I>): I => array[array.length - 1];
+
+const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => userA.pubnubToken === userB.pubnubToken;
+
+const getLastAction = (state) => state.lastAction;
+
+const getScroll = createSelector(
+  [ getCurrentChannelObj, getLastAction, getCurrentUser ],
+  (currentChannel, action, currentUser) => {
+    if (!currentChannel) {
+      return {
+        type: 'SCROLL_TO',
+        position: 0,
+      }
+    }
+    const { moments, scrollPosition, id:channelId } = currentChannel;
+
+    if (action.type === 'PUBLISH_MOMENT_TO_CHANNEL') {
+      const messageSender = lastInArray<MessageType>(moments).sender;
+      if (isSameUser(messageSender, currentUser)) {
+        return {
+          type: 'SCROLL_TO',
+          position: 0,
+        }
+      } else {
+        return {
+          type: 'SCROLL_TO',
+          position: scrollPosition,
+        }
+      }
+    } else if (action.type = 'SET_SCROLL_POSITION' && action.channel === channelId) {
+      return {
+        type: 'NO_SCROLL'
+      }
+    } else {
+      return {
+        type: 'SCROLL_TO',
+        position: scrollPosition,
+      }
+    }
+  }
+)
+
 export {
+  getScroll,
   getHostChannel,
   getPublicChannel,
   getLegacyChannel,

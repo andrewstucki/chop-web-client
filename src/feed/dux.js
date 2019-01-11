@@ -541,7 +541,7 @@ const addChannel = (
       moments: [],
       participants,
       anchorMoments: [],
-      scrollPosition: -1,
+      scrollPosition: 0,
       sawLastMomentAt: Date.now(),
     },
   }
@@ -728,11 +728,15 @@ const defaultState = {
 // Reducer
 
 const reducer = (
-  state: FeedType = defaultState,
+  inboundState: FeedType = defaultState,
   action?: FeedActionTypes): FeedType => {
   if (!action || !action.type) {
-    return state;
+    return inboundState;
   }
+  const state = {
+    ...inboundState,
+    lastAction: { ...action}
+  };
   switch (action.type) {
   case SET_SAW_LAST_MOMENT_AT: {
     const { timestamp, channelId } = action;
@@ -1323,14 +1327,6 @@ const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
 
-const getScrollPosition = (state: FeedType, channel: string): number => {
-  if (state.channels[channel]) {
-    return state.channels[channel].scrollPosition;
-  } else {
-    return -1;
-  }
-};
-
 // Exports
 
 export {
@@ -1365,7 +1361,6 @@ export {
   setAuthentication,
   removeAuthentication,
   updateScrollPosition,
-  getScrollPosition,
   setClientInfo,
   setHereNow,
 };

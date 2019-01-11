@@ -5,12 +5,12 @@ import {
   feedContents,
   feedAnchorMoments,
   hasNotSeenLatestMoments,
+  getScroll,
 } from '../selectors/channelSelectors';
 
 import {
   togglePopUpModal,
   updateScrollPosition,
-  getScrollPosition,
   setSawLastMomentAt,
 } from './dux';
 import type {
@@ -20,17 +20,17 @@ import type {
 
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
+  const cacheState = state.cache;
   const { channel } = ownProps;
-  const scrollPosition = getScrollPosition(feedState, channel);
   return {
     moments: feedContents(feedState, channel),
     anchorMoments: feedAnchorMoments(feedState, channel),
     currentChannel: channel,
     animatingMoment: feedState.renderingAnchorMoment,
     showLeaveChat: feedState?.channels?.[channel]?.direct,
-    scrollPosition: getScrollPosition(feedState, channel),
+    scroll: getScroll(feedState, cacheState),
     currentUser: feedState.currentUser,
-    showNewMessageButton: hasNotSeenLatestMoments(feedState, channel) && scrollPosition !== -1,
+    showNewMessageButton: hasNotSeenLatestMoments(feedState, channel),
     isChatFocused: feedState.isChatFocused,
   };
 };
