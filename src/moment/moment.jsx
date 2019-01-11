@@ -67,7 +67,7 @@ class Moment extends React.Component<MomentPropType> {
         />
       );
     default:
-        return null;
+      return null;
     }
   }
 }
