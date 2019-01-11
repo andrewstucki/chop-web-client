@@ -136,6 +136,8 @@ const getNotificationText = notification => {
     return joinedChatNotificationText(notification);
   case LEFT_CHANNEL:
     return leftChannelNotificationText(notification);
+  default:
+    return null;
   }
 };
 
