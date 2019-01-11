@@ -56,6 +56,7 @@ type PubnubStatusEventType = {
 
 type PubnubPresenceEventStateType = {
   available_prayer: boolean, // eslint-disable-line camelcase
+  nickname: string,
 }
 
 type PubnubPresenceEventType = {
@@ -363,11 +364,9 @@ class Chat {
     const publicChannel = getPublicChannel(this.getState());
     const hostChannel = getHostChannel(this.getState());
     const currentUser = getCurrentUser(this.getState());
-    let { nickname } = { ...event.state };
+    const { nickname } = event.state;
 
-    if (nickname === currentUser.name) {
-      nickname = 'You';
-    }
+    const name = nickname === currentUser.name ? 'You' : nickname;
 
     if (channel === publicChannel) {
       switch (action) {
@@ -390,8 +389,8 @@ class Chat {
         );
         break;
       }
-    } else if (channel !== hostChannel && nickname) {
-      this.storeDispatch(receiveJoinedChatNotification(nickname, channel));
+    } else if (channel !== hostChannel && name) {
+      this.storeDispatch(receiveJoinedChatNotification(name, channel));
     }
   }
 

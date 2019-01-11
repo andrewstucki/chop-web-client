@@ -66,6 +66,8 @@ class Moment extends React.Component<MomentPropType> {
           text={data}
         />
       );
+    default:
+      return null;
     }
   }
 }

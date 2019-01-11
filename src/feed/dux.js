@@ -855,26 +855,26 @@ const reducer = (
       },
       isAuthenticated: false,
     };
-  case RECEIVE_MOMENT:
+  case RECEIVE_MOMENT: {
     // $FlowFixMe
-    if (state.channels[action.channel]) {
+    const { channel:channelId, moment }: { channelId: string, moment: MomentType } = action;
+    if (state.channels[channelId]) {
       return {
         ...state,
         channels: {
           ...state.channels,
-          // $FlowFixMe
-          [action.channel]: {
-            ...state.channels[action.channel],
+          [channelId]: {
+            ...state.channels[channelId],
             moments: [
-              ...state.channels[action.channel].moments,
-              // $FlowFixMe
-              action.moment,
+              ...state.channels[channelId].moments,
+              moment,
             ],
           },
         },
       };
     }
     return state;
+  }
   case ADD_CHANNEL:
     if (state.channels[action.channel.id]) {
       return state;
