@@ -5,7 +5,7 @@ import styles from './style.css';
 import ReactTouchEvents from 'react-touch-events';
 
 type SideMenuType = {
-  children?: React$Node | Array<React$Node>,
+  children?: React$Node,
   close: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   isClosed: boolean,
   swipe?:  (event: SyntheticTouchEvent<HTMLButtonElement>) => void,

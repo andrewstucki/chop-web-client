@@ -31,10 +31,11 @@ const getOtherUserNames = (channel, currentUser) => {
 };
 
 // eslint is dumb when it comes to optional chaining
-const hasAction = channel => channel?.moments // eslint-disable-line no-undef
-  ?.filter(moment => ( // eslint-disable-line no-undef
+const hasAction = channel => channel && channel.moments && channel.moments.filter ?
+  channel.moments.filter(moment => ( // eslint-disable-line no-undef
     moment.type === 'ACTIONABLE_NOTIFICATION' &&
-    moment.active === true)).length > 0;
+    moment.active === true)).length > 0
+  : undefined;
 
 const getCurrentUser = state => state.currentUser;
 
