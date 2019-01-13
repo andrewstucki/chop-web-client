@@ -6,8 +6,6 @@ RUN chmod +x /etc/service/nginx/run
 
 COPY config/nginx/nginx.conf /etc/nginx/
 
-RUN mkdir -p /usr/src/app/storybook
-
 WORKDIR /usr/src/app
 
 COPY dist/index.html* /usr/src/app/
