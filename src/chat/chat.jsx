@@ -1,10 +1,10 @@
 // @flow
-/* global SyntheticEvent, SyntheticKeyboardEvent */
+/* global SyntheticEvent, SyntheticKeyboardEvent, TimeoutID */
 import React, { Component } from 'react';
 
 import type { SharedUserType } from '../feed/dux';
 
-import { isUsingIPad, isUsingIPhone } from '../util';
+import { isIOS } from '../util';
 
 import Button from '../components/button';
 import InputField from '../components/inputField';
@@ -13,8 +13,8 @@ import styles from './styles.css';
 
 type ChatProps = {
   publishMessage: (channel: string, text: string, user: SharedUserType) => void,
-  textOnBlur:  () => void,
-  textOnFocus:  () => void,
+  toggleChatFocus: (focused: boolean) => void,
+  toggleHideVideo: (hidden: boolean) => void,
   focused: boolean,
   currentPlaceholder: string,
   currentUser: SharedUserType,
@@ -27,6 +27,8 @@ type ChatState = {
 };
 
 class Chat extends Component<ChatProps, ChatState> {
+  preventScrollTimer: TimeoutID | null;
+
   constructor (props: ChatProps) {
     super(props);
     // $FlowFixMe
@@ -38,9 +40,11 @@ class Chat extends Component<ChatProps, ChatState> {
     // $FlowFixMe
     this.onFocus = this.onFocus.bind(this);
     // $FlowFixMe
-    this.noScrollFunction = this.noScrollFunction.bind(this);
+    this.preventScroll = this.preventScroll.bind(this);
     // $FlowFixMe
     this.sendMessage = this.sendMessage.bind(this);
+
+    this.preventScrollTimer = null;
 
     if (props.initialState) {
       this.state = props.initialState;
@@ -48,6 +52,10 @@ class Chat extends Component<ChatProps, ChatState> {
       this.state = {
         chatInput: '',
       };
+    }
+
+    if (isIOS()) {
+      window.addEventListener('scroll', this.preventScroll);
     }
   }
 
@@ -69,60 +77,48 @@ class Chat extends Component<ChatProps, ChatState> {
       this.setState({chatInput: ''});
     }
   }
-  
-  noScrollFunction () {
-    if (window.scrollY > 1) setTimeout(() => window.scrollTo(0, 0), 500);
+
+  preventScroll () {
+    if (this.preventScrollTimer) {
+      window.clearTimeout(this.preventScrollTimer);
+    }
+
+    this.preventScrollTimer = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 50);
   }
 
   onFocus () {
-    window.scrollTo(0, 0);
-    this.props.textOnFocus();
+    this.props.toggleChatFocus(true);
 
-    if (isUsingIPhone()) {
-      // The required timing here depends on the phone's speed.
-      // Happily it doesn't hurt to scroll to the top multiple times.
-      // It might be possible to remove this if we move the text input box
-      // higher, so iOS Safari doesn't shove our window offscreen.
-      setTimeout(() => window.scrollTo(0, 0), 50);
-      setTimeout(() => window.scrollTo(0, 0), 100);
-      setTimeout(() => window.scrollTo(0, 0), 150);
-    }
-
-    if (isUsingIPad()) {
-      // On iPad, when the soft keyboard comes up, that will cause a change
-      // in window.innerHeight which tells us how big the soft keyboard is.
-      // So, if we see it change, we subtract that amount from our page's height.
+    if (isIOS()) {
+      this.props.toggleHideVideo(true);
       const oldH = window.innerHeight;
-      setTimeout (() => {
+      window.removeEventListener('scroll', this.preventScroll);
+      setTimeout(() => {
         const newH = window.innerHeight;
         if (newH < oldH) {
-          const shortstyle = 'calc(100% - ' + (oldH - newH) + 'px)';
+          const keyboard = oldH - newH;
+          window.scrollTo(0, 0);
 
-          // TODO: get this height to ChopContainer in a better way.
           const wrapper: ?HTMLElement = document.querySelector('#wrapper');
           if (wrapper && wrapper instanceof HTMLElement) {
-            wrapper.style.height = shortstyle;
+            wrapper.style.height = `calc(100% - ${keyboard}px)`;
           }
-
-          window.scrollTo(0, 0);
+          window.addEventListener('scroll', this.preventScroll);
         }
-      }, 500);  // TODO this is an arbitrarily chosen time. Improve this.
-    }
-
-    if (isUsingIPhone() || isUsingIPad()) {
-      window.addEventListener('scroll', this.noScrollFunction);
+      }, 500);
     }
   }
 
   onBlur () {
-    this.props.textOnBlur();
+    this.props.toggleChatFocus(false);
 
-    const iPad = !!navigator.platform && /iPad/.test(navigator.platform);
-    if (iPad) {
-      // undo the height modification made in onFocus().
+    if (isIOS()) {
+      this.props.toggleHideVideo(false);
       const wrapper: ?HTMLElement = document.querySelector('#wrapper');
       if (wrapper && wrapper instanceof HTMLElement) {
-        wrapper.style.height = '';
+        wrapper.style.height = '100%';
       }
     }
   }
@@ -138,6 +134,10 @@ class Chat extends Component<ChatProps, ChatState> {
     event.stopPropagation();
     publishMessage(currentChannel, this.state.chatInput, currentUser);
     this.setState({chatInput: ''});
+  }
+
+  componentWillUnmount (): void {
+    window.removeEventListener('scroll', this.preventScroll);
   }
 
   render () {
@@ -171,7 +171,6 @@ class Chat extends Component<ChatProps, ChatState> {
             disabled={!this.state.chatInput}
             additionalStyles={styles.sendMessage}
           />
-
         </div>
       </div>
     );

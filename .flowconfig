@@ -9,5 +9,9 @@ config/flow-typed
 [lints]
 
 [options]
+esproposal.optional_chaining=enable
 
 [strict]
+
+[untyped]
+<PROJECT_ROOT>/node_modules/redux-persist/lib/integration/react.js.flow

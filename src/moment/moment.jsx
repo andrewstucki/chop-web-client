@@ -21,50 +21,55 @@ type MomentPropType = {
   data: MomentType,
 };
 
-const Moment = ({ data }: MomentPropType) => {
-  switch (data.type) {
-  case MESSAGE:
-    if (!data.text) {
-      return null;
-    } else {
+class Moment extends React.Component<MomentPropType> {
+  render () {
+    const { data } = this.props;
+    switch (data.type) {
+    case MESSAGE:
+      if (!data.text) {
+        return null;
+      } else {
+        return (
+          <Message
+            message={data}
+          />
+        );
+      }
+    case NOTIFICATION:
       return (
-        <Message
-          message={data}
+        <Notification
+          notification={data}
         />
       );
+    case ACTIONABLE_NOTIFICATION:
+      return (
+        <ActionableNotification
+          notification={data}
+        />
+      );
+    case AVATAR_MOMENT:
+      return (
+        <AvatarMoment
+          avatarMoment={data}
+        />
+      );
+    case ANCHOR_MOMENT:
+      return (
+        <AnchorMoment
+          anchorMoment={data}
+          isAnchorMomentAnchored={false}
+        />
+      );
+    case BASIC_TEXT:
+      return (
+        <Text
+          text={data}
+        />
+      );
+    default:
+      return null;
     }
-  case NOTIFICATION:
-    return (
-      <Notification
-        notification={data}
-      />
-    );
-  case ACTIONABLE_NOTIFICATION:
-    return (
-      <ActionableNotification
-        notification={data}
-      />
-    );
-  case AVATAR_MOMENT:
-    return (
-      <AvatarMoment
-        avatarMoment={data}
-      />
-    );
-  case ANCHOR_MOMENT:
-    return (
-      <AnchorMoment
-        anchorMoment={data}
-        isAnchorMomentAnchored={false}
-      />
-    );
-  case BASIC_TEXT:
-    return (
-      <Text
-        text={data}
-      />
-    );
   }
-};
+}
 
 export default Moment;

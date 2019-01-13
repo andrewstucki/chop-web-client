@@ -1,9 +1,10 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const constants = require('./webpack.constants.js');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { BugsnagBuildReporterPlugin } = require('webpack-bugsnag-plugins');
 
 module.exports = merge(common, {
   mode: 'production',
@@ -23,6 +24,10 @@ module.exports = merge(common, {
       { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
     ]),
     new webpack.HashedModuleIdsPlugin(),
+    new BugsnagBuildReporterPlugin({
+      ...constants.BUGSNAG,
+      releaseStage: 'production',
+    })
   ],
   devtool: 'source-map',
   output: {

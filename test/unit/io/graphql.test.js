@@ -11,13 +11,6 @@ describe('Test GraphQL', () => {
     mockFetch.mockResolvedValue(testData);
 
     const storeDispatch = jest.fn();
-    const getStore = jest.fn(() => ({}));
-    const actor = new GraphQlActor(storeDispatch, getStore);
-    actor.dispatch(
-      {
-        type: 'GET_INIT_DATA',
-      }
-    );
     expect(storeDispatch.mock.calls.length).toBe(1);
     expect(storeDispatch.mock.calls[0][0]).toEqual(
       {
@@ -111,7 +104,7 @@ describe('Test GraphQL', () => {
       ],
       type: 'prayer',
     };
-    
+
     mockFetch.mockResolvedValue(returnValue);
 
     const storeDispatch = jest.fn();

@@ -14,8 +14,7 @@ const getChannelType = createSelector(
         return PUBLIC;
       } else if (channel.name === 'Host') {
         return HOST;
-      } else if (channel.participants &&
-                 channel.participants.length >= 2) {
+      } else if (channel.direct) {
         return DIRECT;
       }
     }
@@ -64,4 +63,5 @@ export {
   getPlaceholder,
   getOtherUsers,
   hasOtherUsers,
+  getCurrentUser,
 };

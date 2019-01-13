@@ -13,10 +13,9 @@ describe('NavBar tests', () => {
   test('NavBar renders', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
-          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
-        ]}
+        publicChannel={{id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []}}
+        hostChannel={{id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []}}
+        directChannels={[]}
         onClick={function () {}}
         openMenu={() => {}}
         barWidth={100}
@@ -29,10 +28,9 @@ describe('NavBar tests', () => {
   test('has default channel and host channels', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
-          {id: '123456', name: 'Public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: '123456', name: 'Host', isCurrent: false, hasActions: false, otherUsersNames: []},
-        ]}
+        publicChannel={{id: '123456', name: 'Public', isCurrent: true, hasActions: false, otherUsersNames: []}}
+        hostChannel={{id: '123456', name: 'Host', isCurrent: false, hasActions: false, otherUsersNames: []}}
+        directChannels={[]}
         onClick={function () {}}
         openMenu={() => {}}
         barWidth={100}
@@ -40,7 +38,7 @@ describe('NavBar tests', () => {
       />
     );
     expect(wrapper.find('.navBar a').length).toBe(3);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('event');
+    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
     expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
   });
 
@@ -48,10 +46,9 @@ describe('NavBar tests', () => {
     const onClick = sinon.spy();
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
-          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: '654321', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
-        ]}
+        publicChannel={{id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []}}
+        hostChannel={{id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []}}
+        directChannels={[]}
         onClick={onClick}
         openMenu={() => {}}
         barWidth={100}
@@ -66,10 +63,9 @@ describe('NavBar tests', () => {
   test('displaying pip on public', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
-          {id: '123456', name: 'public', isCurrent: true, hasActions: true, otherUsersNames: []},
-          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
-        ]}
+        publicChannel={{id: '123456', name: 'public', isCurrent: true, hasActions: true, otherUsersNames: []}}
+        hostChannel={{id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []}}
+        directChannels={[]}
         onClick={function () {}}
         openMenu={() => {}}
         barWidth={100}
@@ -83,24 +79,37 @@ describe('NavBar tests', () => {
   test('displaying pip on host', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
-          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: '123456', name: 'host', isCurrent: false, hasActions: true, otherUsersNames: []},
-        ]}
+        publicChannel={{id: '123456', name: 'Public', isCurrent: true, hasActions: false, otherUsersNames: []}}
+        hostChannel={{id: '123456', name: 'Host', isCurrent: false, hasActions: true, otherUsersNames: []}}
+        directChannels={[]}
         onClick={function () {}}
         openMenu={() => {}}
         barWidth={100}
         barX={50}
       />
     );
-    expect(wrapper.find('#nav-public span.pip').length).toBe(0);
-    expect(wrapper.find('#nav-host span.pip').length).toBe(1);
+    expect(wrapper.find('#nav-Public span.pip').length).toBe(0);
+    expect(wrapper.find('#nav-Host span.pip').length).toBe(1);
   });
 
   test('channels with other user names to store', () => {
     expect(NavBar.getDerivedStateFromProps(
       {
-        channels: [
+        hostChannel: {
+          id: '123456',
+          name: 'Hose',
+          isCurrent: false,
+          hasActions: false,
+          otherUsersNames: [],
+        },
+        publicChannel: {
+          id: '123456',
+          name: 'Public',
+          isCurrent: false,
+          hasActions: false,
+          otherUsersNames: [],
+        },
+        directChannels: [
           {
             id: '123456',
             name: 'direct1',
@@ -145,7 +154,21 @@ describe('NavBar tests', () => {
   test('channels without other user names to be stored', () => {
     expect(NavBar.getDerivedStateFromProps(
       {
-        channels: [
+        hostChannel: {
+          id: '123456',
+          name: 'Hose',
+          isCurrent: false,
+          hasActions: false,
+          otherUsersNames: [],
+        },
+        publicChannel: {
+          id: '123456',
+          name: 'Public',
+          isCurrent: false,
+          hasActions: false,
+          otherUsersNames: [],
+        },
+        directChannels: [
           {
             id: '123456',
             name: 'direct1',
@@ -176,7 +199,21 @@ describe('NavBar tests', () => {
   test('channels with other user names that are already stored', () => {
     expect(NavBar.getDerivedStateFromProps(
       {
-        channels: [
+        hostChannel: {
+          id: '123456',
+          name: 'Hose',
+          isCurrent: false,
+          hasActions: false,
+          otherUsersNames: [],
+        },
+        publicChannel: {
+          id: '123456',
+          name: 'Public',
+          isCurrent: false,
+          hasActions: false,
+          otherUsersNames: [],
+        },
+        directChannels: [
           {
             id: '123456',
             name: 'direct1',
@@ -214,9 +251,9 @@ describe('NavBar tests', () => {
   test('direct chat with participants', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
-          {id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []},
+        publicChannel={{id: '123456', name: 'public', isCurrent: true, hasActions: false, otherUsersNames: []}}
+        hostChannel={{id: '123456', name: 'host', isCurrent: false, hasActions: false, otherUsersNames: []}}
+        directChannels={[
           {
             id: '123456',
             name: 'direct1',
@@ -237,7 +274,9 @@ describe('NavBar tests', () => {
   test('channels display in the proper order', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
+        publicChannel={{id: '123456', name: 'Public', isCurrent: true, hasActions: false, otherUsersNames: []}}
+        hostChannel={{id: '123456', name: 'Host', isCurrent: false, hasActions: false, otherUsersNames: []}}
+        directChannels={[
           {
             id: '123456',
             name: 'direct1',
@@ -252,8 +291,6 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: ['bill'],
           },
-          {id: '123456', name: 'Public', isCurrent: true, hasActions: false, otherUsersNames: []},
-          {id: '123456', name: 'Host', isCurrent: false, hasActions: false, otherUsersNames: []},
         ]}
         onClick={function () {}}
         openMenu={() => {}}
@@ -262,7 +299,7 @@ describe('NavBar tests', () => {
       />
     );
     expect(wrapper.find('.navBar a').length).toBe(5);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('event');
+    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
     expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
   });
 });

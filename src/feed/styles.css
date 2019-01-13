@@ -6,6 +6,8 @@
     flex: 1;
     position: relative;
     overflow-y: scroll;
+    overscroll-behavior-y: contain;
+    -ms-scroll-chaining: none;
     -webkit-overflow-scrolling: touch;
   }
 }
@@ -13,6 +15,13 @@
 .scroll {
   @apply --wrapper;
   margin: 0;
+}
+
+.nonScroll {
+  display: flex;
+  flex: 0 0 auto;
+  position: relative;
+  overflow-y: scroll;
 }
 
 .feed {
@@ -32,4 +41,15 @@
   position: -webkit-sticky;
   bottom: 0;
   z-index: 1;
+}
+
+.newMessageButtonContainer {
+  position: absolute;
+  bottom: 68px;
+  width: 100%;
+  text-align: center;
+}
+
+.newMessageButtonWrapper {
+  display: inline-block;
 }

@@ -4,7 +4,7 @@ import { Dispatch  } from 'redux';
 import {
   removeHereNow,
   updateHereNow,
-  leaveChannel,
+  setHereNow,
   loadHistory,
   setSalvations,
 } from '../feed/dux';
@@ -20,11 +20,12 @@ import type { MomentType } from '../moment/dux';
 import { receiveMoment } from '../moment/dux';
 import { receiveAcceptedPrayerRequest } from '../moment/actionableNotification/dux';
 import {
+  receiveJoinedChatNotification,
   receiveLeftChannelNotification,
   receiveMuteUserNotification,
   receivePrayerNotification,
 } from '../moment/notification/dux';
-import { deleteMessage } from '../moment/message/dux';
+import { deleteMessage, receiveMuteUser } from '../moment/message/dux';
 import { 
   publishSalvation,
   salvationMomentExists, 
@@ -34,7 +35,14 @@ import {
   getHostChannel,
   getPublicChannel,
   getCurrentChannel,
+  getMutedUsers,
 } from '../selectors/channelSelectors';
+import { getMessageTimestamp } from '../util';
+import { getCurrentUser } from '../selectors/chatSelectors';
+import type {
+  PubnubReciveMessageType,
+  LegacyNewMessageType,
+} from './converter';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -48,6 +56,7 @@ type PubnubStatusEventType = {
 
 type PubnubPresenceEventStateType = {
   available_prayer: boolean, // eslint-disable-line camelcase
+  nickname: string,
 }
 
 type PubnubPresenceEventType = {
@@ -101,7 +110,7 @@ type LegacyMuteUserType = {
   nickname: string,
   fromNickname: string,
   channelToken: string,
-  cwcTimestamp: string,
+  timestamp: string,
 }
 
 type LegacyLeaveChannelType = {
@@ -112,7 +121,7 @@ type LegacyLeaveChannelType = {
   type: string,
   roomType: string,
   channelToken: string,
-  cwcTimestamp: string,
+  timestamp: string,
 };
 
 type LegacyAcceptPrayerRequestType = {
@@ -147,7 +156,7 @@ type PubnubMessageEventDataType =
   | LegacyPrayerNotificationType
   | LegacyPollVoteType;
 
-type PubnubMessageEventType = {
+export type PubnubMessageEventType = {
   channel: string,
   message: {
     action: string,
@@ -234,18 +243,14 @@ class Chat {
       (status, results) => {
         if (results) {
           const users = results.channels[publicChannel].occupants;
+          const hereNowUsers = {};
           users.forEach(user => {
             const available_prayer = user.state ? user.state.available_prayer : false; // eslint-disable-line camelcase
-            this.storeDispatch(
-              updateHereNow(
-                user.uuid,
-                publicChannel,
-                {
-                  available_prayer: available_prayer, // eslint-disable-line camelcase
-                }
-              )
-            );
+            hereNowUsers[user.uuid] = {
+              available_prayer: available_prayer, // eslint-disable-line camelcase
+            };
           });
+          this.storeDispatch(setHereNow(publicChannel, hereNowUsers));
         }
       }
     );
@@ -257,18 +262,6 @@ class Chat {
         presence: this.onPresence,
       }
     );
-
-    const channels = Object.keys(state.channels)
-      .map(name => state.channels[name].id);
-
-    this.subscribe(channels);
-
-    channels.map(channel => this.pubnub.history({
-      channel: channel,
-    }, 
-    ((status, response) => {
-      this.loadHistory(response.messages, channel);
-    }).bind(this)));
   }
 
   setPubnubState () {
@@ -304,39 +297,53 @@ class Chat {
 
   loadHistory (messages: Array<any>, channel: string) {
     const moments = [];
+    const hostChannel = getHostChannel(this.getState());
     messages.map(message => {
       switch (message.entry.action) {
-      case 'newMessage':
-        
-        if (message.entry.type === 'system') {
-          moments.push(receiveLeftChannelNotification(message.entry.fromNickname, message.entry.channelToken, message.entry.cwcTimestamp).moment);
+      case 'newMessage': {
+        const {fromNickname, channelToken, timestamp} = message.entry.data;
+        if (message.entry.data.type === 'system') {
+          moments.push(receiveLeftChannelNotification(fromNickname, channelToken, getMessageTimestamp(timestamp)).moment);
         } else {
-          moments.push(Converter.legacyToCwc(message.entry.data));
+          moments.push(Converter.legacyNewMessageToCwcMessage(message.entry.data));
         }
         return;
+      }
       case 'newLiveResponseRequest':
         if (message.entry.data.type === 'prayer') {
           moments.push(Converter.legacyToCwcPrayer(message.entry));
         }
         return;
       case 'muteMessage':
-        
         moments.splice(moments.findIndex(moment => moment.id === message.entry.data.umt));
         return;
-      case 'muteUser':
-        
-        moments.push(
-          receiveMuteUserNotification(
-            message.entry.data.fromNickname,
-            message.entry.data.nickname,
-            getHostChannel(this.getState()),
-            message.entry.data.cwcTimestamp
-          ).moment);
+      case 'muteUser': {
+        const mutedUsers = getMutedUsers(this.getState());
+        const { nickname, fromNickname, timestamp } = message.entry.data;
+        const { name:currentUserName } = this.getState().currentUser;
+
+        if (!mutedUsers.includes(nickname) && currentUserName !== nickname) {
+          this.storeDispatch(
+            // $FlowFixMe
+            receiveMuteUser(nickname)
+          );
+
+          if (channel === hostChannel) {
+            moments.push(
+              receiveMuteUserNotification(
+                fromNickname,
+                nickname,
+                hostChannel,
+                getMessageTimestamp(timestamp)
+              ).moment);
+          }
+        }
         return;
+      }
       case 'livePrayerAccepted': {
         const hostChannel = getHostChannel(this.getState());
         moments.push(
-          receivePrayerNotification(message.entry.data.hostName, message.entry.data.guestName, hostChannel, message.entry.data.timestamp).moment
+          receivePrayerNotification(message.entry.data.hostName, message.entry.data.guestName, hostChannel, getMessageTimestamp(message.entry.data.timestamp)).moment
         );
         return;
       }
@@ -345,6 +352,7 @@ class Chat {
         return;
       }
     });
+
     this.storeDispatch(
       loadHistory(moments, channel)
     );
@@ -353,7 +361,13 @@ class Chat {
   onPresence (event: PubnubPresenceEventType) {
     const { action, channel, uuid } = event;
     const available_prayer = event.state ? event.state.available_prayer : false; // eslint-disable-line camelcase
-    if (channel === getPublicChannel(this.getState())) {
+    const publicChannel = getPublicChannel(this.getState());
+    const hostChannel = getHostChannel(this.getState());
+    const currentUser = getCurrentUser(this.getState());
+
+    const name = event?.state?.nickname === currentUser.name ? 'You' : event?.state?.nickname;
+
+    if (channel === publicChannel) {
       switch (action) {
       case 'join':
       case 'state-change':
@@ -374,10 +388,12 @@ class Chat {
         );
         break;
       }
+    } else if (channel !== hostChannel && name) {
+      this.storeDispatch(receiveJoinedChatNotification(name, channel));
     }
   }
 
-  onMessage (event: PubnubMessageEventType) {
+  onMessage (event: PubnubReciveMessageType<LegacyNewMessageType>) {
     const { channels } = this.getState();
     let hasMomentBeenRecieved = false;
     switch (event.message.action) {
@@ -386,9 +402,7 @@ class Chat {
       if (message.type === 'system') {
         this.storeDispatch(
           // $FlowFixMe
-          leaveChannel(message.userId, message.channelToken),
-          // $FlowFixMe
-          receiveLeftChannelNotification(message.fromNickname, message.channelToken, message.cwcTimestamp),
+          receiveLeftChannelNotification(message.fromNickname, message.channelToken, getMessageTimestamp(message.timestamp)),
         );
       } else {
         hasMomentBeenRecieved = Object.keys(channels).find(
@@ -397,35 +411,41 @@ class Chat {
             moment => moment.id === event.message.data.msgId));
 
         if (!hasMomentBeenRecieved) {
-          const moment = Converter.legacyToCwc(event.message.data);
+          const moment = Converter.legacyNewMessageToCwcMessage(event.message.data);
 
           if (moment.text) {
             this.storeDispatch(
-              receiveMoment(event.channel, Converter.legacyToCwc(event.message.data))
+              receiveMoment(event.channel, Converter.legacyNewMessageToCwcMessage(event.message.data))
             );
           }
         }
       }
       return;
     }
-    case 'muteUser': 
+    case 'muteUser': {
+      const mutedUsers = getMutedUsers(this.getState());
       // $FlowFixMe
-      if (this.getState().currentUser.name !== event.message.data.fromNickname) {
+      const { nickname, fromNickname, timestamp } = event.message.data;
+      const { name:currentUserName } = this.getState().currentUser;
+
+      if (!mutedUsers.includes(nickname) && currentUserName !== nickname) {
         this.storeDispatch(
-          // $FlowFixMe
-          receiveMuteUserNotification(
-            // $FlowFixMe
-            event.message.data.fromNickname,
-            // $FlowFixMe
-            event.message.data.nickname,
-            // $FlowFixMe
-            getHostChannel(this.getState()),
-            // $FlowFixMe
-            event.message.data.cwcTimestamp
-          )
+          receiveMuteUser(nickname)
         );
+
+        if (currentUserName !== fromNickname) {
+          this.storeDispatch(
+            receiveMuteUserNotification(
+              fromNickname,
+              nickname,
+              getHostChannel(this.getState()),
+              getMessageTimestamp(timestamp)
+            )
+          );
+        }
       }
       return;
+    }
     case 'videoReaction':
       // $FlowFixMe
       if (this.getState().reactions.find(reaction => event.message.data.reactionId === reaction.id) === undefined) {
@@ -458,7 +478,8 @@ class Chat {
       }
       return;
     case 'removeLiveResponseRequest': {
-      const cancelled = event.message.data.leave ? true : false;
+      // $FlowFixMe
+      const cancelled = !!event.message.data.leave;
       const hostChannel = getHostChannel(this.getState());
       this.storeDispatch(
         // $FlowFixMe
@@ -470,7 +491,7 @@ class Chat {
       const hostChannel = getHostChannel(this.getState());
       this.storeDispatch(
         // $FlowFixMe
-        receivePrayerNotification(event.message.data.hostName, event.message.data.guestName, hostChannel, event.message.data.timestamp)
+        receivePrayerNotification(event.message.data.hostName, event.message.data.guestName, hostChannel, getMessageTimestamp(event.message.data.timestamp))
       );
       return;
     }
@@ -494,7 +515,7 @@ class Chat {
         message: {
           action: 'newMessage',
           channel: channel.id,
-          data: Converter.cwcToLegacy(moment, channel.id),
+          data: Converter.cwcMessageToLegacyNewMessage(moment, channel.id),
         },
       }
     );
@@ -634,9 +655,15 @@ class Chat {
     case 'SET_AVAILABLE_FOR_PRAYER':
       this.setPubnubState();
       return;
-    case 'ADD_CHANNEL':
-      this.subscribe([action.channel.id]);
+    case 'ADD_CHANNEL': {
+      const { id } = action.channel;
+      this.subscribe([id]);
+      this.pubnub.history({channel: id},
+        ((status, response) => {
+          this.loadHistory(response.messages, id);
+        }).bind(this));
       return;
+    }
     case 'PUBLISH_REACTION':
       this.publishReaction(action.reaction, getLegacyChannel(this.getState()));
       return;

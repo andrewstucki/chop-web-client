@@ -28,7 +28,7 @@ const prayerNotificationText = (
   {
     host,
     guest,
-    timeStamp,
+    timestamp,
   }: PrayerNotificationType
 ) => (
   <div className={styles.notification}>
@@ -42,7 +42,7 @@ const prayerNotificationText = (
       <div>
         <strong>{host} </strong>started a live prayer with<strong> {guest}</strong>
       </div>
-      <div className={styles.timeStamp}>{timeStamp}</div>
+      <div className={styles.timestamp}>{timestamp}</div>
     </div>
   </div>
 );
@@ -51,21 +51,31 @@ const MuteUserNotificationText = (
   {
     host,
     guest,
-    timeStamp,
+    timestamp,
   }: MuteUserNotificationType
 ) => (
   <div className={styles.notification}>
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
-        { __html: ChatNotification }
+        {__html: ChatNotification}
       }
     />
     <div className={styles.text}>
       <div>
-        <strong>{host} </strong>muted<strong> {guest}</strong>
+        {
+          host ? (
+            <span>
+              <strong>{host} </strong>muted<strong> {guest}</strong>
+            </span>
+          ) : (
+            <span>
+              <strong>{guest} </strong>was muted
+            </span>
+          )
+        }
       </div>
-      <div className={styles.timeStamp}>{timeStamp}</div>
+      <div className={styles.timestamp}>{timestamp}</div>
     </div>
   </div>
 );
@@ -73,7 +83,7 @@ const MuteUserNotificationText = (
 const joinedChatNotificationText = (
   {
     name,
-    timeStamp,
+    timestamp,
   }: JoinedChatNotificationType
 ) => (
   <div className={styles.notification}>
@@ -85,9 +95,11 @@ const joinedChatNotificationText = (
     />
     <div className={styles.text}>
       <div>
-        <strong>{name} </strong>has joined the chat
+        { name === 'You' ?
+          <span>{name} have joined the chat</span> : <span><strong>{name}</strong> has joined the chat</span>
+        }
       </div>
-      <div className={styles.timeStamp}>{timeStamp}</div>
+      <div className={styles.timestamp}>{timestamp}</div>
     </div>
   </div>
 );
@@ -95,7 +107,7 @@ const joinedChatNotificationText = (
 const leftChannelNotificationText = (
   {
     name,
-    timeStamp,
+    timestamp,
   }: LeftChannelNotificationType
 ) => (
   <div className={styles.notification}>
@@ -109,7 +121,7 @@ const leftChannelNotificationText = (
       <div>
         <strong>{name} </strong>has left the chat
       </div>
-      <div className={styles.timeStamp}>{timeStamp}</div>
+      <div className={styles.timestamp}>{timestamp}</div>
     </div>
   </div>
 );
@@ -124,6 +136,8 @@ const getNotificationText = notification => {
     return joinedChatNotificationText(notification);
   case LEFT_CHANNEL:
     return leftChannelNotificationText(notification);
+  default:
+    return null;
   }
 };
 

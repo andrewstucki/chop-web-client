@@ -64,11 +64,6 @@ domain for it to work with the service.
 6. Add the cookie (under application tab) 'legacy_token' with the value you copied
 7. refresh the page
 
-To start the Storybook server to view components.
-```
-yarn storybook
-```
-
 ## Running the tests
 
 To run the Unit Tests. Unit tests validate code logic without
@@ -107,26 +102,6 @@ To view code coverage.
 yarn coverage
 ```
 
-To generate updated code quality and complexity report
-```
-yarn plato
-```
-
-To run the Snapshot and Visual Regression Tests. Snapshot tests create a copy of
-the markup created by React UI and compare it to the previous copy and validate
-there are no differences. Visual Regression tests take a screenshot of each
-component and compare it to the last screenshot. Both of these types of tests
-need the Storybook server running (see above) in another terminal window (`yarn storybook`).
-```
-yarn snap
-```
-If there is a difference in the snapshots you can compare them to see the delta.
-Then if it is a bug fix it, or if it is an accepted change you can update the
-saved snapshots to reflect the new state.
-```
-yarn snap -u
-```
-
 To run the Linter (eslint)
 ```
 yarn lint
@@ -137,12 +112,17 @@ To run the Flow type-checker
 yarn flow
 ```
 
-To run all the validation (test, functional, snap, flow and lint)
+To run all the validation (test, functional, flow and lint)
 ```
 yarn validate
 ```
 
-Remember, the functional tests will only work if you have first run `yarn start` and `yarn storybook` in other terminal windows.
+To run all the tests (test, flow and lint)
+```
+yarn test:full
+```
+
+Remember, the functional tests will only work if you have first run `yarn start`.
 
 ## Production Build
 

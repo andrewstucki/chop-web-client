@@ -9,7 +9,9 @@ import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
 type NavBarProps = {
-  channels: Array<ChannelType>,
+  directChannels: Array<ChannelType>,
+  publicChannel: ChannelType,
+  hostChannel: ChannelType,
   onClick: (id: string, type: 'EVENT' | 'CHAT') => void,
   openMenu: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
@@ -38,7 +40,7 @@ const Underline = props => (
 );
 
 class NavBar extends React.Component<NavBarProps, NavBarState> {
-  selectedLink: any
+  selectedLink: any;
   channelLink: (channel: ChannelType) => React$Node | string;
   channelTab: (channel: ChannelType) => React$Node;
 
@@ -63,7 +65,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     let copyOfNames = { ...state.directChatChannelNames };
     let hasUpdated = false;
     
-    props.channels.forEach(channel => {
+    props.directChannels.forEach(channel => {
       if (channel.otherUsersNames.length > 0 &&
         state.directChatChannelNames[channel.id] !== channel.otherUsersNames[0]
       ) {
@@ -132,19 +134,13 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     const style = channel.isCurrent ? null : styles.unselected;
     const opacity = channel.isCurrent ? '1.0' : '0.5';
 
-    if (channel.name === 'Public') {
-      return (
-        <span className={style}>
-          event
-        </span>
-      );
-    } else if (channel.name === 'Host') {
+    if (channel.name === 'Public' || channel.name === 'Host') {
       return (
         <span className={style}>
           {channel.name}
         </span>
       );
-    } else if (channel.otherUsersNames.length > 0) {
+    } else {
       const names = this.state.directChatChannelNames;
       const channelIconName = names[channel.id] || '?';
 
@@ -187,12 +183,11 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
   render () {
     const {
-      channels,
+      hostChannel,
+      publicChannel,
+      directChannels,
       openMenu,
     } = this.props;
-    const publicChannel = channels.find(channel => channel.name.toUpperCase() === 'PUBLIC');
-    const hostChannel = channels.find(channel => channel.name.toUpperCase() === 'HOST');
-    const otherChannels = channels.filter(channel => channel.name.toUpperCase() !== 'PUBLIC' && channel.name.toUpperCase() !== 'HOST');
     return (
       <div id="nav-bar" className={styles.navBar}>
         <a
@@ -202,20 +197,14 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           dangerouslySetInnerHTML={{ __html: hamburger }}
         />
         <div className={styles.channelLinks}>
+          { this.channelTab(publicChannel) }
+          { this.channelTab(hostChannel) }
           {
-            publicChannel !== undefined &&
-              this.channelTab(publicChannel)
-          }
-          {
-            hostChannel !== undefined &&
-              this.channelTab(hostChannel)
-          }
-          {
-            otherChannels.map(channel => (
+            directChannels.map(channel => (
               this.channelTab(channel)
             ))
           }
-          {channels.length &&
+          {
             <Underline
               left={this.state.left}
               width={this.state.width}

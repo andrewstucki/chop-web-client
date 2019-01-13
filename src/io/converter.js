@@ -2,44 +2,118 @@
 
 import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
+import { UTC_DATE_FORMAT } from '../util';
+import moment from 'moment';
+import type { MessageType } from '../moment/message/dux';
+import type {
+  UIDType,
+  DateTimeType,
+  DateTimeAsStringType,
+  URLType,
+  ChannelGroupType,
+  ChannelIdType,
+  UserLabelType,
+  LanguageCodeType,
+  RoomType,
+} from '../cwc-types';
+
+// Flow Type Definitions
+
+type TranslationListType = any;
+
+type NewMessageType = string;
+
+export type PubnubReciveMessageType<M> = {
+  actualChannel: null,
+  channel: ChannelIdType,
+  message: M,
+  publisher: string,
+  subscribedChannel: ChannelIdType,
+  subscription: ChannelGroupType,
+  timetoken: DateTimeAsStringType,
+};
+
+export type PubnubPublishMessageType<M, T = empty> = {
+  channel: ChannelIdType,
+  message: M,
+  storeInHistory?: boolean,
+  sendByPost?: boolean,
+  meta?: T,
+  ttl?: number,
+};
+
+export type LegacyMessageType<A, D> = {
+  action: A,
+  channel: ChannelIdType,
+  data: D,
+};
+
+export type LegcayNewMessageDataType = {
+  type?: NewMessageType,
+  channelToken: ChannelIdType,
+  eventStartTime: DateTimeType,
+  eventTimeId: UIDType,
+  eventTimeOffset: UIDType,
+  eventTitle: string,
+  fromAvatar: URLType,
+  fromNickname: string,
+  fromToken: UIDType,
+  isHost: boolean,
+  isUser: boolean,
+  isVolunteer: boolean,
+  isMuted?: boolean,
+  label: UserLabelType,
+  language: LanguageCodeType,
+  messageText: string,
+  msgId: UIDType,
+  organizationId: number,
+  organizationName: string,
+  roomType: RoomType,
+  timestamp: DateTimeAsStringType,
+  uniqueMessageToken: UIDType,
+  userId: UIDType | null,
+  translations?: TranslationListType,
+}
+
+export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMessageDataType>;
+
 
 let _getState;
+
+const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => moment(inTimestamp).utc().format('YYYY-MM-DD HH:mm:ss +0000');
+
+const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => moment.utc(inTimestamp, ['YYYY-MM-DD HH:mm:ss UTC', 'YYYY-MM-DD HH:mm:ss +0000'], true).valueOf();
 
 const Converter = {
   config: (getState: () => any) => {
     _getState = getState;
   },
 
-  cwcToLegacy:( message: any, channelId: string) => {
-    const time = new Date();
-    const offset = (time.getTime() - _getState().event.startTime).toString();
-    const timestamp = Converter.getTimestamp(time);
-    const roomType = 'public';
-
-    return {
+  cwcMessageToLegacyNewMessage:( message: MessageType, channelId: ChannelIdType): LegcayNewMessageDataType => (
+    {
       messageText: message.text,
       language: _getState().currentLanguage,
       eventTimeId: _getState().event.id,
-      eventTimeOffset: offset,
+      eventTimeOffset: (message.timestamp - _getState().event.startTime).toString(),
       eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
-      fromNickname: message.user.name,
-      fromToken: message.user.pubnubToken,
+      fromNickname: message.sender.name,
+      fromToken: message.sender.pubnubToken,
       msgId: message.id,
-      timestamp,
-      fromAvatar: message.user.avatarUrl,
+      timestamp: timestampToString(message.timestamp),
+      fromAvatar: typeof message.sender.avatarUrl === 'string' ? message.sender.avatarUrl : 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
       isHost: true,
-      label: message.user.role.label,
+      label: message.sender.role.label,
       isVolunteer: true,
       isUser: true,
-      userId: message.user.id,
+      userId: message.sender.id,
       organizationId: _getState().organization.id,
       organizationName: _getState().organization.name,
-      roomType: roomType,
+      roomType: 'public',
       channelToken: _getState().channels[channelId].id,
       eventStartTime: _getState().event.startTime,
-    };
-  },
+    }
+  ),
 
   cwcToLegacyReaction: (reaction: any, channelId: string) => (
     {
@@ -49,33 +123,25 @@ const Converter = {
     }
   ),
 
-  cwcToLegacySystemMessage:(message: any) => {
-    const time = new Date();
-    const timestamp = Converter.getTimestamp(time);
-
-    return {
+  cwcToLegacySystemMessage:(message: any) => (
+    {
       fromNickname: 'System',
       messageText: `${message.host.name} started a live prayer with ${message.guest.name}`,
-      timestamp: timestamp,
-    };
-  },
+      timestamp: Converter.getTimestamp(),
+    }
+  ),
 
-  cwcToLegacyLeaveChannel:(moment: any, channelId: string) => {
-    const time = new Date();
-    const timestamp = Converter.getTimestamp(time);
-    const roomType = 'public';
-
-    return {
+  cwcToLegacyLeaveChannel:(moment: any, channelId: string) => (
+    {
       messageText: `${moment.name} has left the chat`,
-      timestamp: timestamp,
+      timestamp: Converter.getTimestamp(),
       userId: moment.pubnubToken,
       fromNickname: moment.name,
       type: 'system',
-      roomType: roomType,
+      roomType: 'public',
       channelToken: channelId,
-      cwcTimestamp: moment.timeStamp,
-    };
-  },
+    }
+  ),
 
   cwcToLegacyMuteUser:(moment: any) => {
     const hostChannel = getHostChannel(_getState());
@@ -83,25 +149,28 @@ const Converter = {
       nickname: moment.guest,
       fromNickname: moment.host,
       channelToken: hostChannel,
-      cwcTimestamp: moment.timeStamp,
+      timestamp: Converter.getTimestamp(),
     };
   },
 
-  legacyToCwc: (message: any) => (
+  legacyNewMessageToCwcMessage: (message: LegcayNewMessageDataType): MessageType => (
     {
       type: 'MESSAGE',
       id: message.uniqueMessageToken,
+      timestamp: timestampFromString(message.timestamp),
       lang: message.language,
       text: message.messageText,
-      translations: message.translations,
-      isMuted: message.isMuted,
-      user: {
+      translations: message.translations ? message.translations : [],
+      isMuted: !!message.isMuted,
+      closeTrayButtonRendered: false,
+      messageTrayOpen: false,
+      sender: {
         id: message.userId,
         name: message.fromNickname,
         avatarUrl: message.fromAvatar,
         pubnubToken: message.fromToken,
         role: {
-          label: message.label,
+          label: message.label ? message.label : '',
         },
       },
     }
@@ -112,6 +181,7 @@ const Converter = {
 
     return receivePrayerRequestNotification(
       {
+        id: '12345',
         name: message.data.fromNickname,
         pubnubToken: message.data.fromToken,
         role: { 
@@ -123,11 +193,8 @@ const Converter = {
     );
   },
 
-  getTimestamp: (time:Date) => {
-    const twoDigitNumber = num => num < 10 ? '0' + num : num.toString();
-    const month = monthIndex => twoDigitNumber(monthIndex + 1);
-    return `${time.getUTCFullYear()}-${month(time.getUTCMonth())}-${twoDigitNumber(time.getUTCDate())} ${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()} +0000`;
-  },
+  getTimestamp: () => moment().utc().format(UTC_DATE_FORMAT),
+
 };
 
 export default Converter;

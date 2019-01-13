@@ -32,8 +32,11 @@ describe('Salvation Moment Tests', () => {
         '123456': {
           name: 'public',
           id: '123456',
+          direct: false,
           moments: [],
           anchorMoments: [],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
     };
@@ -113,6 +116,7 @@ describe('Salvation Moment Tests', () => {
         '123456': {
           name: 'public',
           id: '123456',
+          direct: false,
           moments: [],
           anchorMoments: [
             {
@@ -122,6 +126,8 @@ describe('Salvation Moment Tests', () => {
               text: 'I commit my life to Christ.',
             },
           ],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
       salvations: 3,
@@ -190,6 +196,7 @@ describe('Salvation Moment Tests', () => {
         '123456': {
           name: 'public',
           id: '123456',
+          direct: false,
           moments: [
             {
               type: 'ANCHOR_MOMENT',
@@ -199,6 +206,8 @@ describe('Salvation Moment Tests', () => {
             },
           ],
           anchorMoments: [],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
       salvations: 3,

@@ -48,14 +48,20 @@ describe('Chat2 Tests', () => {
       '123456': {
         name: 'public',
         id: '123456',
+        direct: false,
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
       '789012': {
         name: 'Host',
         id: '789012',
+        direct: false,
         moments: [],
         anchorMoments: [],
+        scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
     },
   };
@@ -110,13 +116,6 @@ describe('Chat2 Tests', () => {
         uuid: '123456',
       }
     );
-    expect(mockSubscribe).toHaveBeenCalledTimes(1);
-    expect(mockSubscribe).toHaveBeenCalledWith(
-      {
-        channels: ['123456', '789012'],
-        withPresence: true,
-      }
-    );
     expect(mockAddListener).toHaveBeenCalledTimes(1);
     expect(mockAddListener).toHaveBeenCalledWith(
       {
@@ -162,7 +161,7 @@ describe('Chat2 Tests', () => {
       id: '123456',
       lang: 'en',
       text: 'You kindness leads us to repentance to the heart of God',
-      user: {
+      sender: {
         pubnubToken: '098765',
         name: 'Hillsong Young & Free',
         role: {
@@ -189,8 +188,8 @@ describe('Chat2 Tests', () => {
     );
 
     expect(mockPublish).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcToLegacy).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcToLegacy).toHaveBeenCalledWith(message, '123456');
+    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledTimes(1);
+    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledWith(message, '123456');
     expect(mockPublish.mock.calls[0][0]).toEqual(
       {
         channel: '123456',
@@ -209,7 +208,7 @@ describe('Chat2 Tests', () => {
       id: '123456',
       lang: 'en',
       text: 'You kindness leads us to repentance to the heart of God',
-      user: {
+      snder: {
         pubnubToken: '098765',
         name: 'Hillsong Young & Free',
         role: {
@@ -291,9 +290,9 @@ describe('Chat2 Tests', () => {
 
     chat.init();
 
-    chat.dispatch(addChannel('direct', 'asd2389dhsdf'));
+    chat.dispatch(addChannel('direct', 'asd2389dhsdf', true));
 
-    expect(mockSubscribe).toHaveBeenCalledTimes(2);
+    expect(mockSubscribe).toHaveBeenCalledTimes(1);
     expect(mockSubscribe).toHaveBeenCalledWith(
       {
         channels: ['asd2389dhsdf'],

@@ -16,7 +16,7 @@ import type {
   ReactionType,
 } from '../reactions/reactionButton/dux';
 
-import type { 
+import type {
   AnchorMomentType,
   PublishSalvationType,
   ReleaseAnchorMomentType,
@@ -34,6 +34,8 @@ import {
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
+  PUBLISH_MUTE_USER,
+  RECEIVE_MUTE_USER,
 } from '../moment';
 
 import {
@@ -55,8 +57,8 @@ import {
 
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
-import { SET_VIDEO } from '../videoFeed/dux';
-import type { SetVideoType, VideoType } from '../videoFeed/dux';
+import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
+import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
 
 import {
   RELEASE_ANCHOR_MOMENT,
@@ -75,15 +77,18 @@ import moment from 'moment';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
+import type {
+  UIDType,
+  DateTimeType,
+  ChannelIdType,
+} from '../cwc-types';
+
 // Action Types
 
-const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
-const INVITE_TO_CHANNEL = 'INVITE_TO_CHANNEL';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
-const GET_INIT_DATA = 'GET_INIT_DATA';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
 const SET_USER = 'SET_USER';
@@ -101,13 +106,12 @@ const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
+const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
+const SET_HERE_NOW = 'SET_HERE_NOW';
+const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 
 // Flow Type Definitions
-
-type GetInitData = {
-  type: 'GET_INIT_DATA',
-};
 
 type SetScheduleDataType = {
   type: 'SET_SCHEDULE_DATA',
@@ -152,6 +156,18 @@ type PubnubKeysType = {
   subscribe: string,
 };
 
+type PrivateUserType = {
+  id: string,
+  name: string,
+  avatarUrl?: string,
+  pubnubToken: string,
+  pubnubAccessKey: string,
+  role: {
+    label: string,
+    permissions: Array<string>,
+  }
+};
+
 type SetUser = {
   type: 'SET_USER',
   user: PrivateUserType,
@@ -167,21 +183,10 @@ type ReceiveReactionType = {
   reaction: ReactionType,
 }
 
-type PrivateUserType = {
-  id: string,
-  name: string,
-  avatarUrl?: string,
-  pubnubToken: string,
-  pubnubAccessKey: string,
-  role: {
-    label: string,
-    permissions: Array<string>,
-  }
-};
-
 type SharedUserType = {
+  id: UIDType | null,
   name: string,
-  avatarUrl?: string,
+  avatarUrl?: string | null,
   pubnubToken: string,
   role: {
     label: string,
@@ -191,19 +196,22 @@ type SharedUserType = {
 type ChannelType = {
   id: string,
   name: string,
+  direct: boolean,
   moments: Array<MomentType>,
   participants?: Array<SharedUserType>,
   anchorMoments: Array<AnchorMomentType>,
-};
-
-type HereNowChannels = {
-  [string]: HereNowUsers,
+  scrollPosition: number,
+  sawLastMomentAt: DateTimeType,
 };
 
 type HereNowUsers = {
   [string]: {
     available_prayer: boolean,
   },
+};
+
+type HereNowChannels = {
+  [string]: HereNowUsers,
 };
 
 type ClientInfoType = {
@@ -217,13 +225,20 @@ type ClientInfoType = {
   state?: string,
 }
 
+type AuthenticationType = {
+  accessToken: string,
+  refreshToken: string
+}
+
+type ChannelsObjectType = {
+  [string]: ChannelType,
+};
+
 type FeedType = {
   pubnubKeys: PubnubKeysType,
   event: EventType,
   organization: OrganizationType,
-  channels: {
-    [string]: ChannelType,
-  },
+  channels: ChannelsObjectType,
   hereNow: HereNowChannels,
   currentUser: PrivateUserType,
   animatingMoment: boolean,
@@ -232,6 +247,7 @@ type FeedType = {
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
+  isVideoPlaying: boolean,
   video: VideoType,
   currentLanguage: string,
   languageOptions: Array<LanguageType>,
@@ -246,18 +262,12 @@ type FeedType = {
     [string]: PaneContentType,
   },
   clientInfo: ClientInfoType,
+  mutedUsers: Array<string>,
 };
 
 type AddChannelType = {
   type: 'ADD_CHANNEL',
   channel: ChannelType,
-};
-
-type InviteToChannelType = {
-  type: 'INVITE_TO_CHANNEL',
-  user: SharedUserType,
-  channelId: string,
-  channelName: string,
 };
 
 type RemoveChannelType = {
@@ -301,6 +311,16 @@ type UserState = {
   available_prayer: boolean,
 };
 
+type HereNowUsersType = {
+  [string]: UserState,
+};
+
+type SetHereNow = {
+  type: 'SET_HERE_NOW',
+  channel: string,
+  users: HereNowUsersType
+};
+
 type UpdateHereNowType = {
   type: 'UPDATE_HERE_NOW',
   channel: string,
@@ -318,11 +338,6 @@ type SetSalvationsType = {
   type: 'SET_SALVATIONS',
   count: number,
 };
-
-type AuthenticationType = {
-  accessToken: string,
-  refreshToken: string
-}
 
 type SetAuthenticationType = {
   type: 'SET_AUTHENTICATION',
@@ -342,10 +357,22 @@ type SetNotificationBannerType = {
   bannerType: string,
 };
 
+type UpdateScrollPositionType = {
+  type: 'UPDATE_SCROLL_POSITION',
+  scrollPosition: number,
+  channel: string,
+};
+
 type SetClientInfoType = {
   type: 'SET_CLIENT_INFO',
   data: ClientInfoType,
-}
+};
+
+type SetSawLastMomentAt = {
+  type: typeof SET_SAW_LAST_MOMENT_AT,
+  timestamp: DateTimeType,
+  channelId: ChannelIdType,
+};
 
 type FeedActionTypes =
   | ReceiveMomentType
@@ -357,7 +384,6 @@ type FeedActionTypes =
   | DeleteMessageType
   | ToggleCloseTrayButtonType
   | PublishAcceptedPrayerRequestType
-  | InviteToChannelType
   | ReceiveAcceptedPrayerRequestType
   | PublishReactionActionType
   | RemoveReactionType
@@ -379,9 +405,20 @@ type FeedActionTypes =
   | AddErrorType
   | RemoveErrorType
   | SetScheduleDataType
-  | SetClientInfoType;
+  | SetClientInfoType
+  | SetHereNow
+  | SetSawLastMomentAt
+  | ToggleHideVideoType;
 
 // Action Creators
+export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
+  {
+    type: SET_SAW_LAST_MOMENT_AT,
+    timestamp,
+    channelId,
+  }
+);
+
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
   {
     type: SET_AUTHENTICATION,
@@ -395,6 +432,14 @@ const setAuthentication = (accessToken: string, refreshToken: string): SetAuthen
 const removeAuthentication = (): RemoveAuthenticationType => (
   {
     type: REMOVE_AUTHENTICATION,
+  }
+);
+
+const setHereNow = (channel: string, users: HereNowUsersType): SetHereNow => (
+  {
+    type: SET_HERE_NOW,
+    channel,
+    users,
   }
 );
 
@@ -467,12 +512,6 @@ const setEvent = (title: string, id: number, startTime: number, videoStartTime: 
   }
 );
 
-const getInitData = (): GetInitData => (
-  {
-    type: GET_INIT_DATA,
-  }
-);
-
 const removeReaction = (id: string): RemoveReactionType => (
   {
     type: REMOVE_REACTION,
@@ -490,6 +529,7 @@ const setUser = (user: PrivateUserType): SetUser => (
 const addChannel = (
   name: string,
   id: string,
+  direct: boolean,
   participants?: Array<SharedUserType>
 ): AddChannelType => (
   {
@@ -497,9 +537,12 @@ const addChannel = (
     channel: {
       id,
       name,
+      direct,
       moments: [],
       participants,
       anchorMoments: [],
+      scrollPosition: -1,
+      sawLastMomentAt: Date.now(),
     },
   }
 );
@@ -554,12 +597,21 @@ const clearNotificationBanner = (): ClearNotificationBannerType => (
   }
 );
 
+const updateScrollPosition = (scrollPosition: number, channel: string): UpdateScrollPositionType => (
+  {
+    type: UPDATE_SCROLL_POSITION,
+    scrollPosition,
+    channel,
+  }
+);
+
 const setClientInfo = (data: ClientInfoType) => (
   {
     type: SET_CLIENT_INFO,
     data,
   }
 );
+
 // Default State
 
 const getLanguage = () => {
@@ -603,6 +655,7 @@ const defaultState = {
   isVideoHidden: false,
   isLanguageSelectorVisible: false,
   isAuthenticated: false,
+  isVideoPlaying: false,
   video: {
     type: '',
     url: '',
@@ -669,6 +722,7 @@ const defaultState = {
     ip: '',
     state: '',
   },
+  mutedUsers: [],
 };
 
 // Reducer
@@ -680,12 +734,37 @@ const reducer = (
     return state;
   }
   switch (action.type) {
+  case SET_SAW_LAST_MOMENT_AT: {
+    const { timestamp, channelId } = action;
+    if (!state.channels[channelId]) {
+      return state;
+    }
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        // $FlowFixMe
+        [channelId]: {
+          ...state.channels[channelId],
+          sawLastMomentAt: timestamp,
+        },
+      },
+    };
+  }
   case SET_PANE_CONTENT:
     return {
       ...state,
       panes: {
         ...state.panes,
         [action.name]: action.content,
+      },
+    };
+  case SET_HERE_NOW:
+    return {
+      ...state,
+      hereNow: {
+        ...state.hereNow,
+        [action.channel]: action.users,
       },
     };
   case UPDATE_HERE_NOW:
@@ -699,17 +778,18 @@ const reducer = (
         },
       },
     };
-  case REMOVE_HERE_NOW:
+  case REMOVE_HERE_NOW: {
+    const { userToken: token } = action;
     return {
       ...state,
       hereNow: {
         [action.channel]: objectFilter(
           state.hereNow[action.channel],
-          // $FlowFixMe
-          userToken => userToken === action.userToken
+          userToken => userToken === token
         ),
       },
     };
+  }
   case 'SET_SEQUENCE':
     return {
       ...state,
@@ -738,8 +818,8 @@ const reducer = (
       ...state,
       event: action.event,
     };
-  case SET_SCHEDULE_DATA : {
-    const newState = {
+  case SET_SCHEDULE_DATA:
+    return {
       ...state,
       sequence: {
         ...state.sequence,
@@ -752,8 +832,6 @@ const reducer = (
         ],
       },
     };
-    return newState;
-  }
   case SET_SCHEDULE :
     return {
       ...state,
@@ -777,26 +855,26 @@ const reducer = (
       },
       isAuthenticated: false,
     };
-  case RECEIVE_MOMENT:
+  case RECEIVE_MOMENT: {
     // $FlowFixMe
-    if (state.channels[action.channel]) {
+    const { channel:channelId, moment }: { channelId: string, moment: MomentType } = action;
+    if (state.channels[channelId]) {
       return {
         ...state,
         channels: {
           ...state.channels,
-          // $FlowFixMe
-          [action.channel]: {
-            ...state.channels[action.channel],
+          [channelId]: {
+            ...state.channels[channelId],
             moments: [
-              ...state.channels[action.channel].moments,
-              // $FlowFixMe
-              action.moment,
+              ...state.channels[channelId].moments,
+              moment,
             ],
           },
         },
       };
     }
     return state;
+  }
   case ADD_CHANNEL:
     if (state.channels[action.channel.id]) {
       return state;
@@ -806,23 +884,6 @@ const reducer = (
       channels: {
         ...state.channels,
         [action.channel.id]: action.channel,
-      },
-    };
-  case INVITE_TO_CHANNEL:
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [action.channelId]: {
-          ...state[action.channelId],
-          id: action.channelId,
-          name: action.channelName,
-          moments: [],
-          participants: [
-            getCurrentUserAsSharedUser(state),
-            action.user,
-          ],
-        },
       },
     };
   case REMOVE_CHANNEL: {
@@ -844,8 +905,7 @@ const reducer = (
           type: EVENT,
         };
       }
-    } 
-
+    }
     return stateCopy;
   }
   case LOAD_HISTORY:
@@ -891,7 +951,16 @@ const reducer = (
       },
     };
   }
-  case 'MUTE_USER':
+  case RECEIVE_MUTE_USER: {
+    // $FlowFixMe
+    const newArray = [...state.mutedUsers, action.nickname];
+    return {
+      ...state,
+      // ensure no duplicates in the array
+      mutedUsers: [...new Set(newArray)],
+    };
+  }
+  case PUBLISH_MUTE_USER:
   case 'DIRECT_CHAT':
   case CLOSE_MESSAGE_TRAY:
     return {
@@ -1046,25 +1115,24 @@ const reducer = (
   }
   case RELEASE_ANCHOR_MOMENT: {
     const { channels } = state;
-    const messageIndex = channels[action.channel].anchorMoments.findIndex(el => (
-      // $FlowFixMe
-      el.id === action.id
+    const { id, channel } = action;
+    const messageIndex = channels[channel].anchorMoments.findIndex(el => (
+      el.id === id
     ));
-    // $FlowFixMe
-    const moment = channels[action.channel].anchorMoments.find(anchorMoment => anchorMoment.id === action.id);
+    const moment = channels[channel].anchorMoments.find(anchorMoment => anchorMoment.id === id);
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: {
-          ...state.channels[action.channel],
+        [channel]: {
+          ...state.channels[channel],
           moments: [
-            ...state.channels[action.channel].moments,
+            ...state.channels[channel].moments,
             moment,
           ],
           anchorMoments: [
-            ...channels[action.channel].anchorMoments.slice(0, messageIndex),
-            ...channels[action.channel].anchorMoments.slice(messageIndex + 1),
+            ...channels[channel].anchorMoments.slice(0, messageIndex),
+            ...channels[channel].anchorMoments.slice(messageIndex + 1),
           ],
         },
       },
@@ -1079,6 +1147,7 @@ const reducer = (
   case LEAVE_CHANNEL: {
     const { channels } = state;
     const { channelId:currentChannel } = state.panes.primary;
+    const { pubnubToken } = action;
     const publicChannel = getPublicChannel(state);
     if (currentChannel &&
       channels[currentChannel].participants &&
@@ -1086,12 +1155,9 @@ const reducer = (
     ) {
       const { participants } = channels[currentChannel];
       const userIndex = participants.findIndex(el => (
-        // $FlowFixMe
-        el.pubnubToken === action.pubnubToken
+        el.pubnubToken === pubnubToken
       ));
       if (participants) {
-        // Flow complains that participants can still
-        // be undefined here even though we already checked for them
         return {
           ...state,
           channels: {
@@ -1127,7 +1193,11 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
-      isVideoHidden: action.focus,
+    };
+  case TOGGLE_HIDE_VIDEO:
+    return {
+      ...state,
+      isVideoHidden: action.hidden,
     };
   case CLOSE_SIDE_MENU:
     return {
@@ -1155,12 +1225,13 @@ const reducer = (
       ...state,
       reactions: [...state.reactions, action.reaction],
     };
-  case REMOVE_REACTION:
+  case REMOVE_REACTION: {
+    const { id } = action;
     return {
       ...state,
-      // $FlowFixMe
-      reactions: state.reactions.filter(reaction => reaction.id !== action.id),
+      reactions: state.reactions.filter(reaction => reaction.id !== id),
     };
+  }
   case SET_SALVATIONS:
     return {
       ...state,
@@ -1171,12 +1242,13 @@ const reducer = (
       ...state,
       errors: [...state.errors, action.error],
     };
-  case REMOVE_ERROR:
+  case REMOVE_ERROR: {
+    const { id } = action;
     return {
       ...state,
-      // $FlowFixMe
-      errors: state.errors.filter(error => error.id !== action.id),
+      errors: state.errors.filter(error => error.id !== id),
     };
+  }
   case CLEAR_ERRORS:
     return {
       ...state,
@@ -1198,10 +1270,35 @@ const reducer = (
         bannerType: '',
       },
     };
+  case UPDATE_SCROLL_POSITION: {
+    if (!state.channels[action.channel]) {
+      return state;
+    }
+    return {
+      ...state,
+      channels: {
+        ...state.channels,
+        [action.channel]: {
+          ...state.channels[action.channel],
+          scrollPosition: action.scrollPosition,
+        },
+      },
+    };
+  }
   case SET_CLIENT_INFO:
     return {
       ...state,
       clientInfo: action.data,
+    };
+  case 'PLAY_VIDEO':
+    return {
+      ...state,
+      isVideoPlaying: true,
+    };
+  case 'PAUSE_VIDEO':
+    return {
+      ...state,
+      isVideoPlaying: false,
     };
   default:
     return state;
@@ -1212,6 +1309,7 @@ const reducer = (
 
 const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   {
+    id: state.currentUser.id,
     pubnubToken: state.currentUser.pubnubToken,
     name: state.currentUser.name,
     avatarUrl: state.currentUser.avatarUrl,
@@ -1225,16 +1323,21 @@ const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
 
+const getScrollPosition = (state: FeedType, channel: string): number => {
+  if (state.channels[channel]) {
+    return state.channels[channel].scrollPosition;
+  } else {
+    return -1;
+  }
+};
+
 // Exports
 
 export {
-  CHANGE_CHANNEL,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
-  INVITE_TO_CHANNEL,
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
-  GET_INIT_DATA,
   SET_NOTIFICATION_BANNER,
 };
 export {
@@ -1244,7 +1347,6 @@ export {
   togglePopUpModal,
   leaveChannel,
   getCurrentUserAsSharedUser,
-  getInitData,
   removeReaction,
   setUser,
   setEvent,
@@ -1262,25 +1364,27 @@ export {
   setSalvations,
   setAuthentication,
   removeAuthentication,
+  updateScrollPosition,
+  getScrollPosition,
   setClientInfo,
+  setHereNow,
 };
 export type {
   AddChannelType,
   RemoveChannelType,
   MomentType,
   FeedType,
-  InviteToChannelType,
   ChannelType,
   PrivateUserType,
   SharedUserType,
   TogglePopUpModalType,
   LeaveChannelType,
-  GetInitData,
   LanguageType,
   OrganizationType,
   SetSalvationsType,
   SetNotificationBannerType,
   ClientInfoType,
+  ChannelsObjectType,
 };
 
 export default reducer;

@@ -6,8 +6,6 @@ RUN chmod +x /etc/service/nginx/run
 
 COPY config/nginx/nginx.conf /etc/nginx/
 
-RUN mkdir -p /usr/src/app/storybook
-
 WORKDIR /usr/src/app
 
 COPY dist/index.html* /usr/src/app/
@@ -17,8 +15,6 @@ COPY dist/runtime.* /usr/src/app/
 COPY dist/vendor.* /usr/src/app/
 
 COPY dist/manifest.* /usr/src/app/
-
-COPY dist/storybook* /usr/src/app/storybook/
 
 RUN groupadd --gid 1001 cwc && useradd --uid 1001 --gid cwc --shell /bin/bash --create-home cwc && \
 	chown -R cwc:cwc /usr/src/app

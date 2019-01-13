@@ -9,11 +9,13 @@ import ActionableNotification from '../../src/moment/actionableNotification/acti
 Enzyme.configure({ adapter: new Adapter() });
 
 const yablby = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'yablby',
   role: { label: '' },
 };
 const billBogus = {
+  id: '12345',
   pubnubToken: '5483',
   name: 'Bill Bogus',
   role: { label: '' },
@@ -36,7 +38,7 @@ describe('ActionableNotification tests', () => {
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
             user: yablby,
-            timeStamp: '9:33pm',
+            timestamp: '9:33pm',
             active: true,
             cancelled: false,
             prayerChannel: 'direct-chat-1234',
@@ -69,7 +71,7 @@ describe('ActionableNotification tests', () => {
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
             user: yablby,
-            timeStamp: '9:33pm',
+            timestamp: '9:33pm',
             active: false,
             cancelled: false,
             prayerChannel: 'direct-chat-12345',
@@ -100,7 +102,7 @@ describe('ActionableNotification tests', () => {
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
             user: yablby,
-            timeStamp: '9:33pm',
+            timestamp: '9:33pm',
             active: false,
             cancelled: true,
             prayerChannel: 'direct-chat-1234',

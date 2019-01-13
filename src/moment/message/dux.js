@@ -2,7 +2,14 @@
 import type { SharedUserType } from '../../feed/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
-import { createUid } from '../../util';
+import { createUid, newTimestamp } from '../../util';
+import type { 
+  UIDType, 
+  DateTimeType, 
+  System, 
+  MomentNameType, 
+  LanguageType,
+} from '../../cwc-types';
 
 // Action Types
 
@@ -11,21 +18,28 @@ const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const TOGGLE_CLOSE_TRAY_BUTTON = 'TOGGLE_CLOSE_TRAY_BUTTON';
 const MESSAGE = 'MESSAGE';
-const MUTE_USER = 'MUTE_USER';
+const RECEIVE_MUTE_USER = 'RECEIVE_MUTE_USER';
+const PUBLISH_MUTE_USER = 'PUBLISH_MUTE_USER';
 const DIRECT_CHAT = 'DIRECT_CHAT';
 const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
 // Flow Type Definitions
 
+type SenderType = System | SharedUserType;
+
+type BaseMomentType<T: MomentNameType, S: SenderType> = {
+  id: UIDType,
+  timestamp: DateTimeType,
+  sender: S,
+  type: T,
+};
+
 type MessageType = {
-  type: 'MESSAGE',
-  id: string,
-  lang: string,
+  lang: LanguageType,
   text: string,
-  user: SharedUserType,
   messageTrayOpen: boolean,
   closeTrayButtonRendered: boolean,
-};
+} & BaseMomentType<typeof MESSAGE, SharedUserType>;
 
 type OpenMessageTrayType = {
   type: 'OPEN_MESSAGE_TRAY',
@@ -48,11 +62,16 @@ type ToggleCloseTrayButtonType = {
   id: string,
 };
 
-type MuteUserType = {
-  type: 'MUTE_USER',
+type ReceiveMuteUserType = {
+  type: 'RECEIVE_MUTE_USER',
+  nickname: string,
+};
+
+type PublishMuteUserType = {
+  type: 'PUBLISH_MUTE_USER',
   feedToken: string,
   nickname: string,
-}
+};
 
 type PublishDeleteMessageType = {
   type: 'PUBLISH_DELETE_MESSAGE',
@@ -60,6 +79,23 @@ type PublishDeleteMessageType = {
 }
 
 // Action Creators
+
+const newMessage = (
+  text: string,
+  sender: SharedUserType,
+  lang: LanguageType
+): MessageType => (
+  {
+    type: MESSAGE,
+    id: createUid(),
+    timestamp: newTimestamp(),
+    lang,
+    text,
+    sender,
+    messageTrayOpen: false,
+    closeTrayButtonRendered: false,
+  }
+);
 
 const publishMessage = (
   channel: string,
@@ -69,14 +105,7 @@ const publishMessage = (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
-    moment: {
-      type: MESSAGE,
-      id: createUid(),
-      text,
-      user,
-      messageTrayOpen: false,
-      closeTrayButtonRendered: false,
-    },
+    moment: newMessage(text, user, 'en'),
   }
 );
 
@@ -116,9 +145,16 @@ const publishDeleteMessage = (id:string): PublishDeleteMessageType => (
   }
 );
 
-const muteUser = (feedToken:string, nickname:string): MuteUserType => (
+const receiveMuteUser = (nickname:string): ReceiveMuteUserType => (
   {
-    type: MUTE_USER,
+    type: RECEIVE_MUTE_USER,
+    nickname,
+  }
+);
+
+const publishMuteUser = (feedToken:string, nickname:string): PublishMuteUserType => (
+  {
+    type: PUBLISH_MUTE_USER,
     feedToken,
     nickname,
   }
@@ -140,7 +176,8 @@ export {
   DELETE_MESSAGE,
   TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
-  MUTE_USER,
+  PUBLISH_MUTE_USER,
+  RECEIVE_MUTE_USER,
   DIRECT_CHAT,
   PUBLISH_DELETE_MESSAGE,
 };
@@ -152,8 +189,10 @@ export {
   toggleCloseTrayButton,
   publishMessage,
   publishDeleteMessage,
-  muteUser,
+  publishMuteUser,
+  receiveMuteUser,
   directChat,
+  newMessage,
 };
 
 export type {
@@ -162,6 +201,7 @@ export type {
   CloseMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
-  MuteUserType,
+  PublishMuteUserType,
+  ReceiveMuteUserType,
   PublishDeleteMessageType,
 };

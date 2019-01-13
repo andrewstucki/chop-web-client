@@ -56,6 +56,7 @@ currentEvent {
     id
     name
     type
+    direct
     subscribers {
       pubnubToken
       avatar
@@ -65,19 +66,20 @@ currentEvent {
 }`;
 
 const eventAt = `
-query EventAt($time: Timestamp, $includeFeed: Boolean!, $includeVideo: Boolean!) {
+query EventAt($time: Timestamp) {
   eventAt (time: $time){
     title
     id
     startTime
     videoStartTime
-    video @include(if: $includeVideo) {
+    video {
       type
       url
     }
-    feeds @include(if: $includeFeed) {
+    feeds {
       id
       name
+      direct
       type
       subscribers {
         pubnubToken
@@ -122,6 +124,7 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $host
   acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken, hostTokens: $hostTokens, requesterNickname: $requesterNickname) {
     id
     name
+    direct
     subscribers {
       pubnubToken
       avatar
@@ -148,6 +151,7 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
   createDirectFeed(targetPubnubToken: $pubnubToken, targetNickname: $nickname) {
     id
     name
+    direct
     subscribers {
       pubnubToken
       avatar
@@ -167,7 +171,7 @@ schedule {
 }`;
 
 const currentState = `
-{
+query CurrentState {
   ${currentEvent}
   ${currentUser}
   ${currentOrganization}
@@ -283,13 +287,11 @@ export default class GraphQl {
     return await this.client.request(schedule);
   }
 
-  async eventAtTime (time, includeFeed, includeVideo) {
+  async eventAtTime (time) {
     return await this.client.request(
       eventAt,
       {
         time,
-        includeFeed,
-        includeVideo,
       }
     );
   }

@@ -47,6 +47,7 @@ describe('Chat', () => {
                 role: { label: '' },
               },
             ],
+            scrollPosition: 0,
           },
         },
       },
@@ -78,6 +79,7 @@ describe('Chat', () => {
                 role: { label: '' },
               },
             ],
+            scrollPosition: 0,
           },
         },
         panes: {
@@ -99,6 +101,6 @@ describe('Chat', () => {
       },
       'direct',
     );
-    expect(result).toEqual('Chat with Shaq O.');
+    expect(result).toEqual('Chat');
   });
 });

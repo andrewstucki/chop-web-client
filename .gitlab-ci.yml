@@ -22,23 +22,56 @@ cache:
     - .yarn
     - dist/
 
-compile:app-staging:
+compile:app-review:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
-  script: 
+  script:
     - yarn install --pure-lockfile --cache-folder .yarn
-    - yarn build:staging
+    - yarn build:review
   artifacts:
     expire_in: 1 day
     paths:
       - dist/
   except:
     - master
+    - integration
+
+compile:app-staging:
+  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  stage: compile
+  variables:
+    GIT_STRATEGY: clone
+
+  script:
+    - yarn install --pure-lockfile --cache-folder .yarn
+    - yarn build:staging
+  after_script:
+    - mkdir -pvm 0700 /root/.ssh  && touch /root/.ssh/known_hosts
+    - echo "$SSH_DEPLOY_KEY" > /root/.ssh/id_rsa
+    - chmod 0600 /root/.ssh/id_rsa
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git config user.name "${GITLAB_USER_NAME}"
+    - git remote set-url --push origin git@in.thewardro.be:io/opennetwork/chop-web-client.git
+    - yarn version --patch
+    # TODO: We need access to Gitlab user to make this push
+    - echo "$GITLAB_KNOWN_HOST" > /root/.ssh/known_hosts
+    - git push origin HEAD:integration
+    - rm -Rfv /root/.ssh
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/
+  only:
+    - integration
+  except:
+    variables:
+      # Do not run the pipeline again because of the `yarn version --patch`
+      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 compile:app-production:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   stage: compile
-  script: 
+  script:
     - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build:production
   artifacts:
@@ -55,14 +88,18 @@ lint:
     - yarn lint
     - yarn flow check
   except:
-    - master
+    refs:
+      - master
+    variables:
+      # Do not run the pipeline again because of the `yarn version --patch`
+      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 test:
   stage: test
   image: in.thewardro.be:4567/io/io-builder:1.0.1
   cache:
     untracked: false
-    policy: pull  
+    policy: pull
   variables:
     CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
   script:
@@ -73,40 +110,60 @@ test:
     - yarn coverage
     - ./cc-test-reporter after-build -t lcov --exit-code $? || echo "Skipping Code Climate Coverage Upload"
   except:
+    refs:
+      - master
+    variables:
+        # Do not run the pipeline again because of the `yarn version --patch`
+        - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
+
+build:image-review:
+  stage: build
+  cache:
+    untracked: false
+    policy: pull
+  script:
+    - command build Dockerfile-app
+  dependencies:
+    - compile:app-review
+  only:
+    - branches
+  except:
     - master
+    - integration
 
 build:image-staging:
   stage: build
   cache:
     untracked: false
-    policy: pull  
-  script: 
+    policy: pull
+  script:
     - command build Dockerfile-app
-  dependencies: 
+  dependencies:
     - compile:app-staging
   only:
-    - branches
+    - integration
   except:
-    - master
+    variables:
+      # Do not run the pipeline again because of the `yarn version --patch`
+      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 build:image-production:
   stage: build
   cache:
     untracked: false
-    policy: pull  
-  script: 
+    policy: pull
+  script:
     - command build Dockerfile-app
-  dependencies: 
+  dependencies:
     - compile:app-production
   only:
     - master
-  
 
 review:
   stage: review
   cache:
     untracked: false
-    policy: pull  
+    policy: pull
   variables:
     CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
@@ -151,6 +208,10 @@ staging:
     url: https://staging.$KUBE_DOMAIN
   only:
     - integration
+  except:
+    variables:
+      # Do not run the pipeline again because of the `yarn version --patch`
+      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 code_coverage_report_master:
   stage: coverage
@@ -170,7 +231,7 @@ code_coverage_report_master:
 
 canary:
   stage: canary
-  cache: {} 
+  cache: {}
   dependencies: []
   script:
     - command deploy
@@ -197,7 +258,7 @@ destroy-canary:
 
 production:
   stage: production
-  cache: {}  
+  cache: {}
   variables:
     CI_ENVIRONMENT_URL: http://$KUBE_DOMAIN
   script:
@@ -208,4 +269,4 @@ production:
   when: manual
   allow_failure: false
   only:
-    - master 
+    - master

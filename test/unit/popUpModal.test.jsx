@@ -9,6 +9,7 @@ import PopUpModal from '../../src/popUpModal/popUpModal';
 Enzyme.configure({ adapter: new Adapter() });
 
 const otherUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {
@@ -87,6 +88,6 @@ describe('PopUpModal tests', () => {
         publishLeftChannelNotification={() => {}}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual(undefined);
+    expect(wrapper.find('div').exists()).toEqual(false);
   });
 });

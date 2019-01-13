@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styles from './style.css';
 
 import Heart from '../../../assets/heart.svg';
 
 type ReactionProps = {
+  reactionId: string,
   removeReaction: (id: string) => void
 };
 
-class Reaction extends React.Component {
+class Reaction extends Component<ReactionProps> {
   constructor (props: ReactionProps) {
     super(props);
     this.reactionRef = React.createRef();
     this.removeReaction = this.removeReaction.bind(this);
+  }
+
+  componentWillUnmount (): void {
+    this.removeReaction();
   }
 
   removeReaction () {
@@ -31,7 +36,7 @@ class Reaction extends React.Component {
     };
 
     return (
-      <div 
+      <div
         onAnimationEnd={this.removeReaction}
         className={styles.animate}
         style={heartStyle}

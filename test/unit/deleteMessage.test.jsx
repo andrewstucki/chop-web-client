@@ -41,7 +41,7 @@ describe('Test delete message', () => {
       id: '123456',
       lang: 'en',
       text: 'hi',
-      user: {
+      sender: {
         pubnubToken: 'abc123xyz',
         name: 'Tony Hoare',
         role: { label: '' },
@@ -54,7 +54,7 @@ describe('Test delete message', () => {
       id: '789012',
       lang: 'en',
       text: 'hey',
-      user: {
+      sender: {
         pubnubToken: '54353',
         name: 'Shaq O.',
         role: { label: '' },
@@ -67,11 +67,13 @@ describe('Test delete message', () => {
   test.skip('Delete message and publish on pubnub', async () => {
     const participants = [
       {
+        id: '12345',
         pubnubToken: 'abc123xyz',
         name: 'Tony Hoare',
         role: { label: '' },
       },
       {
+        id: '12345',
         pubnubToken: '54353',
         name: 'Shaq O.',
         role: { label: '' },
@@ -87,7 +89,7 @@ describe('Test delete message', () => {
     );
 
     return store.dispatch({ type: REHYDRATE }).then(() => {
-      store.dispatch(addChannel('test', 'test', participants));
+      store.dispatch(addChannel('test', 'test', false, participants));
       store.dispatch(setPrimaryPane('test', 'EVENT'));
       store.dispatch(loadHistory(moments, 'test'));
       store.dispatch(deleteMessage('123456', 'test'));
@@ -136,8 +138,11 @@ describe('Test delete message', () => {
         test: {
           name: 'test',
           id: 'test',
+          direct: false,
           moments: moments,
           anchorMoments: [],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
     };

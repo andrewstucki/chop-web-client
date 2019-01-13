@@ -6,6 +6,10 @@ import {
 } from './dux';
 
 import {
+  toggleHideVideo,
+} from '../videoFeed/dux';
+
+import {
   getPlaceholder,
 } from '../selectors/chatSelectors';
 
@@ -26,8 +30,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => (
   {
-    textOnBlur: () => dispatch(toggleChatFocus(false)),
-    textOnFocus: () => dispatch(toggleChatFocus(true)),
+    toggleChatFocus: focused => dispatch(toggleChatFocus(focused)),
+    toggleHideVideo: hidden => dispatch(toggleHideVideo(hidden)),
     publishMessage: (channel, text, user) => dispatch(
       publishMessage(channel, text, user)
     ),
