@@ -364,9 +364,8 @@ class Chat {
     const publicChannel = getPublicChannel(this.getState());
     const hostChannel = getHostChannel(this.getState());
     const currentUser = getCurrentUser(this.getState());
-    const { nickname } = event.state;
 
-    const name = nickname === currentUser.name ? 'You' : nickname;
+    const name = event?.state?.nickname === currentUser.name ? 'You' : event?.state?.nickname;
 
     if (channel === publicChannel) {
       switch (action) {
