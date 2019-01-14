@@ -115,7 +115,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const { current:list } = this.listRef;
 
     const x = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position)
-
+    
     scrollWrapper.scrollTop = x;
   }
 
@@ -133,6 +133,10 @@ class Feed extends React.Component<FeedProps, FeedState> {
   // React Lifecycle functions
 
   componentDidMount () {
+    this.scroll();
+  }
+
+  componentDidUpdate () {
     this.scroll();
   }
 
