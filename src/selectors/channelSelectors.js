@@ -176,8 +176,7 @@ const getScroll = createSelector(
         }
       } else {
         return {
-          type: 'SCROLL_TO',
-          position: scrollPosition,
+          type: 'NO_SCROLL'
         }
       }
     } else if (action.type = 'SET_SCROLL_POSITION' && action.channel === channelId) {

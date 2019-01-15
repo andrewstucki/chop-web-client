@@ -1,4 +1,4 @@
-describe('scrolling', () => {
+describe('Feed scrolling', () => {
   // Cypress.Commands.add('visitGraphQL', (url, operations = {}) => {
   //   cy.visit(url, {
   //     onBeforeLoad: (win) => {
@@ -39,15 +39,15 @@ describe('scrolling', () => {
   //   })
   // })
 
-  it('something', () => {
-    cy.server()
+  function loadAppWithHistory() {
 
-    cy.fixture('currentEvent.json').as('currentEventJSON')
-    cy.route('/.*\/graphql\/.*/', '@currentEventJSON')
+    cy.server();
 
-    cy.route(/.*\/publish\/.*/, [1,"Sent","15474147248048901"]);
+    cy.fixture('pubnubHistory.json').as('pubnubHistoryJSON');
 
-    cy.route(/.*\/history\/.*/, [[],0,0]);
+    cy.route(/.*\/publish\/.*/, [1, "Sent", "15474147248048901"]);
+
+    cy.route(/.*\/history\/.*/, '@pubnubHistoryJSON');
 
     cy.visit('http://0.0.0.0:8080');
     cy
@@ -61,7 +61,7 @@ describe('scrolling', () => {
         }
       });
 
-      cy
+    cy
       .window()
       .its('store')
       .invoke('dispatch', {
@@ -70,24 +70,24 @@ describe('scrolling', () => {
         subscribe: 'sub-c-12f3b1fe-e04d-11e7-b7e7-02872c090099'
       });
 
-      cy
+    cy
       .window()
       .its('store')
       .invoke('dispatch', {
         type: 'SET_USER',
         user: {
-          id: 366,
-          name: 'Olson_Mathilde',
-          avatar: null,
-          pubnubToken: '861c6066-f96c-4a94-8456-59c4aacd371d',
+          id: 1022905,
+          name: 'G. Boole',
+          avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
+          pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
           role: {
-            label: 'Host',
+            label: 'Admin',
             permissions: []
           }
         }
       });
 
-      cy
+    cy
       .window()
       .its('store')
       .invoke('dispatch', {
@@ -100,13 +100,13 @@ describe('scrolling', () => {
         },
       });
 
-      cy
+    cy
       .window()
       .its('store')
       .invoke('dispatch', {
         type: 'ADD_CHANNEL',
         channel: {
-          id: 'dbc0ca00-1015-46a3-9118-5548787f5c0a',
+          id: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c',
           name: 'Public',
           direct: false,
           moments: [],
@@ -117,7 +117,7 @@ describe('scrolling', () => {
         },
       });
 
-      cy
+    cy
       .window()
       .its('store')
       .invoke('dispatch', {
@@ -125,37 +125,136 @@ describe('scrolling', () => {
         name: 'primary',
         content: {
           type: 'EVENT',
-          channelId: 'dbc0ca00-1015-46a3-9118-5548787f5c0a'
+          channelId: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c'
         }
       });
+  }
 
-    for (let i = 0; i <= 12; i ++) {
-      cy
+  it('shows the most recent message when history loads.', () => {
+    loadAppWithHistory();
+
+    cy.get('[data-component=feed] li:last-child').should('be.visible')
+  });
+
+  it('shows the newest message when a new message comes in if we are already scrolled to the most recent.', () => {
+    loadAppWithHistory();
+
+    cy.get('[data-component=feed] ul span').children().should('have.length', 12)
+
+    cy
       .window()
       .its('store')
       .invoke('dispatch', {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
-        channel: 'dbc0ca00-1015-46a3-9118-5548787f5c0a',
+        channel: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c',
         moment: {
           type: 'MESSAGE',
-          id: 'bb884cc9-bf32-495b-bb52-75b2e6285768' + i,
-          timestamp: 1547416607573,
+          id: 'db3d0f79-824d-4e46-94d5-0aedca429b9e',
+          timestamp: 1547486695817,
           lang: 'en',
-          text: 'hi',
+          text: 'This is a new message',
           sender: {
-            id: 366,
-            pubnubToken: '861c6066-f96c-4a94-8456-59c4aacd371d',
-            name: 'Olson_Mathilde',
+            id: 1022905,
+            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
+            name: 'G. Boole',
+            avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
-              label: 'Host'
+              label: 'Admin'
             }
           },
           messageTrayOpen: false,
           closeTrayButtonRendered: false
         }
       });
-    }
 
-    cy.get('[data-component=feed] li:last-child').should('be.visible') 
-  })
-})
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('be.visible');
+    cy.get('@feedList').last().contains('This is a new message');
+  });
+
+  it('does not shows the newest message when a new message comes in if we are scrolled up in the feed.', () => {
+    loadAppWithHistory();
+
+    cy.get('[data-component=feed] ul span').children().should('have.length', 12)
+
+    cy.get('[data-component=feed]').scrollTo(0,100);
+
+
+    cy.window().then($window => {
+      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
+    })
+    cy.wait(50);
+    cy
+      .window()
+      .its('store')
+      .invoke('dispatch', {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c',
+        moment: {
+          type: 'MESSAGE',
+          id: 'db3d0f79-824d-4e46-94d5-0aedca429b9e',
+          timestamp: 1547486695817,
+          lang: 'en',
+          text: 'This is a new message',
+          sender: {
+            id: 1022906,
+            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3',
+            name: 'Other User',
+            avatarUrl: null,
+            role: {
+              label: ''
+            }
+          },
+          messageTrayOpen: false,
+          closeTrayButtonRendered: false
+        }
+      });
+
+      cy.window().then($window => {
+        expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
+      })
+  });
+
+  it('shows the newest message when the user sends new message comes in if we are scrolled up in the feed.', () => {
+    loadAppWithHistory();
+
+    cy.get('[data-component=feed] ul span').children().should('have.length', 12)
+
+    cy.get('[data-component=feed]').scrollTo(0,100);
+
+
+    cy.window().then($window => {
+      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
+    })
+    cy.wait(50);
+    cy
+      .window()
+      .its('store')
+      .invoke('dispatch', {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c',
+        moment: {
+          type: 'MESSAGE',
+          id: 'db3d0f79-824d-4e46-94d5-0aedca429b9e',
+          timestamp: 1547486695817,
+          lang: 'en',
+          text: 'This is a new message',
+          sender: {
+            id: 1022905,
+            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
+            name: 'G. Boole',
+            avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
+            role: {
+              label: 'Admin'
+            }
+          },
+          messageTrayOpen: false,
+          closeTrayButtonRendered: false
+        }
+      });
+
+      cy.window().then($window => {
+        expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(182);
+      })
+  });
+});

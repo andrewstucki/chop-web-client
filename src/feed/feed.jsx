@@ -92,7 +92,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
     if (channel !== undefined) {
       const scrollPosition = (list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + scrollWrapper.scrollTop))
-
       this.props.updateScrollPosition(
         scrollPosition,
         channel
@@ -140,10 +139,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
     this.scroll();
   }
 
-  componentWillUnmount () {
-      this.saveScrollPosition();
-  }
-
   render () {
     const {
       currentChannel,
@@ -180,6 +175,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           // $FlowFixMe
           ref={this.wrapperRef}
           className={styles.scroll}
+          onScroll={this.saveScrollPosition}
         >
           {
             showLeaveChat &&
