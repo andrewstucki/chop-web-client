@@ -179,7 +179,7 @@ const getScroll = createSelector(
           type: 'NO_SCROLL'
         }
       }
-    } else if (action.type = 'SET_SCROLL_POSITION' && action.channel === channelId) {
+    } else if (action.type === 'SET_SCROLL_POSITION' && action.channel === channelId) {
       return {
         type: 'NO_SCROLL'
       }
