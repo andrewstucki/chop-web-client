@@ -735,7 +735,7 @@ const reducer = (
   }
   const state = {
     ...inboundState,
-    lastAction: { ...action}
+    lastAction: { ...action},
   };
   switch (action.type) {
   case SET_SAW_LAST_MOMENT_AT: {

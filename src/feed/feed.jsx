@@ -19,10 +19,6 @@ import Button from '../components/button';
 const NO_SCROLL = 'NO_SCROLL';
 const SCROLL_TO = 'SCROLL_TO';
 
-type ScrollType =
-  | typeof NO_SCROLL
-  | typeof SCROLL_TO;
-
 type ScrollToType = {
   type: typeof SCROLL_TO,
   position: number,
@@ -30,24 +26,11 @@ type ScrollToType = {
 
 type NoScrollType = {
   type: typeof NO_SCROLL,
-};;
+};
 
 type Scroll =
   | ScrollToType
   | NoScrollType;
-
-const scrollAction = (position?: number): Scroll => {
-  if (position === 'number') {
-    return {
-      type: SCROLL_TO,
-      position,
-    }
-  } else {
-    return {
-      type: NO_SCROLL,
-    }
-  }
-}
 
 type FeedProps = {
   moments: Array<MomentType>,
@@ -91,7 +74,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const { current:scrollWrapper } = this.wrapperRef;
 
     if (channel !== undefined) {
-      const scrollPosition = (list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + scrollWrapper.scrollTop))
+      const scrollPosition = (list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + scrollWrapper.scrollTop));
       this.props.updateScrollPosition(
         scrollPosition,
         channel
@@ -109,13 +92,13 @@ class Feed extends React.Component<FeedProps, FeedState> {
     }
   }
 
-  scrollTo = (position) => {
+  scrollTo = (position: number) => {
     const { current:scrollWrapper } = this.wrapperRef;
     const { current:list } = this.listRef;
 
-    const x = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position)
+    const scrollTop = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position);
     
-    scrollWrapper.scrollTop = x;
+    scrollWrapper.scrollTop = scrollTop;
   }
 
   scroll = () => {
@@ -123,6 +106,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     switch (scroll.type) {
     case SCROLL_TO:
       this.scrollTo(scroll.position);
+      break;
     case NO_SCROLL:
     default:
       // no op
@@ -150,8 +134,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     } = this.props;
 
     const hasAnchorMoments = anchorMoments?.length > 0;
-    const lastIndex = moments.length - 1;
-    const momentListItems = moments.map((moment, index) => (
+    const momentListItems = moments.map((moment: MomentType) => (
       // $FlowFixMe
       <li key={moment.id || createUid()}>
         <Moment

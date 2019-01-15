@@ -94,7 +94,7 @@ if (content) {
 
 // expose store when run in Cypress
 if (window.Cypress) {
-  window.store = store
+  window.store = store;
 }
 
 if (document.body) {

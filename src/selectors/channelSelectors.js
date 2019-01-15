@@ -5,6 +5,7 @@ import type {
   FeedType,
   ChannelsObjectType,
   ChannelType,
+  SharedUserType,
 } from '../feed/dux';
 import type {
   ChannelIdType,
@@ -12,6 +13,7 @@ import type {
   UIDType,
 } from '../cwc-types';
 import type { PaneContentType } from '../pane/dux';
+import type { MomentType } from '../moment';
 
 const getChannels = (state: FeedType): ChannelsObjectType => state.channels;
 
@@ -117,7 +119,7 @@ const getCurrentChannel = createSelector(
 const getCurrentChannelObj = createSelector(
   [ getCurrentChannel, getChannels ],
   (channelId, channels) => channels[channelId]
-)
+);
 
 const feedAnchorMoments = createSelector(
   getChannelById,
@@ -148,13 +150,13 @@ const hasNotSeenLatestMoments = createSelector(
   }
 );
 
-const getCurrentUser = (state) => state.currentUser;
+const getCurrentUser = (state: FeedType) => state.currentUser;
 
 const lastInArray = <I>(array: Array<I>): I => array[array.length - 1];
 
 const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => userA.pubnubToken === userB.pubnubToken;
 
-const getLastAction = (state) => state.lastAction;
+const getLastAction = (state: FeedType) => state.lastAction;
 
 const getScroll = createSelector(
   [ getCurrentChannelObj, getLastAction, getCurrentUser ],
@@ -163,34 +165,34 @@ const getScroll = createSelector(
       return {
         type: 'SCROLL_TO',
         position: 0,
-      }
+      };
     }
     const { moments, scrollPosition, id:channelId } = currentChannel;
 
     if (action.type === 'PUBLISH_MOMENT_TO_CHANNEL') {
-      const messageSender = lastInArray<MessageType>(moments).sender;
+      const messageSender = lastInArray(moments).sender;
       if (isSameUser(messageSender, currentUser)) {
         return {
           type: 'SCROLL_TO',
           position: 0,
-        }
+        };
       } else {
         return {
-          type: 'NO_SCROLL'
-        }
+          type: 'NO_SCROLL',
+        };
       }
     } else if (action.type === 'SET_SCROLL_POSITION' && action.channel === channelId) {
       return {
-        type: 'NO_SCROLL'
-      }
+        type: 'NO_SCROLL',
+      };
     } else {
       return {
         type: 'SCROLL_TO',
         position: scrollPosition,
-      }
+      };
     }
   }
-)
+);
 
 export {
   getScroll,
