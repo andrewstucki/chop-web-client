@@ -7,7 +7,7 @@ import { toggleHideVideo } from '../../src/videoFeed/dux';
 
 describe('Video tests', () => {
   test('video hides', () => {
-    const result = reducer(defaultState,
+    const { lastAction, ...result } = reducer(defaultState, // eslint-disable-line no-unused-vars
       toggleHideVideo(true));
 
     expect(result).toEqual(
@@ -19,7 +19,7 @@ describe('Video tests', () => {
   });
 
   test('video shows', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isVideoHidden: true,

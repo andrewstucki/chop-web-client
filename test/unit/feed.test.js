@@ -82,7 +82,7 @@ describe('Feed tests', () => {
   });
 
   test('change current channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -334,7 +334,7 @@ describe('Feed tests', () => {
   test('add a channel', () => {
     mockDate(1546896104521);
 
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -371,7 +371,7 @@ describe('Feed tests', () => {
             name: 'host',
             direct: false,
             participants: undefined,
-            scrollPosition: -1,
+            scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
           },
         },
@@ -381,7 +381,7 @@ describe('Feed tests', () => {
 
   test('add a channel', () => {
     mockDate(1546896104521);
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
       },
@@ -400,7 +400,7 @@ describe('Feed tests', () => {
             participants: [
               otherUser,
             ],
-            scrollPosition: -1,
+            scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
           },
         },
@@ -409,7 +409,7 @@ describe('Feed tests', () => {
   });
 
   test('add a channel that already exists', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -446,7 +446,7 @@ describe('Feed tests', () => {
   });
 
   test('remove channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -466,7 +466,7 @@ describe('Feed tests', () => {
   });
 
   test('remove current channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -695,7 +695,7 @@ describe('Feed tests', () => {
   });
 
   test('Accepts a user', () => {
-    const result = reducer(defaultState, setUser(currentUser));
+    const { lastAction, ...result } = reducer(defaultState, setUser(currentUser)); // eslint-disable-line no-unused-vars
     expect(result).toEqual(
       {
         ...defaultState,
@@ -705,7 +705,7 @@ describe('Feed tests', () => {
   });
 
   test('Opens only the correct message tray public channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -798,7 +798,7 @@ describe('Feed tests', () => {
   });
 
   test('Opens only the correct message tray not public channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -891,7 +891,7 @@ describe('Feed tests', () => {
   });
 
   test('Closes only the correct message tray public channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -984,7 +984,7 @@ describe('Feed tests', () => {
   });
 
   test('Render closeTrayButton after the tray opens', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1077,7 +1077,7 @@ describe('Feed tests', () => {
   });
 
   test('Render openTrayButton after the tray closes', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1170,7 +1170,7 @@ describe('Feed tests', () => {
   });
 
   test('Can delete a message', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1258,7 +1258,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a prayer notification', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1314,7 +1314,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a joined chat notification public', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1368,7 +1368,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a joined chat notification host', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1422,7 +1422,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a left chat notification public', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1476,7 +1476,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a left chat notification host', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1533,7 +1533,7 @@ describe('Feed tests', () => {
 
   // TODO this won't go in event, but I don't know where else to put it right now
   test('Can publish an AvatarMoment in event channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1590,7 +1590,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a prayer request notification host', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1653,7 +1653,7 @@ describe('Feed tests', () => {
   });
 
   test('Store anchorMoment from publishSalvation', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1705,7 +1705,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish an anchor moment as a moment and remove it from anchorMoment', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1755,7 +1755,7 @@ describe('Feed tests', () => {
   });
 
   test('Set salvations', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
       },
@@ -1770,7 +1770,7 @@ describe('Feed tests', () => {
   });
 
   test('Publish accepted prayer request', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1832,7 +1832,7 @@ describe('Feed tests', () => {
   });
 
   test('Receive accepted prayer request', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1925,7 +1925,7 @@ describe('Feed tests', () => {
   });
 
   test('togglePopUpModal', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isPopUpModalVisible: false,
@@ -1941,7 +1941,7 @@ describe('Feed tests', () => {
   });
 
   test('leaveChannel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -2027,7 +2027,7 @@ describe('Feed tests', () => {
 
 describe('Chat tests', () => {
   test('chat focus', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isChatFocused: false,
@@ -2052,13 +2052,19 @@ describe('Chat tests', () => {
         type: TOGGLE_CHAT_FOCUS,
         focus: false,
       });
-    expect(result2).toEqual(defaultState);
+    expect(result2).toEqual({
+      ...defaultState,
+      lastAction: {
+        type: TOGGLE_CHAT_FOCUS,
+        focus: false,
+      },
+    });
   });
 });
 
 describe('SideMenu tests', () => {
   test('Close sideMenu', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: false,
@@ -2074,7 +2080,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Close menu does not toggle when already true', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: true,
@@ -2090,7 +2096,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Open sideMenu', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: true,
@@ -2106,7 +2112,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Open sideMenu does not toggle when already false', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: false,
@@ -2122,7 +2128,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Update scroll position', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -2137,7 +2143,7 @@ describe('SideMenu tests', () => {
           },
         },
       },
-      updateScrollPosition(31, 'public')
+      updateScrollPosition(31, 'public', 1546896104521)
     );
     expect(results).toEqual(
       {
@@ -2160,7 +2166,7 @@ describe('SideMenu tests', () => {
 
 describe('VideoFeed tests', () => {
   test('set url', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       defaultState,
       setVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Standard')
     );
@@ -2180,7 +2186,7 @@ describe('VideoFeed tests', () => {
 
 describe('LanguageSelector tests', () => {
   test('SetLanguage Japanese', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         currentLanguage: 'en',

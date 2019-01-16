@@ -6,7 +6,7 @@ import ReactionsContainer from '../../../reactions/reactionsContainer';
 
 const Chat = ({channel}) => (
   <React.Fragment>
-    <Feed channel={channel} />
+    <Feed key={channel} channel={channel} />
     <div className={styles.inputs}>
       <ChatInputBox channel={channel} />
       <ReactionsContainer />

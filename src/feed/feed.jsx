@@ -16,26 +16,35 @@ import styles from './styles.css';
 import { createUid } from '../util';
 import Button from '../components/button';
 
+const NO_SCROLL = 'NO_SCROLL';
+const SCROLL_TO = 'SCROLL_TO';
+
+type ScrollToType = {
+  type: typeof SCROLL_TO,
+  position: number,
+};
+
+type NoScrollType = {
+  type: typeof NO_SCROLL,
+};
+
+type Scroll =
+  | ScrollToType
+  | NoScrollType;
+
 type FeedProps = {
   moments: Array<MomentType>,
   anchorMoments: Array<AnchorMomentType>,
   currentChannel: string,
   channel: string,
   showLeaveChat: boolean,
-  scrollPosition: number,
   currentUser: PrivateUserType,
   togglePopUpModal: () => void,
-  updateScrollPosition: (scrollPosition: number, channel: string) => void,
+  updateScrollPosition: (scrollPosition: number, channel: string, timestamp: number) => void,
   setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => void,
   showNewMessageButton: boolean,
   isChatFocused: boolean,
-};
-
-type SnapshotType = {
-  momentAdded: boolean,
-  channelChanged: boolean,
-  scrollAtBottom: boolean,
-  lastMessageFromCurrentUser: boolean,
+  scroll: Scroll,
 };
 
 type RefObject = { current: any };
@@ -47,127 +56,67 @@ type FeedState = {
 
 class Feed extends React.Component<FeedProps, FeedState> {
   wrapperRef: RefObject;
+  listRef: RefObject;
   saveScrollPosition: (channel: string) => void;
-  scrollToBottom: void => void;
-  maxScrollTop: void => number;
-  lastMessage: RefObject;
 
   constructor (props: FeedProps) {
     super(props);
-    // $FlowFixMe
     this.wrapperRef = React.createRef();
-    // $FlowFixMe
-    this.lastMessage = React.createRef();
+    this.listRef = React.createRef();
   }
 
-  scrollPosition () {
-    let { scrollTop } = this.wrapperRef.current;
-    const maxScrollTop = this.maxScrollTop();
-    scrollTop = (scrollTop > 0) ? scrollTop : 0;
-    return (scrollTop < maxScrollTop) ? scrollTop : maxScrollTop;
-  }
+  saveScrollPosition = () => {
+    const { channel } = this.props;
+    const { current:list } = this.listRef;
+    const { current:scrollWrapper } = this.wrapperRef;
 
-  saveScrollPosition = (channel: string) => {
     if (channel !== undefined) {
-      const scrollPosition = this.scrollAtBottom() ? -1 : this.scrollPosition();
-
+      const scrollPosition = (list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + scrollWrapper.scrollTop));
       this.props.updateScrollPosition(
         scrollPosition,
-        channel
+        channel,
+        Date.now()
       );
-      if (scrollPosition === -1) {
-        this.props.setSawLastMomentAt(
-          Date.now(),
-          channel
-        );
-      }
     }
   };
+
+  setScrollPositionToBottom = () => {
+    this.scrollTo(0);
+  }
+
+  scrollTo = (position: number) => {
+    const { current:scrollWrapper } = this.wrapperRef;
+    const { current:list } = this.listRef;
+
+    const scrollTop = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position);
+    
+    scrollWrapper.scrollTop = scrollTop;
+  }
+
+  scroll = () => {
+    const { scroll } = this.props;
+    switch (scroll.type) {
+    case SCROLL_TO:
+      this.scrollTo(scroll.position);
+      break;
+    case 'DELAY_SCROLL_TO':
+      setTimeout(() => this.scrollTo(scroll.position), 500);
+      break;
+    case NO_SCROLL:
+    default:
+      // no op
+    }
+  }
+
+  // React Lifecycle functions
 
   componentDidMount () {
-    const { scrollPosition } = this.props;
-    const { current:scrollWrapper } = this.wrapperRef;
-    if (scrollWrapper) {
-      if ((scrollPosition || scrollPosition === 0) && scrollPosition !== -1) {
-        scrollWrapper.scrollTop = scrollPosition;
-      } else {
-        this.scrollToBottom();
-      }
-    }
+    this.scroll();
   }
 
-  getSnapshotBeforeUpdate (prevProps: FeedProps) {
-    const momentAdded = prevProps.moments.length < this.props.moments.length;
-    const channelChanged = prevProps.channel !== this.props.channel;
-    const lastMoment = this.props.moments[this.props.moments.length - 1];
-    const lastMessageFromCurrentUser = lastMoment?.user?.pubnubToken === this.props?.currentUser?.pubnubToken;
-    const scrollAtBottom = this.scrollAtBottom() || this.props.scrollPosition === -1;
-    if (channelChanged && prevProps.channel) {
-      this.saveScrollPosition(prevProps.channel);
-    }
-
-    return {
-      momentAdded,
-      channelChanged,
-      scrollAtBottom,
-      lastMessageFromCurrentUser,
-    };
+  componentDidUpdate () {
+    this.scroll();
   }
-
-  scrollAtBottom () {
-    const { current:lastMessage } = this.lastMessage;
-
-    if (lastMessage === null) {
-      return false;
-    }
-
-    const rect = lastMessage.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || (document.documentElement && document.documentElement.clientHeight)) &&
-      rect.right <= (window.innerWidth || (document.documentElement && document.documentElement.clientWidth))
-    );
-  }
-
-  componentDidUpdate (prevProps: FeedProps, prevState: FeedState, snapshot: SnapshotType) {
-    const { momentAdded, scrollAtBottom, channelChanged, lastMessageFromCurrentUser } = snapshot;
-    const { current:scrollWrapper } = this.wrapperRef;
-    const { scrollPosition } = this.props;
-
-    if (channelChanged && scrollWrapper && scrollPosition !== -1) {
-      scrollWrapper.scrollTop = scrollPosition;
-    } else if (channelChanged && scrollWrapper && scrollPosition === -1) {
-      this.scrollToBottom();
-    } else if (momentAdded && (scrollAtBottom || lastMessageFromCurrentUser)) {
-      this.scrollToBottom();
-    } else if (this.props.isChatFocused && scrollAtBottom) {
-      // Give some time for the keyboard to come up
-      setTimeout(() => this.scrollToBottom(), 500);
-    } else if (!this.props.isChatFocused && prevProps.isChatFocused && scrollAtBottom) {
-      this.scrollToBottom();
-    }
-  }
-
-  componentWillUnmount () {
-    this.saveScrollPosition(this.props.channel);
-  }
-
-  maxScrollTop () {
-    const { current:scrollWrapper } = this.wrapperRef;
-    const { scrollHeight } = scrollWrapper;
-    const { clientHeight:height } = scrollWrapper;
-    return scrollHeight - height;
-  }
-
-  scrollToBottom = () => {
-    const { current:scrollWrapper } = this.wrapperRef;
-    const { current:lastMessage } = this.lastMessage;
-    const scrollElement = lastMessage ? lastMessage : scrollWrapper;
-    if (scrollElement) {
-      scrollElement.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
-    }
-  };
 
   render () {
     const {
@@ -180,10 +129,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
     } = this.props;
 
     const hasAnchorMoments = anchorMoments?.length > 0;
-    const lastIndex = moments.length - 1;
-    const momentListItems = moments.map((moment, index) => (
+    const momentListItems = moments.map((moment: MomentType) => (
       // $FlowFixMe
-      <li key={moment.id || createUid()} ref={lastIndex === index ? this.lastMessage : undefined}>
+      <li key={moment.id || createUid()}>
         <Moment
           data={moment}
         />
@@ -205,7 +153,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           // $FlowFixMe
           ref={this.wrapperRef}
           className={styles.scroll}
-          onScroll={() => this.saveScrollPosition(currentChannel)}
+          onScroll={this.saveScrollPosition}
         >
           {
             showLeaveChat &&
@@ -216,6 +164,8 @@ class Feed extends React.Component<FeedProps, FeedState> {
           }
           <div style={{width: '100%'}}>
             <ul
+              // $FlowFixMe
+              ref={this.listRef}
               key={currentChannel}
               className={styles.feed}
             >
@@ -223,20 +173,19 @@ class Feed extends React.Component<FeedProps, FeedState> {
             </ul>
           </div>
         </div>
+        { showNewMessageButton &&
+          <div className={styles.newMessageButtonContainer}>
+            <div className={styles.newMessageButtonWrapper}>
+              <Button onClick={this.setScrollPositionToBottom} buttonStyle='secondary' text='New Messages' small />
+            </div>
+          </div>
+        }
         { hasAnchorMoments &&
           <div className={styles.nonScroll}>
             <div style={{width: '100%'}}>
               <ul className={styles.anchorMoments}>
                 {anchorMomentListItems}
               </ul>
-            </div>
-          </div>
-        }
-        { showNewMessageButton &&
-          <div className={styles.newMessageButtonContainer
-          }>
-            <div className={styles.newMessageButtonWrapper}>
-              <Button onClick={this.scrollToBottom} buttonStyle='secondary' text='New Messages' small />
             </div>
           </div>
         }

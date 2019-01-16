@@ -263,6 +263,7 @@ type FeedType = {
   },
   clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
+  lastAction?: FeedActionTypes,
 };
 
 type AddChannelType = {
@@ -361,6 +362,7 @@ type UpdateScrollPositionType = {
   type: 'UPDATE_SCROLL_POSITION',
   scrollPosition: number,
   channel: string,
+  timestamp: number,
 };
 
 type SetClientInfoType = {
@@ -541,7 +543,7 @@ const addChannel = (
       moments: [],
       participants,
       anchorMoments: [],
-      scrollPosition: -1,
+      scrollPosition: 0,
       sawLastMomentAt: Date.now(),
     },
   }
@@ -597,11 +599,12 @@ const clearNotificationBanner = (): ClearNotificationBannerType => (
   }
 );
 
-const updateScrollPosition = (scrollPosition: number, channel: string): UpdateScrollPositionType => (
+const updateScrollPosition = (scrollPosition: number, channel: string, timestamp: number): UpdateScrollPositionType => (
   {
     type: UPDATE_SCROLL_POSITION,
     scrollPosition,
     channel,
+    timestamp,
   }
 );
 
@@ -728,29 +731,16 @@ const defaultState = {
 // Reducer
 
 const reducer = (
-  state: FeedType = defaultState,
+  inboundState: FeedType = defaultState,
   action?: FeedActionTypes): FeedType => {
   if (!action || !action.type) {
-    return state;
+    return inboundState;
   }
+  const state = {
+    ...inboundState,
+    lastAction: { ...action},
+  };
   switch (action.type) {
-  case SET_SAW_LAST_MOMENT_AT: {
-    const { timestamp, channelId } = action;
-    if (!state.channels[channelId]) {
-      return state;
-    }
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        // $FlowFixMe
-        [channelId]: {
-          ...state.channels[channelId],
-          sawLastMomentAt: timestamp,
-        },
-      },
-    };
-  }
   case SET_PANE_CONTENT:
     return {
       ...state,
@@ -1271,16 +1261,18 @@ const reducer = (
       },
     };
   case UPDATE_SCROLL_POSITION: {
-    if (!state.channels[action.channel]) {
+    const { scrollPosition, channel, timestamp } = action;
+    if (!state.channels[channel]) {
       return state;
     }
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: {
-          ...state.channels[action.channel],
-          scrollPosition: action.scrollPosition,
+        [channel]: {
+          ...state.channels[channel],
+          scrollPosition: scrollPosition,
+          sawLastMomentAt: scrollPosition === 0 ? timestamp : state.channels[channel].sawLastMomentAt,
         },
       },
     };
@@ -1301,7 +1293,7 @@ const reducer = (
       isVideoPlaying: false,
     };
   default:
-    return state;
+    return inboundState;
   }
 };
 
@@ -1322,14 +1314,6 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
 const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
-
-const getScrollPosition = (state: FeedType, channel: string): number => {
-  if (state.channels[channel]) {
-    return state.channels[channel].scrollPosition;
-  } else {
-    return -1;
-  }
-};
 
 // Exports
 
@@ -1365,7 +1349,6 @@ export {
   setAuthentication,
   removeAuthentication,
   updateScrollPosition,
-  getScrollPosition,
   setClientInfo,
   setHereNow,
 };

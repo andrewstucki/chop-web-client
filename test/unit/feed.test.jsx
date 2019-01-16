@@ -34,7 +34,7 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
-        scrollPosition={0}
+        scroll={{type: 'NO_SCROLL'}}
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
@@ -71,7 +71,7 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
-        scrollPosition={0}
+        scroll={{type: 'NO_SCROLL'}}
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
@@ -108,7 +108,7 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
-        scrollPosition={0}
+        scroll={{type: 'NO_SCROLL'}}
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
@@ -133,7 +133,7 @@ describe('Feed tests', () => {
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
-        scrollPosition={0}
+        scroll={{type: 'NO_SCROLL'}}
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
@@ -158,7 +158,7 @@ describe('Feed tests', () => {
         showLeaveChat={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
-        scrollPosition={0}
+        scroll={{type: 'NO_SCROLL'}}
         currentUser={user}
         updateScrollPosition={() => {}}
         channel="default"
