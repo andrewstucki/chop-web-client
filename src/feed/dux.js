@@ -263,6 +263,7 @@ type FeedType = {
   },
   clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
+  lastAction?: FeedActionTypes,
 };
 
 type AddChannelType = {

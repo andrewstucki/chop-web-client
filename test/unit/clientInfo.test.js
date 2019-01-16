@@ -23,7 +23,9 @@ describe('Testing Client Info', () => {
       state: 'Oklahoma',
     }));
 
-    expect(store.getState().feed).toEqual(
+    const {lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+
+    expect(result).toEqual(
       {
         ...defaultState,
         clientInfo: {

@@ -129,7 +129,6 @@ describe('Feed scrolling', () => {
 
     cy.get('[data-component=feed] ul>span').children().as('feedList');
     cy.get('@feedList').last().should('be.visible');
-    cy.get('@feedList').last().contains('This is a new message');
   });
 
   it('does not shows the newest message when a new message comes in if we are scrolled up in the feed.', () => {
@@ -138,11 +137,8 @@ describe('Feed scrolling', () => {
 
     cy.get('[data-component=feed]').scrollTo(0, 100);
 
+    cy.wait(50); // we have to wait after scrolling since it's an async action but scrollTo does not return a Promise
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
-    })
-    cy.wait(50);
     cy
       .window()
       .its('store')
@@ -169,9 +165,8 @@ describe('Feed scrolling', () => {
         }
       });
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
-    })
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('not.be.visible');
   });
 
   it('shows the newest message when the user sends new message comes in if we are scrolled up in the feed.', () => {
@@ -180,11 +175,8 @@ describe('Feed scrolling', () => {
 
     cy.get('[data-component=feed]').scrollTo(0, 100);
 
+    cy.wait(50); // we have to wait after scrolling since it's an async action but scrollTo does not return a Promise
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
-    })
-    cy.wait(50);
     cy
       .window()
       .its('store')
@@ -211,9 +203,8 @@ describe('Feed scrolling', () => {
         }
       });
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(182);
-    })
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('be.visible');
   });
 
   it('returns to the bottom of the feed after changing channels.', () => {
@@ -235,11 +226,8 @@ describe('Feed scrolling', () => {
         },
       });
 
-    cy.wait(50);
-
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(126);
-    });
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('be.visible');
 
     cy.get('#nav-Host').click();
 
@@ -247,9 +235,8 @@ describe('Feed scrolling', () => {
 
     cy.get('#nav-Public').click();
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(126);
-    });
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('be.visible');
   });
 
   it('returns to the already set scroll position of the feed after changing channels.', () => {
@@ -271,19 +258,13 @@ describe('Feed scrolling', () => {
         },
       });
 
-    cy.wait(50);
-
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(126);
-    });
+    cy.get('[data-component=feed] ul>span').children().last().should('be.visible');
 
     cy.get('[data-component=feed]').scrollTo('top');
 
     cy.wait(50);
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(0);
-    });
+    cy.get('[data-component=feed] ul>span').children().last().should('not.be.visible');
 
     cy.get('#nav-Host').click();
 
@@ -291,9 +272,7 @@ describe('Feed scrolling', () => {
 
     cy.get('#nav-Public').click();
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(0);
-    });
+    cy.get('[data-component=feed] ul>span').children().last().should('not.be.visible');
   });
 });
 
@@ -301,18 +280,19 @@ describe('Feed scrolling with anchor moment', () => {
 
   it('shows the most recent message when history loads.', () => {
     cy
-      .window()
-      .its('store')
-      .invoke('dispatch', {
-        type: 'SET_ANCHOR_MOMENT',
-        channel: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c',
-        anchorMoment: {
-          type: 'ANCHOR_MOMENT',
-          anchorMomentType: 'SALVATION',
-          id: '123345',
-          text: 'I commit my life to Christ.',
-        },
-      });
+    .window()
+    .its('store')
+    .invoke('dispatch', {
+      type: 'SET_ANCHOR_MOMENT',
+      channel: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c',
+      anchorMoment: {
+        type: 'ANCHOR_MOMENT',
+        anchorMomentType: 'SALVATION',
+        id: '123345',
+        text: 'I commit my life to Christ.',
+      },
+    });
+    
     cy.get('[data-component=feed] li:last-child').should('be.visible')
   });
 
@@ -330,7 +310,7 @@ describe('Feed scrolling with anchor moment', () => {
         text: 'I commit my life to Christ.',
       },
     });
-
+    
     cy.get('[data-component=feed] ul>span').children().should('have.length', 12)
 
     cy
@@ -361,11 +341,10 @@ describe('Feed scrolling with anchor moment', () => {
 
     cy.get('[data-component=feed] ul>span').children().as('feedList');
     cy.get('@feedList').last().should('be.visible');
-    cy.get('@feedList').last().contains('This is a new message');
   });
 
   it('does not shows the newest message when a new message comes in if we are scrolled up in the feed.', () => {
-cy
+    cy
     .window()
     .its('store')
     .invoke('dispatch', {
@@ -383,11 +362,8 @@ cy
 
     cy.get('[data-component=feed]').scrollTo(0, 100);
 
+    cy.wait(50); // we have to wait after scrolling since it's an async action but scrollTo does not return a Promise
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
-    })
-    cy.wait(50);
     cy
       .window()
       .its('store')
@@ -414,9 +390,8 @@ cy
         }
       });
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
-    })
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('not.be.visible');
   });
 
   it('shows the newest message when the user sends new message comes in if we are scrolled up in the feed.', () => {
@@ -438,11 +413,8 @@ cy
 
     cy.get('[data-component=feed]').scrollTo(0, 100);
 
+    cy.wait(50); // we have to wait after scrolling since it's an async action but scrollTo does not return a Promise
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(100);
-    })
-    cy.wait(50);
     cy
       .window()
       .its('store')
@@ -469,9 +441,8 @@ cy
         }
       });
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(242);
-    })
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('be.visible');
   });
 
   it('returns to the bottom of the feed after changing channels.', () => {
@@ -506,11 +477,8 @@ cy
         },
       });
 
-    cy.wait(50);
-
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(186);
-    });
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('be.visible');
 
     cy.get('#nav-Host').click();
 
@@ -518,9 +486,8 @@ cy
 
     cy.get('#nav-Public').click();
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(186);
-    });
+    cy.get('[data-component=feed] ul>span').children().as('feedList');
+    cy.get('@feedList').last().should('be.visible');
   });
 
   it('returns to the already set scroll position of the feed after changing channels.', () => {
@@ -537,7 +504,7 @@ cy
         text: 'I commit my life to Christ.',
       },
     });
-    
+
     cy
       .window()
       .its('store')
@@ -555,19 +522,13 @@ cy
         },
       });
 
-    cy.wait(50);
-
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(186);
-    });
+    cy.get('[data-component=feed] ul>span').children().last().should('be.visible');
 
     cy.get('[data-component=feed]').scrollTo('top');
 
     cy.wait(50);
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(0);
-    });
+    cy.get('[data-component=feed] ul>span').children().last().should('not.be.visible');
 
     cy.get('#nav-Host').click();
 
@@ -575,8 +536,6 @@ cy
 
     cy.get('#nav-Public').click();
 
-    cy.window().then($window => {
-      expect($window.document.querySelector('[data-component=feed]').scrollTop).to.equal(0);
-    });
+    cy.get('[data-component=feed] ul>span').children().last().should('not.be.visible');
   });
 });

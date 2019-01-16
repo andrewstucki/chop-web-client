@@ -70,6 +70,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   saveScrollPosition = () => {
     const { channel } = this.props;
+    // $FlowFixMe
     const { current:list } = this.listRef;
     const { current:scrollWrapper } = this.wrapperRef;
 
@@ -94,6 +95,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   scrollTo = (position: number) => {
     const { current:scrollWrapper } = this.wrapperRef;
+    // $FlowFixMe
     const { current:list } = this.listRef;
 
     const scrollTop = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position);
@@ -169,6 +171,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
           }
           <div style={{width: '100%'}}>
             <ul
+              // $FlowFixMe
               ref={this.listRef}
               key={currentChannel}
               className={styles.feed}
