@@ -1306,7 +1306,7 @@ const reducer = (
       isVideoPlaying: false,
     };
   default:
-    return state;
+    return inboundState;
   }
 };
 
