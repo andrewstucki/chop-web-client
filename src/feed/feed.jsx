@@ -56,21 +56,17 @@ type FeedState = {
 
 class Feed extends React.Component<FeedProps, FeedState> {
   wrapperRef: RefObject;
+  listRef: RefObject;
   saveScrollPosition: (channel: string) => void;
-  scrollToBottom: void => void;
-  maxScrollTop: void => number;
 
   constructor (props: FeedProps) {
     super(props);
-    // $FlowFixMe
     this.wrapperRef = React.createRef();
-    // $FlowFixMe
     this.listRef = React.createRef();
   }
 
   saveScrollPosition = () => {
     const { channel } = this.props;
-    // $FlowFixMe
     const { current:list } = this.listRef;
     const { current:scrollWrapper } = this.wrapperRef;
 
@@ -90,7 +86,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   scrollTo = (position: number) => {
     const { current:scrollWrapper } = this.wrapperRef;
-    // $FlowFixMe
     const { current:list } = this.listRef;
 
     const scrollTop = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position);
