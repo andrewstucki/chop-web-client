@@ -52,6 +52,7 @@ describe('Chat2 Tests', () => {
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
       '789012': {
         name: 'Host',
@@ -60,6 +61,7 @@ describe('Chat2 Tests', () => {
         moments: [],
         anchorMoments: [],
         scrollPosition: 0,
+        sawLastMomentAt: 1546896104521,
       },
     },
   };
@@ -159,7 +161,7 @@ describe('Chat2 Tests', () => {
       id: '123456',
       lang: 'en',
       text: 'You kindness leads us to repentance to the heart of God',
-      user: {
+      sender: {
         pubnubToken: '098765',
         name: 'Hillsong Young & Free',
         role: {
@@ -186,8 +188,8 @@ describe('Chat2 Tests', () => {
     );
 
     expect(mockPublish).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcToLegacy).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcToLegacy).toHaveBeenCalledWith(message, '123456');
+    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledTimes(1);
+    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledWith(message, '123456');
     expect(mockPublish.mock.calls[0][0]).toEqual(
       {
         channel: '123456',
@@ -206,7 +208,7 @@ describe('Chat2 Tests', () => {
       id: '123456',
       lang: 'en',
       text: 'You kindness leads us to repentance to the heart of God',
-      user: {
+      snder: {
         pubnubToken: '098765',
         name: 'Hillsong Young & Free',
         role: {

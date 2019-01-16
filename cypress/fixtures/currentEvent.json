@@ -1,0 +1,245 @@
+{
+  "data": {
+    "currentEvent": {
+      "feeds": [{
+        "direct": false,
+        "id": "b39cc517-687c-47da-9d0b-3c2ce2f1eb01",
+        "name": "Public",
+        "subscribers": [{
+          "avatar": null,
+          "nickname": "Nolan.Edmund",
+          "pubnubToken": "e34beb15-f507-4f0d-8f0a-2d59fa2a097c"
+        }, {
+          "avatar": null,
+          "nickname": "Corwin.Marquise",
+          "pubnubToken": "0d0cf7cb-699c-4229-a65a-60a5c53e2d32"
+        }],
+        "type": "public"
+      }, {
+        "direct": false,
+        "id": "9d64bb81-b35e-4db6-af4e-0fbcf3b62308",
+        "name": "Host",
+        "subscribers": [{
+          "avatar": null,
+          "nickname": "Eunice_Gottlieb",
+          "pubnubToken": "03a83079-a7c7-4e97-8c81-3028f94947d1"
+        }, {
+          "avatar": null,
+          "nickname": "Jules.Schneider",
+          "pubnubToken": "c62be51c-00b0-42f6-8d94-36042720f7c1"
+        }],
+        "type": "host"
+      }, {
+        "direct": false,
+        "id": "6044db5d-166c-4c98-81eb-d68b2982a5c5",
+        "name": "Legacy",
+        "subscribers": [{
+          "avatar": null,
+          "nickname": "Patience.Kling",
+          "pubnubToken": "5446756a-f6b2-44da-b7ac-0c4845be9b82"
+        }, {
+          "avatar": null,
+          "nickname": "Paris.Lehner",
+          "pubnubToken": "374cf6f6-433b-4cc1-b94a-78303fb029fa"
+        }],
+        "type": "legacy"
+      }, {
+        "direct": false,
+        "id": "ecf3fd2a-6874-428a-aa10-cb9cfc629f2a",
+        "name": "Personal",
+        "subscribers": [{
+          "avatar": null,
+          "nickname": "Dedric_Prosacco",
+          "pubnubToken": "4eafb402-ff43-4f3f-aac2-36fa89aa50cc"
+        }, {
+          "avatar": null,
+          "nickname": "Beer.Linnie",
+          "pubnubToken": "d8e9b55a-149d-4e71-b6f5-65268279de04"
+        }],
+        "type": "Personal"
+      }],
+      "id": "826",
+      "sequence": {
+        "serverTime": 1547382393,
+        "steps": [{
+          "fetchTime": 1547359197,
+          "queries": ["feeds", "video", "event"],
+          "transitionTime": 1547359200
+        }, {
+          "fetchTime": 1547445596,
+          "queries": ["event", "video", "feeds"],
+          "transitionTime": 1547445599
+        }]
+      },
+      "startTime": 1547359200,
+      "title": "Ut officia",
+      "video": {
+        "type": "live",
+        "url": "https://chopapi.com/video/q3Dki2zXYnTgaTr6Ky2KurQr"
+      },
+      "videoStartTime": 1547359200
+    },
+    "currentLanguages": [{
+      "code": "en",
+      "name": "English"
+    }],
+    "currentOrganization": {
+      "id": 2,
+      "name": "Life.Church"
+    },
+    "currentUser": {
+      "avatar": null,
+      "id": 814,
+      "nickname": "Kovacek_Ryann",
+      "pubnubToken": "e02d87f3-8d6e-4e97-ba76-a0a5a926f05d",
+      "role": {
+        "label": "Host"
+      }
+    },
+    "pubnubKeys": {
+      "publishKey": "pub-c-5d166bf0-07cf-4e5b-81e6-797b7f01bf83",
+      "subscribeKey": "sub-c-12f3b1fe-e04d-11e7-b7e7-02872c090099"
+    },
+    "schedule": [{
+      "endTime": 1547531999,
+      "fetchTime": 1547445596,
+      "id": "938",
+      "scheduleTime": 1547445600,
+      "startTime": 1547445600,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1547618399,
+      "fetchTime": 1547531996,
+      "id": "168",
+      "scheduleTime": 1547532000,
+      "startTime": 1547532000,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1547704799,
+      "fetchTime": 1547618396,
+      "id": "94",
+      "scheduleTime": 1547618400,
+      "startTime": 1547618400,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1547791199,
+      "fetchTime": 1547704796,
+      "id": "960",
+      "scheduleTime": 1547704800,
+      "startTime": 1547704800,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1547877599,
+      "fetchTime": 1547791196,
+      "id": "8",
+      "scheduleTime": 1547791200,
+      "startTime": 1547791200,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1547963999,
+      "fetchTime": 1547877596,
+      "id": "966",
+      "scheduleTime": 1547877600,
+      "startTime": 1547877600,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548050399,
+      "fetchTime": 1547963996,
+      "id": "406",
+      "scheduleTime": 1547964000,
+      "startTime": 1547964000,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548136799,
+      "fetchTime": 1548050396,
+      "id": "924",
+      "scheduleTime": 1548050400,
+      "startTime": 1548050400,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548223199,
+      "fetchTime": 1548136796,
+      "id": "355",
+      "scheduleTime": 1548136800,
+      "startTime": 1548136800,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548309599,
+      "fetchTime": 1548223196,
+      "id": "234",
+      "scheduleTime": 1548223200,
+      "startTime": 1548223200,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548395999,
+      "fetchTime": 1548309596,
+      "id": "667",
+      "scheduleTime": 1548309600,
+      "startTime": 1548309600,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548482399,
+      "fetchTime": 1548395996,
+      "id": "326",
+      "scheduleTime": 1548396000,
+      "startTime": 1548396000,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548568799,
+      "fetchTime": 1548482396,
+      "id": "50",
+      "scheduleTime": 1548482400,
+      "startTime": 1548482400,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548655199,
+      "fetchTime": 1548568796,
+      "id": "180",
+      "scheduleTime": 1548568800,
+      "startTime": 1548568800,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548741599,
+      "fetchTime": 1548655196,
+      "id": "911",
+      "scheduleTime": 1548655200,
+      "startTime": 1548655200,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548827999,
+      "fetchTime": 1548741596,
+      "id": "190",
+      "scheduleTime": 1548741600,
+      "startTime": 1548741600,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1548914399,
+      "fetchTime": 1548827996,
+      "id": "549",
+      "scheduleTime": 1548828000,
+      "startTime": 1548828000,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1549000799,
+      "fetchTime": 1548914396,
+      "id": "912",
+      "scheduleTime": 1548914400,
+      "startTime": 1548914400,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1549087199,
+      "fetchTime": 1549000796,
+      "id": "89",
+      "scheduleTime": 1549000800,
+      "startTime": 1549000800,
+      "title": "Qui delectus optio"
+    }, {
+      "endTime": 1549173599,
+      "fetchTime": 1549087196,
+      "id": "591",
+      "scheduleTime": 1549087200,
+      "startTime": 1549087200,
+      "title": "Qui delectus optio"
+    }]
+  }
+}

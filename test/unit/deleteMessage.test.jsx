@@ -41,7 +41,7 @@ describe('Test delete message', () => {
       id: '123456',
       lang: 'en',
       text: 'hi',
-      user: {
+      sender: {
         pubnubToken: 'abc123xyz',
         name: 'Tony Hoare',
         role: { label: '' },
@@ -54,7 +54,7 @@ describe('Test delete message', () => {
       id: '789012',
       lang: 'en',
       text: 'hey',
-      user: {
+      sender: {
         pubnubToken: '54353',
         name: 'Shaq O.',
         role: { label: '' },
@@ -67,11 +67,13 @@ describe('Test delete message', () => {
   test.skip('Delete message and publish on pubnub', async () => {
     const participants = [
       {
+        id: '12345',
         pubnubToken: 'abc123xyz',
         name: 'Tony Hoare',
         role: { label: '' },
       },
       {
+        id: '12345',
         pubnubToken: '54353',
         name: 'Shaq O.',
         role: { label: '' },
@@ -140,6 +142,7 @@ describe('Test delete message', () => {
           moments: moments,
           anchorMoments: [],
           scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
     };

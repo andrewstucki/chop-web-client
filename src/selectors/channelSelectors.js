@@ -1,17 +1,36 @@
+// @flow
 import { createSelector } from 'reselect';
 import { objectFilter } from '../util';
+import type {
+  FeedType,
+  ChannelsObjectType,
+  ChannelType,
+  SharedUserType,
+} from '../feed/dux';
+import type {
+  ChannelIdType,
+  LanguageCodeType,
+  UIDType,
+} from '../cwc-types';
+import type { PaneContentType } from '../pane/dux';
+import type { MomentType } from '../moment';
 
-const getChannels = state => state.channels;
+const getChannels = (state: FeedType): ChannelsObjectType => state.channels;
 
-const getChannelById = (state, id) => getChannels(state)[id];
+const getChannelById = (state: FeedType, id: ChannelIdType): ChannelType => getChannels(state)[id];
 
-const getCurrentLanguage = state => state.currentLanguage;
+const getCurrentLanguage = (state: FeedType): LanguageCodeType => state.currentLanguage;
 
-const getPrimaryPane = state => state.panes.primary;
+const getPrimaryPane = (state: FeedType): PaneContentType => state.panes.primary;
 
-const getMutedUsers = state => state.mutedUsers;
+const getMutedUsers = (state: FeedType):Array<UIDType>  => state.mutedUsers;
 
-const getChannelIdByNameFactory = name => (
+const getSawLastMomentAt = createSelector(
+  getChannelById,
+  channel => channel ? channel.sawLastMomentAt : 0
+);
+
+const getChannelIdByNameFactory = (name: string): ChannelIdType => (
   createSelector(
     getChannels,
     channels => { 
@@ -22,7 +41,7 @@ const getChannelIdByNameFactory = name => (
   )
 );
 
-const getChannelByNameFactory = name => (
+const getChannelByNameFactory = (name: string): ChannelType => (
   createSelector(
     getChannels,
     getChannelIdByNameFactory(name),
@@ -30,7 +49,7 @@ const getChannelByNameFactory = name => (
   )
 );
 
-const translateMoment = currentLanguage => moment => {
+const translateMoment = (currentLanguage: LanguageCodeType) => (moment: MomentType): MomentType => {
   if (moment.type === 'MESSAGE' &&
       moment.lang !== currentLanguage &&
       moment.translations) {
@@ -45,9 +64,9 @@ const translateMoment = currentLanguage => moment => {
   return moment;
 };
 
-const mutedMoment = moment => moment.isMuted !== 'true';
+const mutedMoment = (moment: MomentType): boolean => moment.isMuted !== 'true';
 
-const removeMutedUsers = mutedUsers => moment => {
+const removeMutedUsers = (mutedUsers: Array<UIDType>) => (moment: MomentType): boolean => {
   if (moment.user) {
     return !mutedUsers.includes(moment.user.name);
   } else {
@@ -97,6 +116,11 @@ const getCurrentChannel = createSelector(
   pane => pane.channelId,
 );
 
+const getCurrentChannelObj = createSelector(
+  [ getCurrentChannel, getChannels ],
+  (channelId, channels) => channels[channelId]
+);
+
 const feedAnchorMoments = createSelector(
   getChannelById,
   channel => channel && channel.anchorMoments ? channel.anchorMoments : []
@@ -114,7 +138,69 @@ const feedContents = createSelector(
     : []
 );
 
+const hasNotSeenLatestMoments = createSelector(
+  getChannelById,
+  getSawLastMomentAt,
+  (channel, sawLastMomentAt) => {
+    if (channel) {
+      return channel.moments.filter(moment => moment.timestamp > sawLastMomentAt).length > 0;
+    } else {
+      return false;
+    }
+  }
+);
+
+const getCurrentUser = (state: FeedType) => state.currentUser;
+
+const lastInArray = <I>(array: Array<I>): I => array[array.length - 1];
+
+const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => userA.pubnubToken === userB.pubnubToken;
+
+const getLastAction = (state: FeedType) => state.lastAction;
+
+const getScroll = createSelector(
+  [ getCurrentChannelObj, getLastAction, getCurrentUser ],
+  (currentChannel, action, currentUser) => {
+    if (!currentChannel) {
+      return {
+        type: 'SCROLL_TO',
+        position: 0,
+      };
+    }
+    const { moments, scrollPosition, id:channelId } = currentChannel;
+
+    if (action.type === 'PUBLISH_MOMENT_TO_CHANNEL' || action.type === 'RECEIVE_MOMENT') {
+      const messageSender = lastInArray(moments).sender;
+      if (isSameUser(messageSender, currentUser)) {
+        return {
+          type: 'SCROLL_TO',
+          position: 0,
+        };
+      } else {
+        return {
+          type: 'NO_SCROLL',
+        };
+      }
+    } else if (action.type === 'SET_SCROLL_POSITION' && action.channel === channelId) {
+      return {
+        type: 'NO_SCROLL',
+      };
+    } else if (action.type === 'TOGGLE_CHAT_FOCUS') {
+      return {
+        type: 'DELAY_SCROLL_TO',
+        position: scrollPosition || 0,
+      };
+    } else {
+      return {
+        type: 'SCROLL_TO',
+        position: scrollPosition,
+      };
+    }
+  }
+);
+
 export {
+  getScroll,
   getHostChannel,
   getPublicChannel,
   getLegacyChannel,
@@ -126,4 +212,5 @@ export {
   getMutedUsers,
   getHostChannelObject,
   getPublicChannelObject,
+  hasNotSeenLatestMoments,
 };

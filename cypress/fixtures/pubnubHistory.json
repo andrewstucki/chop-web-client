@@ -1,0 +1,351 @@
+[
+    [{
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "Nsnjjenjjvv",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545587086725",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "cc7d1163-c840-4559-a2dc-640a77e22486",
+                "fromNickname": "Michael Haglund",
+                "fromToken": "d16fd1c3f10811a5441d76f7b45722a5e74b258931dc1dcc167d48d77720a4b1",
+                "msgId": "cc7d1163-c840-4559-a2dc-640a77e22486",
+                "timestamp": "2019-01-10 15:30:15 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1047040,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471342155762815
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "hehebcbhvyd",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545587090515",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "9051bd6a-4164-44af-a5a2-2ef93b5981a1",
+                "fromNickname": "Michael Haglund",
+                "fromToken": "d16fd1c3f10811a5441d76f7b45722a5e74b258931dc1dcc167d48d77720a4b1",
+                "msgId": "9051bd6a-4164-44af-a5a2-2ef93b5981a1",
+                "timestamp": "2019-01-10 15:30:19 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1047040,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471342193584045
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "jdjndnncjcuehd",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545587097333",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "aec62b0b-c102-4041-8972-6c36ecd4ecf0",
+                "fromNickname": "Michael Haglund",
+                "fromToken": "d16fd1c3f10811a5441d76f7b45722a5e74b258931dc1dcc167d48d77720a4b1",
+                "msgId": "aec62b0b-c102-4041-8972-6c36ecd4ecf0",
+                "timestamp": "2019-01-10 15:30:26 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1047040,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471342261813152
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "Shjdjjcjv",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545587110517",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "8cea27a2-a858-4d8c-a912-7f4ad6d492f5",
+                "fromNickname": "Michael Haglund",
+                "fromToken": "d16fd1c3f10811a5441d76f7b45722a5e74b258931dc1dcc167d48d77720a4b1",
+                "msgId": "8cea27a2-a858-4d8c-a912-7f4ad6d492f5",
+                "timestamp": "2019-01-10 15:30:39 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1047040,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471342393563539
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "Sjsnnenc",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545587209950",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "33ce3c87-b2fe-4dc6-9280-4647dd3adaf0",
+                "fromNickname": "Michael Haglund",
+                "fromToken": "d16fd1c3f10811a5441d76f7b45722a5e74b258931dc1dcc167d48d77720a4b1",
+                "msgId": "33ce3c87-b2fe-4dc6-9280-4647dd3adaf0",
+                "timestamp": "2019-01-10 15:32:18 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1047040,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471343387929452
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "Hello",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545587553032",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "e8c836d6-8713-4497-8232-fa4e8f6c1c06",
+                "fromNickname": "Nate",
+                "fromToken": "47290610f0880739e19f40d27c07ed79d3dda66a7c2d55859f745c020b67c736",
+                "msgId": "e8c836d6-8713-4497-8232-fa4e8f6c1c06",
+                "timestamp": "2019-01-10 15:38:01 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1067579,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471346818553238
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "Hi",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545590336858",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "d7c027bf-3df3-496c-84eb-02ec5306e2d5",
+                "fromNickname": "Michael Haglund",
+                "fromToken": "d16fd1c3f10811a5441d76f7b45722a5e74b258931dc1dcc167d48d77720a4b1",
+                "msgId": "d7c027bf-3df3-496c-84eb-02ec5306e2d5",
+                "timestamp": "2019-01-10 16:24:25 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1047040,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471374657019662
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "bottom",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545590369031",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "78ee07a9-08de-4c76-95da-9d55fc6124ee",
+                "fromNickname": "G. Boole",
+                "fromToken": "f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c",
+                "msgId": "78ee07a9-08de-4c76-95da-9d55fc6124ee",
+                "timestamp": "2019-01-10 16:24:57 +0000",
+                "fromAvatar": "https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1022905,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471374987618786
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "hello",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545597559421",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "c63ace30-c751-457f-ad50-aa8fe72d6c60",
+                "fromNickname": "G. Boole",
+                "fromToken": "f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c",
+                "msgId": "c63ace30-c751-457f-ad50-aa8fe72d6c60",
+                "timestamp": "2019-01-10 18:24:48 +0000",
+                "fromAvatar": "https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1022905,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471446889900618
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "Hello",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545597602115",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "bb4f9a2a-9e2c-41b6-9d1d-8c30ccd929a9",
+                "fromNickname": "G. Boole",
+                "fromToken": "f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c",
+                "msgId": "bb4f9a2a-9e2c-41b6-9d1d-8c30ccd929a9",
+                "timestamp": "2019-01-10 18:25:30 +0000",
+                "fromAvatar": "https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1022905,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471447316680686
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "Hello",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545597956640",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "d23a5ad6-23ca-496d-b101-c77351766e40",
+                "fromNickname": "G. Boole",
+                "fromToken": "f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c",
+                "msgId": "d23a5ad6-23ca-496d-b101-c77351766e40",
+                "timestamp": "2019-01-10 18:31:25 +0000",
+                "fromAvatar": "https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1022905,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547128800
+            }
+        },
+        "timetoken": 15471450862794484
+    }, {
+        "message": {
+            "action": "newMessage",
+            "channel": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+            "data": {
+                "messageText": "hi",
+                "language": "en",
+                "eventTimeId": "132942",
+                "eventTimeOffset": "1545934234079",
+                "eventTitle": "Staging Event",
+                "uniqueMessageToken": "ae7c4101-7f91-4fb1-bdc6-f00de6ab6512",
+                "fromNickname": "Michael Haglund",
+                "fromToken": "d16fd1c3f10811a5441d76f7b45722a5e74b258931dc1dcc167d48d77720a4b1",
+                "msgId": "ae7c4101-7f91-4fb1-bdc6-f00de6ab6512",
+                "timestamp": "2019-01-14 16:01:48 +0000",
+                "fromAvatar": "https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png",
+                "isHost": true,
+                "label": "Admin",
+                "isVolunteer": true,
+                "isUser": true,
+                "userId": 1047040,
+                "organizationId": 3,
+                "organizationName": "Freedom Church",
+                "roomType": "public",
+                "channelToken": "998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c",
+                "eventStartTime": 1547474400
+            }
+        },
+        "timetoken": 15474817086064751
+    }], 15469863598600780, 15474817086064751
+]

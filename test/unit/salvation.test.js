@@ -36,6 +36,7 @@ describe('Salvation Moment Tests', () => {
           moments: [],
           anchorMoments: [],
           scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
     };
@@ -126,6 +127,7 @@ describe('Salvation Moment Tests', () => {
             },
           ],
           scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
       salvations: 3,
@@ -205,6 +207,7 @@ describe('Salvation Moment Tests', () => {
           ],
           anchorMoments: [],
           scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
         },
       },
       salvations: 3,

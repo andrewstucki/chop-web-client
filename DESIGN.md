@@ -44,9 +44,6 @@ https://postcss.org/
 CSSnext -- PostCSS plugin that allows us to use future CSS features
 http://cssnext.io/
 
-Storybook -- Component testing site
-https://storybook.js.org/
-
 GitLab CI/CD -- Continues Integration and Deployment
 https://about.gitlab.com/features/gitlab-ci-cd/
 
@@ -94,7 +91,6 @@ We layout our DUX files in this order:
 Test code goes in the test folder. There are three main types of tests.
 
 - functional -- Testing interaction
-- snapshot -- Testing visual regression
 - unit -- Testing pure logic
 
 The assets folder holds additional assets used by the application.

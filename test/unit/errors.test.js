@@ -18,7 +18,9 @@ describe('Errors tests', () => {
       addError('You do not have access to this area of the application.')
     );
 
-    expect(store.getState().feed).toEqual(
+    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+
+    expect(result).toEqual(
       {
         ...defaultState,
         errors: [
@@ -51,7 +53,9 @@ describe('Errors tests', () => {
       removeError('12345')
     );
 
-    expect(store.getState().feed).toEqual(
+    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+
+    expect(result).toEqual(
       defaultState
     );
   });
@@ -80,7 +84,9 @@ describe('Errors tests', () => {
       clearErrors()
     );
 
-    expect(store.getState().feed).toEqual(
+    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+    
+    expect(result).toEqual(
       defaultState
     );
   });

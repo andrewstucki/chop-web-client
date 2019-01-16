@@ -4,7 +4,7 @@ import reducer, { defaultState} from '../../src/feed/dux';
 
 describe('Mute User tests', () => {
   test('User is added when a mute message is received.', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -15,6 +15,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -37,6 +38,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -53,7 +55,7 @@ describe('Mute User tests', () => {
   });
 
   test('Duplicate users are not added.', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -64,6 +66,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -87,6 +90,7 @@ describe('Mute User tests', () => {
             anchorMoments: [],
             moments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {

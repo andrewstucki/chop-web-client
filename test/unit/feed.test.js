@@ -13,6 +13,7 @@ import reducer, {
 import {
   feedContents as feedContentsSelector,
   feedAnchorMoments,
+  hasNotSeenLatestMoments,
 } from '../../src/selectors/channelSelectors';
 
 import {
@@ -24,7 +25,7 @@ import {
 } from '../../src/moment/dux';
 
 import {
-  closeMenu, 
+  closeMenu,
   openMenu,
 } from '../../src/sideMenu/dux';
 
@@ -50,10 +51,11 @@ import {
 import { mockDate } from '../testUtils';
 
 import { setLanguage } from '../../src/languageSelector/dux';
- 
+
 import { setPrimaryPane } from '../../src/pane/dux';
 
 const otherUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {
@@ -72,7 +74,7 @@ const currentUser = {
 };
 
 describe('Feed tests', () => {
-  mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
+  // mockDate('Wed Jun 27 2018 16:53:06 GMT-0500');
 
   test('default state', () => {
     const result = reducer();
@@ -80,7 +82,7 @@ describe('Feed tests', () => {
   });
 
   test('change current channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -92,6 +94,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -100,6 +103,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -117,6 +121,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -125,6 +130,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -150,6 +156,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -168,7 +175,7 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a message',
-          user: currentUser,
+          sender: currentUser,
           messageTrayOpen: false,
           closeTrayButtonRendered: false,
         },
@@ -176,8 +183,8 @@ describe('Feed tests', () => {
     );
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
-    expect(result.channels.public.moments[0].user.id).toEqual('12345');
-    expect(result.channels.public.moments[0].user.name).toEqual('Joan Jet');
+    expect(result.channels.public.moments[0].sender.id).toEqual('12345');
+    expect(result.channels.public.moments[0].sender.name).toEqual('Joan Jet');
   });
 
   test('adds a message to current channel not public from current user', () => {
@@ -193,6 +200,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -201,6 +209,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -219,7 +228,7 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a string',
-          user: otherUser,
+          sender: otherUser,
           messageTrayOpen: false,
           closeTrayButtonRendered: false,
         },
@@ -228,8 +237,8 @@ describe('Feed tests', () => {
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('this is a string');
-    expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
-    expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
+    expect(result.channels.host.moments[0].sender.pubnubToken).toEqual('12345');
+    expect(result.channels.host.moments[0].sender.name).toEqual('Billy Bob');
   });
 
   test('receives a message and adds it to the appropriate channel', () => {
@@ -245,6 +254,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '67890',
@@ -253,6 +263,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -260,7 +271,7 @@ describe('Feed tests', () => {
         type: 'MESSAGE',
         id: '12345',
         text: 'Hello there',
-        user: {
+        sender: {
           id: '',
           name: '',
         },
@@ -288,6 +299,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '67890',
@@ -296,6 +308,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -319,7 +332,9 @@ describe('Feed tests', () => {
   });
 
   test('add a channel', () => {
-    const result = reducer(
+    mockDate(1546896104521);
+
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -330,6 +345,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -346,6 +362,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           '12345': {
             id: '12345',
@@ -354,7 +371,8 @@ describe('Feed tests', () => {
             name: 'host',
             direct: false,
             participants: undefined,
-            scrollPosition: -1,
+            scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -362,7 +380,8 @@ describe('Feed tests', () => {
   });
 
   test('add a channel', () => {
-    const result = reducer(
+    mockDate(1546896104521);
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
       },
@@ -381,7 +400,8 @@ describe('Feed tests', () => {
             participants: [
               otherUser,
             ],
-            scrollPosition: -1,
+            scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -389,7 +409,7 @@ describe('Feed tests', () => {
   });
 
   test('add a channel that already exists', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -401,6 +421,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -417,6 +438,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -424,7 +446,7 @@ describe('Feed tests', () => {
   });
 
   test('remove channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -435,6 +457,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -443,7 +466,7 @@ describe('Feed tests', () => {
   });
 
   test('remove current channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -455,6 +478,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -476,7 +500,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '12345',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -485,6 +509,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         currentUser: currentUser,
@@ -497,7 +522,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: 'I like socks',
-          user: {
+          sender: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -512,12 +537,13 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         channels: {
-          public: { 
+          public: {
             id: '12345',
             name: 'public',
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           host: {
             id: '12345',
@@ -527,7 +553,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '12345',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -548,7 +574,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: 'I like socks',
-          user: {
+          sender: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -575,7 +601,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '12345',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -594,6 +620,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         currentLanguage: 'ko',
@@ -607,7 +634,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: '나는 양말을 좋아한다.',
-          user: {
+          sender: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -628,7 +655,7 @@ describe('Feed tests', () => {
   });
 
   test('feedAnchorMoments selector with no anchor moments', () => {
-    expect(feedAnchorMoments(defaultState, 'public')).toEqual([]);    
+    expect(feedAnchorMoments(defaultState, 'public')).toEqual([]);
   });
 
   test('feedAncorMoments selector with moments', () => {
@@ -649,6 +676,7 @@ describe('Feed tests', () => {
               },
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -665,9 +693,9 @@ describe('Feed tests', () => {
       ]
     );
   });
-  
+
   test('Accepts a user', () => {
-    const result = reducer(defaultState, setUser(currentUser));
+    const { lastAction, ...result } = reducer(defaultState, setUser(currentUser)); // eslint-disable-line no-unused-vars
     expect(result).toEqual(
       {
         ...defaultState,
@@ -677,7 +705,7 @@ describe('Feed tests', () => {
   });
 
   test('Opens only the correct message tray public channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -690,7 +718,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -701,7 +729,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -711,6 +739,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -734,7 +763,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -745,7 +774,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -755,6 +784,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -768,7 +798,7 @@ describe('Feed tests', () => {
   });
 
   test('Opens only the correct message tray not public channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -781,7 +811,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -792,7 +822,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -802,6 +832,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -825,7 +856,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -836,7 +867,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -846,6 +877,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -859,7 +891,7 @@ describe('Feed tests', () => {
   });
 
   test('Closes only the correct message tray public channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -872,7 +904,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -883,7 +915,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -893,6 +925,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -916,7 +949,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -927,7 +960,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -937,6 +970,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -950,7 +984,7 @@ describe('Feed tests', () => {
   });
 
   test('Render closeTrayButton after the tray opens', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -963,7 +997,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -974,7 +1008,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -984,6 +1018,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1007,7 +1042,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1018,7 +1053,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1028,6 +1063,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1041,7 +1077,7 @@ describe('Feed tests', () => {
   });
 
   test('Render openTrayButton after the tray closes', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1054,7 +1090,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1065,7 +1101,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1075,6 +1111,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1098,7 +1135,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1109,7 +1146,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1119,6 +1156,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1132,7 +1170,7 @@ describe('Feed tests', () => {
   });
 
   test('Can delete a message', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1145,7 +1183,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                user: {
+                sender: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1155,7 +1193,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                user: {
+                sender: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -1165,7 +1203,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                user: {
+                sender: {
                   id: '18475',
                   name: 'George Costanza',
                 },
@@ -1174,6 +1212,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1192,7 +1231,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                user: {
+                sender: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -1202,7 +1241,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                user: {
+                sender: {
                   id: '18475',
                   name: 'George Costanza',
                 },
@@ -1211,6 +1250,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1218,7 +1258,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a prayer notification', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1229,6 +1269,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1265,6 +1306,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1272,7 +1314,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a joined chat notification public', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1283,6 +1325,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1317,6 +1360,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1324,7 +1368,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a joined chat notification host', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1335,6 +1379,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1369,6 +1414,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1376,7 +1422,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a left chat notification public', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1387,6 +1433,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1421,6 +1468,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1428,7 +1476,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a left chat notification host', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1440,6 +1488,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1475,6 +1524,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1483,7 +1533,7 @@ describe('Feed tests', () => {
 
   // TODO this won't go in event, but I don't know where else to put it right now
   test('Can publish an AvatarMoment in event channel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1494,6 +1544,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1531,6 +1582,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1538,7 +1590,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish a prayer request notification host', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1549,6 +1601,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1592,6 +1645,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1599,7 +1653,7 @@ describe('Feed tests', () => {
   });
 
   test('Store anchorMoment from publishSalvation', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1610,6 +1664,7 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1642,6 +1697,7 @@ describe('Feed tests', () => {
               },
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1649,7 +1705,7 @@ describe('Feed tests', () => {
   });
 
   test('Can publish an anchor moment as a moment and remove it from anchorMoment', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1667,6 +1723,7 @@ describe('Feed tests', () => {
               },
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1690,6 +1747,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -1697,7 +1755,7 @@ describe('Feed tests', () => {
   });
 
   test('Set salvations', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
       },
@@ -1712,7 +1770,7 @@ describe('Feed tests', () => {
   });
 
   test('Publish accepted prayer request', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1736,6 +1794,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1765,6 +1824,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1772,7 +1832,7 @@ describe('Feed tests', () => {
   });
 
   test('Receive accepted prayer request', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1796,6 +1856,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1825,6 +1886,7 @@ describe('Feed tests', () => {
             ],
             anchorMoments: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
@@ -1863,7 +1925,7 @@ describe('Feed tests', () => {
   });
 
   test('togglePopUpModal', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isPopUpModalVisible: false,
@@ -1879,7 +1941,7 @@ describe('Feed tests', () => {
   });
 
   test('leaveChannel', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -1891,6 +1953,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             participants: [
               {
+                id: '12345',
                 pubnubToken: currentUser.pubnubToken,
                 name: currentUser.name,
                 role: {
@@ -1900,6 +1963,7 @@ describe('Feed tests', () => {
               otherUser,
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           public: {
             id: '67890',
@@ -1909,6 +1973,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             participants: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1935,6 +2000,7 @@ describe('Feed tests', () => {
               otherUser,
             ],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
           public: {
             id: '67890',
@@ -1944,6 +2010,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             participants: [],
             scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
           },
         },
         panes: {
@@ -1960,11 +2027,10 @@ describe('Feed tests', () => {
 
 describe('Chat tests', () => {
   test('chat focus', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isChatFocused: false,
-        isVideoHidden: false,
       },
       {
         type: TOGGLE_CHAT_FOCUS,
@@ -1974,7 +2040,6 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
-        isVideoHidden: true,
       }
     );
 
@@ -1982,19 +2047,24 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         isChatFocused: true,
-        isVideoHidden: true,
       },
       {
         type: TOGGLE_CHAT_FOCUS,
         focus: false,
       });
-    expect(result2).toEqual(defaultState);
+    expect(result2).toEqual({
+      ...defaultState,
+      lastAction: {
+        type: TOGGLE_CHAT_FOCUS,
+        focus: false,
+      },
+    });
   });
 });
 
 describe('SideMenu tests', () => {
   test('Close sideMenu', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: false,
@@ -2010,7 +2080,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Close menu does not toggle when already true', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: true,
@@ -2026,7 +2096,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Open sideMenu', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: true,
@@ -2042,7 +2112,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Open sideMenu does not toggle when already false', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         isSideMenuClosed: false,
@@ -2058,7 +2128,7 @@ describe('SideMenu tests', () => {
   });
 
   test('Update scroll position', () => {
-    const results = reducer(
+    const { lastAction, ...results } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         channels: {
@@ -2069,10 +2139,11 @@ describe('SideMenu tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: -1,
+            sawLastMomentAt: 1546896104521,
           },
         },
       },
-      updateScrollPosition(31, 'public')
+      updateScrollPosition(31, 'public', 1546896104521)
     );
     expect(results).toEqual(
       {
@@ -2085,6 +2156,7 @@ describe('SideMenu tests', () => {
             moments: [],
             anchorMoments: [],
             scrollPosition: 31,
+            sawLastMomentAt: 1546896104521,
           },
         },
       }
@@ -2094,7 +2166,7 @@ describe('SideMenu tests', () => {
 
 describe('VideoFeed tests', () => {
   test('set url', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       defaultState,
       setVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Standard')
     );
@@ -2114,7 +2186,7 @@ describe('VideoFeed tests', () => {
 
 describe('LanguageSelector tests', () => {
   test('SetLanguage Japanese', () => {
-    const result = reducer(
+    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
         currentLanguage: 'en',
@@ -2127,5 +2199,91 @@ describe('LanguageSelector tests', () => {
         currentLanguage: 'ko',
       }
     );
+  });
+
+  describe('hasNotSeenLatestMoments', () => {
+    test('is true when message timestamps are newer then sawLastMomentAt' , () => {
+      const state = {
+        ...defaultState,
+        channels: {
+          '12345': {
+            id: '12345',
+            name: 'public',
+            direct: false,
+            moments: [
+              {
+                type: MESSAGE,
+                id: '189',
+                text: 'Hello Billy Bob',
+                sender: {
+                  id: '14543',
+                  name: 'Jenny Jane',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104520,
+              },
+              {
+                type: MESSAGE,
+                id: '204',
+                text: 'George is very angry',
+                sender: {
+                  id: '18475',
+                  name: 'George Costanza',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104522,
+              },
+            ],
+            anchorMoments: [],
+            scrollPosition: 31,
+            sawLastMomentAt: 1546896104521,
+          },
+        },
+      };
+      const channelId = '12345';
+      expect(hasNotSeenLatestMoments(state, channelId)).toBeTruthy();
+    });
+
+    test('is false when message timestamps are older then sawLastMomentAt' , () => {
+      const state = {
+        ...defaultState,
+        channels: {
+          '12345': {
+            id: '12345',
+            name: 'public',
+            direct: false,
+            moments: [
+              {
+                type: MESSAGE,
+                id: '189',
+                text: 'Hello Billy Bob',
+                sender: {
+                  id: '14543',
+                  name: 'Jenny Jane',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104519,
+              },
+              {
+                type: MESSAGE,
+                id: '204',
+                text: 'George is very angry',
+                sender: {
+                  id: '18475',
+                  name: 'George Costanza',
+                },
+                messageTrayOpen: true,
+                timestamp: 1546896104520,
+              },
+            ],
+            anchorMoments: [],
+            scrollPosition: 31,
+            sawLastMomentAt: 1546896104521,
+          },
+        },
+      };
+      const channelId = '12345';
+      expect(hasNotSeenLatestMoments(state, channelId)).toBeFalsy();
+    });
   });
 });

@@ -9,6 +9,7 @@ import React from 'react';
 Enzyme.configure({ adapter: new Adapter() });
 
 const otherUser = {
+  id: '12345',
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {
@@ -20,8 +21,8 @@ describe('Chat tests', () => {
   test('has a InputField and Button', () => {
     const wrapper = Enzyme.shallow(
       <Chat
-        textOnBlur={function () {}}
-        textOnFocus={function () {}}
+        toggleChatFocus={function () {}}
+        toggleHideVideo={function () {}}
         buttonOnClick={function () {}}
         focused={true}
         enterDetect={function () {}}
@@ -41,8 +42,8 @@ describe('Chat tests', () => {
   test('has a InputField and disabled Button', () => {
     const wrapper = Enzyme.shallow(
       <Chat
-        textOnBlur={function () {}}
-        textOnFocus={function () {}}
+        toggleChatFocus={function () {}}
+        toggleHideVideo={function () {}}
         buttonOnClick={function () {}}
         focused={false}
         enterDetect={function () {}}

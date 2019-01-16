@@ -63,9 +63,9 @@ describe('Reaction tests', () => {
         ],
       },
     };
-    const result = reducer(state, removeReaction(reactionId));
+    const { lastAction, ...result } = reducer(state, removeReaction(reactionId)).feed; // eslint-disable-line no-unused-vars
 
-    expect(result.feed).toEqual(
+    expect(result).toEqual(
       {
         ...defaultState,
         currentUser: {

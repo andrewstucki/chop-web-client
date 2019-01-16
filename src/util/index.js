@@ -27,18 +27,18 @@ const avatarColors = [
 
 const getAvatarColor = (nickname: string, opacity?: number) => {
   const op = opacity || '1.0';
-  const numberDigest = djb2Hash(nickname); 
-  const numberOfColors = avatarColors.length; 
-  const index = Math.abs(numberDigest % numberOfColors); 
+  const numberDigest = djb2Hash(nickname);
+  const numberOfColors = avatarColors.length;
+  const index = Math.abs(numberDigest % numberOfColors);
   const color = avatarColors[index];
-  return `rgba(${color}, ${op})`; 
+  return `rgba(${color}, ${op})`;
 };
 
 const djb2Hash = str => {
   let hash = 5381;
-  for (const char in str) { 
-    const charCode = char.charCodeAt(0); 
-    hash = (hash << 5) + hash + charCode; 
+  for (const char in str) {
+    const charCode = char.charCodeAt(0);
+    hash = (hash << 5) + hash + charCode;
   }
   return hash;
 };
@@ -55,23 +55,7 @@ const createUid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(regEx, replacer);
 };
 
-const isUsingIPad = () => 
-  !!navigator.platform && /iPad/.test(navigator.platform);
-
-const isUsingIPhone = () =>
-  !!navigator.platform && /iPhone/.test(navigator.platform);
-
-// using info from https://51degrees.com/blog/device-detection-for-apple-iphone-and-ipad
-const isUsingIPhoneX = () =>
-  (window.screen.height === 812 && window.screen.width === 375 && window.devicePixelRatio === 3);
-
-// 6/6s/7/8
-const isUsingIPhone678 = () => 
-  (window.screen.height === 667 && window.screen.width === 375 && window.devicePixelRatio === 2);
-
-// iPhone 6+/6s+/7+/8+
-const isUsingIPhone678plus = () =>
-  (window.screen.height === 736 && window.screen.width === 414 && window.devicePixelRatio === 3);
+const newTimestamp = () => Date.now();
 
 const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => {
   let users = [];
@@ -89,7 +73,7 @@ const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => 
   return users;
 };
 
-const capitalizeFirstLetter = (string: string) => 
+const capitalizeFirstLetter = (string: string) =>
   (string.charAt(0).toUpperCase() + string.slice(1));
 
 const objectFilter = (obj, predicate) => {
@@ -111,7 +95,7 @@ const sanitizeConfig = {
   ADD_ATTR: ['target'],
 };
 
-const sanitizeString = (string: string, config:any = sanitizeConfig) => 
+const sanitizeString = (string: string, config:any = sanitizeConfig) =>
   DOMPurify.sanitize(string, config)
 ;
 
@@ -140,16 +124,14 @@ const isMobileDevice = () => { /* eslint-disable */
   return check;
 };
 
+const isIOS = () => !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
 export {
   getFirstInitial,
   getAvatarColor,
   createUid,
+  newTimestamp,
   avatarImageExists,
-  isUsingIPad,
-  isUsingIPhone,
-  isUsingIPhoneX,
-  isUsingIPhone678,
-  isUsingIPhone678plus,
   convertSubscribersToSharedUsers,
   capitalizeFirstLetter,
   objectFilter,
@@ -158,4 +140,5 @@ export {
   getMessageTimestamp,
   UTC_DATE_FORMAT,
   isMobileDevice,
+  isIOS,
 };

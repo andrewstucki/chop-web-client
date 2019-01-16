@@ -1,6 +1,6 @@
 {
   "name": "chop-web-client",
-  "version": "3.0.0",
+  "version": "3.0.15",
   "description": "Church Online Platform (ChOP) web client",
   "main": "index.tsx",
   "repository": "git@in.thewardro.be:kenny.heaton/chop-web-client.git",
@@ -16,13 +16,11 @@
     "functional": "jest --testRegex='/test/functional/.*\\.test\\.jsx?$'",
     "test": "jest",
     "coverage": "yarn test --coverage",
-    "snap": "jest --testRegex='/test/snapshots/.*\\.test\\.jsx?$'",
     "flow": "flow",
-    "storybook": "start-storybook -p 9001 -c config/.storybook",
     "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/functional/ test/unit/",
-    "validate": "yarn test && yarn flow && yarn lint && yarn snap",
-    "ftest": "yarn test && yarn flow && yarn lint",
-    "export-storybook": "build-storybook -c ./config/.storybook -o ./dist/storybook"
+    "validate": "yarn test && yarn flow && yarn lint",
+    "test:full": "yarn test && yarn flow && yarn lint",
+    "cypress:open": "cypress open"
   },
   "jest": {
     "testRegex": "/test/unit/.*\\.test\\.jsx?$",
@@ -32,7 +30,10 @@
       "iframe_api": "<rootDir>/test/fake-js-file.js",
       "Youtube\\.min\\.js$": "<rootDir>/test/fake-js-file.js"
     },
-    "testURL": "https://live.life.church"
+    "testURL": "https://live.life.church",
+    "setupFiles": [
+      "<rootDir>/test/setupFile.js"
+    ]
   },
   "devDependencies": {
     "@alshakero/ez-s": "^0.0.3",
@@ -47,21 +48,20 @@
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@storybook/addon-storyshots": "^3.4.1",
-    "@storybook/addons": "3.4.1",
-    "@storybook/react": "^3.4.1",
     "babel-eslint": "8.2.1",
     "compression-webpack-plugin": "^1.1.11",
     "copy-webpack-plugin": "^4.5.3",
     "css-loader": "^2.0.1",
+    "cssnano": "^4.1.8",
+    "cypress": "^3.1.4",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.19.1",
     "eslint-plugin-flowtype": "^2.46.2",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-react": "^7.7.0",
-    "flow-bin": "^0.69.0",
-    "flow-typed": "^2.4.0",
+    "flow-bin": "0.90.0",
+    "flow-typed": "2.5.1",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
@@ -87,7 +87,6 @@
     "@bugsnag/js": "^5.0.2",
     "@bugsnag/plugin-react": "^5.0.2",
     "@redux-beacon/google-tag-manager": "^1.0.1",
-    "@storybook/addon-actions": "^4.1.1",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
@@ -100,8 +99,8 @@
     "linkifyjs": "^2.1.7",
     "moment": "^2.22.2",
     "pubnub": "^4.21.6",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "react": "16.6.3",
+    "react-dom": "16.6.3",
     "react-gtm-module": "^2.0.2",
     "react-player": "^1.7.1",
     "react-redux": "^5.0.7",

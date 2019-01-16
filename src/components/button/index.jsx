@@ -13,6 +13,7 @@ type ButtonPropsType = {
   disabled?: boolean,
   hidden?: boolean,
   additionalStyles?: string,
+  small?: boolean | void,
 };
 
 class Button extends Component<ButtonPropsType, void> {
@@ -35,9 +36,12 @@ class Button extends Component<ButtonPropsType, void> {
       disabled,
       hidden,
       additionalStyles = '',
+      small = false,
     } = this.props;
 
-    const style = `${styles.button} ${styles[buttonStyle]} ${additionalStyles}`.trim();
+    const buttonSizeStyle = small ? styles.small : styles.default;
+
+    const style = `${styles.button} ${styles[buttonStyle]} ${additionalStyles} ${buttonSizeStyle}`.trim();
 
     if (buttonStyle === 'icon') {
       return (

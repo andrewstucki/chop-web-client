@@ -57,8 +57,8 @@ import {
 
 import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
 
-import { SET_VIDEO } from '../videoFeed/dux';
-import type { SetVideoType, VideoType } from '../videoFeed/dux';
+import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
+import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
 
 import {
   RELEASE_ANCHOR_MOMENT,
@@ -77,14 +77,18 @@ import moment from 'moment';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
+import type {
+  UIDType,
+  DateTimeType,
+  ChannelIdType,
+} from '../cwc-types';
+
 // Action Types
 
-const CHANGE_CHANNEL = 'CHANGE_CHANNEL';
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
-const GET_INIT_DATA = 'GET_INIT_DATA';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
 const SET_USER = 'SET_USER';
@@ -105,12 +109,9 @@ const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
+const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 
 // Flow Type Definitions
-
-type GetInitData = {
-  type: 'GET_INIT_DATA',
-};
 
 type SetScheduleDataType = {
   type: 'SET_SCHEDULE_DATA',
@@ -183,8 +184,9 @@ type ReceiveReactionType = {
 }
 
 type SharedUserType = {
+  id: UIDType | null,
   name: string,
-  avatarUrl?: string,
+  avatarUrl?: string | null,
   pubnubToken: string,
   role: {
     label: string,
@@ -199,6 +201,7 @@ type ChannelType = {
   participants?: Array<SharedUserType>,
   anchorMoments: Array<AnchorMomentType>,
   scrollPosition: number,
+  sawLastMomentAt: DateTimeType,
 };
 
 type HereNowUsers = {
@@ -227,13 +230,15 @@ type AuthenticationType = {
   refreshToken: string
 }
 
+type ChannelsObjectType = {
+  [string]: ChannelType,
+};
+
 type FeedType = {
   pubnubKeys: PubnubKeysType,
   event: EventType,
   organization: OrganizationType,
-  channels: {
-    [string]: ChannelType,
-  },
+  channels: ChannelsObjectType,
   hereNow: HereNowChannels,
   currentUser: PrivateUserType,
   animatingMoment: boolean,
@@ -258,6 +263,7 @@ type FeedType = {
   },
   clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
+  lastAction?: FeedActionTypes,
 };
 
 type AddChannelType = {
@@ -356,11 +362,18 @@ type UpdateScrollPositionType = {
   type: 'UPDATE_SCROLL_POSITION',
   scrollPosition: number,
   channel: string,
+  timestamp: number,
 };
 
 type SetClientInfoType = {
   type: 'SET_CLIENT_INFO',
   data: ClientInfoType,
+};
+
+type SetSawLastMomentAt = {
+  type: typeof SET_SAW_LAST_MOMENT_AT,
+  timestamp: DateTimeType,
+  channelId: ChannelIdType,
 };
 
 type FeedActionTypes =
@@ -395,9 +408,19 @@ type FeedActionTypes =
   | RemoveErrorType
   | SetScheduleDataType
   | SetClientInfoType
-  | SetHereNow;
+  | SetHereNow
+  | SetSawLastMomentAt
+  | ToggleHideVideoType;
 
 // Action Creators
+export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
+  {
+    type: SET_SAW_LAST_MOMENT_AT,
+    timestamp,
+    channelId,
+  }
+);
+
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
   {
     type: SET_AUTHENTICATION,
@@ -491,12 +514,6 @@ const setEvent = (title: string, id: number, startTime: number, videoStartTime: 
   }
 );
 
-const getInitData = (): GetInitData => (
-  {
-    type: GET_INIT_DATA,
-  }
-);
-
 const removeReaction = (id: string): RemoveReactionType => (
   {
     type: REMOVE_REACTION,
@@ -526,7 +543,8 @@ const addChannel = (
       moments: [],
       participants,
       anchorMoments: [],
-      scrollPosition: -1,
+      scrollPosition: 0,
+      sawLastMomentAt: Date.now(),
     },
   }
 );
@@ -581,11 +599,12 @@ const clearNotificationBanner = (): ClearNotificationBannerType => (
   }
 );
 
-const updateScrollPosition = (scrollPosition: number, channel: string): UpdateScrollPositionType => (
+const updateScrollPosition = (scrollPosition: number, channel: string, timestamp: number): UpdateScrollPositionType => (
   {
     type: UPDATE_SCROLL_POSITION,
     scrollPosition,
     channel,
+    timestamp,
   }
 );
 
@@ -712,13 +731,17 @@ const defaultState = {
 // Reducer
 
 const reducer = (
-  state: FeedType = defaultState,
+  inboundState: FeedType = defaultState,
   action?: FeedActionTypes): FeedType => {
   if (!action || !action.type) {
-    return state;
+    return inboundState;
   }
+  const state = {
+    ...inboundState,
+    lastAction: { ...action},
+  };
   switch (action.type) {
-  case SET_PANE_CONTENT: 
+  case SET_PANE_CONTENT:
     return {
       ...state,
       panes: {
@@ -822,26 +845,26 @@ const reducer = (
       },
       isAuthenticated: false,
     };
-  case RECEIVE_MOMENT:
+  case RECEIVE_MOMENT: {
     // $FlowFixMe
-    if (state.channels[action.channel]) {
+    const { channel:channelId, moment }: { channelId: string, moment: MomentType } = action;
+    if (state.channels[channelId]) {
       return {
         ...state,
         channels: {
           ...state.channels,
-          // $FlowFixMe
-          [action.channel]: {
-            ...state.channels[action.channel],
+          [channelId]: {
+            ...state.channels[channelId],
             moments: [
-              ...state.channels[action.channel].moments,
-              // $FlowFixMe
-              action.moment,
+              ...state.channels[channelId].moments,
+              moment,
             ],
           },
         },
       };
     }
     return state;
+  }
   case ADD_CHANNEL:
     if (state.channels[action.channel.id]) {
       return state;
@@ -873,7 +896,6 @@ const reducer = (
         };
       }
     }
-
     return stateCopy;
   }
   case LOAD_HISTORY:
@@ -1161,7 +1183,11 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
-      isVideoHidden: action.focus,
+    };
+  case TOGGLE_HIDE_VIDEO:
+    return {
+      ...state,
+      isVideoHidden: action.hidden,
     };
   case CLOSE_SIDE_MENU:
     return {
@@ -1235,13 +1261,18 @@ const reducer = (
       },
     };
   case UPDATE_SCROLL_POSITION: {
+    const { scrollPosition, channel, timestamp } = action;
+    if (!state.channels[channel]) {
+      return state;
+    }
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: {
-          ...state.channels[action.channel],
-          scrollPosition: action.scrollPosition,
+        [channel]: {
+          ...state.channels[channel],
+          scrollPosition: scrollPosition,
+          sawLastMomentAt: scrollPosition === 0 ? timestamp : state.channels[channel].sawLastMomentAt,
         },
       },
     };
@@ -1262,7 +1293,7 @@ const reducer = (
       isVideoPlaying: false,
     };
   default:
-    return state;
+    return inboundState;
   }
 };
 
@@ -1270,6 +1301,7 @@ const reducer = (
 
 const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
   {
+    id: state.currentUser.id,
     pubnubToken: state.currentUser.pubnubToken,
     name: state.currentUser.name,
     avatarUrl: state.currentUser.avatarUrl,
@@ -1283,23 +1315,13 @@ const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
 
-const getScrollPosition = (state: FeedType, channel: string): number => {
-  if (state.channels[channel]) {
-    return state.channels[channel].scrollPosition;
-  } else {
-    return -1;
-  }
-};
-
 // Exports
 
 export {
-  CHANGE_CHANNEL,
   ADD_CHANNEL,
   REMOVE_CHANNEL,
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
-  GET_INIT_DATA,
   SET_NOTIFICATION_BANNER,
 };
 export {
@@ -1309,7 +1331,6 @@ export {
   togglePopUpModal,
   leaveChannel,
   getCurrentUserAsSharedUser,
-  getInitData,
   removeReaction,
   setUser,
   setEvent,
@@ -1328,7 +1349,6 @@ export {
   setAuthentication,
   removeAuthentication,
   updateScrollPosition,
-  getScrollPosition,
   setClientInfo,
   setHereNow,
 };
@@ -1342,12 +1362,12 @@ export type {
   SharedUserType,
   TogglePopUpModalType,
   LeaveChannelType,
-  GetInitData,
   LanguageType,
   OrganizationType,
   SetSalvationsType,
   SetNotificationBannerType,
   ClientInfoType,
+  ChannelsObjectType,
 };
 
 export default reducer;

@@ -7,11 +7,13 @@ import Enzyme from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { mockDate } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-// TODO: Timezone while running in CI does not match local timezone, skipping for now
 test.skip('Offline renders when no event.', () => {
+  mockDate('Wed Nov 28 2018 21:00:00 GMT-0000');
+
   const store = createStore(
     reducer,
     {
@@ -35,7 +37,7 @@ test.skip('Offline renders when no event.', () => {
     <Provider store={store}>
       <div>
         <Event />
-      </div>   
+      </div>
     </Provider>
   );
 
@@ -65,7 +67,7 @@ test('Event renders when there is an event.', () => {
     <Provider store={store}>
       <div>
         <Event />
-      </div>   
+      </div>
     </Provider>
   );
 
