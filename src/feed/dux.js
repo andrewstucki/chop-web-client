@@ -362,6 +362,7 @@ type UpdateScrollPositionType = {
   type: 'UPDATE_SCROLL_POSITION',
   scrollPosition: number,
   channel: string,
+  timestamp: number,
 };
 
 type SetClientInfoType = {
@@ -598,11 +599,12 @@ const clearNotificationBanner = (): ClearNotificationBannerType => (
   }
 );
 
-const updateScrollPosition = (scrollPosition: number, channel: string): UpdateScrollPositionType => (
+const updateScrollPosition = (scrollPosition: number, channel: string, timestamp: number): UpdateScrollPositionType => (
   {
     type: UPDATE_SCROLL_POSITION,
     scrollPosition,
     channel,
+    timestamp,
   }
 );
 
@@ -739,23 +741,6 @@ const reducer = (
     lastAction: { ...action},
   };
   switch (action.type) {
-  case SET_SAW_LAST_MOMENT_AT: {
-    const { timestamp, channelId } = action;
-    if (!state.channels[channelId]) {
-      return state;
-    }
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        // $FlowFixMe
-        [channelId]: {
-          ...state.channels[channelId],
-          sawLastMomentAt: timestamp,
-        },
-      },
-    };
-  }
   case SET_PANE_CONTENT:
     return {
       ...state,
@@ -1276,16 +1261,18 @@ const reducer = (
       },
     };
   case UPDATE_SCROLL_POSITION: {
-    if (!state.channels[action.channel]) {
+    const { scrollPosition, channel, timestamp } = action;
+    if (!state.channels[channel]) {
       return state;
     }
     return {
       ...state,
       channels: {
         ...state.channels,
-        [action.channel]: {
-          ...state.channels[action.channel],
-          scrollPosition: action.scrollPosition,
+        [channel]: {
+          ...state.channels[channel],
+          scrollPosition: scrollPosition,
+          sawLastMomentAt: scrollPosition === 0 ? timestamp : state.channels[channel].sawLastMomentAt,
         },
       },
     };

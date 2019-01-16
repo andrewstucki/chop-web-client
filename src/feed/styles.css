@@ -44,12 +44,15 @@
 }
 
 .newMessageButtonContainer {
-  position: absolute;
-  bottom: 68px;
+  position: relative;
   width: 100%;
-  text-align: center;
+  height: 0px;
+  overflow: visible;
 }
 
 .newMessageButtonWrapper {
-  display: inline-block;
+  position: absolute;
+  bottom: 8PX;
+  left: 50%;
+  margin-left: -60px;
 }

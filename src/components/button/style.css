@@ -6,7 +6,15 @@
   outline: none;
 }
 
-.button:hover:not(:disabled) {
+.button.small {
+  border: none;
+}
+
+.button.small:hover:not(:disabled) {
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled),.button.small {
   box-shadow: 0px 2px 6px rgba(45, 45, 46, 0.25);
 }
 

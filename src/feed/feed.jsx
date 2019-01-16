@@ -40,7 +40,7 @@ type FeedProps = {
   showLeaveChat: boolean,
   currentUser: PrivateUserType,
   togglePopUpModal: () => void,
-  updateScrollPosition: (scrollPosition: number, channel: string) => void,
+  updateScrollPosition: (scrollPosition: number, channel: string, timestamp: number) => void,
   setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => void,
   showNewMessageButton: boolean,
   isChatFocused: boolean,
@@ -78,19 +78,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
       const scrollPosition = (list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + scrollWrapper.scrollTop));
       this.props.updateScrollPosition(
         scrollPosition,
-        channel
+        channel,
+        Date.now()
       );
     }
   };
 
   setScrollPositionToBottom = () => {
-    const { channel } = this.props;
-    if (channel !== undefined) {
-      this.props.updateScrollPosition(
-        0,
-        channel
-      );
-    }
+    this.scrollTo(0);
   }
 
   scrollTo = (position: number) => {
@@ -108,6 +103,9 @@ class Feed extends React.Component<FeedProps, FeedState> {
     switch (scroll.type) {
     case SCROLL_TO:
       this.scrollTo(scroll.position);
+      break;
+    case 'DELAY_SCROLL_TO':
+      setTimeout(() => this.scrollTo(scroll.position), 500);
       break;
     case NO_SCROLL:
     default:
@@ -180,20 +178,19 @@ class Feed extends React.Component<FeedProps, FeedState> {
             </ul>
           </div>
         </div>
+        { showNewMessageButton &&
+          <div className={styles.newMessageButtonContainer}>
+            <div className={styles.newMessageButtonWrapper}>
+              <Button onClick={this.setScrollPositionToBottom} buttonStyle='secondary' text='New Messages' small />
+            </div>
+          </div>
+        }
         { hasAnchorMoments &&
           <div className={styles.nonScroll}>
             <div style={{width: '100%'}}>
               <ul className={styles.anchorMoments}>
                 {anchorMomentListItems}
               </ul>
-            </div>
-          </div>
-        }
-        { showNewMessageButton &&
-          <div className={styles.newMessageButtonContainer
-          }>
-            <div className={styles.newMessageButtonWrapper}>
-              <Button onClick={this.setScrollPositionToBottom} buttonStyle='secondary' text='New Messages' small />
             </div>
           </div>
         }

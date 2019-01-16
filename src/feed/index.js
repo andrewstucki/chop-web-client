@@ -38,7 +38,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => (
   {
     togglePopUpModal: () => (dispatch(togglePopUpModal())),
-    updateScrollPosition: (scrollPosition, channel) => (dispatch(updateScrollPosition(scrollPosition, channel))),
+    updateScrollPosition: (scrollPosition, channel, timestamp) => (dispatch(updateScrollPosition(scrollPosition, channel, timestamp))),
     setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => (dispatch(setSawLastMomentAt(timestamp, channelId))),
   }
 );

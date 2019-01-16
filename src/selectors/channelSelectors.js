@@ -185,6 +185,11 @@ const getScroll = createSelector(
       return {
         type: 'NO_SCROLL',
       };
+    } else if (action.type === 'TOGGLE_CHAT_FOCUS') {
+      return {
+        type: 'DELAY_SCROLL_TO',
+        position: scrollPosition || 0,
+      };
     } else {
       return {
         type: 'SCROLL_TO',

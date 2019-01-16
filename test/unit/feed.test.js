@@ -2143,7 +2143,7 @@ describe('SideMenu tests', () => {
           },
         },
       },
-      updateScrollPosition(31, 'public')
+      updateScrollPosition(31, 'public', 1546896104521)
     );
     expect(results).toEqual(
       {
