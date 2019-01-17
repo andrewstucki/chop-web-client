@@ -70,7 +70,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const { current:list } = this.listRef;
     const { current:scrollWrapper } = this.wrapperRef;
 
-    if (channel !== undefined) {
+    if (channel && list && scrollWrapper) {
       const scrollPosition = (list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + scrollWrapper.scrollTop));
       this.props.updateScrollPosition(
         scrollPosition,
@@ -88,9 +88,11 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const { current:scrollWrapper } = this.wrapperRef;
     const { current:list } = this.listRef;
 
-    const scrollTop = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position);
-    
-    scrollWrapper.scrollTop = scrollTop;
+    if (scrollWrapper && list) {
+      const scrollTop = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position);
+      
+      scrollWrapper.scrollTop = scrollTop;
+    }
   }
 
   scroll = () => {
