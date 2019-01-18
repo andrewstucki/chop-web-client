@@ -22,6 +22,11 @@ type VideoFeedProps = {
 class VideoFeed extends React.Component<VideoFeedProps> {
   render () {
     const { type, Player, url, isVideoHidden, isMobileDevice, onPlay, onPause, startAt, isVideoPlaying } = this.props;
+
+    if (!url) {
+      return null;
+    }
+
     const wrapperStyle = isVideoHidden ?
       styles.hideVideo :
       styles.showVideo;
