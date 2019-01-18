@@ -1272,7 +1272,7 @@ const reducer = (
         [channel]: {
           ...state.channels[channel],
           scrollPosition: scrollPosition,
-          sawLastMomentAt: scrollPosition === 0 ? timestamp : state.channels[channel].sawLastMomentAt,
+          sawLastMomentAt: scrollPosition < 10 ? timestamp : state.channels[channel].sawLastMomentAt,
         },
       },
     };
