@@ -33,7 +33,7 @@ const getSawLastMomentAt = createSelector(
 const getChannelIdByNameFactory = (name: string): ChannelIdType => (
   createSelector(
     getChannels,
-    channels => { 
+    channels => {
       if (channels) {
         return Object.keys(channels).find(channel => channels[channel] ? channels[channel].name.toUpperCase() === name : null);
       }
@@ -142,8 +142,8 @@ const hasNotSeenLatestMoments = createSelector(
   getChannelById,
   getSawLastMomentAt,
   (channel, sawLastMomentAt) => {
-    if (channel) {
-      return channel.moments.filter(moment => moment.timestamp > sawLastMomentAt).length > 0;
+    if (channel && sawLastMomentAt !== undefined) {
+      return channel.moments.some(moment => moment.timestamp > sawLastMomentAt) && channel.scrollPosition > 10;
     } else {
       return false;
     }
@@ -167,9 +167,10 @@ const getScroll = createSelector(
         position: 0,
       };
     }
-    const { moments, scrollPosition, id:channelId } = currentChannel;
+    const { moments, scrollPosition } = currentChannel;
 
-    if (action.type === 'PUBLISH_MOMENT_TO_CHANNEL' || action.type === 'RECEIVE_MOMENT') {
+    switch (action.type) {
+    case 'PUBLISH_MOMENT_TO_CHANNEL': {
       const lastMessage = lastInArray(moments);
       if (lastMessage) {
         const messageSender = lastMessage.sender;
@@ -178,29 +179,43 @@ const getScroll = createSelector(
             type: 'SCROLL_TO',
             position: 0,
           };
-        } else {
-          return {
-            type: 'NO_SCROLL',
-          };
         }
+      }
+      return {
+        type: 'NO_SCROLL',
+      };
+    }
+    case 'LOAD_HISTORY':
+      return {
+        type: 'SCROLL_TO',
+        position: 0,
+      };
+    case 'TOGGLE_CHAT_FOCUS':
+      return {
+        type: 'DELAY_SCROLL_TO',
+        position: scrollPosition || 0,
+      };
+    case 'SET_ANCHOR_MOMENT':
+    case 'SET_PANE_CONTENT':
+      return {
+        type: 'SCROLL_TO',
+        position: scrollPosition || 0,
+      };
+    case 'RECEIVE_MOMENT': {
+      if (scrollPosition < 10) {
+        return {
+          type: 'SCROLL_TO',
+          position: 0,
+        };
       } else {
         return {
           type: 'NO_SCROLL',
         };
       }
-    } else if (action.type === 'SET_SCROLL_POSITION' && action.channel === channelId) {
+    }
+    default:
       return {
         type: 'NO_SCROLL',
-      };
-    } else if (action.type === 'TOGGLE_CHAT_FOCUS') {
-      return {
-        type: 'DELAY_SCROLL_TO',
-        position: scrollPosition || 0,
-      };
-    } else {
-      return {
-        type: 'SCROLL_TO',
-        position: scrollPosition,
       };
     }
   }
