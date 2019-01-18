@@ -170,12 +170,19 @@ const getScroll = createSelector(
     const { moments, scrollPosition, id:channelId } = currentChannel;
 
     if (action.type === 'PUBLISH_MOMENT_TO_CHANNEL' || action.type === 'RECEIVE_MOMENT') {
-      const messageSender = lastInArray(moments).sender;
-      if (isSameUser(messageSender, currentUser)) {
-        return {
-          type: 'SCROLL_TO',
-          position: 0,
-        };
+      const lastMessage = lastInArray(moments);
+      if (lastMessage) {
+        const messageSender = lastMessage.sender;
+        if (isSameUser(messageSender, currentUser)) {
+          return {
+            type: 'SCROLL_TO',
+            position: 0,
+          };
+        } else {
+          return {
+            type: 'NO_SCROLL',
+          };
+        }
       } else {
         return {
           type: 'NO_SCROLL',
