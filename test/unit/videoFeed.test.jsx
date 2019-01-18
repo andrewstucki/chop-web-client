@@ -17,16 +17,23 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('VideoFeed tests', () => {
   test('VideoFeed shows video', () => {
     const wrapper = Enzyme.shallow(
-      <VideoFeed Player={YouTubePlayer} isVideoHidden={false} url="" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='simulated'/>
+      <VideoFeed Player={YouTubePlayer} isVideoHidden={false} url="https://life.church/video" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='simulated'/>
     );
     expect(wrapper.find('.showVideo').type()).toEqual('div');
   });
 
   test('VideoFeed hides video', () => {
     const wrapper = Enzyme.shallow(
-      <VideoFeed Player={YouTubePlayer} isVideoHidden={true} url="" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='simulated' />
+      <VideoFeed Player={YouTubePlayer} isVideoHidden={true} url="https://life.church/video" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='simulated' />
     );
     expect(wrapper.find('.hideVideo').type()).toEqual('div');
+  });
+
+  test ('VideoFeed does not render if url is not set', () => {
+    const wrapper = Enzyme.shallow(
+      <VideoFeed Player={YouTubePlayer} isVideoHidden={true} url="" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='' />
+    );
+    expect(wrapper.find('.hideVideo').exists()).toEqual(false);
   });
 
   test('YouTube URL renders YouTube player', () => {
