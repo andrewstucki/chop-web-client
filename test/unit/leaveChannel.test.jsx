@@ -101,7 +101,7 @@ describe('Test leave channel', () => {
         }
       );
       expect(Object.keys(store.getState().feed.channels).length).toEqual(4);
-      expect(store.getState().panes.primary.channelId).toEqual('1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c');
+      expect(store.getState().panes.primary.active.content.channelId).toEqual('1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c');
       expect(mockLeaveChannel).toHaveBeenCalledTimes(1);
       expect(mockLeaveChannel).toHaveBeenCalledWith('test');
     });

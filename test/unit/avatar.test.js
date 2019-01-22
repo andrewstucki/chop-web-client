@@ -19,7 +19,17 @@ describe('Test Avatar', () => {
     const store = createStore(
       reducer,
       {
-        feed: defaultState,
+        feed: {
+          ...defaultState,
+          panes: {
+            primary: {
+              active: {
+                type: 'CHAT',
+                content: {},
+              },
+            },
+          },
+        },
       }
     );
 
@@ -59,7 +69,17 @@ describe('Test Avatar', () => {
     const store = createStore(
       reducer,
       {
-        feed: defaultState,
+        feed: {
+          ...defaultState,
+          panes: {
+            primary: {
+              active: {
+                type: 'CHAT',
+                content: {},
+              },
+            },
+          },
+        },
       }
     );
 

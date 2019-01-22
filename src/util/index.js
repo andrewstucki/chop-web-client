@@ -126,6 +126,8 @@ const isMobileDevice = () => { /* eslint-disable */
 
 const isIOS = () => !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
+const getComponentDisplayName = Componenet => Componenet.displayName || Componenet.name || 'Component';
+
 export {
   getFirstInitial,
   getAvatarColor,
@@ -141,4 +143,5 @@ export {
   UTC_DATE_FORMAT,
   isMobileDevice,
   isIOS,
+  getComponentDisplayName,
 };
