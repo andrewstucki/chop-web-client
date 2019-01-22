@@ -28,4 +28,5 @@
   padding: 0;
   line-height: 0;
   outline-style: none;
+  -webkit-tap-highlight-color: transparent;
 }
