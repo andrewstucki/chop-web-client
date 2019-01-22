@@ -42,11 +42,11 @@ const MessageTray = (
   <div className={styles.tray}>
     {
       trayButton(
-        styles.directChatButton,
-        styles.directChatImage,
-        DirectChatButton,
-        'Chat',
-        directChat
+        styles.muteButton,
+        styles.muteImage,
+        MuteButton,
+        'Mute',
+        muteUser
       )
     }
     {
@@ -60,11 +60,11 @@ const MessageTray = (
     }
     {
       trayButton(
-        styles.muteButton,
-        styles.muteImage,
-        MuteButton,
-        'Mute',
-        muteUser
+        styles.directChatButton,
+        styles.directChatImage,
+        DirectChatButton,
+        'Chat',
+        directChat
       )
     }
   </div>

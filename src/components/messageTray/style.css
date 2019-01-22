@@ -2,7 +2,8 @@
 
 :root {
   --button: {
-    font-size: 12.8px;
+    font-size: 13.44px;
+    font-weight: 500;
     color: var(--primaryColor);
     border: none;
     outline: none;
@@ -34,9 +35,9 @@
 
 .directChatImage svg,
 .muteImage svg {
-  width: 15px;
+  width: 20px;
 }
 
 .deleteImage svg {
-  width: 13px;
+  width: 20px;
 }
