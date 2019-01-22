@@ -59,6 +59,9 @@ const Message = (
           onClick={() => {
             closeMessageTray(message.id);
           }}
+          onTouchStart={() => {
+            closeMessageTray(message.id);
+          }}
         />
       );
     }
@@ -67,6 +70,9 @@ const Message = (
         className={styles.openTrayButton}
         dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
         onClick={() => {
+          openMessageTray(message.id);
+        }}
+        onTouchStart={() => {
           openMessageTray(message.id);
         }}
       />
