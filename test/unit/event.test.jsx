@@ -59,6 +59,14 @@ test('Event renders when there is an event.', () => {
           startTime: 1543585500,
           videoStartTime: 1543586400,
         },
+        panes: {
+          primary: {
+            active: {
+              type: 'EVENT',
+              content: {},
+            },
+          },
+        },
       },
     }
   );

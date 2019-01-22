@@ -1,11 +1,14 @@
 // @flow
-import { 
-  getCurrentChannel, 
-  getPublicChannelObject as publicChannel, 
-  getHostChannelObject as hostChannel, 
+import {
+  getCurrentChannel,
+  getPublicChannelObject as publicChannel,
+  getHostChannelObject as hostChannel,
   getDirectChannels as directChannels,
 } from '../selectors/channelSelectors';
 import { createSelector } from 'reselect';
+
+// Action Types
+const SET_NAVBAR_INDEX = 'SET_NAVBAR_INDEX';
 
 // Flow Type Definitions
 
@@ -15,7 +18,22 @@ type ChannelType = {
   isCurrent: boolean,
   hasActions: boolean,
   otherUsersNames: Array<string>,
+  isDirect: boolean,
 };
+
+type SetNavbarIndexType = {
+  type: 'SET_NAVBAR_INDEX',
+  index: number,
+};
+
+// Action Creators
+
+const setNavbarIndex = (index:number):SetNavbarIndexType => (
+  {
+    type: SET_NAVBAR_INDEX,
+    index,
+  }
+);
 
 // Selectors
 
@@ -46,18 +64,19 @@ const createNavChannel = (channel, currentChannel, currentUser) => (
     isCurrent: currentChannel === channel.id,
     hasActions: hasAction(channel),
     otherUsersNames: getOtherUserNames(channel, currentUser),
+    isDirect: channel.direct,
   }
 );
 
 const getPublicChannel = createSelector(
-  state => publicChannel(state) || { name: 'Public', id: 'event', moments: [] },
+  state => publicChannel(state) || { name: 'Public', id: 'event', moments: [], direct: false },
   getCurrentChannel,
   getCurrentUser,
   createNavChannel
 );
 
 const getHostChannel = createSelector(
-  state => hostChannel(state) || { name: 'Host', id: 'host', moments: [] },
+  state => hostChannel(state) || { name: 'Host', id: 'host', moments: [], direct: false },
   getCurrentChannel,
   getCurrentUser,
   createNavChannel
@@ -67,7 +86,7 @@ const getDirectChannels = createSelector(
   directChannels,
   getCurrentChannel,
   getCurrentUser,
-  (channels, currentChannel, currentUser) => 
+  (channels, currentChannel, currentUser) =>
     Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentUser))
 );
 
@@ -77,7 +96,10 @@ export {
   getHostChannel,
   getPublicChannel,
   getDirectChannels,
+  setNavbarIndex,
+  SET_NAVBAR_INDEX,
 };
 export type {
   ChannelType,
+  SetNavbarIndexType,
 };

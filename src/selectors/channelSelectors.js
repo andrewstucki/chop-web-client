@@ -12,8 +12,8 @@ import type {
   LanguageCodeType,
   UIDType,
 } from '../cwc-types';
-import type { PaneContentType } from '../pane/dux';
-import type { MomentType } from '../moment';
+import type { PaneType } from '../pane/dux';
+import type { MomentType } from '../moment/dux';
 
 const getChannels = (state: FeedType): ChannelsObjectType => state.channels;
 
@@ -21,7 +21,7 @@ const getChannelById = (state: FeedType, id: ChannelIdType): ChannelType => getC
 
 const getCurrentLanguage = (state: FeedType): LanguageCodeType => state.currentLanguage;
 
-const getPrimaryPane = (state: FeedType): PaneContentType => state.panes.primary;
+const getPrimaryPane = (state: FeedType): PaneType => state.panes.primary.active;
 
 const getMutedUsers = (state: FeedType):Array<UIDType>  => state.mutedUsers;
 
@@ -113,7 +113,7 @@ const getLegacyChannel = createSelector(
 
 const getCurrentChannel = createSelector(
   getPrimaryPane,
-  pane => pane.channelId,
+  pane => pane?.content?.channelId || '',
 );
 
 const getCurrentChannelObj = createSelector(

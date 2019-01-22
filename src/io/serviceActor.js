@@ -47,10 +47,7 @@ class ServiceActor {
   storeDispatch: (action: any) => void;
   graph: GraphQl;
   location: Location;
-  getAll: any;
-  graphAuth: any;
   getStore: () => any;
-  getAuthentication: (variables: any) => any;
   cookies: Cookies;
   handleDataFetchErrors: (payload: any) => void;
   setCurrentState: (payload: any) => void;
@@ -147,14 +144,14 @@ class ServiceActor {
     });
   }
 
-  _handleDataFetchErrors (payload: any) {  
+  _handleDataFetchErrors (payload: any) {
     const { errors } = payload.response;
     if (errors) {
       // eslint-disable-next-line no-console
       console.log('The graphql response returned errors:');
       for (const err in errors) {
         const { message, extensions } = errors[err];
-        
+
         if (message) {
           this.storeDispatch(addError(message));
           // eslint-disable-next-line no-console

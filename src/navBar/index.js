@@ -2,23 +2,25 @@
 import NavBar from './navBar';
 import { connect } from 'react-redux';
 
-import { getHostChannel, getPublicChannel, getDirectChannels } from '../navBar/dux';
+import { getHostChannel, getPublicChannel, getDirectChannels, setNavbarIndex } from './dux';
 import { openMenu } from '../sideMenu/dux';
 import { setPrimaryPane } from '../pane/dux';
 
 const mapStateToProps = state => {
-  const feedState = state.feed;
+  const { feed:feedState } = state;
+  const publicChannel = getPublicChannel(feedState);
+  const hostChannel = getHostChannel(feedState);
+  const directChannels = getDirectChannels(feedState);
   return {
-    directChannels: getDirectChannels(feedState),
-    hostChannel: getHostChannel(feedState),
-    publicChannel: getPublicChannel(feedState),
+    channels: [publicChannel, hostChannel, ...directChannels],
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
     openMenu: () => dispatch(openMenu()),
-    onClick: (id, type) => dispatch(setPrimaryPane(id, type)),
+    setPrimaryPane: (id, type) => dispatch(setPrimaryPane(id, type)),
+    setNavbarIndex: index => dispatch(setNavbarIndex(index)),
   }
 );
 

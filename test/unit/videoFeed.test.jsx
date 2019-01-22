@@ -31,9 +31,9 @@ describe('VideoFeed tests', () => {
 
   test ('VideoFeed does not render if url is not set', () => {
     const wrapper = Enzyme.shallow(
-      <VideoFeed Player={YouTubePlayer} isVideoHidden={true} url="" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='' />
+      <VideoFeed Player={YouTubePlayer} isVideoHidden={false} url="" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='' />
     );
-    expect(wrapper.find('.hideVideo').exists()).toEqual(false);
+    expect(wrapper.find('.showVideo').exists()).toEqual(false);
   });
 
   test('YouTube URL renders YouTube player', () => {

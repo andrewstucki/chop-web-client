@@ -43,7 +43,7 @@ import {
 } from '../pane/dux';
 
 import type {
-  PaneContentType,
+  PaneType,
 } from '../pane/dux';
 
 import {
@@ -82,6 +82,14 @@ import type {
   DateTimeType,
   ChannelIdType,
 } from '../cwc-types';
+
+// $FlowFixMe - this module does not resolve in GitLab CI
+import type { SetNavbarIndexType } from '../navbar/dux';
+
+import {
+  SET_NAVBAR_INDEX,
+} from '../navBar/dux';
+
 
 // Action Types
 
@@ -259,10 +267,14 @@ type FeedType = {
   isAuthenticated: boolean,
   auth: AuthenticationType,
   panes: {
-    [string]: PaneContentType,
+    [string]: {
+      active: PaneType,
+      previous?: PaneType,
+    },
   },
   clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
+  navbarIndex: number,
   lastAction?: FeedActionTypes,
 };
 
@@ -410,7 +422,8 @@ type FeedActionTypes =
   | SetClientInfoType
   | SetHereNow
   | SetSawLastMomentAt
-  | ToggleHideVideoType;
+  | ToggleHideVideoType
+  | SetNavbarIndexType;
 
 // Action Creators
 export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
@@ -696,8 +709,16 @@ const defaultState = {
   ],
   panes: {
     primary: {
-      type: EVENT,
-      channelId: '',
+      active: {
+        type: '',
+        // $FlowFixMe
+        content: {},
+      },
+      previous: {
+        type: '',
+        // $FlowFixMe
+        content: {},
+      },
     },
   },
   reactions: [],
@@ -726,6 +747,7 @@ const defaultState = {
     state: '',
   },
   mutedUsers: [],
+  navbarIndex: 0,
 };
 
 // Reducer
@@ -746,7 +768,10 @@ const reducer = (
       ...state,
       panes: {
         ...state.panes,
-        [action.name]: action.content,
+        [action.name]: {
+          active: action.pane,
+          previous: state.panes[action.name].active,
+        },
       },
     };
   case SET_HERE_NOW:
@@ -883,16 +908,21 @@ const reducer = (
     const publicChannel = getPublicChannel(stateCopy);
     const hostChannel = getHostChannel(stateCopy);
 
-    if (action.channel === state.panes.primary.channelId) {
+    if (action.channel === state.panes.primary.active.content.channelId) {
       if (action.channel === publicChannel) {
-        stateCopy.panes.primary = {
-          channelId: hostChannel || '',
+        stateCopy.panes.primary.active = {
           type: CHAT,
+          content: {
+            channelId: hostChannel || '',
+          },
         };
       } else {
-        stateCopy.panes.primary = {
-          channelId: publicChannel || '',
+        stateCopy.panes.primary.active = {
           type: EVENT,
+          content: {
+            channelId: publicChannel || '',
+          },
+
         };
       }
     }
@@ -927,9 +957,9 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.panes.primary.channelId]: {
-          ...state.channels[state.panes.primary.channelId],
-          moments: state.channels[state.panes.primary.channelId].moments.map(
+        [state.panes.primary.active.content.channelId]: {
+          ...state.channels[state.panes.primary.active.content.channelId],
+          moments: state.channels[state.panes.primary.active.content.channelId].moments.map(
             message => (
               {
                 ...message,
@@ -957,9 +987,9 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.panes.primary.channelId]: {
-          ...state.channels[state.panes.primary.channelId],
-          moments: state.channels[state.panes.primary.channelId].moments.map(
+        [state.panes.primary.active.content.channelId]: {
+          ...state.channels[state.panes.primary.active.content.channelId],
+          moments: state.channels[state.panes.primary.active.content.channelId].moments.map(
             message => (
               {
                 ...message,
@@ -977,9 +1007,9 @@ const reducer = (
       ...state,
       channels: {
         ...state.channels,
-        [state.panes.primary.channelId]: {
-          ...state.channels[state.panes.primary.channelId],
-          moments: state.channels[state.panes.primary.channelId].moments.map(
+        [state.panes.primary.active.content.channelId]: {
+          ...state.channels[state.panes.primary.active.content.channelId],
+          moments: state.channels[state.panes.primary.active.content.channelId].moments.map(
             message => (
               {
                 ...message,
@@ -1056,10 +1086,10 @@ const reducer = (
           ...state,
           channels: {
             ...state.channels,
-            [state.panes.primary.channelId]: {
-              ...state.channels[state.panes.primary.channelId],
+            [state.panes.primary.active.content.channelId]: {
+              ...state.channels[state.panes.primary.active.content.channelId],
               moments: [
-                ...state.channels[state.panes.primary.channelId].moments,
+                ...state.channels[state.panes.primary.active.content.channelId].moments,
                 // $FlowFixMe
                 action.moment,
               ],
@@ -1136,7 +1166,7 @@ const reducer = (
   }
   case LEAVE_CHANNEL: {
     const { channels } = state;
-    const { channelId:currentChannel } = state.panes.primary;
+    const { channelId:currentChannel } = state.panes.primary.active.content;
     const { pubnubToken } = action;
     const publicChannel = getPublicChannel(state);
     if (currentChannel &&
@@ -1161,9 +1191,15 @@ const reducer = (
             },
           },
           panes: {
+            ...state.panes,
             primary: {
-              type: EVENT,
-              channelId: publicChannel,
+              active: {
+                type: EVENT,
+                content: {
+                  channelId: publicChannel,
+                },
+              },
+              previous: {},
             },
           },
         };
@@ -1291,6 +1327,11 @@ const reducer = (
     return {
       ...state,
       isVideoPlaying: false,
+    };
+  case SET_NAVBAR_INDEX:
+    return {
+      ...state,
+      navbarIndex: action.index,
     };
   default:
     return inboundState;
