@@ -9,7 +9,8 @@ describe('Converter Tests', () => {
         {
           event: {
             id: '320418',
-            startTime: 1529425800000,
+            eventTimeId: '3908134',
+            startTime: 1548165600,
             title: 'When Pigs Fly - Week 2',
           },
           organization: {
@@ -31,7 +32,7 @@ describe('Converter Tests', () => {
         {
           type: 'MESSAGE',
           id: '80299c76-b08f-4700-b660-df8691969042',
-          timestamp: 1546629813280,
+          timestamp: 1548173995604,
           lang: 'en',
           text: 'Hello',
           closeTrayButtonRendered: false,
@@ -52,14 +53,14 @@ describe('Converter Tests', () => {
       {
         messageText: 'Hello',
         language: 'en',
-        eventTimeId: '320418',
-        eventTimeOffset: '17204013280',
+        eventTimeId: '3908134',
+        eventTimeOffset: '8395',
         eventTitle: 'When Pigs Fly - Week 2',
         uniqueMessageToken: '80299c76-b08f-4700-b660-df8691969042',
         fromNickname: 'Jackie Chan',
         fromToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
         msgId: '80299c76-b08f-4700-b660-df8691969042',
-        timestamp: '2019-01-04 19:23:33 +0000',
+        timestamp: '2019-01-22 16:19:55 +0000',
         fromAvatar: 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
         isHost: true,
         label: 'HOST',
@@ -70,7 +71,7 @@ describe('Converter Tests', () => {
         organizationName: 'Life.Church',
         roomType: 'public',
         channelToken: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
-        eventStartTime: 1529425800000,
+        eventStartTime: 1548165600,
       }
     );
   });

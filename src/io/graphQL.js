@@ -38,6 +38,9 @@ const currentEvent = `
 currentEvent {
   title
   id
+  eventTime {
+    id
+  }
   startTime
   videoStartTime
   sequence {
@@ -70,6 +73,9 @@ query EventAt($time: Timestamp) {
   eventAt (time: $time){
     title
     id
+    eventTime {
+      id
+    }
     startTime
     videoStartTime
     video {

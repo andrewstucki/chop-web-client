@@ -133,6 +133,7 @@ type SetScheduleType = {
 type EventType = {
   title: string,
   id: number,
+  eventTimeId: number,
   startTime: number,
 };
 
@@ -289,7 +290,7 @@ type LeaveChannelType = {
 type SetEventType = {
   type: 'SET_EVENT',
   event: EventType,
-}
+};
 
 type SetLanguageOptionsType = {
   type: 'SET_LANGUAGE_OPTIONS',
@@ -502,12 +503,13 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
   }
 );
 
-const setEvent = (title: string, id: number, startTime: number, videoStartTime: number): SetEventType => (
+const setEvent = (title: string, id: number, eventTimeId:number, startTime: number, videoStartTime: number): SetEventType => (
   {
     type: SET_EVENT,
     event: {
       title,
       id,
+      eventTimeId,
       startTime,
       videoStartTime,
     },
@@ -631,6 +633,7 @@ const defaultState = {
   },
   event: {
     id: 0,
+    eventTimeId: 0,
     startTime: 0,
     title: '',
   },
