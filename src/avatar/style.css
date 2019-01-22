@@ -7,4 +7,5 @@
   color: var(--backgroundColor);
   text-align: center;
   line-height: 40px;
+  font-weight: bold;
 }

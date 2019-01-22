@@ -47,10 +47,7 @@ class ServiceActor {
   storeDispatch: (action: any) => void;
   graph: GraphQl;
   location: Location;
-  getAll: any;
-  graphAuth: any;
   getStore: () => any;
-  getAuthentication: (variables: any) => any;
   cookies: Cookies;
   handleDataFetchErrors: (payload: any) => void;
   setCurrentState: (payload: any) => void;

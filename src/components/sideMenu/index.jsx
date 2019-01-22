@@ -11,29 +11,29 @@ type SideMenuType = {
   swipe?:  (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
 };
 
+const Overlay = ({close, isClosed}) => (
+  <div onClick={close} className={isClosed ? styles.overlayClosed : styles.overlayOpen}></div>
+);
+
+const Menu = ({swipe, isClosed, children}) => (
+  <ReactTouchEvents onSwipe={ swipe }>
+    <div className={isClosed ? styles.menuClosed : styles.menuOpen}>{children}</div>
+  </ReactTouchEvents>
+);
+
 const SideMenu = (
   {
     children,
     close,
     isClosed,
     swipe,
-  }: SideMenuType) => {
-  const wrapperClass = isClosed ? styles.closed : styles.open;
-  return (
-    <div className={wrapperClass}>
-      <div
-        onClick={close}
-        className={styles.overlay}
-      ></div>
-      <ReactTouchEvents
-        onSwipe={ swipe }
-      >
-        <div className={styles.container}>
-          {children}
-        </div>
-      </ReactTouchEvents>
-    </div>
-  );
-};
+  }: SideMenuType) => (
+  <React.Fragment>
+    <Overlay close={close} isClosed={isClosed} />
+    <Menu swipe={swipe} isClosed={isClosed}>
+      {children}
+    </Menu>
+  </React.Fragment> 
+);
 
 export default SideMenu;

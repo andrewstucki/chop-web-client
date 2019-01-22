@@ -1,15 +1,19 @@
 //@flow
 import Pane from './pane';
 import { connect } from 'react-redux';
-import { paneContentSelector } from '../selectors/paneSelectors';
+import {paneContentSelector, previousPaneContentSelector} from '../selectors/paneSelectors';
 
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
+  const { navbarIndex } = feedState;
   const { name } = ownProps;
-  const content = paneContentSelector(feedState, name);
+  const active = paneContentSelector(feedState, name);
+  const previous = previousPaneContentSelector(feedState, name);
+
   return {
-    type: content.type,
-    content,
+    active,
+    previous,
+    navbarIndex,
   };
 };
 

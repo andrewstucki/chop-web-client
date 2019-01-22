@@ -70,8 +70,12 @@ describe('Test GraphQL', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: '123456',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: '123456',
+              },
+            },
           },
         },
         languageOptions: [
