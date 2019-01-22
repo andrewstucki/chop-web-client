@@ -38,32 +38,34 @@ const ActionableNotification = (
 
   return (
     <div className={notificationStyle}>
-      <span
-        className={styles.icon}
-        dangerouslySetInnerHTML={
-          { __html: ChatNotification }
-        }
-      />
-      <div className={styles.text}>
-        <div>
-          <strong>{user.name} </strong>has requested prayer
+      <div className={styles.actionableWrapper}>
+        <span
+          className={styles.icon}
+          dangerouslySetInnerHTML={
+            { __html: ChatNotification }
+          }
+        />
+        <div className={styles.text}>
+          <div>
+            <strong>{user.name}</strong> has requested prayer
+          </div>
+          <div className={styles.timestamp}>{timestamp}</div>
         </div>
-        <div className={styles.timestamp}>{timestamp}</div>
+        {
+          active &&
+            <button
+              className={styles.acceptButton}
+              onClick={
+                () => (
+                  acceptPrayerRequest(prayerChannel, hostChannel, false)
+                )
+              }
+            >
+              Accept
+            </button>
+        }
+        <div className={acceptedTextStyle}>{acceptedText}</div>
       </div>
-      {
-        active &&
-          <button
-            className={styles.acceptButton}
-            onClick={
-              () => (
-                acceptPrayerRequest(prayerChannel, hostChannel, false)
-              )
-            }
-          >
-            Accept
-          </button>
-      }
-      <div className={acceptedTextStyle}>{acceptedText}</div>
     </div>
   );
 };
