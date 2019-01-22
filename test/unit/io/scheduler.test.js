@@ -26,7 +26,7 @@ describe('Service Run through', () => {
   test.skip('Joining before service starts', async () => {
     jest.useFakeTimers();
     mockDate(time);
-    
+
     global.document.cookie  = data.cookie;
     mockAuthenticate.mockResolvedValue(data.authenticate);
     mockCurrentState.mockResolvedValue(data.currentState);
@@ -35,7 +35,7 @@ describe('Service Run through', () => {
     mockEventAtTime.mockResolvedValueOnce(data.eventAtNum2);
     mockEventAtTime.mockResolvedValue(data.eventAtNum3);
     mockGetSequence.mockResolvedValueOnce(data.sequenceNum2);
-    
+
     const actors = actorMiddleware(serviceActor);
     const middlewareList = [promisifyMiddleware, actors];
     const store = createStore(
@@ -52,7 +52,7 @@ describe('Service Run through', () => {
       );
 
       await true; // an expression is required for the await statement
-      
+
       expect(store.getState().feed).toEqual(
         {
           ...defaultState,
@@ -379,8 +379,12 @@ const phase4 = {
   },
   panes: {
     primary: {
-      type: 'EVENT',
-      channelId: '5fd7123ee2ff4432cafbac4331b643a65839b941ef19e4b60b7f8973e13511ff',
+      active: {
+        type: 'EVENT',
+        content: {
+          channelId: '5fd7123ee2ff4432cafbac4331b643a65839b941ef19e4b60b7f8973e13511ff',
+        },
+      },
     },
   },
   sequence: {

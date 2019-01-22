@@ -135,8 +135,16 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'CHAT',
-            channelId: 'host',
+            active: {
+              type: 'CHAT',
+              content: {
+                channelId: 'host',
+              },
+            },
+            previous: {
+              type: '',
+              content: {},
+            },
           },
         },
       }
@@ -161,8 +169,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
         chatInput: 'this is a message',
@@ -214,8 +226,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'CHAT',
-            channelId: 'host',
+            active: {
+              type: 'CHAT',
+              content: {
+                channelId: 'host',
+              },
+            },
           },
         },
         chatInput: 'this is a string',
@@ -744,8 +760,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       },
@@ -789,8 +809,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       }
@@ -837,8 +861,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'CHAT',
-            channelId: 'host',
+            active: {
+              type: 'CHAT',
+              content: {
+                channelId: 'host',
+              },
+            },
           },
         },
       },
@@ -882,8 +910,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'CHAT',
-            channelId: 'host',
+            active: {
+              type: 'CHAT',
+              content: {
+                channelId: 'host',
+              },
+            },
           },
         },
       }
@@ -930,8 +962,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       },
@@ -975,8 +1011,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       }
@@ -1023,8 +1063,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       },
@@ -1068,8 +1112,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       }
@@ -1116,8 +1164,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       },
@@ -1161,8 +1213,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       }
@@ -1978,8 +2034,12 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'CHAT',
-            channelId: 'direct',
+            active: {
+              type: 'CHAT',
+              content: {
+                channelId: 'direct',
+              },
+            },
           },
         },
         currentUser: currentUser,
@@ -2015,8 +2075,13 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
+            previous: {},
           },
         },
         currentUser: currentUser,

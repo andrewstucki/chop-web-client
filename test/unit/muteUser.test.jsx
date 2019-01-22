@@ -59,8 +59,12 @@ describe('Test mute user', () => {
           },
           panes: {
             primary: {
-              channelId: 'test',
-              type: 'EVENT',
+              active: {
+                type: 'EVENT',
+                content: {
+                  channelId: 'test',
+                },
+              },
             },
           },
         },
@@ -72,7 +76,7 @@ describe('Test mute user', () => {
       <Provider store={store}>
         <div>
           <Message message={message} />
-        </div>   
+        </div>
       </Provider>
     );
 

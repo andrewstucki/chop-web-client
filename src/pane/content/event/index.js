@@ -10,7 +10,7 @@ const mapStateToProps = state => {
   const primaryPane = paneContentSelector(feedState, PRIMARY_PANE);
   return {
     isOffline: isOffline(feedState),
-    channel: primaryPane.channelId,
+    channel: primaryPane.content.channelId,
   };
 };
 

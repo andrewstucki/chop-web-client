@@ -5,9 +5,15 @@ const getPane = (state, name) => state.panes[name];
 
 const paneContentSelector = createSelector(
   getPane,
-  pane => pane
+  pane => pane.active,
+);
+
+const previousPaneContentSelector = createSelector(
+  getPane,
+  pane => pane.previous,
 );
 
 export {
   paneContentSelector,
+  previousPaneContentSelector,
 };
