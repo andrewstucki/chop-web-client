@@ -37,16 +37,16 @@
 }
 
 .role {
-  color: var(--disabledTextColor);
-  border: 1px solid var(--disabledTextColor);
+  color: white;
+  background-color: var(--disabledTextColor);
   border-radius: 12px;
-  font-size: 11px;
+  font-size: 10.24px;
   text-align: center;
-  line-height: 13px;
-  padding: 0 4px 0 4px;
+  line-height: 1.25;
+  padding: 0 5px 1px;
   display: inline-block;
   position: relative;
-  bottom: 2px;
+  bottom: 1px;
   left: 4px;
 }
 
