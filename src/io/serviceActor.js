@@ -69,7 +69,7 @@ class ServiceActor {
     this.startTimer = this._startTimer.bind(this);
     this.checkTime = this._checkTime.bind(this);
     this.setCurrentState = this._setCurrentState.bind(this);
-    this.handelEvent = this._handelEvent.bind(this);
+    this.handleEvent = this._handleEvent.bind(this);
   }
 
   async init () {
@@ -291,7 +291,7 @@ class ServiceActor {
       });
     }
     if (payload.eventAt || payload.currentEvent || payload.schedule) {
-      this.handelEvent(payload);
+      this.handleEvent(payload);
     }
     const { currentOrganization } = payload;
     if (currentOrganization) {
@@ -312,17 +312,20 @@ class ServiceActor {
     }
   }
 
-  _handelEvent (payload) {
+  _handleEvent (payload) {
     const event = payload.currentEvent || payload.eventAt;
     if (event) {
       if (event.title !== undefined &&
         event.id !== undefined &&
+        event.eventTime !== undefined &&
+        event.eventTime.id !== undefined &&
         event.startTime !== undefined &&
         event.videoStartTime !== undefined) {
         this.storeDispatch(
           setEvent(
             event.title,
             event.id,
+            event.eventTime.id,
             event.startTime,
             event.videoStartTime,
           )
