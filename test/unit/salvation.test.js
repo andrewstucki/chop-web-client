@@ -15,6 +15,7 @@ describe('Salvation Moment Tests', () => {
       },
       event: {
         id: 320418,
+        eventTimeId: 1920834,
         startTime: 1529425800000,
         title: 'When Pigs Fly - Week 2',
         timezone: 'Central',
@@ -53,7 +54,7 @@ describe('Salvation Moment Tests', () => {
         type: 'SET_PUBNUB_KEYS',
       }
     );
-    
+
     __messageEvent(
       {
         channel: '123456',
@@ -99,6 +100,7 @@ describe('Salvation Moment Tests', () => {
       },
       event: {
         id: 320418,
+        eventTimeId: 1920834,
         startTime: 1529425800000,
         title: 'When Pigs Fly - Week 2',
         timezone: 'Central',
@@ -179,6 +181,7 @@ describe('Salvation Moment Tests', () => {
       },
       event: {
         id: 320418,
+        eventTimeId: 1920834,
         startTime: 1529425800000,
         title: 'When Pigs Fly - Week 2',
         timezone: 'Central',
