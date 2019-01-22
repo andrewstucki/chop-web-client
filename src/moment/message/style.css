@@ -26,12 +26,14 @@
 
 .body {
   flex: 1;
-  margin: 0 8px;
+  margin: 1px 8px 0;
+  color: var(--textColor);
 }
 
 .name {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 13.44px;
+  line-height: 1.25;
 }
 
 .role {
@@ -79,7 +81,7 @@
 }
 
 .text {
-  line-height: 19.2px;
+  line-height: 1.25;
   overflow-wrap: break-word;
   word-break: break-word;
 }
