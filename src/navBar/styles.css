@@ -17,6 +17,10 @@
   @apply --link-base;
 }
 
+.link:focus {
+  outline: none;
+}
+
 .navBar {
   display: flex;
   background-color: #1e1f23;
@@ -43,20 +47,18 @@
   height: 2px;
   bottom: 8px;
   background-color: var(--backgroundColor);
-  border-radius: 2px;
   transition: width var(--animation-duration) var(--ease-out), left var(--animation-duration) var(--ease-out), opacity var(--animation-duration) var(--ease-out);
 }
 
 .hamburger {
   @apply --link-base;
-  width:21px;
-  padding: 0 12px 0 16px;
+  padding: 0 8px;
   margin:0px;
 }
 
 .hamburger svg {
-  width: 21px;
-  height: 15px;
+  width: 32px;
+  opacity: 0.5;
 }
 
 .pip {
