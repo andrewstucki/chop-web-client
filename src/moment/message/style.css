@@ -7,16 +7,16 @@
     border: none;
     background-color: #fff;
   };
+}
 
-  --message: {
-    width: 100%;
-    min-height: 40px;
-    display: flex;
-    background: #fff;
-    overflow: hidden;
-    padding: 8px 0 8px;
-    transition: transform var(--animation-duration);
-  }
+.message {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  background: #fff;
+  overflow: hidden;
+  padding: 8px 0 8px;
+  transition: opacity var(--animation-duration) var(--ease-in-out);
 }
 
 .wrapper {
@@ -50,30 +50,25 @@
   left: 4px;
 }
 
-.moveMessageLeft {
-  @apply --message;
-  transition-timing-function: var(--ease-out);
-  transform: translateX(-258px);
+/* ":last-child" seems a little dangerous. I don't know of a way to target the specific tray by name. -Eric */
+.messageTrayOpen > :last-child {
+  transition: right var(--animation-duration) var(--ease-in-out);
+  right: 0;
 }
 
-.moveMessageRight {
-  @apply --message;
-  transition-timing-function: var(--ease-in);
-  transform: translateX(0);
+/* ":last-child" seems a little dangerous. I don't know of a way to target the specific tray by name. -Eric */
+.messageTrayClosed > :last-child {
+  transition: right var(--animation-duration) var(--ease-in-out);
+  right: -284px;
 }
 
-.closeTrayButton,
+.messageTrayOpen .message {
+  opacity: 0.25;
+}
+
 .openTrayButton {
   @apply --button;
   outline-style: none;
-}
-
-.closeTrayButton {
-  padding: 0 24px;
-}
-
-.closeTrayButton svg {
-  width: 8px;
 }
 
 .openTrayButton svg {
