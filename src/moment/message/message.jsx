@@ -39,25 +39,28 @@ const Message = (
     currentUser,
     publishDeleteMessage,
     deleteMessage,
-    toggleCloseTrayButton,
     muteUser,
     directChat,
     mutedNotificationBanner,
   }: MessagePropsType
 ) => {
-  const { messageTrayOpen, closeTrayButtonRendered, text } = message;
+  const { messageTrayOpen, text } = message;
   const messageStyle = 
     messageTrayOpen ? styles.messageTrayOpen : styles.messageTrayClosed;
 
   const renderText = linkifyHtml(text, { target: '_blank' });
 
   return (
-    <div data-component="messageContainer" className={styles.wrapper + " " + messageStyle}>
+    <div data-component='messageContainer' className={styles.wrapper + ' ' + messageStyle}>
 
       <div
         className={styles.message}
-        onClick={messageTrayOpen ? () => {closeMessageTray(message.id);} : undefined}
-        onTouchStart={messageTrayOpen ? () => {closeMessageTray(message.id);} : undefined}
+        onClick={messageTrayOpen ? () => {
+          closeMessageTray(message.id);
+        } : undefined}
+        onTouchStart={messageTrayOpen ? () => {
+          closeMessageTray(message.id);
+        } : undefined}
       >
         <Avatar user={message.sender} />
 
@@ -66,7 +69,7 @@ const Message = (
           {message.sender.role.label &&
             <span className={styles.role}>{message.sender.role.label}</span>
           }
-          <div key={message.id} data-node="text" className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
+          <div key={message.id} data-node='text' className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
         </div>
         <button
           className={styles.openTrayButton}
@@ -81,7 +84,9 @@ const Message = (
       </div>
       
       <MessageTray
-        closeTray={() => {closeMessageTray(message.id);}}
+        closeTray={() => {
+          closeMessageTray(message.id);
+        }}
         deleteMessage={() => {
           publishDeleteMessage(message.id);
           deleteMessage(message.id, currentChannel);
