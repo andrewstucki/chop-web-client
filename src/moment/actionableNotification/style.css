@@ -1,16 +1,29 @@
 @import url('../notification/style');
 
+.actionableWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .actionableNotification {
   @apply --notification;
-  background-color: var(--disabledColor);
+  padding: 8px 0;
+}
+
+.actionableNotification .actionableWrapper {
+  border: 1px solid #ECECEC;
+  border-radius: 2px;
+  padding: 4px 0;
 }
 
 .acceptButton {
   color: var(--primaryColor);
   border: none;
-  margin-right: 16px;
-  padding: 0;
-  background-color: var(--disabledColor);
+  margin-right: 8px;
+  padding: 8px;
+  background-color: transparent;
+  font-weight: 500;
 }
 
 .showText {

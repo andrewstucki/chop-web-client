@@ -53,10 +53,10 @@ describe('ActionableNotification tests', () => {
       'actionableNotification'
     );
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(2).text()).toEqual(
+    expect(wrapper.find('div').at(3).text()).toEqual(
       'yablby has requested prayer'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
     expect(wrapper.find('button').at(0).text()).toEqual('Accept');
     wrapper.find('button').at(0).simulate('click');
     expect(acceptPrayerRequest.calledOnce).toEqual(true);
@@ -85,11 +85,11 @@ describe('ActionableNotification tests', () => {
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('notification');
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(2).text()).toEqual(
+    expect(wrapper.find('div').at(3).text()).toEqual(
       'yablby has requested prayer'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
-    expect(wrapper.find('div').at(4).text()).toEqual('Accepted');
+    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
+    expect(wrapper.find('div').at(5).text()).toEqual('Accepted');
   });
 
   test('Cancelled prayer request notification renders', () => {
@@ -117,10 +117,10 @@ describe('ActionableNotification tests', () => {
       'notification'
     );
     expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(2).text()).toEqual(
+    expect(wrapper.find('div').at(3).text()).toEqual(
       'yablby has requested prayer'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
-    expect(wrapper.find('div').at(4).text()).toEqual('Cancelled');
+    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
+    expect(wrapper.find('div').at(5).text()).toEqual('Cancelled');
   });
 });
