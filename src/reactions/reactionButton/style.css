@@ -15,11 +15,11 @@
 }
 
 .reactionButton svg {
-  width: 29px;
+  width: 32px;
 }
 
 .reactionButton:active svg {
-  width: 34px;
+  width: 42px;
 }
 
 .reactionButton {
@@ -28,4 +28,5 @@
   padding: 0;
   line-height: 0;
   outline-style: none;
+  -webkit-tap-highlight-color: transparent;
 }
