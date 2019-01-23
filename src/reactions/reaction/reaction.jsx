@@ -24,7 +24,7 @@ class Reaction extends Component<ReactionProps> {
   }
 
   render () {
-    const randWidth = Math.floor(Math.random() * 6) + 17;
+    const randWidth = Math.floor(Math.random() * 8) + 18;
     const randRight = Math.floor(Math.random() * 20) + 10;
     const randTop = Math.floor(Math.random() * 11) + 75;
     const heartStyle = {
