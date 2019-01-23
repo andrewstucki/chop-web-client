@@ -53,7 +53,7 @@
 .moveMessageLeft {
   @apply --message;
   transition-timing-function: var(--ease-out);
-  transform: translateX(-249px);
+  transform: translateX(-258px);
 }
 
 .moveMessageRight {

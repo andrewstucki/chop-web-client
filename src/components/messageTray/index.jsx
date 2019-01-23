@@ -37,7 +37,7 @@ const MessageTray = (
     deleteMessage,
     muteUser,
     directChat,
-  }: MessageTrayPropsType
+  }: MessageTrayPropsType,
 ) => (
   <div className={styles.tray}>
     {
