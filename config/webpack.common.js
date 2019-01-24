@@ -18,7 +18,7 @@ module.exports = {
         sideEffects: true,
         use: [
           { loader: 'style-loader' },
-          { 
+          {
             loader: 'css-loader',
             options: {
               modules: true,
@@ -52,7 +52,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './assets/index.html'
     }),
-    new BugsnagSourceMapUploaderPlugin(constants.BUGSNAG),
+    new BugsnagSourceMapUploaderPlugin({...constants.BUGSNAG, overwrite: true}),
   ],
   output: {
     filename: '[name].[contenthash].js',
