@@ -142,7 +142,7 @@ describe('Feed tests', () => {
               },
             },
             previous: {
-              type: '',
+              type: 'EVENT',
               content: {},
             },
           },
