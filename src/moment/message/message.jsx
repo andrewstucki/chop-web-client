@@ -45,7 +45,7 @@ const Message = (
   }: MessagePropsType
 ) => {
   const { messageTrayOpen, text } = message;
-  const messageStyle = 
+  const messageStyle =
     messageTrayOpen ? styles.messageTrayOpen : styles.messageTrayClosed;
 
   const renderText = linkifyHtml(text, { target: '_blank' });
@@ -58,9 +58,9 @@ const Message = (
         onClick={messageTrayOpen ? () => {
           closeMessageTray(message.id);
         } : undefined}
-        onTouchStart={messageTrayOpen ? () => {
+        /*onTouchStart={messageTrayOpen ? () => {
           closeMessageTray(message.id);
-        } : undefined}
+        } : undefined}*/
       >
         <Avatar user={message.sender} />
 
@@ -77,12 +77,13 @@ const Message = (
           onClick={() => {
             openMessageTray(message.id);
           }}
+          /*
           onTouchStart={() => {
             openMessageTray(message.id);
-          }}
+          }}*/
         />
       </div>
-      
+
       <MessageTray
         closeTray={() => {
           closeMessageTray(message.id);

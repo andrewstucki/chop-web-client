@@ -59,7 +59,7 @@
 /* ":last-child" seems a little dangerous. I don't know of a way to target the specific tray by name. -Eric */
 .messageTrayClosed > :last-child {
   transition: right var(--animation-duration) var(--ease-in-out);
-  right: -284px;
+  right: -300px;
 }
 
 .messageTrayOpen .message {
