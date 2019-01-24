@@ -4,9 +4,11 @@ import React from 'react';
 import DirectChatButton from '../../../assets/direct-chat-button.svg';
 import DeleteButton from '../../../assets/delete-button.svg';
 import MuteButton from '../../../assets/mute-button.svg';
+import CloseButton from '../../../assets/close-message-tray-button.svg';
 import styles from './style.css';
 
 type MessageTrayPropsType = {
+  closeTray: (id: string) => void,
   deleteMessage: (id: string, channel:string) => void,
   muteUser: (pubnubToken: string) => void,
   directChat: (pubnubToken: string, nickname: string) => void,
@@ -34,19 +36,29 @@ const trayButton = (
 
 const MessageTray = (
   {
+    closeTray,
     deleteMessage,
     muteUser,
     directChat,
-  }: MessageTrayPropsType
+  }: MessageTrayPropsType,
 ) => (
   <div className={styles.tray}>
     {
       trayButton(
-        styles.directChatButton,
-        styles.directChatImage,
-        DirectChatButton,
-        'Chat',
-        directChat
+        styles.closeButton,
+        styles.closeImage,
+        CloseButton,
+        'Close',
+        closeTray
+      )
+    }
+    {
+      trayButton(
+        styles.muteButton,
+        styles.muteImage,
+        MuteButton,
+        'Mute',
+        muteUser
       )
     }
     {
@@ -60,11 +72,11 @@ const MessageTray = (
     }
     {
       trayButton(
-        styles.muteButton,
-        styles.muteImage,
-        MuteButton,
-        'Mute',
-        muteUser
+        styles.directChatButton,
+        styles.directChatImage,
+        DirectChatButton,
+        'Chat',
+        directChat
       )
     }
   </div>
