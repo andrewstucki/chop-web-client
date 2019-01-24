@@ -50,7 +50,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     this.selectedLink = React.createRef();
     this.state = {
       left: 20,
-      width: 35,
+      width: 42,
       opacity: 1.0,
       directChatChannelNames: {},
     };

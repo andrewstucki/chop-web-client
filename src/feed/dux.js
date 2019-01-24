@@ -713,7 +713,7 @@ const defaultState = {
   panes: {
     primary: {
       active: {
-        type: '',
+        type: EVENT,
         // $FlowFixMe
         content: {},
       },
