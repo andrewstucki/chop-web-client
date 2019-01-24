@@ -10,8 +10,12 @@ describe('Chat', () => {
         ...defaultFeedState,
         panes: {
           primary: {
-            type: 'EVENT',
-            channelId: 'public',
+            active: {
+              type: 'EVENT',
+              content: {
+                channelId: 'public',
+              },
+            },
           },
         },
       },
@@ -25,8 +29,12 @@ describe('Chat', () => {
         ...defaultFeedState,
         panes: {
           primary: {
-            type: 'CHAT',
-            channelId: 'host',
+            active: {
+              type: 'CHAT',
+              content: {
+                channelId: 'host',
+              },
+            },
           },
         },
         channels: {
@@ -84,8 +92,12 @@ describe('Chat', () => {
         },
         panes: {
           primary: {
-            type: 'CHAT',
-            channelId: 'direct',
+            active: {
+              type: 'CHAT',
+              content: {
+                channelId: 'direct',
+              },
+            },
           },
         },
         currentUser: {

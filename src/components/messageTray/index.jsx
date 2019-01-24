@@ -22,6 +22,7 @@ const trayButton = (
   <button
     className={buttonStyle}
     onClick={onClick}
+    onTouchStart={onClick}
   >
     <span
       className={imageType}

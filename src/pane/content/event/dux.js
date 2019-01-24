@@ -2,7 +2,6 @@
 const EVENT = 'EVENT';
 
 type EventType = {
-  type: 'EVENT',
   channelId: string,
 };
 

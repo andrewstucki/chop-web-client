@@ -1,6 +1,7 @@
 // @flow
-/* global SyntheticMouseEvent, React$Node */
+/* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React from 'react';
+import type { Node } from 'react';
 import type { ChannelType } from './dux';
 import styles from './styles.css';
 import hamburger from '../../assets/hamburger.svg';
@@ -9,11 +10,10 @@ import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
 type NavBarProps = {
-  directChannels: Array<ChannelType>,
-  publicChannel: ChannelType,
-  hostChannel: ChannelType,
-  onClick: (id: string, type: 'EVENT' | 'CHAT') => void,
+  channels: Array<ChannelType>,
+  setPrimaryPane: (id: string, type: 'EVENT' | 'CHAT') => void,
   openMenu: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  setNavbarIndex: (index:number) => void,
 };
 
 type NavBarState = {
@@ -40,9 +40,9 @@ const Underline = props => (
 );
 
 class NavBar extends React.Component<NavBarProps, NavBarState> {
-  selectedLink: any;
-  channelLink: (channel: ChannelType) => React$Node | string;
-  channelTab: (channel: ChannelType) => React$Node;
+  selectedLink: { current: any };
+  channelLink: (channel: ChannelType) => Node;
+  channelTab: (channel: ChannelType, index:number) => Node;
 
   constructor (props: NavBarProps) {
     super(props);
@@ -54,8 +54,6 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       opacity: 1.0,
       directChatChannelNames: {},
     };
-
-    this.channelTab = this.channelTab.bind(this);
   }
 
   static getDerivedStateFromProps (
@@ -64,8 +62,9 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
   ): NavBarState | null {
     let copyOfNames = { ...state.directChatChannelNames };
     let hasUpdated = false;
-    
-    props.directChannels.forEach(channel => {
+    const { channels } = props;
+
+    channels.filter(channel => channel.isDirect).forEach(channel => {
       if (channel.otherUsersNames.length > 0 &&
         state.directChatChannelNames[channel.id] !== channel.otherUsersNames[0]
       ) {
@@ -160,9 +159,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     }
   }
 
-  channelTab (channel: ChannelType) {
+  channelTab = (channel: ChannelType, index: number) => {
     const selectedLink = channel.isCurrent ? this.selectedLink : null;
-    const { onClick } = this.props;
     return (
       <a
         // $FlowFixMe
@@ -171,7 +169,8 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         href="javascript:void(0)"
         key={channel.id}
         className={styles.link}
-        onClick={() => onClick(channel.id, channel.name === 'Public' ? EVENT : CHAT)}
+        onClick={event => this.handleTabClick(channel, event)}
+        data-index={index}
       >
         { channel.hasActions
           ? <span className={styles.pip}></span>
@@ -179,13 +178,18 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
         {this.channelLink(channel)}
       </a>
     );
-  }
+  };
+
+  handleTabClick = (channel: ChannelType, event:SyntheticTouchEvent<HTMLAnchorElement>):void => {
+    const { setPrimaryPane, setNavbarIndex } = this.props;
+    const { index } = event.currentTarget.dataset;
+    setNavbarIndex(parseInt(index));
+    setPrimaryPane(channel.id, channel.name === 'Public' ? EVENT : CHAT);
+  };
 
   render () {
     const {
-      hostChannel,
-      publicChannel,
-      directChannels,
+      channels,
       openMenu,
     } = this.props;
     return (
@@ -197,11 +201,9 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           dangerouslySetInnerHTML={{ __html: hamburger }}
         />
         <div className={styles.channelLinks}>
-          { this.channelTab(publicChannel) }
-          { this.channelTab(hostChannel) }
           {
-            directChannels.map(channel => (
-              this.channelTab(channel)
+            channels.map((channel, index) => (
+              this.channelTab(channel, index)
             ))
           }
           {

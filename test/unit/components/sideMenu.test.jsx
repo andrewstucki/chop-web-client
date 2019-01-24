@@ -15,7 +15,7 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('div').at(2).text()).toEqual('Hello');
+    expect(wrapper.find('Menu').at(0).children().text()).toEqual('Hello');
   });
 
   test('close', () => {
@@ -25,7 +25,7 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    wrapper.find('div').at(1).simulate('click');
+    wrapper.find('Overlay').at(0).simulate('click');
     expect(closeButton.calledOnce).toEqual(true);
   });
 
@@ -54,7 +54,7 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('closed');
+    expect(wrapper.find('Overlay').at(0).props().isClosed).toEqual(true);
   });
 
   test('open', () => {
@@ -63,6 +63,6 @@ describe('SideMenu tests', () => {
         Hello
       </SideMenu>
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('open');
+    expect(wrapper.find('Overlay').at(0).props().isClosed).toEqual(false);
   });
 });

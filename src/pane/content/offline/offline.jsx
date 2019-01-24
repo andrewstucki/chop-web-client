@@ -7,18 +7,12 @@ type OfflinePropsType = {
   eventTime: string
 };
 
-const Offline =
-(
-  {
-    eventName,
-    eventTime,
-  }: OfflinePropsType
-) => (
+const Offline = ({ eventName, eventTime }: OfflinePropsType) => (
   <div className={styles.offline}>
     <div>
       <p className={styles.heading}>Upcoming Event</p>
       <p className={styles.eventName}>{eventName}</p>
-      <p className={styles.eventTime}>{eventTime}</p>
+      <p>{eventTime}</p>
     </div>
   </div>
 );

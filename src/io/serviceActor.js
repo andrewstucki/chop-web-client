@@ -47,10 +47,7 @@ class ServiceActor {
   storeDispatch: (action: any) => void;
   graph: GraphQl;
   location: Location;
-  getAll: any;
-  graphAuth: any;
   getStore: () => any;
-  getAuthentication: (variables: any) => any;
   cookies: Cookies;
   handleDataFetchErrors: (payload: any) => void;
   setCurrentState: (payload: any) => void;
@@ -72,7 +69,7 @@ class ServiceActor {
     this.startTimer = this._startTimer.bind(this);
     this.checkTime = this._checkTime.bind(this);
     this.setCurrentState = this._setCurrentState.bind(this);
-    this.handelEvent = this._handelEvent.bind(this);
+    this.handleEvent = this._handleEvent.bind(this);
   }
 
   async init () {
@@ -147,14 +144,14 @@ class ServiceActor {
     });
   }
 
-  _handleDataFetchErrors (payload: any) {  
+  _handleDataFetchErrors (payload: any) {
     const { errors } = payload.response;
     if (errors) {
       // eslint-disable-next-line no-console
       console.log('The graphql response returned errors:');
       for (const err in errors) {
         const { message, extensions } = errors[err];
-        
+
         if (message) {
           this.storeDispatch(addError(message));
           // eslint-disable-next-line no-console
@@ -294,7 +291,7 @@ class ServiceActor {
       });
     }
     if (payload.eventAt || payload.currentEvent || payload.schedule) {
-      this.handelEvent(payload);
+      this.handleEvent(payload);
     }
     const { currentOrganization } = payload;
     if (currentOrganization) {
@@ -315,17 +312,20 @@ class ServiceActor {
     }
   }
 
-  _handelEvent (payload) {
+  _handleEvent (payload) {
     const event = payload.currentEvent || payload.eventAt;
     if (event) {
       if (event.title !== undefined &&
         event.id !== undefined &&
+        event.eventTime !== undefined &&
+        event.eventTime.id !== undefined &&
         event.startTime !== undefined &&
         event.videoStartTime !== undefined) {
         this.storeDispatch(
           setEvent(
             event.title,
             event.id,
+            event.eventTime.id,
             event.startTime,
             event.videoStartTime,
           )

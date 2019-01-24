@@ -31,6 +31,7 @@ describe('Chat2 Tests', () => {
     },
     event: {
       id: 320418,
+      eventTimeId: 1920834,
       startTime: 1529425800000,
       title: 'When Pigs Fly - Week 2',
       timezone: 'Central',
@@ -175,10 +176,10 @@ describe('Chat2 Tests', () => {
     const getState = jest.fn();
     getState.mockReturnValue(store);
 
-    const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars 
+    const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars
 
     chat.init();
-    
+
     chat.dispatch(
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -225,7 +226,7 @@ describe('Chat2 Tests', () => {
     const chat = new Chat(dispatch, getState);
 
     chat.init();
-    
+
     __messageEvent(
       {
         channel: 'public',
@@ -309,13 +310,13 @@ describe('Chat2 Tests', () => {
     const chat = new Chat(dispatch, getState);
 
     chat.init();
-    
+
     chat.dispatch(
       {
         type: 'SET_AVAILABLE_FOR_PRAYER',
         status: true,
       }
-    ); 
+    );
 
     expect(mockSetState).toHaveBeenCalledTimes(1);
     expect(mockSetState).toHaveBeenCalledWith(

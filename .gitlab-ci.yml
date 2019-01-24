@@ -53,9 +53,9 @@ compile:app-staging:
     - git config user.name "${GITLAB_USER_NAME}"
     - git remote set-url --push origin git@in.thewardro.be:io/opennetwork/chop-web-client.git
     - yarn version --patch
-    # TODO: We need access to Gitlab user to make this push
     - echo "$GITLAB_KNOWN_HOST" > /root/.ssh/known_hosts
-    - git push origin HEAD:integration
+    # Temporarily disabled to see if it resolves pipeline status issue
+    # - git push origin HEAD:integration
     - rm -Rfv /root/.ssh
   artifacts:
     expire_in: 1 day

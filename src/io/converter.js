@@ -93,8 +93,9 @@ const Converter = {
     {
       messageText: message.text,
       language: _getState().currentLanguage,
-      eventTimeId: _getState().event.id,
-      eventTimeOffset: (message.timestamp - _getState().event.startTime).toString(),
+      eventTimeId: _getState().event.eventTimeId,
+      // message timestamp is stored in milliseconds, starTime is stored in seconds
+      eventTimeOffset: moment(message.timestamp.toString(), 'x').diff(moment(_getState().event.startTime.toString(), 'X'), 'seconds').toString(),
       eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
       fromNickname: message.sender.name,
@@ -184,10 +185,10 @@ const Converter = {
         id: '12345',
         name: message.data.fromNickname,
         pubnubToken: message.data.fromToken,
-        role: { 
+        role: {
           label: '',
         },
-      }, 
+      },
       message.data.channel,
       hostChannel,
     );

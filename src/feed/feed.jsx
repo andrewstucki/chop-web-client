@@ -90,7 +90,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
     if (scrollWrapper && list) {
       const scrollTop = list.scrollHeight - (Math.floor(scrollWrapper.getBoundingClientRect().height) + position);
-      
+
       scrollWrapper.scrollTop = scrollTop;
     }
   }

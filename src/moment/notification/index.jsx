@@ -18,6 +18,7 @@ import type {
 
 import ChatNotification from '../../../assets/chat-notification.svg';
 import EndChatNotification from '../../../assets/end-chat-notification.svg';
+import MuteUserNotification from '../../../assets/mute-user-notification.svg';
 import styles from './style.css';
 
 type NotificationPropsType = {
@@ -58,7 +59,7 @@ const MuteUserNotificationText = (
     <span
       className={styles.icon}
       dangerouslySetInnerHTML={
-        {__html: ChatNotification}
+        {__html: MuteUserNotification}
       }
     />
     <div className={styles.text}>
