@@ -29,7 +29,7 @@ const user = {
 describe('Message', () => {
   test('has correct text', () => {
     const wrapper = Enzyme.shallow(
-      <Message 
+      <Message
         message={
           {
             type: MESSAGE,
@@ -61,7 +61,7 @@ describe('Message', () => {
 
   test('displays the role label', () => {
     const wrapper = Enzyme.shallow(
-      <Message 
+      <Message
         message={
           {
             type: MESSAGE,
@@ -94,7 +94,7 @@ describe('Message', () => {
   test('has a tray open button and it can be clicked', () => {
     const openTray = sinon.spy();
     const wrapper = Enzyme.shallow(
-      <Message 
+      <Message
         message={
           {
             type: MESSAGE,
@@ -124,40 +124,5 @@ describe('Message', () => {
     expect(wrapper.find('button').length).toBe(1);
     wrapper.find('button').at(0).simulate('click');
     expect(openTray.calledOnce).toEqual(true);
-  });
-
-  test('has a tray close button and it can be clicked', () => {
-    const closeTray = sinon.spy();
-    const wrapper = Enzyme.shallow(
-      <Message 
-        message={
-          {
-            type: MESSAGE,
-            id: '1234',
-            timestamp: 1546570485391,
-            lang: 'en',
-            text: 'Go west young man!',
-            sender: otherUser,
-            messageTrayOpen: true,
-            closeTrayButtonRendered: true,
-          }
-        }
-        currentChannel='public'
-        closeMessageTray={closeTray}
-        openMessageTray={() => {}}
-        deleteMessage={() => {}}
-        publishDeleteMessage={() => {}}
-        toggleCloseTrayButton={() => {}}
-        muteUser={() => {}}
-        directChat={() => {}}
-        publishMuteUserNotification={() => {}}
-        mutedNotificationBanner={() => {}}
-        hostChannel='host'
-        currentUser={user}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(1);
-    wrapper.find('button').at(0).simulate('click');
-    expect(closeTray.calledOnce).toEqual(true);
   });
 });

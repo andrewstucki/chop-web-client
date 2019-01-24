@@ -6,7 +6,6 @@ import type { SharedUserType } from '../../feed/dux';
 import Avatar from '../../avatar';
 
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
-import CloseMessageTray from '../../../assets/close-message-tray-button.svg';
 import MessageTray from '../../components/messageTray';
 import linkifyHtml from 'linkifyjs/html';
 import { sanitizeString } from '../../util';
@@ -40,51 +39,55 @@ const Message = (
     currentUser,
     publishDeleteMessage,
     deleteMessage,
-    toggleCloseTrayButton,
     muteUser,
     directChat,
     mutedNotificationBanner,
   }: MessagePropsType
 ) => {
-  const { messageTrayOpen, closeTrayButtonRendered, text } = message;
-  const messageStyle = 
-    messageTrayOpen ? styles.moveMessageLeft : styles.moveMessageRight;
-
-  const renderMessageButtons = () => {
-    if (closeTrayButtonRendered) {
-      return (
-        <button
-          className={styles.closeTrayButton}
-          dangerouslySetInnerHTML={{ __html: CloseMessageTray }}
-          onClick={() => {
-            closeMessageTray(message.id);
-          }}
-          onTouchStart={() => {
-            closeMessageTray(message.id);
-          }}
-        />
-      );
-    }
-    return (
-      <button
-        className={styles.openTrayButton}
-        dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
-        onClick={() => {
-          openMessageTray(message.id);
-        }}
-        onTouchStart={() => {
-          openMessageTray(message.id);
-        }}
-      />
-    );
-  };
+  const { messageTrayOpen, text } = message;
+  const messageStyle =
+    messageTrayOpen ? styles.messageTrayOpen : styles.messageTrayClosed;
 
   const renderText = linkifyHtml(text, { target: '_blank' });
 
   return (
-    <div data-component="messageContainer" className={styles.wrapper}>
-    
+    <div data-component='messageContainer' className={styles.wrapper + ' ' + messageStyle}>
+
+      <div
+        className={styles.message}
+        onClick={messageTrayOpen ? () => {
+          closeMessageTray(message.id);
+        } : undefined}
+        /*onTouchStart={messageTrayOpen ? () => {
+          closeMessageTray(message.id);
+        } : undefined}*/
+      >
+        <Avatar user={message.sender} />
+
+        <div className={styles.body}>
+          <strong className={styles.name}>{message.sender.name}</strong>
+          {message.sender.role.label &&
+            <span className={styles.role}>{message.sender.role.label}</span>
+          }
+          <div key={message.id} data-node='text' className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
+        </div>
+        <button
+          className={styles.openTrayButton}
+          dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
+          onClick={() => {
+            openMessageTray(message.id);
+          }}
+          /*
+          onTouchStart={() => {
+            openMessageTray(message.id);
+          }}*/
+        />
+      </div>
+
       <MessageTray
+        closeTray={() => {
+          closeMessageTray(message.id);
+        }}
         deleteMessage={() => {
           publishDeleteMessage(message.id);
           deleteMessage(message.id, currentChannel);
@@ -99,23 +102,6 @@ const Message = (
           directChat(message.sender.pubnubToken, message.sender.name);
         }}
       />
-      <div
-        className={messageStyle}
-        onTransitionEnd={() => {
-          toggleCloseTrayButton(message.id);
-        }}
-      >
-        <Avatar user={message.sender} />
-        
-        <div className={styles.body}>
-          <strong className={styles.name}>{message.sender.name}</strong>
-          {message.sender.role.label &&
-            <span className={styles.role}>{message.sender.role.label}</span>
-          }
-          <div key={message.id} data-node="text" className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
-        </div>
-        {renderMessageButtons()}
-      </div>
 
     </div>
   );
