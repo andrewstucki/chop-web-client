@@ -19,14 +19,14 @@ function withSlideTransitions (WrappedComponent) {
     : WrappedComponent => makeWithSlideTransitions(WrappedComponent, arguments[0]);
 }
 
-const makeWithSlideTransitions = (WrappedComponent, options = { duration: 0.7 }) => {
+const makeWithSlideTransitions = (WrappedComponent, options = { duration: 0.4 }) => {
   class WithSlideTransitions extends Component {
     syncTransitionRight (enter, leave, callback) {
       if (enter && leave) {
         const { duration } = options;
         const tl = new TimelineLite({ onComplete: callback });
-        tl.fromTo(enter, duration, { left: '-100%' }, { left: 0, ease: Power3.easeOut } )
-          .fromTo(leave, duration, { left: 0 }, { left: '100%', ease: Power3.easeOut }, `-=${duration}` );
+        tl.fromTo(enter, duration, { left: '-100%' }, { left: 0, ease: Power3.easeInOut } )
+          .fromTo(leave, duration, { left: 0 }, { left: '100%', ease: Power3.easeInOut }, `-=${duration}` );
       }
     }
 
@@ -34,8 +34,8 @@ const makeWithSlideTransitions = (WrappedComponent, options = { duration: 0.7 })
       if (enter && leave) {
         const { duration } = options;
         const tl = new TimelineLite({ onComplete: callback });
-        tl.fromTo(enter, duration, { left: '100%' }, { left: 0, ease: Power3.easeOut } )
-          .fromTo(leave, duration, { left: 0 }, {left: '-100%', ease: Power3.easeOut}, `-=${duration}` );
+        tl.fromTo(enter, duration, { left: '100%' }, { left: 0, ease: Power3.easeInOut } )
+          .fromTo(leave, duration, { left: 0 }, {left: '-100%', ease: Power3.easeInOut}, `-=${duration}` );
       }
     }
 
