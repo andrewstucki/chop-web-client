@@ -1,7 +1,8 @@
 //@flow
 import { createSelector } from 'reselect';
+import type { FeedType } from '../feed/dux';
 
-const getPane = (state, name) => state.panes[name];
+const getPane = (state:FeedType, name:string) => state.panes[name];
 
 const paneContentSelector = createSelector(
   getPane,
@@ -14,6 +15,7 @@ const previousPaneContentSelector = createSelector(
 );
 
 export {
+  getPane,
   paneContentSelector,
   previousPaneContentSelector,
 };

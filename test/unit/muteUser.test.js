@@ -26,6 +26,7 @@ describe('Mute User tests', () => {
                 channelId: 'test',
               },
             },
+            isAnimating: false,
           },
         },
       },
@@ -53,6 +54,7 @@ describe('Mute User tests', () => {
                 channelId: 'test',
               },
             },
+            isAnimating: false,
           },
         },
         mutedUsers: [
@@ -85,6 +87,7 @@ describe('Mute User tests', () => {
                 channelId: 'test',
               },
             },
+            isAnimating: false,
           },
         },
         mutedUsers: ['blockme'],
@@ -113,6 +116,7 @@ describe('Mute User tests', () => {
                 channelId: 'test',
               },
             },
+            isAnimating: false,
           },
         },
         mutedUsers: [

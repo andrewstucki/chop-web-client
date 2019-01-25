@@ -10,9 +10,12 @@ import type { WithSlideTransitionsType } from '../animations';
 import { PaneWrapper, PaneContentWrapper } from './styles';
 
 type PanePropsType = {
+  name: string,
   active: PaneType,
   previous: PaneType,
   navbarIndex: number,
+  updatePaneAnimation: (string, boolean) => void,
+  isAnimating: boolean,
   ...WithSlideTransitionsType,
 };
 
@@ -28,19 +31,26 @@ class Pane extends Component<PanePropsType> {
   }
 
   componentDidUpdate (prevProps:PanePropsType): void {
-    const { navbarIndex:currentNavbarIndex } = this.props;
+    const { navbarIndex:currentNavbarIndex, updatePaneAnimation, name,
+      syncTransitionLeft, syncTransitionRight } = this.props;
     const { navbarIndex:prevNavbarIndex } = prevProps;
     const { current:currentPane } = this.currentPane;
     const { current:prevPane } = this.prevPane;
 
-    if (prevPane && currentPane && currentNavbarIndex !== prevNavbarIndex) {
+    if (currentPane && currentNavbarIndex !== prevNavbarIndex) {
+      updatePaneAnimation(name, true);
       if (currentNavbarIndex > prevNavbarIndex) {
-        this.props.syncTransitionLeft(currentPane, prevPane);
+        syncTransitionLeft(currentPane, prevPane, this.removePreviousPane);
       } else {
-        this.props.syncTransitionRight(currentPane, prevPane);
+        syncTransitionRight(currentPane, prevPane, this.removePreviousPane);
       }
     }
   }
+
+  removePreviousPane = () => {
+    const { name, updatePaneAnimation } = this.props;
+    updatePaneAnimation(name, false);
+  };
 
   renderPaneContent = (pane:PaneType) => {
     const { type, content } = pane;
@@ -60,15 +70,14 @@ class Pane extends Component<PanePropsType> {
   };
 
   render () {
-    const { active, previous } = this.props;
+    const { active, previous, isAnimating } = this.props;
 
     return (
       <PaneWrapper>
-
         <PaneContentWrapper
           offCanvas
           ref={this.prevPane}>
-          { this.renderPaneContent(previous) }
+          { isAnimating && this.renderPaneContent(previous) }
         </PaneContentWrapper>
 
         <PaneContentWrapper
