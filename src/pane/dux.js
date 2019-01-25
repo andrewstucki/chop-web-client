@@ -3,6 +3,7 @@ import type { EventType } from './content/event/dux';
 import type { ChatType } from './content/chat/dux';
 
 const SET_PANE_CONTENT = 'SET_PANE_CONTENT';
+const UPDATE_PANE_ANIMATION = 'UPDATE_PANE_ANIMATION';
 const PRIMARY_PANE = 'primary';
 
 type PaneContentType =
@@ -12,6 +13,18 @@ type PaneContentType =
 type PaneType = {
   type: string,
   content: PaneContentType,
+};
+
+type SetPrimaryPaneType = {
+  type: typeof SET_PANE_CONTENT,
+  name: string,
+  pane: PaneType,
+};
+
+type UpdatePaneAnimationType = {
+  type: typeof UPDATE_PANE_ANIMATION,
+  name: string,
+  isAnimating: boolean,
 };
 
 const setPrimaryPane = (channelId: string, type: 'EVENT' | 'CHAT') => (
@@ -27,13 +40,25 @@ const setPrimaryPane = (channelId: string, type: 'EVENT' | 'CHAT') => (
   }
 );
 
+const updatePaneAnimation = (name: string, isAnimating: boolean) => (
+  {
+    type: UPDATE_PANE_ANIMATION,
+    name,
+    isAnimating,
+  }
+);
+
 export {
-  SET_PANE_CONTENT,
   PRIMARY_PANE,
+  SET_PANE_CONTENT,
+  UPDATE_PANE_ANIMATION,
   setPrimaryPane,
+  updatePaneAnimation,
 };
 
 export type {
   PaneContentType,
   PaneType,
+  SetPrimaryPaneType,
+  UpdatePaneAnimationType,
 };

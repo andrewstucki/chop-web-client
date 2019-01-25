@@ -40,10 +40,13 @@ import {
 
 import {
   SET_PANE_CONTENT,
+  UPDATE_PANE_ANIMATION,
 } from '../pane/dux';
 
 import type {
   PaneType,
+  SetPrimaryPaneType,
+  UpdatePaneAnimationType,
 } from '../pane/dux';
 
 import {
@@ -271,6 +274,7 @@ type FeedType = {
     [string]: {
       active: PaneType,
       previous?: PaneType,
+      isAnimating: boolean,
     },
   },
   clientInfo: ClientInfoType,
@@ -424,7 +428,9 @@ type FeedActionTypes =
   | SetHereNow
   | SetSawLastMomentAt
   | ToggleHideVideoType
-  | SetNavbarIndexType;
+  | SetNavbarIndexType
+  | UpdatePaneAnimationType
+  | SetPrimaryPaneType;
 
 // Action Creators
 export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
@@ -722,6 +728,7 @@ const defaultState = {
         // $FlowFixMe
         content: {},
       },
+      isAnimating: false,
     },
   },
   reactions: [],
@@ -774,6 +781,18 @@ const reducer = (
         [action.name]: {
           active: action.pane,
           previous: state.panes[action.name].active,
+          isAnimating: false,
+        },
+      },
+    };
+  case UPDATE_PANE_ANIMATION:
+    return {
+      ...state,
+      panes: {
+        ...state.panes,
+        [action.name]: {
+          ...state.panes[action.name],
+          isAnimating: action.isAnimating,
         },
       },
     };
@@ -1203,6 +1222,7 @@ const reducer = (
                 },
               },
               previous: {},
+              isAnimating: false,
             },
           },
         };
