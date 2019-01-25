@@ -7,7 +7,9 @@ const IframeEmbedPlayer = ({style, url}: IFramePlayerPropsType) => (
     className={style}
     src={url}
     width="100%"
-    frameBorder="0"
+    frameBorder={0}
+    marginWidth={0}
+    marginHeight={0}
   ></iframe>
 );
 
