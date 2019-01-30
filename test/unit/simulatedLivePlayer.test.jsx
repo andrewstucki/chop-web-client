@@ -47,4 +47,21 @@ describe('Simulated Live Player tests', () => {
     const shouldUpdate = wrapper.instance().shouldComponentUpdate({ url: 'https://youtube.com/embed/789012', startAt: 123 });
     expect(shouldUpdate).toBe(true);
   });
+
+  test('does not render when the Player is null', () => {
+    const wrapper = Enzyme.shallow(
+      <SimulatedLivePlayer
+        url='https://youtube.com/embed/123456'
+        style='style'
+        Player={null}
+        startAt={0}
+        onPause={() => {}}
+        onPlay={() => {}}
+        isVideoPlaying={true}
+        isMobileDevice={true}
+      />
+    );
+
+    expect(wrapper.type()).toBe(null);
+  });
 });
