@@ -14,8 +14,7 @@ const mapStateToProps = state => {
   const { type } = feedState.video;
   let { url } = feedState.video;
 
-  /* eslint-disable-next-line no-useless-escape */
-  const urlYoutube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube\.com\S*[^\w\-\s])([\w\-]{11})(?=[^\w\-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
+  const urlYoutube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
   const urlVimeo = /https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/;
 
   if (url.match(urlYoutube)) {
