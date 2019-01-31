@@ -52,6 +52,7 @@ class InputField extends Component<InputFieldProps, void> {
           onBlur={onBlur}
           value={value}
           placeholder={placeholder}
+          autocomplete="false"
           // $FlowFixMe
           ref={this.input}
         />
