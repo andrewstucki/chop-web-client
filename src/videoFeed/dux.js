@@ -97,7 +97,7 @@ const videoPlayerFactory = createSelector(
       return VimeoPlayer;
     } else if (video.url.indexOf('wistia') > -1) {
       return WistiaPlayer;
-    } else if (video.url.indexOf('youtube') > -1) {
+    } else if (video.url.indexOf('youtu') > -1) {
       return YouTubePlayer;
     } else {
       return null;
