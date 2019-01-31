@@ -37,6 +37,19 @@ const SideMenu = (
     swipe={onSwipe}
   >
     <a
+      id="support"
+      className={styles.feedbackLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
+    >
+      Support
+      <span
+        className={styles.externalLinkIcon}
+        dangerouslySetInnerHTML={{ __html: FeedbackLink }}
+      />
+    </a>
+    <a
       id="feedback"
       className={styles.feedbackLink}
       target="_blank"
@@ -52,7 +65,7 @@ const SideMenu = (
     <a
       id="guest-experience"
       className={styles.guestLink}
-      href={window.location.origin.toString()}
+      href={`${window.location.origin.toString()}/guest_experience`}
     >
       Switch to guest experience
       <span
