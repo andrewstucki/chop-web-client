@@ -11,6 +11,7 @@ import { defaultState } from '../../src/feed/dux';
 import YouTubePlayer from 'react-player/lib/players/YouTube';
 import VimeoPlayer from 'react-player/lib/players/Vimeo';
 import WistiaPlayer from 'react-player/lib/players/Wistia';
+import {setVideo} from '../../src/videoFeed/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -57,6 +58,11 @@ describe('VideoFeed tests', () => {
     );
 
     expect(wrapper.find(YouTubePlayer).exists()).toEqual(true);
+    expect(wrapper.find(YouTubePlayer).prop('url')).toEqual('//www.youtube.com/embed/iGwawktAMRg');
+
+    store.dispatch(setVideo('https://youtu.be/YRU80h2FM-A', 'simulated'));
+    expect(wrapper.find(YouTubePlayer).exists()).toEqual(true);
+    expect(wrapper.find(YouTubePlayer).prop('url')).toEqual('//www.youtube.com/embed/iGwawktAMRg');
   });
 
   test('Vimeo URL renders Vimeo player', () => {

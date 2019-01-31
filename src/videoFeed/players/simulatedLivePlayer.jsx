@@ -52,43 +52,47 @@ class SimulatedLivePlayer extends React.Component<SimulatedLivePlayerPropsType, 
   render () {
     const { Player, url, isMobileDevice, style, onPlay, onPause  } = this.props;
 
-    return (
-      <Player
-        // $FlowFixMe
-        ref={this.player}
-        url={url}
-        className={style}
-        width='100%'
-        height='100%'
-        frameBorder='0'
-        playing
-        controls
-        muted={isMobileDevice}
-        playsinline
-        config={{
-          youtube: {
-            playerVars: {
-              disablekb: 1,
-              modestbranding: 1,
+    if (Player === null) {
+      return null;
+    } else {
+      return (
+        <Player
+          // $FlowFixMe
+          ref={this.player}
+          url={url}
+          className={style}
+          width='100%'
+          height='100%'
+          frameBorder='0'
+          playing
+          controls
+          muted={isMobileDevice}
+          playsinline
+          config={{
+            youtube: {
+              playerVars: {
+                disablekb: 1,
+                modestbranding: 1,
+              },
             },
-          },
-          vimeo: {
-            iframeParams: {
-              portrait: false,
-              title: false,
+            vimeo: {
+              iframeParams: {
+                portrait: false,
+                title: false,
+              },
             },
-          },
-          wistia: {
-            options: {
-              silentAutoPlay: 'allow',
+            wistia: {
+              options: {
+                silentAutoPlay: 'allow',
+              },
             },
-          },
-        }}
-        onPlay={onPlay}
-        onPause={onPause}
-        onDuration={this.onReady}
-      />
-    );
+          }}
+          onPlay={onPlay}
+          onPause={onPause}
+          onDuration={this.onReady}
+        />
+      );
+    }
   }
 }
 
