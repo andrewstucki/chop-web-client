@@ -8,7 +8,7 @@ import sinon from 'sinon';
 Enzyme.configure({ adapter: new Adapter() });
 
 test('Button has correct text', () => {
-  const wrapper = Enzyme.shallow(
+  const wrapper = Enzyme.mount(
     <Button
       buttonId="login"
       onClick={() => {}}
@@ -21,7 +21,7 @@ test('Button has correct text', () => {
 
 test('Button clickable', () => {
   const onButtonClick = sinon.spy();
-  const wrapper = Enzyme.shallow(
+  const wrapper = Enzyme.mount(
     <Button
       text="Love"
       onClick={onButtonClick}

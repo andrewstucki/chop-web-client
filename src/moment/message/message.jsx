@@ -7,6 +7,7 @@ import Avatar from '../../avatar';
 
 import OpenTrayButton from '../../../assets/open-tray-button.svg';
 import MessageTray from '../../components/messageTray';
+import { Actionable } from '../../components/Actionable';
 import linkifyHtml from 'linkifyjs/html';
 import { sanitizeString } from '../../util';
 
@@ -30,77 +31,79 @@ type MessagePropsType = {
 
 const Message = (
   {
-    message,
+    message: {
+      sender,
+      messageTrayOpen,
+      text,
+      id:messageId,
+    },
     currentChannel,
-    openMessageTray,
     hostChannel,
-    closeMessageTray,
-    publishMuteUserNotification,
-    currentUser,
-    publishDeleteMessage,
-    deleteMessage,
-    muteUser,
-    directChat,
-    mutedNotificationBanner,
+    currentUser: {
+      name:currentUserName,
+    },
+    ...otherProps
   }: MessagePropsType
 ) => {
-  const { messageTrayOpen, text } = message;
+  const { name: senderName, pubnubToken: senderToken, role: { label: senderLabel } = {} } = sender;
   const messageStyle =
     messageTrayOpen ? styles.messageTrayOpen : styles.messageTrayClosed;
 
   const renderText = linkifyHtml(text, { target: '_blank' });
 
+  const openMessageTray = () => otherProps.openMessageTray(messageId);
+  const closeMessageTray = () => messageTrayOpen ? otherProps.closeMessageTray(messageId) : undefined;
+  const deleteMessage = () => {
+    otherProps.publishDeleteMessage(messageId);
+    otherProps.deleteMessage(messageId, currentChannel);
+  };
+  const muteUser = () => {
+    otherProps.muteUser(currentChannel, senderName);
+    otherProps.mutedNotificationBanner(senderName);
+    otherProps.publishMuteUserNotification(currentUserName, senderName, hostChannel);
+    closeMessageTray();
+  };
+  const directChat = () => otherProps.directChat(senderToken, senderName);
+
+  const OpenMessageTrayButton = () => (
+    <Actionable onClick={openMessageTray} keepFocus={true}>
+      <button
+        className={styles.openTrayButton}
+        dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
+      />
+    </Actionable>
+  );
+
+  const MessageBody = () => (
+    <React.Fragment>
+      <Avatar user={sender} />
+
+      <div className={styles.body}>
+        <strong className={styles.name}>{senderName}</strong>
+        {senderLabel &&
+          <span className={styles.role}>{senderLabel}</span>
+        }
+        <div key={messageId} data-node='text' className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
+      </div>
+    </React.Fragment>
+  );
+
   return (
     <div data-component='messageContainer' className={styles.wrapper + ' ' + messageStyle}>
-
-      <div
-        className={styles.message}
-        onClick={messageTrayOpen ? () => {
-          closeMessageTray(message.id);
-        } : undefined}
-        /*onTouchStart={messageTrayOpen ? () => {
-          closeMessageTray(message.id);
-        } : undefined}*/
-      >
-        <Avatar user={message.sender} />
-
-        <div className={styles.body}>
-          <strong className={styles.name}>{message.sender.name}</strong>
-          {message.sender.role.label &&
-            <span className={styles.role}>{message.sender.role.label}</span>
-          }
-          <div key={message.id} data-node='text' className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
+      <Actionable onClick={closeMessageTray}  keepFocus={true} tabable={false}>
+        <div
+          className={styles.message}
+        >
+          <MessageBody />
+          <OpenMessageTrayButton />
         </div>
-        <button
-          className={styles.openTrayButton}
-          dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
-          onClick={() => {
-            openMessageTray(message.id);
-          }}
-          /*
-          onTouchStart={() => {
-            openMessageTray(message.id);
-          }}*/
-        />
-      </div>
+      </Actionable>
 
       <MessageTray
-        closeTray={() => {
-          closeMessageTray(message.id);
-        }}
-        deleteMessage={() => {
-          publishDeleteMessage(message.id);
-          deleteMessage(message.id, currentChannel);
-        }}
-        muteUser={() => {
-          muteUser(currentChannel, message.sender.name);
-          mutedNotificationBanner(message.sender.name);
-          publishMuteUserNotification(currentUser.name, message.sender.name, hostChannel);
-          closeMessageTray(message.id);
-        }}
-        directChat={() => {
-          directChat(message.sender.pubnubToken, message.sender.name);
-        }}
+        closeTray={closeMessageTray}
+        deleteMessage={deleteMessage}
+        muteUser={muteUser}
+        directChat={directChat}
       />
 
     </div>

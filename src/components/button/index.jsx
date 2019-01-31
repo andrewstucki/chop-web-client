@@ -2,11 +2,12 @@
 /* global SyntheticMouseEvent */
 import React, { Component } from 'react';
 import styles from './style.css';
+import { Actionable } from '../Actionable';
 
 type ButtonPropsType = {
   buttonId?: string,
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
-  onTouchStart?: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  keepFocus?: boolean,
   buttonStyle: 'primary' | 'secondary' | 'tertiary' | 'icon',
   text?: string,
   image?: any,
@@ -29,7 +30,7 @@ class Button extends Component<ButtonPropsType, void> {
     const {
       buttonId,
       onClick,
-      onTouchStart,
+      keepFocus = false,
       text,
       image,
       buttonStyle,
@@ -45,32 +46,32 @@ class Button extends Component<ButtonPropsType, void> {
 
     if (buttonStyle === 'icon') {
       return (
-        <button
-          // $FlowFixMe
-          ref={this.node}
-          id={buttonId}
-          className={style}
-          onClick={onClick}
-          onTouchStart={onTouchStart}
-          dangerouslySetInnerHTML={{ __html: image }}
-          disabled={disabled}
-          hidden={hidden}
-        />
+        <Actionable onClick={onClick} keepFocus={keepFocus}>
+          <button
+            // $FlowFixMe
+            ref={this.node}
+            id={buttonId}
+            className={style}
+            dangerouslySetInnerHTML={{ __html: image }}
+            disabled={disabled}
+            hidden={hidden}
+          />
+        </Actionable>
       );
     } else {
       return (
-        <button
-          // $FlowFixMe
-          ref={this.node}
-          id={buttonId}
-          className={style}
-          onClick={onClick}
-          onTouchStart={onTouchStart}
-          disabled={disabled}
-          hidden={hidden}
-        >
-          {text}
-        </button>
+        <Actionable onClick={onClick} keepFocus={keepFocus}>
+          <button
+            // $FlowFixMe
+            ref={this.node}
+            id={buttonId}
+            className={style}
+            disabled={disabled}
+            hidden={hidden}
+          >
+            {text}
+          </button>
+        </Actionable>
       );
     }
   }
