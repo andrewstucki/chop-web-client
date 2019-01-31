@@ -71,7 +71,11 @@ import {
 import type { BannerType } from '../banner/dux';
 
 import { SET_LANGUAGE } from '../languageSelector/dux';
-import { getPublicChannel, getHostChannel } from '../selectors/channelSelectors';
+import {
+  getPublicChannel,
+  getHostChannel,
+  getCurrentChannel,
+} from '../selectors/channelSelectors';
 
 import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
 import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
@@ -924,31 +928,47 @@ const reducer = (
       },
     };
   case REMOVE_CHANNEL: {
-    const stateCopy = { ...state };
-    delete stateCopy.channels[action.channel];
+    const { channel: deletedChannelId } = action;
+    const { [deletedChannelId]: _channel, ...updatedChannels } = state.channels;
+    const publicChannelId = getPublicChannel(state);
+    const hostChannelId = getHostChannel(state);
+    const currentChannelId = getCurrentChannel(state);
+    const publicChannelPain = {
+      type: EVENT,
+      content: {
+        channelId: publicChannelId,
+      },
+    };
+    const hostChannelPain = {
+      type: CHAT,
+      content: {
+        channelId: hostChannelId,
+      },
+    };
+    let newPain = {
+      type: EVENT,
+      content: {},
+    };
 
-    const publicChannel = getPublicChannel(stateCopy);
-    const hostChannel = getHostChannel(stateCopy);
-
-    if (action.channel === state.panes.primary.active.content.channelId) {
-      if (action.channel === publicChannel) {
-        stateCopy.panes.primary.active = {
-          type: CHAT,
-          content: {
-            channelId: hostChannel || '',
-          },
-        };
-      } else {
-        stateCopy.panes.primary.active = {
-          type: EVENT,
-          content: {
-            channelId: publicChannel || '',
-          },
-
-        };
+    if (deletedChannelId === currentChannelId) {
+      if (deletedChannelId === publicChannelId && hostChannelId) {
+        newPain = hostChannelPain;
+      } else if (publicChannelId) {
+        newPain = publicChannelPain;
       }
     }
-    return stateCopy;
+
+    return {
+      ...state,
+      channels: updatedChannels,
+      panes: {
+        ... state.panes,
+        primary: {
+          ... state.panes.primary,
+          active: newPain,
+        },
+      },
+    };
   }
   case LOAD_HISTORY:
     if (state.channels[action.channel]) {
