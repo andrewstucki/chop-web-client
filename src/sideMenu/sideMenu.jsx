@@ -65,7 +65,7 @@ const SideMenu = (
     <a
       id="guest-experience"
       className={styles.guestLink}
-      href={window.location.origin.toString()}
+      href={`${window.location.origin.toString()}/guest_experience`}
     >
       Switch to guest experience
       <span
