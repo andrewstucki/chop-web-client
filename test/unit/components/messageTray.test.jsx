@@ -29,7 +29,7 @@ describe('MessageTray tests', () => {
   test('Can click delete', () => {
     const deleteMessage = sinon.spy();
     const muteUser = sinon.spy();
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <MessageTray
         deleteMessage={deleteMessage}
         muteUser={muteUser}
@@ -38,7 +38,7 @@ describe('MessageTray tests', () => {
       />
     );
 
-    wrapper.find('button').at(2).simulate('click');
+    wrapper.find('button.deleteButton').first().simulate('click');
     expect(deleteMessage.calledOnce).toEqual(true);
   });
 });

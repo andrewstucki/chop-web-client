@@ -123,15 +123,13 @@ class Chat extends Component<ChatProps, ChatState> {
     }
   }
 
-  sendMessage (event: SyntheticEvent<HTMLButtonElement>) {
+  sendMessage () {
     const {
       publishMessage,
       currentUser,
       currentChannel,
     } = this.props;
 
-    event.preventDefault();
-    event.stopPropagation();
     publishMessage(currentChannel, this.state.chatInput, currentUser);
     this.setState({chatInput: ''});
   }
@@ -164,7 +162,7 @@ class Chat extends Component<ChatProps, ChatState> {
           <Button
             buttonId='chat-button'
             onClick={this.sendMessage}
-            onTouchStart={this.sendMessage}
+            keepFocus={true}
             image={UpArrow}
             buttonStyle="icon"
             imageType="arrow"
