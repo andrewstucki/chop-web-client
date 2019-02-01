@@ -2,12 +2,14 @@ image: quay.io/lifechurch/k8s-deploy-helper:3.0.1
 variables:
   # Application deployment domain
   KUBE_DOMAIN: churchonline.us
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 stages:
   - compile
   - test
   - build
   - review
+  - cypress
   - staging
   - coverage
   - canary
@@ -21,6 +23,7 @@ cache:
     - node_modules/
     - .yarn
     - dist/
+    - cache/Cypress
 
 compile:app-review:
   image: in.thewardro.be:4567/io/io-builder:1.0.1
@@ -28,6 +31,7 @@ compile:app-review:
   script:
     - yarn install --pure-lockfile --cache-folder .yarn
     - yarn build:review
+    #- yarn cy:verify
   artifacts:
     expire_in: 1 day
     paths:
@@ -168,6 +172,11 @@ review:
     CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
     - command deploy
+    - echo $CI_ENVIRONMENT_URL > environmentUrl.txt
+  artifacts:
+    expire_in: 1 hr
+    paths:
+      - environmentUrl.txt
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
@@ -177,6 +186,15 @@ review:
   except:
     - master
     - integration
+  
+cypress-tests:
+  image: cypress/base:10
+  stage: cypress
+  script:
+    - CI_ENVIRONMENT_URL=`cat environmentUrl.txt`
+    - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl=$CI_ENVIRONMENT_URL
+  dependencies:
+    - review
 
 stop_review:
   stage: review

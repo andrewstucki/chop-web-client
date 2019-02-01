@@ -19,8 +19,10 @@
     "flow": "flow",
     "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/functional/ test/unit/",
     "validate": "yarn test && yarn flow && yarn lint",
-    "test:full": "yarn test && yarn flow && yarn lint",
-    "cypress:open": "cypress open"
+    "test:full": "yarn test && yarn flow && yarn lint && yarn cy:run",
+    "cy:open": "cypress open",
+    "cy:verify": "cypress verify",
+    "cy:run": "cypress run"
   },
   "jest": {
     "testRegex": "/test/unit/.*\\.test\\.jsx?$",
@@ -55,7 +57,7 @@
     "copy-webpack-plugin": "^4.5.3",
     "css-loader": "^2.0.1",
     "cssnano": "^4.1.8",
-    "cypress": "^3.1.4",
+    "cypress": "3.1.5",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.19.1",
