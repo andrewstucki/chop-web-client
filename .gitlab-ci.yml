@@ -142,6 +142,11 @@ build:image-staging:
     policy: pull
   script:
     - command build Dockerfile-app
+    - echo "https://digerati.chopdev.com" > environmentUrl.txt
+  artifacts:
+    expire_in: 1 hr
+    paths:
+      - environmentUrl.txt
   dependencies:
     - compile:app-staging
   only:
