@@ -214,6 +214,7 @@ cypress:tests-staging:
     - build:image-staging
   only:
     - integration
+  allow_failure: true
 
 stop_review:
   stage: review
