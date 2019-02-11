@@ -28,7 +28,7 @@ const user = {
 
 describe('Message', () => {
   test('has correct text', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <Message
         message={
           {
@@ -56,11 +56,11 @@ describe('Message', () => {
         currentUser={user}
       />
     );
-    expect(wrapper.find('div').last().html()).toEqual('<div data-node="text" class="text">Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!</div>');
+    expect(wrapper.find('div.text').first().html()).toEqual('<div data-node="text" class="text">Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!</div>');
   });
 
   test('displays the role label', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <Message
         message={
           {
@@ -88,12 +88,12 @@ describe('Message', () => {
         currentUser={user}
       />
     );
-    expect(wrapper.find('span').last().text()).toEqual('Host');
+    expect(wrapper.find('span.role').first().text()).toEqual('Host');
   });
 
   test('has a tray open button and it can be clicked', () => {
     const openTray = sinon.spy();
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <Message
         message={
           {
@@ -121,7 +121,7 @@ describe('Message', () => {
         currentUser={user}
       />
     );
-    expect(wrapper.find('button').length).toBe(1);
+    expect(wrapper.find('button').length).toBe(5);
     wrapper.find('button').at(0).simulate('click');
     expect(openTray.calledOnce).toEqual(true);
   });

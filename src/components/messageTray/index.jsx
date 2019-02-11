@@ -6,6 +6,7 @@ import DeleteButton from '../../../assets/delete-button.svg';
 import MuteButton from '../../../assets/mute-button.svg';
 import CloseButton from '../../../assets/close-message-tray-button.svg';
 import styles from './style.css';
+import { Actionable } from '../Actionable';
 
 type MessageTrayPropsType = {
   closeTray: (id: string) => void,
@@ -21,17 +22,15 @@ const trayButton = (
   text: string,
   onClick,
 ) => (
-  <button
-    className={buttonStyle}
-    onClick={onClick}
-    onTouchStart={onClick}
-  >
-    <span
-      className={imageType}
-      dangerouslySetInnerHTML={{ __html: image }}
-    />
-    <p>{text}</p>
-  </button>
+  <Actionable onClick={onClick} keepFocus={true}>
+    <button className={buttonStyle}>
+      <span
+        className={imageType}
+        dangerouslySetInnerHTML={{ __html: image }}
+      />
+      <p>{text}</p>
+    </button>
+  </Actionable>
 );
 
 const MessageTray = (

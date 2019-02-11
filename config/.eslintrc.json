@@ -117,6 +117,13 @@
         "no-useless-escape" : [
             "error"
         ],
+        "no-unused-vars": [
+            "error", 
+            { 
+                "varsIgnorePattern": "^_.*",
+                "argsIgnorePattern": "^_.*"
+            }
+        ],
         "no-var": [
             "error"
         ],
