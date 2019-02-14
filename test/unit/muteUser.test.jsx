@@ -12,7 +12,7 @@ import Message from '../../src/moment/message';
 import actorMiddleware from '../../src/middleware/actor-middleware';
 import '../../src/io/location';
 import { REHYDRATE } from 'redux-persist/lib/constants';
-import { promisifyMiddleware } from '../testUtils';
+import { promisifyMiddleware, mountWithTheme } from '../testUtils';
 
 jest.mock('../../src/io/graphQL');
 jest.mock('../../src/io/location');
@@ -72,7 +72,7 @@ describe('Test mute user', () => {
       applyMiddleware(...middlewareList)
     );
 
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Provider store={store}>
         <div>
           <Message message={message} />

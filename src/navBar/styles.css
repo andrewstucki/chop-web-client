@@ -30,9 +30,14 @@
 }
 
 .channelLinks {
-  overflow-x: auto;
-  flex: 1;
+  overflow-x: scroll;
   display: flex;
+  width: 100%;
+}
+
+.channelLinksWrapper {
+  display: flex;
+  flex: 0 0 auto;
   position: relative;
 }
 

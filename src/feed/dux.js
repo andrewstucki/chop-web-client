@@ -4,12 +4,20 @@ import type {
   CloseMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
-  MomentType,
   ReceiveMomentType,
-  PublishLeaveChannelType,
   PublishAcceptedPrayerRequestType,
   ReceiveAcceptedPrayerRequestType,
 } from '../moment';
+
+import type {
+  TabType,
+  AddTabType,
+  RemoveTabType,
+} from '../pane/content/tab/dux';
+
+import type {
+  MomentType,
+} from '../moment/dux';
 
 import type {
   PublishReactionActionType,
@@ -45,7 +53,7 @@ import {
 
 import type {
   PaneType,
-  SetPrimaryPaneType,
+  SetPaneType,
   UpdatePaneAnimationType,
 } from '../pane/dux';
 
@@ -89,6 +97,8 @@ import type {
   DateTimeType,
   ChannelIdType,
 } from '../cwc-types';
+
+import { ADD_TAB, REMOVE_TAB } from '../pane/content/tab/dux';
 
 // $FlowFixMe - this module does not resolve in GitLab CI
 import type { SetNavbarIndexType } from '../navbar/dux';
@@ -138,18 +148,24 @@ type ScheduleType = {
   id: number,
   startTime: number,
   endTime: number,
-}
+  title: string,
+  hostInfo: string,
+};
 
 type SetScheduleType = {
   type: 'SET_SCHEDULE',
   schedule: Array<ScheduleType>,
-}
+};
 
 type EventType = {
   title: string,
   id: number,
   eventTimeId: number,
   startTime: number,
+  description?: string,
+  hostInfo?: string,
+  speaker?: string,
+  hostInfo?: string,
 };
 
 type LanguageType = {
@@ -181,7 +197,7 @@ type PrivateUserType = {
   role: {
     label: string,
     permissions: Array<string>,
-  }
+  },
 };
 
 type SetUser = {
@@ -206,7 +222,7 @@ type SharedUserType = {
   pubnubToken: string,
   role: {
     label: string,
-  }
+  },
 };
 
 type ChannelType = {
@@ -239,12 +255,12 @@ type ClientInfoType = {
   longitude?: number,
   ip?: string,
   state?: string,
-}
+};
 
 type AuthenticationType = {
   accessToken: string,
-  refreshToken: string
-}
+  refreshToken: string,
+};
 
 type ChannelsObjectType = {
   [string]: ChannelType,
@@ -281,6 +297,7 @@ type FeedType = {
       isAnimating: boolean,
     },
   },
+  tabs: Array<TabType>,
   clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
   navbarIndex: number,
@@ -340,7 +357,7 @@ type HereNowUsersType = {
 type SetHereNow = {
   type: 'SET_HERE_NOW',
   channel: string,
-  users: HereNowUsersType
+  users: HereNowUsersType,
 };
 
 type UpdateHereNowType = {
@@ -363,7 +380,7 @@ type SetSalvationsType = {
 
 type SetAuthenticationType = {
   type: 'SET_AUTHENTICATION',
-  auth: AuthenticationType
+  auth: AuthenticationType,
 };
 
 type RemoveAuthenticationType = {
@@ -416,7 +433,6 @@ type FeedActionTypes =
   | SetOrganizationType
   | SetPubnubKeysType
   | LeaveChannelType
-  | PublishLeaveChannelType
   | SetScheduleType
   | UpdateHereNowType
   | PublishSalvationType
@@ -434,7 +450,9 @@ type FeedActionTypes =
   | ToggleHideVideoType
   | SetNavbarIndexType
   | UpdatePaneAnimationType
-  | SetPrimaryPaneType;
+  | SetPaneType
+  | AddTabType
+  | RemoveTabType;
 
 // Action Creators
 export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
@@ -526,7 +544,8 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
   }
 );
 
-const setEvent = (title: string, id: number, eventTimeId:number, startTime: number, videoStartTime: number): SetEventType => (
+const setEvent = (title: string, id: number, eventTimeId:number, startTime: number, videoStartTime: number,
+  speaker: string, description: string, hostInfo: string): SetEventType => (
   {
     type: SET_EVENT,
     event: {
@@ -535,6 +554,9 @@ const setEvent = (title: string, id: number, eventTimeId:number, startTime: numb
       eventTimeId,
       startTime,
       videoStartTime,
+      speaker,
+      description,
+      hostInfo,
     },
   }
 );
@@ -659,6 +681,7 @@ const defaultState = {
     eventTimeId: 0,
     startTime: 0,
     title: '',
+    hostInfo: '',
   },
   schedule: [],
   organization: {
@@ -724,17 +747,14 @@ const defaultState = {
     primary: {
       active: {
         type: EVENT,
-        // $FlowFixMe
-        content: {},
-      },
-      previous: {
-        type: '',
-        // $FlowFixMe
-        content: {},
+        content: {
+          channelId: 'event',
+        },
       },
       isAnimating: false,
     },
   },
+  tabs: [],
   reactions: [],
   notificationBanner: {
     message: '',
@@ -947,7 +967,9 @@ const reducer = (
     };
     let newPain = {
       type: EVENT,
-      content: {},
+      content: {
+        channelId: 'event',
+      },
     };
 
     if (deletedChannelId === currentChannelId) {
@@ -995,23 +1017,28 @@ const reducer = (
   case OPEN_MESSAGE_TRAY: {
     // $FlowFixMe
     const { id } = action;
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [state.panes.primary.active.content.channelId]: {
-          ...state.channels[state.panes.primary.active.content.channelId],
-          moments: state.channels[state.panes.primary.active.content.channelId].moments.map(
-            message => (
-              {
-                ...message,
-                messageTrayOpen: message.id === id,
-              }
-            )
-          ),
+    const currentChannel = getCurrentChannel(state);
+
+    if (currentChannel) {
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [currentChannel]: {
+            ...state.channels[currentChannel],
+            moments: state.channels[currentChannel].moments.map(
+              message => (
+                {
+                  ...message,
+                  messageTrayOpen: message.id === id,
+                }
+              )
+            ),
+          },
         },
-      },
-    };
+      };
+    }
+    return state;
   }
   case RECEIVE_MUTE_USER: {
     // $FlowFixMe
@@ -1024,45 +1051,54 @@ const reducer = (
   }
   case PUBLISH_MUTE_USER:
   case 'DIRECT_CHAT':
-  case CLOSE_MESSAGE_TRAY:
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [state.panes.primary.active.content.channelId]: {
-          ...state.channels[state.panes.primary.active.content.channelId],
-          moments: state.channels[state.panes.primary.active.content.channelId].moments.map(
-            message => (
-              {
-                ...message,
-                messageTrayOpen: false,
-              }
-            )
-          ),
+  case CLOSE_MESSAGE_TRAY: {
+    const currentChannel = getCurrentChannel(state);
+    if (currentChannel) {
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [currentChannel]: {
+            ...state.channels[currentChannel],
+            moments: state.channels[currentChannel].moments.map(
+              message => (
+                {
+                  ...message,
+                  messageTrayOpen: false,
+                }
+              )
+            ),
+          },
         },
-      },
-    };
+      };
+    }
+    return state;
+  }
   case TOGGLE_CLOSE_TRAY_BUTTON: {
     // $FlowFixMe
     const { id } = action;
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [state.panes.primary.active.content.channelId]: {
-          ...state.channels[state.panes.primary.active.content.channelId],
-          moments: state.channels[state.panes.primary.active.content.channelId].moments.map(
-            message => (
-              {
-                ...message,
-                closeTrayButtonRendered: message.id === id ?
-                  !message.closeTrayButtonRendered : message.closeTrayButtonRendered,
-              }
-            )
-          ),
+    const currentChannel = getCurrentChannel(state);
+    if (currentChannel) {
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [currentChannel]: {
+            ...state.channels[currentChannel],
+            moments: state.channels[currentChannel].moments.map(
+              message => (
+                {
+                  ...message,
+                  closeTrayButtonRendered: message.id === id ?
+                    !message.closeTrayButtonRendered : message.closeTrayButtonRendered,
+                }
+              )
+            ),
+          },
         },
-      },
-    };
+      };
+    }
+    return state;
   }
   case PUBLISH_ACCEPTED_PRAYER_REQUEST:
   case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
@@ -1121,17 +1157,18 @@ const reducer = (
     };
   }
   case PUBLISH_MOMENT_TO_CHANNEL: {
+    const currentChannel = getCurrentChannel(state);
     // $FlowFixMe
-    if (action.moment.type === MESSAGE) {
+    if (action.moment.type === MESSAGE && currentChannel) {
       if ([action.moment.text].toString().length > 0) {
         return {
           ...state,
           channels: {
             ...state.channels,
-            [state.panes.primary.active.content.channelId]: {
-              ...state.channels[state.panes.primary.active.content.channelId],
+            [currentChannel]: {
+              ...state.channels[currentChannel],
               moments: [
-                ...state.channels[state.panes.primary.active.content.channelId].moments,
+                ...state.channels[currentChannel].moments,
                 // $FlowFixMe
                 action.moment,
               ],
@@ -1207,45 +1244,47 @@ const reducer = (
     };
   }
   case LEAVE_CHANNEL: {
-    const { channels } = state;
-    const { channelId:currentChannel } = state.panes.primary.active.content;
-    const { pubnubToken } = action;
-    const publicChannel = getPublicChannel(state);
-    if (currentChannel &&
-      channels[currentChannel].participants &&
-      channels[currentChannel].participants.length
-    ) {
-      const { participants } = channels[currentChannel];
-      const userIndex = participants.findIndex(el => (
-        el.pubnubToken === pubnubToken
-      ));
-      if (participants) {
-        return {
-          ...state,
-          channels: {
-            ...channels,
-            [currentChannel]: {
-              ...channels[currentChannel],
-              participants: [
-                ...participants.slice(0, userIndex),
-                ...participants.slice(userIndex + 1),
-              ],
-            },
-          },
-          panes: {
-            ...state.panes,
-            primary: {
-              active: {
-                type: EVENT,
-                content: {
-                  channelId: publicChannel,
-                },
+    const currentChannel = getCurrentChannel(state);
+    if (currentChannel) {
+      const {channels} = state;
+      const {pubnubToken} = action;
+      const publicChannel = getPublicChannel(state);
+      if (currentChannel &&
+        channels[currentChannel].participants &&
+        channels[currentChannel].participants.length
+      ) {
+        const {participants} = channels[currentChannel];
+        const userIndex = participants.findIndex(el => (
+          el.pubnubToken === pubnubToken
+        ));
+        if (participants) {
+          return {
+            ...state,
+            channels: {
+              ...channels,
+              [currentChannel]: {
+                ...channels[currentChannel],
+                participants: [
+                  ...participants.slice(0, userIndex),
+                  ...participants.slice(userIndex + 1),
+                ],
               },
-              previous: {},
-              isAnimating: false,
             },
-          },
-        };
+            panes: {
+              ...state.panes,
+              primary: {
+                active: {
+                  type: EVENT,
+                  content: {
+                    channelId: publicChannel,
+                  },
+                },
+                previous: {},
+                isAnimating: false,
+              },
+            },
+          };
+        }
       }
     }
     return state;
@@ -1376,6 +1415,44 @@ const reducer = (
       ...state,
       navbarIndex: action.index,
     };
+  case ADD_TAB: {
+    const { tab } = action;
+    const exists = state.tabs.filter(item => item.type === tab.type).length > 0;
+
+    if (exists) {
+      return state;
+    } else {
+      return {
+        ...state,
+        tabs: [
+          ...state.tabs,
+          tab,
+        ],
+      };
+    }
+  }
+  case REMOVE_TAB: {
+    const { tabType } = action;
+    const publicChannel = getPublicChannel(state) || 'event';
+
+    return {
+      ...state,
+      tabs: state.tabs.filter(item => item.type !== tabType),
+      panes: {
+        ...state.panes,
+        primary: {
+          active: {
+            type: EVENT,
+            content: {
+              channelId: publicChannel,
+            },
+          },
+          previous: {},
+          isAnimating: false,
+        },
+      },
+    };
+  }
   default:
     return inboundState;
   }
@@ -1436,6 +1513,7 @@ export {
   setClientInfo,
   setHereNow,
 };
+
 export type {
   AddChannelType,
   RemoveChannelType,

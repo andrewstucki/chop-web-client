@@ -30,7 +30,7 @@ describe('NotificationBanner test', () => {
       <Provider store={store}>
         <div>
           <Banner />
-        </div>   
+        </div>
       </Provider>
     );
 
@@ -41,7 +41,7 @@ describe('NotificationBanner test', () => {
       },
     );
     expect(wrapper.find('div').at(1).text()).toEqual(
-      'SVGG. Boole was muted.'
+      'FileG. Boole was muted.'
     );
   });
 
@@ -63,7 +63,7 @@ describe('NotificationBanner test', () => {
       <Provider store={store}>
         <div>
           <Banner />
-        </div>   
+        </div>
       </Provider>
     );
 
@@ -74,7 +74,7 @@ describe('NotificationBanner test', () => {
       },
     );
     expect(wrapper.find('div').at(1).text()).toEqual(
-      'SVGThere was an error.'
+      'FileThere was an error.'
     );
   });
 
@@ -96,7 +96,7 @@ describe('NotificationBanner test', () => {
       <Provider store={store}>
         <div>
           <Banner />
-        </div>   
+        </div>
       </Provider>
     );
     wrapper.find('button').first().simulate('click');

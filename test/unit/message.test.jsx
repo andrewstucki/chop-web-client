@@ -5,6 +5,9 @@ import { MESSAGE } from '../../src/moment/message/dux';
 import Enzyme from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
+import { mountWithTheme } from '../testUtils';
+import Label from '../../src/components/label';
+import { TextWrapper } from '../../src/moment/message/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -28,7 +31,7 @@ const user = {
 
 describe('Message', () => {
   test('has correct text', () => {
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Message
         message={
           {
@@ -56,11 +59,11 @@ describe('Message', () => {
         currentUser={user}
       />
     );
-    expect(wrapper.find('div.text').first().html()).toEqual('<div data-node="text" class="text">Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!</div>');
+    expect(wrapper.find(TextWrapper).html()).toContain('Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!');
   });
 
   test('displays the role label', () => {
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Message
         message={
           {
@@ -88,12 +91,12 @@ describe('Message', () => {
         currentUser={user}
       />
     );
-    expect(wrapper.find('span.role').first().text()).toEqual('Host');
+    expect(wrapper.find(Label).text()).toEqual('Host');
   });
 
   test('has a tray open button and it can be clicked', () => {
     const openTray = sinon.spy();
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Message
         message={
           {

@@ -36,8 +36,11 @@ query Sequence($time: Timestamp) {
 
 const currentEvent = `
 currentEvent {
-  title
   id
+  title
+  speaker
+  description
+  hostInfo
   eventTime {
     id
   }
@@ -71,8 +74,11 @@ currentEvent {
 const eventAt = `
 query EventAt($time: Timestamp) {
   eventAt (time: $time){
-    title
     id
+    title
+    speaker
+    description
+    hostInfo
     eventTime {
       id
     }
@@ -174,6 +180,7 @@ schedule {
   id
   title
   scheduleTime
+  hostInfo
 }`;
 
 const currentState = `

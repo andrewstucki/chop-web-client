@@ -25,10 +25,16 @@ import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import bugsnag from '@bugsnag/js';
 import bugsnagReact from '@bugsnag/plugin-react';
 import TagManager from 'react-gtm-module';
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyle, theme } from './styles';
+import smoothscroll from 'smoothscroll-polyfill';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
 declare var GTM;
+
+// kick off the polyfill!
+smoothscroll.polyfill();
 
 TagManager.initialize(GTM);
 
@@ -80,12 +86,17 @@ if (content) {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ErrorBoundary>
-          <Router basename={ROUTE_BASENAME}>
-            <Switch>
-              <Route exact path='/' component={Chop}/>
-              <Route exact path='/login' component={Login}/>
-            </Switch>
-          </Router>
+          <ThemeProvider theme={theme}>
+            <>
+              <GlobalStyle />
+              <Router basename={ROUTE_BASENAME}>
+                <Switch>
+                  <Route exact path='/' component={Chop}/>
+                  <Route exact path='/login' component={Login}/>
+                </Switch>
+              </Router>
+            </>
+          </ThemeProvider>
         </ErrorBoundary>
       </PersistGate>
     </Provider>,

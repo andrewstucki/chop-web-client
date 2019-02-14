@@ -1,3 +1,8 @@
+import React from 'react';
+import { mount, shallow } from 'enzyme';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './theme';
+
 const mockDate = date => {
   const RealDate = Date;
   global.Date = class extends RealDate {
@@ -12,8 +17,10 @@ const mockDate = date => {
   };
 };
 
-const promisifyMiddleware = ({dispatch, getState}) => next => action => {
-  return new Promise( (resolve) => resolve(next(action)) )
-};
+const promisifyMiddleware = ({_dispatch, _getState}) => next => action => new Promise( resolve => resolve(next(action)) );
 
-export { mockDate, promisifyMiddleware };
+const shallowWithTheme = children => shallow(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
+
+const mountWithTheme = children => mount(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
+
+export { mockDate, promisifyMiddleware, shallowWithTheme, mountWithTheme };

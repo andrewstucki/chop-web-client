@@ -25,8 +25,8 @@ const makeWithSlideTransitions = (WrappedComponent, options = { duration: 0.4 })
       if (enter && leave) {
         const { duration } = options;
         const tl = new TimelineLite({ onComplete: callback });
-        tl.fromTo(enter, duration, { left: '-100%' }, { left: 0, ease: Power3.easeInOut } )
-          .fromTo(leave, duration, { left: 0 }, { left: '100%', ease: Power3.easeInOut }, `-=${duration}` );
+        tl.fromTo(enter, duration, { transform: 'translate3d(-100%, 0, 0)' }, { transform: 'translate3d(0, 0, 0)', ease: Power3.easeInOut } )
+          .fromTo(leave, duration, { transform: 'translate3d(0, 0, 0)' }, { transform: 'translate3d(100%, 0, 0)', ease: Power3.easeInOut }, `-=${duration}` );
       }
     }
 
@@ -34,8 +34,8 @@ const makeWithSlideTransitions = (WrappedComponent, options = { duration: 0.4 })
       if (enter && leave) {
         const { duration } = options;
         const tl = new TimelineLite({ onComplete: callback });
-        tl.fromTo(enter, duration, { left: '100%' }, { left: 0, ease: Power3.easeInOut } )
-          .fromTo(leave, duration, { left: 0 }, {left: '-100%', ease: Power3.easeInOut}, `-=${duration}` );
+        tl.fromTo(enter, duration, { transform: 'translate3d(100%, 0, 0)' }, { transform: 'translate3d(0, 0, 0)', ease: Power3.easeInOut } )
+          .fromTo(leave, duration, { transform: 'translate3d(0, 0, 0)' }, {transform: 'translate3d(-100%, 0, 0)', ease: Power3.easeInOut}, `-=${duration}` );
       }
     }
 

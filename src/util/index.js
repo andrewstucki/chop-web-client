@@ -93,6 +93,8 @@ const DOMPurify = createDOMPurify();
 
 const sanitizeConfig = {
   ADD_ATTR: ['target'],
+  // TODO: We should not allow all iframes, but have decided to pursue a more secure solution further down the road.
+  ADD_TAGS: ['iframe'],
 };
 
 const sanitizeString = (string: string, config:any = sanitizeConfig) =>

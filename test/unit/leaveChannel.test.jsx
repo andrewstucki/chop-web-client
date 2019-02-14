@@ -75,7 +75,7 @@ describe('Test leave channel', () => {
       );
 
       store.dispatch(
-        setPrimaryPane('test', 'CHAT')
+        setPrimaryPane('CHAT', 'test' )
       );
 
       store.dispatch(
