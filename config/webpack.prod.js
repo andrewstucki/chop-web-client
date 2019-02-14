@@ -31,6 +31,6 @@ module.exports = merge(common, {
   ],
   devtool: 'source-map',
   output: {
-    publicPath: 'https://churchonline.us'
+    publicPath: 'https://churchonline.us/'
   }
 });

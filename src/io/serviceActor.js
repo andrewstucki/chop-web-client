@@ -328,6 +328,9 @@ class ServiceActor {
             event.eventTime.id,
             event.startTime,
             event.videoStartTime,
+            event.speaker || '',
+            event.description || '',
+            event.hostInfo || '',
           )
         );
       }
@@ -378,7 +381,7 @@ class ServiceActor {
             );
             if (channel.name === 'Public') {
               this.storeDispatch(
-                setPrimaryPane(channel.id, EVENT)
+                setPrimaryPane(EVENT, channel.id)
               );
             }
           }
@@ -429,7 +432,7 @@ class ServiceActor {
       const { name, id, direct, subscribers } = data.acceptPrayer;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, direct, participants));
-      this.storeDispatch(setPrimaryPane(id, CHAT));
+      this.storeDispatch(setPrimaryPane(CHAT, id));
     } catch (error) {
       this.handleDataFetchErrors(error);
     }
@@ -452,7 +455,7 @@ class ServiceActor {
       const { name, id, direct, subscribers } = directChat.createDirectFeed;
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, direct, participants));
-      this.storeDispatch(setPrimaryPane(id, CHAT));
+      this.storeDispatch(setPrimaryPane(CHAT, id));
     } catch (error) {
       this.handleDataFetchErrors(error);
     }

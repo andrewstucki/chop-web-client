@@ -8,6 +8,7 @@ import Button from '../../src/components/button';
 import SideMenuComponent from '../../src/components/sideMenu';
 import SideMenu from '../../src/sideMenu/sideMenu';
 import LanguageSelector from '../../src/languageSelector';
+import { mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -42,6 +43,13 @@ const languageOptions = [
   },
 ];
 
+const currentPane = {
+  type: 'EVENT',
+  content: {
+    channelId: 'host',
+  },
+};
+
 describe('SideBar tests', () => {
   test('SideBar renders', () => {
     const closeFunction = () => {};
@@ -52,6 +60,13 @@ describe('SideBar tests', () => {
         isClosed={false}
         languageOptions={languageOptions}
         setLanguage={() => {}}
+        currentPane={currentPane}
+        hostChannel='host'
+        publicChannel='public'
+        setPaneToChat={() => {}}
+        setPaneToEvent={() => {}}
+        setPaneToTab={() => {}}
+        addTab={() => {}}
       />
     );
     expect(wrapper.find(SideMenuComponent).length).toBe(1);
@@ -68,6 +83,13 @@ describe('SideBar tests', () => {
         isClosed={false}
         languageOptions={languageOptions}
         setLanguage={() => {}}
+        currentPane={currentPane}
+        hostChannel='host'
+        publicChannel='public'
+        setPaneToChat={() => {}}
+        setPaneToEvent={() => {}}
+        setPaneToTab={() => {}}
+        addTab={() => {}}
       />
     );
     expect(wrapper.find('#guest-experience').length)
@@ -84,6 +106,13 @@ describe('SideBar tests', () => {
         isClosed={false}
         languageOptions={languageOptions}
         setLanguage={() => {}}
+        currentPane={currentPane}
+        hostChannel='host'
+        publicChannel='public'
+        setPaneToChat={() => {}}
+        setPaneToEvent={() => {}}
+        setPaneToTab={() => {}}
+        addTab={() => {}}
       />
     );
     expect(wrapper.find('#feedback').length)
@@ -96,13 +125,20 @@ describe('SideBar tests', () => {
 
   test('SideBar has logout button', () => {
     const logoutButton = sinon.spy();
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <SideMenu
         logout={logoutButton}
         close={() => {}}
         isClosed={false}
         languageOptions={languageOptions}
         setLanguage={() => {}}
+        currentPane={currentPane}
+        hostChannel='host'
+        publicChannel='public'
+        setPaneToChat={() => {}}
+        setPaneToEvent={() => {}}
+        setPaneToTab={() => {}}
+        addTab={() => {}}
       />
     );
     expect(wrapper.find(Button).length)

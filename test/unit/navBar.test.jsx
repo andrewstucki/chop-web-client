@@ -4,6 +4,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 
 import NavBar from '../../src/navBar/navBar';
+import {EVENT} from '../../src/pane/content/event/dux';
+import {CHAT} from '../../src/pane/content/chat/dux';
 
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -12,7 +14,7 @@ describe('NavBar tests', () => {
   test('NavBar renders', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
+        items={[
           {
             id: '123456',
             name: 'Public',
@@ -20,6 +22,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -28,14 +31,18 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
         ]}
         onClick={function () {}}
         setNavbarIndex={() => {}}
-        setPrimaryPane={() => {}}
+        setPaneToChat={() => {}}
+        setPaneToTab={() => {}}
+        setPaneToEvent={() => {}}
         openMenu={() => {}}
         barWidth={100}
         barX={50}
+        navbarIndex={0}
       />
     );
     expect(wrapper.find('.navBar').type()).toEqual('div');
@@ -44,7 +51,7 @@ describe('NavBar tests', () => {
   test('has default channel and host channels', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
+        items={[
           {
             id: '123456',
             name: 'Public',
@@ -52,6 +59,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -60,14 +68,18 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
         ]}
         onClick={function () {}}
         setNavbarIndex={() => {}}
-        setPrimaryPane={() => {}}
+        setPaneToChat={() => {}}
+        setPaneToTab={() => {}}
+        setPaneToEvent={() => {}}
         openMenu={() => {}}
         barWidth={100}
         barX={50}
+        navbarIndex={0}
       />
     );
     expect(wrapper.find('.navBar a').length).toBe(3);
@@ -78,7 +90,7 @@ describe('NavBar tests', () => {
   test('displaying pip on public', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
+        items={[
           {
             id: '123456',
             name: 'Public',
@@ -86,6 +98,7 @@ describe('NavBar tests', () => {
             hasActions: true,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -94,14 +107,18 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
         ]}
         onClick={function () {}}
         setNavbarIndex={() => {}}
-        setPrimaryPane={() => {}}
+        setPaneToChat={() => {}}
+        setPaneToTab={() => {}}
+        setPaneToEvent={() => {}}
         openMenu={() => {}}
         barWidth={100}
         barX={50}
+        navbarIndex={0}
       />
     );
     expect(wrapper.find('#nav-Public span.pip').length).toBe(1);
@@ -111,7 +128,7 @@ describe('NavBar tests', () => {
   test('displaying pip on host', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
+        items={[
           {
             id: '123456',
             name: 'Public',
@@ -119,6 +136,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -127,14 +145,18 @@ describe('NavBar tests', () => {
             hasActions: true,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
         ]}
         onClick={function () {}}
         setNavbarIndex={() => {}}
-        setPrimaryPane={() => {}}
+        setPaneToChat={() => {}}
+        setPaneToTab={() => {}}
+        setPaneToEvent={() => {}}
         openMenu={() => {}}
         barWidth={100}
         barX={50}
+        navbarIndex={0}
       />
     );
     expect(wrapper.find('#nav-Public span.pip').length).toBe(0);
@@ -144,7 +166,7 @@ describe('NavBar tests', () => {
   test('channels with other user names to store', () => {
     expect(NavBar.getDerivedStateFromProps(
       {
-        channels: [
+        items: [
           {
             id: '123456',
             name: 'Public',
@@ -152,6 +174,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -160,6 +183,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
           {
             id: '123456',
@@ -170,6 +194,7 @@ describe('NavBar tests', () => {
               'bob',
             ],
             isDirect: true,
+            type: CHAT,
           },
           {
             id: '12345',
@@ -180,12 +205,16 @@ describe('NavBar tests', () => {
               'sue',
             ],
             isDirect: true,
+            type: CHAT,
           },
         ],
         onClick: () => {},
         setNavbarIndex: () => {},
-        setPrimaryPane: () => {},
+        setPaneToChat: () => {},
+        setPaneToTab: () => {},
+        setPaneToEvent: () => {},
         openMenu: () => {},
+        navbarIndex: 0,
       },
       {
         left: 20,
@@ -209,7 +238,7 @@ describe('NavBar tests', () => {
   test('channels without other user names to be stored', () => {
     expect(NavBar.getDerivedStateFromProps(
       {
-        channels: [
+        items: [
           {
             id: '123456',
             name: 'Public',
@@ -217,6 +246,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -225,6 +255,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
           {
             id: '123456',
@@ -233,6 +264,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: true,
+            type: CHAT,
           },
           {
             id: '12345',
@@ -241,12 +273,16 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: true,
+            type: CHAT,
           },
         ],
         onClick: () => {},
         setNavbarIndex: () => {},
-        setPrimaryPane: () => {},
+        setPaneToChat: () => {},
+        setPaneToTab: () => {},
+        setPaneToEvent: () => {},
         openMenu: () => {},
+        navbarIndex: 0,
       },
       {
         left: 20,
@@ -260,7 +296,7 @@ describe('NavBar tests', () => {
   test('channels with other user names that are already stored', () => {
     expect(NavBar.getDerivedStateFromProps(
       {
-        channels: [
+        items: [
           {
             id: '123456',
             name: 'Public',
@@ -268,6 +304,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -276,6 +313,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
           {
             id: '123456',
@@ -286,6 +324,7 @@ describe('NavBar tests', () => {
               'bob',
             ],
             isDirect: true,
+            type: CHAT,
           },
           {
             id: '12345',
@@ -296,12 +335,16 @@ describe('NavBar tests', () => {
               'sue',
             ],
             isDirect: true,
+            type: CHAT,
           },
         ],
         onClick: () => {},
         setNavbarIndex: () => {},
-        setPrimaryPane: () => {},
+        setPaneToChat: () => {},
+        setPaneToTab: () => {},
+        setPaneToEvent: () => {},
         openMenu: () => {},
+        navbarIndex: 0,
       },
       {
         left: 20,
@@ -318,7 +361,7 @@ describe('NavBar tests', () => {
   test('direct chat with participants', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
+        items={[
           {
             id: '123456',
             name: 'public',
@@ -326,6 +369,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -334,6 +378,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
           {
             id: '123456',
@@ -342,14 +387,18 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: ['bob'],
             isDirect: true,
+            type: CHAT,
           },
         ]}
         onClick={function () {}}
         setNavbarIndex={() => {}}
-        setPrimaryPane={() => {}}
+        setPaneToChat={() => {}}
+        setPaneToTab={() => {}}
+        setPaneToEvent={() => {}}
         openMenu={() => {}}
         barWidth={100}
         barX={50}
+        navbarIndex={0}
       />
     );
     expect(wrapper.find('#nav-direct1').text()).toEqual('B');
@@ -358,7 +407,7 @@ describe('NavBar tests', () => {
   test('channels display in the proper order', () => {
     const wrapper = Enzyme.shallow(
       <NavBar
-        channels={[
+        items={[
           {
             id: '123456',
             name: 'Public',
@@ -366,6 +415,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: EVENT,
           },
           {
             id: '123456',
@@ -374,6 +424,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: [],
             isDirect: false,
+            type: CHAT,
           },
           {
             id: '123456',
@@ -382,6 +433,7 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: ['bob'],
             isDirect: true,
+            type: CHAT,
           },
           {
             id: '123456',
@@ -390,14 +442,18 @@ describe('NavBar tests', () => {
             hasActions: false,
             otherUsersNames: ['bill'],
             isDirect: true,
+            type: CHAT,
           },
         ]}
         onClick={function () {}}
         setNavbarIndex={() => {}}
-        setPrimaryPane={() => {}}
+        setPaneToChat={() => {}}
+        setPaneToTab={() => {}}
+        setPaneToEvent={() => {}}
         openMenu={() => {}}
         barWidth={100}
         barX={50}
+        navbarIndex={0}
       />
     );
     expect(wrapper.find('.navBar a').length).toBe(5);

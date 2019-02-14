@@ -8,6 +8,8 @@ import Event from './content/event';
 import { withSlideTransitions } from '../animations';
 import type { WithSlideTransitionsType } from '../animations';
 import { PaneWrapper, PaneContentWrapper } from './styles';
+import Tab from './content/tab';
+import {TAB} from './content/tab/dux';
 
 type PanePropsType = {
   name: string,
@@ -62,7 +64,13 @@ class Pane extends Component<PanePropsType> {
       );
     case CHAT:
       return (
+        // $FlowFixMe
         <Chat channel={content.channelId} />
+      );
+    case TAB:
+      return (
+        // $FlowFixMe
+        <Tab type={content.type}/>
       );
     default:
       return null;

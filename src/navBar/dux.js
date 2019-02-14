@@ -6,19 +6,27 @@ import {
   getDirectChannels as directChannels,
 } from '../selectors/channelSelectors';
 import { createSelector } from 'reselect';
+import { paneContentSelector } from '../selectors/paneSelectors';
+import { PRIMARY_PANE } from '../pane/dux';
+import { TAB } from '../pane/content/tab/dux';
+import { EVENT } from '../pane/content/event/dux';
+import { CHAT } from '../pane/content/chat/dux';
+import type { TabTypeType } from '../pane/content/tab/dux';
 
 // Action Types
 const SET_NAVBAR_INDEX = 'SET_NAVBAR_INDEX';
 
 // Flow Type Definitions
 
-type ChannelType = {
+type NavbarItemType = {
   name: string,
   id: string,
   isCurrent: boolean,
   hasActions: boolean,
   otherUsersNames: Array<string>,
   isDirect: boolean,
+  type: typeof EVENT | typeof CHAT | typeof TAB,
+  tabType?: TabTypeType,
 };
 
 type SetNavbarIndexType = {
@@ -65,6 +73,7 @@ const createNavChannel = (channel, currentChannel, currentUser) => (
     hasActions: hasAction(channel),
     otherUsersNames: getOtherUserNames(channel, currentUser),
     isDirect: channel.direct,
+    type: channel.name === 'Public' ? EVENT : CHAT,
   }
 );
 
@@ -90,16 +99,34 @@ const getDirectChannels = createSelector(
     Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentUser))
 );
 
+const getTabs = createSelector(
+  state => state.tabs,
+  state => paneContentSelector(state, PRIMARY_PANE),
+  (tabs, currentPane) =>
+    tabs.map(tab => ({
+      name: tab.name,
+      id: tab.id,
+      isCurrent: currentPane.type === TAB && currentPane.content.type === tab.type,
+      hasActions: false,
+      otherUsersNames: [],
+      isDirect: false,
+      type: TAB,
+      tabType: tab.type,
+    }))
+);
+
 // Exports
 
 export {
   getHostChannel,
   getPublicChannel,
   getDirectChannels,
+  getTabs,
   setNavbarIndex,
   SET_NAVBAR_INDEX,
 };
+
 export type {
-  ChannelType,
+  NavbarItemType,
   SetNavbarIndexType,
 };

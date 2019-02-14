@@ -28,7 +28,7 @@ const trayButton = (
         className={imageType}
         dangerouslySetInnerHTML={{ __html: image }}
       />
-      <p>{text}</p>
+      <div>{text}</div>
     </button>
   </Actionable>
 );

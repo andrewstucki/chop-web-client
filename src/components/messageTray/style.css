@@ -55,6 +55,6 @@
   padding: 0 8px;
 }
 
-.closeButton p {
+.closeButton div {
   display: none;
 }

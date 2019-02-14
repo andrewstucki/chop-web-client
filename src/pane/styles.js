@@ -15,7 +15,7 @@ const PaneContentWrapper = styled.div`
   flex-direction: column;
   position: absolute;
   bottom: 0;
-  left: ${ (props:PaneContentWrapperPropsType) => props.offCanvas ? '-100%' : '0' };
+  transform: ${ (props:PaneContentWrapperPropsType) => props.offCanvas ? 'translate3d(-100%, 0, 0)' : 'translate3d(0, 0, 0)' };
   width: 100%; 
   height: 100%; 
 `;

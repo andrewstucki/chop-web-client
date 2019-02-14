@@ -3,8 +3,11 @@ import { SET_PANE_CONTENT } from '../../dux';
 
 const CHAT = 'CHAT';
 
-type ChatType = {
-  channelId: string,
+type ChatPaneType = {
+  type: typeof CHAT,
+  content: {
+    channelId: string,
+  },
 };
 
 const setPaneToChat = (name: string, channelId: string) => (
@@ -27,5 +30,5 @@ export {
 };
 
 export type {
-  ChatType,
+  ChatPaneType,
 };

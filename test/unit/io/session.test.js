@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import reducer from '../../../src/chop/dux';
 import SideMenu from '../../../src/sideMenu';
 import '../../../src/io/location';
+import { mountWithTheme } from '../../testUtils';
 
 jest.mock('../../../src/io/graphQL');
 jest.mock('../../../src/io/location');
@@ -18,10 +19,18 @@ describe('Session', () => {
 
     const store = createStore(reducer);
 
-    const wrapper = Enzyme.mount(
+    const theme = {
+      colors: {
+        text: 'black',
+        disabledText: 'gray',
+      },
+    };
+
+    const wrapper = mountWithTheme(
       <Provider store={store}>
         <SideMenu />
-      </Provider>
+      </Provider>,
+      theme
     );
 
     wrapper.find('#logout').simulate('click');

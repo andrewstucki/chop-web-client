@@ -1,21 +1,19 @@
 //@flow
-import type { EventType } from './content/event/dux';
-import type { ChatType } from './content/chat/dux';
+import type { EventPaneType } from './content/event/dux';
+import type { ChatPaneType } from './content/chat/dux';
+import type { TabPaneType } from './content/tab/dux';
+
+import { EVENT } from './content/event/dux';
+import { CHAT } from './content/chat/dux';
+import { TAB } from './content/tab/dux';
 
 const SET_PANE_CONTENT = 'SET_PANE_CONTENT';
 const UPDATE_PANE_ANIMATION = 'UPDATE_PANE_ANIMATION';
 const PRIMARY_PANE = 'primary';
 
-type PaneContentType =
-  EventType |
-  ChatType;
+type PaneType = EventPaneType | ChatPaneType | TabPaneType;
 
-type PaneType = {
-  type: string,
-  content: PaneContentType,
-};
-
-type SetPrimaryPaneType = {
+type SetPaneType = {
   type: typeof SET_PANE_CONTENT,
   name: string,
   pane: PaneType,
@@ -27,7 +25,9 @@ type UpdatePaneAnimationType = {
   isAnimating: boolean,
 };
 
-const setPrimaryPane = (channelId: string, type: 'EVENT' | 'CHAT') => (
+type PaneContentTypeType = typeof EVENT | typeof CHAT | typeof TAB;
+
+const setPrimaryPane = (type: PaneContentTypeType, channelId: string):SetPaneType => (
   {
     type: SET_PANE_CONTENT,
     name: PRIMARY_PANE,
@@ -57,8 +57,7 @@ export {
 };
 
 export type {
-  PaneContentType,
   PaneType,
-  SetPrimaryPaneType,
+  SetPaneType,
   UpdatePaneAnimationType,
 };

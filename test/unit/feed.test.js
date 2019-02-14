@@ -107,7 +107,7 @@ describe('Feed tests', () => {
           },
         },
       }
-      , setPrimaryPane('host', 'CHAT'));
+      , setPrimaryPane('CHAT', 'host'));
 
     expect(result).toEqual(
       {
@@ -143,7 +143,9 @@ describe('Feed tests', () => {
             },
             previous: {
               type: 'EVENT',
-              content: {},
+              content: {
+                channelId: 'event',
+              },
             },
             isAnimating: false,
           },

@@ -31,6 +31,6 @@ module.exports = merge(common, {
   ],
   devtool: 'inline-source-map',
   output: {
-    publicPath: 'https://staging.churchonline.us'
+    publicPath: 'https://staging.churchonline.us/'
   }
 });

@@ -5,13 +5,14 @@ import type { MessageType } from './dux';
 import type { SharedUserType } from '../../feed/dux';
 import Avatar from '../../avatar';
 
-import OpenTrayButton from '../../../assets/open-tray-button.svg';
+import OpenTrayButtonIcon from '../../../assets/open-tray-button.svg';
 import MessageTray from '../../components/messageTray';
 import { Actionable } from '../../components/Actionable';
 import linkifyHtml from 'linkifyjs/html';
 import { sanitizeString } from '../../util';
+import Label from '../../components/label';
 
-import styles from './style.css';
+import { MessageWrapper, Wrapper, BodyWrapper, NameWrapper, OpenTrayButton, TextWrapper } from './styles';
 
 type MessagePropsType = {
   message: MessageType,
@@ -46,9 +47,6 @@ const Message = (
   }: MessagePropsType
 ) => {
   const { name: senderName, pubnubToken: senderToken, role: { label: senderLabel } = {} } = sender;
-  const messageStyle =
-    messageTrayOpen ? styles.messageTrayOpen : styles.messageTrayClosed;
-
   const renderText = linkifyHtml(text, { target: '_blank' });
 
   const openMessageTray = () => otherProps.openMessageTray(messageId);
@@ -67,36 +65,32 @@ const Message = (
 
   const OpenMessageTrayButton = () => (
     <Actionable onClick={openMessageTray} keepFocus={true}>
-      <button
-        className={styles.openTrayButton}
-        dangerouslySetInnerHTML={{ __html: OpenTrayButton }}
+      <OpenTrayButton
+        dangerouslySetInnerHTML={{ __html: OpenTrayButtonIcon }}
       />
     </Actionable>
   );
 
   const MessageBody = () => (
-    <React.Fragment>
+    <>
       <Avatar user={sender} />
-
-      <div className={styles.body}>
-        <strong className={styles.name}>{senderName}</strong>
+      <BodyWrapper>
+        <NameWrapper>{senderName}</NameWrapper>
         {senderLabel &&
-          <span className={styles.role}>{senderLabel}</span>
+          <Label text={senderLabel} />
         }
-        <div key={messageId} data-node='text' className={styles.text} dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
-      </div>
-    </React.Fragment>
+        <TextWrapper key={messageId} data-node='text' dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
+      </BodyWrapper>
+    </>
   );
 
   return (
-    <div data-component='messageContainer' className={styles.wrapper + ' ' + messageStyle}>
+    <Wrapper data-component='messageContainer' messageTrayOpen={messageTrayOpen}>
       <Actionable onClick={closeMessageTray}  keepFocus={true} tabable={false}>
-        <div
-          className={styles.message}
-        >
+        <MessageWrapper>
           <MessageBody />
           <OpenMessageTrayButton />
-        </div>
+        </MessageWrapper>
       </Actionable>
 
       <MessageTray
@@ -106,7 +100,7 @@ const Message = (
         directChat={directChat}
       />
 
-    </div>
+    </Wrapper>
   );
 };
 

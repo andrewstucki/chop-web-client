@@ -10,7 +10,6 @@ import PopUpModal from '../popUpModal';
 import Pane from '../pane';
 import { PRIMARY_PANE } from '../pane/dux';
 
-import '../../assets/global.css';
 import styles from './styles.css';
 
 type ChopContainerProps = {

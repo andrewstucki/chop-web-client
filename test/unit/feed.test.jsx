@@ -6,7 +6,7 @@ import Enzyme from 'enzyme';
 import { MESSAGE } from '../../src/moment/dux';
 
 import Feed from '../../src/feed/feed';
-import FeedActionBanner from '../../src/feed/feedActionBanner';
+import FeedActionBanner from '../../src/components/actionBanner';
 import Button from '../../src/components/button';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -17,7 +17,7 @@ describe('Feed tests', () => {
     id: '01928374',
     pubnubAccessKey: '098765',
     name: 'Billy Bob',
-    role: { 
+    role: {
       label: '',
       permissions: [],
     },
@@ -80,7 +80,7 @@ describe('Feed tests', () => {
         setSawLastMomentAt={() => {}}
       />
     );
-    
+
     expect(wrapper.find('ul').children().length).toBe(1);
     expect(wrapper.find('li').at(0).childAt(0).props().data).toEqual(
       {

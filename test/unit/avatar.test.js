@@ -11,6 +11,7 @@ import ImageAvatar from '../../src/avatar/imageAvatar';
 import InitialAvatar from '../../src/avatar/initialAvatar';
 import Feed from '../../src/feed';
 import { setPrimaryPane } from '../../src/pane/dux';
+import { mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -33,7 +34,7 @@ describe('Test Avatar', () => {
       }
     );
 
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Provider store={store}>
         <Feed channel="public"/>
       </Provider>
@@ -44,7 +45,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      setPrimaryPane('public', 'EVENT')
+      setPrimaryPane('EVENT', 'public')
     );
 
     store.dispatch(
@@ -83,7 +84,7 @@ describe('Test Avatar', () => {
       }
     );
 
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Provider store={store}>
         <Feed channel="public" />
       </Provider>
@@ -94,7 +95,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      setPrimaryPane('public', 'EVENT')
+      setPrimaryPane('EVENT', 'public')
     );
 
     store.dispatch(

@@ -191,7 +191,7 @@ review:
   except:
     - master
     - integration
-  
+
 cypress:tests-review:
   image: cypress/base:10
   stage: cypress
@@ -203,18 +203,17 @@ cypress:tests-review:
   except:
     - master
     - integration
-  
+
 cypress:tests-staging:
   image: cypress/base:10
   stage: cypress
   script:
     - CI_ENVIRONMENT_URL=`cat environmentUrl.txt`
-    - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl="https://digerati.chopdev.com"
+    - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl="https://digerati.chopdev.com/host_mobile"
   dependencies:
     - build:image-staging
   only:
     - integration
-  allow_failure: true
 
 stop_review:
   stage: review

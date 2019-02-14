@@ -15,7 +15,6 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        sideEffects: true,
         use: [
           { loader: 'style-loader' },
           {
@@ -42,6 +41,17 @@ module.exports = {
       {
         test: /\.svg$/,
         loader: 'svg-inline-loader?classPrefix',
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'images',
+            }
+          }
+        ]
       }
     ]
   },
