@@ -11,7 +11,7 @@ import type {
 
 import Moment from '../moment/moment';
 import AnchorMoment from '../anchorMoment/';
-import FeedActionBanner from './feedActionBanner';
+import ActionBanner from '../components/actionBanner';
 import styles from './styles.css';
 import { createUid } from '../util';
 import Button from '../components/button';
@@ -148,7 +148,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
       </li>
     ));
     return (
-      // $FlowFixMe Fragment has been added to flow 0.7.1 so we need to upgrade
       <React.Fragment>
         <div
           data-component="feed"
@@ -159,9 +158,10 @@ class Feed extends React.Component<FeedProps, FeedState> {
         >
           {
             showLeaveChat &&
-              <FeedActionBanner
+              <ActionBanner
                 text="Leave"
-                togglePopUpModal={togglePopUpModal}
+                onClick={togglePopUpModal}
+                primary
               />
           }
           <div style={{width: '100%'}}>

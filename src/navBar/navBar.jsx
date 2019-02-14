@@ -1,19 +1,25 @@
 // @flow
-/* global SyntheticMouseEvent, SyntheticTouchEvent */
+/* global SyntheticMouseEvent */
 import React from 'react';
 import type { Node } from 'react';
-import type { ChannelType } from './dux';
+import type { NavbarItemType } from './dux';
 import styles from './styles.css';
 import hamburger from '../../assets/hamburger.svg';
 import { getAvatarColor, getFirstInitial } from '../util';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
+import type { TabTypeType } from '../pane/content/tab/dux';
+import {TAB} from '../pane/content/tab/dux';
+import {PRIMARY_PANE} from '../pane/dux';
 
 type NavBarProps = {
-  channels: Array<ChannelType>,
-  setPrimaryPane: (id: string, type: 'EVENT' | 'CHAT') => void,
+  items: Array<NavbarItemType>,
   openMenu: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
-  setNavbarIndex: (index:number) => void,
+  setPaneToEvent: (name: string, channelId: string) => void,
+  setPaneToChat: (name: string, channelId: string) => void,
+  setPaneToTab: (name: string, type: TabTypeType) => void,
+  setNavbarIndex: (index: number) => void,
+  navbarIndex: number,
 };
 
 type NavBarState = {
@@ -41,8 +47,8 @@ const Underline = props => (
 
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: { current: any };
-  channelLink: (channel: ChannelType) => Node;
-  channelTab: (channel: ChannelType, index:number) => Node;
+  itemLink: (channel: NavbarItemType) => Node;
+  itemTab: (channel: NavbarItemType, index:number) => Node;
 
   constructor (props: NavBarProps) {
     super(props);
@@ -62,16 +68,16 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
   ): NavBarState | null {
     let copyOfNames = { ...state.directChatChannelNames };
     let hasUpdated = false;
-    const { channels } = props;
+    const { items } = props;
 
-    channels.filter(channel => channel.isDirect).forEach(channel => {
-      if (channel.otherUsersNames.length > 0 &&
-        state.directChatChannelNames[channel.id] !== channel.otherUsersNames[0]
+    items.filter(item => item.isDirect).forEach(item => {
+      if (item.otherUsersNames.length > 0 &&
+        state.directChatChannelNames[item.id] !== item.otherUsersNames[0]
       ) {
         hasUpdated = true;
         copyOfNames = {
           ...copyOfNames,
-          [channel.id]: channel.otherUsersNames[0],
+          [item.id]: item.otherUsersNames[0],
         };
       }
     });
@@ -91,17 +97,16 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       const marginWidth = 20;
       const selectedLink = this.selectedLink.current;
       const {
-        left,
         width,
       } = selectedLink.getBoundingClientRect();
-      const wrapperDiv = selectedLink.parentElement;
-      const parentLeft = wrapperDiv.getBoundingClientRect().left;
-      const parentScroll = wrapperDiv.scrollLeft;
-      const wrapperLeftEdge = parentLeft + parentScroll;
 
-      const updatedLeft = (left - wrapperLeftEdge) + marginWidth;
+      selectedLink.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'end' });
+
+      const updatedLeft = selectedLink.offsetLeft + marginWidth;
       const updatedWidth = width - (marginWidth * 2);
-      const updatedOpacity = this.selectedLinkHasVisibleUnderline() ? 1.0 : 0.0;
+      const updatedOpacity = selectedLink.id !== 'nav-Direct' ? 1.0 : 0.0;
+      const { navbarIndex, setNavbarIndex } = this.props;
+      const { index } = selectedLink.dataset;
 
       if (this.shouldUpdateState(updatedLeft, updatedWidth, updatedOpacity)) {
         this.setState(
@@ -111,6 +116,10 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
             opacity: updatedOpacity,
           }
         );
+
+        if (navbarIndex.toString() !== index) {
+          setNavbarIndex(parseInt(index));
+        }
       }
     }
   }
@@ -124,25 +133,13 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       this.state.opacity !== updatedOpacity;
   }
 
-  selectedLinkHasVisibleUnderline () {
-    return this.selectedLink.current.id === 'nav-Public' ||
-      this.selectedLink.current.id === 'nav-Host';
-  }
+  itemLink (item: NavbarItemType) {
+    const style = item.isCurrent ? null : styles.unselected;
+    const opacity = item.isCurrent ? '1.0' : '0.5';
 
-  channelLink (channel: ChannelType) {
-    const style = channel.isCurrent ? null : styles.unselected;
-    const opacity = channel.isCurrent ? '1.0' : '0.5';
-
-    if (channel.name === 'Public' || channel.name === 'Host') {
-      return (
-        <span className={style}>
-          {channel.name}
-        </span>
-      );
-    } else {
+    if (item.isDirect) {
       const names = this.state.directChatChannelNames;
-      const channelIconName = names[channel.id] || '?';
-
+      const channelIconName = names[item.id] || '?';
       return (
         <div
           className={styles.avatar}
@@ -156,42 +153,59 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           {getFirstInitial(channelIconName)}
         </div>
       );
+    } else {
+      return (
+        <span className={style}>
+          {item.name}
+        </span>
+      );
     }
   }
 
-  channelTab = (channel: ChannelType, index: number) => {
-    const selectedLink = channel.isCurrent ? this.selectedLink : null;
+  itemTab = (item: NavbarItemType, index: number) => {
+    const selectedLink = item.isCurrent ? this.selectedLink : null;
     return (
       <a
         // $FlowFixMe
         ref={selectedLink}
-        id={'nav-' + channel.name}
+        id={'nav-' + item.name.replace(/ /g,'')}
         href="javascript:void(0)"
-        key={channel.id}
+        key={item.id}
         className={styles.link}
-        onClick={event => this.handleTabClick(channel, event)}
+        onClick={() => this.handleTabClick(item)}
         data-index={index}
       >
-        { channel.hasActions
+        { item.hasActions
           ? <span className={styles.pip}></span>
           : null }
-        {this.channelLink(channel)}
+        {this.itemLink(item)}
       </a>
     );
   };
 
-  handleTabClick = (channel: ChannelType, event:SyntheticTouchEvent<HTMLAnchorElement>):void => {
-    const { setPrimaryPane, setNavbarIndex } = this.props;
-    const { index } = event.currentTarget.dataset;
-    setNavbarIndex(parseInt(index));
-    setPrimaryPane(channel.id, channel.name === 'Public' ? EVENT : CHAT);
+  handleTabClick = (item: NavbarItemType):void => {
+    const { setPaneToEvent, setPaneToChat, setPaneToTab } = this.props;
+    switch (item.type) {
+    case EVENT:
+      setPaneToEvent(PRIMARY_PANE, item.id);
+      break;
+    case CHAT:
+      setPaneToChat(PRIMARY_PANE, item.id);
+      break;
+    case TAB:
+      if (item.tabType) {
+        setPaneToTab(PRIMARY_PANE, item.tabType);
+      }
+      break;
+    }
   };
 
   render () {
     const {
-      channels,
+      items,
       openMenu,
     } = this.props;
+
     return (
       <div id="nav-bar" className={styles.navBar}>
         <a
@@ -201,18 +215,20 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
           dangerouslySetInnerHTML={{ __html: hamburger }}
         />
         <div className={styles.channelLinks}>
-          {
-            channels.map((channel, index) => (
-              this.channelTab(channel, index)
-            ))
-          }
-          {
-            <Underline
-              left={this.state.left}
-              width={this.state.width}
-              opacity={this.state.opacity}
-            />
-          }
+          <div className={styles.channelLinksWrapper}>
+            {
+              items.map((item, index) => (
+                this.itemTab(item, index)
+              ))
+            }
+            {
+              <Underline
+                left={this.state.left}
+                width={this.state.width}
+                opacity={this.state.opacity}
+              />
+            }
+          </div>
         </div>
       </div>
     );

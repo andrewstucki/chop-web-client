@@ -45,8 +45,11 @@
         "brace-style": [
             "error"
         ],
-        "camelcase": [
-            "error"
+        "no-unused-vars": [
+            "error",
+            {
+                "allow": "^_.*"
+            }
         ],
         "comma-dangle": [
             "error",
@@ -118,8 +121,8 @@
             "error"
         ],
         "no-unused-vars": [
-            "error", 
-            { 
+            "error",
+            {
                 "varsIgnorePattern": "^_.*",
                 "argsIgnorePattern": "^_.*"
             }

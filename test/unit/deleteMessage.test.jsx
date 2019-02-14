@@ -90,11 +90,11 @@ describe('Test delete message', () => {
 
     return store.dispatch({ type: REHYDRATE }).then(() => {
       store.dispatch(addChannel('test', 'test', false, participants));
-      store.dispatch(setPrimaryPane('test', 'EVENT'));
+      store.dispatch(setPrimaryPane('EVENT', 'test'));
       store.dispatch(loadHistory(moments, 'test'));
       store.dispatch(deleteMessage('123456', 'test'));
       store.dispatch(publishDeleteMessage('123456'));
-      
+
       mockFetch.mockResolvedValueOnce(accessToken);
 
       expect(mockPublish).toHaveBeenCalledTimes(1);
