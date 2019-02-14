@@ -43,6 +43,11 @@
   position: -webkit-sticky;
   bottom: 0;
   z-index: 1;
+  margin-left: 0;
+}
+
+.anchorMoments li {
+  list-style-type: none;
 }
 
 .newMessageButtonContainer {
