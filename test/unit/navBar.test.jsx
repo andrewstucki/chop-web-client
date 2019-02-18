@@ -49,7 +49,7 @@ describe('NavBar tests', () => {
   });
 
   test('has default channel and host channels', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -82,13 +82,13 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('.navBar a').length).toBe(3);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
-    expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
+    expect(wrapper.find('Actionable').length).toBe(3);
+    expect(wrapper.find('Actionable').at(1).text()).toBe('Public');
+    expect(wrapper.find('Actionable').at(2).text()).toBe('Host');
   });
 
   test('displaying pip on public', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -121,8 +121,8 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('#nav-Public span.pip').length).toBe(1);
-    expect(wrapper.find('#nav-Host span.pip').length).toBe(0);
+    expect(wrapper.find('#nav-Public').find('styles__Pip').length).toBe(1);
+    expect(wrapper.find('#nav-Host').find('styles__Pip').length).toBe(0);
   });
 
   test('displaying pip on host', () => {
@@ -159,8 +159,8 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('#nav-Public span.pip').length).toBe(0);
-    expect(wrapper.find('#nav-Host span.pip').length).toBe(1);
+    expect(wrapper.find('#nav-Public').find('styles__Pip').length).toBe(0);
+    expect(wrapper.find('#nav-Host').find('styles__Pip').length).toBe(1);
   });
 
   test('channels with other user names to store', () => {
@@ -359,7 +359,7 @@ describe('NavBar tests', () => {
   });
 
   test('direct chat with participants', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -401,11 +401,11 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('#nav-direct1').text()).toEqual('B');
+    expect(wrapper.find('Actionable').at(3).text()).toEqual('B');
   });
 
   test('channels display in the proper order', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -456,8 +456,8 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('.navBar a').length).toBe(5);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
-    expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
+    expect(wrapper.find('Actionable').length).toBe(5);
+    expect(wrapper.find('Actionable').at(1).text()).toBe('Public');
+    expect(wrapper.find('Actionable').at(2).text()).toBe('Host');
   });
 });

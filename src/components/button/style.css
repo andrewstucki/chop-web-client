@@ -15,7 +15,7 @@
 }
 
 .button:hover:not(:disabled),.button.small {
-  box-shadow: 0px 2px 6px rgba(45, 45, 46, 0.25);
+  box-shadow: 0 2px 6px rgba(45, 45, 46, 0.25);
 }
 
 .icon {
@@ -32,7 +32,7 @@
 
 .primary {
   background-color: var(--primaryColor);
-  color: white;
+  color: var(--backgroundColor);
 }
 
 .primary:hover {
@@ -45,24 +45,24 @@
 
 .primary:focus {
   outline: 1px solid var(--primaryColor);
-  border: 1px solid white;
+  border: 1px solid var(--backgroundColor);
 }
 
 .primary:disabled {
-  background-color: #ECECEC;
+  background-color: var(--gray10);
   color: var(--disabledTextColor);
 }
 
 .secondary {
-  background-color: white;
-  border-color: #C6C6C6;
+  background-color: var(--backgroundColor);
+  border-color: var(--gray30);
   color: var(--primaryColor);
 }
 
 .tertiary {
   background-color: var(--tertiaryColor);
-  border-color: #666667;
-  color: white;
+  border-color: var(--gray80);
+  color: var(--backgroundColor);
 }
 
 .default.primary, .default.secondary, .default.tertiary { 

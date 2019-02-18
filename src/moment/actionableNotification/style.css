@@ -1,4 +1,4 @@
-@import url('../notification/style');
+@import url('../notification/style.css');
 
 .actionableWrapper {
   display: flex;
@@ -12,7 +12,7 @@
 }
 
 .actionableNotification .actionableWrapper {
-  border: 1px solid #ECECEC;
+  border: 1px solid var(--gray10);
   border-radius: 2px;
   padding: 4px 0;
 }

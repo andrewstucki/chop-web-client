@@ -19,7 +19,7 @@
   padding: .375rem .75rem;
   font-size: 1rem;
   line-height: 1.5;
-  border: 1px solid #C6C6C6;
+  border: 1px solid var(--gray30);
   border-radius: .25rem;
   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
   outline: none;

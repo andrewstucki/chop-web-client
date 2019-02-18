@@ -56,18 +56,54 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const ionDesignValues = {
+  colors: {
+    brands: {
+      lifeChurch: '#A6192E',
+      openNetwork: '#2993E5',
+      churchMetrics: '#4CB239',
+      churchOnlinePlatform: '#FF9000',
+      developDotMe: '#764AFF',
+    },
+    utilities: {
+      actionBlue: '#009ECC',
+      validGreen: '#09C1A1',
+      warningYellow: '#FFBA0C',
+      errorRed: '#E33300',
+    },
+    grayscale: {
+      gray130: '#2D2D2E',
+      gray100: '#404041',
+      gray80: '#666667',
+      gray50: '#9F9FA0',
+      gray30: '#C6C6C6',
+      gray10: '#ECECEC',
+      gray5: '#F6F6F6',
+      white: '#FFFFFF',
+    },
+  },
+};
+
 // Once we get into light/dark mode we will want to look into styled-themeing
 // https://github.com/styled-components/styled-theming
 const theme = {
   colors: {
-    primary:    '#2993e5',
-    disabled:   '#f5f5f3',
-    background: '#ffffff',
-    gray100:    '#404041',
-    gray50:     '#9f9fa0',
-    gray30:     '#C6C6C6',
-    gray10:     '#ECECEC',
-    dangerText: '#dd3131',
+    primary:    ionDesignValues.colors.brands.openNetwork,
+    disabled:   ionDesignValues.colors.grayscale.gray5,
+    background: ionDesignValues.colors.grayscale.white,
+    textColor:  ionDesignValues.colors.grayscale.gray100,
+    alternateTextColor: ionDesignValues.colors.grayscale.white,
+    gray100:    ionDesignValues.colors.grayscale.gray100,
+    gray50:     ionDesignValues.colors.grayscale.gray50,
+    gray30:     ionDesignValues.colors.grayscale.gray30,
+    gray10:     ionDesignValues.colors.grayscale.gray10,
+    dangerText: ionDesignValues.colors.utilities.errorRed,
+  },
+  animation: {
+    easeIn:     'cubic-bezier(0.6, 0, 0.8, 0.3)',
+    easeOut:    'cubic-bezier(0.2, 0.7, 0.4, 1)',
+    easeInOut:  'cubic-bezier(0.7, 0, 0.3, 1)',
+    duration:   '300ms',
   },
 };
 
