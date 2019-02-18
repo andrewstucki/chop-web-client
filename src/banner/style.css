@@ -1,7 +1,7 @@
 @import url('../../assets/theme.css');
 
 .banner {
-  color: #ffffff;
+  color: var(--backgroundColor);
   font-size: 16px;
   display: flex;
   flex-direction: row;
