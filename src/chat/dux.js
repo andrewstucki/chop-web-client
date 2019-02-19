@@ -42,6 +42,7 @@ export {
 
 export type {
   ToggleChatFocusType,
+  SetKeyboardHeightType,
 };
 
 export {

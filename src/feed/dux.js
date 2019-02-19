@@ -67,6 +67,7 @@ import {
 } from '../sideMenu/dux';
 
 import { TOGGLE_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../chat/dux';
+import type { SetKeyboardHeightType } from '../chat/dux';
 
 import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
 import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
@@ -276,6 +277,7 @@ type FeedType = {
   animatingMoment: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
+  keyboardHeight: number | typeof(undefined),
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
@@ -452,7 +454,8 @@ type FeedActionTypes =
   | UpdatePaneAnimationType
   | SetPaneType
   | AddTabType
-  | RemoveTabType;
+  | RemoveTabType
+  | SetKeyboardHeightType;
 
 // Action Creators
 export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
