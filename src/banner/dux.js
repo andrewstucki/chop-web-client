@@ -21,6 +21,16 @@ const mutedNotificationBanner = (
   }
 );
 
+const warningNotificationBanner = (
+  message: string,
+): SetNotificationBannerType => (
+  {
+    type: SET_NOTIFICATION_BANNER,
+    message,
+    bannerType: 'warning',
+  }
+);
+
 const errorNotificationBanner = (
   message: string,
 ): SetNotificationBannerType => (
@@ -36,6 +46,7 @@ const errorNotificationBanner = (
 export {
   mutedNotificationBanner,
   errorNotificationBanner,
+  warningNotificationBanner,
 };
 
 export type {

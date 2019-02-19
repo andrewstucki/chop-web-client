@@ -98,6 +98,8 @@ const theme = {
     gray30:     ionDesignValues.colors.grayscale.gray30,
     gray10:     ionDesignValues.colors.grayscale.gray10,
     dangerText: ionDesignValues.colors.utilities.errorRed,
+    warningText: ionDesignValues.colors.utilities.warningYellow,
+    validText: ionDesignValues.colors.utilities.validGreen,
   },
   animation: {
     easeIn:     'cubic-bezier(0.6, 0, 0.8, 0.3)',
