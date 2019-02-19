@@ -1,14 +1,14 @@
 import React from 'react';
-import styles from './style.css';
+import { Icon } from './styles';
 import { getFirstInitial, getAvatarColor } from '../util';
 
-const InitialAvatar = ({name}) => (
-  <div
-    className={styles.icon}
+const InitialAvatar = ({name, large}) => (
+  <Icon
+    large={large}
     style={{backgroundColor: getAvatarColor(name)}}
   >
     {getFirstInitial(name)}
-  </div>
+  </Icon>
 );
 
 export default InitialAvatar;

@@ -3,6 +3,7 @@ import React from 'react';
 
 import type { LanguageType } from '../feed/dux';
 import styles from './style.css';
+import Globe from '../../assets/globe.svg';
 
 type LanguageSelectorPropsType = {
   setLanguage: (language: string) => void,
@@ -16,10 +17,11 @@ const LanguageSelector = (
   }: LanguageSelectorPropsType
 ) => (
   <div className={styles.container}>
-    <div className={styles.text}>
-      Chat translation:
-    </div>
     <div className={styles.dropdownContainer}>
+      <div
+        dangerouslySetInnerHTML={{ __html: Globe }}
+        className={styles.globe}
+      />
       <select
         onChange={event => {
           setLanguage(event.target.value);

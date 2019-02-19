@@ -4,7 +4,7 @@ import reset from 'styled-reset';
 const GlobalStyle = createGlobalStyle`
   ${reset}
   
-  body, html, p, input, button {
+  body, html, p, input, button, option {
     font-family: "Helvetica Neue", Helvetica, "Arial Nova", Arial, sans-serif;
     font-size: 16px;
     line-height: 1.25;

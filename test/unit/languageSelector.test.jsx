@@ -55,7 +55,6 @@ describe('LanguageSelector tests', () => {
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('container');
     expect(wrapper.find('select').at(0).props().className).toEqual('languageSelector');
-    expect(wrapper.find('div').at(1).text()).toEqual('Chat translation:');
     expect(wrapper.find('option').at(0).text()).toEqual('English');
     wrapper.find('select').at(0).simulate('change', event);
     expect(setLanguage.calledOnce).toEqual(true);

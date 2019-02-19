@@ -14,6 +14,8 @@ const mapStateToProps = state => {
   const hostChannel = getHostChannel(feedState);
   const publicChannel = getPublicChannel(feedState);
   const { active: currentPane } = feedState.panes.primary;
+  const { name:organizationName } = feedState.organization;
+  const { title:eventTitle, description:eventDescription } = feedState.event;
 
   return {
     isClosed: feedState.isSideMenuClosed,
@@ -21,6 +23,10 @@ const mapStateToProps = state => {
     hostChannel,
     publicChannel,
     currentPane,
+    organizationName,
+    eventTitle,
+    eventDescription,
+    currentUser: feedState.currentUser,
   };
 };
 

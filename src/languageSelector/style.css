@@ -1,26 +1,25 @@
 @import url('../../assets/theme.css');
 
 .container {
-  margin-top: 24px;
+  margin: 32px 0;
   display: flex;
   align-items: center;
-}
-
-.text,
-.languageSelector {
-  display: inline-block;
-  color: var(--disabledTextColor);
+  flex-direction: column;
 }
 
 .languageSelector {
-  padding-left: 8px;
-  padding-right: 32px;
-  margin-left: 8px;
+  padding-left: 34px;
+  padding-right: 20px;
+  margin: 0 auto;
   border: 1px solid var(--gray30);
   font-size: 16px;
   line-height: 20px;
   background-color: var(--backgroundColor);
   -webkit-appearance: none;
+  border-radius: 16px;
+  display: inline-block;
+  color: var(--textColor);
+  height: 32px;
 }
 
 .dropdownContainer {
@@ -31,12 +30,20 @@
 
 .dropdownContainer:after {
   content: '';
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 5px solid var(--disabledTextColor);
-  right: 6px;
+  right: 8px;
   position: absolute;
+  pointer-events: none;
+}
+
+.globe {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  left: 10px;
   pointer-events: none;
 }
