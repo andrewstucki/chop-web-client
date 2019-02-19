@@ -2,11 +2,10 @@
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React from 'react';
 
-import type { LanguageType } from '../feed/dux';
+import type {LanguageType, SharedUserType} from '../feed/dux';
 
 import SideMenuComponent from '../components/sideMenu';
 import SideMenuItem from './sideMenuItem';
-import Button from '../components/button';
 import LanguageSelector from '../languageSelector';
 import GuestExperienceLink from '../../assets/guest-experience-link.svg';
 import FeedbackLink from '../../assets/feedback-link.svg';
@@ -16,14 +15,16 @@ import HostInfo from '../../assets/host-info.svg';
 import Calendar from '../../assets/calendar.svg';
 import Document from '../../assets/document.svg';
 import Bible from '../../assets/bible.svg';
+import Exit from '../../assets/exit.svg';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
-import styles from './styles.css';
+import { ExternalLink, LinkIcon, OrganizationTitle, Nickname, EventDescription, EventTitle, Profile, ProfileActions } from './styles';
 import type { PaneType } from '../pane/dux';
 import { PRIMARY_PANE } from '../pane/dux';
 import { HOST_INFO } from '../hostInfo/dux';
 import type {TabTypeType} from '../pane/content/tab/dux';
+import Avatar from '../avatar';
 
 type SideMenuType = {
   logout: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -39,6 +40,10 @@ type SideMenuType = {
   setPaneToChat: (name: string, channelId: string) => void,
   setPaneToTab: (name: string, type: TabTypeType) => void,
   addTab: (type: TabTypeType, id: string,  name: string) => void,
+  organizationName: string,
+  eventTitle: string,
+  eventDescription: string,
+  currentUser: SharedUserType,
 };
 
 const SideMenu = (
@@ -56,6 +61,10 @@ const SideMenu = (
     setPaneToChat,
     setPaneToTab,
     addTab,
+    organizationName,
+    eventTitle,
+    eventDescription,
+    currentUser,
   }: SideMenuType
 ) => (
   <SideMenuComponent
@@ -63,6 +72,24 @@ const SideMenu = (
     isClosed={isClosed}
     swipe={onSwipe}
   >
+    <OrganizationTitle>{organizationName}</OrganizationTitle>
+    <EventTitle>{eventTitle}</EventTitle>
+    <EventDescription>{eventDescription}</EventDescription>
+
+    <Profile>
+      <Avatar user={currentUser} large/>
+      <Nickname>{currentUser.name}</Nickname>
+      <ProfileActions>
+        <a
+          id='logout'
+          href="javascript:void(0)"
+          onClick={logout}>
+          <LinkIcon
+            dangerouslySetInnerHTML={{ __html: Exit }}
+          /> Log Out
+        </a>
+      </ProfileActions>
+    </Profile>
 
     <SideMenuItem
       active={currentPane.type === EVENT}
@@ -110,53 +137,57 @@ const SideMenu = (
       comingSoon
     />
 
-    <a
-      id="support"
-      className={styles.feedbackLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
-    >
-      Support
-      <span
-        className={styles.externalLinkIcon}
-        dangerouslySetInnerHTML={{ __html: FeedbackLink }}
-      />
-    </a>
-    <a
-      id="feedback"
-      className={styles.feedbackLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      href="https://lifechurch.formstack.com/forms/host_feedback_2"
-    >
-      Give feedback
-      <span
-        className={styles.externalLinkIcon}
-        dangerouslySetInnerHTML={{ __html: FeedbackLink }}
-      />
-    </a>
-    <a
-      id="guest-experience"
-      className={styles.guestLink}
-      href={`${window.location.origin.toString()}/guest_experience`}
-    >
-      Switch to guest experience
-      <span
-        className={styles.externalLinkIcon}
-        dangerouslySetInnerHTML={{ __html: GuestExperienceLink }}
-      />
-    </a>
-    <Button
-      buttonId="logout"
-      onClick={logout}
-      text="Log out"
-      buttonStyle="secondary"
-    />
+    <hr />
+
     <LanguageSelector
       setLanguage={setLanguage}
       languageOptions={languageOptions}
     />
+
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <ExternalLink
+        id="guest-experience"
+        href={`${window.location.origin.toString()}/guest_experience`}
+      >
+        Guest experience
+        <LinkIcon
+          dangerouslySetInnerHTML={{ __html: GuestExperienceLink }}
+          withStroke
+        />
+      </ExternalLink>
+
+      <ExternalLink
+        id="support"
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
+      >
+        Support
+        <LinkIcon
+          dangerouslySetInnerHTML={{ __html: FeedbackLink }}
+          withStroke
+        />
+      </ExternalLink>
+
+      <ExternalLink
+        id="feedback"
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://lifechurch.formstack.com/forms/host_feedback_2"
+      >
+        Give feedback
+        <LinkIcon
+          dangerouslySetInnerHTML={{ __html: FeedbackLink }}
+          withStroke
+        />
+      </ExternalLink>
+    </div>
   </SideMenuComponent>
 );
 
