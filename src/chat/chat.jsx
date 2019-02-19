@@ -1,5 +1,5 @@
 // @flow
-/* global SyntheticEvent, SyntheticKeyboardEvent, TimeoutID */
+/* global SyntheticEvent, SyntheticKeyboardEvent, TimeoutID, IntervalID */
 import React, { Component } from 'react';
 
 import type { SharedUserType } from '../feed/dux';
@@ -14,8 +14,10 @@ import styles from './styles.css';
 type ChatProps = {
   publishMessage: (channel: string, text: string, user: SharedUserType) => void,
   toggleChatFocus: (focused: boolean) => void,
+  setKeyboardHeight: (height: number) => void,
   toggleHideVideo: (hidden: boolean) => void,
   focused: boolean,
+  keyboardHeight: number | typeof(undefined),
   currentPlaceholder: string,
   currentUser: SharedUserType,
   currentChannel: string,
@@ -24,10 +26,13 @@ type ChatProps = {
 
 type ChatState = {
   chatInput: string,
+  windowHeight: number,
 };
 
 class Chat extends Component<ChatProps, ChatState> {
   preventScrollTimer: TimeoutID | null;
+  pollKeyboardInterval: IntervalID | null;
+  pollCount: number;
 
   constructor (props: ChatProps) {
     super(props);
@@ -45,12 +50,16 @@ class Chat extends Component<ChatProps, ChatState> {
     this.sendMessage = this.sendMessage.bind(this);
 
     this.preventScrollTimer = null;
+    this.pollKeyboardInterval = null;
+    this.pollCount = 0;
 
     if (props.initialState) {
       this.state = props.initialState;
     } else {
       this.state = {
         chatInput: '',
+        windowHeight: 0,
+        keyboardHeight: 0,
       };
     }
 
@@ -58,6 +67,13 @@ class Chat extends Component<ChatProps, ChatState> {
       window.addEventListener('scroll', this.preventScroll);
     }
   }
+
+  componentDidMount () {
+    this.setState({
+      windowHeight: window.innerHeight,
+    });
+  }
+
 
   onTextEntered (event: SyntheticEvent<HTMLInputElement>) {
     if (event.target instanceof HTMLInputElement) {
@@ -85,29 +101,51 @@ class Chat extends Component<ChatProps, ChatState> {
 
     this.preventScrollTimer = setTimeout(() => {
       window.scrollTo(0, 0);
-    }, 50);
+    }, 30);
   }
 
+  pollForKeyboard  = () => {
+    const { windowHeight } = this.state;
+    this.pollCount = 0;
+
+    this.pollKeyboardInterval = setInterval(() => {
+      const newHeight = window.innerHeight;
+
+      if (this.pollCount > 100) {
+        clearInterval(this.pollKeyboardInterval);
+      }
+
+      if (newHeight < windowHeight) {
+        const keyboard = windowHeight - newHeight;
+
+        this.setWrapperHeight(keyboard);
+        this.props.setKeyboardHeight(keyboard);
+
+        clearInterval(this.pollKeyboardInterval);
+      }
+
+      this.pollCount += 1;
+    }, 0);
+  };
+
+  setWrapperHeight = (keyboardHeight:number) => {
+    const wrapper: ?HTMLElement = document.querySelector('#wrapper');
+    if (wrapper && wrapper instanceof HTMLElement) {
+      wrapper.style.height = `calc(100% - ${keyboardHeight}px)`;
+    }
+  };
+
   onFocus () {
+    const { keyboardHeight } = this.props;
     this.props.toggleChatFocus(true);
 
     if (isIOS()) {
       this.props.toggleHideVideo(true);
-      const oldH = window.innerHeight;
-      window.removeEventListener('scroll', this.preventScroll);
-      setTimeout(() => {
-        const newH = window.innerHeight;
-        if (newH < oldH) {
-          const keyboard = oldH - newH;
-          window.scrollTo(0, 0);
-
-          const wrapper: ?HTMLElement = document.querySelector('#wrapper');
-          if (wrapper && wrapper instanceof HTMLElement) {
-            wrapper.style.height = `calc(100% - ${keyboard}px)`;
-          }
-          window.addEventListener('scroll', this.preventScroll);
-        }
-      }, 500);
+      if (keyboardHeight && keyboardHeight > 0) {
+        this.setWrapperHeight(keyboardHeight);
+      } else {
+        this.pollForKeyboard();
+      }
     }
   }
 
@@ -120,6 +158,7 @@ class Chat extends Component<ChatProps, ChatState> {
       if (wrapper && wrapper instanceof HTMLElement) {
         wrapper.style.height = '100%';
       }
+      clearInterval(this.pollKeyboardInterval);
     }
   }
 
@@ -136,6 +175,8 @@ class Chat extends Component<ChatProps, ChatState> {
 
   componentWillUnmount (): void {
     window.removeEventListener('scroll', this.preventScroll);
+    clearInterval(this.pollKeyboardInterval);
+    clearTimeout(this.preventScrollTimer);
   }
 
   render () {

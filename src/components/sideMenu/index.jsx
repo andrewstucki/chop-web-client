@@ -1,6 +1,6 @@
 // @flow
 /* global SyntheticMouseEvent, React$Node, SyntheticTouchEvent */
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from './style.css';
 import ReactTouchEvents from 'react-touch-events';
 
@@ -15,11 +15,25 @@ const Overlay = ({close, isClosed}) => (
   <div onClick={close} className={isClosed ? styles.overlayClosed : styles.overlayOpen}></div>
 );
 
-const Menu = ({swipe, isClosed, children}) => (
-  <ReactTouchEvents onSwipe={ swipe }>
-    <div className={isClosed ? styles.menuClosed : styles.menuOpen}>{children}</div>
-  </ReactTouchEvents>
-);
+const Menu = ({swipe, isClosed, children}) => {
+  const menuRef = useRef();
+
+  return (
+    <ReactTouchEvents onSwipe={swipe}>
+      <div
+        className={isClosed ? styles.menuClosed : styles.menuOpen}
+        ref={menuRef}
+        onTransitionEnd={() => {
+          if (menuRef.current && isClosed) {
+            menuRef.current.scrollTop = 0;
+          }
+        }}
+      >{children}</div>
+    </ReactTouchEvents>
+  );
+};
+
+
 
 const SideMenu = (
   {
@@ -33,7 +47,7 @@ const SideMenu = (
     <Menu swipe={swipe} isClosed={isClosed}>
       {children}
     </Menu>
-  </React.Fragment> 
+  </React.Fragment>
 );
 
 export default SideMenu;

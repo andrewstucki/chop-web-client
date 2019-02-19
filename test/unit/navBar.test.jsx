@@ -25,7 +25,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '8910111',
             name: 'Host',
             isCurrent: false,
             hasActions: false,
@@ -49,7 +49,7 @@ describe('NavBar tests', () => {
   });
 
   test('has default channel and host channels', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -62,7 +62,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '2131654',
             name: 'Host',
             isCurrent: false,
             hasActions: false,
@@ -82,13 +82,13 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('.navBar a').length).toBe(3);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
-    expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
+    expect(wrapper.find('Actionable').length).toBe(3);
+    expect(wrapper.find('Actionable').at(1).text()).toBe('Public');
+    expect(wrapper.find('Actionable').at(2).text()).toBe('Host');
   });
 
   test('displaying pip on public', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -101,7 +101,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '1346546',
             name: 'Host',
             isCurrent: true,
             hasActions: false,
@@ -121,8 +121,8 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('#nav-Public span.pip').length).toBe(1);
-    expect(wrapper.find('#nav-Host span.pip').length).toBe(0);
+    expect(wrapper.find('#nav-Public').find('styles__Pip').length).toBe(1);
+    expect(wrapper.find('#nav-Host').find('styles__Pip').length).toBe(0);
   });
 
   test('displaying pip on host', () => {
@@ -139,7 +139,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '146546',
             name: 'Host',
             isCurrent: false,
             hasActions: true,
@@ -159,8 +159,8 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('#nav-Public span.pip').length).toBe(0);
-    expect(wrapper.find('#nav-Host span.pip').length).toBe(1);
+    expect(wrapper.find('#nav-Public').find('styles__Pip').length).toBe(0);
+    expect(wrapper.find('#nav-Host').find('styles__Pip').length).toBe(1);
   });
 
   test('channels with other user names to store', () => {
@@ -177,7 +177,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '5654651',
             name: 'Hose',
             isCurrent: false,
             hasActions: false,
@@ -249,7 +249,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '1321510',
             name: 'Hose',
             isCurrent: false,
             hasActions: false,
@@ -258,7 +258,7 @@ describe('NavBar tests', () => {
             type: CHAT,
           },
           {
-            id: '123456',
+            id: '221351',
             name: 'direct1',
             isCurrent: false,
             hasActions: false,
@@ -267,7 +267,7 @@ describe('NavBar tests', () => {
             type: CHAT,
           },
           {
-            id: '12345',
+            id: '365133',
             name: 'direct2',
             isCurrent: false,
             hasActions: false,
@@ -307,7 +307,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '654651',
             name: 'Hose',
             isCurrent: false,
             hasActions: false,
@@ -359,7 +359,7 @@ describe('NavBar tests', () => {
   });
 
   test('direct chat with participants', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -372,7 +372,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '532321',
             name: 'host',
             isCurrent: false,
             hasActions: false,
@@ -381,7 +381,7 @@ describe('NavBar tests', () => {
             type: CHAT,
           },
           {
-            id: '123456',
+            id: '36542',
             name: 'direct1',
             isCurrent: false,
             hasActions: false,
@@ -401,11 +401,11 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('#nav-direct1').text()).toEqual('B');
+    expect(wrapper.find('Actionable').at(3).text()).toEqual('B');
   });
 
   test('channels display in the proper order', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <NavBar
         items={[
           {
@@ -418,7 +418,7 @@ describe('NavBar tests', () => {
             type: EVENT,
           },
           {
-            id: '123456',
+            id: '321365',
             name: 'Host',
             isCurrent: false,
             hasActions: false,
@@ -427,7 +427,7 @@ describe('NavBar tests', () => {
             type: CHAT,
           },
           {
-            id: '123456',
+            id: '3513513',
             name: 'direct1',
             isCurrent: false,
             hasActions: false,
@@ -436,7 +436,7 @@ describe('NavBar tests', () => {
             type: CHAT,
           },
           {
-            id: '123456',
+            id: '6546510',
             name: 'direct1',
             isCurrent: false,
             hasActions: false,
@@ -456,8 +456,8 @@ describe('NavBar tests', () => {
         navbarIndex={0}
       />
     );
-    expect(wrapper.find('.navBar a').length).toBe(5);
-    expect(wrapper.find('.navBar a').at(1).text()).toBe('Public');
-    expect(wrapper.find('.navBar a').at(2).text()).toBe('Host');
+    expect(wrapper.find('Actionable').length).toBe(5);
+    expect(wrapper.find('Actionable').at(1).text()).toBe('Public');
+    expect(wrapper.find('Actionable').at(2).text()).toBe('Host');
   });
 });
