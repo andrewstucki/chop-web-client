@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import {
   toggleChatFocus,
+  setKeyboardHeight,
 } from './dux';
 
 import {
@@ -25,6 +26,7 @@ const mapStateToProps = (state, ownProps) => {
     currentPlaceholder: getPlaceholder(feedState, ownProps.channel),
     currentUser: getCurrentUserAsSharedUser(feedState),
     currentChannel: ownProps.channel,
+    keyboardHeight: feedState.keyboardHeight,
   };
 };
 
@@ -35,6 +37,7 @@ const mapDispatchToProps = dispatch => (
     publishMessage: (channel, text, user) => dispatch(
       publishMessage(channel, text, user)
     ),
+    setKeyboardHeight: height => dispatch(setKeyboardHeight(height)),
   }
 );
 
