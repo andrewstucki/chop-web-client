@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #F6F6F6;
+  background-color: var(--gray5);
   border-radius: 24px;
   position: absolute;
   right: 0;

@@ -1,29 +1,8 @@
 @import url('../../assets/theme.css');
 
-:root {
-  --link-base: {
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    color: #ffffff;
-    text-transform: uppercase;
-    text-decoration: none;
-    position: relative;
-    font-weight: 500;
-  }
-}
-
-.link {
-  @apply --link-base;
-}
-
-.link:focus {
-  outline: none;
-}
-
 .navBar {
   display: flex;
-  background-color: #1e1f23;
+  background-color: var(--gray5);
   height: 48px;
   width: 100%;
   z-index: 1;
@@ -41,47 +20,21 @@
   position: relative;
 }
 
-.unselected {
-  opacity: .5;
-}
-
-.bar {
-  display: flex;
-  content: "";
-  position: absolute;
-  height: 2px;
-  bottom: 8px;
-  background-color: var(--backgroundColor);
-  transition: width var(--animation-duration) var(--ease-out), left var(--animation-duration) var(--ease-out), opacity var(--animation-duration) var(--ease-out);
-}
-
 .hamburger {
-  @apply --link-base;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: var(--gray100);
+  text-transform: uppercase;
+  text-decoration: none;
+  position: relative;
+  font-weight: 500;
   padding: 0 8px;
   margin:0px;
 }
 
 .hamburger svg {
+  color: var(--gray100);
   width: 32px;
-  opacity: 0.5;
 }
 
-.pip {
-  height:8px;
-  width:8px;
-  border-radius: 50%;
-  background-color: #2993E5;
-  position: absolute;
-  top: 6px;
-  right: 3px;
-}
-
-.avatar {
-  border-radius: var(--borderRadius);
-  height: 28px;
-  width: 28px;
-  font-size: 12px;
-  color: var(--backgroundColor);
-  text-align: center;
-  line-height: 28px;
-}

@@ -1,12 +1,12 @@
 import React from 'react';
-import styles from './style.css';
+import { Icon } from './styles';
 
-const ImageAvatar = ({url}) => (
-  <div
-    className={styles.icon}
+const ImageAvatar = ({url, large}) => (
+  <Icon
+    large={large}
     style={{backgroundImage: `url(${url})`, backgroundSize: 'cover'}}
   >
-  </div>
+  </Icon>
 );
 
 export default ImageAvatar;

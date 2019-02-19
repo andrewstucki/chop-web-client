@@ -66,7 +66,8 @@ import {
   CLOSE_SIDE_MENU,
 } from '../sideMenu/dux';
 
-import { TOGGLE_CHAT_FOCUS } from '../chat/dux';
+import { TOGGLE_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../chat/dux';
+import type { SetKeyboardHeightType } from '../chat/dux';
 
 import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
 import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
@@ -276,6 +277,7 @@ type FeedType = {
   animatingMoment: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
+  keyboardHeight: number | typeof(undefined),
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
@@ -452,7 +454,8 @@ type FeedActionTypes =
   | UpdatePaneAnimationType
   | SetPaneType
   | AddTabType
-  | RemoveTabType;
+  | RemoveTabType
+  | SetKeyboardHeightType;
 
 // Action Creators
 export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
@@ -700,6 +703,7 @@ const defaultState = {
       permissions: [],
     },
   },
+  keyboardHeight: undefined,
   animatingMoment: true,
   isPopUpModalVisible: false,
   isChatFocused: false,
@@ -893,7 +897,7 @@ const reducer = (
         ],
       },
     };
-  case SET_SCHEDULE :
+  case SET_SCHEDULE:
     return {
       ...state,
       schedule: action.schedule,
@@ -1301,6 +1305,11 @@ const reducer = (
     return {
       ...state,
       isChatFocused: action.focus,
+    };
+  case SET_KEYBOARD_HEIGHT:
+    return {
+      ...state,
+      keyboardHeight: action.height,
     };
   case TOGGLE_HIDE_VIDEO:
     return {

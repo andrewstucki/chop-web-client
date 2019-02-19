@@ -9,6 +9,23 @@
   --tertiaryColor:       #404041;
   --borderRadius:      24px;
 
+  /* Open Network ChOP Brand Color */
+  --brandColor: #FF9000;
+
+  /* Utility Colors */
+  --successGreen: #09C1A1;
+  --warningYellow: #FFBA0C;
+  --errorRed: #E33300;
+
+  /* Grayscale */
+  --gray130: #2D2D2E;
+  --gray100: #404041;
+  --gray80: #666667;
+  --gray50: #9F9FA0;
+  --gray30: #C6C6C6;
+  --gray10: #ECECEC;
+  --gray5: #F6F6F6;
+
   /* Animation */
   --ease-in:            cubic-bezier(0.6, 0, 0.8, 0.3);
   --ease-out:           cubic-bezier(0.2, 0.7, 0.4, 1);

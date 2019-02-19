@@ -4,13 +4,15 @@ import React from 'react';
 import type { Node } from 'react';
 import type { NavbarItemType } from './dux';
 import styles from './styles.css';
-import hamburger from '../../assets/hamburger.svg';
-import { getAvatarColor, getFirstInitial } from '../util';
+import Hamburger from '../icons/hamburger';
+import { getFirstInitial } from '../util';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 import type { TabTypeType } from '../pane/content/tab/dux';
 import {TAB} from '../pane/content/tab/dux';
 import {PRIMARY_PANE} from '../pane/dux';
+import { NavBarItemWrapper, Pip, DirectChatAvatar, Underline, NavBarHamburgerWrapper } from './styles';
+import { Actionable } from '../components/Actionable';
 
 type NavBarProps = {
   items: Array<NavbarItemType>,
@@ -31,19 +33,18 @@ type NavBarState = {
   },
 };
 
-const Underline = props => (
-  <div
-    id="nav-underline"
-    className={styles.bar}
-    style={
-      {
-        left: props.left.toString() + 'px',
-        width: props.width.toString() + 'px',
-        opacity: props.opacity.toString(),
-      }
-    }
-  ></div>
-);
+const NavBarItem = ({item, directChatChannelNames}) => {
+  if (item.isDirect) {
+    const channelIconName = directChatChannelNames[item.id] || '?';
+    return (
+      <DirectChatAvatar isCurrent={item.isCurrent} name={channelIconName}>
+        {getFirstInitial(channelIconName)}
+      </DirectChatAvatar>
+    );
+  } else {
+    return item.name;
+  }
+};
 
 class NavBar extends React.Component<NavBarProps, NavBarState> {
   selectedLink: { current: any };
@@ -52,7 +53,6 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
   constructor (props: NavBarProps) {
     super(props);
-    // $FlowFixMe
     this.selectedLink = React.createRef();
     this.state = {
       left: 20,
@@ -104,7 +104,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
       const updatedLeft = selectedLink.offsetLeft + marginWidth;
       const updatedWidth = width - (marginWidth * 2);
-      const updatedOpacity = selectedLink.id !== 'nav-Direct' ? 1.0 : 0.0;
+      const updatedOpacity = (selectedLink && selectedLink.getAttribute('data-direct') === 'true') ? 0.0 : 1.0;
       const { navbarIndex, setNavbarIndex } = this.props;
       const { index } = selectedLink.dataset;
 
@@ -133,53 +133,23 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       this.state.opacity !== updatedOpacity;
   }
 
-  itemLink (item: NavbarItemType) {
-    const style = item.isCurrent ? null : styles.unselected;
-    const opacity = item.isCurrent ? '1.0' : '0.5';
-
-    if (item.isDirect) {
-      const names = this.state.directChatChannelNames;
-      const channelIconName = names[item.id] || '?';
-      return (
-        <div
-          className={styles.avatar}
-          style={
-            {
-              backgroundColor: getAvatarColor(channelIconName),
-              opacity: opacity,
-            }
-          }
-        >
-          {getFirstInitial(channelIconName)}
-        </div>
-      );
-    } else {
-      return (
-        <span className={style}>
-          {item.name}
-        </span>
-      );
-    }
-  }
-
   itemTab = (item: NavbarItemType, index: number) => {
     const selectedLink = item.isCurrent ? this.selectedLink : null;
     return (
-      <a
-        // $FlowFixMe
-        ref={selectedLink}
-        id={'nav-' + item.name.replace(/ /g,'')}
-        href="javascript:void(0)"
-        key={item.id}
-        className={styles.link}
-        onClick={() => this.handleTabClick(item)}
-        data-index={index}
-      >
-        { item.hasActions
-          ? <span className={styles.pip}></span>
-          : null }
-        {this.itemLink(item)}
-      </a>
+      <Actionable key={item.id} onClick={() => this.handleTabClick(item)}>
+        <NavBarItemWrapper
+          ref={selectedLink}
+          id={'nav-' + item.name.replace(/ /g,'')}
+          data-index={index}
+          data-direct={item.isDirect}
+          isCurrent={item.isCurrent}
+        >
+          { item.hasActions
+            ? <Pip />
+            : null }
+          <NavBarItem item={item} directChatChannelNames={this.state.directChatChannelNames} />
+        </NavBarItemWrapper>
+      </Actionable>
     );
   };
 
@@ -208,12 +178,11 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
 
     return (
       <div id="nav-bar" className={styles.navBar}>
-        <a
-          href="javascript:void(0)"
-          onClick={openMenu}
-          className={styles.hamburger}
-          dangerouslySetInnerHTML={{ __html: hamburger }}
-        />
+        <Actionable onClick={openMenu}>
+          <NavBarHamburgerWrapper>
+            <Hamburger size={32} />
+          </NavBarHamburgerWrapper>
+        </Actionable>
         <div className={styles.channelLinks}>
           <div className={styles.channelLinksWrapper}>
             {
