@@ -22,9 +22,11 @@ describe('Chat tests', () => {
     const wrapper = Enzyme.shallow(
       <Chat
         toggleChatFocus={function () {}}
+        setKeyboardHeight={function () {}}
         toggleHideVideo={function () {}}
         buttonOnClick={function () {}}
         focused={true}
+        keyboardHeight={undefined}
         enterDetect={function () {}}
         currentPlaceholder=""
         currentChannel="public"
@@ -43,9 +45,11 @@ describe('Chat tests', () => {
     const wrapper = Enzyme.shallow(
       <Chat
         toggleChatFocus={function () {}}
+        setKeyboardHeight={function () {}}
         toggleHideVideo={function () {}}
         buttonOnClick={function () {}}
         focused={false}
+        keyboardHeight={undefined}
         enterDetect={function () {}}
         currentPlaceholder=""
         currentChannel="public"

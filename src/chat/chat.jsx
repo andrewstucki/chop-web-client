@@ -14,8 +14,10 @@ import styles from './styles.css';
 type ChatProps = {
   publishMessage: (channel: string, text: string, user: SharedUserType) => void,
   toggleChatFocus: (focused: boolean) => void,
+  setKeyboardHeight: (height: number) => void,
   toggleHideVideo: (hidden: boolean) => void,
   focused: boolean,
+  keyboardHeight: number | typeof(undefined),
   currentPlaceholder: string,
   currentUser: SharedUserType,
   currentChannel: string,
@@ -25,7 +27,6 @@ type ChatProps = {
 type ChatState = {
   chatInput: string,
   windowHeight: number,
-  keyboardHeight: number,
 };
 
 class Chat extends Component<ChatProps, ChatState> {
@@ -118,10 +119,7 @@ class Chat extends Component<ChatProps, ChatState> {
         const keyboard = windowHeight - newHeight;
 
         this.setWrapperHeight(keyboard);
-
-        this.setState({
-          keyboardHeight: keyboard,
-        });
+        this.props.setKeyboardHeight(keyboard);
 
         clearInterval(this.pollKeyboardInterval);
       }
@@ -138,12 +136,12 @@ class Chat extends Component<ChatProps, ChatState> {
   };
 
   onFocus () {
-    const { keyboardHeight } = this.state;
+    const { keyboardHeight } = this.props;
     this.props.toggleChatFocus(true);
 
     if (isIOS()) {
       this.props.toggleHideVideo(true);
-      if (keyboardHeight > 0) {
+      if (keyboardHeight && keyboardHeight > 0) {
         this.setWrapperHeight(keyboardHeight);
       } else {
         this.pollForKeyboard();
