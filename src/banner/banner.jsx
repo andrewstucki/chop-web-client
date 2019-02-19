@@ -1,22 +1,29 @@
 import React from 'react';
-import style from './style.css';
-import Dismiss from '../../assets/dismiss-banner-button.svg';
+import Dismiss from '../icons/dismiss-button';
 import type { BannerType } from './dux';
 import { capitalizeFirstLetter } from '../util/index';
-import Button from '../components/button';
+import {IconButton} from '../components/button/styles';
+import {
+  WarningBanner,
+  ErrorBanner,
+  NotificationBanner,
+  BannerMessage,
+} from './styles';
+import {Actionable} from '../components/Actionable';
+import { theme } from '../styles';
 
 type BannerProps = {
   banner: BannerType,
   dismissNotification: () => void,
 };
 
-const notificationStyle = {
-  backgroundColor: '#09C1A1',
-};
-
-const errorStyle = {
-  backgroundColor: '#E33300',
-};
+const DismissButton = ({dismissNotification}) => (
+  <Actionable onClick={dismissNotification}>
+    <IconButton size={48}>
+      <Dismiss size={16} color={theme.colors.textColor} />
+    </IconButton>
+  </Actionable>
+);
 
 const Banner = (
   {
@@ -24,32 +31,34 @@ const Banner = (
     dismissNotification,
   }: BannerProps
 ) => {
-  const dismissButton = () => (
-    <Button
-      onClick={dismissNotification}
-      image={Dismiss}
-      buttonStyle="icon"
-      additionalStyles={style.closeBannerButton}
-    />
-  );
-  if (banner.message !== '' && banner.bannerType !== '') {
-    if (banner.bannerType === 'notification') {
-      return (
-        <div className={style.banner} style={notificationStyle}>
-          {dismissButton()}
-          <div className={style.message}><strong>{capitalizeFirstLetter(banner.message)}</strong> was muted.</div>
-        </div>
-      );
-    } else {
-      return (
-        <div className={style.banner} style={errorStyle}>
-          {dismissButton()}
-          <div className={style.message}>{banner.message}</div>
-        </div>
-      );
-    } 
-  } 
-  return null;
+  if (banner.message === '') {
+    return null;
+  }
+  switch (banner.bannerType) {
+  case 'notification':
+    return (
+      <NotificationBanner>
+        <DismissButton dismissNotification={dismissNotification}/>
+        <BannerMessage><strong>{capitalizeFirstLetter(banner.message)}</strong> was muted.</BannerMessage>
+      </NotificationBanner>
+    );
+  case 'error':
+    return (
+      <ErrorBanner>
+        <DismissButton dismissNotification={dismissNotification}/>
+        <BannerMessage>{banner.message}</BannerMessage>
+      </ErrorBanner>
+    );
+  case 'warning':
+    return (
+      <WarningBanner>
+        <DismissButton dismissNotification={dismissNotification}/>
+        <BannerMessage>{banner.message}</BannerMessage>
+      </WarningBanner>
+    );
+  default:
+    return null;
+  }
 };
 
 export default Banner;
