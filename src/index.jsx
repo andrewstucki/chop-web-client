@@ -28,6 +28,7 @@ import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
 import smoothscroll from 'smoothscroll-polyfill';
+import { warningNotificationBanner } from './banner/dux';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
@@ -76,6 +77,10 @@ const store = createStore(
     applyMiddleware(...middlewareList)
   )
 );
+
+if (navigator.userAgent.match('CriOS')) {
+  store.dispatch(warningNotificationBanner('We’re optimizing Host Tools for Chrome. For now, please switch to Safari.'));
+}
 
 const persistor = persistStore(store);
 
