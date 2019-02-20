@@ -128,6 +128,8 @@ const isMobileDevice = () => { /* eslint-disable */
 
 const isIOS = () => !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
+const isAndroid = () => !!navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('android') > -1;
+
 const getComponentDisplayName = Componenet => Componenet.displayName || Componenet.name || 'Component';
 
 export {
@@ -145,5 +147,6 @@ export {
   UTC_DATE_FORMAT,
   isMobileDevice,
   isIOS,
+  isAndroid,
   getComponentDisplayName,
 };
