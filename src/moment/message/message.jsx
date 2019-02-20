@@ -93,12 +93,14 @@ const Message = (
         </MessageWrapper>
       </Actionable>
 
-      <MessageTray
-        closeTray={closeMessageTray}
-        deleteMessage={deleteMessage}
-        muteUser={muteUser}
-        directChat={directChat}
-      />
+      {messageTrayOpen &&
+        <MessageTray
+          closeTray={closeMessageTray}
+          deleteMessage={deleteMessage}
+          muteUser={muteUser}
+          directChat={directChat}
+        />
+      }
 
     </Wrapper>
   );

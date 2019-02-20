@@ -124,7 +124,6 @@ describe('Message', () => {
         currentUser={user}
       />
     );
-    expect(wrapper.find('button').length).toBe(5);
     wrapper.find('button').at(0).simulate('click');
     expect(openTray.calledOnce).toEqual(true);
   });
