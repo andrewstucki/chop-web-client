@@ -12,6 +12,7 @@ const NavBarItemWrapper = styled.button`
   font-weight: 500;
   border: none;
   background: transparent;
+  outline: none;
 `;
 
 const NavBarHamburgerWrapper = styled.button`
