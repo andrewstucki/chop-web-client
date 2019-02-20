@@ -38,6 +38,10 @@
   flex-direction: column-reverse;
 }
 
+.feed span li {
+  list-style-type: none;
+}
+
 .anchorMoments {
   position: sticky;
   position: -webkit-sticky;
