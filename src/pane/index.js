@@ -1,34 +1,22 @@
 //@flow
 import Pane from './pane';
 import { connect } from 'react-redux';
-import { paneContentSelector, previousPaneContentSelector, getPane } from '../selectors/paneSelectors';
-import { updatePaneAnimation } from './dux';
+import { paneContentSelector } from '../selectors/paneSelectors';
 
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
-  const { navbarIndex } = feedState;
+  const { navbarIndex, prevNavbarIndex } = feedState;
   const { name } = ownProps;
-  const active = paneContentSelector(feedState, name);
-  const previous = previousPaneContentSelector(feedState, name);
-  const pane = getPane(feedState, name);
-  const { isAnimating } = pane;
+  const pane = paneContentSelector(feedState, name);
 
   return {
     name,
-    active,
-    previous,
+    pane,
     navbarIndex,
-    isAnimating,
+    prevNavbarIndex,
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    updatePaneAnimation: (name, isAnimating) => dispatch(updatePaneAnimation(name, isAnimating)),
-  }
-);
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
 )(Pane);

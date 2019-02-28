@@ -1,80 +1,52 @@
 // @flow
 /* global SyntheticMouseEvent */
-import React, { Component } from 'react';
-import styles from './style.css';
-import { Actionable } from '../Actionable';
+import React from 'react';
+import Actionable from '../Actionable';
+import StyledButton from './styles';
+
+const BUTTON_PRIMARY = 'primary';
+const BUTTON_SECONDARY = 'secondary';
+const BUTTON_TERTIARY = 'tertiary';
+const BUTTON_XSMALL = 'xsmall';
+const BUTTON_SMALL = 'small';
+const BUTTON_MEDIUM = 'medium';
+const BUTTON_LARGE = 'large';
+const BUTTON_XLARGE = 'xlarge';
 
 type ButtonPropsType = {
-  buttonId?: string,
+  children: string,
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   keepFocus?: boolean,
-  buttonStyle: 'primary' | 'secondary' | 'tertiary' | 'icon',
-  text?: string,
-  image?: any,
+  variant?: typeof BUTTON_PRIMARY | typeof BUTTON_SECONDARY | typeof BUTTON_TERTIARY,
+  size?: typeof BUTTON_XSMALL | typeof BUTTON_SMALL | typeof BUTTON_MEDIUM | typeof BUTTON_LARGE | typeof BUTTON_XLARGE,
   disabled?: boolean,
   hidden?: boolean,
-  additionalStyles?: string,
-  small?: boolean | void,
 };
 
-class Button extends Component<ButtonPropsType, void> {
-  node: { current: HTMLButtonElement }
+const Button = ({ children, onClick, keepFocus, variant = BUTTON_PRIMARY, size = BUTTON_MEDIUM, disabled = false, hidden = false }:ButtonPropsType) => (
+  <Actionable onClick={onClick} keepFocus={keepFocus}>
+    <StyledButton
+      variant={variant}
+      size={size}
+      disabled={disabled}
+      hidden={hidden}
+    >
+      {children}
+    </StyledButton>
+  </Actionable>
+);
 
-  constructor (props: ButtonPropsType) {
-    super(props);
-    // $FlowFixMe
-    this.node = React.createRef();
-  }
+Button.whyDidYouRender = true;
 
-  render () {
-    const {
-      buttonId,
-      onClick,
-      keepFocus = false,
-      text,
-      image,
-      buttonStyle,
-      disabled,
-      hidden,
-      additionalStyles = '',
-      small = false,
-    } = this.props;
-
-    const buttonSizeStyle = small ? styles.small : styles.default;
-
-    const style = `${styles.button} ${styles[buttonStyle]} ${additionalStyles} ${buttonSizeStyle}`.trim();
-
-    if (buttonStyle === 'icon') {
-      return (
-        <Actionable onClick={onClick} keepFocus={keepFocus}>
-          <button
-            // $FlowFixMe
-            ref={this.node}
-            id={buttonId}
-            className={style}
-            dangerouslySetInnerHTML={{ __html: image }}
-            disabled={disabled}
-            hidden={hidden}
-          />
-        </Actionable>
-      );
-    } else {
-      return (
-        <Actionable onClick={onClick} keepFocus={keepFocus}>
-          <button
-            // $FlowFixMe
-            ref={this.node}
-            id={buttonId}
-            className={style}
-            disabled={disabled}
-            hidden={hidden}
-          >
-            {text}
-          </button>
-        </Actionable>
-      );
-    }
-  }
-}
-
-export default Button;
+export default React.memo < ButtonPropsType > (Button);
+export {
+  BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
+  BUTTON_TERTIARY,
+  BUTTON_XSMALL,
+  BUTTON_SMALL,
+  BUTTON_MEDIUM,
+  BUTTON_LARGE,
+  BUTTON_XLARGE,
+};
+export type { ButtonPropsType };

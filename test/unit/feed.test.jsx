@@ -7,7 +7,7 @@ import { MESSAGE } from '../../src/moment/dux';
 
 import Feed from '../../src/feed/feed';
 import FeedActionBanner from '../../src/components/actionBanner';
-import Button from '../../src/components/button';
+import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../../src/components/button';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -171,12 +171,12 @@ describe('Feed tests', () => {
     expect(button.exists()).toBeTruthy();
     expect(button.length).toBe(1);
     const {
-      buttonStyle,
-      small,
-      text,
+      children,
+      variant,
+      size,
     } = button.first().props();
-    expect(text).toBe('New Messages');
-    expect(buttonStyle).toBe('secondary');
-    expect(small).toBe(true);
+    expect(children).toBe('New Messages');
+    expect(variant).toBe(BUTTON_SECONDARY);
+    expect(size).toBe(BUTTON_SMALL);
   });
 });

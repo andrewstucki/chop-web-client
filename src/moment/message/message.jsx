@@ -7,12 +7,13 @@ import Avatar from '../../avatar';
 
 import OpenTrayButtonIcon from '../../../assets/open-tray-button.svg';
 import MessageTray from '../../components/messageTray';
-import { Actionable } from '../../components/Actionable';
+import Actionable from '../../components/Actionable';
 import linkifyHtml from 'linkifyjs/html';
 import { sanitizeString } from '../../util';
 import Label from '../../components/label';
 
-import { MessageWrapper, Wrapper, BodyWrapper, NameWrapper, OpenTrayButton, TextWrapper } from './styles';
+import { MessageWrapper, Wrapper, BodyWrapper, NameWrapper, OpenTrayButton, TextWrapper, AnimatedMessageTray } from './styles';
+import { useTransition } from 'react-spring';
 
 type MessagePropsType = {
   message: MessageType,
@@ -84,23 +85,32 @@ const Message = (
     </>
   );
 
+  const transitions = useTransition(messageTrayOpen, null, {
+    from: { transform:  'translate3d(100%,0,0)' },
+    enter: { transform: 'translate3d(2px,0,0)' },
+    leave: { transform: 'translate3d(125%,0,0)' },
+  });
+
   return (
-    <Wrapper data-component='messageContainer' messageTrayOpen={messageTrayOpen}>
-      <Actionable onClick={closeMessageTray}  keepFocus={true} tabable={false}>
-        <MessageWrapper>
+    <Wrapper data-component='messageContainer'>
+      <Actionable onClick={closeMessageTray} keepFocus={true} tabable={false}>
+        <MessageWrapper messageTrayOpen={messageTrayOpen}>
           <MessageBody />
           <OpenMessageTrayButton />
         </MessageWrapper>
       </Actionable>
 
-      {messageTrayOpen &&
-        <MessageTray
-          closeTray={closeMessageTray}
-          deleteMessage={deleteMessage}
-          muteUser={muteUser}
-          directChat={directChat}
-        />
-      }
+      { transitions.map(({ item, props, key }) => (
+        item &&
+          <AnimatedMessageTray style={props} key={key}>
+            <MessageTray
+              closeTray={closeMessageTray}
+              deleteMessage={deleteMessage}
+              muteUser={muteUser}
+              directChat={directChat}
+            />
+          </AnimatedMessageTray>
+      ))}
 
     </Wrapper>
   );

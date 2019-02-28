@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
+import color from 'color';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -84,9 +85,31 @@ const ionDesignValues = {
   },
 };
 
+type ThemeType = {
+  colors: {
+    [string]: string,
+  },
+  buttons: {
+    [string]: {
+      default: string,
+      hover: string,
+      active: string,
+      focusShadow: string,
+      text: string,
+      border?: string,
+    }
+  },
+  animation: {
+    easeIn: string,
+    easeOut: string,
+    easeInOut: string,
+    duration: string,
+  }
+};
+
 // Once we get into light/dark mode we will want to look into styled-themeing
 // https://github.com/styled-components/styled-theming
-const theme = {
+const theme:ThemeType = {
   colors: {
     primary:    ionDesignValues.colors.brands.openNetwork,
     disabled:   ionDesignValues.colors.grayscale.gray5,
@@ -97,9 +120,27 @@ const theme = {
     gray50:     ionDesignValues.colors.grayscale.gray50,
     gray30:     ionDesignValues.colors.grayscale.gray30,
     gray10:     ionDesignValues.colors.grayscale.gray10,
+    gray5:      ionDesignValues.colors.grayscale.gray5,
     dangerText: ionDesignValues.colors.utilities.errorRed,
     warningText: ionDesignValues.colors.utilities.warningYellow,
     validText: ionDesignValues.colors.utilities.validGreen,
+  },
+  buttons: {
+    primary: {
+      default:  ionDesignValues.colors.brands.openNetwork,
+      hover:    color(ionDesignValues.colors.brands.openNetwork).lighten(0.1).hex(),
+      active:   color(ionDesignValues.colors.brands.openNetwork).darken(0.1).hex(),
+      focusShadow: `0px 0px 0px 1px ${ionDesignValues.colors.grayscale.white} inset`,
+      text:     ionDesignValues.colors.grayscale.white,
+    },
+    secondary: {
+      default:  ionDesignValues.colors.grayscale.white,
+      hover:    ionDesignValues.colors.grayscale.white,
+      active:   ionDesignValues.colors.grayscale.gray10,
+      focusShadow: `0px 0px 0px 1px ${ionDesignValues.colors.grayscale.gray30} inset`,
+      text:     ionDesignValues.colors.brands.openNetwork,
+      border:   ionDesignValues.colors.grayscale.gray30,
+    },
   },
   animation: {
     easeIn:     'cubic-bezier(0.6, 0, 0.8, 0.3)',
@@ -110,3 +151,4 @@ const theme = {
 };
 
 export { GlobalStyle, theme };
+export type { ThemeType };

@@ -1,8 +1,14 @@
+// @flow
 import React from 'react';
 import Chat from '../chat';
 import Offline from '../offline';
 
-const Event = ({isOffline, channel}) => {
+type EventPropsType = {
+  isOffline: boolean,
+  channel: string,
+};
+
+const Event = ({isOffline, channel}:EventPropsType) => {
   if (isOffline) {
     return (
       <Offline />
@@ -14,4 +20,6 @@ const Event = ({isOffline, channel}) => {
   }
 };
 
-export default Event;
+Event.whyDidYouRender = true;
+
+export default React.memo < EventPropsType > (Event);

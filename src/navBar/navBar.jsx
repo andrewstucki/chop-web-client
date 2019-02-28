@@ -12,7 +12,7 @@ import type { TabTypeType } from '../pane/content/tab/dux';
 import {TAB} from '../pane/content/tab/dux';
 import {PRIMARY_PANE} from '../pane/dux';
 import { NavBarItemWrapper, Pip, DirectChatAvatar, Underline, NavBarHamburgerWrapper } from './styles';
-import { Actionable } from '../components/Actionable';
+import Actionable from '../components/Actionable';
 
 type NavBarProps = {
   items: Array<NavbarItemType>,
@@ -46,9 +46,8 @@ const NavBarItem = ({item, directChatChannelNames}) => {
   }
 };
 
-class NavBar extends React.Component<NavBarProps, NavBarState> {
+class NavBar extends React.PureComponent<NavBarProps, NavBarState> {
   selectedLink: { current: any };
-  itemLink: (channel: NavbarItemType) => Node;
   itemTab: (channel: NavbarItemType, index:number) => Node;
 
   constructor (props: NavBarProps) {
@@ -105,8 +104,6 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
       const updatedLeft = selectedLink.offsetLeft + marginWidth;
       const updatedWidth = width - (marginWidth * 2);
       const updatedOpacity = (selectedLink && selectedLink.getAttribute('data-direct') === 'true') ? 0.0 : 1.0;
-      const { navbarIndex, setNavbarIndex } = this.props;
-      const { index } = selectedLink.dataset;
 
       if (this.shouldUpdateState(updatedLeft, updatedWidth, updatedOpacity)) {
         this.setState(
@@ -116,10 +113,6 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
             opacity: updatedOpacity,
           }
         );
-
-        if (navbarIndex.toString() !== index) {
-          setNavbarIndex(parseInt(index));
-        }
       }
     }
   }
@@ -136,7 +129,7 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
   itemTab = (item: NavbarItemType, index: number) => {
     const selectedLink = item.isCurrent ? this.selectedLink : null;
     return (
-      <Actionable key={item.id} onClick={() => this.handleTabClick(item)}>
+      <Actionable key={item.id} onClick={(event:SyntheticMouseEvent<HTMLButtonElement>) => this.handleTabClick(event, item)}>
         <NavBarItemWrapper
           ref={selectedLink}
           id={'nav-' + item.name.replace(/ /g,'')}
@@ -153,8 +146,15 @@ class NavBar extends React.Component<NavBarProps, NavBarState> {
     );
   };
 
-  handleTabClick = (item: NavbarItemType):void => {
-    const { setPaneToEvent, setPaneToChat, setPaneToTab } = this.props;
+  handleTabClick = (event:SyntheticMouseEvent<HTMLButtonElement>, item: NavbarItemType):void => {
+    const { setPaneToEvent, setPaneToChat, setPaneToTab, setNavbarIndex, navbarIndex } = this.props;
+    const { index } = event.currentTarget.dataset;
+    const newIndex = parseInt(index);
+
+    if (navbarIndex !== newIndex) {
+      setNavbarIndex(newIndex);
+    }
+
     switch (item.type) {
     case EVENT:
       setPaneToEvent(PRIMARY_PANE, item.id);

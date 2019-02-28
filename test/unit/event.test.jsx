@@ -7,7 +7,7 @@ import Enzyme from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { mockDate } from '../testUtils';
+import { mockDate, mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -61,17 +61,15 @@ test('Event renders when there is an event.', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {},
-            },
+            type: 'EVENT',
+            content: {},
           },
         },
       },
     }
   );
 
-  const wrapper = Enzyme.mount(
+  const wrapper = mountWithTheme(
     <Provider store={store}>
       <div>
         <Event />

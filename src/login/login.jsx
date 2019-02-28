@@ -1,9 +1,9 @@
 // @flow
-/* global SyntheticKeyboardEvent */
-import React, { Component } from 'react';
-import styles from './styles.css';
+/* global SyntheticKeyboardEvent, SyntheticMouseEvent */
+import React, { useState } from 'react';
+import { Wrapper, ButtonWrapper } from './styles';
 import InputField from '../components/inputField';
-import Button from '../components/button';
+import Button, {BUTTON_MEDIUM, BUTTON_PRIMARY} from '../components/button';
 import Errors from '../errors';
 import { Redirect } from 'react-router-dom';
 
@@ -16,93 +16,62 @@ type LoginProps = {
 type LoginState = {
   email: string,
   password: string,
-  errors: Array<string>
-}
+};
 
-class Login extends Component<LoginProps, LoginState> {
-  handleLogin: () => void
-  handleUserInput: (event:SyntheticKeyboardEvent<HTMLInputElement>) => void
-  emailInput: { current: InputField }
-  passwordInput: { current: InputField } 
+const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => {
+  const [values, setValues] = useState < LoginState > ({ email: '', password: '' });
 
-  constructor (props:LoginProps) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      errors: [],
-    };
-
-    // $FlowFixMe
-    this.emailInput = React.createRef();
-    // $FlowFixMe
-    this.passwordInput = React.createRef();
-    
-    this.handleUserInput = this.handleUserInput.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
-  }
-
-  handleUserInput (event: SyntheticKeyboardEvent<HTMLInputElement>) {
+  const onChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
-    this.setState({
-      [name]: value,
-    });
-  }
+    setValues({ ...values, [name]: value });
+  };
 
-  handleLogin (event: SyntheticKeyboardEvent<HTMLInputElement>) {
+  const handleLogin = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    let { email, password } = this.state;
 
-    // Fallback to React Uncontrolled DOM components for AutoFill
-    if ( email === '' ) {
-      email = this.emailInput.current.value(); 
-    } 
-    if ( password === '') {
-      password = this.passwordInput.current.value(); 
-    }
+    const { email, password } = values;
+    clearErrors();
+    basicAuthLogin(email, password);
+  };
 
-    this.props.clearErrors();
-    this.props.basicAuthLogin(email, password);
+
+  if (isAuthenticated) {
+    return (
+      <Redirect to='/'/>
+    );
+  } else {
+    return (
+      <Wrapper>
+        <h1>Log In</h1>
+        <Errors />
+        <form onSubmit={handleLogin}>
+          <InputField
+            type='email'
+            name='email'
+            label='Email'
+            onChange={onChange}
+            value={values.email}
+          />
+          <InputField
+            type='password'
+            name='password'
+            label='Password'
+            onChange={onChange}
+            value={values.password}
+          />
+          <ButtonWrapper>
+            <Button
+              onClick={handleLogin}
+              variant={BUTTON_PRIMARY}
+              size={BUTTON_MEDIUM}
+            >
+              Log In
+            </Button>
+          </ButtonWrapper>
+        </form>
+      </Wrapper>
+    );
   }
-
-  render () {
-    if (this.props.isAuthenticated) {
-      return (
-        <Redirect to='/'/>
-      );
-    } else {
-      return (
-        <div className={styles.login}>
-          <h1>Log In</h1>
-          <Errors />
-          <form onSubmit={this.handleLogin}>
-            <InputField 
-              type='email'
-              name='email'
-              label='Email'
-              onChange={event => this.handleUserInput(event)}
-              // $FlowFixMe
-              ref={this.emailInput}/>
-            <InputField
-              type='password'
-              name='password'
-              label='Password'
-              onChange={event => this.handleUserInput(event)}
-              // $FlowFixMe
-              ref={this.passwordInput} />
-            <div style={{display: 'flex', placeContent: 'flex-end'}}>
-              <Button
-                buttonId="login"
-                onClick={this.handleLogin}
-                text="Log In"
-                buttonStyle="primary"
-              />
-            </div>
-          </form>
-        </div>
-      );
-    }
-  }
-}
+};
 
 export default Login;

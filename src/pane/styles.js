@@ -1,8 +1,5 @@
 import styled from 'styled-components';
-
-type PaneContentWrapperPropsType = {
-  offCanvas: boolean,
-};
+import { animated } from 'react-spring';
 
 const PaneWrapper = styled.div`
   flex: 1;
@@ -10,14 +7,13 @@ const PaneWrapper = styled.div`
   height: 100%;
 `;
 
-const PaneContentWrapper = styled.div`
+const PaneContentWrapper = styled(animated.div)`
   display: flex;
   flex-direction: column;
   position: absolute;
   bottom: 0;
-  transform: ${ (props:PaneContentWrapperPropsType) => props.offCanvas ? 'translate3d(-100%, 0, 0)' : 'translate3d(0, 0, 0)' };
-  width: 100%; 
-  height: 100%; 
+  width: 100%;
+  height: 100%;
 `;
 
 export {

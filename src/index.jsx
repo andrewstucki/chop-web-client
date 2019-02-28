@@ -34,6 +34,11 @@ declare var ENV:string;
 declare var ROUTE_BASENAME:string;
 declare var GTM;
 
+if (ENV === 'development') {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+  whyDidYouRender(React);
+}
+
 // kick off the polyfill!
 smoothscroll.polyfill();
 

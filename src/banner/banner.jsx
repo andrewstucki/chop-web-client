@@ -2,14 +2,13 @@ import React from 'react';
 import Dismiss from '../icons/dismiss-button';
 import type { BannerType } from './dux';
 import { capitalizeFirstLetter } from '../util/index';
-import {IconButton} from '../components/button/styles';
+import IconButton from '../components/iconButton';
 import {
   WarningBanner,
   ErrorBanner,
   NotificationBanner,
   BannerMessage,
 } from './styles';
-import {Actionable} from '../components/Actionable';
 import { theme } from '../styles';
 
 type BannerProps = {
@@ -18,11 +17,9 @@ type BannerProps = {
 };
 
 const DismissButton = ({dismissNotification}) => (
-  <Actionable onClick={dismissNotification}>
-    <IconButton size={48}>
-      <Dismiss size={16} color={theme.colors.textColor} />
-    </IconButton>
-  </Actionable>
+  <IconButton onClick={dismissNotification} size={48} >
+    <Dismiss size={16} color={theme.colors.textColor} />
+  </IconButton>
 );
 
 const Banner = (

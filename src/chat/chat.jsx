@@ -5,11 +5,11 @@ import React, { Component } from 'react';
 import type { SharedUserType } from '../feed/dux';
 
 import { isIOS } from '../util';
-
-import Button from '../components/button';
-import InputField from '../components/inputField';
-import UpArrow from '../../assets/large-arrow-up.svg';
-import styles from './styles.css';
+import UpArrow from '../icons/up-arrow';
+import IconButton from '../components/iconButton';
+import { theme } from '../styles';
+import { Background, Wrapper } from './styles';
+import ChatInput from '../components/chatInput';
 
 type ChatProps = {
   publishMessage: (channel: string, text: string, user: SharedUserType) => void,
@@ -17,7 +17,7 @@ type ChatProps = {
   setKeyboardHeight: (height: number) => void,
   toggleHideVideo: (hidden: boolean) => void,
   focused: boolean,
-  keyboardHeight: number | typeof(undefined),
+  keyboardHeight: number | typeof undefined,
   currentPlaceholder: string,
   currentUser: SharedUserType,
   currentChannel: string,
@@ -185,13 +185,10 @@ class Chat extends Component<ChatProps, ChatState> {
       currentPlaceholder,
     } = this.props;
 
-    const style = focused ? styles.focused : styles.default;
-
     return (
-      <div className={styles.background}>
-        <div className={style}>
-          <InputField
-            type='chat'
+      <Background>
+        <Wrapper focused={focused}>
+          <ChatInput
             onChange={this.onTextEntered}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
@@ -200,18 +197,17 @@ class Chat extends Component<ChatProps, ChatState> {
             enterDetect={this.onKeyPressed}
           />
 
-          <Button
-            buttonId='chat-button'
+          <IconButton
+            size={36}
             onClick={this.sendMessage}
             keepFocus={true}
-            image={UpArrow}
-            buttonStyle="icon"
-            imageType="arrow"
             disabled={!this.state.chatInput}
-            additionalStyles={styles.sendMessage}
-          />
-        </div>
-      </div>
+            background={theme.colors.primary}
+          >
+            <UpArrow size={24} color={theme.colors.background}/>
+          </IconButton>
+        </Wrapper>
+      </Background>
     );
   }
 }

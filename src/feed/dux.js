@@ -48,13 +48,11 @@ import {
 
 import {
   SET_PANE_CONTENT,
-  UPDATE_PANE_ANIMATION,
 } from '../pane/dux';
 
 import type {
   PaneType,
   SetPaneType,
-  UpdatePaneAnimationType,
 } from '../pane/dux';
 
 import {
@@ -88,7 +86,7 @@ import {
 
 import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
 import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
@@ -277,7 +275,7 @@ type FeedType = {
   animatingMoment: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
-  keyboardHeight: number | typeof(undefined),
+  keyboardHeight: number | typeof undefined,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
@@ -293,16 +291,13 @@ type FeedType = {
   isAuthenticated: boolean,
   auth: AuthenticationType,
   panes: {
-    [string]: {
-      active: PaneType,
-      previous?: PaneType,
-      isAnimating: boolean,
-    },
+    [string]: PaneType,
   },
   tabs: Array<TabType>,
   clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
   navbarIndex: number,
+  prevNavbarIndex?: number,
   lastAction?: FeedActionTypes,
 };
 
@@ -451,21 +446,12 @@ type FeedActionTypes =
   | SetSawLastMomentAt
   | ToggleHideVideoType
   | SetNavbarIndexType
-  | UpdatePaneAnimationType
   | SetPaneType
   | AddTabType
   | RemoveTabType
   | SetKeyboardHeightType;
 
 // Action Creators
-export const setSawLastMomentAt = (timestamp: DateTimeType, channelId: ChannelIdType): SetSawLastMomentAt => (
-  {
-    type: SET_SAW_LAST_MOMENT_AT,
-    timestamp,
-    channelId,
-  }
-);
-
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
   {
     type: SET_AUTHENTICATION,
@@ -635,14 +621,6 @@ const setSalvations = (count:number): SetSalvationsType => (
   }
 );
 
-const setNotificationBanner = (message: string, bannerType: string): SetNotificationBannerType => (
-  {
-    type: SET_NOTIFICATION_BANNER,
-    message,
-    bannerType,
-  }
-);
-
 const clearNotificationBanner = (): ClearNotificationBannerType => (
   {
     type: CLEAR_NOTIFICATION_BANNER,
@@ -749,13 +727,10 @@ const defaultState = {
   ],
   panes: {
     primary: {
-      active: {
-        type: EVENT,
-        content: {
-          channelId: 'event',
-        },
+      type: EVENT,
+      content: {
+        channelId: 'event',
       },
-      isAnimating: false,
     },
   },
   tabs: [],
@@ -773,7 +748,7 @@ const defaultState = {
     accessToken: '',
     refreshToken: '',
   },
-  persistExpiresAt: moment().add(1, 'months').format(),
+  persistExpiresAt: dayjs().add(1, 'month').format(),
   clientInfo: {
     countryCode: '',
     countryName: '',
@@ -786,6 +761,7 @@ const defaultState = {
   },
   mutedUsers: [],
   navbarIndex: 0,
+  prevNavbarIndex: undefined,
 };
 
 // Reducer
@@ -806,22 +782,7 @@ const reducer = (
       ...state,
       panes: {
         ...state.panes,
-        [action.name]: {
-          active: action.pane,
-          previous: state.panes[action.name].active,
-          isAnimating: false,
-        },
-      },
-    };
-  case UPDATE_PANE_ANIMATION:
-    return {
-      ...state,
-      panes: {
-        ...state.panes,
-        [action.name]: {
-          ...state.panes[action.name],
-          isAnimating: action.isAnimating,
-        },
+        [action.name]: action.pane,
       },
     };
   case SET_HERE_NOW:
@@ -957,19 +918,22 @@ const reducer = (
     const publicChannelId = getPublicChannel(state);
     const hostChannelId = getHostChannel(state);
     const currentChannelId = getCurrentChannel(state);
-    const publicChannelPain = {
+
+    const publicChannelPane = {
       type: EVENT,
       content: {
         channelId: publicChannelId,
       },
     };
-    const hostChannelPain = {
+
+    const hostChannelPane = {
       type: CHAT,
       content: {
         channelId: hostChannelId,
       },
     };
-    let newPain = {
+
+    let newPane = {
       type: EVENT,
       content: {
         channelId: 'event',
@@ -978,9 +942,9 @@ const reducer = (
 
     if (deletedChannelId === currentChannelId) {
       if (deletedChannelId === publicChannelId && hostChannelId) {
-        newPain = hostChannelPain;
+        newPane = hostChannelPane;
       } else if (publicChannelId) {
-        newPain = publicChannelPain;
+        newPane = publicChannelPane;
       }
     }
 
@@ -989,10 +953,7 @@ const reducer = (
       channels: updatedChannels,
       panes: {
         ... state.panes,
-        primary: {
-          ... state.panes.primary,
-          active: newPain,
-        },
+        primary: newPane,
       },
     };
   }
@@ -1277,14 +1238,10 @@ const reducer = (
             panes: {
               ...state.panes,
               primary: {
-                active: {
-                  type: EVENT,
-                  content: {
-                    channelId: publicChannel,
-                  },
+                type: EVENT,
+                content: {
+                  channelId: publicChannel,
                 },
-                previous: {},
-                isAnimating: false,
               },
             },
           };
@@ -1423,6 +1380,7 @@ const reducer = (
     return {
       ...state,
       navbarIndex: action.index,
+      prevNavbarIndex: state.navbarIndex,
     };
   case ADD_TAB: {
     const { tab } = action;
@@ -1450,14 +1408,10 @@ const reducer = (
       panes: {
         ...state.panes,
         primary: {
-          active: {
-            type: EVENT,
-            content: {
-              channelId: publicChannel,
-            },
+          type: EVENT,
+          content: {
+            channelId: publicChannel,
           },
-          previous: {},
-          isAnimating: false,
         },
       },
     };
@@ -1511,7 +1465,6 @@ export {
   setSchedule,
   getNotificationBanner,
   clearNotificationBanner,
-  setNotificationBanner,
   setScheduleData,
   updateHereNow,
   removeHereNow,
