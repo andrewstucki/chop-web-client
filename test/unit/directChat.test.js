@@ -36,11 +36,9 @@ describe('Direct Chat Tests', () => {
           },
           panes: {
             primary: {
-              active: {
-                type: 'EVENT',
-                content: {
-                  channelId: 'abc',
-                },
+              type: 'EVENT',
+              content: {
+                channelId: 'abc',
               },
             },
           },
@@ -59,11 +57,9 @@ describe('Direct Chat Tests', () => {
             ...defaultState,
             panes: {
               primary: {
-                active: {
-                  type: 'CHAT',
-                  content: {
-                    channelId: '67890',
-                  },
+                type: 'CHAT',
+                content: {
+                  channelId: '67890',
                 },
               },
             },

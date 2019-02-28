@@ -20,13 +20,10 @@ describe('Mute User tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'test',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'test',
             },
-            isAnimating: false,
           },
         },
       },
@@ -48,13 +45,10 @@ describe('Mute User tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'test',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'test',
             },
-            isAnimating: false,
           },
         },
         mutedUsers: [
@@ -81,13 +75,10 @@ describe('Mute User tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'test',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'test',
             },
-            isAnimating: false,
           },
         },
         mutedUsers: ['blockme'],
@@ -110,13 +101,10 @@ describe('Mute User tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'test',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'test',
             },
-            isAnimating: false,
           },
         },
         mutedUsers: [

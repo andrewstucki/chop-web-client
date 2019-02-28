@@ -23,6 +23,7 @@ describe('NavBar tests', () => {
       {
         ...defaultState,
         navbarIndex: 2,
+        prevNavbarIndex: 0,
       }
     );
   });

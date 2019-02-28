@@ -379,11 +379,9 @@ const phase4 = {
   },
   panes: {
     primary: {
-      active: {
-        type: 'EVENT',
-        content: {
-          channelId: '5fd7123ee2ff4432cafbac4331b643a65839b941ef19e4b60b7f8973e13511ff',
-        },
+      type: 'EVENT',
+      content: {
+        channelId: '5fd7123ee2ff4432cafbac4331b643a65839b941ef19e4b60b7f8973e13511ff',
       },
     },
   },

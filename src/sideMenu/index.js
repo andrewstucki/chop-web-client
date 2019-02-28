@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   const feedState = state.feed;
   const hostChannel = getHostChannel(feedState);
   const publicChannel = getPublicChannel(feedState);
-  const { active: currentPane } = feedState.panes.primary;
+  const { primary: currentPane } = feedState.panes;
   const { name:organizationName } = feedState.organization;
   const { title:eventTitle, description:eventDescription } = feedState.event;
 

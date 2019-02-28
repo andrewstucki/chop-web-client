@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import styles from './styles.css';
+import { Wrapper, Heading, EventName} from './styles';
 
 type OfflinePropsType = {
   eventName: string,
@@ -8,13 +8,15 @@ type OfflinePropsType = {
 };
 
 const Offline = ({ eventName, eventTime }: OfflinePropsType) => (
-  <div className={styles.offline}>
+  <Wrapper>
     <div>
-      <p className={styles.heading}>Upcoming Event</p>
-      <p className={styles.eventName}>{eventName}</p>
+      <Heading>Upcoming Event</Heading>
+      <EventName>{eventName}</EventName>
       <p>{eventTime}</p>
     </div>
-  </div>
+  </Wrapper>
 );
 
-export default Offline;
+Offline.whyDidYouRender = true;
+
+export default React.memo < OfflinePropsType > (Offline);

@@ -14,6 +14,7 @@ const mockDate = date => {
     static now () {
       return date;
     }
+
   };
 };
 
