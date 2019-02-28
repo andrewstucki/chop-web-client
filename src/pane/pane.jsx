@@ -8,6 +8,8 @@ import Event from './content/event';
 import { PaneWrapper, PaneContentWrapper } from './styles';
 import hash from 'object-hash';
 import { useTransition } from 'react-spring';
+import { TAB } from './content/tab/dux';
+import Tab from './content/tab';
 
 type PanePropsType = {
   name: string,
@@ -24,6 +26,9 @@ const renderPaneContent = (pane:PaneType) => {
   case CHAT:
     // $FlowFixMe
     return <Chat channel={content.channelId} />;
+  case TAB:
+    // $FlowFixMe
+    return <Tab type={content.type}/>;
   default:
     return null;
   }
