@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import Offline from './offline';
 import { getNextEventData } from '../../../selectors/eventSelectors';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const mapStateToProps = state => {
   const { feed:feedState } = state;
@@ -10,8 +10,8 @@ const mapStateToProps = state => {
   if (nextEvent) {
     const { title, scheduleTime } = nextEvent;
 
-    const unixTime = moment.unix(scheduleTime);
-    const localTime = unixTime.local().format('h:mma dddd, MMM. D');
+    const unixTime = dayjs.unix(scheduleTime);
+    const localTime = unixTime.format('h:mma dddd, MMM. D');
 
     return {
       eventName: title,

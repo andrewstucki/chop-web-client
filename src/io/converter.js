@@ -2,8 +2,8 @@
 
 import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
-import { UTC_DATE_FORMAT } from '../util';
-import moment from 'moment';
+import { UTC_DATE_FORMAT, getUTCDate } from '../util';
+import dayjs from 'dayjs';
 import type { MessageType } from '../moment/message/dux';
 import type {
   UIDType,
@@ -77,12 +77,13 @@ export type LegcayNewMessageDataType = {
 
 export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMessageDataType>;
 
-
 let _getState;
 
-const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => moment(inTimestamp).utc().format('YYYY-MM-DD HH:mm:ss +0000');
+const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => (
+  dayjs(getUTCDate(new Date(inTimestamp))).format('YYYY-MM-DD HH:mm:ss +0000')
+);
 
-const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => moment.utc(inTimestamp, ['YYYY-MM-DD HH:mm:ss UTC', 'YYYY-MM-DD HH:mm:ss +0000'], true).valueOf();
+const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => dayjs(inTimestamp).valueOf();
 
 const Converter = {
   config: (getState: () => any) => {
@@ -95,7 +96,7 @@ const Converter = {
       language: _getState().currentLanguage,
       eventTimeId: _getState().event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
-      eventTimeOffset: moment(message.timestamp.toString(), 'x').diff(moment(_getState().event.startTime.toString(), 'X'), 'seconds').toString(),
+      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'seconds').toString(),
       eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
       fromNickname: message.sender.name,
@@ -194,7 +195,7 @@ const Converter = {
     );
   },
 
-  getTimestamp: () => moment().utc().format(UTC_DATE_FORMAT),
+  getTimestamp: () => dayjs(getUTCDate()).format(UTC_DATE_FORMAT),
 
 };
 

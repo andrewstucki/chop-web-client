@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { ThemeProvider } from 'styled-components';
-import { theme } from './theme';
+import { theme } from '../../src/styles';
 
 const mockDate = date => {
   const RealDate = Date;

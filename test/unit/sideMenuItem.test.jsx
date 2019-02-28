@@ -4,9 +4,10 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import 'jest-styled-components';
 import SideMenuItem from '../../src/sideMenu/sideMenuItem';
-import UpArrow from '../../assets/large-arrow-up.svg';
+import Globe from '../../assets/globe.svg';
 import { Wrapper, Title } from '../../src/sideMenu/sideMenuItem/styles';
 import { mountWithTheme } from '../testUtils';
+import { theme } from '../../src/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -15,7 +16,7 @@ describe('SideMenuItem tests', () => {
     const wrapper = mountWithTheme(
       <SideMenuItem
         active={true}
-        icon={UpArrow}
+        icon={Globe}
         title='Test'
         onClick={() => {}}
       />
@@ -24,14 +25,14 @@ describe('SideMenuItem tests', () => {
     expect(wrapper.find(SideMenuItem).exists()).toEqual(true);
     expect(wrapper.find(Title).text()).toEqual('Test');
     // $FlowFixMe
-    expect(wrapper.find(Wrapper)).toHaveStyleRule('color', '#404041');
+    expect(wrapper.find(Wrapper)).toHaveStyleRule('color', theme.colors.gray100);
   });
 
   test('SideMenuItem inactive state', () => {
     const wrapper = mountWithTheme(
       <SideMenuItem
         active={false}
-        icon={UpArrow}
+        icon={Globe}
         title='Test'
         onClick={() => {}}
       />
@@ -40,6 +41,6 @@ describe('SideMenuItem tests', () => {
     expect(wrapper.find(SideMenuItem).exists()).toEqual(true);
     expect(wrapper.find(Title).text()).toEqual('Test');
     // $FlowFixMe
-    expect(wrapper.find(Wrapper)).toHaveStyleRule('color', '#9f9fa0');
+    expect(wrapper.find(Wrapper)).toHaveStyleRule('color', theme.colors.gray50);
   });
 });

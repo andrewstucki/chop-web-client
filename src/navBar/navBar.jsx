@@ -12,7 +12,7 @@ import type { TabTypeType } from '../pane/content/tab/dux';
 import {TAB} from '../pane/content/tab/dux';
 import {PRIMARY_PANE} from '../pane/dux';
 import { NavBarItemWrapper, Pip, DirectChatAvatar, Underline, NavBarHamburgerWrapper } from './styles';
-import { Actionable } from '../components/Actionable';
+import Actionable from '../components/Actionable';
 
 type NavBarProps = {
   items: Array<NavbarItemType>,

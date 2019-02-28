@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Wrapper, Action} from './styles';
-import { Actionable } from '../Actionable';
+import Actionable from '../Actionable';
 
 type ActionBannerPropsType = {
   text: string,
@@ -25,4 +25,6 @@ const ActionBanner = (
   </Wrapper>
 );
 
-export default ActionBanner;
+ActionBanner.whyDidYouRender = true;
+
+export default React.memo < ActionBannerPropsType > (ActionBanner);

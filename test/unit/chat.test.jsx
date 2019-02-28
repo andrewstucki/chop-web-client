@@ -1,7 +1,7 @@
 // @flow
 import Adapter from 'enzyme-adapter-react-16';
-import Button from '../../src/components/button';
-import InputField from '../../src/components/inputField';
+import IconButton from '../../src/components/iconButton';
+import ChatInput from '../../src/components/chatInput';
 import Chat from '../../src/chat/chat';
 import Enzyme from 'enzyme';
 import React from 'react';
@@ -37,8 +37,8 @@ describe('Chat tests', () => {
     wrapper.setState({
       chatInput: 'Hello',
     });
-    expect(wrapper.find(InputField).length).toBe(1);
-    expect(wrapper.find(Button).length).toBe(1);
+    expect(wrapper.find(ChatInput).length).toBe(1);
+    expect(wrapper.find(IconButton).length).toBe(1);
   });
 
   test('has a InputField and disabled Button', () => {
@@ -57,8 +57,8 @@ describe('Chat tests', () => {
         publishMessage={() => {}}
       />
     );
-    expect(wrapper.find(InputField).length).toBe(1);
-    const button = wrapper.find(Button);
+    expect(wrapper.find(ChatInput).length).toBe(1);
+    const button = wrapper.find(IconButton);
     expect(button.length).toBe(1);
     expect(button.props()).toHaveProperty('disabled');
   });

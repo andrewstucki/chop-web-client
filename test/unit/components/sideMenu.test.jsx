@@ -10,7 +10,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('SideMenu tests', () => {
   test('with child content', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <SideMenu close={() => {}} isClosed={false}>
         Hello
       </SideMenu>
@@ -49,7 +49,7 @@ describe('SideMenu tests', () => {
   });
 
   test('closed', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <SideMenu close={() => {}} isClosed={true}>
         Hello
       </SideMenu>
@@ -58,11 +58,12 @@ describe('SideMenu tests', () => {
   });
 
   test('open', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = Enzyme.mount(
       <SideMenu close={() => {}} isClosed={false}>
         Hello
       </SideMenu>
     );
+
     expect(wrapper.find('Overlay').at(0).props().isClosed).toEqual(false);
   });
 });

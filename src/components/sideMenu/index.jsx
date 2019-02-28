@@ -33,8 +33,6 @@ const Menu = ({swipe, isClosed, children}) => {
   );
 };
 
-
-
 const SideMenu = (
   {
     children,
@@ -50,4 +48,6 @@ const SideMenu = (
   </React.Fragment>
 );
 
-export default SideMenu;
+SideMenu.whyDidYouRender = true;
+
+export default React.memo < SideMenuType > (SideMenu);

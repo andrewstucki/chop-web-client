@@ -1,9 +1,6 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import LabelWrapper from '../../components/label/styles';
-
-type WrapperPropsType = {
-  messageTrayOpen: boolean,
-};
+import { animated } from 'react-spring';
 
 const MessageWrapper = styled.div`
   width: 100%;
@@ -13,29 +10,14 @@ const MessageWrapper = styled.div`
   overflow: hidden;
   padding: 8px 0 8px;
   transition: opacity 300ms cubic-bezier(0.7, 0, 0.3, 1);
+  opacity: ${props => props.messageTrayOpen ? '0.5' : '1.0'};
 `;
 
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
   
-  ${(props:WrapperPropsType) => props.messageTrayOpen ?
-    css`
-    > :last-child {
-      transition: right 300ms cubic-bezier(0.7, 0, 0.3, 1);
-      right: 0;
-    }
-    
-    ${MessageWrapper} {
-      opacity: 0.25;
-    }
-    ` :
-    css`
-    > :last-child {
-      transition: right 300ms cubic-bezier(0.7, 0, 0.3, 1);
-      right: -300px;
-    }`
-}
   ${LabelWrapper} {
     display: inline-block;
     position: relative;
@@ -74,6 +56,11 @@ const TextWrapper = styled.div`
   word-break: break-word;
 `;
 
+const AnimatedMessageTray = styled(animated.div)`
+  position: absolute;
+  right: 0;
+`;
+
 export {
   MessageWrapper,
   Wrapper,
@@ -81,5 +68,6 @@ export {
   NameWrapper,
   OpenTrayButton,
   TextWrapper,
+  AnimatedMessageTray,
 };
 
