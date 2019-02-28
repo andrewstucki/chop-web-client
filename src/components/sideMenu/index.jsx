@@ -16,7 +16,7 @@ const Overlay = ({close, isClosed}) => (
 );
 
 const Menu = ({swipe, isClosed, children}) => {
-  const menuRef = useRef();
+  const menuRef = useRef(null);
 
   return (
     <ReactTouchEvents onSwipe={swipe}>

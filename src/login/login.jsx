@@ -1,6 +1,6 @@
 // @flow
 /* global SyntheticKeyboardEvent, SyntheticMouseEvent */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Wrapper, ButtonWrapper } from './styles';
 import InputField from '../components/inputField';
 import Button, {BUTTON_MEDIUM, BUTTON_PRIMARY} from '../components/button';
@@ -20,6 +20,8 @@ type LoginState = {
 
 const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => {
   const [values, setValues] = useState < LoginState > ({ email: '', password: '' });
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const onChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -28,8 +30,15 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
 
   const handleLogin = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    const { current:currentEmail } = emailRef;
+    const { current:currentPassword } = passwordRef;
 
-    const { email, password } = values;
+    // Fallback to React Uncontrolled DOM components for AutoFill
+    const {
+      email = currentEmail === null ? '' : currentEmail.value(),
+      password = currentPassword === null ? '' : currentPassword.value(),
+    } = values;
+
     clearErrors();
     basicAuthLogin(email, password);
   };
@@ -46,6 +55,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
         <Errors />
         <form onSubmit={handleLogin}>
           <InputField
+            ref={emailRef}
             type='email'
             name='email'
             label='Email'
@@ -53,6 +63,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
             value={values.email}
           />
           <InputField
+            ref={passwordRef}
             type='password'
             name='password'
             label='Password'

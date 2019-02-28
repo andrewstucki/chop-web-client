@@ -1,6 +1,6 @@
 // @flow
 /* global SyntheticKeyboardEvent, SyntheticFocusEvent */
-import React from 'react';
+import React, { useRef, useImperativeHandle } from 'react';
 import { Wrapper, Input, Label } from './styles';
 
 type InputFieldProps = {
@@ -14,21 +14,33 @@ type InputFieldProps = {
   placeholder?: string,
 };
 
-const InputField = ({ type, label, name, onChange, onFocus, onBlur, value, placeholder }: InputFieldProps) => (
-  <Wrapper>
-    <Label htmlFor={name}>{label}</Label>
-    <Input
-      type={type}
-      name={name}
-      onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      value={value}
-      placeholder={placeholder}
-    />
-  </Wrapper>
-);
+const InputField = React.forwardRef(({ type, label, name, onChange, onFocus, onBlur, value, placeholder }: InputFieldProps, ref) => {
+  const inputRef = useRef(null);
 
-InputField.whyDidYouRender = true;
+  useImperativeHandle(ref, () => ({
+    value: () => {
+      const { current } = inputRef;
+      return current === null ? '' : current.value;
+    },
+  }));
+
+  return (
+    <Wrapper>
+      <Label htmlFor={name}>{label}</Label>
+      <Input
+        ref={inputRef}
+        type={type}
+        name={name}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        value={value}
+        placeholder={placeholder}
+      />
+    </Wrapper>
+  );
+});
+
+InputField.displayName = 'InputField';
 
 export default React.memo < InputFieldProps > (InputField);
