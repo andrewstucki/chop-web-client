@@ -21,7 +21,7 @@ const getChannelById = (state: FeedType, id: ChannelIdType): ChannelType => getC
 
 const getCurrentLanguage = (state: FeedType): LanguageCodeType => state.currentLanguage;
 
-const getPrimaryPane = (state: FeedType): PaneType => state.panes.primary.active;
+const getPrimaryPane = (state: FeedType): PaneType => state.panes.primary;
 
 const getMutedUsers = (state: FeedType):Array<UIDType>  => state.mutedUsers;
 

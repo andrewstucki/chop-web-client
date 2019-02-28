@@ -31,4 +31,4 @@ const Tab = ({ type, removeTab }:TabPropsType) => (
   </>
 );
 
-export default Tab;
+export default React.memo < TabPropsType > (Tab);

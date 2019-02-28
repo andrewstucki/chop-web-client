@@ -135,19 +135,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'CHAT',
-              content: {
-                channelId: 'host',
-              },
+            type: 'CHAT',
+            content: {
+              channelId: 'host',
             },
-            previous: {
-              type: 'EVENT',
-              content: {
-                channelId: 'event',
-              },
-            },
-            isAnimating: false,
           },
         },
       }
@@ -172,13 +163,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
         chatInput: 'this is a message',
@@ -230,13 +218,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'CHAT',
-              content: {
-                channelId: 'host',
-              },
+            type: 'CHAT',
+            content: {
+              channelId: 'host',
             },
-            isAnimating: false,
           },
         },
         chatInput: 'this is a string',
@@ -765,13 +750,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       },
@@ -815,13 +797,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       }
@@ -868,13 +847,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'CHAT',
-              content: {
-                channelId: 'host',
-              },
+            type: 'CHAT',
+            content: {
+              channelId: 'host',
             },
-            isAnimating: false,
           },
         },
       },
@@ -918,13 +894,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'CHAT',
-              content: {
-                channelId: 'host',
-              },
+            type: 'CHAT',
+            content: {
+              channelId: 'host',
             },
-            isAnimating: false,
           },
         },
       }
@@ -971,13 +944,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       },
@@ -1021,13 +991,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       }
@@ -1074,13 +1041,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       },
@@ -1124,13 +1088,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       }
@@ -1177,13 +1138,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       },
@@ -1227,13 +1185,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            isAnimating: false,
           },
         },
       }
@@ -2049,13 +2004,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'CHAT',
-              content: {
-                channelId: 'direct',
-              },
+            type: 'CHAT',
+            content: {
+              channelId: 'direct',
             },
-            isAnimating: false,
           },
         },
         currentUser: currentUser,
@@ -2091,14 +2043,10 @@ describe('Feed tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: 'EVENT',
-              content: {
-                channelId: 'public',
-              },
+            type: 'EVENT',
+            content: {
+              channelId: 'public',
             },
-            previous: {},
-            isAnimating: false,
           },
         },
         currentUser: currentUser,

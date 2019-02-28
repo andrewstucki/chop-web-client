@@ -1,101 +1,56 @@
 //@flow
-import React, { Component } from 'react';
+import React from 'react';
 import type { PaneType } from './dux';
 import { CHAT } from './content/chat/dux';
 import Chat from './content/chat';
 import { EVENT } from './content/event/dux';
 import Event from './content/event';
-import { withSlideTransitions } from '../animations';
-import type { WithSlideTransitionsType } from '../animations';
 import { PaneWrapper, PaneContentWrapper } from './styles';
-import Tab from './content/tab';
-import {TAB} from './content/tab/dux';
+import hash from 'object-hash';
+import { useTransition } from 'react-spring';
 
 type PanePropsType = {
   name: string,
-  active: PaneType,
-  previous: PaneType,
+  pane: PaneType,
   navbarIndex: number,
-  updatePaneAnimation: (string, boolean) => void,
-  isAnimating: boolean,
-  ...WithSlideTransitionsType,
+  prevNavbarIndex: number,
 };
 
-@withSlideTransitions
-class Pane extends Component<PanePropsType> {
-  prevPane: { current: any };
-  currentPane: { current: any };
-
-  constructor (props:PanePropsType) {
-    super(props);
-    this.prevPane = React.createRef();
-    this.currentPane = React.createRef();
+const renderPaneContent = (pane:PaneType) => {
+  const { type, content } = pane;
+  switch (type) {
+  case EVENT:
+    return <Event />;
+  case CHAT:
+    // $FlowFixMe
+    return <Chat channel={content.channelId} />;
+  default:
+    return null;
   }
+};
 
-  componentDidUpdate (prevProps:PanePropsType): void {
-    const { navbarIndex:currentNavbarIndex, updatePaneAnimation, name,
-      syncTransitionLeft, syncTransitionRight } = this.props;
-    const { navbarIndex:prevNavbarIndex } = prevProps;
-    const { current:currentPane } = this.currentPane;
-    const { current:prevPane } = this.prevPane;
+const Pane = ({ pane, navbarIndex, prevNavbarIndex }:PanePropsType) => {
+  const direction = navbarIndex > prevNavbarIndex;
+  const transitions = useTransition(pane, hash(pane), {
+    from: { transform: direction ? 'translate3d(100%,0,0)' : 'translate3d(-100%,0,0)' },
+    enter: { transform: direction ? 'translate3d(0%,0,0)' : 'translate3d(0%,0,0)' },
+    leave: { transform: direction ? 'translate3d(-100%,0,0)' : 'translate3d(100%,0,0)' },
+    immediate: prevNavbarIndex === undefined,
+  });
 
-    if (currentPane && currentNavbarIndex !== prevNavbarIndex) {
-      updatePaneAnimation(name, true);
-      if (currentNavbarIndex > prevNavbarIndex) {
-        syncTransitionLeft(currentPane, prevPane, this.removePreviousPane);
-      } else {
-        syncTransitionRight(currentPane, prevPane, this.removePreviousPane);
-      }
-    }
-  }
-
-  removePreviousPane = () => {
-    const { name, updatePaneAnimation } = this.props;
-    updatePaneAnimation(name, false);
-  };
-
-  renderPaneContent = (pane:PaneType) => {
-    const { type, content } = pane;
-
-    switch (type) {
-    case EVENT:
-      return (
-        <Event />
-      );
-    case CHAT:
-      return (
-        // $FlowFixMe
-        <Chat channel={content.channelId} />
-      );
-    case TAB:
-      return (
-        // $FlowFixMe
-        <Tab type={content.type}/>
-      );
-    default:
-      return null;
-    }
-  };
-
-  render () {
-    const { active, previous, isAnimating } = this.props;
-
-    return (
-      <PaneWrapper>
+  return (
+    <PaneWrapper>
+      { transitions.map(({ item:pane, props, key }) => (
         <PaneContentWrapper
-          offCanvas
-          ref={this.prevPane}>
-          { isAnimating && this.renderPaneContent(previous) }
-        </PaneContentWrapper>
+          key={key}
+          style={props}>
+          {renderPaneContent(pane)}
+        </PaneContentWrapper>)
+      )}
+    </PaneWrapper>
+  );
+};
 
-        <PaneContentWrapper
-          ref={this.currentPane}>
-          { this.renderPaneContent(active) }
-        </PaneContentWrapper>
+Pane.whyDidYouRender = true;
 
-      </PaneWrapper>
-    );
-  }
-}
-
-export default Pane;
+export default React.memo < PanePropsType > (Pane);

@@ -24,10 +24,8 @@ describe('Test Avatar', () => {
           ...defaultState,
           panes: {
             primary: {
-              active: {
-                type: 'CHAT',
-                content: {},
-              },
+              type: 'CHAT',
+              content: {},
             },
           },
         },
@@ -74,10 +72,8 @@ describe('Test Avatar', () => {
           ...defaultState,
           panes: {
             primary: {
-              active: {
-                type: 'CHAT',
-                content: {},
-              },
+              type: 'CHAT',
+              content: {},
             },
           },
         },

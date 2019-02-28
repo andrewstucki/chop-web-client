@@ -15,11 +15,9 @@ describe('Tab tests', () => {
           ...defaultState,
           panes: {
             primary: {
-              active: {
-                type: 'CHAT',
-                content: {
-                  channelId: 'Public',
-                },
+              type: 'CHAT',
+              content: {
+                channelId: 'Public',
               },
             },
           },
@@ -38,19 +36,10 @@ describe('Tab tests', () => {
         ...defaultState,
         panes: {
           primary: {
-            active: {
-              type: TAB,
-              content: {
-                type: HOST_INFO,
-              },
+            type: TAB,
+            content: {
+              type: HOST_INFO,
             },
-            previous: {
-              type: 'CHAT',
-              content: {
-                channelId: 'Public',
-              },
-            },
-            isAnimating: false,
           },
         },
       }
@@ -170,14 +159,10 @@ describe('Tab tests', () => {
         },
         panes: {
           primary: {
-            active: {
-              type: EVENT,
-              content: {
-                channelId: 'public',
-              },
+            type: EVENT,
+            content: {
+              channelId: 'public',
             },
-            previous: {},
-            isAnimating: false,
           },
         },
       }

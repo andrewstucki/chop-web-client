@@ -6,16 +6,10 @@ const getPane = (state:FeedType, name:string) => state.panes[name];
 
 const paneContentSelector = createSelector(
   getPane,
-  pane => pane.active,
-);
-
-const previousPaneContentSelector = createSelector(
-  getPane,
-  pane => pane.previous,
+  pane => pane,
 );
 
 export {
   getPane,
   paneContentSelector,
-  previousPaneContentSelector,
 };
