@@ -5,8 +5,11 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import sinon from 'sinon';
+import { mountWithTheme } from '../testUtils';
 
 import Login from '../../src/login/login';
+import Button from '../../src/components/button';
+import { Wrapper } from '../../src/login/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -15,7 +18,7 @@ describe('Login tests', () => {
     const wrapper = Enzyme.shallow(
       <Login basicAuthLogin={() => {}} isAuthenticated={false} clearErrors={() => {}}/>
     );
-    expect(wrapper.find('.login').type()).toEqual('div');
+    expect(wrapper.find(Wrapper).exists()).toBeTruthy();
   });
 
   test('Changing values updates state', () => {
@@ -29,11 +32,11 @@ describe('Login tests', () => {
       }
     ));
 
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Provider store={store}>
         <div>
           <Login basicAuthLogin={basicAuthLogin} isAuthenticated={false} clearErrors={() => {}}/>
-        </div>   
+        </div>
       </Provider>
     );
 
@@ -44,9 +47,9 @@ describe('Login tests', () => {
     const passwordInput = wrapper.find('input[name="password"]');
     passwordInput.instance().value = 'password';
     passwordInput.simulate('change');
-    
-    expect(wrapper.find('#login').prop('disabled')).toBeFalsy();
-    wrapper.find('#login').simulate('click');
+
+    expect(wrapper.find(Button).prop('disabled')).toBeFalsy();
+    wrapper.find(Button).simulate('click');
     expect(basicAuthLogin.calledOnce).toEqual(true);
   });
 });

@@ -4,7 +4,7 @@ import type { SharedUserType } from '../../feed/dux';
 
 import HeartButton from '../../../assets/heart-button.svg';
 import styles from './style.css';
-import { Actionable } from '../../components/Actionable';
+import Actionable from '../../components/Actionable';
 
 type ReactionButtonPropsType = {
   buttonClick: (currentUser: SharedUserType) => void,

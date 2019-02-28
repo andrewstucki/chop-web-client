@@ -5,8 +5,10 @@ type LabelPropsType = {
   text: string,
 };
 
-const Index = ({text}:LabelPropsType) => (
+const Label = ({ text }:LabelPropsType) => (
   <Wrapper>{text}</Wrapper>
 );
 
-export default Index;
+Label.whyDidYouRender = true;
+
+export default React.memo(Label);

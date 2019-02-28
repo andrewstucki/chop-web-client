@@ -1,11 +1,18 @@
 // @flow
 /* global SyntheticEvent */
-import React from 'react';
+import * as React from 'react';
+
+type ActionableProps = {
+  onClick: any,
+  keepFocus?: boolean,
+  tabable?: boolean,
+  children: any,
+};
 
 const preventDefault = (event: SyntheticEvent<HTMLButtonElement>) =>
   event.preventDefault();
 
-const Actionable = ({onClick, keepFocus = false, tabable = true, children}: any) => {
+const Actionable = ({onClick, keepFocus = false, tabable = true, children}: ActionableProps) => {
   const { type: nodeName } = children;
   const interactiveElement = ['button', 'a', 'input', 'select', 'textarea', 'details'].includes(nodeName);
   const addKeyboardSupport = !interactiveElement && tabable;
@@ -21,6 +28,6 @@ const Actionable = ({onClick, keepFocus = false, tabable = true, children}: any)
   return React.cloneElement(children, newProps);
 };
 
-export {
-  Actionable,
-};
+Actionable.whyDidYouRender = true;
+
+export default React.memo < ActionableProps > (Actionable);

@@ -14,7 +14,7 @@ import AnchorMoment from '../anchorMoment/';
 import ActionBanner from '../components/actionBanner';
 import styles from './styles.css';
 import { createUid } from '../util';
-import Button from '../components/button';
+import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../components/button';
 
 const NO_SCROLL = 'NO_SCROLL';
 const SCROLL_TO = 'SCROLL_TO';
@@ -178,7 +178,12 @@ class Feed extends React.Component<FeedProps, FeedState> {
         { showNewMessageButton &&
           <div className={styles.newMessageButtonContainer}>
             <div className={styles.newMessageButtonWrapper}>
-              <Button onClick={this.setScrollPositionToBottom} buttonStyle='secondary' text='New Messages' small />
+              <Button
+                onClick={this.setScrollPositionToBottom}
+                variant={BUTTON_SECONDARY}
+                size={BUTTON_SMALL}>
+                New Messages
+              </Button>
             </div>
           </div>
         }

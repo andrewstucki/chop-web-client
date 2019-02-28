@@ -1,6 +1,6 @@
 import type { SubscriberType } from '../feed';
 import createDOMPurify from 'dompurify';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const getFirstInitial = name => (
   name.charAt(0).toUpperCase()
@@ -57,6 +57,8 @@ const createUid = () => {
 
 const newTimestamp = () => Date.now();
 
+const getUTCDate = (date = new Date()) => new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+
 const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => {
   let users = [];
 
@@ -104,7 +106,7 @@ const sanitizeString = (string: string, config:any = sanitizeConfig) =>
 const UTC_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss ZZ';
 const EPOCH_DATE_FORMAT = 'x';
 
-const getMessageTimestamp = (timestamp: string = moment().format(UTC_DATE_FORMAT)) => {
+const getMessageTimestamp = (timestamp: string = dayjs().format(UTC_DATE_FORMAT)) => {
   const isEpoch = timestamp.toString().match(/^\d{10}$/);
   let time = timestamp;
 
@@ -113,8 +115,8 @@ const getMessageTimestamp = (timestamp: string = moment().format(UTC_DATE_FORMAT
   }
 
   const inputFormat = isEpoch ? EPOCH_DATE_FORMAT : UTC_DATE_FORMAT;
-  const date = moment(time, inputFormat);
-  const format = moment().diff(date, 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
+  const date = dayjs(time, inputFormat);
+  const format = dayjs().diff(date, 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
   return date.format(format);
 };
 
@@ -149,4 +151,5 @@ export {
   isIOS,
   isAndroid,
   getComponentDisplayName,
+  getUTCDate,
 };

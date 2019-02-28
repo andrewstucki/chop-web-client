@@ -88,7 +88,7 @@ import {
 
 import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
 import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
@@ -277,7 +277,7 @@ type FeedType = {
   animatingMoment: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
-  keyboardHeight: number | typeof(undefined),
+  keyboardHeight: number | typeof undefined,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
@@ -773,7 +773,7 @@ const defaultState = {
     accessToken: '',
     refreshToken: '',
   },
-  persistExpiresAt: moment().add(1, 'months').format(),
+  persistExpiresAt: dayjs().add(1, 'month').format(),
   clientInfo: {
     countryCode: '',
     countryName: '',

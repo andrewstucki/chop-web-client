@@ -5,13 +5,14 @@ import Enzyme from 'enzyme';
 import sinon from 'sinon';
 
 import MessageTray from '../../../src/components/messageTray';
+import { mountWithTheme } from '../../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('MessageTray tests', () => {
   test('MessageTray has buttons', () => {
     const muteUser = sinon.spy();
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <MessageTray
         deleteMessage={() => {}}
         muteUser={muteUser}
@@ -19,26 +20,66 @@ describe('MessageTray tests', () => {
         closeTray={() => {}}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('tray');
-    expect(wrapper.find('button').at(0).props().className).toEqual('closeButton');
-    expect(wrapper.find('button').at(1).props().className).toEqual('muteButton');
-    expect(wrapper.find('button').at(2).props().className).toEqual('deleteButton');
-    expect(wrapper.find('button').at(3).props().className).toEqual('directChatButton');
+    expect(wrapper.find('button').length).toEqual(4);
   });
 
   test('Can click delete', () => {
     const deleteMessage = sinon.spy();
-    const muteUser = sinon.spy();
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <MessageTray
         deleteMessage={deleteMessage}
+        muteUser={() => {}}
+        directChat={() => {}}
+        closeTray={() => {}}
+      />
+    );
+
+    wrapper.find('[data-test="deleteButton"]').first().simulate('click');
+    expect(deleteMessage.calledOnce).toEqual(true);
+  });
+
+  test('Can click delete', () => {
+    const muteUser = sinon.spy();
+    const wrapper = mountWithTheme(
+      <MessageTray
+        deleteMessage={() => {}}
         muteUser={muteUser}
         directChat={() => {}}
         closeTray={() => {}}
       />
     );
 
-    wrapper.find('button.deleteButton').first().simulate('click');
-    expect(deleteMessage.calledOnce).toEqual(true);
+    wrapper.find('[data-test="muteButton"]').first().simulate('click');
+    expect(muteUser.calledOnce).toEqual(true);
+  });
+
+  test('Can click direct chat', () => {
+    const directChat = sinon.spy();
+    const wrapper = mountWithTheme(
+      <MessageTray
+        deleteMessage={() => {}}
+        muteUser={() => {}}
+        directChat={directChat}
+        closeTray={() => {}}
+      />
+    );
+
+    wrapper.find('[data-test="directChatButton"]').first().simulate('click');
+    expect(directChat.calledOnce).toEqual(true);
+  });
+
+  test('Can click close', () => {
+    const closeTray = sinon.spy();
+    const wrapper = mountWithTheme(
+      <MessageTray
+        deleteMessage={() => {}}
+        muteUser={() => {}}
+        directChat={() => {}}
+        closeTray={closeTray}
+      />
+    );
+
+    wrapper.find('[data-test="closeButton"]').first().simulate('click');
+    expect(closeTray.calledOnce).toEqual(true);
   });
 });
