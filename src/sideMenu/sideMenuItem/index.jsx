@@ -33,4 +33,4 @@ const SideMenuItem = ({ active, icon, title, onClick, comingSoon }:SideMenuItemP
   </Wrapper>
 );
 
-export default SideMenuItem;
+export default React.memo < SideMenuItemProps > (SideMenuItem);

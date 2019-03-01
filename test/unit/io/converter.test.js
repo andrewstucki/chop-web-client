@@ -46,6 +46,7 @@ describe('Converter Tests', () => {
               label: 'HOST',
             },
           },
+          isMuted: false,
         },
         'public'
       )

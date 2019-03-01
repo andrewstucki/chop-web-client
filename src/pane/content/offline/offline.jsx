@@ -17,6 +17,4 @@ const Offline = ({ eventName, eventTime }: OfflinePropsType) => (
   </Wrapper>
 );
 
-Offline.whyDidYouRender = true;
-
 export default React.memo < OfflinePropsType > (Offline);

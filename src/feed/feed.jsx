@@ -201,4 +201,4 @@ class Feed extends React.Component<FeedProps, FeedState> {
   }
 }
 
-export default Feed;
+export default React.memo < FeedProps > (Feed);

@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { mutedNotificationBanner, errorNotificationBanner } from '../../src/banner/dux';
 import { defaultState } from '../../src/feed/dux';
 import Banner from '../../src/banner';
+import { mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -92,7 +93,7 @@ describe('NotificationBanner test', () => {
       },
     );
 
-    const wrapper = Enzyme.mount(
+    const wrapper = mountWithTheme(
       <Provider store={store}>
         <div>
           <Banner />

@@ -25,6 +25,4 @@ const ActionBanner = (
   </Wrapper>
 );
 
-ActionBanner.whyDidYouRender = true;
-
 export default React.memo < ActionBannerPropsType > (ActionBanner);

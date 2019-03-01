@@ -2,12 +2,17 @@
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import Enzyme from 'enzyme';
+import { mountWithTheme } from '../testUtils';
 
-import { MESSAGE } from '../../src/moment/dux';
+import { MESSAGE } from '../../src/moment';
 
 import Feed from '../../src/feed/feed';
 import FeedActionBanner from '../../src/components/actionBanner';
 import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../../src/components/button';
+import { createStore } from 'redux';
+import reducer from '../../src/chop/dux';
+import { defaultState } from '../../src/feed/dux';
+import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -24,7 +29,7 @@ describe('Feed tests', () => {
   };
 
   test('has an empty feed', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Feed
         moments={[]}
         anchorMoments={[]}
@@ -54,31 +59,40 @@ describe('Feed tests', () => {
         text: 'This is a message',
         sender: {
           id: '12345',
-          nickname: 'Billy Bob',
+          name: 'Billy Bob',
         },
         messageTrayOpen: false,
       },
     ];
-    const wrapper = Enzyme.shallow(
-      <Feed
-        offset={0}
-        moments={moments}
-        anchorMoments={[]}
-        onMessageRender={function () {}}
-        currentChannel="default"
-        appendingMessage={false}
-        animatingMoment={true}
-        showLeaveChat={true}
-        isPopUpModalVisible={false}
-        togglePopUpModal={() => {}}
-        scroll={{type: 'NO_SCROLL'}}
-        currentUser={user}
-        updateScrollPosition={() => {}}
-        channel="default"
-        showNewMessageButton={false}
-        isChatFocused={false}
-        setSawLastMomentAt={() => {}}
-      />
+
+    const store = createStore(
+      reducer,
+      {
+        feed: defaultState,
+      }
+    );
+    const wrapper = mountWithTheme(
+      <Provider store={store}>
+        <Feed
+          offset={0}
+          moments={moments}
+          anchorMoments={[]}
+          onMessageRender={function () {}}
+          currentChannel="default"
+          appendingMessage={false}
+          animatingMoment={true}
+          showLeaveChat={true}
+          isPopUpModalVisible={false}
+          togglePopUpModal={() => {}}
+          scroll={{type: 'NO_SCROLL'}}
+          currentUser={user}
+          updateScrollPosition={() => {}}
+          channel="default"
+          showNewMessageButton={false}
+          isChatFocused={false}
+          setSawLastMomentAt={() => {}}
+        />
+      </Provider>
     );
 
     expect(wrapper.find('ul').children().length).toBe(1);
@@ -88,15 +102,16 @@ describe('Feed tests', () => {
         text: 'This is a message',
         sender: {
           id: '12345',
-          nickname: 'Billy Bob',
+          name: 'Billy Bob',
         },
+        type: 'MESSAGE',
         messageTrayOpen: false,
       }
     );
   });
 
   test('check for key prop', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Feed
         offset={0}
         moments={[]}
@@ -121,7 +136,7 @@ describe('Feed tests', () => {
   });
 
   test('Feed with participants', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Feed
         offset={0}
         moments={[]}
@@ -146,7 +161,7 @@ describe('Feed tests', () => {
   });
 
   test('Feed with New Message button', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Feed
         offset={0}
         moments={[]}

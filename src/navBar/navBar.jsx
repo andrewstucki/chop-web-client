@@ -33,7 +33,14 @@ type NavBarState = {
   },
 };
 
-const NavBarItem = ({item, directChatChannelNames}) => {
+type NavbarItemProps = {
+  item: NavbarItemType,
+  directChatChannelNames: {
+    [string]: string,
+  },
+};
+
+const NavBarItem = React.memo < NavbarItemProps > (({item, directChatChannelNames}:NavbarItemProps) => {
   if (item.isDirect) {
     const channelIconName = directChatChannelNames[item.id] || '?';
     return (
@@ -44,7 +51,7 @@ const NavBarItem = ({item, directChatChannelNames}) => {
   } else {
     return item.name;
   }
-};
+});
 
 class NavBar extends React.PureComponent<NavBarProps, NavBarState> {
   selectedLink: { current: any };

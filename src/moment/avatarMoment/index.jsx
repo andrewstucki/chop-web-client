@@ -4,24 +4,23 @@ import React from 'react';
 import { getFirstInitial, getAvatarColor } from '../../util';
 
 import type { AvatarMomentType } from './dux';
-import styles from './style.css';
+import { Wrapper, Avatar, User } from './styles';
 
 type AvatarMomentPropsType = {
   avatarMoment: AvatarMomentType,
 };
 
 const AvatarMoment = ({ avatarMoment }: AvatarMomentPropsType) => (
-  <div className={styles.avatarMoment}>
-    <div
-      className={styles.avatar}
+  <Wrapper>
+    <Avatar
       style={{backgroundColor: getAvatarColor(avatarMoment.user.name)}}
     >
       {getFirstInitial(avatarMoment.user.name)}
-    </div>
-    <div className={styles.user}>
+    </Avatar>
+    <User>
       <strong>{avatarMoment.user.name}</strong>
-    </div>
-  </div>
+    </User>
+  </Wrapper>
 );
 
-export default AvatarMoment;
+export default React.memo < AvatarMomentPropsType > (AvatarMoment);

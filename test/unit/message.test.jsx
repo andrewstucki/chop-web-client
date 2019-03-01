@@ -43,6 +43,7 @@ describe('Message', () => {
             sender: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
+            isMuted: false,
           }
         }
         currentChannel='public'
@@ -75,6 +76,7 @@ describe('Message', () => {
             sender: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
+            isMuted: false,
           }
         }
         currentChannel='public'
@@ -108,6 +110,7 @@ describe('Message', () => {
             sender: otherUser,
             messageTrayOpen: false,
             closeTrayButtonRendered: false,
+            isMuted: false,
           }
         }
         currentChannel='public'

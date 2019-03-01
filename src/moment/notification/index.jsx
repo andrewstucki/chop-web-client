@@ -146,4 +146,4 @@ const Notification = ({ notification }: NotificationPropsType) => (
   getNotificationText(notification)
 );
 
-export default Notification;
+export default React.memo < NotificationPropsType > (Notification);

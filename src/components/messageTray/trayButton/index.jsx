@@ -29,6 +29,4 @@ const TrayButton = ({ type = MESSAGE_ACTION, icon, color, text, onClick }:TrayBu
   );
 };
 
-TrayButton.whyDidYouRender = true;
-
 export default React.memo < TrayButtonProps > (TrayButton);
