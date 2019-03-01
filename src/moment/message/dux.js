@@ -3,11 +3,11 @@ import type { SharedUserType } from '../../feed/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import { createUid, newTimestamp } from '../../util';
-import type { 
-  UIDType, 
-  DateTimeType, 
-  System, 
-  MomentNameType, 
+import type {
+  UIDType,
+  DateTimeType,
+  System,
+  MomentNameType,
   LanguageType,
 } from '../../cwc-types';
 
@@ -39,6 +39,7 @@ type MessageType = {
   text: string,
   messageTrayOpen: boolean,
   closeTrayButtonRendered: boolean,
+  isMuted: boolean,
 } & BaseMomentType<typeof MESSAGE, SharedUserType>;
 
 type OpenMessageTrayType = {
@@ -94,6 +95,7 @@ const newMessage = (
     sender,
     messageTrayOpen: false,
     closeTrayButtonRendered: false,
+    isMuted: false,
   }
 );
 

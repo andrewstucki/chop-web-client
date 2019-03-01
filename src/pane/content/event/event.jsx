@@ -20,6 +20,4 @@ const Event = ({isOffline, channel}:EventPropsType) => {
   }
 };
 
-Event.whyDidYouRender = true;
-
 export default React.memo < EventPropsType > (Event);

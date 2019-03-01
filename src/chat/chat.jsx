@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import type { SharedUserType } from '../feed/dux';
 
 import { isIOS } from '../util';
-import UpArrow from '../icons/up-arrow';
+import UpArrow from '../icons/upArrow';
 import IconButton from '../components/iconButton';
 import { theme } from '../styles';
 import { Background, Wrapper } from './styles';
@@ -212,4 +212,4 @@ class Chat extends Component<ChatProps, ChatState> {
   }
 }
 
-export default Chat;
+export default React.memo < ChatProps > (Chat);

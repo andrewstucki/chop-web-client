@@ -5,6 +5,7 @@ import ChatInput from '../../src/components/chatInput';
 import Chat from '../../src/chat/chat';
 import Enzyme from 'enzyme';
 import React from 'react';
+import { mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -19,7 +20,7 @@ const otherUser = {
 
 describe('Chat tests', () => {
   test('has a InputField and Button', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Chat
         toggleChatFocus={function () {}}
         setKeyboardHeight={function () {}}
@@ -42,7 +43,7 @@ describe('Chat tests', () => {
   });
 
   test('has a InputField and disabled Button', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Chat
         toggleChatFocus={function () {}}
         setKeyboardHeight={function () {}}

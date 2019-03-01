@@ -26,6 +26,4 @@ const IconButton = ({ children, size, onClick, background = 'none', keepFocus, d
   </Actionable>
 );
 
-IconButton.whyDidYouRender = true;
-
 export default React.memo < IconButtonPropsType > (IconButton);

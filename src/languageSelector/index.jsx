@@ -44,4 +44,4 @@ const LanguageSelector = (
   </div>
 );
 
-export default LanguageSelector;
+export default React.memo < LanguageSelectorPropsType > (LanguageSelector);

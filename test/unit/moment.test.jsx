@@ -11,51 +11,72 @@ import {
   Text,
   AvatarMoment,
 } from '../../src/moment';
+import { mountWithTheme } from '../testUtils';
 
 import AnchorMoment from '../../src/anchorMoment';
+import { createStore } from 'redux';
+import reducer from '../../src/chop/dux';
+import { defaultState } from '../../src/feed/dux';
+import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Moment tests', () => {
   test('Moment renders', () => {
-    const wrapper = Enzyme.shallow(
-      <Moment
-        data={
-          {
-            type: 'MESSAGE',
-            id: '12345',
-            text: 'Hello',
-            sender: {
-              id: '54321',
-              nickname: 'Wilbur Wagner',
-            },
-            messageTrayOpen: false,
-            closeTrayButtonRendered: false,
+    const store = createStore(
+      reducer,
+      {
+        feed: defaultState,
+      }
+    );
+    const wrapper = mountWithTheme(
+      <Provider store={store}>
+        <Moment
+          data={
+            {
+              type: 'MESSAGE',
+              id: '12345',
+              text: 'Hello',
+              sender: {
+                id: '54321',
+                name: 'Wilbur Wagner',
+              },
+              messageTrayOpen: false,
+              closeTrayButtonRendered: false,
+            }
           }
-        }
-      />
+        />
+      </Provider>
     );
     expect(wrapper.find(Message).length).toBe(1);
   });
 
   test('Message renders', () => {
-    const wrapper = Enzyme.shallow(
-      <Moment
-        data={
-          {
-            type: 'MESSAGE',
-            id: '12345',
-            lang: 'en',
-            text: 'Hello',
-            sender: {
-              id: '54321',
-              nickname: 'Wilbur Wagner',
-            },
-            messageTrayOpen: false,
-            closeTrayButtonRendered: false,
+    const store = createStore(
+      reducer,
+      {
+        feed: defaultState,
+      }
+    );
+    const wrapper = mountWithTheme(
+      <Provider store={store}>
+        <Moment
+          data={
+            {
+              type: 'MESSAGE',
+              id: '12345',
+              lang: 'en',
+              text: 'Hello',
+              sender: {
+                id: '54321',
+                name: 'Wilbur Wagner',
+              },
+              messageTrayOpen: false,
+              closeTrayButtonRendered: false,
+            }
           }
-        }
-      />
+        />
+      </Provider>
     );
     expect(wrapper.find(Message).at(0).props().message).toEqual(
       {
@@ -65,7 +86,7 @@ describe('Moment tests', () => {
         text: 'Hello',
         sender: {
           id: '54321',
-          nickname: 'Wilbur Wagner',
+          name: 'Wilbur Wagner',
         },
         messageTrayOpen: false,
         closeTrayButtonRendered: false,
@@ -74,7 +95,7 @@ describe('Moment tests', () => {
   });
 
   test('Prayer notification renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Moment
         data={
           {
@@ -101,7 +122,7 @@ describe('Moment tests', () => {
   });
 
   test('Joined chat notification renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Moment
         data={
           {
@@ -126,7 +147,7 @@ describe('Moment tests', () => {
   });
 
   test('Left chat notification', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Moment
         data={
           {
@@ -151,25 +172,37 @@ describe('Moment tests', () => {
   });
 
   test('Prayer request notification renders', () => {
-    const wrapper = Enzyme.shallow(
-      <Moment
-        data={
-          {
-            type: 'ACTIONABLE_NOTIFICATION',
-            notificationType: 'PRAYER_REQUEST',
-            name: 'Billy',
-            timestamp: '4:53pm',
-            active: true,
+    const store = createStore(
+      reducer,
+      {
+        feed: defaultState,
+      }
+    );
+    const wrapper = mountWithTheme(
+      <Provider store={store}>
+        <Moment
+          data={
+            {
+              type: 'ACTIONABLE_NOTIFICATION',
+              notificationType: 'PRAYER_REQUEST',
+              user: {
+                name: 'Billy',
+              },
+              timestamp: '4:53pm',
+              active: true,
+            }
           }
-        }
-      />
+        />
+      </Provider>
     );
     expect(wrapper.find(ActionableNotification).at(0).props()).toEqual(
       {
         notification: {
           type: 'ACTIONABLE_NOTIFICATION',
           notificationType: 'PRAYER_REQUEST',
-          name: 'Billy',
+          user: {
+            name: 'Billy',
+          },
           timestamp: '4:53pm',
           active: true,
         },
@@ -178,18 +211,26 @@ describe('Moment tests', () => {
   });
 
   test('Salvation anchor moment renders', () => {
-    const wrapper = Enzyme.shallow(
-      <Moment
-        data={
-          {
-            type: 'ANCHOR_MOMENT',
-            anchorMomentType: 'SALVATION',
-            id: '12345',
-            text: 'I commit my life to Christ',
+    const store = createStore(
+      reducer,
+      {
+        feed: defaultState,
+      }
+    );
+    const wrapper = mountWithTheme(
+      <Provider store={store}>
+        <Moment
+          data={
+            {
+              type: 'ANCHOR_MOMENT',
+              anchorMomentType: 'SALVATION',
+              id: '12345',
+              text: 'I commit my life to Christ',
+            }
           }
-        }
-        isAnchorMomentAnchored={false}
-      />
+          isAnchorMomentAnchored={false}
+        />
+      </Provider>
     );
     expect(wrapper.find(AnchorMoment).at(0).props()).toEqual(
       {
@@ -205,7 +246,7 @@ describe('Moment tests', () => {
   });
 
   test('Text renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Moment
         data={
           {
@@ -226,7 +267,7 @@ describe('Moment tests', () => {
   });
 
   test('AvatarMoment renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Moment
         data={
           {
@@ -234,12 +275,13 @@ describe('Moment tests', () => {
             id: '12345',
             user: {
               id: '6789',
-              nickname: 'Madmartigan',
+              name: 'Madmartigan',
             },
           }
         }
       />
     );
+
     expect(wrapper.find(AvatarMoment).at(0).props()).toEqual(
       {
         avatarMoment: {
@@ -247,7 +289,7 @@ describe('Moment tests', () => {
           id: '12345',
           user: {
             id: '6789',
-            nickname: 'Madmartigan',
+            name: 'Madmartigan',
           },
         },
       }

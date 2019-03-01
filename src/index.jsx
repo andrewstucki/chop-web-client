@@ -36,7 +36,7 @@ declare var GTM;
 
 if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render');
-  whyDidYouRender(React);
+  whyDidYouRender(React, { include: [/^/], exclude: [/^StyledComponent/, /^Connect/]});
 }
 
 // kick off the polyfill!

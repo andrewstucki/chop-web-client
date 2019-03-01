@@ -83,4 +83,4 @@ class ChopContainer extends React.Component<ChopContainerProps, ChopContainerSta
   }
 }
 
-export default ChopContainer;
+export default React.memo < ChopContainerProps > (ChopContainer);

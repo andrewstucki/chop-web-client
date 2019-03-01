@@ -33,7 +33,7 @@ const ActionableNotification = (
   const acceptedTextStyle =
     !active ? styles.showText : styles.hideText;
 
-  const acceptedText = 
+  const acceptedText =
     cancelled ? 'Cancelled' : 'Accepted';
 
   return (
@@ -70,4 +70,4 @@ const ActionableNotification = (
   );
 };
 
-export default ActionableNotification;
+export default React.memo < ActionableNotificationPropsType > (ActionableNotification);

@@ -36,8 +36,6 @@ const Button = ({ children, onClick, keepFocus, variant = BUTTON_PRIMARY, size =
   </Actionable>
 );
 
-Button.whyDidYouRender = true;
-
 export default React.memo < ButtonPropsType > (Button);
 export {
   BUTTON_PRIMARY,

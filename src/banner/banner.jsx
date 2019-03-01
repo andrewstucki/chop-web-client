@@ -1,5 +1,5 @@
 import React from 'react';
-import Dismiss from '../icons/dismiss-button';
+import Dismiss from '../icons/dismissButton';
 import type { BannerType } from './dux';
 import { capitalizeFirstLetter } from '../util/index';
 import IconButton from '../components/iconButton';

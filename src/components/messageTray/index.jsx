@@ -32,6 +32,4 @@ const MessageTray = (
   </Wrapper>
 );
 
-MessageTray.whyDidYouRender = true;
-
 export default React.memo < MessageTrayPropsType > (MessageTray);

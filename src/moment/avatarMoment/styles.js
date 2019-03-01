@@ -1,12 +1,12 @@
-@import url('../../../assets/theme.css');
+import styled from 'styled-components';
 
-.avatarMoment {
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-}
+`;
 
-.avatar {
+const Avatar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,11 +17,13 @@
   line-height: 31px;
   font-size: 25px;
   margin-bottom: 8px;
-}
+`;
 
-.user {
+const User = styled.div`
   color: var(--textColor);
   text-align: center;
   line-height: 25px;
   font-size: 20px;
-}
+`;
+
+export { Wrapper, Avatar, User };

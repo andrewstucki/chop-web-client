@@ -19,6 +19,4 @@ const Chat = ({channel}:ChatPropsType) => (
   </>
 );
 
-Chat.whyDidYouRender = true;
-
 export default React.memo < ChatPropsType > (Chat);

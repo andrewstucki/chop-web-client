@@ -64,11 +64,11 @@ const translateMoment = (currentLanguage: LanguageCodeType) => (moment: MomentTy
   return moment;
 };
 
-const mutedMoment = (moment: MomentType): boolean => moment.isMuted !== 'true';
+const mutedMoment = (moment: MomentType): boolean => !moment.isMuted;
 
 const removeMutedUsers = (mutedUsers: Array<UIDType>) => (moment: MomentType): boolean => {
-  if (moment.user) {
-    return !mutedUsers.includes(moment.user.name);
+  if (moment.sender) {
+    return !mutedUsers.includes(moment.sender.name);
   } else {
     return true;
   }

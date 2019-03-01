@@ -12,7 +12,7 @@ import type {
   AnchorMomentType,
 } from './dux';
 
-import styles from './style.css';
+import { Wrapper, ReleaseButton, Text, SubText, MomentWrapper } from './styles';
 
 type AnchorMomentPropsType = {
   anchorMoment: AnchorMomentType,
@@ -29,12 +29,12 @@ const salvationMoment = (
   salvations,
 ) => (
   <div>
-    <div className={styles.text}>
+    <Text>
       {text}
-    </div>
-    <div className={styles.subText}>
+    </Text>
+    <SubText>
       {salvations === 1 ? `${salvations} hand raised` : `${salvations} hands raised`}
-    </div>
+    </SubText>
   </div>
 );
 
@@ -46,38 +46,29 @@ const getAnchorMoment = (anchorMoment, salvations) => {
 };
 
 const AnchorMoment = (
-  { 
+  {
     anchorMoment,
     isAnchorMomentAnchored,
     releaseAnchorMoment,
     currentChannel,
-    salvations, 
+    salvations,
   }: AnchorMomentPropsType
-) => {
-  const anchorMomentStyle =
-    isAnchorMomentAnchored ? styles.anchored : styles.released;
-
-  const textContainerStyle =
-    isAnchorMomentAnchored ? styles.withButton : styles.withoutButton;
-
-  return (
-    <div className={anchorMomentStyle}>
-      {
-        isAnchorMomentAnchored &&
-          <button
-            className={styles.releaseAnchorButton}
+) => (
+  <Wrapper anchored={isAnchorMomentAnchored}>
+    {
+      isAnchorMomentAnchored &&
+          <ReleaseButton
             dangerouslySetInnerHTML={{ __html: ReleaseAnchorButton }}
             onClick={() => {
               // $FlowFixMe
               releaseAnchorMoment(currentChannel, anchorMoment.id);
             }}
           />
-      }
-      <div className={textContainerStyle}>
-        {getAnchorMoment(anchorMoment, salvations)}
-      </div>
-    </div>
-  );
-};
+    }
+    <MomentWrapper>
+      {getAnchorMoment(anchorMoment, salvations)}
+    </MomentWrapper>
+  </Wrapper>
+);
 
-export default AnchorMoment;
+export default React.memo < AnchorMomentPropsType > (AnchorMoment);
