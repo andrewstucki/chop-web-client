@@ -86,9 +86,9 @@ const Message = (
   );
 
   const transitions = useTransition(messageTrayOpen, null, {
-    from: { transform:  'translate3d(100%,0,0)' },
-    enter: { transform: 'translate3d(2px,0,0)' },
-    leave: { transform: 'translate3d(125%,0,0)' },
+    from: { transform:  'translate3d(316px,0,0)' },
+    enter: { transform: 'translate3d(8px,0,0)' },
+    leave: { transform: 'translate3d(316px,0,0)' },
   });
 
   return (
@@ -104,10 +104,10 @@ const Message = (
         item &&
           <AnimatedMessageTray style={props} key={key}>
             <MessageTray
-              closeTray={closeMessageTray}
               deleteMessage={deleteMessage}
               muteUser={muteUser}
               directChat={directChat}
+              closeTray={closeMessageTray}
             />
           </AnimatedMessageTray>
       ))}
