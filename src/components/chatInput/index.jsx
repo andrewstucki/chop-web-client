@@ -25,6 +25,4 @@ const ChatInput = ({ onChange, onFocus, onBlur, value, placeholder, enterDetect 
   />
 );
 
-ChatInput.whyDidYouRender = true;
-
 export default React.memo < ChatInputProps > (ChatInput);

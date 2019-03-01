@@ -1,8 +1,14 @@
+// @flow
 import React from 'react';
 import { Icon } from './styles';
 import { getFirstInitial, getAvatarColor } from '../util';
 
-const InitialAvatar = ({name, large}) => (
+type InitialAvatarProps = {
+  name: string,
+  large: boolean,
+};
+
+const InitialAvatar = ({name, large}:InitialAvatarProps) => (
   <Icon
     large={large}
     style={{backgroundColor: getAvatarColor(name)}}
@@ -11,4 +17,4 @@ const InitialAvatar = ({name, large}) => (
   </Icon>
 );
 
-export default InitialAvatar;
+export default React.memo < InitialAvatarProps > (InitialAvatar);

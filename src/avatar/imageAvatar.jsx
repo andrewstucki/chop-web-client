@@ -1,7 +1,13 @@
+// @flow
 import React from 'react';
 import { Icon } from './styles';
 
-const ImageAvatar = ({url, large}) => (
+type ImageAvatarProps = {
+  url: string,
+  large: boolean,
+};
+
+const ImageAvatar = ({url, large}:ImageAvatarProps) => (
   <Icon
     large={large}
     style={{backgroundImage: `url(${url})`, backgroundSize: 'cover'}}
@@ -9,4 +15,4 @@ const ImageAvatar = ({url, large}) => (
   </Icon>
 );
 
-export default ImageAvatar;
+export default React.memo < ImageAvatarProps > (ImageAvatar);

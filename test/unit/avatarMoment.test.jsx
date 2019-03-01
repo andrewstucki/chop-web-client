@@ -4,12 +4,14 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import AvatarMoment from '../../src/moment/avatarMoment';
+import { Avatar, User } from '../../src/moment/avatarMoment/styles';
+import { mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('AvatarMoment tests', () => {
   test('AvatarMoment renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <AvatarMoment
         avatarMoment={
           {
@@ -25,8 +27,8 @@ describe('AvatarMoment tests', () => {
         }
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('avatarMoment');
-    expect(wrapper.find('div').at(1).text()).toEqual('M');
-    expect(wrapper.find('div').at(2).text()).toEqual('Madmartigan');
+
+    expect(wrapper.find(Avatar).text()).toEqual('M');
+    expect(wrapper.find(User).text()).toEqual('Madmartigan');
   });
 });

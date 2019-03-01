@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { theme } from '../styles';
 
 const Banner = styled.div`
   font-size: 16px;
@@ -15,18 +14,18 @@ const Banner = styled.div`
 `;
 
 const WarningBanner = styled(Banner)`
-  color: ${theme.colors.textColor};
-  background-color: ${theme.colors.warningText};
+  color: ${props => props.theme.colors.textColor};
+  background-color: ${props => props.theme.colors.warningText};
 `;
 
 const ErrorBanner = styled(Banner)`
-  color: ${theme.colors.background};
-  background-color: ${theme.colors.dangerText};
+  color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.dangerText};
 `;
 
 const NotificationBanner = styled(Banner)`
-  color: ${theme.colors.background};
-  background-color: ${theme.colors.validGreen};
+  color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.validText};
 `;
 
 const BannerMessage = styled.div`

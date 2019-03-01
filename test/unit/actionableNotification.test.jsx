@@ -3,6 +3,7 @@ import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import sinon from 'sinon';
+import { mountWithTheme } from '../testUtils';
 
 import ActionableNotification from '../../src/moment/actionableNotification/actionableNotification';
 
@@ -30,7 +31,7 @@ const hostChannel = {
 describe('ActionableNotification tests', () => {
   test('Active prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <ActionableNotification
         notification={
           {
@@ -63,7 +64,7 @@ describe('ActionableNotification tests', () => {
   });
 
   test('Inactive prayer request notification renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <ActionableNotification
         notification={
           {
@@ -94,7 +95,7 @@ describe('ActionableNotification tests', () => {
 
   test('Cancelled prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <ActionableNotification
         notification={
           {

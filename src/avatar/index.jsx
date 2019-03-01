@@ -1,8 +1,15 @@
+// @flow
 import React from 'react';
 import InitialAvatar from './initialAvatar';
 import ImageAvatar from './imageAvatar';
+import type { SharedUserType } from '../feed/dux';
 
-const Avatar = ({user, large}) => {
+type AvatarProps = {
+  user: SharedUserType,
+  large?: boolean,
+};
+
+const Avatar = ({user, large = false}:AvatarProps) => {
   if (user.avatarUrl && user.avatarUrl.indexOf('missing.png') === -1) {
     return (
       <ImageAvatar url={user.avatarUrl} large={large} />
@@ -14,4 +21,4 @@ const Avatar = ({user, large}) => {
   }
 };
 
-export default Avatar;
+export default React.memo < AvatarProps > (Avatar);

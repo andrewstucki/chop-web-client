@@ -64,7 +64,7 @@ const currentUser = {
 describe('SideBar tests', () => {
   test('SideBar renders', () => {
     const closeFunction = () => {};
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <SideMenu
         logout={() => {}}
         close={closeFunction}
@@ -91,7 +91,7 @@ describe('SideBar tests', () => {
   });
 
   test('SideBar has link to guest experience', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -111,14 +111,14 @@ describe('SideBar tests', () => {
         organizationName='The Church'
       />
     );
-    expect(wrapper.find('#guest-experience').length)
+    expect(wrapper.find('a[data-test="guest-experience"]').length)
       .toBe(1);
-    expect(wrapper.find('#guest-experience').text())
-      .toBe('Guest experience');
+    expect(wrapper.find('a[data-test="guest-experience"]').text())
+      .toBe('Guest experienceFile');
   });
 
   test('SideBar has link to give feedback', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -138,11 +138,12 @@ describe('SideBar tests', () => {
         organizationName='The Church'
       />
     );
-    expect(wrapper.find('#feedback').length)
+
+    expect(wrapper.find('a[data-test="feedback"]').length)
       .toBe(1);
-    expect(wrapper.find('#feedback').text())
-      .toBe('Give feedback');
-    expect(wrapper.find('#feedback').props().href)
+    expect(wrapper.find('a[data-test="feedback"]').text())
+      .toBe('Give feedbackFile');
+    expect(wrapper.find('a[data-test="feedback"]').props().href)
       .toBe('https://lifechurch.formstack.com/forms/host_feedback_2');
   });
 

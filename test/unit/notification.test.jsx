@@ -2,6 +2,7 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
+import { mountWithTheme } from '../testUtils';
 
 import Notification from '../../src/moment/notification';
 
@@ -9,7 +10,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Notification test', () => {
   test('Prayer notification renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Notification
         notification={
           {
@@ -32,7 +33,7 @@ describe('Notification test', () => {
   });
 
   test('Joined chat notification renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Notification
         notification={
           {
@@ -54,7 +55,7 @@ describe('Notification test', () => {
   });
 
   test('Left channel notification renders', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Notification
         notification={
           {
@@ -76,7 +77,7 @@ describe('Notification test', () => {
   });
 
   test('Mute notification renders with a host', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Notification
         notification={
           {
@@ -99,7 +100,7 @@ describe('Notification test', () => {
   });
 
   test('Mute notification renders without a host', () => {
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <Notification
         notification={
           {

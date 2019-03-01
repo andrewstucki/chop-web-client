@@ -56,6 +56,4 @@ const Pane = ({ pane, navbarIndex, prevNavbarIndex }:PanePropsType) => {
   );
 };
 
-Pane.whyDidYouRender = true;
-
 export default React.memo < PanePropsType > (Pane);

@@ -1,8 +1,0 @@
-@import '../../../assets/theme.css';
-
-.text {
-    text-align: center;
-    width: 100%;
-    line-height: 19.2px;
-    color: var(--disabledTextColor);
-}

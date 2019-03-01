@@ -72,4 +72,4 @@ class Moment extends React.Component<MomentPropType> {
   }
 }
 
-export default Moment;
+export default React.memo < MomentType > (Moment);

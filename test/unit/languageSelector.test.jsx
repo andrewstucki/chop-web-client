@@ -5,6 +5,7 @@ import Enzyme from 'enzyme';
 import sinon from 'sinon';
 
 import LanguageSelector from '../../src/languageSelector';
+import { mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -16,7 +17,7 @@ describe('LanguageSelector tests', () => {
         value: 'English',
       },
     };
-    const wrapper = Enzyme.shallow(
+    const wrapper = mountWithTheme(
       <LanguageSelector
         languageOptions={
           [

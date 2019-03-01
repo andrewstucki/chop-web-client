@@ -28,6 +28,4 @@ const Actionable = ({onClick, keepFocus = false, tabable = true, children}: Acti
   return React.cloneElement(children, newProps);
 };
 
-Actionable.whyDidYouRender = true;
-
 export default React.memo < ActionableProps > (Actionable);

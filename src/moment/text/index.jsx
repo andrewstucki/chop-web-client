@@ -1,18 +1,18 @@
-
+// @flow
 import React from 'react';
 import type { TextType } from './dux';
 
-import styles from './styles.css';
+import { Wrapper } from './styles';
 
 const Text = (
   {
     text,
   }: TextType) => (
   <div>
-    <div className={styles.text}>
+    <Wrapper>
       {text.text}
-    </div>
+    </Wrapper>
   </div>
 );
 
-export default Text;
+export default React.memo < TextType > (Text);

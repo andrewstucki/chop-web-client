@@ -152,8 +152,8 @@ const SideMenu = (
       }}
     >
       <ExternalLink
-        id="guest-experience"
         href={`${window.location.origin.toString()}/guest_experience`}
+        data-test="guest-experience"
       >
         Guest experience
         <LinkIcon
@@ -163,10 +163,10 @@ const SideMenu = (
       </ExternalLink>
 
       <ExternalLink
-        id="support"
         target="_blank"
         rel="noopener noreferrer"
         href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
+        data-test="support"
       >
         Support
         <LinkIcon
@@ -176,10 +176,10 @@ const SideMenu = (
       </ExternalLink>
 
       <ExternalLink
-        id="feedback"
         target="_blank"
         rel="noopener noreferrer"
         href="https://lifechurch.formstack.com/forms/host_feedback_2"
+        data-test="feedback"
       >
         Give feedback
         <LinkIcon
@@ -191,4 +191,4 @@ const SideMenu = (
   </SideMenuComponent>
 );
 
-export default SideMenu;
+export default React.memo < SideMenuType > (SideMenu);
