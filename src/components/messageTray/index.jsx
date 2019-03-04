@@ -25,10 +25,10 @@ const MessageTray = (
   }: MessageTrayPropsType,
 ) => (
   <Wrapper>
-    <TrayButton icon={CloseButton} text='Close' onClick={closeTray} color={theme.colors.gray50} data-test='closeButton' />
     <TrayButton icon={MuteButton} text='Mute' onClick={muteUser} color={theme.colors.dangerText} data-test='muteButton' />
     <TrayButton icon={DeleteButton} text='Delete message' onClick={deleteMessage} color={theme.colors.primary} data-test='deleteButton' />
     <TrayButton icon={DirectChatButton} text='Chat' onClick={directChat} color={theme.colors.primary} data-test='directChatButton' />
+    <TrayButton icon={CloseButton} text='Close' onClick={closeTray} color={theme.colors.gray50} data-test='closeButton' />
   </Wrapper>
 );
 

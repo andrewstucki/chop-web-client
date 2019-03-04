@@ -24,11 +24,16 @@ const Wrapper = styled.div`
     bottom: 1px;
     left: 4px;
   }
+
+  div {
+    -webkit-tap-highlight-color: transparent;
+  }
+
 `;
 
 const BodyWrapper = styled.div`
   flex: 1;
-  margin: 1px 8px 0;
+  margin: 0 8px;
   color: ${props => props.theme.colors.gray100};
 `;
 
@@ -40,14 +45,34 @@ const NameWrapper = styled.strong`
 
 const OpenTrayButton = styled.button`
   line-height: 0;
-  padding: 0 8px;
+  padding: 0 4px;
   border: none;
   background-color: #fff;
   outline-style: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  height: 40px;
+  align-self: center;
   
   svg {
-    width: 15px;
+    width: 20px;
+    position: relative;
   }
+
+  &:active:before {
+    content: '';
+    position: absolute;
+    border-radius: 100%;
+    left: 50%;
+    margin-left: -16px;
+    top: 50%;
+    margin-top: -16px;
+    width: 32px;
+    height: 32px;
+    background: ${props => props.theme.colors.gray10}
+  }
+
+  
 `;
 
 const TextWrapper = styled.div`
