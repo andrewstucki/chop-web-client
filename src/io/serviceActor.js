@@ -33,7 +33,7 @@ import {
   convertSubscribersToSharedUsers,
   isEmpty,
 } from '../util';
-import Cookies from './cookies';
+import LegacyToken from './LegacyToken';
 import Location from './location';
 import GraphQl from './graphQL';
 import Scheduler from './scheduler';
@@ -48,7 +48,7 @@ class ServiceActor {
   graph: GraphQl;
   location: Location;
   getStore: () => any;
-  cookies: Cookies;
+  legacyToken: LegacyToken;
   handleDataFetchErrors: (payload: any) => void;
   setCurrentState: (payload: any) => void;
   getInitialData: (payload: any) => void;
@@ -60,7 +60,7 @@ class ServiceActor {
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
     this.getStore = getStore;
-    this.cookies = new Cookies();
+    this.legacyToken = new LegacyToken();
     this.location = new Location();
     this.graph = new GraphQl();
 
@@ -74,7 +74,7 @@ class ServiceActor {
 
   async init () {
     const { accessToken, refreshToken } = this.getStore().auth;
-    const legacyToken = this.cookies.legacyToken();
+    const legacyToken = this.legacyToken.get();
     const hostname = Location.hostname();
 
     if (accessToken) {
