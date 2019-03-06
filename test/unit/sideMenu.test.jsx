@@ -4,7 +4,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import sinon from 'sinon';
 
-import SideMenuComponent from '../../src/components/sideMenu';
 import SideMenu from '../../src/sideMenu/sideMenu';
 import LanguageSelector from '../../src/languageSelector';
 import { mountWithTheme } from '../testUtils';
@@ -84,9 +83,8 @@ describe('SideBar tests', () => {
         organizationName='The Church'
       />
     );
-    expect(wrapper.find(SideMenuComponent).length).toBe(1);
-    expect(wrapper.find(SideMenuComponent).props().isClosed).toBe(false);
-    expect(wrapper.find(SideMenuComponent).props().close).toBe(closeFunction);
+    expect(wrapper.find('styles__Menu').length).toBe(1);
+    expect(wrapper.find('styles__Menu').props().open).toBe(true);
     expect(wrapper.find(LanguageSelector).length).toBe(1);
   });
 

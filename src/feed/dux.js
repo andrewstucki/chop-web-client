@@ -70,6 +70,9 @@ import type { SetKeyboardHeightType } from '../chat/dux';
 import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
 import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
 
+import {TOGGLE_NAV_MENU_EXPANDED} from '../navMenu/dux';
+import type {ToggleNavMenuExpandedType} from '../navMenu/dux';
+
 import {
   RELEASE_ANCHOR_MOMENT,
   SET_ANCHOR_MOMENT,
@@ -265,6 +268,10 @@ type ChannelsObjectType = {
   [string]: ChannelType,
 };
 
+type NavType = {
+  expanded: boolean,
+};
+
 type FeedType = {
   pubnubKeys: PubnubKeysType,
   event: EventType,
@@ -299,6 +306,7 @@ type FeedType = {
   navbarIndex: number,
   prevNavbarIndex?: number,
   lastAction?: FeedActionTypes,
+  nav: NavType,
 };
 
 type AddChannelType = {
@@ -449,7 +457,8 @@ type FeedActionTypes =
   | SetPaneType
   | AddTabType
   | RemoveTabType
-  | SetKeyboardHeightType;
+  | SetKeyboardHeightType
+  | ToggleNavMenuExpandedType;
 
 // Action Creators
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
@@ -762,6 +771,9 @@ const defaultState = {
   mutedUsers: [],
   navbarIndex: 0,
   prevNavbarIndex: undefined,
+  nav: {
+    expanded: true,
+  },
 };
 
 // Reducer
@@ -1361,6 +1373,14 @@ const reducer = (
         },
       };
     }
+    case TOGGLE_NAV_MENU_EXPANDED:
+      return {
+        ...state,
+        nav: {
+          ...state.nav,
+          expanded: !state.nav.expanded,
+        },
+      };
     case SET_CLIENT_INFO:
       return {
         ...state,

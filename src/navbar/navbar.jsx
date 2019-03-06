@@ -131,6 +131,7 @@ const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItem
       isCurrent={item.isCurrent}
     >
       { item.hasActions && <Pip /> }
+      { }
       { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : item.name }
     </NavbarItemWrapper>
   </Actionable>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   padding: 48px 16px 24px 16px;
   overflow-x: scroll;
+  height: 100%;
 `;
 
 const NoHostInfo = styled.div`

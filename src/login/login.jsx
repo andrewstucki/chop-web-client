@@ -50,7 +50,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
     );
   } else {
     return (
-      <Wrapper>
+      <Wrapper data-test="login">
         <h1>Log In</h1>
         <Errors />
         <form onSubmit={handleLogin}>
