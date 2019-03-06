@@ -2,7 +2,29 @@ import styled from 'styled-components';
 import { theme } from '../styles';
 import { getAvatarColor } from '../util';
 
-const NavBarItemWrapper = styled.button`
+const NavbarWrapper = styled.div`
+  display: flex;
+  background-color: ${props => props.theme.colors.gray5};
+  height: 48px;
+  width: 100%;
+  z-index: 1;
+
+`;
+
+const NavbarItemsWrapper = styled.div`
+  overflow-x: scroll;
+  display: flex;
+  width: 100%;
+
+`;
+
+const NavbarItemsInnerWrapper = styled.div`
+  display: flex;
+  flex: 0 0 auto;
+  position: relative;
+`;
+
+const NavbarItemWrapper = styled.button`
   display: flex;
   align-items: center;
   padding: 0 12px;
@@ -15,7 +37,7 @@ const NavBarItemWrapper = styled.button`
   outline: none;
 `;
 
-const NavBarHamburgerWrapper = styled.button`
+const NavbarHamburgerWrapper = styled.button`
   display: flex;
   align-items: center;
   color: ${ theme.colors.textColor };
@@ -64,8 +86,11 @@ const Underline = styled.div`
 `;
 
 export {
-  NavBarItemWrapper,
-  NavBarHamburgerWrapper,
+  NavbarWrapper,
+  NavbarItemsWrapper,
+  NavbarItemsInnerWrapper,
+  NavbarItemWrapper,
+  NavbarHamburgerWrapper,
   Pip,
   DirectChatAvatar,
   Underline,

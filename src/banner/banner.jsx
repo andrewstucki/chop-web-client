@@ -32,29 +32,29 @@ const Banner = (
     return null;
   }
   switch (banner.bannerType) {
-  case 'notification':
-    return (
-      <NotificationBanner>
-        <DismissButton dismissNotification={dismissNotification}/>
-        <BannerMessage><strong>{capitalizeFirstLetter(banner.message)}</strong> was muted.</BannerMessage>
-      </NotificationBanner>
-    );
-  case 'error':
-    return (
-      <ErrorBanner>
-        <DismissButton dismissNotification={dismissNotification}/>
-        <BannerMessage>{banner.message}</BannerMessage>
-      </ErrorBanner>
-    );
-  case 'warning':
-    return (
-      <WarningBanner>
-        <DismissButton dismissNotification={dismissNotification}/>
-        <BannerMessage>{banner.message}</BannerMessage>
-      </WarningBanner>
-    );
-  default:
-    return null;
+    case 'notification':
+      return (
+        <NotificationBanner>
+          <DismissButton dismissNotification={dismissNotification}/>
+          <BannerMessage><strong>{capitalizeFirstLetter(banner.message)}</strong> was muted.</BannerMessage>
+        </NotificationBanner>
+      );
+    case 'error':
+      return (
+        <ErrorBanner>
+          <DismissButton dismissNotification={dismissNotification}/>
+          <BannerMessage>{banner.message}</BannerMessage>
+        </ErrorBanner>
+      );
+    case 'warning':
+      return (
+        <WarningBanner>
+          <DismissButton dismissNotification={dismissNotification}/>
+          <BannerMessage>{banner.message}</BannerMessage>
+        </WarningBanner>
+      );
+    default:
+      return null;
   }
 };
 

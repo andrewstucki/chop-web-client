@@ -12,12 +12,12 @@ type TabPropsType = {
 
 const renderTabContent = type => {
   switch (type) {
-  case HOST_INFO:
-    return (
-      <HostInfo />
-    );
-  default:
-    return null;
+    case HOST_INFO:
+      return (
+        <HostInfo />
+      );
+    default:
+      return null;
   }
 };
 

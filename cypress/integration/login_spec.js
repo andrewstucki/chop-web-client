@@ -7,6 +7,6 @@ describe('Chat', () => {
 
     cy.get('button').click();
 
-    cy.get('#nav-bar').should('exist');
+    cy.get('[data-testid="navbar"]').should('exist');
   });
-})
+});

@@ -153,7 +153,7 @@ const SideMenu = (
     >
       <ExternalLink
         href={`${window.location.origin.toString()}/guest_experience`}
-        data-test="guest-experience"
+        data-testid="guest-experience"
       >
         Guest experience
         <LinkIcon
@@ -166,7 +166,7 @@ const SideMenu = (
         target="_blank"
         rel="noopener noreferrer"
         href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
-        data-test="support"
+        data-testid="support"
       >
         Support
         <LinkIcon
@@ -179,7 +179,7 @@ const SideMenu = (
         target="_blank"
         rel="noopener noreferrer"
         href="https://lifechurch.formstack.com/forms/host_feedback_2"
-        data-test="feedback"
+        data-testid="feedback"
       >
         Give feedback
         <LinkIcon

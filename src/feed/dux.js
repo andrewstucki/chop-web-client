@@ -104,7 +104,7 @@ import type { SetNavbarIndexType } from '../navbar/dux';
 
 import {
   SET_NAVBAR_INDEX,
-} from '../navBar/dux';
+} from '../navbar/dux';
 
 
 // Action Types
@@ -777,647 +777,647 @@ const reducer = (
     lastAction: { ...action},
   };
   switch (action.type) {
-  case SET_PANE_CONTENT:
-    return {
-      ...state,
-      panes: {
-        ...state.panes,
-        [action.name]: action.pane,
-      },
-    };
-  case SET_HERE_NOW:
-    return {
-      ...state,
-      hereNow: {
-        ...state.hereNow,
-        [action.channel]: action.users,
-      },
-    };
-  case UPDATE_HERE_NOW:
-    return {
-      ...state,
-      hereNow: {
-        ...state.hereNow,
-        [action.channel]: {
-          ...state.hereNow[action.channel],
-          [action.userToken]: action.state,
-        },
-      },
-    };
-  case REMOVE_HERE_NOW: {
-    const { userToken: token } = action;
-    return {
-      ...state,
-      hereNow: {
-        [action.channel]: objectFilter(
-          state.hereNow[action.channel],
-          userToken => userToken === token
-        ),
-      },
-    };
-  }
-  case 'SET_SEQUENCE':
-    return {
-      ...state,
-      sequence: action.sequence,
-    };
-  case SET_LANGUAGE_OPTIONS:
-    return {
-      ...state,
-      languageOptions: action.languageOptions,
-    };
-  case SET_PUBNUB_KEYS:
-    return {
-      ...state,
-      pubnubKeys: {
-        publish: action.publish,
-        subscribe: action.subscribe,
-      },
-    };
-  case SET_ORGANIZATION:
-    return {
-      ...state,
-      organization: action.organization,
-    };
-  case SET_EVENT :
-    return {
-      ...state,
-      event: action.event,
-    };
-  case SET_SCHEDULE_DATA:
-    return {
-      ...state,
-      sequence: {
-        ...state.sequence,
-        steps: [
-          {
-            ...state.sequence.steps[0],
-            data: action.data,
-          },
-          ...state.sequence.steps.slice(1),
-        ],
-      },
-    };
-  case SET_SCHEDULE:
-    return {
-      ...state,
-      schedule: action.schedule,
-    };
-  case SET_AUTHENTICATION:
-    return {
-      ...state,
-      auth: {
-        accessToken: action.auth.accessToken,
-        refreshToken: action.auth.refreshToken,
-      },
-      isAuthenticated: true,
-    };
-  case REMOVE_AUTHENTICATION:
-    return {
-      ...state,
-      auth: {
-        accessToken: '',
-        refreshToken: '',
-      },
-      isAuthenticated: false,
-    };
-  case RECEIVE_MOMENT: {
-    // $FlowFixMe
-    const { channel:channelId, moment }: { channelId: string, moment: MomentType } = action;
-    if (state.channels[channelId]) {
+    case SET_PANE_CONTENT:
       return {
         ...state,
-        channels: {
-          ...state.channels,
-          [channelId]: {
-            ...state.channels[channelId],
-            moments: [
-              ...state.channels[channelId].moments,
-              moment,
-            ],
-          },
+        panes: {
+          ...state.panes,
+          [action.name]: action.pane,
         },
       };
-    }
-    return state;
-  }
-  case ADD_CHANNEL:
-    if (state.channels[action.channel.id]) {
-      return state;
-    }
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [action.channel.id]: action.channel,
-      },
-    };
-  case REMOVE_CHANNEL: {
-    const { channel: deletedChannelId } = action;
-    const { [deletedChannelId]: _channel, ...updatedChannels } = state.channels;
-    const publicChannelId = getPublicChannel(state);
-    const hostChannelId = getHostChannel(state);
-    const currentChannelId = getCurrentChannel(state);
-
-    const publicChannelPane = {
-      type: EVENT,
-      content: {
-        channelId: publicChannelId,
-      },
-    };
-
-    const hostChannelPane = {
-      type: CHAT,
-      content: {
-        channelId: hostChannelId,
-      },
-    };
-
-    let newPane = {
-      type: EVENT,
-      content: {
-        channelId: 'event',
-      },
-    };
-
-    if (deletedChannelId === currentChannelId) {
-      if (deletedChannelId === publicChannelId && hostChannelId) {
-        newPane = hostChannelPane;
-      } else if (publicChannelId) {
-        newPane = publicChannelPane;
-      }
-    }
-
-    return {
-      ...state,
-      channels: updatedChannels,
-      panes: {
-        ... state.panes,
-        primary: newPane,
-      },
-    };
-  }
-  case LOAD_HISTORY:
-    if (state.channels[action.channel]) {
+    case SET_HERE_NOW:
       return {
         ...state,
-        channels: {
-          ...state.channels,
+        hereNow: {
+          ...state.hereNow,
+          [action.channel]: action.users,
+        },
+      };
+    case UPDATE_HERE_NOW:
+      return {
+        ...state,
+        hereNow: {
+          ...state.hereNow,
           [action.channel]: {
-            ...state.channels[action.channel],
-            moments: [
-              ...state.channels[action.channel].moments,
-              ...action.moments,
-            ],
+            ...state.hereNow[action.channel],
+            [action.userToken]: action.state,
           },
         },
       };
-    }
-    return state;
-  case SET_USER:
-    return {
-      ...state,
-      currentUser: action.user,
-    };
-  case OPEN_MESSAGE_TRAY: {
-    // $FlowFixMe
-    const { id } = action;
-    const currentChannel = getCurrentChannel(state);
-
-    if (currentChannel) {
+    case REMOVE_HERE_NOW: {
+      const { userToken: token } = action;
       return {
         ...state,
-        channels: {
-          ...state.channels,
-          [currentChannel]: {
-            ...state.channels[currentChannel],
-            moments: state.channels[currentChannel].moments.map(
-              message => (
-                {
-                  ...message,
-                  messageTrayOpen: message.id === id,
-                }
-              )
-            ),
-          },
+        hereNow: {
+          [action.channel]: objectFilter(
+            state.hereNow[action.channel],
+            userToken => userToken === token
+          ),
         },
       };
     }
-    return state;
-  }
-  case RECEIVE_MUTE_USER: {
-    // $FlowFixMe
-    const newArray = [...state.mutedUsers, action.nickname];
-    return {
-      ...state,
-      // ensure no duplicates in the array
-      mutedUsers: [...new Set(newArray)],
-    };
-  }
-  case PUBLISH_MUTE_USER:
-  case 'DIRECT_CHAT':
-  case CLOSE_MESSAGE_TRAY: {
-    const currentChannel = getCurrentChannel(state);
-    if (currentChannel) {
+    case 'SET_SEQUENCE':
       return {
         ...state,
-        channels: {
-          ...state.channels,
-          [currentChannel]: {
-            ...state.channels[currentChannel],
-            moments: state.channels[currentChannel].moments.map(
-              message => (
-                {
-                  ...message,
-                  messageTrayOpen: false,
-                }
-              )
-            ),
-          },
+        sequence: action.sequence,
+      };
+    case SET_LANGUAGE_OPTIONS:
+      return {
+        ...state,
+        languageOptions: action.languageOptions,
+      };
+    case SET_PUBNUB_KEYS:
+      return {
+        ...state,
+        pubnubKeys: {
+          publish: action.publish,
+          subscribe: action.subscribe,
         },
       };
-    }
-    return state;
-  }
-  case TOGGLE_CLOSE_TRAY_BUTTON: {
-    // $FlowFixMe
-    const { id } = action;
-    const currentChannel = getCurrentChannel(state);
-    if (currentChannel) {
+    case SET_ORGANIZATION:
       return {
         ...state,
-        channels: {
-          ...state.channels,
-          [currentChannel]: {
-            ...state.channels[currentChannel],
-            moments: state.channels[currentChannel].moments.map(
-              message => (
-                {
-                  ...message,
-                  closeTrayButtonRendered: message.id === id ?
-                    !message.closeTrayButtonRendered : message.closeTrayButtonRendered,
-                }
-              )
-            ),
-          },
-        },
+        organization: action.organization,
       };
-    }
-    return state;
-  }
-  case PUBLISH_ACCEPTED_PRAYER_REQUEST:
-  case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
-    // $FlowFixMe
-    const { prayerChannel, hostChannel, cancelled } = action;
-    const messageIndex = state.channels[hostChannel].moments.findIndex(el => (
-      el.prayerChannel === prayerChannel && el.active === true
-    ));
-    if (messageIndex >= 0) {
+    case SET_EVENT :
       return {
         ...state,
-        channels: {
-          ...state.channels,
-          // $FlowFixMe
-          [hostChannel]: {
-            // $FlowFixMe
-            ...state.channels[hostChannel],
-            // $FlowFixMe
-            moments: [
-              ...state.channels[hostChannel].moments.slice(0, messageIndex),
-              {
-                ...state.channels[hostChannel].moments[messageIndex],
-                active: false,
-                cancelled: cancelled,
-              },
-              ...state.channels[hostChannel].moments.slice(messageIndex + 1),
-            ],
-          },
-        },
+        event: action.event,
       };
-    } else {
+    case SET_SCHEDULE_DATA:
       return {
         ...state,
-      };
-    }
-  }
-  case DELETE_MESSAGE: {
-    // $FlowFixMe
-    const { id, channel } = action;
-    const { channels } = state;
-    const messageIndex = channels[channel].moments.findIndex(el => (
-      el.id === id
-    ));
-    return {
-      ...state,
-      channels: {
-        ...channels,
-        [channel]: {
-          ...channels[channel],
-          moments: [
-            ...channels[channel].moments.slice(0, messageIndex),
-            ...channels[channel].moments.slice(messageIndex + 1),
+        sequence: {
+          ...state.sequence,
+          steps: [
+            {
+              ...state.sequence.steps[0],
+              data: action.data,
+            },
+            ...state.sequence.steps.slice(1),
           ],
         },
-      },
-    };
-  }
-  case PUBLISH_MOMENT_TO_CHANNEL: {
-    const currentChannel = getCurrentChannel(state);
+      };
+    case SET_SCHEDULE:
+      return {
+        ...state,
+        schedule: action.schedule,
+      };
+    case SET_AUTHENTICATION:
+      return {
+        ...state,
+        auth: {
+          accessToken: action.auth.accessToken,
+          refreshToken: action.auth.refreshToken,
+        },
+        isAuthenticated: true,
+      };
+    case REMOVE_AUTHENTICATION:
+      return {
+        ...state,
+        auth: {
+          accessToken: '',
+          refreshToken: '',
+        },
+        isAuthenticated: false,
+      };
+    case RECEIVE_MOMENT: {
     // $FlowFixMe
-    if (action.moment.type === MESSAGE && currentChannel) {
-      if ([action.moment.text].toString().length > 0) {
+      const { channel:channelId, moment }: { channelId: string, moment: MomentType } = action;
+      if (state.channels[channelId]) {
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            [channelId]: {
+              ...state.channels[channelId],
+              moments: [
+                ...state.channels[channelId].moments,
+                moment,
+              ],
+            },
+          },
+        };
+      }
+      return state;
+    }
+    case ADD_CHANNEL:
+      if (state.channels[action.channel.id]) {
+        return state;
+      }
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [action.channel.id]: action.channel,
+        },
+      };
+    case REMOVE_CHANNEL: {
+      const { channel: deletedChannelId } = action;
+      const { [deletedChannelId]: _channel, ...updatedChannels } = state.channels;
+      const publicChannelId = getPublicChannel(state);
+      const hostChannelId = getHostChannel(state);
+      const currentChannelId = getCurrentChannel(state);
+
+      const publicChannelPane = {
+        type: EVENT,
+        content: {
+          channelId: publicChannelId,
+        },
+      };
+
+      const hostChannelPane = {
+        type: CHAT,
+        content: {
+          channelId: hostChannelId,
+        },
+      };
+
+      let newPane = {
+        type: EVENT,
+        content: {
+          channelId: 'event',
+        },
+      };
+
+      if (deletedChannelId === currentChannelId) {
+        if (deletedChannelId === publicChannelId && hostChannelId) {
+          newPane = hostChannelPane;
+        } else if (publicChannelId) {
+          newPane = publicChannelPane;
+        }
+      }
+
+      return {
+        ...state,
+        channels: updatedChannels,
+        panes: {
+          ... state.panes,
+          primary: newPane,
+        },
+      };
+    }
+    case LOAD_HISTORY:
+      if (state.channels[action.channel]) {
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            [action.channel]: {
+              ...state.channels[action.channel],
+              moments: [
+                ...state.channels[action.channel].moments,
+                ...action.moments,
+              ],
+            },
+          },
+        };
+      }
+      return state;
+    case SET_USER:
+      return {
+        ...state,
+        currentUser: action.user,
+      };
+    case OPEN_MESSAGE_TRAY: {
+    // $FlowFixMe
+      const { id } = action;
+      const currentChannel = getCurrentChannel(state);
+
+      if (currentChannel) {
         return {
           ...state,
           channels: {
             ...state.channels,
             [currentChannel]: {
               ...state.channels[currentChannel],
+              moments: state.channels[currentChannel].moments.map(
+                message => (
+                  {
+                    ...message,
+                    messageTrayOpen: message.id === id,
+                  }
+                )
+              ),
+            },
+          },
+        };
+      }
+      return state;
+    }
+    case RECEIVE_MUTE_USER: {
+    // $FlowFixMe
+      const newArray = [...state.mutedUsers, action.nickname];
+      return {
+        ...state,
+        // ensure no duplicates in the array
+        mutedUsers: [...new Set(newArray)],
+      };
+    }
+    case PUBLISH_MUTE_USER:
+    case 'DIRECT_CHAT':
+    case CLOSE_MESSAGE_TRAY: {
+      const currentChannel = getCurrentChannel(state);
+      if (currentChannel) {
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            [currentChannel]: {
+              ...state.channels[currentChannel],
+              moments: state.channels[currentChannel].moments.map(
+                message => (
+                  {
+                    ...message,
+                    messageTrayOpen: false,
+                  }
+                )
+              ),
+            },
+          },
+        };
+      }
+      return state;
+    }
+    case TOGGLE_CLOSE_TRAY_BUTTON: {
+    // $FlowFixMe
+      const { id } = action;
+      const currentChannel = getCurrentChannel(state);
+      if (currentChannel) {
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            [currentChannel]: {
+              ...state.channels[currentChannel],
+              moments: state.channels[currentChannel].moments.map(
+                message => (
+                  {
+                    ...message,
+                    closeTrayButtonRendered: message.id === id ?
+                      !message.closeTrayButtonRendered : message.closeTrayButtonRendered,
+                  }
+                )
+              ),
+            },
+          },
+        };
+      }
+      return state;
+    }
+    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+    case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
+    // $FlowFixMe
+      const { prayerChannel, hostChannel, cancelled } = action;
+      const messageIndex = state.channels[hostChannel].moments.findIndex(el => (
+        el.prayerChannel === prayerChannel && el.active === true
+      ));
+      if (messageIndex >= 0) {
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            // $FlowFixMe
+            [hostChannel]: {
+            // $FlowFixMe
+              ...state.channels[hostChannel],
+              // $FlowFixMe
               moments: [
-                ...state.channels[currentChannel].moments,
-                // $FlowFixMe
-                action.moment,
+                ...state.channels[hostChannel].moments.slice(0, messageIndex),
+                {
+                  ...state.channels[hostChannel].moments[messageIndex],
+                  active: false,
+                  cancelled: cancelled,
+                },
+                ...state.channels[hostChannel].moments.slice(messageIndex + 1),
               ],
             },
           },
-          chatInput: '',
+        };
+      } else {
+        return {
+          ...state,
         };
       }
     }
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        // $FlowFixMe
-        [action.channel]: {
-          // $FlowFixMe
-          ...state.channels[action.channel],
-          moments: [
-            // $FlowFixMe
-            ...state.channels[action.channel].moments,
-            // $FlowFixMe
-            action.moment,
-          ],
+    case DELETE_MESSAGE: {
+    // $FlowFixMe
+      const { id, channel } = action;
+      const { channels } = state;
+      const messageIndex = channels[channel].moments.findIndex(el => (
+        el.id === id
+      ));
+      return {
+        ...state,
+        channels: {
+          ...channels,
+          [channel]: {
+            ...channels[channel],
+            moments: [
+              ...channels[channel].moments.slice(0, messageIndex),
+              ...channels[channel].moments.slice(messageIndex + 1),
+            ],
+          },
         },
-      },
-    };
-  }
-  case SET_ANCHOR_MOMENT: {
-    const { channel, anchorMoment } = action;
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [channel]: {
-          ...state.channels[channel],
-          anchorMoments: [
-            ...state.channels[channel].anchorMoments,
-            anchorMoment,
-          ],
-        },
-      },
-    };
-  }
-  case RELEASE_ANCHOR_MOMENT: {
-    const { channels } = state;
-    const { id, channel } = action;
-    const messageIndex = channels[channel].anchorMoments.findIndex(el => (
-      el.id === id
-    ));
-    const moment = channels[channel].anchorMoments.find(anchorMoment => anchorMoment.id === id);
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [channel]: {
-          ...state.channels[channel],
-          moments: [
-            ...state.channels[channel].moments,
-            moment,
-          ],
-          anchorMoments: [
-            ...channels[channel].anchorMoments.slice(0, messageIndex),
-            ...channels[channel].anchorMoments.slice(messageIndex + 1),
-          ],
-        },
-      },
-    };
-  }
-  case TOGGLE_POP_UP_MODAL: {
-    return {
-      ...state,
-      isPopUpModalVisible: !state.isPopUpModalVisible,
-    };
-  }
-  case LEAVE_CHANNEL: {
-    const currentChannel = getCurrentChannel(state);
-    if (currentChannel) {
-      const {channels} = state;
-      const {pubnubToken} = action;
-      const publicChannel = getPublicChannel(state);
-      if (currentChannel &&
-        channels[currentChannel].participants &&
-        channels[currentChannel].participants.length
-      ) {
-        const {participants} = channels[currentChannel];
-        const userIndex = participants.findIndex(el => (
-          el.pubnubToken === pubnubToken
-        ));
-        if (participants) {
+      };
+    }
+    case PUBLISH_MOMENT_TO_CHANNEL: {
+      const currentChannel = getCurrentChannel(state);
+      // $FlowFixMe
+      if (action.moment.type === MESSAGE && currentChannel) {
+        if ([action.moment.text].toString().length > 0) {
           return {
             ...state,
             channels: {
-              ...channels,
+              ...state.channels,
               [currentChannel]: {
-                ...channels[currentChannel],
-                participants: [
-                  ...participants.slice(0, userIndex),
-                  ...participants.slice(userIndex + 1),
+                ...state.channels[currentChannel],
+                moments: [
+                  ...state.channels[currentChannel].moments,
+                  // $FlowFixMe
+                  action.moment,
                 ],
               },
             },
-            panes: {
-              ...state.panes,
-              primary: {
-                type: EVENT,
-                content: {
-                  channelId: publicChannel,
-                },
-              },
-            },
+            chatInput: '',
           };
         }
       }
-    }
-    return state;
-  }
-  case 'SET_AVATAR':
-    return {
-      ...state,
-      currentUser: {
-        ...state.currentUser,
-        avatarUrl: action.url,
-      },
-    };
-  case TOGGLE_CHAT_FOCUS:
-    return {
-      ...state,
-      isChatFocused: action.focus,
-    };
-  case SET_KEYBOARD_HEIGHT:
-    return {
-      ...state,
-      keyboardHeight: action.height,
-    };
-  case TOGGLE_HIDE_VIDEO:
-    return {
-      ...state,
-      isVideoHidden: action.hidden,
-    };
-  case CLOSE_SIDE_MENU:
-    return {
-      ...state,
-      isSideMenuClosed: true,
-    };
-  case OPEN_SIDE_MENU:
-    return {
-      ...state,
-      isSideMenuClosed: false,
-    };
-  case SET_VIDEO:
-    return {
-      ...state,
-      video: action.video,
-    };
-  case SET_LANGUAGE:
-    return {
-      ...state,
-      currentLanguage: action.language,
-    };
-  case PUBLISH_REACTION:
-  case RECEIVE_REACTION:
-    return {
-      ...state,
-      reactions: [...state.reactions, action.reaction],
-    };
-  case REMOVE_REACTION: {
-    const { id } = action;
-    return {
-      ...state,
-      reactions: state.reactions.filter(reaction => reaction.id !== id),
-    };
-  }
-  case SET_SALVATIONS:
-    return {
-      ...state,
-      salvations: action.count,
-    };
-  case ADD_ERROR:
-    return {
-      ...state,
-      errors: [...state.errors, action.error],
-    };
-  case REMOVE_ERROR: {
-    const { id } = action;
-    return {
-      ...state,
-      errors: state.errors.filter(error => error.id !== id),
-    };
-  }
-  case CLEAR_ERRORS:
-    return {
-      ...state,
-      errors: [],
-    };
-  case SET_NOTIFICATION_BANNER:
-    return {
-      ...state,
-      notificationBanner: {
-        message: action.message,
-        bannerType: action.bannerType,
-      },
-    };
-  case CLEAR_NOTIFICATION_BANNER:
-    return {
-      ...state,
-      notificationBanner: {
-        message: '',
-        bannerType: '',
-      },
-    };
-  case UPDATE_SCROLL_POSITION: {
-    const { scrollPosition, channel, timestamp } = action;
-    if (!state.channels[channel]) {
-      return state;
-    }
-    return {
-      ...state,
-      channels: {
-        ...state.channels,
-        [channel]: {
-          ...state.channels[channel],
-          scrollPosition: scrollPosition,
-          sawLastMomentAt: scrollPosition < 10 ? timestamp : state.channels[channel].sawLastMomentAt,
-        },
-      },
-    };
-  }
-  case SET_CLIENT_INFO:
-    return {
-      ...state,
-      clientInfo: action.data,
-    };
-  case 'PLAY_VIDEO':
-    return {
-      ...state,
-      isVideoPlaying: true,
-    };
-  case 'PAUSE_VIDEO':
-    return {
-      ...state,
-      isVideoPlaying: false,
-    };
-  case SET_NAVBAR_INDEX:
-    return {
-      ...state,
-      navbarIndex: action.index,
-      prevNavbarIndex: state.navbarIndex,
-    };
-  case ADD_TAB: {
-    const { tab } = action;
-    const exists = state.tabs.filter(item => item.type === tab.type).length > 0;
-
-    if (exists) {
-      return state;
-    } else {
       return {
         ...state,
-        tabs: [
-          ...state.tabs,
-          tab,
-        ],
-      };
-    }
-  }
-  case REMOVE_TAB: {
-    const { tabType } = action;
-    const publicChannel = getPublicChannel(state) || 'event';
-
-    return {
-      ...state,
-      tabs: state.tabs.filter(item => item.type !== tabType),
-      panes: {
-        ...state.panes,
-        primary: {
-          type: EVENT,
-          content: {
-            channelId: publicChannel,
+        channels: {
+          ...state.channels,
+          // $FlowFixMe
+          [action.channel]: {
+          // $FlowFixMe
+            ...state.channels[action.channel],
+            moments: [
+            // $FlowFixMe
+              ...state.channels[action.channel].moments,
+              // $FlowFixMe
+              action.moment,
+            ],
           },
         },
-      },
-    };
-  }
-  default:
-    return inboundState;
+      };
+    }
+    case SET_ANCHOR_MOMENT: {
+      const { channel, anchorMoment } = action;
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [channel]: {
+            ...state.channels[channel],
+            anchorMoments: [
+              ...state.channels[channel].anchorMoments,
+              anchorMoment,
+            ],
+          },
+        },
+      };
+    }
+    case RELEASE_ANCHOR_MOMENT: {
+      const { channels } = state;
+      const { id, channel } = action;
+      const messageIndex = channels[channel].anchorMoments.findIndex(el => (
+        el.id === id
+      ));
+      const moment = channels[channel].anchorMoments.find(anchorMoment => anchorMoment.id === id);
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [channel]: {
+            ...state.channels[channel],
+            moments: [
+              ...state.channels[channel].moments,
+              moment,
+            ],
+            anchorMoments: [
+              ...channels[channel].anchorMoments.slice(0, messageIndex),
+              ...channels[channel].anchorMoments.slice(messageIndex + 1),
+            ],
+          },
+        },
+      };
+    }
+    case TOGGLE_POP_UP_MODAL: {
+      return {
+        ...state,
+        isPopUpModalVisible: !state.isPopUpModalVisible,
+      };
+    }
+    case LEAVE_CHANNEL: {
+      const currentChannel = getCurrentChannel(state);
+      if (currentChannel) {
+        const {channels} = state;
+        const {pubnubToken} = action;
+        const publicChannel = getPublicChannel(state);
+        if (currentChannel &&
+        channels[currentChannel].participants &&
+        channels[currentChannel].participants.length
+        ) {
+          const {participants} = channels[currentChannel];
+          const userIndex = participants.findIndex(el => (
+            el.pubnubToken === pubnubToken
+          ));
+          if (participants) {
+            return {
+              ...state,
+              channels: {
+                ...channels,
+                [currentChannel]: {
+                  ...channels[currentChannel],
+                  participants: [
+                    ...participants.slice(0, userIndex),
+                    ...participants.slice(userIndex + 1),
+                  ],
+                },
+              },
+              panes: {
+                ...state.panes,
+                primary: {
+                  type: EVENT,
+                  content: {
+                    channelId: publicChannel,
+                  },
+                },
+              },
+            };
+          }
+        }
+      }
+      return state;
+    }
+    case 'SET_AVATAR':
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          avatarUrl: action.url,
+        },
+      };
+    case TOGGLE_CHAT_FOCUS:
+      return {
+        ...state,
+        isChatFocused: action.focus,
+      };
+    case SET_KEYBOARD_HEIGHT:
+      return {
+        ...state,
+        keyboardHeight: action.height,
+      };
+    case TOGGLE_HIDE_VIDEO:
+      return {
+        ...state,
+        isVideoHidden: action.hidden,
+      };
+    case CLOSE_SIDE_MENU:
+      return {
+        ...state,
+        isSideMenuClosed: true,
+      };
+    case OPEN_SIDE_MENU:
+      return {
+        ...state,
+        isSideMenuClosed: false,
+      };
+    case SET_VIDEO:
+      return {
+        ...state,
+        video: action.video,
+      };
+    case SET_LANGUAGE:
+      return {
+        ...state,
+        currentLanguage: action.language,
+      };
+    case PUBLISH_REACTION:
+    case RECEIVE_REACTION:
+      return {
+        ...state,
+        reactions: [...state.reactions, action.reaction],
+      };
+    case REMOVE_REACTION: {
+      const { id } = action;
+      return {
+        ...state,
+        reactions: state.reactions.filter(reaction => reaction.id !== id),
+      };
+    }
+    case SET_SALVATIONS:
+      return {
+        ...state,
+        salvations: action.count,
+      };
+    case ADD_ERROR:
+      return {
+        ...state,
+        errors: [...state.errors, action.error],
+      };
+    case REMOVE_ERROR: {
+      const { id } = action;
+      return {
+        ...state,
+        errors: state.errors.filter(error => error.id !== id),
+      };
+    }
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        errors: [],
+      };
+    case SET_NOTIFICATION_BANNER:
+      return {
+        ...state,
+        notificationBanner: {
+          message: action.message,
+          bannerType: action.bannerType,
+        },
+      };
+    case CLEAR_NOTIFICATION_BANNER:
+      return {
+        ...state,
+        notificationBanner: {
+          message: '',
+          bannerType: '',
+        },
+      };
+    case UPDATE_SCROLL_POSITION: {
+      const { scrollPosition, channel, timestamp } = action;
+      if (!state.channels[channel]) {
+        return state;
+      }
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [channel]: {
+            ...state.channels[channel],
+            scrollPosition: scrollPosition,
+            sawLastMomentAt: scrollPosition < 10 ? timestamp : state.channels[channel].sawLastMomentAt,
+          },
+        },
+      };
+    }
+    case SET_CLIENT_INFO:
+      return {
+        ...state,
+        clientInfo: action.data,
+      };
+    case 'PLAY_VIDEO':
+      return {
+        ...state,
+        isVideoPlaying: true,
+      };
+    case 'PAUSE_VIDEO':
+      return {
+        ...state,
+        isVideoPlaying: false,
+      };
+    case SET_NAVBAR_INDEX:
+      return {
+        ...state,
+        navbarIndex: action.index,
+        prevNavbarIndex: state.navbarIndex,
+      };
+    case ADD_TAB: {
+      const { tab } = action;
+      const exists = state.tabs.filter(item => item.type === tab.type).length > 0;
+
+      if (exists) {
+        return state;
+      } else {
+        return {
+          ...state,
+          tabs: [
+            ...state.tabs,
+            tab,
+          ],
+        };
+      }
+    }
+    case REMOVE_TAB: {
+      const { tabType } = action;
+      const publicChannel = getPublicChannel(state) || 'event';
+
+      return {
+        ...state,
+        tabs: state.tabs.filter(item => item.type !== tabType),
+        panes: {
+          ...state.panes,
+          primary: {
+            type: EVENT,
+            content: {
+              channelId: publicChannel,
+            },
+          },
+        },
+      };
+    }
+    default:
+      return inboundState;
   }
 };
 

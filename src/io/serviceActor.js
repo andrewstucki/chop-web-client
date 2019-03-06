@@ -161,9 +161,9 @@ class ServiceActor {
           const { code = '' } = extensions;
           if (code) {
             switch (code) {
-            case 'UNAUTHORIZED':
-              this.storeDispatch(removeAuthentication());
-              return;
+              case 'UNAUTHORIZED':
+                this.storeDispatch(removeAuthentication());
+                return;
             }
           }
         }
@@ -474,26 +474,26 @@ class ServiceActor {
       return;
     }
     switch (action.type) {
-    case REHYDRATE:
-      this.init();
-      return;
-    case BASIC_AUTH_LOGIN:
-      this.getAccessTokenByBasicAuth(action);
-      return;
-    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
-      this.publishAcceptedPrayerRequest(action);
-      return;
-    case REMOVE_CHANNEL:
-      this.removeChannel(action);
-      return;
-    case PUBLISH_MUTE_USER:
-      this.muteUser(action);
-      return;
-    case DIRECT_CHAT:
-      this.directChat(action);
-      return;
-    default:
-      return;
+      case REHYDRATE:
+        this.init();
+        return;
+      case BASIC_AUTH_LOGIN:
+        this.getAccessTokenByBasicAuth(action);
+        return;
+      case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+        this.publishAcceptedPrayerRequest(action);
+        return;
+      case REMOVE_CHANNEL:
+        this.removeChannel(action);
+        return;
+      case PUBLISH_MUTE_USER:
+        this.muteUser(action);
+        return;
+      case DIRECT_CHAT:
+        this.directChat(action);
+        return;
+      default:
+        return;
     }
   }
 }

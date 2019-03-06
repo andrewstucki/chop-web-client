@@ -2,7 +2,7 @@
 import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
-import { setNavbarIndex } from '../../src/navBar/dux';
+import { setNavbarIndex } from '../../src/navbar/dux';
 
 describe('NavBar tests', () => {
   test('Navbar index is updated', () => {

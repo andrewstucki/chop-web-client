@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import Banner from '../banner';
-import NavBar from '../navBar';
+import Navbar from '../navbar';
 import VideoFeed from '../videoFeed';
 import SideMenu from '../sideMenu';
 import PopUpModal from '../popUpModal';
@@ -69,7 +69,7 @@ class ChopContainer extends React.Component<ChopContainerProps, ChopContainerSta
           <div className={styles.chop}>
             <PopUpModal />
             <Banner />
-            <NavBar />
+            <Navbar />
             <VideoFeed />
             <Pane name={PRIMARY_PANE} />
           </div>
