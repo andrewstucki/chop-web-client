@@ -111,9 +111,9 @@ describe('SideBar tests', () => {
         organizationName='The Church'
       />
     );
-    expect(wrapper.find('a[data-test="guest-experience"]').length)
+    expect(wrapper.find('a[data-testid="guest-experience"]').length)
       .toBe(1);
-    expect(wrapper.find('a[data-test="guest-experience"]').text())
+    expect(wrapper.find('a[data-testid="guest-experience"]').text())
       .toBe('Guest experienceFile');
   });
 
@@ -139,11 +139,11 @@ describe('SideBar tests', () => {
       />
     );
 
-    expect(wrapper.find('a[data-test="feedback"]').length)
+    expect(wrapper.find('a[data-testid="feedback"]').length)
       .toBe(1);
-    expect(wrapper.find('a[data-test="feedback"]').text())
+    expect(wrapper.find('a[data-testid="feedback"]').text())
       .toBe('Give feedbackFile');
-    expect(wrapper.find('a[data-test="feedback"]').props().href)
+    expect(wrapper.find('a[data-testid="feedback"]').props().href)
       .toBe('https://lifechurch.formstack.com/forms/host_feedback_2');
   });
 

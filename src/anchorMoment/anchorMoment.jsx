@@ -40,8 +40,8 @@ const salvationMoment = (
 
 const getAnchorMoment = (anchorMoment, salvations) => {
   switch (anchorMoment.anchorMomentType) {
-  case SALVATION:
-    return salvationMoment(anchorMoment, salvations);
+    case SALVATION:
+      return salvationMoment(anchorMoment, salvations);
   }
 };
 

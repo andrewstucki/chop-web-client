@@ -98,14 +98,14 @@ class Feed extends React.Component<FeedProps, FeedState> {
   scroll = () => {
     const { scroll } = this.props;
     switch (scroll.type) {
-    case SCROLL_TO:
-      this.scrollTo(scroll.position);
-      break;
-    case 'DELAY_SCROLL_TO':
-      setTimeout(() => this.scrollTo(scroll.position), 500);
-      break;
-    case NO_SCROLL:
-    default:
+      case SCROLL_TO:
+        this.scrollTo(scroll.position);
+        break;
+      case 'DELAY_SCROLL_TO':
+        setTimeout(() => this.scrollTo(scroll.position), 500);
+        break;
+      case NO_SCROLL:
+      default:
       // no op
     }
   }

@@ -129,16 +129,16 @@ const leftChannelNotificationText = (
 
 const getNotificationText = notification => {
   switch (notification.notificationType) {
-  case PRAYER:
-    return prayerNotificationText(notification);
-  case MUTE:
-    return MuteUserNotificationText(notification);
-  case JOINED_CHAT:
-    return joinedChatNotificationText(notification);
-  case LEFT_CHANNEL:
-    return leftChannelNotificationText(notification);
-  default:
-    return null;
+    case PRAYER:
+      return prayerNotificationText(notification);
+    case MUTE:
+      return MuteUserNotificationText(notification);
+    case JOINED_CHAT:
+      return joinedChatNotificationText(notification);
+    case LEFT_CHANNEL:
+      return leftChannelNotificationText(notification);
+    default:
+      return null;
   }
 };
 
