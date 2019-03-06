@@ -190,7 +190,6 @@ const SideMenu = (
             target="_blank"
             rel="noopener noreferrer"
             href="https://lifechurch.formstack.com/forms/host_feedback_2"
-            data-testid="feedback"
           >
             Give feedback
             <LinkIcon
