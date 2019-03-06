@@ -93,7 +93,7 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
           <NavMenuItem Icon={Bible} text="Bible" expanded={expanded} disabled={true} />
         </NavMenuBodySection>
       </NavMenuBody>
-      <NavMenuFooter data-test="nav-menu-footer">
+      <NavMenuFooter data-testid="nav-menu-footer">
         <NavMenuIconWrapper>
           <NavMenuMinifyArrow onClick={toggleExpanded} expanded={expanded} />
         </NavMenuIconWrapper>

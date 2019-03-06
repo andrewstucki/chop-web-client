@@ -7,6 +7,6 @@ describe('Chat', () => {
 
     cy.get('button').click();
 
-    cy.get('[data-test=chop]');
+    cy.get('[data-testid=chop]');
   });
 });

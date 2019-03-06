@@ -16,7 +16,7 @@ const ChopContainer = ({organization, authenticated}: ChopContainerProps) => {
 
   if (authenticated) {
     return (
-      <Wrapper id="wrapper" data-test="chop">
+      <Wrapper id="wrapper" data-testid="chop">
         <MediaQuery maxWidth={639}>
           <Small/>
         </MediaQuery>

@@ -162,7 +162,7 @@ const SideMenu = (
           }}
         >
           <ExternalLink
-            data-test="guest-experience"
+            data-testid="guest-experience"
             href={`${window.location.origin.toString()}/guest_experience`}
             data-testid="guest-experience"
           >
@@ -174,7 +174,7 @@ const SideMenu = (
           </ExternalLink>
 
           <ExternalLink
-            data-test="support"
+            data-testid="support"
             target="_blank"
             rel="noopener noreferrer"
             href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
@@ -187,7 +187,7 @@ const SideMenu = (
           </ExternalLink>
 
           <ExternalLink
-            data-test="feedback"
+            data-testid="feedback"
             target="_blank"
             rel="noopener noreferrer"
             href="https://lifechurch.formstack.com/forms/host_feedback_2"
