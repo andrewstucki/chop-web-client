@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { theme } from '../styles';
-import { getAvatarColor } from '../util';
 
 const NavbarWrapper = styled.div`
   display: flex;
@@ -61,17 +60,6 @@ const Pip = styled.span`
   right: 3px;
 `;
 
-const DirectChatAvatar = styled.div`
-  border-radius: 24px;
-  height: 28px;
-  width: 28px;
-  font-size: 12px;
-  color: ${theme.colors.alternateTextColor};
-  text-align: center;
-  line-height: 28px;
-  background-color: ${ props =>  getAvatarColor(props.name, props.isCurrent ? 1.0 : 0.5) };
-`;
-
 const Underline = styled.div`
   display: flex;
   content: "";
@@ -92,6 +80,5 @@ export {
   NavbarItemWrapper,
   NavbarHamburgerWrapper,
   Pip,
-  DirectChatAvatar,
   Underline,
 };

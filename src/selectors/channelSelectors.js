@@ -116,6 +116,11 @@ const getCurrentChannel = createSelector(
   pane => pane?.content?.channelId || '',
 );
 
+const getCurrentTabType = createSelector(
+  getPrimaryPane,
+  pane => pane?.content?.type || '',
+);
+
 const getCurrentChannelObj = createSelector(
   [ getCurrentChannel, getChannels ],
   (channelId, channels) => channels[channelId]
@@ -232,6 +237,7 @@ export {
   feedAnchorMoments,
   getChannelById,
   getMutedUsers,
+  getCurrentTabType,
   getHostChannelObject,
   getPublicChannelObject,
   hasNotSeenLatestMoments,

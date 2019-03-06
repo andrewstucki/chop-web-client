@@ -16,6 +16,7 @@ type ActionPropsType = {
 };
 
 const Action = styled.button`
+  outline: none;
   border: none;
   padding: 0;
   margin: auto 16px;

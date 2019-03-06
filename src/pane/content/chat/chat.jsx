@@ -1,5 +1,5 @@
 // @flow
-import styles from '../../../chop/styles.css';
+import styles from './styles.css';
 import React from 'react';
 import Feed from '../../../feed';
 import ChatInputBox from '../../../chat';

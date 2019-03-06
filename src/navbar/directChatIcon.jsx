@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { DirectChatAvatar } from './styles';
+import { DirectChatAvatar } from '../components/styles';
 import { getFirstInitial } from '../util';
 
 type DirectChatIconProps = {
