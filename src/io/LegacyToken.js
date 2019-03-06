@@ -4,7 +4,12 @@ export default class LegacyToken {
     if (typeof cookieToken === 'string' && cookieToken) {
       return cookieToken;
     } else {
-      return global.location.search.replace(/legacy_token=([^&]*)/, '$1');
+      const searchParams = new URLSearchParams(global.location.search);
+      if (searchParams.has('legacy_token')) {
+        return searchParams.get('legacy_token');
+      } else {
+        return '';
+      }
     }
   }
 }
