@@ -11,6 +11,7 @@ module.exports = merge(common, {
   plugins: [
     new webpack.DefinePlugin({
       ENV: JSON.stringify('production'),
+      BABEL_ENV: JSON.stringify('production'),
       GATEWAY_HOST: JSON.stringify('https://chopapi.com/graphql'),
       GTM: {
         gtmId: JSON.stringify('GTM-MQMRR25'),
