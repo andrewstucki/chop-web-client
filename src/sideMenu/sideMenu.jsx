@@ -164,7 +164,6 @@ const SideMenu = (
           <ExternalLink
             data-testid="guest-experience"
             href={`${window.location.origin.toString()}/guest_experience`}
-            data-testid="guest-experience"
           >
             Guest experience
             <LinkIcon
