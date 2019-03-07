@@ -35,7 +35,7 @@ const ChopTheme = ({ children }) => (
 const renderWithTheme = (ui, options = {}) =>
   render(ui, { wrapper: ChopTheme, ...options });
 
-const renderWithRedux = (ui, state = defaultState) => {
+const renderWithRedux = (ui, state = { feed: defaultState }) => {
   const store = createStore(reducer, state);
   return {
     ...render(<Provider store={store}>{ui}</Provider>),
@@ -43,7 +43,7 @@ const renderWithRedux = (ui, state = defaultState) => {
   };
 };
 
-const renderWithReduxAndTheme = (ui, state = defaultState, options = {}) => {
+const renderWithReduxAndTheme = (ui, state = { feed: defaultState }, options = {}) => {
   const store = createStore(reducer, state);
   return {
     ...render(<Provider store={store}>{ui}</Provider>, { wrapper: ChopTheme, ...options }),

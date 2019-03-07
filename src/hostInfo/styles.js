@@ -4,6 +4,13 @@ const Wrapper = styled.div`
   padding: 48px 16px 24px 16px;
   overflow-x: scroll;
   height: 100%;
+  
+  iframe {
+    overflow: hidden;
+    max-width: 455px;
+    max-height: 256px;
+    margin: 1rem 0;
+  }
 `;
 
 const NoHostInfo = styled.div`

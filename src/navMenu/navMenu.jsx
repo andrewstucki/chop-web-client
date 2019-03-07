@@ -79,7 +79,7 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
         { directChannels.length > 0 &&
         <NavMenuBodySection>
           { directChannels.map(channel =>
-            <NavMenuItem key={channel.id} useAvatar={true} text={channel.otherUsersNames[0]} expanded={expanded}
+            <NavMenuItem key={channel.id} useAvatar={true} text={channel.otherUsersNames[0] || '?'} expanded={expanded}
               selected={channel.isCurrent} onClick={() => setPaneToChat(PRIMARY_PANE, channel.id)}/>
           )}
         </NavMenuBodySection>

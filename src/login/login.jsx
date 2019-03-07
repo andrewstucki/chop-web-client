@@ -85,4 +85,4 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
   }
 };
 
-export default Login;
+export default React.memo < LoginProps > (Login);

@@ -5,20 +5,19 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import sinon from 'sinon';
-import { mountWithTheme } from '../testUtils';
+import { mountWithTheme, renderWithReduxAndTheme } from '../testUtils';
 
 import Login from '../../src/login/login';
 import Button from '../../src/components/button';
-import { Wrapper } from '../../src/login/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Login tests', () => {
   test('Component renders', () => {
-    const wrapper = Enzyme.shallow(
+    const { getByTestId } = renderWithReduxAndTheme(
       <Login basicAuthLogin={() => {}} isAuthenticated={false} clearErrors={() => {}}/>
     );
-    expect(wrapper.find(Wrapper).exists()).toBeTruthy();
+    expect(getByTestId('login')).toBeTruthy();
   });
 
   test('Changing values updates state', () => {
