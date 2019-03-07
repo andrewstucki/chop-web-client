@@ -1,16 +1,10 @@
 // @flow
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import sinon from 'sinon';
-import { mountWithTheme, renderWithReduxAndTheme } from '../testUtils';
+import { renderWithReduxAndTheme } from '../testUtils';
+import { fireEvent } from 'react-testing-library';
 
 import Login from '../../src/login/login';
-import Button from '../../src/components/button';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('Login tests', () => {
   test('Component renders', () => {
@@ -23,32 +17,20 @@ describe('Login tests', () => {
   test('Changing values updates state', () => {
     const basicAuthLogin = sinon.spy();
 
-    const store = createStore(() => (
-      {
-        feed: {
-          errors: [],
-        },
-      }
-    ));
-
-    const wrapper = mountWithTheme(
-      <Provider store={store}>
-        <div>
-          <Login basicAuthLogin={basicAuthLogin} isAuthenticated={false} clearErrors={() => {}}/>
-        </div>
-      </Provider>
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Login basicAuthLogin={basicAuthLogin} isAuthenticated={false} clearErrors={() => {}}/>
     );
 
-    const emailInput = wrapper.find('input[name="email"]');
-    emailInput.instance().value = 'test@life.church';
-    emailInput.simulate('change');
+    const emailInput = getByTestId('email');
+    fireEvent.change(emailInput, { target: { value: 'test@life.church' } });
+    expect(emailInput.value).toBe('test@life.church');
 
-    const passwordInput = wrapper.find('input[name="password"]');
-    passwordInput.instance().value = 'password';
-    passwordInput.simulate('change');
+    const passwordInput = getByTestId('password');
+    fireEvent.change(passwordInput, { target: { value: 'password' } });
+    expect(passwordInput.value).toBe('password');
 
-    expect(wrapper.find(Button).prop('disabled')).toBeFalsy();
-    wrapper.find(Button).simulate('click');
+    const loginButton = getByTestId('Log In');
+    fireEvent.click(loginButton);
     expect(basicAuthLogin.calledOnce).toEqual(true);
   });
 });
