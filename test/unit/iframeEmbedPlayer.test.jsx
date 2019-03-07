@@ -1,21 +1,20 @@
 // @flow
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render } from 'react-testing-library';
 import React from 'react';
 import IframeEmbedPlayer from '../../src/videoFeed/players/iframeEmbedPlayer';
 
-Enzyme.configure({ adapter: new Adapter() });
-
 describe('IframeEmbedPlayer tests', () => {
   test('renders an iframe with the given URL', () => {
-    const wrapper = Enzyme.shallow(
+    const { container } = render(
       <IframeEmbedPlayer
         url='https://youtube.com/embed/123456'
         style='style'
       />
     );
 
-    expect(wrapper.find('iframe').exists()).toBeTruthy();
-    expect(wrapper.find('iframe[src="https://youtube.com/embed/123456"]').exists()).toBeTruthy();
+    const iframe = container.querySelector('iframe');
+
+    expect(iframe).toBeTruthy();
+    expect(iframe.getAttribute('src')).toEqual('https://youtube.com/embed/123456');
   });
 });

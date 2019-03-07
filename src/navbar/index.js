@@ -1,5 +1,5 @@
 // @flow
-import NavBar from './navBar';
+import Navbar from './navbar';
 import { connect } from 'react-redux';
 
 import { getHostChannel, getPublicChannel, getDirectChannels, getTabs, setNavbarIndex } from './dux';
@@ -31,9 +31,9 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-const VisibleNavBar = connect(
+const VisibleNavbar = connect(
   mapStateToProps,
   mapDispatchToProps
-)(NavBar);
+)(Navbar);
 
-export default VisibleNavBar;
+export default VisibleNavbar;

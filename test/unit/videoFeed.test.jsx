@@ -1,45 +1,73 @@
 // @flow
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import { render } from 'react-testing-library';
 import { default as ConnectedVideoFeed } from '../../src/videoFeed';
 import VideoFeed from '../../src/videoFeed/videoFeed';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
 import YouTubePlayer from 'react-player/lib/players/YouTube';
-import VimeoPlayer from 'react-player/lib/players/Vimeo';
-import WistiaPlayer from 'react-player/lib/players/Wistia';
-import {setVideo} from '../../src/videoFeed/dux';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { renderWithRedux } from '../testUtils';
 
 describe('VideoFeed tests', () => {
   test('VideoFeed shows video', () => {
-    const wrapper = Enzyme.shallow(
-      <VideoFeed Player={YouTubePlayer} isVideoHidden={false} url="https://life.church/video" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='simulated'/>
+    const { getByTestId } = render(
+      <VideoFeed
+        Player={YouTubePlayer}
+        isVideoHidden={false}
+        url="https://life.church/video"
+        startAt={0}
+        isMobileDevice={false}
+        isVideoPlaying={true}
+        onPause={() => {}}
+        onPlay={() => {}}
+        type='simulated'
+      />
     );
-    expect(wrapper.find('.showVideo').type()).toEqual('div');
+
+    const videoFeed = getByTestId('videoFeed');
+    expect(videoFeed).toBeTruthy();
+    expect(getComputedStyle(videoFeed).display).toEqual('block');
   });
 
   test('VideoFeed hides video', () => {
-    const wrapper = Enzyme.shallow(
-      <VideoFeed Player={YouTubePlayer} isVideoHidden={true} url="https://life.church/video" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='simulated' />
+    const { getByTestId } = render(
+      <VideoFeed
+        Player={YouTubePlayer}
+        isVideoHidden={true}
+        url="https://life.church/video"
+        startAt={0}
+        isMobileDevice={false}
+        isVideoPlaying={true}
+        onPause={() => {}}
+        onPlay={() => {}}
+        type='simulated'
+      />
     );
-    expect(wrapper.find('.hideVideo').type()).toEqual('div');
+
+    const videoFeed = getByTestId('videoFeed');
+    expect(videoFeed).toBeTruthy();
+    expect(getComputedStyle(videoFeed).display).toEqual('none');
   });
 
   test ('VideoFeed does not render if url is not set', () => {
-    const wrapper = Enzyme.shallow(
-      <VideoFeed Player={YouTubePlayer} isVideoHidden={false} url="" startAt={0} isMobileDevice={false} isVideoPlaying={true} onPause={() => {}} onPlay={() => {}} type='' />
+    const { queryByTestId } = render(
+      <VideoFeed
+        Player={YouTubePlayer}
+        isVideoHidden={false}
+        url=""
+        startAt={0}
+        isMobileDevice={false}
+        isVideoPlaying={true}
+        onPause={() => {}}
+        onPlay={() => {}}
+        type=''
+      />
     );
-    expect(wrapper.find('.showVideo').exists()).toEqual(false);
+    expect(queryByTestId('videoFeed')).toBeFalsy();
   });
 
-  test('YouTube URL renders YouTube player', () => {
-    const store = createStore(
-      reducer,
+  test('Simulated video renders simulated player', () => {
+    const { getByTestId } = renderWithRedux(
+      <ConnectedVideoFeed />,
       {
         feed: {
           ...defaultState,
@@ -51,68 +79,41 @@ describe('VideoFeed tests', () => {
       }
     );
 
-    const wrapper = Enzyme.mount(
-      <Provider store={store}>
-        <ConnectedVideoFeed />
-      </Provider>
-    );
-
-    expect(wrapper.find(YouTubePlayer).exists()).toEqual(true);
-    expect(wrapper.find(YouTubePlayer).prop('url')).toEqual('//www.youtube.com/embed/iGwawktAMRg');
-
-    store.dispatch(setVideo('https://youtu.be/YRU80h2FM-A', 'simulated'));
-    expect(wrapper.find(YouTubePlayer).exists()).toEqual(true);
-    expect(wrapper.find(YouTubePlayer).prop('url')).toEqual('//www.youtube.com/embed/iGwawktAMRg');
+    expect(getByTestId('simulatedLivePlayer')).toBeTruthy();
   });
 
-  test('Vimeo URL renders Vimeo player', () => {
-    const store = createStore(
-      reducer,
+  test('Offline video renders offline player', () => {
+    const { getByTestId } = renderWithRedux(
+      <ConnectedVideoFeed />,
       {
         feed: {
           ...defaultState,
           video: {
-            type: 'simulated',
-            url: 'https://player.vimeo.com/video/50889661',
+            type: 'offline',
+            url: 'https://www.wistia.com/embed/iGwawktAMRg',
           },
         },
       }
     );
 
-    const wrapper = Enzyme.mount(
-      <Provider store={store}>
-        <ConnectedVideoFeed />
-      </Provider>
-    );
-
-    expect(wrapper.find(VimeoPlayer).exists()).toEqual(true);
+    expect(getByTestId('offlinePlayer')).toBeTruthy();
   });
 
-  test('Wistia URL renders Wistia player', () => {
-    const store = createStore(
-      reducer,
+  test('Live video renders iframe player', () => {
+    const { getByTestId } = renderWithRedux(
+      <ConnectedVideoFeed />,
       {
         feed: {
           ...defaultState,
           video: {
-            type: 'simulated',
-            url: 'https://fast.wistia.net/embed/iframe/avk9twrrbn',
+            type: 'live',
+            url: 'https://player.vimeo.com/video/1234567890',
           },
         },
       }
     );
 
-    const wrapper = Enzyme.mount(
-      <Provider store={store}>
-        <ConnectedVideoFeed />
-      </Provider>
-    );
-
-    expect(wrapper.find(WistiaPlayer).exists()).toEqual(true);
-  });
-
-  test('SimulatedLive should only re-render when the URL changes', () => {
-
+    expect(getByTestId('iframePlayer')).toBeTruthy();
   });
 });
 

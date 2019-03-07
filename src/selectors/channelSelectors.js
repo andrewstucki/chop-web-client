@@ -116,6 +116,11 @@ const getCurrentChannel = createSelector(
   pane => pane?.content?.channelId || '',
 );
 
+const getCurrentTabType = createSelector(
+  getPrimaryPane,
+  pane => pane?.content?.type || '',
+);
+
 const getCurrentChannelObj = createSelector(
   [ getCurrentChannel, getChannels ],
   (channelId, channels) => channels[channelId]
@@ -170,53 +175,53 @@ const getScroll = createSelector(
     const { moments, scrollPosition } = currentChannel;
 
     switch (action.type) {
-    case 'PUBLISH_MOMENT_TO_CHANNEL': {
-      const lastMessage = lastInArray(moments);
-      if (lastMessage) {
-        const messageSender = lastMessage.sender;
-        if (isSameUser(messageSender, currentUser)) {
-          return {
-            type: 'SCROLL_TO',
-            position: 0,
-          };
+      case 'PUBLISH_MOMENT_TO_CHANNEL': {
+        const lastMessage = lastInArray(moments);
+        if (lastMessage) {
+          const messageSender = lastMessage.sender;
+          if (isSameUser(messageSender, currentUser)) {
+            return {
+              type: 'SCROLL_TO',
+              position: 0,
+            };
+          }
         }
-      }
-      return {
-        type: 'NO_SCROLL',
-      };
-    }
-    case 'LOAD_HISTORY':
-      return {
-        type: 'SCROLL_TO',
-        position: 0,
-      };
-    case 'TOGGLE_CHAT_FOCUS':
-      return {
-        type: 'DELAY_SCROLL_TO',
-        position: scrollPosition || 0,
-      };
-    case 'SET_ANCHOR_MOMENT':
-    case 'SET_PANE_CONTENT':
-      return {
-        type: 'SCROLL_TO',
-        position: scrollPosition || 0,
-      };
-    case 'RECEIVE_MOMENT': {
-      if (scrollPosition < 10) {
-        return {
-          type: 'SCROLL_TO',
-          position: 0,
-        };
-      } else {
         return {
           type: 'NO_SCROLL',
         };
       }
-    }
-    default:
-      return {
-        type: 'NO_SCROLL',
-      };
+      case 'LOAD_HISTORY':
+        return {
+          type: 'SCROLL_TO',
+          position: 0,
+        };
+      case 'TOGGLE_CHAT_FOCUS':
+        return {
+          type: 'DELAY_SCROLL_TO',
+          position: scrollPosition || 0,
+        };
+      case 'SET_ANCHOR_MOMENT':
+      case 'SET_PANE_CONTENT':
+        return {
+          type: 'SCROLL_TO',
+          position: scrollPosition || 0,
+        };
+      case 'RECEIVE_MOMENT': {
+        if (scrollPosition < 10) {
+          return {
+            type: 'SCROLL_TO',
+            position: 0,
+          };
+        } else {
+          return {
+            type: 'NO_SCROLL',
+          };
+        }
+      }
+      default:
+        return {
+          type: 'NO_SCROLL',
+        };
     }
   }
 );
@@ -232,6 +237,7 @@ export {
   feedAnchorMoments,
   getChannelById,
   getMutedUsers,
+  getCurrentTabType,
   getHostChannelObject,
   getPublicChannelObject,
   hasNotSeenLatestMoments,

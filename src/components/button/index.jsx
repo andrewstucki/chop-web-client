@@ -30,6 +30,7 @@ const Button = ({ children, onClick, keepFocus, variant = BUTTON_PRIMARY, size =
       size={size}
       disabled={disabled}
       hidden={hidden}
+      data-testid={children}
     >
       {children}
     </StyledButton>

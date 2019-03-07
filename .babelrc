@@ -17,12 +17,7 @@
   "env": {
     "production": {
       "plugins": [
-        ["react-remove-properties", { "properties": ["data-test"] }]
-      ]
-    },
-    "staging": {
-      "plugins": [
-        ["react-remove-properties", { "properties": ["data-test"] }]
+        ["react-remove-properties", { "properties": ["data-testid"] }]
       ]
     }
   }

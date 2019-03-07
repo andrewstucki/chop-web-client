@@ -78,6 +78,7 @@ const ionDesignValues = {
       gray80: '#666667',
       gray50: '#9F9FA0',
       gray30: '#C6C6C6',
+      gray15: '#E5E5E5',
       gray10: '#ECECEC',
       gray5: '#F6F6F6',
       white: '#FFFFFF',

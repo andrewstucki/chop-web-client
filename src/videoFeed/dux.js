@@ -26,12 +26,10 @@ type SetVideoType = {
 
 type IFramePlayerPropsType = {
   url: string,
-  style: string,
 };
 
 type SimulatedLivePlayerPropsType = {
   url: string,
-  style: string,
   // $FlowFixMe
   Player: React.ComponentType<SimulatedLivePlayerPropsType>,
   startAt: number,
@@ -43,7 +41,6 @@ type SimulatedLivePlayerPropsType = {
 
 type OfflinePlayerPropsType = {
   url: string,
-  style: string,
   // $FlowFixMe
   Player: React.ComponentType<OfflinePlayerPropsType>,
 };

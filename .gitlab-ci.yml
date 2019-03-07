@@ -9,8 +9,8 @@ stages:
   - test
   - build
   - review
-  - cypress
   - staging
+  - cypress
   - coverage
   - canary
   - destroy-canary
