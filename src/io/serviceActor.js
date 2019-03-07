@@ -33,7 +33,7 @@ import {
   convertSubscribersToSharedUsers,
   isEmpty,
 } from '../util';
-import Cookies from './cookies';
+import LegacyToken from './LegacyToken';
 import Location from './location';
 import GraphQl from './graphQL';
 import Scheduler from './scheduler';
@@ -48,7 +48,7 @@ class ServiceActor {
   graph: GraphQl;
   location: Location;
   getStore: () => any;
-  cookies: Cookies;
+  legacyToken: LegacyToken;
   handleDataFetchErrors: (payload: any) => void;
   setCurrentState: (payload: any) => void;
   getInitialData: (payload: any) => void;
@@ -60,7 +60,7 @@ class ServiceActor {
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
     this.getStore = getStore;
-    this.cookies = new Cookies();
+    this.legacyToken = new LegacyToken();
     this.location = new Location();
     this.graph = new GraphQl();
 
@@ -74,7 +74,7 @@ class ServiceActor {
 
   async init () {
     const { accessToken, refreshToken } = this.getStore().auth;
-    const legacyToken = this.cookies.legacyToken();
+    const legacyToken = this.legacyToken.get();
     const hostname = Location.hostname();
 
     if (accessToken) {
@@ -161,9 +161,9 @@ class ServiceActor {
           const { code = '' } = extensions;
           if (code) {
             switch (code) {
-            case 'UNAUTHORIZED':
-              this.storeDispatch(removeAuthentication());
-              return;
+              case 'UNAUTHORIZED':
+                this.storeDispatch(removeAuthentication());
+                return;
             }
           }
         }
@@ -474,26 +474,26 @@ class ServiceActor {
       return;
     }
     switch (action.type) {
-    case REHYDRATE:
-      this.init();
-      return;
-    case BASIC_AUTH_LOGIN:
-      this.getAccessTokenByBasicAuth(action);
-      return;
-    case PUBLISH_ACCEPTED_PRAYER_REQUEST:
-      this.publishAcceptedPrayerRequest(action);
-      return;
-    case REMOVE_CHANNEL:
-      this.removeChannel(action);
-      return;
-    case PUBLISH_MUTE_USER:
-      this.muteUser(action);
-      return;
-    case DIRECT_CHAT:
-      this.directChat(action);
-      return;
-    default:
-      return;
+      case REHYDRATE:
+        this.init();
+        return;
+      case BASIC_AUTH_LOGIN:
+        this.getAccessTokenByBasicAuth(action);
+        return;
+      case PUBLISH_ACCEPTED_PRAYER_REQUEST:
+        this.publishAcceptedPrayerRequest(action);
+        return;
+      case REMOVE_CHANNEL:
+        this.removeChannel(action);
+        return;
+      case PUBLISH_MUTE_USER:
+        this.muteUser(action);
+        return;
+      case DIRECT_CHAT:
+        this.directChat(action);
+        return;
+      default:
+        return;
     }
   }
 }

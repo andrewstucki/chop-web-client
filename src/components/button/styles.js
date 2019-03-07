@@ -36,36 +36,36 @@ const Button = styled.button`
   
   ${props => {
     switch (props.size) {
-    case BUTTON_XSMALL:
-      return css`
+      case BUTTON_XSMALL:
+        return css`
           font-size: 10.72px;
           line-height: 13px;
           padding: 5px 12px;
-      `;
-    case BUTTON_SMALL:
-      return css`
+        `;
+      case BUTTON_SMALL:
+        return css`
           font-size: 12.8px;
           line-height: 16px;
           padding: 6px 16px 8px 16px;
-      `;
-    case BUTTON_MEDIUM:
-      return css`
+        `;
+      case BUTTON_MEDIUM:
+        return css`
           padding: 9px 24px;
           font-size: 16px;
           line-height: 20px;
-      `;
-    case BUTTON_LARGE:
-      return css`
+        `;
+      case BUTTON_LARGE:
+        return css`
           padding: 16px 32px 15px 32px;
           font-size: 20px;
           line-height: 25px;
-      `;
-    case BUTTON_XLARGE:
-      return css`
+        `;
+      case BUTTON_XLARGE:
+        return css`
           padding: 17px 40px 15px 40px;
           font-size: 24.96px;
           line-height: 31px;
-      `;
+        `;
     }
   }
   

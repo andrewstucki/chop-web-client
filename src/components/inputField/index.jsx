@@ -36,6 +36,7 @@ const InputField = React.forwardRef(({ type, label, name, onChange, onFocus, onB
         onBlur={onBlur}
         value={value}
         placeholder={placeholder}
+        data-testid={name}
       />
     </Wrapper>
   );

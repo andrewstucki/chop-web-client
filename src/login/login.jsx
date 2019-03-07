@@ -50,7 +50,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
     );
   } else {
     return (
-      <Wrapper>
+      <Wrapper data-testid="login">
         <h1>Log In</h1>
         <Errors />
         <form onSubmit={handleLogin}>
@@ -85,4 +85,4 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
   }
 };
 
-export default Login;
+export default React.memo < LoginProps > (Login);

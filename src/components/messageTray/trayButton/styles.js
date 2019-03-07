@@ -23,6 +23,11 @@ const ActionButton = styled.button`
   svg {
     width: 20px;
   }
+
+  & > div {
+    position: relative;
+    top: -1px;
+  }
   
 `;
 

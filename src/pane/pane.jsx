@@ -21,16 +21,16 @@ type PanePropsType = {
 const renderPaneContent = (pane:PaneType) => {
   const { type, content } = pane;
   switch (type) {
-  case EVENT:
-    return <Event />;
-  case CHAT:
+    case EVENT:
+      return <Event />;
+    case CHAT:
     // $FlowFixMe
-    return <Chat channel={content.channelId} />;
-  case TAB:
+      return <Chat channel={content.channelId} />;
+    case TAB:
     // $FlowFixMe
-    return <Tab type={content.type}/>;
-  default:
-    return null;
+      return <Tab type={content.type}/>;
+    default:
+      return null;
   }
 };
 

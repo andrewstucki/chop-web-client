@@ -50,7 +50,7 @@ class SimulatedLivePlayer extends React.Component<SimulatedLivePlayerPropsType, 
   }
 
   render () {
-    const { Player, url, isMobileDevice, style, onPlay, onPause  } = this.props;
+    const { Player, url, isMobileDevice, onPlay, onPause  } = this.props;
 
     if (Player === null) {
       return null;
@@ -59,8 +59,13 @@ class SimulatedLivePlayer extends React.Component<SimulatedLivePlayerPropsType, 
         <Player
           // $FlowFixMe
           ref={this.player}
+          data-testid='simulatedLivePlayer'
           url={url}
-          className={style}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
           width='100%'
           height='100%'
           frameBorder='0'

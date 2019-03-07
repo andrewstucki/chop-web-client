@@ -48,13 +48,13 @@ const getPlaceholder = createSelector(
   getOtherUsersNames,
   (channelType, otherUserNames) => {
     switch (channelType) {
-    case HOST:
-      return 'Chat with hosts';
-    case DIRECT:
-      return `Chat with ${otherUserNames.join(', ').replace(/,\s([^,]*)$/, ' and $1')}`;
-    case PUBLIC:
-    default:
-      return 'Chat';
+      case HOST:
+        return 'Chat with hosts';
+      case DIRECT:
+        return `Chat with ${otherUserNames.join(', ').replace(/,\s([^,]*)$/, ' and $1')}`;
+      case PUBLIC:
+      default:
+        return 'Chat';
     }
   }
 );

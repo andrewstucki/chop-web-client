@@ -34,7 +34,7 @@ describe('MessageTray tests', () => {
       />
     );
 
-    wrapper.find('[data-test="deleteButton"]').first().simulate('click');
+    wrapper.find('[data-testid="deleteButton"]').first().simulate('click');
     expect(deleteMessage.calledOnce).toEqual(true);
   });
 
@@ -49,7 +49,7 @@ describe('MessageTray tests', () => {
       />
     );
 
-    wrapper.find('[data-test="muteButton"]').first().simulate('click');
+    wrapper.find('[data-testid="muteButton"]').first().simulate('click');
     expect(muteUser.calledOnce).toEqual(true);
   });
 
@@ -64,7 +64,7 @@ describe('MessageTray tests', () => {
       />
     );
 
-    wrapper.find('[data-test="directChatButton"]').first().simulate('click');
+    wrapper.find('[data-testid="directChatButton"]').first().simulate('click');
     expect(directChat.calledOnce).toEqual(true);
   });
 
@@ -79,7 +79,7 @@ describe('MessageTray tests', () => {
       />
     );
 
-    wrapper.find('[data-test="closeButton"]').first().simulate('click');
+    wrapper.find('[data-testid="closeButton"]').first().simulate('click');
     expect(closeTray.calledOnce).toEqual(true);
   });
 });

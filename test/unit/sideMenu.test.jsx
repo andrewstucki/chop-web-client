@@ -4,7 +4,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import sinon from 'sinon';
 
-import SideMenuComponent from '../../src/components/sideMenu';
 import SideMenu from '../../src/sideMenu/sideMenu';
 import LanguageSelector from '../../src/languageSelector';
 import { mountWithTheme } from '../testUtils';
@@ -84,9 +83,8 @@ describe('SideBar tests', () => {
         organizationName='The Church'
       />
     );
-    expect(wrapper.find(SideMenuComponent).length).toBe(1);
-    expect(wrapper.find(SideMenuComponent).props().isClosed).toBe(false);
-    expect(wrapper.find(SideMenuComponent).props().close).toBe(closeFunction);
+    expect(wrapper.find('styles__Menu').length).toBe(1);
+    expect(wrapper.find('styles__Menu').props().open).toBe(true);
     expect(wrapper.find(LanguageSelector).length).toBe(1);
   });
 
@@ -111,9 +109,9 @@ describe('SideBar tests', () => {
         organizationName='The Church'
       />
     );
-    expect(wrapper.find('a[data-test="guest-experience"]').length)
+    expect(wrapper.find('a[data-testid="guest-experience"]').length)
       .toBe(1);
-    expect(wrapper.find('a[data-test="guest-experience"]').text())
+    expect(wrapper.find('a[data-testid="guest-experience"]').text())
       .toBe('Guest experienceFile');
   });
 
@@ -139,11 +137,11 @@ describe('SideBar tests', () => {
       />
     );
 
-    expect(wrapper.find('a[data-test="feedback"]').length)
+    expect(wrapper.find('a[data-testid="feedback"]').length)
       .toBe(1);
-    expect(wrapper.find('a[data-test="feedback"]').text())
+    expect(wrapper.find('a[data-testid="feedback"]').text())
       .toBe('Give feedbackFile');
-    expect(wrapper.find('a[data-test="feedback"]').props().href)
+    expect(wrapper.find('a[data-testid="feedback"]').props().href)
       .toBe('https://lifechurch.formstack.com/forms/host_feedback_2');
   });
 

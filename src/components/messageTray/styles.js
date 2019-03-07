@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   width: 300px;
   border-radius: 2px 0 0 2px;
   box-sizing: border-box;
-  padding-right: 12px;
+  padding-left: 12px;
 `;
 
 export { Wrapper };
