@@ -1,10 +1,10 @@
 /* @flow*/
 import React from 'react';
-import styles from './styles.css';
 import type { SimulatedLivePlayerPropsType } from './dux';
 import IframeEmbedPlayer from './players/iframeEmbedPlayer';
 import SimulatedLivePlayer from './players/simulatedLivePlayer';
 import OfflinePlayer from './players/offlinePlayer';
+import { Wrapper } from './styles';
 
 type VideoFeedProps = {
   type: string,
@@ -19,50 +19,38 @@ type VideoFeedProps = {
   isMobileDevice: boolean,
 };
 
-class VideoFeed extends React.Component<VideoFeedProps> {
-  render () {
-    const { type, Player, url, isVideoHidden, isMobileDevice, onPlay, onPause, startAt, isVideoPlaying } = this.props;
-
-    if (!url) {
-      return null;
-    }
-
-    const wrapperStyle = isVideoHidden ?
-      styles.hideVideo :
-      styles.showVideo;
-    const frameStyle = styles.frame;
-
-    return (
-      <div className={wrapperStyle}>
-        { url !== '' && type === 'simulated' &&
-          <SimulatedLivePlayer
-            Player={Player}
-            url={url}
-            startAt={startAt}
-            style={frameStyle}
-            onPlay={onPlay}
-            onPause={onPause}
-            isMobileDevice={isMobileDevice}
-            isVideoPlaying={isVideoPlaying}
-          />
-        }
-
-        { url !== '' && type === 'live' &&
-          <IframeEmbedPlayer
-            url={url}
-            style={frameStyle}
-          />
-        }
-
-        { url !== '' && type === 'offline' &&
-          <OfflinePlayer
-            url={url}
-            style={frameStyle}
-            Player={Player}/>
-        }
-      </div>
-    );
+const VideoFeed = ({ type, Player, url, isVideoHidden, isMobileDevice, onPlay, onPause, startAt, isVideoPlaying }:VideoFeedProps) => {
+  if (!url) {
+    return null;
   }
-}
 
-export default VideoFeed;
+  return (
+    <Wrapper data-testid='videoFeed' hidden={isVideoHidden}>
+      { url !== '' && type === 'simulated' &&
+        <SimulatedLivePlayer
+          Player={Player}
+          url={url}
+          startAt={startAt}
+          onPlay={onPlay}
+          onPause={onPause}
+          isMobileDevice={isMobileDevice}
+          isVideoPlaying={isVideoPlaying}
+        />
+      }
+
+      { url !== '' && type === 'live' &&
+        <IframeEmbedPlayer
+          url={url}
+        />
+      }
+
+      { url !== '' && type === 'offline' &&
+        <OfflinePlayer
+          url={url}
+          Player={Player}/>
+      }
+    </Wrapper>
+  );
+};
+
+export default React.memo < VideoFeedProps > (VideoFeed);

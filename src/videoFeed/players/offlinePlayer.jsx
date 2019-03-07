@@ -1,14 +1,19 @@
-/* @flow*/
+// @flow
 import React from 'react';
 import type { OfflinePlayerPropsType } from '../dux';
 import IframeEmbedPlayer from './iframeEmbedPlayer';
 
-const OfflinePlayer = ({ Player, url, style }: OfflinePlayerPropsType) => {
+const OfflinePlayer = ({ Player, url }: OfflinePlayerPropsType) => {
   if (Player !== null) {
     return (
       <Player
+        data-testid='offlinePlayer'
         url={url}
-        className={style}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
         width='100%'
         height='100%'
         frameBorder='0'
@@ -32,9 +37,9 @@ const OfflinePlayer = ({ Player, url, style }: OfflinePlayerPropsType) => {
     );
   } else {
     return (
-      <IframeEmbedPlayer url={url} style={style}/>
+      <IframeEmbedPlayer url={url} />
     );
   }
 };
 
-export default OfflinePlayer;
+export default React.memo < OfflinePlayerPropsType > (OfflinePlayer);
