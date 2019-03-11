@@ -1,6 +1,8 @@
+// @flow
 import React from 'react';
+import type { IconPropsType } from './index';
 
-const HostChat = ({color, large = true}) => {
+const HostChatIcon = ({color, large = true}:IconPropsType) => {
   if (large) {
     return (
       <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,4 +20,4 @@ const HostChat = ({color, large = true}) => {
   }
 };
 
-export default HostChat;
+export default React.memo < IconPropsType > (HostChatIcon);

@@ -90,4 +90,4 @@ class Medium extends React.Component<MediumProps, MediumState> {
   }
 }
 
-export default Medium;
+export default React.memo < MediumProps > (Medium);

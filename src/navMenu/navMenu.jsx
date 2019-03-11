@@ -1,14 +1,14 @@
 import React from 'react';
 import { Wrapper, IconButton, NavMenuButton, NavMenuHeader, NavMenuBody, NavMenuBodySection, NavMenuFooter, NavMenuIconWrapper, NavMenuTextWrapper, NavMenuChurchName, InnerWrapper, Label, getColor } from './styles';
 import Hamburger from '../icons/hamburger';
-import HostChat from '../icons/host-chat';
-import HostInfo from '../icons/host-info';
+import HostChat from '../icons/hostChat';
+import HostInfo from '../icons/hostInfo';
 import Chat from '../icons/chat';
 import Calendar from '../icons/calendar';
 import Bible from '../icons/bible';
 import Document from '../icons/document';
-import LeftArrow from '../icons/left-arrow';
-import RightArrow from '../icons/right-arrow';
+import LeftArrow from '../icons/leftArrow';
+import RightArrow from '../icons/rightArrow';
 import Actionable from '../components/Actionable';
 import { theme } from '../styles';
 import {PRIMARY_PANE} from '../pane/dux';
@@ -16,7 +16,7 @@ import {HOST_INFO} from '../hostInfo/dux';
 import {getFirstInitial} from '../util';
 import {DirectChatAvatar} from '../components/styles';
 
-const NavMenuItem = ({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false}) => (
+const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false}) => (
   <Actionable onClick={onClick}>
     <NavMenuButton disabled={disabled} expanded={expanded}>
       <NavMenuIconWrapper>
@@ -39,17 +39,19 @@ const NavMenuItem = ({Icon, useAvatar, text, selected = false, onClick = null, e
       }
     </NavMenuButton>
   </Actionable>
-);
+));
+NavMenuItem.displayName = 'NavMenuItem';
 
-const NavMenuHamburger = ({onClick, expanded}) => (
+const NavMenuHamburger = React.memo(({onClick, expanded}) => (
   <Actionable onClick={onClick}>
     <IconButton expanded={expanded}>
       <Hamburger large={!expanded} />
     </IconButton>
   </Actionable>
-);
+));
+NavMenuHamburger.displayName = 'NavMenuHamburger';
 
-const NavMenuMinifyArrow = ({onClick, expanded}) => (
+const NavMenuMinifyArrow = React.memo(({onClick, expanded}) => (
   <Actionable onClick={onClick}>
     <IconButton expanded={expanded}>
       { expanded &&
@@ -60,7 +62,9 @@ const NavMenuMinifyArrow = ({onClick, expanded}) => (
       }
     </IconButton>
   </Actionable>
-);
+));
+
+NavMenuMinifyArrow.displayName = 'NavMenuMinifyArrow';
 
 const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat, hostChannel, setPaneToTab, directChannels, openMenu, expanded, toggleExpanded, currentTabType}) => (
   <Wrapper expanded={expanded}>
@@ -102,4 +106,4 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
   </Wrapper>
 );
 
-export default NavMenu;
+export default React.memo(NavMenu);
