@@ -71,4 +71,4 @@ class Small extends React.Component<SmallProps, SmallState> {
   }
 }
 
-export default Small;
+export default React.memo < SmallProps > (Small);

@@ -17,4 +17,4 @@ const HostInfo = ({hostInfo}:HostInfoPropsType) => (
     : <Wrapper dangerouslySetInnerHTML={{ __html: sanitizeString(hostInfo) }} />
 );
 
-export default HostInfo;
+export default React.memo < HostInfoPropsType > (HostInfo);

@@ -64,7 +64,7 @@ class Chat extends Component<ChatProps, ChatState> {
     }
 
     if (isIOS()) {
-      window.addEventListener('scroll', this.preventScroll);
+      window.addEventListener('scroll', this.preventScroll, { passive: false });
     }
   }
 
