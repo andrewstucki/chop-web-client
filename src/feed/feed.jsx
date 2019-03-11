@@ -1,4 +1,5 @@
 // @flow
+/* global TimeoutID */
 import React from 'react';
 import type { PrivateUserType } from './dux';
 
@@ -58,6 +59,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
   wrapperRef: RefObject;
   listRef: RefObject;
   saveScrollPosition: (channel: string) => void;
+  isScrolling: TimeoutID;
 
   constructor (props: FeedProps) {
     super(props);
@@ -82,7 +84,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
   setScrollPositionToBottom = () => {
     this.scrollTo(0);
-  }
+  };
 
   scrollTo = (position: number) => {
     const { current:scrollWrapper } = this.wrapperRef;
@@ -93,7 +95,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
 
       scrollWrapper.scrollTop = scrollTop;
     }
-  }
+  };
 
   scroll = () => {
     const { scroll } = this.props;
@@ -108,16 +110,33 @@ class Feed extends React.Component<FeedProps, FeedState> {
       default:
       // no op
     }
-  }
+  };
 
-  // React Lifecycle functions
+  detectScroll = () => {
+    window.clearTimeout(this.isScrolling);
+    this.isScrolling = setTimeout(() => {
+      this.saveScrollPosition();
+    }, 100);
+  };
 
-  componentDidMount () {
+  componentDidMount (): void {
+    const { current } = this.wrapperRef;
+    if (current) {
+      current.addEventListener('scroll', this.detectScroll, { passive: true });
+    }
     this.scroll();
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (): void {
     this.scroll();
+  }
+
+  componentWillUnmount (): void {
+    const { current } = this.wrapperRef;
+    window.clearTimeout(this.isScrolling);
+    if (current) {
+      current.removeEventListener('scroll', this.detectScroll);
+    }
   }
 
   render () {
@@ -154,7 +173,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
           // $FlowFixMe
           ref={this.wrapperRef}
           className={styles.scroll}
-          onScroll={this.saveScrollPosition}
         >
           {
             showLeaveChat &&
