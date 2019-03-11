@@ -11,7 +11,7 @@ const Errors = ({ errors = [] }: ErrorsProps) => (
   <div className={styles.errors}>
     {
       errors.map(error => 
-        <p key={error.id}>{error.message}</p>
+        <p data-testid="error-message" key={error.id}>{error.message}</p>
       )
     }
   </div>
