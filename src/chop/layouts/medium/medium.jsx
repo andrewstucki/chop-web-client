@@ -8,7 +8,7 @@ import PopUpModal from '../../../popUpModal';
 import Pane from '../../../pane';
 import { PRIMARY_PANE } from '../../../pane/dux';
 import NavMenu from '../../../navMenu';
-import { Container, CellContainer } from './styles';
+import { Container, CellContainerTop, CellContainerBottom } from './styles';
 import { Grid, Cell } from 'styled-css-grid';
 
 type MediumProps = {
@@ -75,14 +75,14 @@ class Medium extends React.Component<MediumProps, MediumState> {
             <NavMenu/>
           </Cell>
           <Cell area="video">
-            <CellContainer>
+            <CellContainerTop>
               <VideoFeed />
-            </CellContainer>
+            </CellContainerTop>
           </Cell>
           <Cell area="chat">
-            <CellContainer>
+            <CellContainerBottom>
               <Pane name={PRIMARY_PANE} />
-            </CellContainer>
+            </CellContainerBottom>
           </Cell>
         </Grid>
       </Container>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wrapper, IconButton, NavMenuButton, NavMenuHeader, NavMenuBody, NavMenuBodySection, NavMenuFooter, NavMenuIconWrapper, NavMenuTextWrapper, NavMenuChurchName, InnerWrapper, Label, getColor } from './styles';
+import { Wrapper, IconButton, NavMenuButton, NavMenuHeader, NavMenuBody, NavMenuBodySection, NavMenuFooter, NavMenuIconWrapper, NavMenuTextWrapper, NavMenuCapTextWrapper, NavMenuChurchName, InnerWrapper, Label, getColor } from './styles';
 import Hamburger from '../icons/hamburger';
 import HostChat from '../icons/hostChat';
 import HostInfo from '../icons/hostInfo';
@@ -19,7 +19,7 @@ import {DirectChatAvatar} from '../components/styles';
 const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false}) => (
   <Actionable onClick={onClick}>
     <NavMenuButton disabled={disabled} expanded={expanded}>
-      <NavMenuIconWrapper>
+      <NavMenuIconWrapper expanded={expanded}>
         { useAvatar &&
           <DirectChatAvatar isCurrent={selected} name={text}>
             {getFirstInitial(text)}
@@ -29,13 +29,18 @@ const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClic
           <Icon large={!expanded} color={getColor(theme.colors, disabled, selected)} />
         }
       </NavMenuIconWrapper>
-      {expanded &&
-        <NavMenuTextWrapper selected={selected} disabled={disabled}>
+      {expanded && useAvatar &&
+          <NavMenuTextWrapper selected={selected} disabled={disabled}>
+            {text}
+          </NavMenuTextWrapper>
+      }
+      {expanded &&  !useAvatar &&
+        <NavMenuCapTextWrapper selected={selected} disabled={disabled}>
           {text}
           { disabled &&
             <Label>Coming Soon</Label>
           }
-        </NavMenuTextWrapper>
+        </NavMenuCapTextWrapper>
       }
     </NavMenuButton>
   </Actionable>
