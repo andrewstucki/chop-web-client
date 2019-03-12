@@ -24,6 +24,7 @@ const Wrapper = styled.div`
   width: ${props => props.expanded ? '200' : '64'}px;
   box-sizing: border-box;
   transition: width ${props => props.theme.animation.duration} ${props => props.expanded ? props.theme.animation.easeInOut : props.theme.animation.easeInOut};
+  overflow: hidden;
 `;
 
 const InnerWrapper = styled.div`
@@ -57,7 +58,7 @@ const NavMenuFooter = styled.div`
  `;
 
 const NavMenuIconWrapper = styled.div`
-  width: ${props => props.expanded ? '54' : '64'}px;
+  width: ${props => props.expanded ? '52' : '64'}px;
   height: 64px;
   display: flex;
   align-items: center;
@@ -71,8 +72,13 @@ const NavMenuTextWrapper = styled.div`
   align-items: flex-start;
   justify-content: center;
   color: ${props => getColor(props.theme.colors, props.disabled, props.selected) };
-  text-transform: uppercase;
   font-size: 13.44px;
+  font-weight: 500;
+  text-align: left;
+`;
+
+const NavMenuCapTextWrapper = styled(NavMenuTextWrapper)`
+  text-transform: uppercase;
 `;
 
 const NavMenuChurchName = styled.div`
@@ -81,26 +87,31 @@ const NavMenuChurchName = styled.div`
   align-items: center;
   color: ${props => props.theme.colors.gray50 };
   font-size: 13.44px;
+  white-space: nowrap;
+  font-weight: 500;
 `;
 
 const IconButton = styled.button`
   outline: none;
+  -webkit-tap-highlight-color: transparent;
   display: inline-block;
-  width: ${props => props.expanded ? '54' : '64'}px;
   height: 64px;
+  width: 64px;
   box-sizing: border-box;
   text-decoration: none;
-  margin:0px;
+  padding: 0;
+  margin: 0;
   border: none;
   background: transparent;
 `;
 
 const NavMenuButton = styled.button`
   outline: none;
+  -webkit-tap-highlight-color: transparent;
   cursor: ${props => props.disabled ? 'auto' : 'pointer'};
-  width: calc(100% - 8px);
-  padding: 0;
-  margin: 0 4px;
+  width: 100%;
+  padding: 0 16px 0 0;
+  margin: 0;
   border: none;
   background: transparent;
   display: flex;
@@ -126,6 +137,7 @@ export {
   NavMenuFooter,
   NavMenuIconWrapper,
   NavMenuTextWrapper,
+  NavMenuCapTextWrapper,
   NavMenuChurchName,
   Label,
   getColor,
