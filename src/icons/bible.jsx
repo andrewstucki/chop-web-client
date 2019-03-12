@@ -1,6 +1,9 @@
+// @flow
 import React from 'react';
+import type { IconPropsType } from './index';
 
-const Bible = ({color, large = true}) => {
+
+const BibleIcon = ({color, large = true}:IconPropsType) => {
   if (large) {
     return (
       <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,4 +23,4 @@ const Bible = ({color, large = true}) => {
   }
 };
 
-export default Bible;
+export default React.memo < IconPropsType > (BibleIcon);

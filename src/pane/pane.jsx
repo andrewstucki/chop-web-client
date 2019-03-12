@@ -38,7 +38,7 @@ const Pane = ({ pane, navbarIndex, prevNavbarIndex }:PanePropsType) => {
   const direction = navbarIndex > prevNavbarIndex;
   const transitions = useTransition(pane, hash(pane), {
     from: { transform: direction ? 'translate3d(100%,0,0)' : 'translate3d(-100%,0,0)' },
-    enter: { transform: direction ? 'translate3d(0%,0,0)' : 'translate3d(0%,0,0)' },
+    enter: { transform: direction ? 'translate3d(0,0,0)' : 'translate3d(0,0,0)' },
     leave: { transform: direction ? 'translate3d(-100%,0,0)' : 'translate3d(100%,0,0)' },
     immediate: prevNavbarIndex === undefined,
   });

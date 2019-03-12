@@ -3,7 +3,7 @@ import React from 'react';
 import { theme } from '../styles';
 import type { IconPropsType } from './';
 
-const Hamburger = ({large = true, color = theme.colors.gray50}) => {
+const HamburgerIcon = ({large = true, color = theme.colors.gray50}:IconPropsType) => {
   if (large) {
     return (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,4 +19,4 @@ const Hamburger = ({large = true, color = theme.colors.gray50}) => {
   }
 };
 
-export default React.memo < IconPropsType > (Hamburger);
+export default React.memo < IconPropsType > (HamburgerIcon);
