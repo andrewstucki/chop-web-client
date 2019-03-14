@@ -13,6 +13,7 @@ describe('ChatInput', () => {
     const onInputChange = sinon.spy();
     const wrapper = mountWithTheme(
       <ChatInput
+        id="chat"
         onChange={onInputChange}
         onFocus={() => {}}
         onBlur={() => {}}
