@@ -1,3 +1,4 @@
+// @flow
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import color from 'color';
@@ -105,7 +106,7 @@ type ThemeType = {
     easeOut: string,
     easeInOut: string,
     duration: string,
-  }
+  },
 };
 
 // Once we get into light/dark mode we will want to look into styled-themeing

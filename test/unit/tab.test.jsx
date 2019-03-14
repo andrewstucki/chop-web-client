@@ -1,58 +1,55 @@
 // @flow
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import 'jest-styled-components';
 import Tab from '../../src/pane/content/tab';
 import { HOST_INFO } from '../../src/hostInfo/dux';
-import HostInfo from '../../src/hostInfo';
-import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
-import { Provider } from 'react-redux';
-import { mountWithTheme } from '../testUtils';
-import ActionBanner from '../../src/components/actionBanner';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { renderWithReduxAndTheme } from '../testUtils';
 
 describe('Tab tests', () => {
   test('Tab Type renders', () => {
-    const store = createStore(
-      reducer,
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Tab
+        type={HOST_INFO}
+        removeTab={() => {}}
+      />,
       {
-        feed: defaultState,
+        feed: {
+          ...defaultState,
+          event: {
+            title: 'Event',
+            id: 123,
+            eventTimeId: 0,
+            startTime: 0,
+            hostInfo: '<p>The information for the hosts.</p>',
+          },
+        },
       }
     );
 
-    const wrapper = mountWithTheme(
-      <Provider store={store}>
-        <Tab
-          type={HOST_INFO}
-          removeTab={() => {}}
-        />
-      </Provider>
-    );
-
-    expect(wrapper.find(HostInfo).exists()).toEqual(true);
+    expect(getByTestId('hostInfo')).toBeTruthy();
   });
 
-  test('Tab has an action banner', () => {
-    const store = createStore(
-      reducer,
+  test('Tab has an action banner on small devices', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Tab
+        type={HOST_INFO}
+        removeTab={() => {}}
+      />,
       {
-        feed: defaultState,
+        feed: {
+          ...defaultState,
+          event: {
+            title: 'Event',
+            id: 123,
+            eventTimeId: 0,
+            startTime: 0,
+            hostInfo: '<p>The information for the hosts.</p>',
+          },
+        },
       }
     );
 
-    const wrapper = mountWithTheme(
-      <Provider store={store}>
-        <Tab
-          type={HOST_INFO}
-          removeTab={() => {}}
-        />
-      </Provider>
-    );
-
-    expect(wrapper.find(ActionBanner).exists()).toBeTruthy();
+    expect(getByTestId('tabHeader')).toBeTruthy();
   });
 });

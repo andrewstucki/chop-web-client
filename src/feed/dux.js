@@ -30,8 +30,6 @@ import type {
   ReleaseAnchorMomentType,
 } from '../anchorMoment/dux';
 
-import { objectFilter } from '../util';
-
 import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
@@ -136,6 +134,7 @@ const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
+const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 
 // Flow Type Definitions
@@ -238,14 +237,8 @@ type ChannelType = {
   sawLastMomentAt: DateTimeType,
 };
 
-type HereNowUsers = {
-  [string]: {
-    available_prayer: boolean,
-  },
-};
-
 type HereNowChannels = {
-  [string]: HereNowUsers,
+  [string]: Array<UserState>,
 };
 
 type ClientInfoType = {
@@ -279,7 +272,6 @@ type FeedType = {
   channels: ChannelsObjectType,
   hereNow: HereNowChannels,
   currentUser: PrivateUserType,
-  animatingMoment: boolean,
   isPopUpModalVisible: boolean,
   isChatFocused: boolean,
   keyboardHeight: number | typeof undefined,
@@ -352,30 +344,32 @@ type LoadHistoryType = {
 };
 
 type UserState = {
-  available_prayer: boolean,
-};
-
-type HereNowUsersType = {
-  [string]: UserState,
+  id: string,
+  available_prayer?: boolean,
 };
 
 type SetHereNow = {
-  type: 'SET_HERE_NOW',
+  type: typeof SET_HERE_NOW,
   channel: string,
-  users: HereNowUsersType,
+  users: Array<UserState>,
+};
+
+type AddHereNowType = {
+  type: typeof ADD_HERE_NOW,
+  channel: string,
+  user: UserState,
 };
 
 type UpdateHereNowType = {
-  type: 'UPDATE_HERE_NOW',
+  type: typeof UPDATE_HERE_NOW,
   channel: string,
-  userToken: string,
-  state: UserState,
+  user: UserState,
 };
 
 type RemoveHereNowType = {
-  type: 'REMOVE_HERE_NOW',
-  userToken: string,
+  type: typeof REMOVE_HERE_NOW,
   channel: string,
+  userToken: string,
 };
 
 type SetSalvationsType = {
@@ -440,6 +434,7 @@ type FeedActionTypes =
   | LeaveChannelType
   | SetScheduleType
   | UpdateHereNowType
+  | AddHereNowType
   | PublishSalvationType
   | ReleaseAnchorMomentType
   | SetSalvationsType
@@ -477,7 +472,7 @@ const removeAuthentication = (): RemoveAuthenticationType => (
   }
 );
 
-const setHereNow = (channel: string, users: HereNowUsersType): SetHereNow => (
+const setHereNow = (channel: string, users: Array<UserState>): SetHereNow => (
   {
     type: SET_HERE_NOW,
     channel,
@@ -485,16 +480,23 @@ const setHereNow = (channel: string, users: HereNowUsersType): SetHereNow => (
   }
 );
 
-const updateHereNow = (userToken: string, channel: string, state: UserState): UpdateHereNowType => (
+const addHereNow = (channel: string, user: UserState): AddHereNowType => (
   {
-    type: UPDATE_HERE_NOW,
+    type: ADD_HERE_NOW,
     channel,
-    userToken,
-    state,
+    user,
   }
 );
 
-const removeHereNow = (userToken: string, channel: string): RemoveHereNowType => (
+const updateHereNow = (channel: string, user: UserState): UpdateHereNowType => (
+  {
+    type: UPDATE_HERE_NOW,
+    channel,
+    user,
+  }
+);
+
+const removeHereNow = (channel: string, userToken: string): RemoveHereNowType => (
   {
     type: REMOVE_HERE_NOW,
     userToken,
@@ -691,7 +693,6 @@ const defaultState = {
     },
   },
   keyboardHeight: undefined,
-  animatingMoment: true,
   isPopUpModalVisible: false,
   isChatFocused: false,
   isSideMenuClosed: true,
@@ -805,26 +806,36 @@ const reducer = (
           [action.channel]: action.users,
         },
       };
-    case UPDATE_HERE_NOW:
+    case ADD_HERE_NOW:
       return {
         ...state,
         hereNow: {
           ...state.hereNow,
-          [action.channel]: {
+          [action.channel]: [
             ...state.hereNow[action.channel],
-            [action.userToken]: action.state,
-          },
+            action.user,
+          ],
         },
       };
-    case REMOVE_HERE_NOW: {
-      const { userToken: token } = action;
+    case UPDATE_HERE_NOW: {
+      const { user } = action;
       return {
         ...state,
         hereNow: {
-          [action.channel]: objectFilter(
-            state.hereNow[action.channel],
-            userToken => userToken === token
-          ),
+          ...state.hereNow,
+          [action.channel]: state.hereNow[action.channel].map(item => (
+            item.id === user.id ? user : item
+          )),
+        },
+      };
+    }
+    case REMOVE_HERE_NOW: {
+      const { userToken } = action;
+      return {
+        ...state,
+        hereNow: {
+          ...state.hereNow,
+          [action.channel]: state.hereNow[action.channel].filter(item => item.id !==  userToken),
         },
       };
     }
@@ -1494,6 +1505,7 @@ export {
   updateScrollPosition,
   setClientInfo,
   setHereNow,
+  addHereNow,
 };
 
 export type {

@@ -425,7 +425,7 @@ class ServiceActor {
     const currentMoments = channels[currentChannel].moments;
     const moment = currentMoments.find(moment => moment.prayerChannel === action.prayerChannel);
     const { user, prayerChannel } = moment;
-    const hosts = getAvailableForPrayer(this.getStore()).map(user => user.id);
+    const hosts = getAvailableForPrayer(this.getStore(), currentChannel).map(user => user.id);
 
     try {
       const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken, hosts, user.name);
