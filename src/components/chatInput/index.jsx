@@ -10,10 +10,12 @@ type ChatInputProps = {
   value: string,
   placeholder: string,
   enterDetect: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
+  id: string
 };
 
-const ChatInput = ({ onChange, onFocus, onBlur, value, placeholder, enterDetect }:ChatInputProps) => (
+const ChatInput = ({ onChange, onFocus, onBlur, value, placeholder, enterDetect, id }:ChatInputProps) => (
   <Input
+    data-testid={id}
     type='text'
     onChange={onChange}
     onFocus={onFocus}
