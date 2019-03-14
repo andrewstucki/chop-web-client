@@ -44,6 +44,7 @@ import type {
   PubnubReciveMessageType,
   LegacyNewMessageType,
 } from './converter';
+import bugsnagClient from '../util/bugsnag';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -678,7 +679,11 @@ class Chat {
         this.subscribe([id]);
         this.pubnub.history({channel: id},
           ((status, response) => {
-            this.loadHistory(response.messages, id);
+            if (!status?.error) {
+              this.loadHistory(response.messages, id);
+            } else {
+              bugsnagClient.notify(new Error('Pubnub History failed to load'), { metaData: status });
+            }
           }).bind(this));
 
         this.hereNow(id);

@@ -39,7 +39,10 @@
     "setupFilesAfterEnv": [
       "jest-extended",
       "react-testing-library/cleanup-after-each"
-    ]
+    ],
+    "globals": {
+      "ENV": "test"
+    }
   },
   "devDependencies": {
     "@babel/cli": "^7.2.0",
