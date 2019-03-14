@@ -9,7 +9,6 @@ module.exports = merge(common, {
   plugins: [
     new webpack.DefinePlugin({
       ENV: JSON.stringify('staging'),
-      BABEL_ENV: JSON.stringify('staging'),
       GATEWAY_HOST: JSON.stringify('https://staging.chopapi.com/graphql'),
       GTM: {
         gtmId: JSON.stringify('GTM-MQMRR25'),
