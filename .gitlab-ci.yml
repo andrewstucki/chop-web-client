@@ -21,15 +21,14 @@ cache:
   key: "$CI_PROJECT_ID"
   paths:
     - node_modules/
-    - .yarn
     - dist/
     - cache/Cypress
 
 compile:app-review:
-  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  image: in.thewardro.be:4567/io/io-builder:1.0.2
   stage: compile
   script:
-    - yarn install --pure-lockfile --cache-folder .yarn
+    - yarn install --pure-lockfile
     - yarn build:review
     #- yarn cy:verify
   artifacts:
@@ -41,13 +40,13 @@ compile:app-review:
     - integration
 
 compile:app-staging:
-  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  image: in.thewardro.be:4567/io/io-builder:1.0.2
   stage: compile
   variables:
     GIT_STRATEGY: clone
 
   script:
-    - yarn install --pure-lockfile --cache-folder .yarn
+    - yarn install --pure-lockfile
     - yarn build:staging
   after_script:
     - mkdir -pvm 0700 /root/.ssh  && touch /root/.ssh/known_hosts
@@ -73,10 +72,10 @@ compile:app-staging:
       - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 compile:app-production:
-  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  image: in.thewardro.be:4567/io/io-builder:1.0.2
   stage: compile
   script:
-    - yarn install --pure-lockfile --cache-folder .yarn
+    - yarn install --pure-lockfile
     - yarn build:production
   artifacts:
     expire_in: 1 day
@@ -87,7 +86,7 @@ compile:app-production:
 
 lint:
   stage: test
-  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  image: in.thewardro.be:4567/io/io-builder:1.0.2
   script:
     - yarn lint
     - yarn flow check
@@ -100,19 +99,13 @@ lint:
 
 test:
   stage: test
-  image: in.thewardro.be:4567/io/io-builder:1.0.1
-  cache:
-    untracked: false
-    policy: pull
-  variables:
-    CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
+  image: in.thewardro.be:4567/io/io-builder:1.0.2
   script:
-    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-    - chmod +x ./cc-test-reporter
-    - ./cc-test-reporter before-build
-    - yarn add jest
-    - yarn coverage
-    - ./cc-test-reporter after-build -t lcov --exit-code $? || echo "Skipping Code Climate Coverage Upload"
+    - yarn coverage # Use coverage to generate coverage report
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - coverage/
   except:
     refs:
       - master
@@ -198,6 +191,10 @@ cypress:tests-review:
   script:
     - CI_ENVIRONMENT_URL=`cat environmentUrl.txt`
     - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl=$CI_ENVIRONMENT_URL
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - cy-coverage/
   dependencies:
     - review
   except:
@@ -252,7 +249,7 @@ staging:
 code_coverage_report_master:
   stage: coverage
   cache: {}
-  image: in.thewardro.be:4567/io/io-builder:1.0.1
+  image: in.thewardro.be:4567/io/io-builder:1.0.2
   variables:
     CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
   script:
@@ -261,8 +258,29 @@ code_coverage_report_master:
     - ./cc-test-reporter before-build
     - yarn install
     - yarn coverage
-    - ./cc-test-reporter after-build -t lcov --exit-code $? || echo "Skipping Code Climate Coverage Upload"
+    - yarn cy:run
+    - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.cy.json cy-coverage/lcov.info
+    - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.jest.json coverage/lcov.info
+    - ./cc-test-reporter  sum-coverage coverage/codeclimate.*.json -p 2
+    - ./cc-test-reporter upload-coverage
   only:
+    - master
+
+code_coverage_report:
+  stage: coverage
+  cache: {}
+  image: in.thewardro.be:4567/io/io-builder:1.0.2
+  variables:
+    CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
+  script:
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+    - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.cy.json cy-coverage/lcov.info
+    - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.jest.json coverage/lcov.info
+    - ./cc-test-reporter  sum-coverage coverage/codeclimate.*.json -p 2
+    - ./cc-test-reporter upload-coverage
+  except:
     - master
 
 canary:

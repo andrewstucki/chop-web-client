@@ -1,11 +1,26 @@
+# dependencies
 node_modules/
+
+# output build dir
 dist/
+
+# log files
 yarn-error.log
-.DS_Store
-coverage
 /.eslintrc.json
+
+# Mac OS system files
+.DS_Store
+
+# code coverage
+coverage
+cy-coverage
+.nyc_output/
+
+# Editor and IDE specific configs
 .idea
 .vscode/
+
+# Cypress media output
 cypress/screenshots/
 cypress/videos/
 

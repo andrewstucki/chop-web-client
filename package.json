@@ -21,7 +21,8 @@
     "test:full": "yarn test && yarn flow && yarn lint && yarn cy:run",
     "cy:open": "cypress open",
     "cy:verify": "cypress verify",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "cy:coverage": "nyc report"
   },
   "jest": {
     "testRegex": "/test/unit/.*\\.test\\.jsx?$",
@@ -55,6 +56,7 @@
     "@babel/preset-react": "^7.0.0",
     "@welldone-software/why-did-you-render": "^2.5.2",
     "babel-eslint": "8.2.1",
+    "babel-plugin-istanbul": "^5.1.1",
     "babel-plugin-react-remove-properties": "^0.3.0",
     "babel-plugin-styled-components": "^1.10.0",
     "compression-webpack-plugin": "^1.1.11",
@@ -80,6 +82,7 @@
     "jest-extended": "^0.11.1",
     "jest-snapshot": "^24.0.0",
     "jest-styled-components": "^6.3.1",
+    "nyc": "^13.3.0",
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^11.1.0",
     "postcss-loader": "^2.1.5",
