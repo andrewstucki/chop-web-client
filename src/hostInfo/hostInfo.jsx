@@ -9,12 +9,17 @@ type HostInfoPropsType = {
 };
 
 const HostInfo = ({hostInfo}:HostInfoPropsType) => (
-  isEmpty(hostInfo) ?
-    <NoHostInfo>
-      <img src={emptyInfo} alt="There is no Host Info for this event."/>
-      <p>There is no Host Info for this event.</p>
-    </NoHostInfo>
-    : <Wrapper dangerouslySetInnerHTML={{ __html: sanitizeString(hostInfo) }} />
+  <>
+  {
+    isEmpty(hostInfo) ?
+      <NoHostInfo>
+        <img src={emptyInfo} alt="There is no Host Info for this event."/>
+        <p>There is no Host Info for this event.</p>
+      </NoHostInfo>
+      :
+      <Wrapper data-testid='hostInfo' dangerouslySetInnerHTML={{ __html: sanitizeString(hostInfo) }}/>
+  }
+  </>
 );
 
 export default React.memo < HostInfoPropsType > (HostInfo);

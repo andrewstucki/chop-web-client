@@ -7,7 +7,6 @@ import { mountWithTheme } from '../testUtils';
 import { MESSAGE } from '../../src/moment';
 
 import Feed from '../../src/feed/feed';
-import FeedActionBanner from '../../src/components/actionBanner';
 import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../../src/components/button';
 import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
@@ -35,7 +34,6 @@ describe('Feed tests', () => {
         anchorMoments={[]}
         currentChannel="default"
         appendingMessage={false}
-        animatingMoment={false}
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -80,7 +78,6 @@ describe('Feed tests', () => {
           onMessageRender={function () {}}
           currentChannel="default"
           appendingMessage={false}
-          animatingMoment={true}
           showLeaveChat={true}
           isPopUpModalVisible={false}
           togglePopUpModal={() => {}}
@@ -119,7 +116,6 @@ describe('Feed tests', () => {
         onMessageRender={function () {}}
         currentChannel="default"
         appendingMessage={false}
-        animatingMoment={false}
         showLeaveChat={true}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
@@ -135,31 +131,6 @@ describe('Feed tests', () => {
     expect(wrapper.find('ul').first().key()).toEqual('default');
   });
 
-  test('Feed with participants', () => {
-    const wrapper = mountWithTheme(
-      <Feed
-        offset={0}
-        moments={[]}
-        anchorMoments={[]}
-        onMessageRender={function () {}}
-        currentChannel="host"
-        appendingMessage={false}
-        animatingMoment={false}
-        showLeaveChat={true}
-        isPopUpModalVisible={false}
-        togglePopUpModal={() => {}}
-        scroll={{type: 'NO_SCROLL'}}
-        currentUser={user}
-        updateScrollPosition={() => {}}
-        channel="default"
-        showNewMessageButton={false}
-        isChatFocused={false}
-        setSawLastMomentAt={() => {}}
-      />
-    );
-    expect(wrapper.find(FeedActionBanner).length).toBe(1);
-  });
-
   test('Feed with New Message button', () => {
     const wrapper = mountWithTheme(
       <Feed
@@ -169,7 +140,6 @@ describe('Feed tests', () => {
         onMessageRender={function () {}}
         currentChannel="host"
         appendingMessage={false}
-        animatingMoment={false}
         showLeaveChat={false}
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}

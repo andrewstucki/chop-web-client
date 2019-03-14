@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => (
   {
-    removeTab: type => dispatch(removeTab(type)),
+    hideTab: type => dispatch(removeTab(type)),
   }
 );
 

@@ -4,7 +4,7 @@ import actorMiddleware from '../../src/middleware/actor-middleware';
 import reducer from '../../src/chop/dux';
 import { getAvailableForPrayer } from '../../src/selectors/hereNowSelector';
 import { __messageEvent, __presenceEvent, mockHereNow } from 'pubnub';
-import { defaultState } from '../../src/feed/dux';
+import { addChannel, defaultState } from '../../src/feed/dux';
 import Chat from '../../src/io/chat';
 jest.mock('pubnub');
 
@@ -252,11 +252,21 @@ describe('Prayer Request Tests', () => {
       }
     );
 
+    store.dispatch(
+      addChannel(
+        'public',
+        '123456',
+        false,
+        [])
+    );
+
     expect(getAvailableForPrayer(store.getState().feed)).toEqual(
       [
         {
           id: 'abc',
-          available_prayer: true, // eslint-disable-line camelcase
+          state: {
+            available_prayer: true, // eslint-disable-line camelcase
+          },
         },
       ]
     );
@@ -276,11 +286,15 @@ describe('Prayer Request Tests', () => {
       [
         {
           id: 'abc',
-          available_prayer: true, // eslint-disable-line camelcase
+          state: {
+            available_prayer: true, // eslint-disable-line camelcase
+          },
         },
         {
           id: 'nop',
-          available_prayer: true, // eslint-disable-line camelcase
+          state: {
+            available_prayer: true, // eslint-disable-line camelcase
+          },
         },
       ]
     );
@@ -300,7 +314,9 @@ describe('Prayer Request Tests', () => {
       [
         {
           id: 'nop',
-          available_prayer: true, // eslint-disable-line camelcase
+          state: {
+            available_prayer: true, // eslint-disable-line camelcase
+          },
         },
       ]
     );

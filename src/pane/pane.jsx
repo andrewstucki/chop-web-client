@@ -10,6 +10,7 @@ import hash from 'object-hash';
 import { useTransition } from 'react-spring';
 import { TAB } from './content/tab/dux';
 import Tab from './content/tab';
+import { Small, MediumUp } from '../util/responsive';
 
 type PanePropsType = {
   name: string,
@@ -45,13 +46,20 @@ const Pane = ({ pane, navbarIndex, prevNavbarIndex }:PanePropsType) => {
 
   return (
     <PaneWrapper>
-      { transitions.map(({ item:pane, props, key }) => (
-        <PaneContentWrapper
-          key={key}
-          style={props}>
+      <Small>
+        { transitions.map(({ item:pane, props, key }) => (
+          <PaneContentWrapper
+            key={key}
+            style={props}>
+            {renderPaneContent(pane)}
+          </PaneContentWrapper>)
+        )}
+      </Small>
+      <MediumUp>
+        <PaneContentWrapper>
           {renderPaneContent(pane)}
         </PaneContentWrapper>)
-      )}
+      </MediumUp>
     </PaneWrapper>
   );
 };

@@ -1,13 +1,14 @@
 // @flow
 import React from 'react';
 import { HOST_INFO } from '../../../hostInfo/dux';
-import ActionBanner from '../../../components/actionBanner';
 import HostInfo from '../../../hostInfo';
 import type { TabTypeType } from './dux';
+import PaneHeader from '../../../paneHeader';
+import { TAB_HEADER } from '../../../paneHeader/tabHeader';
 
 type TabPropsType = {
   type: TabTypeType,
-  removeTab: (type: TabTypeType) => void,
+  hideTab: (type: TabTypeType) => void
 };
 
 const renderTabContent = type => {
@@ -21,12 +22,12 @@ const renderTabContent = type => {
   }
 };
 
-const Tab = ({ type, removeTab }:TabPropsType) => (
+const Tab = ({ type, hideTab }:TabPropsType) => (
   <>
-    <ActionBanner
-      text="Hide Tab"
-      onClick={() => removeTab(type)}
-    />
+    <PaneHeader type={TAB_HEADER} data={{
+      title: type.replace(/_/g, ' '),
+      hideTab: () => hideTab(type),
+    }}/>
     { renderTabContent(type) }
   </>
 );
