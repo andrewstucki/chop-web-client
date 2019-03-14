@@ -58,7 +58,7 @@ const Pane = ({ pane, navbarIndex, prevNavbarIndex }:PanePropsType) => {
       <MediumUp>
         <PaneContentWrapper>
           {renderPaneContent(pane)}
-        </PaneContentWrapper>)
+        </PaneContentWrapper>
       </MediumUp>
     </PaneWrapper>
   );

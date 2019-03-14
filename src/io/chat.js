@@ -451,15 +451,22 @@ class Chat {
           );
         }
         return;
-      case 'muteMessage':
-      // $FlowFixMe
-        if (this.getState().channels[event.message.data.channelToken].moments.find(moment => moment.id === event.message.data.umt) !== undefined) {
-          this.storeDispatch(
+      case 'muteMessage': {
+        const { channelToken, umt } = event.message.data;
+        const { channels } = this.getState();
+
+        if (channels[channelToken]) {
+          const { moments } = channels[channelToken];
           // $FlowFixMe
-            deleteMessage(event.message.data.umt, event.message.data.channelToken)
-          );
+          if (moments.find(moment => moment.id === umt) !== undefined) {
+            this.storeDispatch(
+              // $FlowFixMe
+              deleteMessage(umt, channelToken)
+            );
+          }
         }
         return;
+      }
       case 'removeLiveResponseRequest': {
       // $FlowFixMe
         const cancelled = !!event.message.data.leave;
