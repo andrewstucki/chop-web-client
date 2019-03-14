@@ -1,19 +1,10 @@
 describe('NavBar', () => {
   beforeEach(() => {
-    cy.viewport('iphone-6');
-    cy.visit('/');
-    cy.window().then(win => {
-      win.store.dispatch(
-        {
-          type: 'BASIC_AUTH_LOGIN',
-          email: 'joe.test@testing.com',
-          password: '123456',
-        }
-      );
-    });
+    cy.login();
   });
 
   it('has all correct elements on it', () => {
+    cy.viewport('iphone-6');
     cy.get('[data-testid=navbar]').as('navbar');
     cy.get('[data-testid=navbar]>button>svg');
     cy.get('@navbar').contains('Public');
@@ -21,6 +12,7 @@ describe('NavBar', () => {
   });
 
   it('changes channels', () => {
+    cy.viewport('iphone-6');
     cy.get('[data-testid=navbar]').as('navbar');
     cy.get('@navbar').contains('Public').as('public');
     cy.get('@navbar').contains('Host').as('host');
@@ -33,6 +25,7 @@ describe('NavBar', () => {
   });
 
   it('scrolls sideways', () => {
+    cy.viewport('iphone-6');
     cy.get('[data-testid=navbarItems]').then($el => {
       expect(Cypress.dom.isScrollable($el)).to.be.false;
     });
@@ -41,17 +34,6 @@ describe('NavBar', () => {
     cy.viewport(150, 400); // Make the viewport very narrow so we will have scrolling in the Nav Bar
     cy.get('[data-testid=navbarItems]').then($el => {
       expect(Cypress.dom.isScrollable($el)).to.be.true;
-    });
-    cy.contains('Host Info').then($el => {
-      expect(Cypress.dom.isVisible($el)).to.be.false;
-    });
-    cy.get('[data-testid=navbarItems]').scrollTo('right');
-    cy.wait(500); // TODO: We have to wait for the scroll to finish but should find a better way
-    cy.contains('Host Info').then($el => {
-      expect(Cypress.dom.isVisible($el)).to.be.true;
-    });
-    cy.contains('Public').then($el => {
-      expect(Cypress.dom.isVisible($el)).to.be.false;
     });
   });
 });

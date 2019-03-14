@@ -22,13 +22,12 @@ import actorMiddleware from './middleware/actor-middleware';
 import ChatActor from './io/chat';
 import serviceActor from './io/serviceActor';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
-import bugsnag from '@bugsnag/js';
-import bugsnagReact from '@bugsnag/plugin-react';
 import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
 import smoothscroll from 'smoothscroll-polyfill';
 import { warningNotificationBanner } from './banner/dux';
+import { ErrorBoundary } from './util/bugsnag';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
@@ -43,16 +42,6 @@ if (ENV === 'development') {
 smoothscroll.polyfill();
 
 TagManager.initialize(GTM);
-
-const bugsnagClient = bugsnag({
-  apiKey: '2403ac729529750d296e1e4ee022f7dc',
-  releaseStage: ENV,
-  notifyReleaseStages: [ 'production', 'staging' ],
-});
-
-bugsnagClient.use(bugsnagReact, React);
-
-const ErrorBoundary = bugsnagClient.getPlugin('react');
 
 const actorMiddlewareApplied = actorMiddleware(
   ChatActor,

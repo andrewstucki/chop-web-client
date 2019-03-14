@@ -1,9 +1,12 @@
 describe('Chatting', () => {
+  beforeEach(() => {
+    cy.login();
+  });
+
   it('Sending a message', () => {
     cy.server();
     cy.route('/publish/**').as('publish');
 
-    cy.login();
     cy.get('[data-testid=chat-input]').type('Hello, world!');
     cy.get('[data-testid=chat-submit-button]').click();
 
@@ -18,15 +21,18 @@ describe('Chatting', () => {
   });
 
   it('Receiving a message', () => {
+    cy.get('[data-testid=chat-input]'); // Make sure the state and page has loaded
     // TODO: Send this message in through pubnub or open another client and send it from their
     cy.window().then(win => {
+      const { channels } = win.store.getState().feed;
+      const [ channelId ] = Object.keys(win.store.getState().feed.channels).filter(key => channels[key].name === 'Public');
       win.store.dispatch(
         {
           type: 'RECEIVE_MOMENT',
-          channel: '998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c',
+          channel: channelId,
           moment: {
             type: 'MESSAGE',
-            id: 'd5080509-6e0a-47f6-b48d-ff01f7f86242',
+            id: 'd5080509-6e0a-47f6-b48d-' + Date.now().toString(),
             timestamp: 1552583185000,
             lang: 'en',
             text: 'Goodnight, moon!',
