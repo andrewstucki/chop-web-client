@@ -163,6 +163,7 @@ type EventType = {
   id: number,
   eventTimeId: number,
   startTime: number,
+  endTime: number,
   description?: string,
   hostInfo?: string,
   speaker?: string,
@@ -544,7 +545,7 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
   }
 );
 
-const setEvent = (title: string, id: number, eventTimeId:number, startTime: number, videoStartTime: number,
+const setEvent = (title: string, id: number, eventTimeId:number, startTime: number, endTime: number, videoStartTime: number,
   speaker: string, description: string, hostInfo: string): SetEventType => (
   {
     type: SET_EVENT,
@@ -553,6 +554,7 @@ const setEvent = (title: string, id: number, eventTimeId:number, startTime: numb
       id,
       eventTimeId,
       startTime,
+      endTime,
       videoStartTime,
       speaker,
       description,
@@ -672,6 +674,7 @@ const defaultState = {
     id: 0,
     eventTimeId: 0,
     startTime: 0,
+    endTime: 0,
     title: '',
     hostInfo: '',
   },

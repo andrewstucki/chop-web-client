@@ -45,6 +45,7 @@ currentEvent {
     id
   }
   startTime
+  endTime
   videoStartTime
   sequence {
     serverTime
@@ -83,6 +84,7 @@ query EventAt($time: Timestamp) {
       id
     }
     startTime
+    endTime
     videoStartTime
     video {
       type

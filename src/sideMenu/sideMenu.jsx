@@ -18,7 +18,7 @@ import Exit from '../../assets/exit.svg';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
-import { ExternalLink, LinkIcon, OrganizationTitle, Nickname, EventDescription, EventTitle, Profile, ProfileActions, Menu, Overlay } from './styles';
+import { ExternalLink, LinkIcon, OrganizationTitle, Nickname, EventDescription, EventTitle, Profile, ProfileActions, Menu, Overlay, LogOutButton } from './styles';
 import type { PaneType } from '../pane/dux';
 import { PRIMARY_PANE } from '../pane/dux';
 import { HOST_INFO } from '../hostInfo/dux';
@@ -86,14 +86,13 @@ const SideMenu = (
           <Avatar user={currentUser} large/>
           <Nickname>{currentUser.name}</Nickname>
           <ProfileActions>
-            <a
-              id='logout'
-              href="javascript:void(0)"
+            <LogOutButton
+              data-testid='logout'
               onClick={logout}>
               <LinkIcon
                 dangerouslySetInnerHTML={{ __html: Exit }}
               /> Log Out
-            </a>
+            </LogOutButton>
           </ProfileActions>
         </Profile>
 

@@ -74,6 +74,7 @@ const ionDesignValues = {
       errorRed: '#E33300',
     },
     grayscale: {
+      black: '#000000',
       gray130: '#2D2D2E',
       gray100: '#404041',
       gray80: '#666667',
@@ -118,6 +119,7 @@ const theme:ThemeType = {
     background: ionDesignValues.colors.grayscale.white,
     textColor:  ionDesignValues.colors.grayscale.gray100,
     alternateTextColor: ionDesignValues.colors.grayscale.white,
+    black:      ionDesignValues.colors.grayscale.black,
     gray100:    ionDesignValues.colors.grayscale.gray100,
     gray50:     ionDesignValues.colors.grayscale.gray50,
     gray30:     ionDesignValues.colors.grayscale.gray30,

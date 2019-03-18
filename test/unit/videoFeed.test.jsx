@@ -1,15 +1,14 @@
 // @flow
 import React from 'react';
-import { render } from 'react-testing-library';
 import { default as ConnectedVideoFeed } from '../../src/videoFeed';
 import VideoFeed from '../../src/videoFeed/videoFeed';
 import { defaultState } from '../../src/feed/dux';
 import YouTubePlayer from 'react-player/lib/players/YouTube';
-import { renderWithRedux } from '../testUtils';
+import { renderWithReduxAndTheme } from '../testUtils';
 
 describe('VideoFeed tests', () => {
   test('VideoFeed shows video', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithReduxAndTheme(
       <VideoFeed
         Player={YouTubePlayer}
         isVideoHidden={false}
@@ -29,7 +28,7 @@ describe('VideoFeed tests', () => {
   });
 
   test('VideoFeed hides video', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithReduxAndTheme(
       <VideoFeed
         Player={YouTubePlayer}
         isVideoHidden={true}
@@ -49,7 +48,7 @@ describe('VideoFeed tests', () => {
   });
 
   test ('VideoFeed does not render if url is not set', () => {
-    const { queryByTestId } = render(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <VideoFeed
         Player={YouTubePlayer}
         isVideoHidden={false}
@@ -66,7 +65,7 @@ describe('VideoFeed tests', () => {
   });
 
   test('Simulated video renders simulated player', () => {
-    const { getByTestId } = renderWithRedux(
+    const { getByTestId } = renderWithReduxAndTheme(
       <ConnectedVideoFeed />,
       {
         feed: {
@@ -83,7 +82,7 @@ describe('VideoFeed tests', () => {
   });
 
   test('Offline video renders offline player', () => {
-    const { getByTestId } = renderWithRedux(
+    const { getByTestId } = renderWithReduxAndTheme(
       <ConnectedVideoFeed />,
       {
         feed: {
@@ -100,7 +99,7 @@ describe('VideoFeed tests', () => {
   });
 
   test('Live video renders iframe player', () => {
-    const { getByTestId } = renderWithRedux(
+    const { getByTestId } = renderWithReduxAndTheme(
       <ConnectedVideoFeed />,
       {
         feed: {
