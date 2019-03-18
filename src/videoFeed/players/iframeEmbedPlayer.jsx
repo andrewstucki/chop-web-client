@@ -15,6 +15,7 @@ const IframeEmbedPlayer = ({url}: IFramePlayerPropsType) => (
     frameBorder={0}
     marginWidth={0}
     marginHeight={0}
+    title='iframePlayer'
     data-testid='iframePlayer'
   ></iframe>
 );

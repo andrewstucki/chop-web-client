@@ -15,33 +15,36 @@ const LanguageSelector = (
     setLanguage,
     languageOptions,
   }: LanguageSelectorPropsType
-) => (
-  <div className={styles.container}>
-    <div className={styles.dropdownContainer}>
-      <div
-        dangerouslySetInnerHTML={{ __html: Globe }}
-        className={styles.globe}
-      />
-      <select
-        onChange={event => {
-          setLanguage(event.target.value);
-        }}
-        className={styles.languageSelector}
-        tabIndex="-1"
-      >
-        {
-          languageOptions.map(language => (
-            <option
-              key={language.code}
-              value={language.code}
-            >
-              {language.name}
-            </option>
-          ))
-        }
-      </select>
+) => {
+  const handleChange = event => setLanguage(event.target.value);
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.dropdownContainer}>
+        <div
+          dangerouslySetInnerHTML={{ __html: Globe }}
+          className={styles.globe}
+        />
+        <select
+          onChange={handleChange}
+          onBlur={handleChange}
+          className={styles.languageSelector}
+          tabIndex="-1"
+        >
+          {
+            languageOptions.map(language => (
+              <option
+                key={language.code}
+                value={language.code}
+              >
+                {language.name}
+              </option>
+            ))
+          }
+        </select>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default React.memo < LanguageSelectorPropsType > (LanguageSelector);

@@ -9,7 +9,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:jsx-a11y/strict"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -23,13 +24,14 @@
         "flowtype",
         "import",
         "cypress",
-        "react-hooks"
+        "react-hooks",
+        "jsx-a11y"
     ],
     "settings": {
         "react": {
             "createClass": "createReactClass",
             "pragma": "React",
-            "version": "16.6.3",
+            "version": "16.8.4",
             "flowVersion": "0.90.0"
         }
     },

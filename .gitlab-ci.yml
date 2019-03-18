@@ -188,6 +188,7 @@ review:
 cypress:tests-review:
   image: cypress/base:10
   stage: cypress
+  allow_failure: true
   script:
     - CI_ENVIRONMENT_URL=`cat environmentUrl.txt`
     - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl=$CI_ENVIRONMENT_URL
@@ -204,6 +205,7 @@ cypress:tests-review:
 cypress:tests-staging:
   image: cypress/base:10
   stage: cypress
+  allow_failure: true
   script:
     - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl="https://digerati.chopdev.com/host_mobile"
   dependencies:

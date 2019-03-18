@@ -320,6 +320,7 @@ class ServiceActor {
         event.eventTime !== undefined &&
         event.eventTime.id !== undefined &&
         event.startTime !== undefined &&
+        event.endTime !== undefined &&
         event.videoStartTime !== undefined) {
         this.storeDispatch(
           setEvent(
@@ -327,6 +328,7 @@ class ServiceActor {
             event.id,
             event.eventTime.id,
             event.startTime,
+            event.endTime,
             event.videoStartTime,
             event.speaker || '',
             event.description || '',
