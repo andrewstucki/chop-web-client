@@ -209,6 +209,7 @@ staging:
 
 code_coverage_report_master:
   stage: coverage
+  allow_failure: true
   cache: {}
   image: node:lts
   variables:
