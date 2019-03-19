@@ -37,7 +37,6 @@ import {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
-  toggleCloseTrayButton,
   publishAcceptedPrayerRequest,
   receiveAcceptedPrayerRequest,
   MESSAGE,
@@ -181,7 +180,6 @@ describe('Feed tests', () => {
           text: 'this is a message',
           sender: currentUser,
           messageTrayOpen: false,
-          closeTrayButtonRendered: false,
         },
       }
     );
@@ -236,7 +234,6 @@ describe('Feed tests', () => {
           text: 'this is a string',
           sender: otherUser,
           messageTrayOpen: false,
-          closeTrayButtonRendered: false,
         },
       }
     );
@@ -282,7 +279,6 @@ describe('Feed tests', () => {
           name: '',
         },
         messageTrayOpen: false,
-        closeTrayButtonRendered: false,
       })
     );
     expect(result.channels.public.moments.length).toEqual(0);
@@ -728,7 +724,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
               {
@@ -739,7 +734,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'William',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -757,7 +751,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      openMessageTray('123'));
+      openMessageTray('public', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -775,7 +769,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: true,
               },
               {
@@ -786,7 +779,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'William',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -825,7 +817,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
               {
@@ -836,7 +827,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'William',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -854,7 +844,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      openMessageTray('123'));
+      openMessageTray('host','123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -872,7 +862,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: true,
               },
               {
@@ -883,7 +872,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'William',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -922,7 +910,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'Billy Bob',
                 },
-                closeTrayButtonRendered: true,
                 messageTrayOpen: true,
               },
               {
@@ -933,7 +920,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'William',
                 },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],
@@ -951,7 +937,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      closeMessageTray('123'));
+      closeMessageTray('public','123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -970,7 +956,6 @@ describe('Feed tests', () => {
                   name: 'Billy Bob',
                 },
                 messageTrayOpen: false,
-                closeTrayButtonRendered: true,
               },
               {
                 type: MESSAGE,
@@ -980,201 +965,6 @@ describe('Feed tests', () => {
                   id: '12345',
                   name: 'William',
                 },
-                closeTrayButtonRendered: false,
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-          },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'public',
-            },
-          },
-        },
-      }
-    );
-  });
-
-  test('Render closeTrayButton after the tray opens', () => {
-    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            direct: false,
-            moments: [
-              {
-                type: MESSAGE,
-                id: '123',
-                text: 'I like socks',
-                sender: {
-                  id: '12345',
-                  name: 'Billy Bob',
-                },
-                messageTrayOpen: true,
-                closeTrayButtonRendered: false,
-              },
-              {
-                type: MESSAGE,
-                id: '456',
-                text: 'I like rocks',
-                sender: {
-                  id: '12345',
-                  name: 'William',
-                },
-                closeTrayButtonRendered: false,
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-          },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'public',
-            },
-          },
-        },
-      },
-      toggleCloseTrayButton('123'));
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            direct: false,
-            moments: [
-              {
-                type: MESSAGE,
-                id: '123',
-                text: 'I like socks',
-                sender: {
-                  id: '12345',
-                  name: 'Billy Bob',
-                },
-                messageTrayOpen: true,
-                closeTrayButtonRendered: true,
-              },
-              {
-                type: MESSAGE,
-                id: '456',
-                text: 'I like rocks',
-                sender: {
-                  id: '12345',
-                  name: 'William',
-                },
-                closeTrayButtonRendered: false,
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-          },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'public',
-            },
-          },
-        },
-      }
-    );
-  });
-
-  test('Render openTrayButton after the tray closes', () => {
-    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            direct: false,
-            moments: [
-              {
-                type: MESSAGE,
-                id: '123',
-                text: 'I like socks',
-                sender: {
-                  id: '12345',
-                  name: 'Billy Bob',
-                },
-                messageTrayOpen: false,
-                closeTrayButtonRendered: true,
-              },
-              {
-                type: MESSAGE,
-                id: '456',
-                text: 'I like rocks',
-                sender: {
-                  id: '12345',
-                  name: 'William',
-                },
-                closeTrayButtonRendered: false,
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-          },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'public',
-            },
-          },
-        },
-      },
-      toggleCloseTrayButton('123'));
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            direct: false,
-            moments: [
-              {
-                type: MESSAGE,
-                id: '123',
-                text: 'I like socks',
-                sender: {
-                  id: '12345',
-                  name: 'Billy Bob',
-                },
-                messageTrayOpen: false,
-                closeTrayButtonRendered: false,
-              },
-              {
-                type: MESSAGE,
-                id: '456',
-                text: 'I like rocks',
-                sender: {
-                  id: '12345',
-                  name: 'William',
-                },
-                closeTrayButtonRendered: false,
                 messageTrayOpen: false,
               },
             ],

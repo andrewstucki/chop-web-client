@@ -149,6 +149,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       // $FlowFixMe
       <li key={moment.id || createUid()}>
         <Moment
+          currentChannel={currentChannel}
           data={moment}
         />
       </li>
@@ -156,6 +157,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const anchorMomentListItems = anchorMoments.map(anchorMoment => (
       <li key={anchorMoment.id}>
         <AnchorMoment
+          currentChannel={currentChannel}
           anchorMoment={anchorMoment}
           isAnchorMomentAnchored={true}
         />
@@ -164,7 +166,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     return (
       <React.Fragment>
         <div
-          data-component="feed"
+          data-testid='feed'
           // $FlowFixMe
           ref={this.wrapperRef}
           className={styles.scroll}

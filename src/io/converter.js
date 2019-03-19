@@ -164,7 +164,6 @@ const Converter = {
       text: message.messageText,
       translations: message.translations ? message.translations : [],
       isMuted: !!message.isMuted,
-      closeTrayButtonRendered: false,
       messageTrayOpen: false,
       sender: {
         id: message.userId,

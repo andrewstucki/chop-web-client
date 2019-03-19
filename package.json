@@ -16,7 +16,7 @@
     "test": "jest",
     "coverage": "yarn test --coverage",
     "flow": "flow",
-    "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/",
+    "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/ cypress/",
     "validate": "yarn test && yarn flow && yarn lint",
     "test:full": "yarn test && yarn flow && yarn lint && yarn cy:run",
     "cy:open": "cypress open",
@@ -101,7 +101,7 @@
     "webpack-bugsnag-plugins": "^1.2.4",
     "webpack-bundle-analyzer": "^3.0.4",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
+    "webpack-dev-server": "^3.2.1",
     "webpack-merge": "^4.1.2"
   },
   "dependencies": {

@@ -180,14 +180,13 @@ describe('Load history', () => {
     chat.loadHistory(history, '123456');
 
     expect(store.getState().channels['123456'].moments.length).toBe(1);
-    expect(store.getState().channels['123456'].moments).toEqual([ 
-      { 
+    expect(store.getState().channels['123456'].moments).toEqual([
+      {
         type: 'MESSAGE',
         id: '16e434d2-7d53-4b64-b2d7-b61bd91a433b',
         timestamp: 1539961090000,
         lang: 'en',
         text: 'Hello',
-        closeTrayButtonRendered: false,
         messageTrayOpen: false,
         isMuted: false,
         translations: [
@@ -197,15 +196,15 @@ describe('Load history', () => {
           },
         ],
         sender:
-        { 
+        {
           id: undefined,
           name: 'G. Boole',
           avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
           pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
-          role: { 
+          role: {
             label: 'Admin',
           },
-        }, 
+        },
       },
     ]);
   });

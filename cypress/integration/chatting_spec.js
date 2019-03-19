@@ -13,7 +13,7 @@ describe('Chatting', () => {
     cy.wait('@publish')
       .its('url').should('match', /Hello, world!/);
 
-    cy.get('[data-component=messageContainer]').last().as('message');
+    cy.get('[data-testid=messageContainer]').last().as('message');
     cy.get('@message').contains('Hello, world!');
     cy.get('@message').contains('Tester Joe');
     cy.get('@message').contains('T');
@@ -38,7 +38,6 @@ describe('Chatting', () => {
             text: 'Goodnight, moon!',
             translations: [],
             isMuted: false,
-            closeTrayButtonRendered: false,
             messageTrayOpen: false,
             sender: {
               id: 1074240,
@@ -54,7 +53,7 @@ describe('Chatting', () => {
       );
     });
 
-    cy.get('[data-component=messageContainer]').last().as('message');
+    cy.get('[data-testid=messageContainer]').last().as('message');
     cy.get('@message').contains('Goodnight, moon!');
     cy.get('@message').contains('Tester Steve');
     cy.get('@message').contains('T');
