@@ -28,7 +28,7 @@ compile:app-review:
   image: node:lts
   stage: compile
   script:
-    - yarn install --pure-lockfile --verbose
+    - yarn install --pure-lockfile
     - yarn build:review
   artifacts:
     expire_in: 1 day
@@ -43,32 +43,15 @@ compile:app-staging:
   stage: compile
   variables:
     GIT_STRATEGY: clone
-
   script:
     - yarn install --pure-lockfile
     - yarn build:staging
-  after_script:
-    - mkdir -pvm 0700 /root/.ssh  && touch /root/.ssh/known_hosts
-    - echo "$SSH_DEPLOY_KEY" > /root/.ssh/id_rsa
-    - chmod 0600 /root/.ssh/id_rsa
-    - git config user.email "${GITLAB_USER_EMAIL}"
-    - git config user.name "${GITLAB_USER_NAME}"
-    - git remote set-url --push origin git@in.thewardro.be:io/opennetwork/chop-web-client.git
-    - yarn version --patch
-    - echo "$GITLAB_KNOWN_HOST" > /root/.ssh/known_hosts
-    # Temporarily disabled to see if it resolves pipeline status issue
-    # - git push origin HEAD:integration
-    - rm -Rfv /root/.ssh
   artifacts:
     expire_in: 1 day
     paths:
       - dist/
   only:
     - integration
-  except:
-    variables:
-      # Do not run the pipeline again because of the `yarn version --patch`
-      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 compile:app-production:
   image: node:lts
@@ -83,34 +66,19 @@ compile:app-production:
   only:
     - master
 
-lint:
+test:
   stage: test
   image: node:lts
   script:
     - yarn lint
     - yarn flow check
-  except:
-    refs:
-      - master
-    variables:
-      # Do not run the pipeline again because of the `yarn version --patch`
-      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
-
-test:
-  stage: test
-  image: node:lts
-  script:
     - yarn coverage # Use coverage to generate coverage report
   artifacts:
     expire_in: 1 day
     paths:
       - coverage/
   except:
-    refs:
-      - master
-    variables:
-        # Do not run the pipeline again because of the `yarn version --patch`
-        - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
+    - master
 
 build:image-review:
   stage: build
@@ -143,10 +111,6 @@ build:image-staging:
     - compile:app-staging
   only:
     - integration
-  except:
-    variables:
-      # Do not run the pipeline again because of the `yarn version --patch`
-      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 build:image-production:
   stage: build
@@ -242,10 +206,6 @@ staging:
     url: https://staging.$KUBE_DOMAIN
   only:
     - integration
-  except:
-    variables:
-      # Do not run the pipeline again because of the `yarn version --patch`
-      - $CI_COMMIT_MESSAGE =~ /v\d.\d.\d/i
 
 code_coverage_report_master:
   stage: coverage
