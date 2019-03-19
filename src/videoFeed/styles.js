@@ -6,8 +6,7 @@ const Container = styled.div`
 `;
 
 const OuterWrapper = styled.div`
-  max-width: 455px; 
-  max-height: 256px;
+  max-width: 455px;
   margin: 0 auto; 
   height: 100%; 
   width: 100%;

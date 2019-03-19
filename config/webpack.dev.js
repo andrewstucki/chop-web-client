@@ -28,7 +28,8 @@ module.exports = merge(common, {
     ],
     contentBase: './dist',
     historyApiFallback: true,
-    compress: true
+    compress: true,
+    hot: true,
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

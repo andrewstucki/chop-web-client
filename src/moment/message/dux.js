@@ -16,7 +16,6 @@ import type {
 const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
 const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
-const TOGGLE_CLOSE_TRAY_BUTTON = 'TOGGLE_CLOSE_TRAY_BUTTON';
 const MESSAGE = 'MESSAGE';
 const RECEIVE_MUTE_USER = 'RECEIVE_MUTE_USER';
 const PUBLISH_MUTE_USER = 'PUBLISH_MUTE_USER';
@@ -38,17 +37,18 @@ type MessageType = {
   lang: LanguageType,
   text: string,
   messageTrayOpen: boolean,
-  closeTrayButtonRendered: boolean,
   isMuted: boolean,
 } & BaseMomentType<typeof MESSAGE, SharedUserType>;
 
 type OpenMessageTrayType = {
   type: 'OPEN_MESSAGE_TRAY',
+  channel: string,
   id: string,
 };
 
 type CloseMessageTrayType = {
   type: 'CLOSE_MESSAGE_TRAY',
+  channel: string,
   id: string,
 };
 
@@ -94,7 +94,6 @@ const newMessage = (
     text,
     sender,
     messageTrayOpen: false,
-    closeTrayButtonRendered: false,
     isMuted: false,
   }
 );
@@ -111,23 +110,18 @@ const publishMessage = (
   }
 );
 
-const openMessageTray = (id: string): OpenMessageTrayType => (
+const openMessageTray = (channel: string, id: string): OpenMessageTrayType => (
   {
     type: OPEN_MESSAGE_TRAY,
+    channel,
     id,
   }
 );
 
-const closeMessageTray = (id: string): CloseMessageTrayType => (
+const closeMessageTray = (channel:string, id: string): CloseMessageTrayType => (
   {
     type: CLOSE_MESSAGE_TRAY,
-    id,
-  }
-);
-
-const toggleCloseTrayButton = (id: string): ToggleCloseTrayButtonType => (
-  {
-    type: TOGGLE_CLOSE_TRAY_BUTTON,
+    channel,
     id,
   }
 );
@@ -176,7 +170,6 @@ export {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
-  TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
   PUBLISH_MUTE_USER,
   RECEIVE_MUTE_USER,
@@ -188,7 +181,6 @@ export {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
-  toggleCloseTrayButton,
   publishMessage,
   publishDeleteMessage,
   publishMuteUser,

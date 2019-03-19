@@ -14,6 +14,7 @@ import { theme } from '../styles';
 import {PRIMARY_PANE} from '../pane/dux';
 import {HOST_INFO} from '../hostInfo/dux';
 import {getFirstInitial} from '../util';
+import {MediumDown} from '../util/responsive';
 import {DirectChatAvatar} from '../components/styles';
 
 const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false}) => (
@@ -94,7 +95,9 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
         </NavMenuBodySection>
         }
         <NavMenuBodySection>
-          <NavMenuItem Icon={Chat} text="Chat" expanded={expanded} selected={publicChannel.isCurrent} onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)} />
+          <MediumDown>
+            <NavMenuItem Icon={Chat} text="Chat" expanded={expanded} selected={publicChannel.isCurrent} onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)} />
+          </MediumDown>
           <NavMenuItem Icon={HostChat} text="Host Chat" expanded={expanded} selected={hostChannel.isCurrent} onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)} />
           <NavMenuItem Icon={HostInfo} text="Host Info" expanded={expanded} selected={currentTabType === 'HOST_INFO'} onClick={() => setPaneToTab(PRIMARY_PANE, HOST_INFO)} />
           <NavMenuItem Icon={Calendar} text="Schedule" expanded={expanded} disabled={true} />

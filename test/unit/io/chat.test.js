@@ -171,7 +171,6 @@ describe('Chat2 Tests', () => {
         },
       },
       messageTrayOpen: false,
-      closeTrayButtonRendered: false,
     };
     const dispatch = jest.fn();
     const getState = jest.fn();
@@ -218,7 +217,6 @@ describe('Chat2 Tests', () => {
         },
       },
       messageTrayOpen: false,
-      closeTrayButtonRendered: false,
     };
     const dispatch = jest.fn();
     const getState = jest.fn();

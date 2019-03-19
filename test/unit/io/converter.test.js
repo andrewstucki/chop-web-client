@@ -35,7 +35,6 @@ describe('Converter Tests', () => {
           timestamp: 1548173995604,
           lang: 'en',
           text: 'Hello',
-          closeTrayButtonRendered: false,
           messageTrayOpen: false,
           sender: {
             id: '1234567',
@@ -137,7 +136,6 @@ describe('Converter Tests', () => {
         text: 'Hello',
         messageTrayOpen: false,
         isMuted: false,
-        closeTrayButtonRendered: false,
         translations: [],
         sender: {
           id: '1234567',

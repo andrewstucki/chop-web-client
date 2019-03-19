@@ -34,7 +34,6 @@ import {
   OPEN_MESSAGE_TRAY,
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
-  TOGGLE_CLOSE_TRAY_BUTTON,
   MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
@@ -1006,18 +1005,16 @@ const reducer = (
         currentUser: action.user,
       };
     case OPEN_MESSAGE_TRAY: {
-    // $FlowFixMe
-      const { id } = action;
-      const currentChannel = getCurrentChannel(state);
-
-      if (currentChannel) {
+      // $FlowFixMe
+      const { channel, id } = action;
+      if (state.channels[channel]) {
         return {
           ...state,
           channels: {
             ...state.channels,
-            [currentChannel]: {
-              ...state.channels[currentChannel],
-              moments: state.channels[currentChannel].moments.map(
+            [channel]: {
+              ...state.channels[channel],
+              moments: state.channels[channel].moments.map(
                 message => (
                   {
                     ...message,
@@ -1028,8 +1025,9 @@ const reducer = (
             },
           },
         };
+      } else {
+        return state;
       }
-      return state;
     }
     case RECEIVE_MUTE_USER: {
     // $FlowFixMe
@@ -1043,45 +1041,20 @@ const reducer = (
     case PUBLISH_MUTE_USER:
     case 'DIRECT_CHAT':
     case CLOSE_MESSAGE_TRAY: {
-      const currentChannel = getCurrentChannel(state);
-      if (currentChannel) {
+      // $FlowFixMe
+      const { channel } = action;
+      if (state.channels[channel]) {
         return {
           ...state,
           channels: {
             ...state.channels,
-            [currentChannel]: {
-              ...state.channels[currentChannel],
-              moments: state.channels[currentChannel].moments.map(
+            [channel]: {
+              ...state.channels[channel],
+              moments: state.channels[channel].moments.map(
                 message => (
                   {
                     ...message,
                     messageTrayOpen: false,
-                  }
-                )
-              ),
-            },
-          },
-        };
-      }
-      return state;
-    }
-    case TOGGLE_CLOSE_TRAY_BUTTON: {
-    // $FlowFixMe
-      const { id } = action;
-      const currentChannel = getCurrentChannel(state);
-      if (currentChannel) {
-        return {
-          ...state,
-          channels: {
-            ...state.channels,
-            [currentChannel]: {
-              ...state.channels[currentChannel],
-              moments: state.channels[currentChannel].moments.map(
-                message => (
-                  {
-                    ...message,
-                    closeTrayButtonRendered: message.id === id ?
-                      !message.closeTrayButtonRendered : message.closeTrayButtonRendered,
                   }
                 )
               ),
@@ -1148,18 +1121,20 @@ const reducer = (
       };
     }
     case PUBLISH_MOMENT_TO_CHANNEL: {
-      const currentChannel = getCurrentChannel(state);
       // $FlowFixMe
-      if (action.moment.type === MESSAGE && currentChannel) {
+      if (action.moment.type === MESSAGE) {
         if ([action.moment.text].toString().length > 0) {
           return {
             ...state,
             channels: {
               ...state.channels,
-              [currentChannel]: {
-                ...state.channels[currentChannel],
+              // $FlowFixMe
+              [action.channel]: {
+                // $FlowFixMe
+                ...state.channels[action.channel],
                 moments: [
-                  ...state.channels[currentChannel].moments,
+                  // $FlowFixMe
+                  ...state.channels[action.channel].moments,
                   // $FlowFixMe
                   action.moment,
                 ],

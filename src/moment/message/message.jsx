@@ -20,11 +20,10 @@ type MessagePropsType = {
   currentChannel: string,
   hostChannel: string,
   currentUser: SharedUserType,
-  openMessageTray: (id: string) => void,
-  closeMessageTray: (id: string) => void,
+  openMessageTray: (channel: string, id: string) => void,
+  closeMessageTray: (channel: string, id: string) => void,
   deleteMessage: (id: string, channel: string) => void,
   publishDeleteMessage: (id: string) => void,
-  toggleCloseTrayButton: (id: string) => void,
   muteUser: (channel: string, nickname: string) => void,
   publishMuteUserNotification: (host: string, guest: string, channel: string) => void,
   directChat: (pubnubToken: string, nickname: string) => void,
@@ -50,8 +49,8 @@ const Message = (
   const { name: senderName, pubnubToken: senderToken, role: { label: senderLabel } = {} } = sender;
   const renderText = linkifyHtml(text, { target: '_blank' });
 
-  const openMessageTray = () => otherProps.openMessageTray(messageId);
-  const closeMessageTray = () => messageTrayOpen ? otherProps.closeMessageTray(messageId) : undefined;
+  const openMessageTray = () => otherProps.openMessageTray(currentChannel, messageId);
+  const closeMessageTray = () => messageTrayOpen ? otherProps.closeMessageTray(currentChannel, messageId) : undefined;
   const deleteMessage = () => {
     otherProps.publishDeleteMessage(messageId);
     otherProps.deleteMessage(messageId, currentChannel);
@@ -92,7 +91,7 @@ const Message = (
   });
 
   return (
-    <Wrapper data-component='messageContainer'>
+    <Wrapper data-testid='messageContainer'>
       <Actionable onClick={closeMessageTray} keepFocus={true} tabable={false}>
         <MessageWrapper messageTrayOpen={messageTrayOpen}>
           <MessageBody />

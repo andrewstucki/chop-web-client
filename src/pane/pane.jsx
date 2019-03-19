@@ -11,12 +11,16 @@ import { useTransition } from 'react-spring';
 import { TAB } from './content/tab/dux';
 import Tab from './content/tab';
 import { Small, MediumUp } from '../util/responsive';
+import { isEmpty } from '../util';
 
 type PanePropsType = {
   name: string,
+  isMediumPlusUp: boolean,
   pane: PaneType,
   navbarIndex: number,
   prevNavbarIndex: number,
+  hostChannel: string,
+  setPaneToChat: (pane:string, channel:string) => void,
 };
 
 const renderPaneContent = (pane:PaneType) => {
@@ -35,7 +39,7 @@ const renderPaneContent = (pane:PaneType) => {
   }
 };
 
-const Pane = ({ pane, navbarIndex, prevNavbarIndex }:PanePropsType) => {
+const Pane = ({ isMediumPlusUp, name, pane, navbarIndex, prevNavbarIndex, setPaneToChat, hostChannel }:PanePropsType) => {
   const direction = navbarIndex > prevNavbarIndex;
   const transitions = useTransition(pane, hash(pane), {
     from: { transform: direction ? 'translate3d(100%,0,0)' : 'translate3d(-100%,0,0)' },
@@ -44,8 +48,14 @@ const Pane = ({ pane, navbarIndex, prevNavbarIndex }:PanePropsType) => {
     immediate: prevNavbarIndex === undefined,
   });
 
+  // Prevent two EVENT panes on Medium+
+  if (isMediumPlusUp && pane.type === EVENT && !isEmpty(hostChannel)) {
+    setPaneToChat(name, hostChannel);
+    return null;
+  }
+
   return (
-    <PaneWrapper>
+    <PaneWrapper data-testid='pane'>
       <Small>
         { transitions.map(({ item:pane, props, key }) => (
           <PaneContentWrapper

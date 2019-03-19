@@ -7,6 +7,9 @@ Small.displayName = 'Small';
 const Medium = React.memo(props => <Responsive {...props} minidth={640} maxWidth={767} />);
 Medium.displayName = 'Medium';
 
+const MediumDown = React.memo(props => <Responsive {...props} maxWidth={767} />);
+MediumDown.displayName = 'MediumDown';
+
 const MediumUp = React.memo(props => <Responsive {...props} minWidth={640} />);
 MediumUp.displayName = 'MediumUp';
 
@@ -28,6 +31,7 @@ Xlarge.displayName = 'Xlarge';
 export {
   Small,
   Medium,
+  MediumDown,
   MediumUp,
   MediumPlus,
   MediumPlusUp,
