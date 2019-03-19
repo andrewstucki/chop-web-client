@@ -41,12 +41,13 @@ class MediumPlus extends React.Component<MediumPlusProps, MediumPlusState> {
             'menu chat public',
           ]}
           height="100%"
-          width="100%">
+          width="100%"
+          columnGap='0'>
           <GridCell area="menu">
             <NavMenu/>
           </GridCell>
           <GridCell area="video">
-            <CellContainer>
+            <CellContainer topCell>
               <VideoFeed />
             </CellContainer>
           </GridCell>
@@ -56,7 +57,7 @@ class MediumPlus extends React.Component<MediumPlusProps, MediumPlusState> {
             </CellContainer>
           </GridCell>
           <GridCell area="public">
-            <CellContainer>
+            <CellContainer staticCell>
               <PaneWrapper>
                 <PaneContentWrapper>
                   <Event />
