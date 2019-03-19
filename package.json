@@ -139,6 +139,7 @@
     "redux-persist": "^5.10.0",
     "redux-persist-transform-expire": "^0.0.2",
     "redux-persist-transform-filter": "^0.0.18",
+    "redux-saga": "^1.0.2",
     "reselect": "^4.0.0",
     "smoothscroll-polyfill": "^0.4.3",
     "styled-components": "^4.1.3",

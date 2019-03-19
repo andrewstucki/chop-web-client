@@ -10,6 +10,8 @@ import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import mySaga from './io/saga';
 import {
   BrowserRouter as Router,
   Route,
@@ -48,8 +50,10 @@ const actorMiddlewareApplied = actorMiddleware(
   serviceActor,
 );
 
+const sagaMiddleware = createSagaMiddleware();
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const middlewareList = [actorMiddlewareApplied, tagManagerMiddleware];
+const middlewareList = [actorMiddlewareApplied, tagManagerMiddleware, sagaMiddleware];
 
 const persistConfig = {
   key: 'root',
@@ -71,6 +75,8 @@ const store = createStore(
     applyMiddleware(...middlewareList)
   )
 );
+
+sagaMiddleware.run(mySaga);
 
 if (navigator.userAgent.match('CriOS')) {
   store.dispatch(warningNotificationBanner('We’re optimizing Host Tools for Chrome. For now, please switch to Safari.'));

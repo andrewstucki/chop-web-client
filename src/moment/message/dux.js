@@ -19,6 +19,8 @@ const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const MESSAGE = 'MESSAGE';
 const RECEIVE_MUTE_USER = 'RECEIVE_MUTE_USER';
 const PUBLISH_MUTE_USER = 'PUBLISH_MUTE_USER';
+const MUTE_USER_SUCCEEDED = 'MUTE_USER_SUCCEEDED';
+const MUTE_USER_FAILED = 'MUTE_USER_FAILED';
 const DIRECT_CHAT = 'DIRECT_CHAT';
 const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
@@ -70,8 +72,8 @@ type ReceiveMuteUserType = {
 
 type PublishMuteUserType = {
   type: 'PUBLISH_MUTE_USER',
-  feedToken: string,
-  nickname: string,
+  channelId: string,
+  userName: string,
 };
 
 type PublishDeleteMessageType = {
@@ -148,11 +150,11 @@ const receiveMuteUser = (nickname:string): ReceiveMuteUserType => (
   }
 );
 
-const publishMuteUser = (feedToken:string, nickname:string): PublishMuteUserType => (
+const publishMuteUser = (channelId:string, userName:string): PublishMuteUserType => (
   {
     type: PUBLISH_MUTE_USER,
-    feedToken,
-    nickname,
+    channelId,
+    userName,
   }
 );
 
@@ -171,6 +173,8 @@ export {
   CLOSE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   MESSAGE,
+  MUTE_USER_SUCCEEDED,
+  MUTE_USER_FAILED,
   PUBLISH_MUTE_USER,
   RECEIVE_MUTE_USER,
   DIRECT_CHAT,

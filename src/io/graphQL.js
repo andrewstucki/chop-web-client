@@ -149,8 +149,8 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $host
 `;
 
 const muteUser = ` 
-mutation muteUser($feedToken: String!, $nickname: String!, $clientIp: String!) {
-  muteUser(feedToken: $feedToken, nickname: $nickname, clientIp: $clientIp)
+mutation muteUser($feedToken: String!, $nickname: String!) {
+  muteUser(feedToken: $feedToken, nickname: $nickname, clientIp: "0.0.0.0")
 }
 `;
 
@@ -268,13 +268,12 @@ export default class GraphQl {
     );
   }
 
-  async muteUser (feedToken: string, nickname: string, clientIp: string) {
+  async muteUser (feedToken: string, nickname: string) {
     return await this.client.request(
       muteUser,
       {
         feedToken,
         nickname,
-        clientIp,
       }
     );
   }
