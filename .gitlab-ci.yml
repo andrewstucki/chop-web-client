@@ -28,7 +28,7 @@ compile:app-review:
   image: node:lts
   stage: compile
   script:
-    - yarn install --pure-lockfile
+    - yarn install --pure-lockfile --verbose
     - yarn build:review
   artifacts:
     expire_in: 1 day
