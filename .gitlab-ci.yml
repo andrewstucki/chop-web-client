@@ -29,8 +29,9 @@ compile:app-review:
   stage: compile
   script:
     - yarn install --pure-lockfile
+    - yarn global add eslint
+    - yarn global add jest
     - yarn build:review
-    #- yarn cy:verify
   artifacts:
     expire_in: 1 day
     paths:
@@ -47,6 +48,8 @@ compile:app-staging:
 
   script:
     - yarn install --pure-lockfile
+    - yarn global add eslint
+    - yarn global add jest
     - yarn build:staging
   after_script:
     - mkdir -pvm 0700 /root/.ssh  && touch /root/.ssh/known_hosts
@@ -76,6 +79,8 @@ compile:app-production:
   stage: compile
   script:
     - yarn install --pure-lockfile
+    - yarn global add eslint
+    - yarn global add jest
     - yarn build:production
   artifacts:
     expire_in: 1 day
