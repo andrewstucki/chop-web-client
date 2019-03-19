@@ -47,7 +47,6 @@ describe('Test delete message', () => {
         role: { label: '' },
       },
       messageTrayOpen: false,
-      closeTrayButtonRendered: true,
     },
     {
       type: 'MESSAGE',
@@ -60,7 +59,6 @@ describe('Test delete message', () => {
         role: { label: '' },
       },
       messageTrayOpen: false,
-      closeTrayButtonRendered: true,
     },
   ];
 

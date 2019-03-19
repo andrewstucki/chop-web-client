@@ -42,7 +42,6 @@ describe('Message', () => {
             text: 'Go to https://live.life.church young man!<script>sinister script</script>',
             sender: otherUser,
             messageTrayOpen: false,
-            closeTrayButtonRendered: false,
             isMuted: false,
           }
         }
@@ -51,7 +50,6 @@ describe('Message', () => {
         openMessageTray={() => {}}
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
-        toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
@@ -75,7 +73,6 @@ describe('Message', () => {
             text: 'Go west young man!',
             sender: otherUser,
             messageTrayOpen: false,
-            closeTrayButtonRendered: false,
             isMuted: false,
           }
         }
@@ -84,7 +81,6 @@ describe('Message', () => {
         openMessageTray={() => {}}
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
-        toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}
@@ -109,7 +105,6 @@ describe('Message', () => {
             text: 'Go west young man!',
             sender: otherUser,
             messageTrayOpen: false,
-            closeTrayButtonRendered: false,
             isMuted: false,
           }
         }
@@ -118,7 +113,6 @@ describe('Message', () => {
         openMessageTray={openTray}
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
-        toggleCloseTrayButton={() => {}}
         muteUser={() => {}}
         directChat={() => {}}
         publishMuteUserNotification={() => {}}

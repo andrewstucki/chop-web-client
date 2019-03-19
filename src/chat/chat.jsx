@@ -189,6 +189,7 @@ class Chat extends Component<ChatProps, ChatState> {
       <Background>
         <Wrapper focused={focused}>
           <ChatInput
+            id="chat-input"
             onChange={this.onTextEntered}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
@@ -198,6 +199,7 @@ class Chat extends Component<ChatProps, ChatState> {
           />
 
           <IconButton
+            id="chat-submit-button"
             size={36}
             onClick={this.sendMessage}
             keepFocus={true}

@@ -33,6 +33,7 @@ describe('Chat2 Tests', () => {
       id: 320418,
       eventTimeId: 1920834,
       startTime: 1529425800000,
+      endTime: 1529425900000,
       title: 'When Pigs Fly - Week 2',
       timezone: 'Central',
     },
@@ -170,7 +171,6 @@ describe('Chat2 Tests', () => {
         },
       },
       messageTrayOpen: false,
-      closeTrayButtonRendered: false,
     };
     const dispatch = jest.fn();
     const getState = jest.fn();
@@ -217,7 +217,6 @@ describe('Chat2 Tests', () => {
         },
       },
       messageTrayOpen: false,
-      closeTrayButtonRendered: false,
     };
     const dispatch = jest.fn();
     const getState = jest.fn();

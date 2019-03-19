@@ -9,7 +9,6 @@ module.exports = merge(common, {
   plugins: [
     new webpack.DefinePlugin({
       ENV: JSON.stringify('development'),
-      BABEL_ENV: JSON.stringify('development'),
       GATEWAY_HOST: JSON.stringify('https://staging.chopapi.com/graphql'),
       //GATEWAY_HOST: JSON.stringify('http://localhost:3000/graphql'),
       GTM: {
@@ -29,7 +28,8 @@ module.exports = merge(common, {
     ],
     contentBase: './dist',
     historyApiFallback: true,
-    compress: true
+    compress: true,
+    hot: true,
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

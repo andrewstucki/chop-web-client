@@ -1,31 +1,20 @@
 import { createSelector } from 'reselect';
 import { getPublicChannel } from './channelSelectors';
 
-const getHereNowSelector = state => state.hereNow;
+const getHereNow = state => state.hereNow;
 
-const getUserInPublicChannel = createSelector(
-  getHereNowSelector,
-  getPublicChannel,
-  (hereNow, publicChannel) => {
-    const channel = hereNow[publicChannel];
-    const userIds = Object.keys(channel);
-    const getUser = id => (
-      {
-        id,
-        available_prayer: channel[id].available_prayer, // eslint-disable-line camelcase
-      }
-    );
-
-    return userIds.map(getUser);
-  }
+const getUsersInChannel = (state, channel:string) => (
+  getHereNow(state)?.[channel] || []
 );
 
 const getAvailableForPrayer = createSelector(
-  getUserInPublicChannel,
-  users => users.filter(user => user.available_prayer)
+  getPublicChannel,
+  getHereNow,
+  (publicChannel, hereNow) => hereNow[publicChannel].filter(user => user.state.available_prayer)
 );
 
 export {
+  getUsersInChannel,
   getAvailableForPrayer,
 };
 

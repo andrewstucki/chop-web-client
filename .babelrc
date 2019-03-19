@@ -12,12 +12,17 @@
     ["@babel/plugin-proposal-decorators", { "legacy": true}],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
     "@babel/plugin-proposal-json-strings",
-    "babel-plugin-styled-components",
+    "babel-plugin-styled-components"
   ],
   "env": {
     "production": {
       "plugins": [
         ["react-remove-properties", { "properties": ["data-testid"] }]
+      ]
+    },
+    "development": {
+      "plugins": [
+        ["istanbul"]
       ]
     }
   }

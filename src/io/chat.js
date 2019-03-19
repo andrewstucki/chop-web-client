@@ -5,11 +5,12 @@ import {
   removeHereNow,
   updateHereNow,
   setHereNow,
+  addHereNow,
   loadHistory,
   setSalvations,
 } from '../feed/dux';
-import type { 
-  FeedType, 
+import type {
+  FeedType,
   ChannelType,
 } from '../feed/dux';
 import type {
@@ -26,9 +27,9 @@ import {
   receivePrayerNotification,
 } from '../moment/notification/dux';
 import { deleteMessage, receiveMuteUser } from '../moment/message/dux';
-import { 
+import {
   publishSalvation,
-  salvationMomentExists, 
+  salvationMomentExists,
 } from '../anchorMoment/dux';
 import {
   getLegacyChannel,
@@ -43,6 +44,7 @@ import type {
   PubnubReciveMessageType,
   LegacyNewMessageType,
 } from './converter';
+import bugsnagClient from '../util/bugsnag';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -234,27 +236,6 @@ class Chat {
       }
     );
 
-    const publicChannel = getPublicChannel(this.getState());
-    this.pubnub.hereNow(
-      {
-        channels: [publicChannel],
-        includeState: true,
-      },
-      (status, results) => {
-        if (results) {
-          const users = results.channels[publicChannel].occupants;
-          const hereNowUsers = {};
-          users.forEach(user => {
-            const available_prayer = user.state ? user.state.available_prayer : false; // eslint-disable-line camelcase
-            hereNowUsers[user.uuid] = {
-              available_prayer: available_prayer, // eslint-disable-line camelcase
-            };
-          });
-          this.storeDispatch(setHereNow(publicChannel, hereNowUsers));
-        }
-      }
-    );
-
     this.pubnub.addListener(
       {
         status: this.onStatus,
@@ -347,7 +328,7 @@ class Chat {
           );
           return;
         }
-        case 'pollVote': 
+        case 'pollVote':
           this.receivePollVote(message.entry.data);
           return;
       }
@@ -360,35 +341,37 @@ class Chat {
 
   onPresence (event: PubnubPresenceEventType) {
     const { action, channel, uuid } = event;
-    const available_prayer = event.state ? event.state.available_prayer : false; // eslint-disable-line camelcase
-    const publicChannel = getPublicChannel(this.getState());
-    const hostChannel = getHostChannel(this.getState());
     const currentUser = getCurrentUser(this.getState());
 
     const name = event?.state?.nickname === currentUser.name ? 'You' : event?.state?.nickname;
 
-    if (channel === publicChannel) {
-      switch (action) {
-        case 'join':
-        case 'state-change':
-          this.storeDispatch(
-            updateHereNow(
-              uuid,
-              channel,
-              {
-                available_prayer: available_prayer, // eslint-disable-line camelcase
-              }
-            )
-          );
-          break;
-        case 'timeout':
-        case 'leave':
-          this.storeDispatch(
-            removeHereNow(uuid, channel)
-          );
-          break;
-      }
-    } else if (channel !== hostChannel && name) {
+    switch (action) {
+      case 'join':
+        this.storeDispatch(
+          addHereNow(
+            channel,
+            this.filterUserState(event),
+
+          )
+        );
+        break;
+      case 'state-change':
+        this.storeDispatch(
+          updateHereNow(
+            channel,
+            this.filterUserState(event),
+          )
+        );
+        break;
+      case 'timeout':
+      case 'leave':
+        this.storeDispatch(
+          removeHereNow(channel, uuid)
+        );
+        break;
+    }
+
+    if (name === 'Direct') {
       this.storeDispatch(receiveJoinedChatNotification(name, channel));
     }
   }
@@ -468,15 +451,22 @@ class Chat {
           );
         }
         return;
-      case 'muteMessage':
-      // $FlowFixMe
-        if (this.getState().channels[event.message.data.channelToken].moments.find(moment => moment.id === event.message.data.umt) !== undefined) {
-          this.storeDispatch(
+      case 'muteMessage': {
+        const { channelToken, umt } = event.message.data;
+        const { channels } = this.getState();
+
+        if (channels[channelToken]) {
+          const { moments } = channels[channelToken];
           // $FlowFixMe
-            deleteMessage(event.message.data.umt, event.message.data.channelToken)
-          );
+          if (moments.find(moment => moment.id === umt) !== undefined) {
+            this.storeDispatch(
+              // $FlowFixMe
+              deleteMessage(umt, channelToken)
+            );
+          }
         }
         return;
+      }
       case 'removeLiveResponseRequest': {
       // $FlowFixMe
         const cancelled = !!event.message.data.leave;
@@ -629,13 +619,48 @@ class Chat {
     }
   }
 
+  hereNow (id:string) {
+    const includeState = getHostChannel(this.getState()) === id;
+    this.pubnub.hereNow(
+      {
+        channels: [id],
+        includeState,
+      },
+      (status, results) => {
+        if (results) {
+          const { occupants } = results.channels[id];
+          const hereNowUsers = occupants.map(user => this.filterUserState(user));
+          this.storeDispatch(setHereNow(id, hereNowUsers));
+        }
+      }
+    );
+  }
+
+  filterUserState (user:PubnubPresenceEventType) {
+    if (user.state) {
+      // Only keep available_prayer attribute for now
+      const available_prayer = user.state ? user.state.available_prayer : false; // eslint-disable-line camelcase
+      return {
+        id: user.uuid,
+        state: {
+          available_prayer: available_prayer, // eslint-disable-line camelcase
+        },
+      };
+    } else {
+      return {
+        id: user.uuid,
+        state: {},
+      };
+    }
+  }
+
   dispatch (action: any) {
     if (!action || !action.type) {
       return;
     }
     switch (action.type) {
       case 'PUBLISH_MOMENT_TO_CHANNEL':
-      
+
         if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'PRAYER') {
           this.publishSystemMessage(action.moment, action.channel);
         } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
@@ -657,17 +682,25 @@ class Chat {
         return;
       case 'ADD_CHANNEL': {
         const { id } = action.channel;
+
         this.subscribe([id]);
         this.pubnub.history({channel: id},
           ((status, response) => {
-            this.loadHistory(response.messages, id);
+            if (!status?.error) {
+              this.loadHistory(response.messages, id);
+            } else {
+              bugsnagClient.notify(new Error('Pubnub History failed to load'), { metaData: status });
+            }
           }).bind(this));
+
+        this.hereNow(id);
+
         return;
       }
       case 'PUBLISH_REACTION':
         this.publishReaction(action.reaction, getLegacyChannel(this.getState()));
         return;
-      case 'REMOVE_CHANNEL': 
+      case 'REMOVE_CHANNEL':
         this.unsubscribe([action.channel]);
         return;
       case 'PUBLISH_DELETE_MESSAGE': {

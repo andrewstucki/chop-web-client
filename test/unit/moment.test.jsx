@@ -42,7 +42,6 @@ describe('Moment tests', () => {
                 name: 'Wilbur Wagner',
               },
               messageTrayOpen: false,
-              closeTrayButtonRendered: false,
             }
           }
         />
@@ -72,7 +71,6 @@ describe('Moment tests', () => {
                 name: 'Wilbur Wagner',
               },
               messageTrayOpen: false,
-              closeTrayButtonRendered: false,
             }
           }
         />
@@ -89,7 +87,6 @@ describe('Moment tests', () => {
           name: 'Wilbur Wagner',
         },
         messageTrayOpen: false,
-        closeTrayButtonRendered: false,
       }
     );
   });

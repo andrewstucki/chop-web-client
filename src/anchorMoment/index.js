@@ -1,20 +1,14 @@
 // @flow
 import { connect } from 'react-redux';
-
-import {
-  releaseAnchorMoment,
-} from './dux';
-
+import { releaseAnchorMoment } from './dux';
 import AnchorMoment from './anchorMoment';
-import { paneContentSelector } from '../selectors/paneSelectors';
-import { PRIMARY_PANE } from '../pane/dux';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
-  const primaryPane = paneContentSelector(feedState, PRIMARY_PANE);
+  const { currentChannel } = ownProps;
 
   return {
-    currentChannel: primaryPane.content.channelId,
+    currentChannel,
     salvations: feedState.salvations,
   };
 };

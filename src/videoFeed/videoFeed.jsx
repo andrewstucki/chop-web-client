@@ -1,10 +1,13 @@
-/* @flow*/
+// @flow
 import React from 'react';
 import type { SimulatedLivePlayerPropsType } from './dux';
 import IframeEmbedPlayer from './players/iframeEmbedPlayer';
 import SimulatedLivePlayer from './players/simulatedLivePlayer';
 import OfflinePlayer from './players/offlinePlayer';
-import { Wrapper } from './styles';
+import VideoHeader from './videoHeader';
+import { Container, OuterWrapper, InnerWrapper } from './styles';
+import { MediumUp } from '../util/responsive';
+
 
 type VideoFeedProps = {
   type: string,
@@ -25,31 +28,40 @@ const VideoFeed = ({ type, Player, url, isVideoHidden, isMobileDevice, onPlay, o
   }
 
   return (
-    <Wrapper data-testid='videoFeed' hidden={isVideoHidden}>
-      { url !== '' && type === 'simulated' &&
-        <SimulatedLivePlayer
-          Player={Player}
-          url={url}
-          startAt={startAt}
-          onPlay={onPlay}
-          onPause={onPause}
-          isMobileDevice={isMobileDevice}
-          isVideoPlaying={isVideoPlaying}
-        />
-      }
+    <>
+      <MediumUp>
+        <VideoHeader />
+      </MediumUp>
+      <Container>
+        <OuterWrapper>
+          <InnerWrapper data-testid='videoFeed' hidden={isVideoHidden}>
+            { url !== '' && type === 'simulated' &&
+              <SimulatedLivePlayer
+                Player={Player}
+                url={url}
+                startAt={startAt}
+                onPlay={onPlay}
+                onPause={onPause}
+                isMobileDevice={isMobileDevice}
+                isVideoPlaying={isVideoPlaying}
+              />
+            }
 
-      { url !== '' && type === 'live' &&
-        <IframeEmbedPlayer
-          url={url}
-        />
-      }
+            { url !== '' && type === 'live' &&
+              <IframeEmbedPlayer
+                url={url}
+              />
+            }
 
-      { url !== '' && type === 'offline' &&
-        <OfflinePlayer
-          url={url}
-          Player={Player}/>
-      }
-    </Wrapper>
+            { url !== '' && type === 'offline' &&
+              <OfflinePlayer
+                url={url}
+                Player={Player}/>
+            }
+          </InnerWrapper>
+        </OuterWrapper>
+      </Container>
+    </>
   );
 };
 

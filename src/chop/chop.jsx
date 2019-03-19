@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
+import SmallLayout from './layouts/small';
+import MediumLayout from './layouts/medium';
+import MediumPlusLayout from './layouts/mediumPlus';
 import { Redirect } from 'react-router-dom';
-import MediaQuery from 'react-responsive';
-import Small from './layouts/small';
-import Medium from './layouts/medium';
+import { Small, Medium, MediumPlusUp } from '../util/responsive';
 import { Wrapper } from './styles';
 
 type ChopContainerProps = {
@@ -17,12 +18,15 @@ const ChopContainer = ({organization, authenticated}: ChopContainerProps) => {
   if (authenticated) {
     return (
       <Wrapper id="wrapper" data-testid="chop">
-        <MediaQuery maxWidth={639}>
-          <Small/>
-        </MediaQuery>
-        <MediaQuery minWidth={640}>
-          <Medium/>
-        </MediaQuery>
+        <Small>
+          <SmallLayout />
+        </Small>
+        <Medium>
+          <MediumLayout />
+        </Medium>
+        <MediumPlusUp>
+          <MediumPlusLayout />
+        </MediumPlusUp>
       </Wrapper>
     );
   } else {

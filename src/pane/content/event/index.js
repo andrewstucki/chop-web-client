@@ -2,15 +2,14 @@
 import { connect } from 'react-redux';
 import Event from './event';
 import { isOffline } from '../../../selectors/eventSelectors';
-import { paneContentSelector } from '../../../selectors/paneSelectors';
-import { PRIMARY_PANE } from '../../../pane/dux';
+import { getPublicChannel } from '../../../selectors/channelSelectors';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
-  const primaryPane = paneContentSelector(feedState, PRIMARY_PANE);
+  const channel = getPublicChannel(feedState);
   return {
     isOffline: isOffline(feedState),
-    channel: primaryPane.content.channelId,
+    channel,
   };
 };
 

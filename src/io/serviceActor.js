@@ -24,10 +24,8 @@ import {
 } from '../moment';
 import { addError } from '../errors/dux';
 import {
-  PUBLISH_MUTE_USER,
   DIRECT_CHAT,
 } from '../moment/message/dux';
-import type { PublishMuteUserType } from '../moment/message/dux';
 import {
   avatarImageExists,
   convertSubscribersToSharedUsers,
@@ -320,6 +318,7 @@ class ServiceActor {
         event.eventTime !== undefined &&
         event.eventTime.id !== undefined &&
         event.startTime !== undefined &&
+        event.endTime !== undefined &&
         event.videoStartTime !== undefined) {
         this.storeDispatch(
           setEvent(
@@ -327,6 +326,7 @@ class ServiceActor {
             event.id,
             event.eventTime.id,
             event.startTime,
+            event.endTime,
             event.videoStartTime,
             event.speaker || '',
             event.description || '',
@@ -425,7 +425,7 @@ class ServiceActor {
     const currentMoments = channels[currentChannel].moments;
     const moment = currentMoments.find(moment => moment.prayerChannel === action.prayerChannel);
     const { user, prayerChannel } = moment;
-    const hosts = getAvailableForPrayer(this.getStore()).map(user => user.id);
+    const hosts = getAvailableForPrayer(this.getStore(), currentChannel).map(user => user.id);
 
     try {
       const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken, hosts, user.name);
@@ -433,16 +433,6 @@ class ServiceActor {
       const participants = convertSubscribersToSharedUsers(subscribers);
       this.storeDispatch(addChannel(name, id, direct, participants));
       this.storeDispatch(setPrimaryPane(CHAT, id));
-    } catch (error) {
-      this.handleDataFetchErrors(error);
-    }
-  }
-
-  async muteUser (action:PublishMuteUserType) {
-    try {
-      const { feedToken, nickname } = action;
-      const ip = '0.0.0.0';
-      await this.graph.muteUser(feedToken, nickname, ip);
     } catch (error) {
       this.handleDataFetchErrors(error);
     }
@@ -485,9 +475,6 @@ class ServiceActor {
         return;
       case REMOVE_CHANNEL:
         this.removeChannel(action);
-        return;
-      case PUBLISH_MUTE_USER:
-        this.muteUser(action);
         return;
       case DIRECT_CHAT:
         this.directChat(action);

@@ -10,6 +10,8 @@ import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import mySaga from './io/saga';
 import {
   BrowserRouter as Router,
   Route,
@@ -22,13 +24,12 @@ import actorMiddleware from './middleware/actor-middleware';
 import ChatActor from './io/chat';
 import serviceActor from './io/serviceActor';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
-import bugsnag from '@bugsnag/js';
-import bugsnagReact from '@bugsnag/plugin-react';
 import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
 import smoothscroll from 'smoothscroll-polyfill';
 import { warningNotificationBanner } from './banner/dux';
+import { ErrorBoundary } from './util/bugsnag';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
@@ -44,23 +45,15 @@ smoothscroll.polyfill();
 
 TagManager.initialize(GTM);
 
-const bugsnagClient = bugsnag({
-  apiKey: '2403ac729529750d296e1e4ee022f7dc',
-  releaseStage: ENV,
-  notifyReleaseStages: [ 'production', 'staging' ],
-});
-
-bugsnagClient.use(bugsnagReact, React);
-
-const ErrorBoundary = bugsnagClient.getPlugin('react');
-
 const actorMiddlewareApplied = actorMiddleware(
   ChatActor,
   serviceActor,
 );
 
+const sagaMiddleware = createSagaMiddleware();
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const middlewareList = [actorMiddlewareApplied, tagManagerMiddleware];
+const middlewareList = [actorMiddlewareApplied, tagManagerMiddleware, sagaMiddleware];
 
 const persistConfig = {
   key: 'root',
@@ -82,6 +75,8 @@ const store = createStore(
     applyMiddleware(...middlewareList)
   )
 );
+
+sagaMiddleware.run(mySaga);
 
 if (navigator.userAgent.match('CriOS')) {
   store.dispatch(warningNotificationBanner('We’re optimizing Host Tools for Chrome. For now, please switch to Safari.'));

@@ -18,12 +18,13 @@ import { ANCHOR_MOMENT } from '../anchorMoment/dux';
 import type { MomentType } from './dux';
 
 type MomentPropType = {
+  currentChannel: string,
   data: MomentType,
 };
 
 class Moment extends React.Component<MomentPropType> {
   render () {
-    const { data } = this.props;
+    const { currentChannel, data } = this.props;
     switch (data.type) {
       case MESSAGE:
         if (!data.text) {
@@ -31,6 +32,7 @@ class Moment extends React.Component<MomentPropType> {
         } else {
           return (
             <Message
+              currentChannel={currentChannel}
               message={data}
             />
           );

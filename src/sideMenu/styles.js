@@ -118,6 +118,17 @@ const Menu = styled.div`
   }
 `;
 
+const LogOutButton = styled.button`
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: ${props => props.theme.colors.gray50};
+  
+  ${LinkIcon} {
+    margin-left: 0;
+  }
+`;
+
 export {
   ExternalLink,
   LinkIcon,
@@ -129,4 +140,5 @@ export {
   ProfileActions,
   Overlay,
   Menu,
+  LogOutButton,
 };

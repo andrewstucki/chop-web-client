@@ -5,21 +5,21 @@ import {
   openMessageTray,
   closeMessageTray,
   deleteMessage,
-  toggleCloseTrayButton,
   publishMuteUser,
   directChat,
   publishDeleteMessage,
 } from './dux';
 import { getCurrentUserAsSharedUser } from '../../feed/dux';
 import { publishMuteUserNotification } from '../notification/dux';
-import { getHostChannel, getCurrentChannel } from '../../selectors/channelSelectors';
+import { getHostChannel } from '../../selectors/channelSelectors';
 import { mutedNotificationBanner } from '../../banner/dux';
 import { getMessageTimestamp } from '../../util';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
+  const { currentChannel } = ownProps;
   return {
-    currentChannel: getCurrentChannel(feedState),
+    currentChannel,
     hostChannel: getHostChannel(feedState),
     currentUser: getCurrentUserAsSharedUser(feedState),
   };
@@ -27,11 +27,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    openMessageTray: id => dispatch(openMessageTray(id)),
-    closeMessageTray: id => dispatch(closeMessageTray(id)),
+    openMessageTray: (channel, id) => dispatch(openMessageTray(channel, id)),
+    closeMessageTray: (channel, id) => dispatch(closeMessageTray(channel, id)),
     deleteMessage: (id, channel) => dispatch(deleteMessage(id, channel)),
     publishDeleteMessage: id => dispatch(publishDeleteMessage(id)),
-    toggleCloseTrayButton: id => dispatch(toggleCloseTrayButton(id)),
     muteUser: (channel, nickname) => dispatch(publishMuteUser(channel, nickname)),
     directChat: (pubnubToken, nickname) => dispatch(directChat(pubnubToken, nickname)),
     publishMuteUserNotification: (host, guest, channel) => dispatch(publishMuteUserNotification(host, guest, channel, getMessageTimestamp())),

@@ -6,7 +6,8 @@ import sinon from 'sinon';
 
 import SideMenu from '../../src/sideMenu/sideMenu';
 import LanguageSelector from '../../src/languageSelector';
-import { mountWithTheme } from '../testUtils';
+import { mountWithTheme, renderWithTheme } from '../testUtils';
+import { fireEvent } from 'react-testing-library';
 import {EventDescription, EventTitle, OrganizationTitle} from '../../src/sideMenu/styles';
 import Avatar from '../../src/avatar';
 
@@ -147,7 +148,7 @@ describe('SideBar tests', () => {
 
   test('SideBar has logout button', () => {
     const logoutButton = sinon.spy();
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <SideMenu
         logout={logoutButton}
         close={() => {}}
@@ -167,13 +168,11 @@ describe('SideBar tests', () => {
         organizationName='The Church'
       />
     );
-    expect(wrapper.find('#logout').length)
-      .toBe(1);
-    expect(wrapper.find('#logout').text())
-      .toBe('File Log Out');
-    wrapper.find('#logout').simulate('click');
-    expect(logoutButton.calledOnce)
-      .toBe(true);
+    const logout = getByTestId('logout');
+    expect(logout).toBeTruthy();
+    expect(logout.textContent).toEqual('File Log Out');
+    fireEvent.click(logout);
+    expect(logoutButton.calledOnce).toBeTruthy();
   });
 
   test('SideBar has organization title', () => {

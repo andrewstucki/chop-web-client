@@ -17,6 +17,7 @@ const CellContainer = styled.div`
 
 const CellContainerTop = styled(CellContainer)`
   margin-top: 8px;
+  background-color: transparent;
 `;
 
 const CellContainerBottom = styled(CellContainer)`

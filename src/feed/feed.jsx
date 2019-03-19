@@ -12,7 +12,6 @@ import type {
 
 import Moment from '../moment/moment';
 import AnchorMoment from '../anchorMoment/';
-import ActionBanner from '../components/actionBanner';
 import styles from './styles.css';
 import { createUid } from '../util';
 import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../components/button';
@@ -38,9 +37,7 @@ type FeedProps = {
   anchorMoments: Array<AnchorMomentType>,
   currentChannel: string,
   channel: string,
-  showLeaveChat: boolean,
   currentUser: PrivateUserType,
-  togglePopUpModal: () => void,
   updateScrollPosition: (scrollPosition: number, channel: string, timestamp: number) => void,
   setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => void,
   showNewMessageButton: boolean,
@@ -144,8 +141,6 @@ class Feed extends React.Component<FeedProps, FeedState> {
       currentChannel,
       moments,
       anchorMoments,
-      showLeaveChat,
-      togglePopUpModal,
       showNewMessageButton,
     } = this.props;
 
@@ -154,6 +149,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
       // $FlowFixMe
       <li key={moment.id || createUid()}>
         <Moment
+          currentChannel={currentChannel}
           data={moment}
         />
       </li>
@@ -161,6 +157,7 @@ class Feed extends React.Component<FeedProps, FeedState> {
     const anchorMomentListItems = anchorMoments.map(anchorMoment => (
       <li key={anchorMoment.id}>
         <AnchorMoment
+          currentChannel={currentChannel}
           anchorMoment={anchorMoment}
           isAnchorMomentAnchored={true}
         />
@@ -169,19 +166,11 @@ class Feed extends React.Component<FeedProps, FeedState> {
     return (
       <React.Fragment>
         <div
-          data-component="feed"
+          data-testid='feed'
           // $FlowFixMe
           ref={this.wrapperRef}
           className={styles.scroll}
         >
-          {
-            showLeaveChat &&
-              <ActionBanner
-                text="Leave"
-                onClick={togglePopUpModal}
-                primary
-              />
-          }
           <div style={{width: '100%'}}>
             <ul
               // $FlowFixMe
