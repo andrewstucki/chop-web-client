@@ -41,8 +41,6 @@ compile:app-review:
 compile:app-staging:
   image: node:lts
   stage: compile
-  variables:
-    GIT_STRATEGY: clone
   script:
     - yarn install --pure-lockfile
     - yarn build:staging
@@ -70,6 +68,7 @@ test:
   stage: test
   image: node:lts
   script:
+    - yarn install --pure-lockfile
     - yarn lint
     - yarn flow check
     - yarn coverage # Use coverage to generate coverage report
