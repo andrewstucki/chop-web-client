@@ -3,7 +3,25 @@ import authData from '../../../test/unit/io/access-token.json';
 
 const authenticate = jest.fn().mockResolvedValue(authData);
 const currentState = jest.fn().mockResolvedValue(testData);
-const acceptPrayer = jest.fn().mockResolvedValue({acceptPrayer: true});
+const acceptPrayer = jest.fn().mockResolvedValue(
+  {
+    acceptPrayer: {
+      name: 'Direct',
+      id: '12345',
+      direct: true,
+      subscribers: [
+        {
+          nickname: 'James T. Kirk',
+          pubnubToken: '67890',
+        },
+        {
+          nickname: 'Will Brown',
+          pubnubToken: '54320',
+        },
+      ],
+    },
+  },
+);
 const muteUser = jest.fn().mockResolvedValue({muteUser: true});
 const leaveChannel = jest.fn().mockResolvedValue({leaveFeed: true});
 const directChat = jest.fn().mockResolvedValue(

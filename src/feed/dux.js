@@ -39,7 +39,6 @@ import {
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
-  PUBLISH_MUTE_USER,
   RECEIVE_MUTE_USER,
 } from '../moment';
 
@@ -1040,8 +1039,6 @@ const reducer = (
         mutedUsers: [...new Set(newArray)],
       };
     }
-    case PUBLISH_MUTE_USER:
-    case 'DIRECT_CHAT':
     case CLOSE_MESSAGE_TRAY: {
       // $FlowFixMe
       const { channel } = action;

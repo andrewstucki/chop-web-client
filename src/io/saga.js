@@ -1,17 +1,34 @@
 // @flow
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeEvery, select } from 'redux-saga/effects';
 import queries from './queries';
 import {
   PUBLISH_MUTE_USER,
   MUTE_USER_SUCCEEDED,
   MUTE_USER_FAILED,
+  DIRECT_CHAT,
+  DIRECT_CHAT_FAILED,
 } from '../moment/message/dux';
 import bugsnagClient from '../util/bugsnag';
-import type {PublishMuteUserType} from '../moment/message/dux';
+import type {PublishMuteUserType, PublishDirectChatType} from '../moment/message/dux';
 import type {Saga} from 'redux-saga';
-import {REMOVE_CHANNEL, REMOVE_CHANNEL_SUCCEEDED, REMOVE_CHANNEL_FAILED, removeAuthentication} from '../feed/dux';
+import {
+  REMOVE_CHANNEL,
+  REMOVE_CHANNEL_SUCCEEDED,
+  REMOVE_CHANNEL_FAILED,
+  removeAuthentication,
+  addChannel,
+} from '../feed/dux';
 import type {RemoveChannelType} from '../feed/dux';
 import {addError} from '../errors/dux';
+import {convertSubscribersToSharedUsers} from '../util';
+import {setPrimaryPane} from '../pane/dux';
+import {CHAT} from '../pane/content/chat/dux';
+import {
+  PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED,
+} from '../moment';
+import type {PublishAcceptedPrayerRequestType} from '../moment';
+import {getAvailableForPrayer} from '../selectors/hereNowSelector';
 
 // eslint-disable-next-line no-console
 const log = message => console.log(message);
@@ -72,28 +89,50 @@ function* removeChannel (action: RemoveChannelType): Saga<void> {
   }
 }
 
-function* watchPublishMuteUser (): Saga<void> {
-  yield takeLatest(PUBLISH_MUTE_USER, muteUser);
+function* directChat (action: PublishDirectChatType): Saga<void> {
+  try {
+    const result = yield call([queries, queries.directChat], action.otherUserPubnubToken, action.otherUserNickname);
+    const { name, id, direct, subscribers } = result.createDirectFeed;
+    const participants = convertSubscribersToSharedUsers(subscribers);
+    yield put(addChannel(name, id, direct, participants));
+    yield put(setPrimaryPane(CHAT, id));
+  } catch (error) {
+    yield put({type: DIRECT_CHAT_FAILED, error: error.message});
+    bugsnagClient.notify(error);
+  }
 }
 
-function* watchRemoveChannel (): Saga<void> {
-  yield takeLatest(REMOVE_CHANNEL, removeChannel);
-}
+function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType): Saga<void> {
+  try {
+    const { userRequestingPrayer: { pubnubToken, name }, prayerChannel } = action;
+    const availableForPrayer = yield select(state => getAvailableForPrayer(state.feed));
 
-function* watchRemoveChannelFailed (): Saga<void> {
-  yield takeLatest(REMOVE_CHANNEL_FAILED, handleDataFetchErrors);
+    const result = yield call([queries, queries.acceptPrayer], prayerChannel, pubnubToken, availableForPrayer, name);
+    const { name: channelName, id, direct, subscribers } = result.acceptPrayer;
+    const participants = convertSubscribersToSharedUsers(subscribers);
+    yield put(addChannel(channelName, id, direct, participants));
+    yield put(setPrimaryPane(CHAT, id));
+  } catch (error) {
+    yield put({type: PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, error: error.message});
+    bugsnagClient.notify(error);
+  }
 }
 
 export default function* rootSaga (): Saga<void> {
   yield all([
-    call(watchPublishMuteUser),
-    call(watchRemoveChannel),
-    call(watchRemoveChannelFailed),
+    takeEvery(PUBLISH_MUTE_USER, muteUser),
+    takeEvery(REMOVE_CHANNEL, removeChannel),
+    takeEvery(REMOVE_CHANNEL_FAILED, handleDataFetchErrors),
+    takeEvery(DIRECT_CHAT, directChat),
+    takeEvery(DIRECT_CHAT_FAILED, handleDataFetchErrors),
+    takeEvery(PUBLISH_ACCEPTED_PRAYER_REQUEST, publishAcceptedPrayerRequest),
+    takeEvery(PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, handleDataFetchErrors),
   ]);
 }
 
 export {
-  watchPublishMuteUser,
   muteUser,
   removeChannel,
+  directChat,
+  publishAcceptedPrayerRequest,
 };

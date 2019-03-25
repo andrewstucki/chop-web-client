@@ -9,6 +9,7 @@ import { createUid, getMessageTimestamp } from '../../util';
 const ACTIONABLE_NOTIFICATION = 'ACTIONABLE_NOTIFICATION';
 const PRAYER_REQUEST = 'PRAYER_REQUEST';
 const PUBLISH_ACCEPTED_PRAYER_REQUEST = 'PUBLISH_ACCEPTED_PRAYER_REQUEST';
+const PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED = 'PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED';
 const RECEIVE_ACCEPTED_PRAYER_REQUEST = 'RECEIVE_ACCEPTED_PRAYER_REQUEST';
 
 // Flow Type Definitions
@@ -31,6 +32,8 @@ type PublishAcceptedPrayerRequestType = {
   type: 'PUBLISH_ACCEPTED_PRAYER_REQUEST',
   prayerChannel: string,
   hostChannel: string,
+  userRequestingPrayer: SharedUserType,
+  cancelled: boolean,
 };
 
 type ReceiveAcceptedPrayerRequestType = {
@@ -65,12 +68,14 @@ const receivePrayerRequestNotification = (
 const publishAcceptedPrayerRequest = (
   prayerChannel: string,
   hostChannel: string,
+  userRequestingPrayer: SharedUserType,
   cancelled: boolean,
 ): PublishAcceptedPrayerRequestType => (
   {
     type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
     prayerChannel,
     hostChannel,
+    userRequestingPrayer,
     cancelled,
   }
 );
@@ -107,5 +112,6 @@ export {
   PRAYER_REQUEST,
   ACTIONABLE_NOTIFICATION,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
+  PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED,
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
 };

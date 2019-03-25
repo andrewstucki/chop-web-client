@@ -18,8 +18,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    acceptPrayerRequest: (prayerChannel, hostChannel, cancelled) => {
-      dispatch(publishAcceptedPrayerRequest(prayerChannel, hostChannel, cancelled));
+    acceptPrayerRequest: (prayerChannel, hostChannel, user, cancelled) => {
+      dispatch(publishAcceptedPrayerRequest(prayerChannel, hostChannel, user, cancelled));
     },
   }
 );

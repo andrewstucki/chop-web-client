@@ -2,7 +2,7 @@
 import Chat from './chat';
 import { connect } from 'react-redux';
 import { getChannelById } from '../../../selectors/channelSelectors';
-import { getUsersInChannel } from '../../../selectors/hereNowSelector';
+import { getUserCountInChannel } from '../../../selectors/hereNowSelector';
 import { togglePopUpModal } from '../../../feed/dux';
 import { getOtherUsers } from '../../../selectors/chatSelectors';
 
@@ -10,7 +10,7 @@ const mapStateToProps = (state, ownProps) => {
   const { channel } = ownProps;
   const { feed:feedState } = state;
   const { name } = getChannelById(feedState, channel) || {};
-  const userCount = getUsersInChannel(feedState, channel).length || null;
+  const userCount = getUserCountInChannel(feedState, channel);
   const isDirect = feedState?.channels?.[channel]?.direct;
   const [otherUser] = getOtherUsers(feedState, channel);
   const { name:otherUsersName } = otherUser || '';
