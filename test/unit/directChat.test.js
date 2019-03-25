@@ -8,11 +8,11 @@ import {
 import reducer from '../../src/chop/dux';
 import actorMiddleware from '../../src/middleware/actor-middleware';
 import ServiceActor from '../../src/io/serviceActor';
-import { mockDirectChat } from '../../src/io/graphQL';
+import { mockDirectChat } from '../../src/io/queries';
 import { defaultState } from '../../src/feed/dux';
 import { promisifyMiddleware } from '../testUtils';
 
-jest.mock('../../src/io/graphQL');
+jest.mock('../../src/io/queries');
 
 describe('Direct Chat Tests', () => {
   test('Direct chat calls server', () => {

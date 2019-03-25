@@ -111,6 +111,8 @@ import {
 
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
+const REMOVE_CHANNEL_SUCCEEDED = 'REMOVE_CHANNEL_SUCCEEDED';
+const REMOVE_CHANNEL_FAILED = 'REMOVE_CHANNEL_FAILED';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const REMOVE_REACTION = 'REMOVE_REACTION';
@@ -814,7 +816,7 @@ const reducer = (
         hereNow: {
           ...state.hereNow,
           [action.channel]: [
-            ...state.hereNow[action.channel],
+            ...state.hereNow[action.channel] || [],
             action.user,
           ],
         },
@@ -825,7 +827,7 @@ const reducer = (
         ...state,
         hereNow: {
           ...state.hereNow,
-          [action.channel]: state.hereNow[action.channel].map(item => (
+          [action.channel]: (state.hereNow[action.channel] || []).map(item => (
             item.id === user.id ? user : item
           )),
         },
@@ -1456,6 +1458,8 @@ export {
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   SET_NOTIFICATION_BANNER,
+  REMOVE_CHANNEL_SUCCEEDED,
+  REMOVE_CHANNEL_FAILED,
 };
 export {
   addChannel,

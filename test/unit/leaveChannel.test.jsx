@@ -1,8 +1,8 @@
 // @flow
 import serviceActor from '../../src/io/serviceActor';
 import ChatActor from '../../src/io/chat';
-import { mockFetch } from 'graphql.js';
-import { mockLeaveChannel } from '../../src/io/graphQL';
+import { mockRequest } from 'graphql-request';
+import queries from '../../src/io/queries';
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
@@ -20,13 +20,15 @@ import { REHYDRATE } from 'redux-persist/lib/constants';
 import { setPrimaryPane } from '../../src/pane/dux';
 
 jest.mock('../../src/io/location');
-jest.mock('graphql.js');
-jest.mock('../../src/io/graphQL');
+jest.mock('graphql-request');
+jest.mock('../../src/io/queries');
 jest.mock('pubnub');
+const mock = (mockFn: any) => mockFn;
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Test leave channel', () => {
+  const mockLeaveChannel = mock(queries.leaveChannel);
   mockDate('Wed Jun 27 2018 16:53:06 GMT-0000');
   const message = {
     channelToken: 'test',
@@ -38,8 +40,8 @@ describe('Test leave channel', () => {
     timestamp: '2018-06-27 16:53:6 +0000',
   };
   global.document.cookie  = 'legacy_token=12345; ';
-  mockFetch.mockResolvedValueOnce(accessToken);
-  mockFetch.mockResolvedValueOnce(testData);
+  mockRequest.mockResolvedValueOnce(accessToken);
+  mockRequest.mockResolvedValueOnce(testData);
   const actorMiddlewareApplied = actorMiddleware(
     serviceActor,
     ChatActor,
@@ -82,7 +84,7 @@ describe('Test leave channel', () => {
         togglePopUpModal()
       );
 
-      mockFetch.mockResolvedValueOnce(accessToken);
+      mockRequest.mockResolvedValueOnce(accessToken);
 
       const wrapper = Enzyme.mount(
         <Provider store={store}>
