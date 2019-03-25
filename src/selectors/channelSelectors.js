@@ -179,7 +179,8 @@ const getScroll = createSelector(
         const lastMessage = lastInArray(moments);
         if (lastMessage) {
           const messageSender = lastMessage.sender;
-          if (isSameUser(messageSender, currentUser)) {
+          // There is no sender for NOTIFICATION types
+          if (messageSender && isSameUser(messageSender, currentUser)) {
             return {
               type: 'SCROLL_TO',
               position: 0,
