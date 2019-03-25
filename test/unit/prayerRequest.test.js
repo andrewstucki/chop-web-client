@@ -261,16 +261,7 @@ describe('Prayer Request Tests', () => {
         [])
     );
 
-    expect(getAvailableForPrayer(store.getState().feed)).toEqual(
-      [
-        {
-          id: 'abc',
-          state: {
-            available_prayer: true, // eslint-disable-line camelcase
-          },
-        },
-      ]
-    );
+    expect(getAvailableForPrayer(store.getState().feed)).toEqual(['abc']);
 
     __presenceEvent(
       {
@@ -283,22 +274,7 @@ describe('Prayer Request Tests', () => {
       }
     );
 
-    expect(getAvailableForPrayer(store.getState().feed)).toEqual(
-      [
-        {
-          id: 'abc',
-          state: {
-            available_prayer: true, // eslint-disable-line camelcase
-          },
-        },
-        {
-          id: 'nop',
-          state: {
-            available_prayer: true, // eslint-disable-line camelcase
-          },
-        },
-      ]
-    );
+    expect(getAvailableForPrayer(store.getState().feed)).toEqual(['abc','nop']);
 
     __presenceEvent(
       {
@@ -311,16 +287,7 @@ describe('Prayer Request Tests', () => {
       }
     );
 
-    expect(getAvailableForPrayer(store.getState().feed)).toEqual(
-      [
-        {
-          id: 'nop',
-          state: {
-            available_prayer: true, // eslint-disable-line camelcase
-          },
-        },
-      ]
-    );
+    expect(getAvailableForPrayer(store.getState().feed)).toEqual(['nop']);
   });
 
   test('Accept prayer request', () => {

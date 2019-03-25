@@ -61,7 +61,10 @@ const Message = (
     otherProps.publishMuteUserNotification(currentUserName, senderName, hostChannel);
     closeMessageTray();
   };
-  const directChat = () => otherProps.directChat(senderToken, senderName);
+  const directChat = () => {
+    otherProps.directChat(senderToken, senderName);
+    closeMessageTray();
+  };
 
   const OpenMessageTrayButton = () => (
     <Actionable onClick={openMessageTray} keepFocus={true}>

@@ -2,7 +2,7 @@
 import type { SharedUserType } from '../../feed/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
-import { createUid, newTimestamp } from '../../util';
+import {createUid, newTimestamp} from '../../util';
 import type {
   UIDType,
   DateTimeType,
@@ -19,9 +19,10 @@ const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const MESSAGE = 'MESSAGE';
 const RECEIVE_MUTE_USER = 'RECEIVE_MUTE_USER';
 const PUBLISH_MUTE_USER = 'PUBLISH_MUTE_USER';
-const MUTE_USER_SUCCEEDED = 'MUTE_USER_SUCCEEDED';
 const MUTE_USER_FAILED = 'MUTE_USER_FAILED';
 const DIRECT_CHAT = 'DIRECT_CHAT';
+const MUTE_USER_SUCCEEDED = 'MUTE_USER_SUCCEEDED';
+const DIRECT_CHAT_FAILED = 'DIRECT_CHAT_FAILED';
 const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
 // Flow Type Definitions
@@ -79,7 +80,13 @@ type PublishMuteUserType = {
 type PublishDeleteMessageType = {
   type: 'PUBLISH_DELETE_MESSAGE',
   id: string,
-}
+};
+
+type PublishDirectChatType = {
+  type: typeof DIRECT_CHAT,
+  otherUserPubnubToken: string,
+  otherUserNickname: string,
+};
 
 // Action Creators
 
@@ -158,7 +165,7 @@ const publishMuteUser = (channelId:string, userName:string): PublishMuteUserType
   }
 );
 
-const directChat = (otherUserPubnubToken: string, otherUserNickname: string) => (
+const directChat = (otherUserPubnubToken: string, otherUserNickname: string): PublishDirectChatType => (
   {
     type: DIRECT_CHAT,
     otherUserPubnubToken,
@@ -178,6 +185,7 @@ export {
   PUBLISH_MUTE_USER,
   RECEIVE_MUTE_USER,
   DIRECT_CHAT,
+  DIRECT_CHAT_FAILED,
   PUBLISH_DELETE_MESSAGE,
 };
 
@@ -202,4 +210,5 @@ export type {
   PublishMuteUserType,
   ReceiveMuteUserType,
   PublishDeleteMessageType,
+  PublishDirectChatType,
 };
