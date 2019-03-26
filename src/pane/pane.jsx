@@ -1,5 +1,5 @@
 //@flow
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { PaneType } from './dux';
 import { CHAT } from './content/chat/dux';
 import Chat from './content/chat';
@@ -23,14 +23,14 @@ type PanePropsType = {
   setPaneToChat: (pane:string, channel:string) => void,
 };
 
-const renderPaneContent = (pane:PaneType) => {
+const renderPaneContent = (pane:PaneType, isMediumPlusUp:boolean) => {
   const { type, content } = pane;
   switch (type) {
     case EVENT:
       return <Event />;
     case CHAT:
     // $FlowFixMe
-      return <Chat channel={content.channelId} />;
+      return <Chat key={content.channelId} channel={content.channelId} hideReactions={isMediumPlusUp} />;
     case TAB:
     // $FlowFixMe
       return <Tab type={content.type}/>;
@@ -49,10 +49,11 @@ const Pane = ({ isMediumPlusUp, name, pane, navbarIndex, prevNavbarIndex, setPan
   });
 
   // Prevent two EVENT panes on Medium+
-  if (isMediumPlusUp && pane.type === EVENT && !isEmpty(hostChannel)) {
-    setPaneToChat(name, hostChannel);
-    return null;
-  }
+  useEffect(() => {
+    if (isMediumPlusUp && pane.type === EVENT && !isEmpty(hostChannel)) {
+      setPaneToChat(name, hostChannel);
+    }
+  });
 
   return (
     <PaneWrapper data-testid='pane'>
@@ -61,13 +62,13 @@ const Pane = ({ isMediumPlusUp, name, pane, navbarIndex, prevNavbarIndex, setPan
           <PaneContentWrapper
             key={key}
             style={props}>
-            {renderPaneContent(pane)}
+            {renderPaneContent(pane, isMediumPlusUp)}
           </PaneContentWrapper>)
         )}
       </Small>
       <MediumUp>
         <PaneContentWrapper>
-          {renderPaneContent(pane)}
+          {renderPaneContent(pane, isMediumPlusUp)}
         </PaneContentWrapper>
       </MediumUp>
     </PaneWrapper>

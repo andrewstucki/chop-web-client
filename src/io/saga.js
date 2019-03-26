@@ -118,7 +118,7 @@ function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType
   }
 }
 
-export default function* rootSaga (): Saga<void> {
+function* rootSaga (): Saga<void> {
   yield all([
     takeEvery(PUBLISH_MUTE_USER, muteUser),
     takeEvery(REMOVE_CHANNEL, removeChannel),
@@ -135,4 +135,5 @@ export {
   removeChannel,
   directChat,
   publishAcceptedPrayerRequest,
+  rootSaga,
 };

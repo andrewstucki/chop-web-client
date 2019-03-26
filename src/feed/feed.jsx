@@ -41,18 +41,12 @@ type FeedProps = {
   updateScrollPosition: (scrollPosition: number, channel: string, timestamp: number) => void,
   setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => void,
   showNewMessageButton: boolean,
-  isChatFocused: boolean,
   scroll: Scroll,
 };
 
 type RefObject = { current: any };
 
-type FeedState = {
-  height: number,
-  top: string,
-};
-
-class Feed extends React.Component<FeedProps, FeedState> {
+class Feed extends React.Component<FeedProps> {
   wrapperRef: RefObject;
   listRef: RefObject;
   saveScrollPosition: (channel: string) => void;

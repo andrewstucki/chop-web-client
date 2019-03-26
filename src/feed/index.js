@@ -25,7 +25,6 @@ const mapStateToProps = (state, ownProps) => {
     scroll: getScroll(feedState, cacheState),
     currentUser: feedState.currentUser,
     showNewMessageButton: hasNotSeenLatestMoments(feedState, channel),
-    isChatFocused: feedState.isChatFocused,
   };
 };
 

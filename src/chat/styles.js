@@ -3,7 +3,7 @@ import Button from '../components/iconButton/styles';
 
 const Background = styled.div`
   background-color: rgba(255, 255, 255, 0.95);
-  width: calc(100% - 56px);
+  width: ${props => props.hideReactions ? '100%' : 'calc(100% - 56px)'};
   left: 0;
   bottom: 0;
 `;

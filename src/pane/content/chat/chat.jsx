@@ -16,9 +16,10 @@ type ChatPropsType = {
   isDirect: boolean,
   leaveChannel: () => void,
   otherUsersName: string,
+  hideReactions: boolean,
 };
 
-const Chat = ({channel, name, userCount, isDirect, leaveChannel, otherUsersName}:ChatPropsType) => (
+const Chat = ({channel, name, userCount, isDirect, leaveChannel, otherUsersName, hideReactions}:ChatPropsType) => (
   <>
     {
       isDirect ?
@@ -36,8 +37,10 @@ const Chat = ({channel, name, userCount, isDirect, leaveChannel, otherUsersName}
     }
     <Feed key={channel} channel={channel} />
     <div className={styles.inputs}>
-      <ChatInputBox channel={channel} />
-      <ReactionsContainer />
+      <ChatInputBox channel={channel} hideReactions={hideReactions} />
+      {!hideReactions &&
+        <ReactionsContainer/>
+      }
     </div>
   </>
 );

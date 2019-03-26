@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 import {
-  toggleChatFocus,
+  setChatFocus,
   setKeyboardHeight,
 } from './dux';
 
@@ -22,17 +22,18 @@ import { getCurrentUserAsSharedUser } from '../feed/dux';
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
   return {
-    focused: feedState.isChatFocused,
+    focused: feedState.focusedChannel === ownProps.channel,
     currentPlaceholder: getPlaceholder(feedState, ownProps.channel),
     currentUser: getCurrentUserAsSharedUser(feedState),
     currentChannel: ownProps.channel,
     keyboardHeight: feedState.keyboardHeight,
+    hideReactions: ownProps.hideReactions,
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    toggleChatFocus: focused => dispatch(toggleChatFocus(focused)),
+    setChatFocus: channel => dispatch(setChatFocus(channel)),
     toggleHideVideo: hidden => dispatch(toggleHideVideo(hidden)),
     publishMessage: (channel, text, user) => dispatch(
       publishMessage(channel, text, user)

@@ -103,7 +103,7 @@ CWC is built out of controls that are independent of each other. They in theory 
 
 These controls each have access to the state (also called store in some cases) and communicate with each other over messages (redux actions). Even though Redux has a single store, each control can utilize it's own part of state if the need arises, but currently we have one reducer that holds all of our state.
 
-We currently separate most action creators according to the module that they are updating. For example we have a "chat" module that has a toggleChatFocus action creator that updates a boolean when the chat component is focused or blurred. The action creator is defined in the chat dux.js file, but we listen for the the TOGGLE_CHAT_FOCUS type in the reducer and update state accordingly.
+We currently separate most action creators according to the module that they are updating. For example we have a "chat" module that has a setChatFocus action creator that updates a boolean when the chat component is focused or blurred. The action creator is defined in the chat dux.js file, but we listen for the the SET_CHAT_FOCUS type in the reducer and update state accordingly.
 
 The action types and flow type definitions are usually defined in the same file as the action creator that they are defining. Sometimes we also need to define what a piece of state looks like as well and those definitions live in the reducer dux file (currently inside src/feed/dux.js).
 

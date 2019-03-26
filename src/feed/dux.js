@@ -60,8 +60,8 @@ import {
   CLOSE_SIDE_MENU,
 } from '../sideMenu/dux';
 
-import { TOGGLE_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../chat/dux';
-import type { SetKeyboardHeightType } from '../chat/dux';
+import { SET_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../chat/dux';
+import type { SetKeyboardHeightType, SetChatFocusType } from '../chat/dux';
 
 import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
 import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
@@ -274,7 +274,7 @@ type FeedType = {
   hereNow: HereNowChannels,
   currentUser: PrivateUserType,
   isPopUpModalVisible: boolean,
-  isChatFocused: boolean,
+  focusedChannel: string,
   keyboardHeight: number | typeof undefined,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
@@ -454,7 +454,8 @@ type FeedActionTypes =
   | AddTabType
   | RemoveTabType
   | SetKeyboardHeightType
-  | ToggleNavMenuExpandedType;
+  | ToggleNavMenuExpandedType
+  | SetChatFocusType;
 
 // Action Creators
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
@@ -697,7 +698,7 @@ const defaultState = {
   },
   keyboardHeight: undefined,
   isPopUpModalVisible: false,
-  isChatFocused: false,
+  focusedChannel: '',
   isSideMenuClosed: true,
   isVideoHidden: false,
   isLanguageSelectorVisible: false,
@@ -1258,10 +1259,10 @@ const reducer = (
           avatarUrl: action.url,
         },
       };
-    case TOGGLE_CHAT_FOCUS:
+    case SET_CHAT_FOCUS:
       return {
         ...state,
-        isChatFocused: action.focus,
+        focusedChannel: action.channel,
       };
     case SET_KEYBOARD_HEIGHT:
       return {

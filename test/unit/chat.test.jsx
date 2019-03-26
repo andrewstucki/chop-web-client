@@ -1,13 +1,8 @@
 // @flow
-import Adapter from 'enzyme-adapter-react-16';
-import IconButton from '../../src/components/iconButton';
-import ChatInput from '../../src/components/chatInput';
 import Chat from '../../src/chat/chat';
-import Enzyme from 'enzyme';
 import React from 'react';
-import { mountWithTheme } from '../testUtils';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { fireEvent } from 'react-testing-library';
+import { renderWithReduxAndTheme } from '../testUtils';
 
 const otherUser = {
   id: '12345',
@@ -20,9 +15,9 @@ const otherUser = {
 
 describe('Chat tests', () => {
   test('has a InputField and Button', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithReduxAndTheme(
       <Chat
-        toggleChatFocus={function () {}}
+        setChatFocus={function () {}}
         setKeyboardHeight={function () {}}
         toggleHideVideo={function () {}}
         buttonOnClick={function () {}}
@@ -33,19 +28,20 @@ describe('Chat tests', () => {
         currentChannel="public"
         currentUser={otherUser}
         publishMessage={() => {}}
+        hideReactions={true}
       />
     );
-    wrapper.setState({
-      chatInput: 'Hello',
-    });
-    expect(wrapper.find(ChatInput).length).toBe(1);
-    expect(wrapper.find(IconButton).length).toBe(1);
+
+
+    fireEvent.change(getByTestId('chat-input'), { target: { value: 'Hello' } });
+    expect(getByTestId('chat-input').value).toEqual('Hello');
+    expect(getByTestId('chat-submit-button')).toBeTruthy();
   });
 
   test('has a InputField and disabled Button', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithReduxAndTheme(
       <Chat
-        toggleChatFocus={function () {}}
+        setChatFocus={function () {}}
         setKeyboardHeight={function () {}}
         toggleHideVideo={function () {}}
         buttonOnClick={function () {}}
@@ -56,11 +52,10 @@ describe('Chat tests', () => {
         currentChannel="public"
         currentUser={otherUser}
         publishMessage={() => {}}
+        hideReactions={true}
       />
     );
-    expect(wrapper.find(ChatInput).length).toBe(1);
-    const button = wrapper.find(IconButton);
-    expect(button.length).toBe(1);
-    expect(button.props()).toHaveProperty('disabled');
+
+    expect(getByTestId('chat-submit-button')).toHaveProperty('disabled');
   });
 });

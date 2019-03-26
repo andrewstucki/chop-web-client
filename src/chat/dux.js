@@ -2,14 +2,14 @@
 
 // Action Types
 
-const TOGGLE_CHAT_FOCUS = 'TOGGLE_CHAT_FOCUS';
+const SET_CHAT_FOCUS = 'SET_CHAT_FOCUS';
 const SET_KEYBOARD_HEIGHT = 'SET_KEYBOARD_HEIGHT';
 
 // Flow Type Definitions
 
-type ToggleChatFocusType = {
-  type: 'TOGGLE_CHAT_FOCUS',
-  focus: boolean
+type SetChatFocusType = {
+  type: 'SET_CHAT_FOCUS',
+  channel: string,
 };
 
 type SetKeyboardHeightType = {
@@ -19,10 +19,10 @@ type SetKeyboardHeightType = {
 
 // Action Creators
 
-const toggleChatFocus = (focus: boolean): ToggleChatFocusType => (
+const setChatFocus = (channel: string): SetChatFocusType => (
   {
-    type: TOGGLE_CHAT_FOCUS,
-    focus,
+    type: SET_CHAT_FOCUS,
+    channel,
   }
 );
 
@@ -36,16 +36,16 @@ const setKeyboardHeight = (height: number): SetKeyboardHeightType => (
 // Exports
 
 export {
-  TOGGLE_CHAT_FOCUS,
+  SET_CHAT_FOCUS,
   SET_KEYBOARD_HEIGHT,
 };
 
 export type {
-  ToggleChatFocusType,
+  SetChatFocusType,
   SetKeyboardHeightType,
 };
 
 export {
-  toggleChatFocus,
+  setChatFocus,
   setKeyboardHeight,
 };

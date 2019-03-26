@@ -42,7 +42,7 @@ describe('Feed tests', () => {
         updateScrollPosition={() => {}}
         channel="default"
         showNewMessageButton={false}
-        isChatFocused={false}
+        focusedChannel=''
         setSawLastMomentAt={() => {}}
       />
     );
@@ -86,7 +86,7 @@ describe('Feed tests', () => {
           updateScrollPosition={() => {}}
           channel="default"
           showNewMessageButton={false}
-          isChatFocused={false}
+          focusedChannel=''
           setSawLastMomentAt={() => {}}
         />
       </Provider>
@@ -124,7 +124,7 @@ describe('Feed tests', () => {
         updateScrollPosition={() => {}}
         channel="default"
         showNewMessageButton={false}
-        isChatFocused={false}
+        focusedChannel=''
         setSawLastMomentAt={() => {}}
       />
     );
@@ -148,7 +148,7 @@ describe('Feed tests', () => {
         updateScrollPosition={() => {}}
         channel="default"
         showNewMessageButton={true}
-        isChatFocused={false}
+        focusedChannel=''
         setSawLastMomentAt={() => {}}
       />
     );

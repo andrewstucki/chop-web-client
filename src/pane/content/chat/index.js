@@ -7,7 +7,7 @@ import { togglePopUpModal } from '../../../feed/dux';
 import { getOtherUsers } from '../../../selectors/chatSelectors';
 
 const mapStateToProps = (state, ownProps) => {
-  const { channel } = ownProps;
+  const { channel, hideReactions } = ownProps;
   const { feed:feedState } = state;
   const { name } = getChannelById(feedState, channel) || {};
   const userCount = getUserCountInChannel(feedState, channel);
@@ -21,6 +21,7 @@ const mapStateToProps = (state, ownProps) => {
     userCount,
     isDirect,
     otherUsersName,
+    hideReactions,
   };
 };
 

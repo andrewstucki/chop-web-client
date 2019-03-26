@@ -2,13 +2,13 @@
 import React from 'react';
 import Pane from '../../src/pane/pane';
 import sinon from 'sinon';
-import { render } from 'react-testing-library';
+import { renderWithReduxAndTheme } from '../testUtils';
 
 
 describe('Pane', () => {
   test('It prevents two event panes from rendering on MediumPlus', () => {
     const setPaneToChat = sinon.spy();
-    const { queryByTestId } = render(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <Pane
         name='primary'
         isMediumPlusUp={true}
@@ -24,7 +24,7 @@ describe('Pane', () => {
         setPaneToChat={setPaneToChat}
       />);
 
-    expect(queryByTestId('pane')).toBeFalsy();
+    expect(queryByTestId('pane')).toBeTruthy();
     expect(setPaneToChat.calledOnce).toBeTruthy();
   });
 });

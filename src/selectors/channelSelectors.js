@@ -196,7 +196,7 @@ const getScroll = createSelector(
           type: 'SCROLL_TO',
           position: 0,
         };
-      case 'TOGGLE_CHAT_FOCUS':
+      case 'SET_CHAT_FOCUS':
         return {
           type: 'DELAY_SCROLL_TO',
           position: scrollPosition || 0,
