@@ -11,7 +11,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import mySaga from './io/saga';
+import { rootSaga } from './io/saga';
 import {
   BrowserRouter as Router,
   Route,
@@ -36,7 +36,7 @@ declare var ROUTE_BASENAME:string;
 declare var GTM;
 
 if (ENV === 'development') {
-  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+  const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
   whyDidYouRender(React, { include: [/^/], exclude: [/^StyledComponent/, /^Connect/, /^ReactTouchEvents/, /^MediaQuery/]});
 }
 
@@ -76,7 +76,7 @@ const store = createStore(
   )
 );
 
-sagaMiddleware.run(mySaga);
+sagaMiddleware.run(rootSaga);
 
 if (navigator.userAgent.match('CriOS')) {
   store.dispatch(warningNotificationBanner('We’re optimizing Host Tools for Chrome. For now, please switch to Safari.'));

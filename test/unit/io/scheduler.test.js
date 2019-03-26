@@ -8,12 +8,12 @@ import {
   mockCurrentState,
   mockEventAtTime,
   mockGetSequence,
-} from '../../../src/io/graphQL';
+} from '../../../src/io/queries';
 import reducer from '../../../src/chop/dux';
 import { defaultState } from '../../../src/feed/dux';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 
-jest.mock('../../../src/io/graphQL');
+jest.mock('../../../src/io/queries');
 
 let time = 1542322000000;
 const fastForwardTime = seconds => {

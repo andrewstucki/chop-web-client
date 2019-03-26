@@ -26,4 +26,4 @@ const ReactionButton = ({ buttonClick: _click, currentUser }: ReactionButtonProp
   );
 };
 
-export default ReactionButton;
+export default React.memo < ReactionButtonPropsType > (ReactionButton);

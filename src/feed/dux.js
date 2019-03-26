@@ -39,7 +39,6 @@ import {
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
-  PUBLISH_MUTE_USER,
   RECEIVE_MUTE_USER,
 } from '../moment';
 
@@ -61,8 +60,8 @@ import {
   CLOSE_SIDE_MENU,
 } from '../sideMenu/dux';
 
-import { TOGGLE_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../chat/dux';
-import type { SetKeyboardHeightType } from '../chat/dux';
+import { SET_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../chat/dux';
+import type { SetKeyboardHeightType, SetChatFocusType } from '../chat/dux';
 
 import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
 import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
@@ -111,6 +110,8 @@ import {
 
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
+const REMOVE_CHANNEL_SUCCEEDED = 'REMOVE_CHANNEL_SUCCEEDED';
+const REMOVE_CHANNEL_FAILED = 'REMOVE_CHANNEL_FAILED';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const REMOVE_REACTION = 'REMOVE_REACTION';
@@ -135,6 +136,8 @@ const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
 const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
+const QUERY_CURRENT_EVENT = 'QUERY_CURRENT_EVENT';
+const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
 
 // Flow Type Definitions
 
@@ -265,6 +268,10 @@ type NavType = {
   expanded: boolean,
 };
 
+type QueryCurrentEventType = {
+  type: typeof QUERY_CURRENT_EVENT,
+}
+
 type FeedType = {
   pubnubKeys: PubnubKeysType,
   event: EventType,
@@ -273,7 +280,7 @@ type FeedType = {
   hereNow: HereNowChannels,
   currentUser: PrivateUserType,
   isPopUpModalVisible: boolean,
-  isChatFocused: boolean,
+  focusedChannel: string,
   keyboardHeight: number | typeof undefined,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
@@ -453,7 +460,8 @@ type FeedActionTypes =
   | AddTabType
   | RemoveTabType
   | SetKeyboardHeightType
-  | ToggleNavMenuExpandedType;
+  | ToggleNavMenuExpandedType
+  | SetChatFocusType;
 
 // Action Creators
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
@@ -655,6 +663,12 @@ const setClientInfo = (data: ClientInfoType) => (
   }
 );
 
+const queryCurrentEvent = () => (
+  {
+    type: QUERY_CURRENT_EVENT,
+  }
+);
+
 // Default State
 
 const getLanguage = () => {
@@ -696,7 +710,7 @@ const defaultState = {
   },
   keyboardHeight: undefined,
   isPopUpModalVisible: false,
-  isChatFocused: false,
+  focusedChannel: '',
   isSideMenuClosed: true,
   isVideoHidden: false,
   isLanguageSelectorVisible: false,
@@ -814,7 +828,7 @@ const reducer = (
         hereNow: {
           ...state.hereNow,
           [action.channel]: [
-            ...state.hereNow[action.channel],
+            ...state.hereNow[action.channel] || [],
             action.user,
           ],
         },
@@ -825,7 +839,7 @@ const reducer = (
         ...state,
         hereNow: {
           ...state.hereNow,
-          [action.channel]: state.hereNow[action.channel].map(item => (
+          [action.channel]: (state.hereNow[action.channel] || []).map(item => (
             item.id === user.id ? user : item
           )),
         },
@@ -1038,8 +1052,6 @@ const reducer = (
         mutedUsers: [...new Set(newArray)],
       };
     }
-    case PUBLISH_MUTE_USER:
-    case 'DIRECT_CHAT':
     case CLOSE_MESSAGE_TRAY: {
       // $FlowFixMe
       const { channel } = action;
@@ -1259,10 +1271,10 @@ const reducer = (
           avatarUrl: action.url,
         },
       };
-    case TOGGLE_CHAT_FOCUS:
+    case SET_CHAT_FOCUS:
       return {
         ...state,
-        isChatFocused: action.focus,
+        focusedChannel: action.channel,
       };
     case SET_KEYBOARD_HEIGHT:
       return {
@@ -1456,6 +1468,11 @@ export {
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   SET_NOTIFICATION_BANNER,
+  REMOVE_CHANNEL_SUCCEEDED,
+  REMOVE_CHANNEL_FAILED,
+  SET_AUTHENTICATION,
+  QUERY_CURRENT_EVENT,
+  TOKEN_AUTH_LOGIN_FAILED,
 };
 export {
   addChannel,
@@ -1484,6 +1501,7 @@ export {
   setClientInfo,
   setHereNow,
   addHereNow,
+  queryCurrentEvent,
 };
 
 export type {
@@ -1502,6 +1520,7 @@ export type {
   SetNotificationBannerType,
   ClientInfoType,
   ChannelsObjectType,
+  QueryCurrentEventType,
 };
 
 export default reducer;

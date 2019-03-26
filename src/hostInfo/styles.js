@@ -4,6 +4,7 @@ const Wrapper = styled.div`
   padding: 48px 16px 24px 16px;
   overflow-x: scroll;
   height: 100%;
+  word-break: break-word;
   
   iframe {
     overflow: hidden;

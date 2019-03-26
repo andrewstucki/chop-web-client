@@ -2,14 +2,11 @@
 import React from 'react';
 import type { IconPropsType } from './index';
 
-
 const BibleIcon = ({color, large = true}:IconPropsType) => {
   if (large) {
     return (
-      <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fillRule="evenodd" clipRule="evenodd"
-          d="M28 0H0V20H12L14 22L16 20H28V0ZM13 3H2V5H13V3ZM2 7H13V9H2V7ZM13 11H2V13H13V11ZM2 15H13V17H2V15ZM26 3H15V5H26V3ZM15 7H26V9H15V7ZM26 11H15V13H26V11ZM15 15H26V17H15V15Z"
-          fill={color}/>
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" clipRule="evenodd" d="M46 22H18V42H30L32 44L34 42H46V22ZM31 25H20V27H31V25ZM20 29H31V31H20V29ZM31 33H20V35H31V33ZM20 37H31V39H20V37ZM44 25H33V27H44V25ZM33 29H44V31H33V29ZM44 33H33V35H44V33ZM33 37H44V39H33V37Z" fill={color} />
       </svg>
     );
   } else {

@@ -5,7 +5,7 @@ const constants = require('./webpack.constants.js');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 
 module.exports = {
-  entry: ['babel-polyfill', './src/index.jsx'],
+  entry: './src/index.jsx',
   module: {
     rules: [
       {

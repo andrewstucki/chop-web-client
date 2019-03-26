@@ -21,7 +21,7 @@ describe('Tag Manager Middleware', () => {
   test('Data Layer Definition adds events to GTM', () => {
     expect.assertions(2);
     const action = {
-      type: 'TOGGLE_CHAT_FOCUS',
+      type: 'SET_CHAT_FOCUS',
       payload: { dummy: 'data' },
     };
 
@@ -30,7 +30,7 @@ describe('Tag Manager Middleware', () => {
     const events = createEvents([dataLayerEventDefinition], state, action, state);
 
     expect(events).toBeTruthy();
-    
+
     const expected = {
       hitType: 'event',
       event: action.type,

@@ -7,46 +7,26 @@ import {
   setPubnubKeys,
   setUser,
   setLanguageOptions,
-  REMOVE_CHANNEL,
   setSchedule,
-  setAuthentication,
   removeAuthentication,
-  setScheduleData,
+  setScheduleData, QUERY_CURRENT_EVENT,
 } from '../feed/dux';
-import { REHYDRATE } from 'redux-persist/lib/constants';
-import { BASIC_AUTH_LOGIN } from '../login/dux';
-import type { BasicAuthLoginType } from '../login/dux';
-import type { RemoveChannelType } from '../feed/dux';
 import { setVideo } from '../videoFeed/dux';
-import {
-  PUBLISH_ACCEPTED_PRAYER_REQUEST,
-  PublishAcceptedPrayerRequestType,
-} from '../moment';
 import { addError } from '../errors/dux';
-import {
-  DIRECT_CHAT,
-} from '../moment/message/dux';
 import {
   avatarImageExists,
   convertSubscribersToSharedUsers,
   isEmpty,
 } from '../util';
-import LegacyToken from './LegacyToken';
-import Location from './location';
-import GraphQl from './graphQL';
+import graph, { GraphQl } from './queries';
 import Scheduler from './scheduler';
-import { getAvailableForPrayer } from '../selectors/hereNowSelector';
-import { getCurrentChannel } from '../selectors/channelSelectors';
 import { setPrimaryPane } from '../pane/dux';
 import { EVENT } from '../pane/content/event/dux';
-import { CHAT } from '../pane/content/chat/dux';
 
 class ServiceActor {
   storeDispatch: (action: any) => void;
   graph: GraphQl;
-  location: Location;
   getStore: () => any;
-  legacyToken: LegacyToken;
   handleDataFetchErrors: (payload: any) => void;
   setCurrentState: (payload: any) => void;
   getInitialData: (payload: any) => void;
@@ -58,9 +38,7 @@ class ServiceActor {
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
     this.getStore = getStore;
-    this.legacyToken = new LegacyToken();
-    this.location = new Location();
-    this.graph = new GraphQl();
+    this.graph = graph;
 
     this.getInitialData = this._getInitialData.bind(this);
     this.handleDataFetchErrors = this._handleDataFetchErrors.bind(this);
@@ -68,67 +46,6 @@ class ServiceActor {
     this.checkTime = this._checkTime.bind(this);
     this.setCurrentState = this._setCurrentState.bind(this);
     this.handleEvent = this._handleEvent.bind(this);
-  }
-
-  async init () {
-    const { accessToken, refreshToken } = this.getStore().auth;
-    const legacyToken = this.legacyToken.get();
-    const hostname = Location.hostname();
-
-    if (accessToken) {
-      await this.initWithAccessToken(accessToken, refreshToken, hostname);
-    } else if (legacyToken) {
-      await this.initWithLegacyToken(legacyToken, hostname);
-    }
-  }
-
-  async initWithAccessToken (accessToken: string, refreshToken:string, hostname:string) {
-    this.graph.setClient(accessToken, hostname);
-    this.setCurrentState().catch(error => {
-      if (refreshToken) {
-        this.getAccessTokenByRefreshToken(refreshToken, hostname);
-      } else {
-        this.storeDispatch(removeAuthentication());
-        this.handleDataFetchErrors(error);
-      }
-    });
-  }
-
-  async initWithLegacyToken (legacyToken:string , hostname: string) {
-    try {
-      const auth = await this.graph.authenticateByLegacyToken(legacyToken, hostname);
-      const { accessToken, refreshToken } = auth.authenticate;
-      this.storeDispatch(setAuthentication(accessToken, refreshToken));
-      this.setCurrentState();
-    } catch (error) {
-      this.storeDispatch(removeAuthentication());
-      this.handleDataFetchErrors(error);
-    }
-  }
-
-  async getAccessTokenByBasicAuth (action:BasicAuthLoginType) {
-    const hostname = Location.hostname();
-
-    try {
-      const auth = await this.graph.authenticateByBasicAuth(action.email, action.password, hostname);
-      const { accessToken, refreshToken } = auth.authenticate;
-      this.storeDispatch(setAuthentication(accessToken, refreshToken));
-      this.setCurrentState();
-    } catch (error) {
-      this.handleDataFetchErrors(error);
-    }
-  }
-
-  async getAccessTokenByRefreshToken (token: string, hostname: string) {
-    try {
-      const auth = await this.graph.authenticateByRefreshToken(token, hostname);
-      const { accessToken, refreshToken } = auth.authenticate;
-      this.storeDispatch(setAuthentication(accessToken, refreshToken));
-      this.setCurrentState();
-    } catch (error) {
-      this.storeDispatch(removeAuthentication());
-      this.handleDataFetchErrors(error);
-    }
   }
 
   async _setCurrentState () {
@@ -419,65 +336,13 @@ class ServiceActor {
     }
   }
 
-  async publishAcceptedPrayerRequest (action:PublishAcceptedPrayerRequestType) {
-    const currentChannel = getCurrentChannel(this.getStore());
-    const { channels } = this.getStore();
-    const currentMoments = channels[currentChannel].moments;
-    const moment = currentMoments.find(moment => moment.prayerChannel === action.prayerChannel);
-    const { user, prayerChannel } = moment;
-    const hosts = getAvailableForPrayer(this.getStore(), currentChannel).map(user => user.id);
-
-    try {
-      const data = await this.graph.acceptPrayer(prayerChannel, user.pubnubToken, hosts, user.name);
-      const { name, id, direct, subscribers } = data.acceptPrayer;
-      const participants = convertSubscribersToSharedUsers(subscribers);
-      this.storeDispatch(addChannel(name, id, direct, participants));
-      this.storeDispatch(setPrimaryPane(CHAT, id));
-    } catch (error) {
-      this.handleDataFetchErrors(error);
-    }
-  }
-
-  async directChat (action: any) {
-    try {
-      const { otherUserPubnubToken, otherUserNickname } = action;
-      const directChat = await this.graph.directChat(otherUserPubnubToken, otherUserNickname);
-      const { name, id, direct, subscribers } = directChat.createDirectFeed;
-      const participants = convertSubscribersToSharedUsers(subscribers);
-      this.storeDispatch(addChannel(name, id, direct, participants));
-      this.storeDispatch(setPrimaryPane(CHAT, id));
-    } catch (error) {
-      this.handleDataFetchErrors(error);
-    }
-  }
-
-  async removeChannel (action:RemoveChannelType) {
-    try {
-      await this.graph.leaveChannel(action.channel);
-    } catch (error) {
-      this.handleDataFetchErrors(error);
-    }
-  }
-
   dispatch (action: any) {
     if (!action && !action.type) {
       return;
     }
     switch (action.type) {
-      case REHYDRATE:
-        this.init();
-        return;
-      case BASIC_AUTH_LOGIN:
-        this.getAccessTokenByBasicAuth(action);
-        return;
-      case PUBLISH_ACCEPTED_PRAYER_REQUEST:
-        this.publishAcceptedPrayerRequest(action);
-        return;
-      case REMOVE_CHANNEL:
-        this.removeChannel(action);
-        return;
-      case DIRECT_CHAT:
-        this.directChat(action);
+      case QUERY_CURRENT_EVENT:
+        this.setCurrentState();
         return;
       default:
         return;

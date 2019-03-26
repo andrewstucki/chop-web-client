@@ -5,10 +5,11 @@ import type { ActionableNotificationType } from './dux';
 
 import ChatNotification from '../../../assets/chat-notification.svg';
 import styles from './style.css';
+import type {SharedUserType} from '../../feed/dux';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
-  acceptPrayerRequest: (prayerChannel: string, hostChannel:string, accepted: boolean) => void,
+  acceptPrayerRequest: (prayerChannel: string, hostChannel:string, user: SharedUserType, accepted: boolean) => void,
   hostChannel: string,
 };
 
@@ -57,7 +58,7 @@ const ActionableNotification = (
               className={styles.acceptButton}
               onClick={
                 () => (
-                  acceptPrayerRequest(prayerChannel, hostChannel, false)
+                  acceptPrayerRequest(prayerChannel, hostChannel, user, false)
                 )
               }
             >

@@ -4,7 +4,7 @@ import '../../../src/io/location';
 import { renderWithReduxAndTheme } from '../../testUtils';
 import { fireEvent } from 'react-testing-library';
 
-jest.mock('../../../src/io/graphQL');
+jest.mock('../../../src/io/queries');
 jest.mock('../../../src/io/location');
 
 

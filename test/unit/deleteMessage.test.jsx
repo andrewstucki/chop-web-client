@@ -1,7 +1,7 @@
 // @flow
 import serviceActor from '../../src/io/serviceActor';
 import ChatActor from '../../src/io/chat';
-import { mockFetch } from 'graphql.js';
+import { mockRequest } from 'graphql-request';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -17,8 +17,8 @@ import { promisifyMiddleware } from '../testUtils';
 import { setPrimaryPane } from '../../src/pane/dux';
 
 jest.mock('../../src/io/location');
-jest.mock('graphql.js');
-jest.mock('../../src/io/graphQL');
+jest.mock('graphql-request');
+jest.mock('../../src/io/queries');
 jest.mock('pubnub');
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -29,8 +29,8 @@ describe('Test delete message', () => {
     umt: '123456',
   };
   global.document.cookie  = 'legacy_token=12345; ';
-  mockFetch.mockResolvedValueOnce(accessToken);
-  mockFetch.mockResolvedValueOnce(testData);
+  mockRequest.mockResolvedValueOnce(accessToken);
+  mockRequest.mockResolvedValueOnce(testData);
   const actorMiddlewareApplied = actorMiddleware(
     serviceActor,
     ChatActor,
@@ -93,7 +93,7 @@ describe('Test delete message', () => {
       store.dispatch(deleteMessage('123456', 'test'));
       store.dispatch(publishDeleteMessage('123456'));
 
-      mockFetch.mockResolvedValueOnce(accessToken);
+      mockRequest.mockResolvedValueOnce(accessToken);
 
       expect(mockPublish).toHaveBeenCalledTimes(1);
       expect(mockPublish.mock.calls[0][0]).toEqual(

@@ -50,7 +50,7 @@ NavMenuItem.displayName = 'NavMenuItem';
 
 const NavMenuHamburger = React.memo(({onClick, expanded}) => (
   <Actionable onClick={onClick}>
-    <IconButton expanded={expanded}>
+    <IconButton>
       <Hamburger large={!expanded} />
     </IconButton>
   </Actionable>
@@ -76,7 +76,7 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
   <Wrapper expanded={expanded}>
     <InnerWrapper expanded={expanded}>
       <NavMenuHeader>
-        <NavMenuIconWrapper>
+        <NavMenuIconWrapper expanded={expanded}>
           <NavMenuHamburger onClick={openMenu} expanded={expanded} />
         </NavMenuIconWrapper>
         {expanded &&

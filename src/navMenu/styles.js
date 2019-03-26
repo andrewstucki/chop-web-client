@@ -110,7 +110,7 @@ const NavMenuButton = styled.button`
   -webkit-tap-highlight-color: transparent;
   cursor: ${props => props.disabled ? 'auto' : 'pointer'};
   width: 100%;
-  padding: 0 16px 0 0;
+  padding: 0;
   margin: 0;
   border: none;
   background: transparent;

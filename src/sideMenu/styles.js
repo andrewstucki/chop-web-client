@@ -62,6 +62,7 @@ const Nickname = styled.div`
   font-weight: bold;
   line-height: 20px;
   margin-top: 0.5rem;
+  color: ${props => props.theme.colors.textColor};
 `;
 
 const ProfileActions = styled.div`

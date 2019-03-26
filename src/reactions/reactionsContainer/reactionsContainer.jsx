@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import Reaction from '../reaction';
 import ReactionButton from '../reactionButton';
@@ -18,4 +19,4 @@ const ReactionsContainer = ({reactions}: ReactionsContainerProps) => (
   </div>
 );
 
-export default ReactionsContainer;
+export default React.memo < ReactionsContainerProps > (ReactionsContainer);
