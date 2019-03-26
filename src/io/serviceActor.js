@@ -8,13 +8,9 @@ import {
   setUser,
   setLanguageOptions,
   setSchedule,
-  setAuthentication,
   removeAuthentication,
-  setScheduleData,
+  setScheduleData, QUERY_CURRENT_EVENT,
 } from '../feed/dux';
-import { REHYDRATE } from 'redux-persist/lib/constants';
-import { BASIC_AUTH_LOGIN } from '../login/dux';
-import type { BasicAuthLoginType } from '../login/dux';
 import { setVideo } from '../videoFeed/dux';
 import { addError } from '../errors/dux';
 import {
@@ -22,8 +18,7 @@ import {
   convertSubscribersToSharedUsers,
   isEmpty,
 } from '../util';
-import LegacyToken from './LegacyToken';
-import graph, { setClient, GraphQl } from './queries';
+import graph, { GraphQl } from './queries';
 import Scheduler from './scheduler';
 import { setPrimaryPane } from '../pane/dux';
 import { EVENT } from '../pane/content/event/dux';
@@ -32,7 +27,6 @@ class ServiceActor {
   storeDispatch: (action: any) => void;
   graph: GraphQl;
   getStore: () => any;
-  legacyToken: LegacyToken;
   handleDataFetchErrors: (payload: any) => void;
   setCurrentState: (payload: any) => void;
   getInitialData: (payload: any) => void;
@@ -44,7 +38,6 @@ class ServiceActor {
   constructor (dispatch: (action: any) => void, getStore: () => any ) {
     this.storeDispatch = dispatch;
     this.getStore = getStore;
-    this.legacyToken = new LegacyToken();
     this.graph = graph;
 
     this.getInitialData = this._getInitialData.bind(this);
@@ -53,64 +46,6 @@ class ServiceActor {
     this.checkTime = this._checkTime.bind(this);
     this.setCurrentState = this._setCurrentState.bind(this);
     this.handleEvent = this._handleEvent.bind(this);
-  }
-
-  async init () {
-    const { accessToken, refreshToken } = this.getStore().auth;
-    const legacyToken = this.legacyToken.get();
-
-    if (accessToken) {
-      await this.initWithAccessToken(accessToken, refreshToken);
-    } else if (legacyToken) {
-      await this.initWithLegacyToken(legacyToken);
-    }
-  }
-
-  async initWithAccessToken (accessToken: string, refreshToken:string) {
-    setClient(accessToken);
-    this.setCurrentState().catch(error => {
-      if (refreshToken) {
-        this.getAccessTokenByRefreshToken(refreshToken);
-      } else {
-        this.storeDispatch(removeAuthentication());
-        this.handleDataFetchErrors(error);
-      }
-    });
-  }
-
-  async initWithLegacyToken (legacyToken:string) {
-    try {
-      const auth = await this.graph.authenticateByLegacyToken(legacyToken);
-      const { accessToken, refreshToken } = auth.authenticate;
-      this.storeDispatch(setAuthentication(accessToken, refreshToken));
-      this.setCurrentState();
-    } catch (error) {
-      this.storeDispatch(removeAuthentication());
-      this.handleDataFetchErrors(error);
-    }
-  }
-
-  async getAccessTokenByBasicAuth (action:BasicAuthLoginType) {
-    try {
-      const auth = await this.graph.authenticateByBasicAuth(action.email, action.password);
-      const { accessToken, refreshToken } = auth.authenticate;
-      this.storeDispatch(setAuthentication(accessToken, refreshToken));
-      this.setCurrentState();
-    } catch (error) {
-      this.handleDataFetchErrors(error);
-    }
-  }
-
-  async getAccessTokenByRefreshToken (token: string) {
-    try {
-      const auth = await this.graph.authenticateByRefreshToken(token);
-      const { accessToken, refreshToken } = auth.authenticate;
-      this.storeDispatch(setAuthentication(accessToken, refreshToken));
-      this.setCurrentState();
-    } catch (error) {
-      this.storeDispatch(removeAuthentication());
-      this.handleDataFetchErrors(error);
-    }
   }
 
   async _setCurrentState () {
@@ -406,11 +341,8 @@ class ServiceActor {
       return;
     }
     switch (action.type) {
-      case REHYDRATE:
-        this.init();
-        return;
-      case BASIC_AUTH_LOGIN:
-        this.getAccessTokenByBasicAuth(action);
+      case QUERY_CURRENT_EVENT:
+        this.setCurrentState();
         return;
       default:
         return;

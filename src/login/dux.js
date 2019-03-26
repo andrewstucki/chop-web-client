@@ -1,5 +1,6 @@
 // @flow
 const BASIC_AUTH_LOGIN = 'BASIC_AUTH_LOGIN';
+const BASIC_AUTH_LOGIN_FAILED = 'BASIC_AUTH_LOGIN_FAILED';
 
 type BasicAuthLoginType = {
   type: 'BASIC_AUTH_LOGIN',
@@ -17,6 +18,7 @@ const basicAuthLogin = (email: string, password: string): BasicAuthLoginType => 
 
 export {
   BASIC_AUTH_LOGIN,
+  BASIC_AUTH_LOGIN_FAILED,
   basicAuthLogin,
 };
 

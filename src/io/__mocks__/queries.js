@@ -1,7 +1,14 @@
 import testData from '../../../test/unit/io/test-data.json';
-import authData from '../../../test/unit/io/access-token.json';
 
-const authenticate = jest.fn().mockResolvedValue(authData);
+const setAccessToken = jest.fn();
+const authenticate = jest.fn().mockResolvedValue(
+  {
+    authenticate: {
+      accessToken: '1234567890',
+      refreshToken: '0987654321',
+    },
+  }
+);
 const currentState = jest.fn().mockResolvedValue(testData);
 const acceptPrayer = jest.fn().mockResolvedValue(
   {
@@ -53,7 +60,7 @@ const mockQueries = {
   authenticate: authenticate,
   authenticateByLegacyToken: authenticate,
   authenticateByBasicAuth: authenticate,
-  authenticatedByRefreshToken: authenticate,
+  authenticateByRefreshToken: authenticate,
   currentState: currentState,
   acceptPrayer: acceptPrayer,
   muteUser: muteUser,
@@ -74,5 +81,6 @@ export {
   eventAtTime,
   getSchedule,
   getSequence,
+  setAccessToken,
 };
 export default mockQueries;

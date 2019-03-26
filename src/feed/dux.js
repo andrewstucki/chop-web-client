@@ -136,6 +136,8 @@ const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
 const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
+const QUERY_CURRENT_EVENT = 'QUERY_CURRENT_EVENT';
+const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
 
 // Flow Type Definitions
 
@@ -265,6 +267,10 @@ type ChannelsObjectType = {
 type NavType = {
   expanded: boolean,
 };
+
+type QueryCurrentEventType = {
+  type: typeof QUERY_CURRENT_EVENT,
+}
 
 type FeedType = {
   pubnubKeys: PubnubKeysType,
@@ -654,6 +660,12 @@ const setClientInfo = (data: ClientInfoType) => (
   {
     type: SET_CLIENT_INFO,
     data,
+  }
+);
+
+const queryCurrentEvent = () => (
+  {
+    type: QUERY_CURRENT_EVENT,
   }
 );
 
@@ -1458,6 +1470,9 @@ export {
   SET_NOTIFICATION_BANNER,
   REMOVE_CHANNEL_SUCCEEDED,
   REMOVE_CHANNEL_FAILED,
+  SET_AUTHENTICATION,
+  QUERY_CURRENT_EVENT,
+  TOKEN_AUTH_LOGIN_FAILED,
 };
 export {
   addChannel,
@@ -1486,6 +1501,7 @@ export {
   setClientInfo,
   setHereNow,
   addHereNow,
+  queryCurrentEvent,
 };
 
 export type {
@@ -1504,6 +1520,7 @@ export type {
   SetNotificationBannerType,
   ClientInfoType,
   ChannelsObjectType,
+  QueryCurrentEventType,
 };
 
 export default reducer;
