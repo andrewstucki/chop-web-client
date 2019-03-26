@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const constants = require('./webpack.constants.js');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 
@@ -69,7 +69,10 @@ module.exports = {
     path: path.resolve(__dirname, '../dist')
   },
   optimization: {
-    minimizer: [new UglifyJSPlugin({ sourceMap: true })],
+    minimizer: [new TerserPlugin({
+      parallel: true,
+      sourceMap: true
+    })],
     runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
