@@ -203,7 +203,7 @@ let client = new GraphQLClient(GATEWAY_HOST, {
 });
 
 
-const setClient = (accessToken: string): void => {
+const setAccessToken = (accessToken: string): void => {
   client = new GraphQLClient(GATEWAY_HOST, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -223,7 +223,7 @@ const queries = {
       password,
     });
 
-    setClient(data.authenticate.accessToken);
+    setAccessToken(data.authenticate.accessToken);
 
     return data;
   },
@@ -308,5 +308,5 @@ const queries = {
 export default queries;
 
 export {
-  setClient,
+  setAccessToken,
 };

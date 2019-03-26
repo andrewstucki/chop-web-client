@@ -1,6 +1,6 @@
 // @flow
 import { all, call, put, takeEvery, select } from 'redux-saga/effects';
-import queries from './queries';
+import queries, {setAccessToken} from './queries';
 import {
   PUBLISH_MUTE_USER,
   MUTE_USER_SUCCEEDED,
@@ -15,8 +15,11 @@ import {
   REMOVE_CHANNEL,
   REMOVE_CHANNEL_SUCCEEDED,
   REMOVE_CHANNEL_FAILED,
+  TOKEN_AUTH_LOGIN_FAILED,
   removeAuthentication,
   addChannel,
+  setAuthentication,
+  queryCurrentEvent,
 } from '../feed/dux';
 import type {RemoveChannelType} from '../feed/dux';
 import {addError} from '../errors/dux';
@@ -29,6 +32,14 @@ import {
 } from '../moment';
 import type {PublishAcceptedPrayerRequestType} from '../moment';
 import {getAvailableForPrayer} from '../selectors/hereNowSelector';
+import { getAccessToken, getRefreshToken } from '../selectors/authSelectors';
+import type {BasicAuthLoginType} from '../login/dux';
+import {
+  BASIC_AUTH_LOGIN,
+  BASIC_AUTH_LOGIN_FAILED,
+} from '../login/dux';
+import { REHYDRATE } from 'redux-persist/lib/constants';
+import {getLegacyToken} from './legacyToken';
 
 // eslint-disable-next-line no-console
 const log = message => console.log(message);
@@ -38,20 +49,17 @@ function* handleDataFetchErrors (payload: any): Saga<void> {
     const { response: { errors } } = payload;
     yield call(log, 'The graphql response returned errors:');
     for (const err in errors) {
-      const { message, extensions } = errors[err];
+      const { message, extensions, path } = errors[err];
 
       if (message) {
         yield put(addError(message));
         yield call(log, ` - ${message}`);
       }
-      if (extensions) {
-        const { code = '' } = extensions;
-        if (code) {
-          switch (code) {
-            case 'UNAUTHORIZED':
-              yield put(removeAuthentication());
-          }
-        }
+      if (
+        extensions && extensions.code === 'UNAUTHORIZED' ||
+        extensions && extensions.code === 'INTERNAL_SERVER_ERROR' && path === 'authenticate'
+      ) {
+        yield put(removeAuthentication());
       }
     }
   } else {
@@ -118,6 +126,53 @@ function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType
   }
 }
 
+function* authenticateByBasicAuth (action: BasicAuthLoginType): Saga<void> {
+  try {
+    const result = yield call([queries, queries.authenticateByBasicAuth], action.email, action.password);
+    const { accessToken, refreshToken } = result.authenticate;
+    yield put(setAuthentication(accessToken, refreshToken));
+    yield put(queryCurrentEvent());
+  } catch (error) {
+    yield put({type: BASIC_AUTH_LOGIN_FAILED, error: error.message});
+    bugsnagClient.notify(error);
+  }
+}
+
+function* authenticateByToken (): Saga<void> {
+  try {
+    const accessToken = yield select(getAccessToken);
+    if (accessToken) {
+      yield call(setAccessToken, accessToken);
+      try {
+        yield put(queryCurrentEvent());
+      } catch (_error) {
+        const refresh = yield select(getRefreshToken);
+        if (refresh) {
+          const result = yield call([queries, queries.authenticateByRefreshToken], refresh);
+          const {accessToken, refreshToken} = result.authenticate;
+          yield put(setAuthentication(accessToken, refreshToken));
+          yield put(queryCurrentEvent());
+        }
+      }
+    } else {
+      const legacyToken = getLegacyToken();
+      if (legacyToken) {
+        const result = yield call([queries, queries.authenticateByLegacyToken], legacyToken);
+        const {accessToken, refreshToken} = result.authenticate;
+        yield put(setAuthentication(accessToken, refreshToken));
+        yield put(queryCurrentEvent());
+      }
+    }
+  } catch (error) {
+    yield put({type: TOKEN_AUTH_LOGIN_FAILED, error: error.message});
+    bugsnagClient.notify(error);
+  }
+}
+
+// function* currentEvent (): Saga<void> {
+//   yield call(log, 'noop');
+// }
+
 function* rootSaga (): Saga<void> {
   yield all([
     takeEvery(PUBLISH_MUTE_USER, muteUser),
@@ -127,6 +182,11 @@ function* rootSaga (): Saga<void> {
     takeEvery(DIRECT_CHAT_FAILED, handleDataFetchErrors),
     takeEvery(PUBLISH_ACCEPTED_PRAYER_REQUEST, publishAcceptedPrayerRequest),
     takeEvery(PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, handleDataFetchErrors),
+    takeEvery(BASIC_AUTH_LOGIN, authenticateByBasicAuth),
+    takeEvery(BASIC_AUTH_LOGIN_FAILED, handleDataFetchErrors),
+    takeEvery(REHYDRATE, authenticateByToken),
+    takeEvery(TOKEN_AUTH_LOGIN_FAILED, handleDataFetchErrors),
+    // takeEvery(QUERY_CURRENT_EVENT, currentEvent),
   ]);
 }
 
@@ -135,5 +195,7 @@ export {
   removeChannel,
   directChat,
   publishAcceptedPrayerRequest,
+  authenticateByBasicAuth,
+  authenticateByToken,
   rootSaga,
 };
