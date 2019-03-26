@@ -31,7 +31,7 @@ import {
 
 import { setVideo } from '../../src/videoFeed/dux';
 
-import { TOGGLE_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../../src/chat/dux';
+import { SET_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../../src/chat/dux';
 
 import {
   openMessageTray,
@@ -1850,35 +1850,17 @@ describe('Chat tests', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
-        isChatFocused: false,
       },
       {
-        type: TOGGLE_CHAT_FOCUS,
-        focus: true,
+        type: SET_CHAT_FOCUS,
+        channel: 'abc',
       });
     expect(result).toEqual(
       {
         ...defaultState,
-        isChatFocused: true,
+        focusedChannel: 'abc',
       }
     );
-
-    const result2 = reducer(
-      {
-        ...defaultState,
-        isChatFocused: true,
-      },
-      {
-        type: TOGGLE_CHAT_FOCUS,
-        focus: false,
-      });
-    expect(result2).toEqual({
-      ...defaultState,
-      lastAction: {
-        type: TOGGLE_CHAT_FOCUS,
-        focus: false,
-      },
-    });
   });
 
   test('keyboard height', () => {

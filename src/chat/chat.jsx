@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 import type { SharedUserType } from '../feed/dux';
 
-import { isIOS } from '../util';
+import { isIOS, isIPhone } from '../util';
 import UpArrow from '../icons/upArrow';
 import IconButton from '../components/iconButton';
 import { theme } from '../styles';
@@ -13,7 +13,7 @@ import ChatInput from '../components/chatInput';
 
 type ChatProps = {
   publishMessage: (channel: string, text: string, user: SharedUserType) => void,
-  toggleChatFocus: (focused: boolean) => void,
+  setChatFocus: (channel: string) => void,
   setKeyboardHeight: (height: number) => void,
   toggleHideVideo: (hidden: boolean) => void,
   focused: boolean,
@@ -22,6 +22,7 @@ type ChatProps = {
   currentUser: SharedUserType,
   currentChannel: string,
   initialState?: ChatState,
+  hideReactions: boolean,
 };
 
 type ChatState = {
@@ -36,18 +37,6 @@ class Chat extends Component<ChatProps, ChatState> {
 
   constructor (props: ChatProps) {
     super(props);
-    // $FlowFixMe
-    this.onTextEntered = this.onTextEntered.bind(this);
-    // $FlowFixMe
-    this.onKeyPressed = this.onKeyPressed.bind(this);
-    // $FlowFixMe
-    this.onBlur = this.onBlur.bind(this);
-    // $FlowFixMe
-    this.onFocus = this.onFocus.bind(this);
-    // $FlowFixMe
-    this.preventScroll = this.preventScroll.bind(this);
-    // $FlowFixMe
-    this.sendMessage = this.sendMessage.bind(this);
 
     this.preventScrollTimer = null;
     this.pollKeyboardInterval = null;
@@ -75,15 +64,15 @@ class Chat extends Component<ChatProps, ChatState> {
   }
 
 
-  onTextEntered (event: SyntheticEvent<HTMLInputElement>) {
+  onTextEntered = (event: SyntheticEvent<HTMLInputElement>) => {
     if (event.target instanceof HTMLInputElement) {
       this.setState({
         chatInput: event.target.value,
       });
     }
-  }
+  };
 
-  onKeyPressed (event: SyntheticKeyboardEvent<HTMLInputElement>) {
+  onKeyPressed = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
     if (event.charCode === 13 && this.state.chatInput.length > 0) {
       this.props.publishMessage(
         this.props.currentChannel,
@@ -92,9 +81,9 @@ class Chat extends Component<ChatProps, ChatState> {
       );
       this.setState({chatInput: ''});
     }
-  }
+  };
 
-  preventScroll () {
+  preventScroll = () => {
     if (this.preventScrollTimer) {
       window.clearTimeout(this.preventScrollTimer);
     }
@@ -102,7 +91,7 @@ class Chat extends Component<ChatProps, ChatState> {
     this.preventScrollTimer = setTimeout(() => {
       window.scrollTo(0, 0);
     }, 30);
-  }
+  };
 
   pollForKeyboard  = () => {
     const { windowHeight } = this.state;
@@ -135,34 +124,38 @@ class Chat extends Component<ChatProps, ChatState> {
     }
   };
 
-  onFocus () {
+  onFocus = () => {
     const { keyboardHeight } = this.props;
-    this.props.toggleChatFocus(true);
+    this.props.setChatFocus(this.props.currentChannel);
 
     if (isIOS()) {
-      this.props.toggleHideVideo(true);
+      if (isIPhone()) {
+        this.props.toggleHideVideo(true);
+      }
       if (keyboardHeight && keyboardHeight > 0) {
         this.setWrapperHeight(keyboardHeight);
       } else {
         this.pollForKeyboard();
       }
     }
-  }
+  };
 
-  onBlur () {
-    this.props.toggleChatFocus(false);
+  onBlur = () => {
+    this.props.setChatFocus('');
 
     if (isIOS()) {
-      this.props.toggleHideVideo(false);
+      if (isIPhone()) {
+        this.props.toggleHideVideo(false);
+      }
       const wrapper: ?HTMLElement = document.querySelector('#wrapper');
       if (wrapper && wrapper instanceof HTMLElement) {
         wrapper.style.height = '100%';
       }
       clearInterval(this.pollKeyboardInterval);
     }
-  }
+  };
 
-  sendMessage () {
+  sendMessage = () => {
     const {
       publishMessage,
       currentUser,
@@ -171,7 +164,7 @@ class Chat extends Component<ChatProps, ChatState> {
 
     publishMessage(currentChannel, this.state.chatInput, currentUser);
     this.setState({chatInput: ''});
-  }
+  };
 
   componentWillUnmount (): void {
     window.removeEventListener('scroll', this.preventScroll);
@@ -183,10 +176,11 @@ class Chat extends Component<ChatProps, ChatState> {
     const {
       focused = false,
       currentPlaceholder,
+      hideReactions,
     } = this.props;
 
     return (
-      <Background>
+      <Background hideReactions={hideReactions}>
         <Wrapper focused={focused}>
           <ChatInput
             id="chat-input"
