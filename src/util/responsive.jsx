@@ -4,7 +4,7 @@ import Responsive from 'react-responsive';
 const Small = React.memo(props => <Responsive {...props} maxWidth={639} />);
 Small.displayName = 'Small';
 
-const Medium = React.memo(props => <Responsive {...props} minidth={640} maxWidth={767} />);
+const Medium = React.memo(props => <Responsive {...props} minWidth={640} maxWidth={767} />);
 Medium.displayName = 'Medium';
 
 const MediumDown = React.memo(props => <Responsive {...props} maxWidth={767} />);
