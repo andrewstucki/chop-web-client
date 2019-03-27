@@ -25,7 +25,14 @@
       "pubnubToken": null,
       "role": {
         "label": "Host",
-        "permissions": []
+        "permissions": [
+          {
+            "key": "event.host_notes.read"
+          },
+          {
+            "key": "feed.user.mute"
+          }
+        ]
       }
     },
     "currentOrganization": {
