@@ -189,7 +189,7 @@ class ServiceActor {
             pubnubToken: user.pubnubToken,
             role: {
               label: user.role ? user.role.label : '',
-              permissions: [],
+              permissions: user?.role?.permissions.map(permission => permission.key) || [],
             },
           }
         )
