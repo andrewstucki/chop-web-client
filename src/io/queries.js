@@ -113,6 +113,9 @@ currentUser {
   pubnubToken
   role {
     label
+    permissions {
+      key
+    }
   }
 }`;
 

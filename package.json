@@ -38,7 +38,8 @@
     ],
     "setupFilesAfterEnv": [
       "jest-extended",
-      "react-testing-library/cleanup-after-each"
+      "react-testing-library/cleanup-after-each",
+      "react-hooks-testing-library/cleanup-after-each"
     ],
     "globals": {
       "ENV": "test",
@@ -97,7 +98,8 @@
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
-    "react-test-renderer": "^16.8.4",
+    "react-hooks-testing-library": "^0.3.8",
+    "react-test-renderer": "^16.8.5",
     "react-testing-library": "^6.0.1",
     "sinon": "^7.3.0",
     "style-loader": "^0.23.1",
@@ -129,9 +131,9 @@
     "linkifyjs": "^2.1.8",
     "object-hash": "^1.3.1",
     "pubnub": "^4.23.0",
-    "react": "16.8.4",
+    "react": "16.8.5",
     "react-countdown-now": "^2.1.0",
-    "react-dom": "16.8.4",
+    "react-dom": "16.8.5",
     "react-gtm-module": "^2.0.4",
     "react-player": "^1.9.3",
     "react-redux": "^5.0.7",
