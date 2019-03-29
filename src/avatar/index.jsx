@@ -2,7 +2,7 @@
 import React from 'react';
 import InitialAvatar from './initialAvatar';
 import ImageAvatar from './imageAvatar';
-import type { SharedUserType } from '../feed/dux';
+import type { SharedUserType } from '../users/dux';
 
 type AvatarProps = {
   user: SharedUserType,

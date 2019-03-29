@@ -1,5 +1,5 @@
 // @flow
-import type { SharedUserType } from '../../feed/dux';
+import type { SharedUserType } from '../../users/dux';
 import { createUid } from '../../util';
 
 const PUBLISH_REACTION = 'PUBLISH_REACTION';

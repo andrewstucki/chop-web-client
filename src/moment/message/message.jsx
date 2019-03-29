@@ -2,7 +2,7 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
-import type { SharedUserType } from '../../feed/dux';
+import type { SharedUserType } from '../../users/dux';
 import Avatar from '../../avatar';
 
 import OpenTrayButtonIcon from '../../../assets/open-tray-button.svg';

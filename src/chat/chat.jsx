@@ -2,7 +2,7 @@
 /* global SyntheticEvent, SyntheticKeyboardEvent, TimeoutID, IntervalID */
 import React, { Component } from 'react';
 
-import type { SharedUserType } from '../feed/dux';
+import type { SharedUserType } from '../users/dux';
 
 import { isIOS, isIPhone } from '../util';
 import UpArrow from '../icons/upArrow';

@@ -132,7 +132,7 @@ pubnubKeys {
 }`;
 
 const currentLanguages = `
-currentLanguages {
+currentLanguages @include(if: $needLanguages) {
   name
   code
 }`;
@@ -190,7 +190,7 @@ schedule {
 }`;
 
 const currentState = `
-query CurrentState {
+query CurrentState($needLanguages: Boolean!) {
   ${currentEvent}
   ${currentUser}
   ${currentOrganization}
@@ -250,7 +250,13 @@ const queries = {
       refreshToken,
     }),
 
-  currentState: async (): Promise<any> => await client.request(currentState),
+  currentState: async (needLanguages: boolean = true): Promise<any> =>
+    await client.request(
+      currentState,
+      {
+        needLanguages,
+      }
+    ),
 
   acceptPrayer: async (channelId: string, requesterPubnubToken: string, hostTokens: Array<string>, requesterName: string): Promise<any> =>
     await client.request(

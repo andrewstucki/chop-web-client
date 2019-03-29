@@ -60,7 +60,7 @@ const persistConfig = {
   storage,
   stateReconciler: autoMergeLevel2,
   transforms: [
-    createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt']),
+    createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt', 'languageOptions']),
     createExpirationTransform({
       defaultState,
     }),

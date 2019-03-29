@@ -1,12 +1,20 @@
-import type { SubscriberType } from '../feed';
+// @flow strict
+import type { SharedUserType } from '../users/dux';
 import createDOMPurify from 'dompurify';
+import type { Config } from 'dompurify';
 import dayjs from 'dayjs';
 
-const getFirstInitial = name => (
+type SubscriberType = {
+  avatar: string,
+  nickname: string,
+  pubnubToken: string,
+};
+
+const getFirstInitial = (name: string): string => (
   name.charAt(0).toUpperCase()
 );
 
-function avatarImageExists (userId) {
+function avatarImageExists (userId: string): Promise<boolean> {
   return new Promise(resolve => {
     const image = new Image();
     image.onload = () => {
@@ -26,7 +34,7 @@ const avatarColors = [
 ];
 
 const getAvatarColor = (nickname: string, opacity?: number) => {
-  const op = opacity || '1.0';
+  const op = opacity === undefined ? '1.0' : opacity;
   const numberDigest = djb2Hash(nickname);
   const numberOfColors = avatarColors.length;
   const index = Math.abs(numberDigest % numberOfColors);
@@ -34,17 +42,18 @@ const getAvatarColor = (nickname: string, opacity?: number) => {
   return `rgba(${color}, ${op})`;
 };
 
-const djb2Hash = str => {
+const djb2Hash = (str: string): number => {
   let hash = 5381;
-  for (const char in str) {
+  const charList = Array.from(str);
+  charList.forEach(char => {
     const charCode = char.charCodeAt(0);
     hash = (hash << 5) + hash + charCode;
-  }
+  });
   return hash;
 };
 
 // U stands for unique
-const createUid = () => {
+const createUid = (): string => {
   let seed = new Date().getTime(); // Used to insure more randomness
   const regEx = /[xy]/g;
   const replacer = char => {
@@ -57,17 +66,19 @@ const createUid = () => {
 
 const newTimestamp = () => Date.now();
 
-const getUTCDate = (date = new Date()) => new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+const getUTCDate = (date: Date = new Date()) => new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
 
-const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => {
-  let users = [];
+const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>): Array<SharedUserType> => {
+  let users: Array<SharedUserType> = [];
 
   if (subscribers && subscribers.length) {
-    users = subscribers.map(person => (
+    users = subscribers.map((person: SubscriberType) => (
       {
+        id: '',
         avatarUrl: person.avatar,
         name: person.nickname,
         pubnubToken: person.pubnubToken,
+        role: { label: '' },
       }
     ));
   }
@@ -77,16 +88,6 @@ const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>) => 
 
 const capitalizeFirstLetter = (string: string) =>
   (string.charAt(0).toUpperCase() + string.slice(1));
-
-const objectFilter = (obj, predicate) => {
-  const result = {};
-  Object.keys(obj).forEach(key => {
-    if (obj.hasOwnProperty(key) && !predicate(key, obj[key])) {
-      result[key] = obj[key];
-    }
-  });
-  return result;
-};
 
 const isEmpty = (string: string) =>
   (!string || string.length === 0);
@@ -99,7 +100,7 @@ const sanitizeConfig = {
   ADD_TAGS: ['iframe'],
 };
 
-const sanitizeString = (string: string, config:any = sanitizeConfig) =>
+const sanitizeString = (string: string, config:Config = sanitizeConfig) =>
   DOMPurify.sanitize(string, config)
 ;
 
@@ -116,7 +117,7 @@ const getMessageTimestamp = (timestamp: string = dayjs().format(UTC_DATE_FORMAT)
 
   const inputFormat = isEpoch ? EPOCH_DATE_FORMAT : UTC_DATE_FORMAT;
   const date = dayjs(time, inputFormat);
-  const format = dayjs().diff(date, 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
+  const format = dayjs().diff(date, 'day') === 0 ? 'h:mma' : 'h:mma, MMMM D';
   return date.format(format);
 };
 
@@ -133,8 +134,6 @@ const isIPhone = () => !!navigator.platform && /iPhone/.test(navigator.platform)
 
 const isAndroid = () => !!navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
-const getComponentDisplayName = Componenet => Componenet.displayName || Componenet.name || 'Component';
-
 export {
   getFirstInitial,
   getAvatarColor,
@@ -143,7 +142,6 @@ export {
   avatarImageExists,
   convertSubscribersToSharedUsers,
   capitalizeFirstLetter,
-  objectFilter,
   isEmpty,
   sanitizeString,
   getMessageTimestamp,
@@ -152,6 +150,5 @@ export {
   isIOS,
   isIPhone,
   isAndroid,
-  getComponentDisplayName,
   getUTCDate,
 };

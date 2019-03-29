@@ -96,7 +96,7 @@ const Converter = {
       language: _getState().currentLanguage,
       eventTimeId: _getState().event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
-      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'seconds').toString(),
+      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'second').toString(),
       eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
       fromNickname: message.sender.name,

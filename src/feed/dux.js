@@ -91,7 +91,6 @@ import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
 
 import type {
-  UIDType,
   DateTimeType,
   ChannelIdType,
 } from '../cwc-types';
@@ -104,6 +103,7 @@ import type { SetNavbarIndexType } from '../navbar/dux';
 import {
   SET_NAVBAR_INDEX,
 } from '../navbar/dux';
+import type { SharedUserType } from '../users/dux';
 
 
 // Action Types
@@ -137,6 +137,7 @@ const SET_HERE_NOW = 'SET_HERE_NOW';
 const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 const QUERY_CURRENT_EVENT = 'QUERY_CURRENT_EVENT';
+const QUERY_CURRENT_EVENT_FAILED = 'QUERY_CURRENT_EVENT_FAILED';
 const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
 
 // Flow Type Definitions
@@ -218,16 +219,6 @@ type ReceiveReactionType = {
   type: 'RECEIVE_REACTION',
   reaction: ReactionType,
 }
-
-type SharedUserType = {
-  id: UIDType | null,
-  name: string,
-  avatarUrl?: string | null,
-  pubnubToken: string,
-  role: {
-    label: string,
-  },
-};
 
 type ChannelType = {
   id: string,
@@ -464,6 +455,12 @@ type FeedActionTypes =
   | SetChatFocusType;
 
 // Action Creators
+const queryCurrentEvent = (): QueryCurrentEventType => (
+  {
+    type: QUERY_CURRENT_EVENT,
+  }
+);
+
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
   {
     type: SET_AUTHENTICATION,
@@ -660,12 +657,6 @@ const setClientInfo = (data: ClientInfoType) => (
   {
     type: SET_CLIENT_INFO,
     data,
-  }
-);
-
-const queryCurrentEvent = () => (
-  {
-    type: QUERY_CURRENT_EVENT,
   }
 );
 
@@ -1472,6 +1463,7 @@ export {
   REMOVE_CHANNEL_FAILED,
   SET_AUTHENTICATION,
   QUERY_CURRENT_EVENT,
+  QUERY_CURRENT_EVENT_FAILED,
   TOKEN_AUTH_LOGIN_FAILED,
 };
 export {
@@ -1511,7 +1503,6 @@ export type {
   FeedType,
   ChannelType,
   PrivateUserType,
-  SharedUserType,
   TogglePopUpModalType,
   LeaveChannelType,
   LanguageType,

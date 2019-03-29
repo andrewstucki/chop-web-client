@@ -1,5 +1,5 @@
 // @flow
-import type { SharedUserType } from '../../feed/dux';
+import type { SharedUserType } from '../../users/dux';
 import type { ReceiveMomentType } from '../dux';
 import { RECEIVE_MOMENT } from '../dux';
 import { createUid, getMessageTimestamp } from '../../util';
