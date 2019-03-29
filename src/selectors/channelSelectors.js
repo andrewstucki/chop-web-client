@@ -1,12 +1,13 @@
 // @flow
 import { createSelector } from 'reselect';
-import { objectFilter } from '../util';
 import type {
   FeedType,
   ChannelsObjectType,
   ChannelType,
-  SharedUserType,
 } from '../feed/dux';
+import type {
+  SharedUserType,
+} from '../users/dux';
 import type {
   ChannelIdType,
   LanguageCodeType,
@@ -94,11 +95,21 @@ const getPublicChannel = createSelector(
   channel => channel
 );
 
+const channelFilter = (obj: ChannelsObjectType, predicate: (string, ChannelType) => boolean) => {
+  const result = {};
+  Object.keys(obj).forEach(key => {
+    if (obj.hasOwnProperty(key) && !predicate(key, obj[key])) {
+      result[key] = obj[key];
+    }
+  });
+  return result;
+};
+
 const getDirectChannels = createSelector(
   getChannels,
   channels =>
     channels ?
-      objectFilter(channels, id => !channels[id].direct) :
+      channelFilter(channels, id => !channels[id].direct) :
       []
 );
 

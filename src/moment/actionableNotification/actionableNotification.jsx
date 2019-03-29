@@ -5,7 +5,7 @@ import type { ActionableNotificationType } from './dux';
 
 import ChatNotification from '../../../assets/chat-notification.svg';
 import styles from './style.css';
-import type {SharedUserType} from '../../feed/dux';
+import type {SharedUserType} from '../../users/dux';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,

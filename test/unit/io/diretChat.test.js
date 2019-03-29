@@ -34,14 +34,18 @@ describe('Test Direct Chat', () => {
           moments: [],
           participants: [
             {
+              id: '',
               avatarUrl: null,
               name: 'Fred',
               pubnubToken: 4321,
+              role: { label: '' },
             },
             {
+              id: '',
               avatarUrl: null,
               name: 'Barny',
               pubnubToken: 5432,
+              role: { label: '' },
             },
           ],
           scrollPosition: 0,

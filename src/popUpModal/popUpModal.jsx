@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import type { SharedUserType } from '../feed/dux';
+import type { SharedUserType } from '../users/dux';
 import styles from './style.css';
 
 type PopUpModalPropsType = {

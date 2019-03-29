@@ -2,7 +2,8 @@
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React, {useCallback} from 'react';
 
-import type {LanguageType, SharedUserType} from '../feed/dux';
+import type {LanguageType } from '../feed/dux';
+import type { SharedUserType} from '../users/dux';
 
 import SideMenuItem from './sideMenuItem';
 import LanguageSelector from '../languageSelector';

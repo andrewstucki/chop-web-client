@@ -15,6 +15,7 @@ yarn-error.log
 coverage
 cy-coverage
 .nyc_output/
+flow-coverage/
 
 # Editor and IDE specific configs
 .idea

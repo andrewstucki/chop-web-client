@@ -63,12 +63,18 @@ describe('Test Accept Prayer', () => {
           moments: [],
           participants: [
             {
+              id: '',
+              avatarUrl: undefined,
               name: 'James T. Kirk',
               pubnubToken: '67890',
+              role: { label: '' },
             },
             {
+              id: '',
+              avatarUrl: undefined,
               name: 'Will Brown',
               pubnubToken: '54320',
+              role: { label: '' },
             },
           ],
           scrollPosition: 0,

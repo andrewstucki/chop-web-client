@@ -16,13 +16,13 @@ describe('Util tests', () => {
   });
 
   test('getMessageTimestamp in past', () => {
-    const result = getMessageTimestamp(new Date('2018-06-27 16:53:6 +0000'));
+    const result = getMessageTimestamp(new Date('2018-06-27 16:53:6 +0000').toString());
     expect(result).toMatch(/^(\d{1,2}):(\d{2})(\s*[ap]m?), (Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sep(tember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)\s+\d{1,2}$/i);
   });
 
   test('getMessageTimestamp today', () => {
     const today = new Date();
-    const result = getMessageTimestamp(today);
+    const result = getMessageTimestamp(today.toString());
     expect(result).toMatch(/^(\d{1,2}):(\d{2})(\s*[ap]m?)$/i);
   });
 });
