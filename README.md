@@ -15,28 +15,10 @@ NOTE: We use yarn because of the added security benefits as well as other featur
 
 ### Installing
 
-In order to ensure that you have the correct version of node installed use nvm to match our .nvmrc file. Our tests will not work with the latest version of node. We use the Node LTS (Long Term Support which is 8.11.2 as of the time of this writing) version. From withing the project directory run:
-
-```bash
-nvm install
+First install Forge https://in.thewardro.be/io/opennetwork/forge
+Then use Forge to install the ChOP-WebClient by running this command:
 ```
-
-Once installed you will need to tell nvm to use that version each time you open a new terminal in the cwc project.
-
-```bash
-nvm use
-```
-
-You can see what version you have with
-
-```
-nvm version
-```
-
-Run yarn to install the remaining node packages.
-
-```
-yarn
+cwc-install
 ```
 
 ## Local Development
