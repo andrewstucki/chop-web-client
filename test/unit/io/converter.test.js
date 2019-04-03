@@ -37,9 +37,9 @@ describe('Converter Tests', () => {
           text: 'Hello',
           messageTrayOpen: false,
           sender: {
-            id: '1234567',
+            id: 1234567,
             name: 'Jackie Chan',
-            avatarUrl: null,
+            avatar: null,
             pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
             role: {
               label: 'HOST',
@@ -66,7 +66,7 @@ describe('Converter Tests', () => {
         label: 'HOST',
         isVolunteer: true,
         isUser: true,
-        userId: '1234567',
+        userId: 1234567,
         organizationId: 2,
         organizationName: 'Life.Church',
         roomType: 'public',
@@ -119,7 +119,7 @@ describe('Converter Tests', () => {
           isVolunteer: true,
           isUser: true,
           isMuted: false,
-          userId: '1234567',
+          userId: 1234567,
           organizationId: 2,
           organizationName: 'Life.Church',
           roomType: 'public',
@@ -138,9 +138,9 @@ describe('Converter Tests', () => {
         isMuted: false,
         translations: [],
         sender: {
-          id: '1234567',
+          id: 1234567,
           name: 'Jackie Chan',
-          avatarUrl: '',
+          avatar: '',
           pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
           role: {
             label: 'HOST',

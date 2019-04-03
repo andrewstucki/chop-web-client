@@ -12,8 +12,9 @@ import { TextWrapper } from '../../src/moment/message/styles';
 Enzyme.configure({ adapter: new Adapter() });
 
 const otherUser = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '12345',
+  avatar: null,
   name: 'Billy Bob',
   role: {
     label: 'Host',
@@ -21,8 +22,9 @@ const otherUser = {
 };
 
 const user = {
-  id: '12345',
+  id: 12345,
   name: 'name',
+  avatar: null,
   pubnubToken: '123',
   role: {
     label: '',

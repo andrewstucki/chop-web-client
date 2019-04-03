@@ -1,12 +1,10 @@
 // @flow strict
 
-import type {UIDType} from '../cwc-types';
-
 
 type SharedUserType = {
-  id: UIDType | null,
+  id: number,
   name: string,
-  avatarUrl?: string | null,
+  avatar: ?string,
   pubnubToken: string,
   role: {
     label: string,

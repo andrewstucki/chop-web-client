@@ -79,12 +79,12 @@ describe('Direct Chat Tests', () => {
                   {
                     pubnubToken: 4321,
                     name: 'Fred',
-                    avatarUrl: null,
+                    avatar: null,
                   },
                   {
                     pubnubToken: 5432,
                     name: 'Barny',
-                    avatarUrl: null,
+                    avatar: null,
                   },
                 ],
               },

@@ -52,10 +52,10 @@ const currentPane = {
 };
 
 const currentUser = {
-  id: '134',
+  id: 134,
   pubnubToken: '12sd0fj230jsdf;',
   name: 'Kylo Ren',
-  avatarUrl: 'http://someimageons3.com/image/123',
+  avatar: 'http://someimageons3.com/image/123',
   role: {
     label: 'Supreme Leader of the First Order',
   },

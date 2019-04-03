@@ -12,7 +12,7 @@ type IconButtonPropsType = {
   keepFocus?: boolean,
   disabled?: boolean,
   hidden?: boolean,
-  id: string,
+  id?: string,
 };
 
 const IconButton = ({ children, size, onClick, background = 'none', keepFocus, disabled, hidden, id }:IconButtonPropsType) => (

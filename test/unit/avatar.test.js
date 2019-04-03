@@ -48,9 +48,9 @@ describe('Test Avatar', () => {
 
     store.dispatch(
       publishMessage('public', 'Hello, world.', {
-        id: '12345',
+        id: 12345,
         name: 'Shine',
-        avatarUrl: 'https://web-assets.life.church/assets/pages/kids/ec-icon-412a05a885c0a86bff7c5ac9abe1d703f9df9889b79c58e85debc32220cf7310.svg',
+        avatar: 'https://web-assets.life.church/assets/pages/kids/ec-icon-412a05a885c0a86bff7c5ac9abe1d703f9df9889b79c58e85debc32220cf7310.svg',
         pubnubToken: '123456',
         role: {
           label: 'host',
@@ -96,8 +96,9 @@ describe('Test Avatar', () => {
 
     store.dispatch(
       publishMessage('public', 'Hello, world.', {
-        id: '12345',
+        id: 12345,
         name: 'Shine',
+        avatar: null,
         pubnubToken: '123456',
         role: {
           label: 'host',

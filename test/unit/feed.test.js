@@ -54,17 +54,19 @@ import { setLanguage } from '../../src/languageSelector/dux';
 import { setPrimaryPane } from '../../src/pane/dux';
 
 const otherUser = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '12345',
+  avatar: null,
   name: 'Billy Bob',
   role: {
     label: '',
   },
 };
 const currentUser = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '09876',
   pubnubAccessKey: '67890',
+  avatar: null,
   name: 'Joan Jet',
   role: {
     label: '',
@@ -185,7 +187,7 @@ describe('Feed tests', () => {
     );
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
-    expect(result.channels.public.moments[0].sender.id).toEqual('12345');
+    expect(result.channels.public.moments[0].sender.id).toEqual(12345);
     expect(result.channels.public.moments[0].sender.name).toEqual('Joan Jet');
   });
 
@@ -1600,7 +1602,8 @@ describe('Feed tests', () => {
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
@@ -1614,7 +1617,16 @@ describe('Feed tests', () => {
           },
         },
       },
-      publishAcceptedPrayerRequest('123456', '12345')
+      publishAcceptedPrayerRequest(
+        '123456',
+        '12345',
+        {
+          id: 67890,
+          avatar: null,
+          pubnubToken: 1234,
+          name: 'Burglekutt',
+        },
+        false)
     );
     expect(result).toEqual(
       {
@@ -1630,11 +1642,13 @@ describe('Feed tests', () => {
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
                 active: false,
+                cancelled: false,
                 prayerChannel: '123456',
               },
             ],
@@ -1662,7 +1676,8 @@ describe('Feed tests', () => {
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
@@ -1692,7 +1707,8 @@ describe('Feed tests', () => {
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
@@ -1769,8 +1785,9 @@ describe('Feed tests', () => {
             anchorMoments: [],
             participants: [
               {
-                id: '12345',
+                id: 12345,
                 pubnubToken: currentUser.pubnubToken,
+                avatar: currentUser.avatar,
                 name: currentUser.name,
                 role: {
                   label: currentUser.role.label,
@@ -1986,7 +2003,7 @@ describe('VideoFeed tests', () => {
   test('set url', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       defaultState,
-      setVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Standard')
+      setVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'videoFeed')
     );
     expect(result).toEqual(
       {
@@ -1995,7 +2012,7 @@ describe('VideoFeed tests', () => {
         video: {
           ...defaultState.video,
           url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          type: 'Standard',
+          type: 'videoFeed',
         },
       }
     );

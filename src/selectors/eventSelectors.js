@@ -1,14 +1,12 @@
 import { createSelector } from 'reselect';
 
-const currentEventExists = state => (
-  !!state.event.id
-);
+const currentEventExists = state => !!state?.event?.id;
 
 const getSchedule = state => state.schedule;
 
 const isOffline = createSelector(
   currentEventExists,
-  result => !result
+  result => result === false
 );
 
 const getNextEventData = createSelector(

@@ -21,8 +21,8 @@ describe('Host Info tests', () => {
           ...defaultState,
           event: {
             title: 'Event',
-            id: 123,
-            eventTimeId: 0,
+            id: '123',
+            eventTimeId: '0',
             startTime: 0,
             hostInfo: '<p>The information for the hosts.</p>',
           },
@@ -46,7 +46,7 @@ describe('Host Info tests', () => {
           ...defaultState,
           schedule: [
             {
-              id: 1,
+              id: '1',
               startTime: 0,
               endTime: 0,
               title: 'Next Event',

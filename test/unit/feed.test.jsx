@@ -18,7 +18,8 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Feed tests', () => {
   const user = {
     pubnubToken: '12345',
-    id: '01928374',
+    id: 1928374,
+    avatar: null,
     pubnubAccessKey: '098765',
     name: 'Billy Bob',
     role: {

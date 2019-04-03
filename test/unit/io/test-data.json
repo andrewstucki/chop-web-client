@@ -1,7 +1,7 @@
 {
   "currentEvent": {
     "title": "Fake Event",
-    "id": 334494,
+    "id": "334494",
     "startTime": 1531864800,
     "endTime": 1531864900,
     "video": {
@@ -86,5 +86,25 @@
   },{
     "name": "Spanish",
     "code": "es"
-  }]
+  }],
+  "sequence": {
+    "serverTime": 1539966236,
+    "steps": [
+      {
+        "fetchTime": 1542289491,
+        "query": ["feed"],
+        "transitionTime": 1542289492
+      },
+      {
+        "fetchTime": 1542289493,
+        "query": ["event", "video"],
+        "transitionTime": 1542289494
+      },
+      {
+        "fetchTime": 1542289495,
+        "query": ["event", "video", "feed"],
+        "transitionTime": 1542289496
+      }
+    ]
+  }
 }
