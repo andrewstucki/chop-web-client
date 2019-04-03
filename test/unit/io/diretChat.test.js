@@ -14,13 +14,14 @@ const mock = (mockFn: any) => mockFn;
 
 describe('Test Direct Chat', () => {
   const mockDirectChat = mock(queries.directChat);
-  test('Mute user success', async () => {
+  test('Direct Chat user success', async () => {
     mockDate(1553266446136);
     const dispatched = [];
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-    }, directChat, {type: DIRECT_CHAT, otherUserPubnubToken: '12345', otherUserNickname: 'James T. Kirk'}).toPromise();
+    }, directChat,
+    {type: DIRECT_CHAT, otherUserPubnubToken: '12345', otherUserNickname: 'James T. Kirk'}).toPromise();
 
     expect(mockDirectChat).toBeCalledWith('12345', 'James T. Kirk');
     expect(dispatched).toEqual([
@@ -34,17 +35,17 @@ describe('Test Direct Chat', () => {
           moments: [],
           participants: [
             {
-              id: '',
-              avatarUrl: null,
+              id: '123',
+              avatar: null,
               name: 'Fred',
-              pubnubToken: 4321,
+              pubnubToken: '4321',
               role: { label: '' },
             },
             {
-              id: '',
-              avatarUrl: null,
+              id: '456',
+              avatar: null,
               name: 'Barny',
-              pubnubToken: 5432,
+              pubnubToken: '5432',
               role: { label: '' },
             },
           ],
@@ -65,7 +66,7 @@ describe('Test Direct Chat', () => {
     ]);
   });
 
-  test('Mute user failure', async () => {
+  test('Direct Chat user failure', async () => {
     mockDirectChat.mockImplementation(() => {
       throw new Error('Broken');
     });
@@ -73,7 +74,8 @@ describe('Test Direct Chat', () => {
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-    }, directChat, {type: DIRECT_CHAT, otherUserPubnubToken: '12345', otherUserNickname: 'James T. Kirk'}).toPromise();
+    }, directChat,
+    {type: DIRECT_CHAT, otherUserPubnubToken: '12345', otherUserNickname: 'James T. Kirk'}).toPromise();
 
     expect(mockDirectChat).toBeCalledWith('12345', 'James T. Kirk');
     expect(dispatched).toEqual([

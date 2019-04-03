@@ -2,9 +2,18 @@
 import { currentEvent } from '../../../src/io/sagas/currentEvent';
 import { runSaga } from 'redux-saga';
 import queries from '../../../src/io/queries';
-import {setEvent, setLanguageOptions, setOrganization, setPubnubKeys, setUser} from '../../../src/feed/dux';
+import {
+  setEvent,
+  setLanguageOptions,
+  setOrganization,
+  setPubnubKeys,
+  setUser,
+  setChannels,
+  setSchedule,
+} from '../../../src/feed/dux';
 import {avatarImageExists} from '../../../src/util';
 import { mockDate } from '../../testUtils';
+import {setVideo} from '../../../src/videoFeed/dux';
 
 jest.mock('../../../src/io/queries');
 jest.mock('../../../src/util');
@@ -23,8 +32,8 @@ describe('Current Event', () => {
           subscribeKey: 'abc',
         },
         currentUser: {
-          id: '1234',
-          nickname: 'John Jonson',
+          id: 1234,
+          name: 'John Jonson',
           avatar: 'http://image.avatar.gif',
           pubnubAccessKey: '0987',
           pubnubToken: '6543',
@@ -33,7 +42,7 @@ describe('Current Event', () => {
             permissions: [],
           },
         },
-        organization: {
+        currentOrganization: {
           id: 0,
           name: 'First Church of the World',
         },
@@ -43,8 +52,8 @@ describe('Current Event', () => {
         ],
         currentEvent: {
           title: 'John on John',
-          id: 888,
-          eventTime: { id: 123 },
+          id: '888',
+          eventTime: { id: '123' },
           startTime: 456,
           endTime: 789,
           videoStartTime: 100,
@@ -73,14 +82,72 @@ describe('Current Event', () => {
               },
             ],
           },
+          feeds: [
+            {
+              id: '111',
+              name: 'Public',
+              direct: false,
+              type: 'Public',
+              participants: [],
+            },
+            {
+              id: '222',
+              name: 'Direct',
+              direct: true,
+              type: 'Private',
+              participants: [
+                {
+                  id: 123,
+                  pubnubToken: '456',
+                  avatar: '',
+                  name: 'Joe',
+                },
+              ],
+            },
+          ],
+          video: {
+            url: 'https://www.youtube.com/watch?v=TD2XGwmRJi8',
+            type: 'simulated',
+          },
         },
+        schedule: [
+          {
+            endTime: 1553817500,
+            id: '129073',
+            scheduleTime: 1542290400,
+            startTime: 1553817500,
+            fetchTime: 1542289490,
+            title: 'Mastermind',
+            hostInfo: '',
+          },
+          {
+            endTime: 1542463200,
+            id: '129073',
+            scheduleTime: 1542376800,
+            startTime: 1553827500,
+            fetchTime: 1542375890,
+            title: 'Mastermind',
+            hostInfo: '',
+          },
+        ],
       }
     );
     mockAvatarImageExists.mockResolvedValue(true);
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-      getState: () => ({languageOptions: []}),
+      getState: () => (
+        {
+          feed: {
+            event: {
+              // because the event defined above doesn't get set
+              // in the context of the test we have to set it here
+              id: '888',
+            },
+            languageOptions: [],
+          },
+        }
+      ),
     },
     currentEvent).toPromise();
 
@@ -88,7 +155,7 @@ describe('Current Event', () => {
     expect(dispatched).toEqual([
       setPubnubKeys('xyz', 'abc'),
       setUser({
-        id: '1234',
+        id: 1234,
         name: 'John Jonson',
         avatar: 'http://image.avatar.gif',
         pubnubAccessKey: '0987',
@@ -109,8 +176,8 @@ describe('Current Event', () => {
       ]),
       setEvent(
         'John on John',
-        888,
-        123,
+        '888',
+        '123',
         456,
         789,
         100,
@@ -135,6 +202,64 @@ describe('Current Event', () => {
           ],
         },
       },
+      setChannels(
+        {
+          '111': {
+            id: '111',
+            name: 'Public',
+            direct: false,
+            type: 'Public',
+            participants: [],
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 0,
+            sawLastMomentAt: 1553807000000,
+          },
+          '222': {
+            id: '222',
+            name: 'Direct',
+            direct: true,
+            type: 'Private',
+            participants: [
+              {
+                id: 123,
+                pubnubToken: '456',
+                avatar: '',
+                name: 'Joe',
+                role: { label: '' },
+              },
+            ],
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 0,
+            sawLastMomentAt: 1553807000000,
+          },
+        }
+      ),
+      setVideo(
+        'https://www.youtube.com/watch?v=TD2XGwmRJi8',
+        'simulated'
+      ),
+      setSchedule([
+        {
+          endTime: 1553817500,
+          fetchTime: 1542289490,
+          id: '129073',
+          scheduleTime: 1542290400,
+          startTime: 1553817500,
+          title: 'Mastermind',
+          hostInfo: '',
+        },
+        {
+          endTime: 1542463200,
+          fetchTime: 1542375890,
+          id: '129073',
+          scheduleTime: 1542376800,
+          startTime: 1553827500,
+          title: 'Mastermind',
+          hostInfo: '',
+        },
+      ]),
     ]);
   });
 });

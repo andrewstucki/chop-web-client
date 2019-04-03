@@ -71,7 +71,7 @@ export type LegcayNewMessageDataType = {
   roomType: RoomType,
   timestamp: DateTimeAsStringType,
   uniqueMessageToken: UIDType,
-  userId: UIDType | null,
+  userId: number | null,
   translations?: TranslationListType,
 }
 
@@ -103,7 +103,7 @@ const Converter = {
       fromToken: message.sender.pubnubToken,
       msgId: message.id,
       timestamp: timestampToString(message.timestamp),
-      fromAvatar: typeof message.sender.avatarUrl === 'string' ? message.sender.avatarUrl : 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
+      fromAvatar: typeof message.sender.avatar === 'string' ? message.sender.avatar : 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
       isHost: true,
       label: message.sender.role.label,
       isVolunteer: true,
@@ -166,9 +166,9 @@ const Converter = {
       isMuted: !!message.isMuted,
       messageTrayOpen: false,
       sender: {
-        id: message.userId,
+        id: message.userId || 0,
         name: message.fromNickname,
-        avatarUrl: message.fromAvatar,
+        avatar: message.fromAvatar,
         pubnubToken: message.fromToken,
         role: {
           label: message.label ? message.label : '',
@@ -182,8 +182,9 @@ const Converter = {
 
     return receivePrayerRequestNotification(
       {
-        id: '12345',
+        id: 12345, // Legacy doesn't forward the user id
         name: message.data.fromNickname,
+        avatar: null,
         pubnubToken: message.data.fromToken,
         role: {
           label: '',

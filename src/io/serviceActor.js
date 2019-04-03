@@ -1,20 +1,11 @@
 // @Flow
 /* global IntervalID */
 import {
-  addChannel,
-  setSchedule,
   removeAuthentication,
-  setScheduleData, QUERY_CURRENT_EVENT,
+  setScheduleData,
 } from '../feed/dux';
-import { setVideo } from '../videoFeed/dux';
 import { addError } from '../errors/dux';
-import {
-  convertSubscribersToSharedUsers,
-  isEmpty,
-} from '../util';
 import graph, { GraphQl } from './queries';
-import { setPrimaryPane } from '../pane/dux';
-import { EVENT } from '../pane/content/event/dux';
 
 class ServiceActor {
   storeDispatch: (action: any) => void;
@@ -27,16 +18,6 @@ class ServiceActor {
     this.getStore = getStore;
     this.graph = graph;
   }
-
-  setCurrentState = async () =>
-    new Promise((resolve, reject) => {
-      this.graph.currentState().then(data => {
-        this.getInitialData(data);
-        resolve(data);
-      }).catch(error => {
-        reject(error);
-      });
-    });
 
   handleDataFetchErrors = (payload: any) => {
     const { errors } = payload.response;
@@ -138,87 +119,8 @@ class ServiceActor {
     }
   };
 
-  getInitialData = (payload: any) => {
-    if (payload === undefined || payload === null) {
-      return;
-    }
-    if (payload.eventAt || payload.currentEvent || payload.schedule) {
-      this.handleEvent(payload);
-    }
-  };
-
-  handleEvent = payload => {
-    if (payload.event) {
-      if (event.feeds) {
-        const { feeds:newChannels } = event;
-        const { channels:currentChannels } = this.getStore();
-
-        Object.keys(currentChannels).forEach(id => {
-          if (!newChannels.some(channel => channel.id === id)) {
-            this.storeDispatch(
-              {
-                type: 'REMOVE_CHANNEL',
-                channel: id,
-              }
-            );
-          }
-        });
-
-        newChannels.forEach(channel => {
-          if (!(channel.id in currentChannels)) {
-            const participants = convertSubscribersToSharedUsers(channel.subscribers);
-            this.storeDispatch(
-              addChannel(
-                channel.name,
-                channel.id,
-                channel.direct,
-                participants
-              )
-            );
-            if (channel.name === 'Public') {
-              this.storeDispatch(
-                setPrimaryPane(EVENT, channel.id)
-              );
-            }
-          }
-        });
-
-        const { video } = event;
-        if (video) {
-          this.storeDispatch(
-            setVideo(
-              video.url,
-              video.type,
-            )
-          );
-        }
-      }
-    }
-    const { schedule } = payload;
-    if (schedule) {
-      const isBetweenEvents = isEmpty(event.id) && isEmpty(this.getStore().event.id);
-      const updatedSchedule = schedule.filter(item =>
-        item.startTime * 1000 > Date.now());
-
-      this.storeDispatch(setSchedule(updatedSchedule));
-
-      if (isBetweenEvents) {
-        const [nextEvent] = schedule;
-        if (nextEvent) {
-          try {
-            this.graph.sequence(nextEvent.startTime).then(this.getInitialData, this.handleDataFetchErrors);
-          } catch (error) {
-            this.handleDataFetchErrors(error);
-          }
-        }
-      }
-    }
-  };
-
   dispatch = (action: any) => {
-    if (action && action.type === QUERY_CURRENT_EVENT) {
-      this.setCurrentState();
-    } else if (action && action.type === 'SET_SEQUENCE') {
+    if (action && action.type === 'SET_SEQUENCE') {
       this.startTimer();
     }
   }

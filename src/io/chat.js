@@ -8,6 +8,7 @@ import {
   addHereNow,
   loadHistory,
   setSalvations,
+  SET_CHANNELS,
 } from '../feed/dux';
 import type {
   FeedType,
@@ -246,23 +247,30 @@ class Chat {
   }
 
   setPubnubState () {
-    this.pubnub.setState(
-      {
-        channels: Object.keys(this.getState().channels),
-        state: {
-          available_help: true, // eslint-disable-line camelcase
-          available_prayer: true, // eslint-disable-line camelcase
-          avatarUrl: this.getState().currentUser.avatarUrl,
-          clientIp: '205.236.56.99',
-          country_name: 'United States', // eslint-disable-line camelcase
-          lat: 35.6500,
-          lon: -97.4214,
-          nickname: this.getState().currentUser.name,
-          userId: null,
-          language: this.getState().currentLanguage,
+    const { currentUser: { avatar, name }, currentLanguage: language, channels } = this.getState();
+    const channelList = Object.keys(channels);
+    if (channelList.length > 0) { // Don't set the state before channels have loaded
+      this.pubnub.setState(
+        {
+          channels: channelList,
+          state: {
+            available_help: true, // eslint-disable-line camelcase
+            available_prayer: true, // eslint-disable-line camelcase
+            avatar: avatar,
+            clientIp: '205.236.56.99',
+            country_name: 'United States', // eslint-disable-line camelcase
+            lat: 35.6500,
+            lon: -97.4214,
+            nickname: name,
+            userId: null,
+            language: language,
+          },
         },
-      }
-    );
+        (status, _response) => {
+          bugsnagClient.notify(`Pubnub Error with setState: message: ${status.message}, type: ${status.type}`);
+        }
+      );
+    }
   }
 
   onStatus (event: PubnubStatusEventType) {
@@ -654,6 +662,20 @@ class Chat {
     }
   }
 
+  addChannel = (channelId: string) => {
+    this.subscribe([channelId]);
+    this.pubnub.history({channel: channelId},
+      ((status, response) => {
+        if (!status?.error) {
+          this.loadHistory(response.messages, channelId);
+        } else {
+          bugsnagClient.notify(new Error('Pubnub History failed to load'), { metaData: status });
+        }
+      }).bind(this));
+
+    this.hereNow(channelId);
+  }
+
   dispatch (action: any) {
     if (!action || !action.type) {
       return;
@@ -680,28 +702,17 @@ class Chat {
       case 'SET_AVAILABLE_FOR_PRAYER':
         this.setPubnubState();
         return;
-      case 'ADD_CHANNEL': {
-        const { id } = action.channel;
-
-        this.subscribe([id]);
-        this.pubnub.history({channel: id},
-          ((status, response) => {
-            if (!status?.error) {
-              this.loadHistory(response.messages, id);
-            } else {
-              bugsnagClient.notify(new Error('Pubnub History failed to load'), { metaData: status });
-            }
-          }).bind(this));
-
-        this.hereNow(id);
-
+      case 'ADD_CHANNEL':
+        this.addChannel(action.channel.id);
         return;
-      }
       case 'PUBLISH_REACTION':
         this.publishReaction(action.reaction, getLegacyChannel(this.getState()));
         return;
       case 'REMOVE_CHANNEL':
         this.unsubscribe([action.channel]);
+        return;
+      case SET_CHANNELS:
+        Object.keys(action.channels).forEach(this.addChannel);
         return;
       case 'PUBLISH_DELETE_MESSAGE': {
         const currentChannel = getCurrentChannel(this.getState());

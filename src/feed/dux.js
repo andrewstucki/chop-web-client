@@ -138,7 +138,9 @@ const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 const QUERY_CURRENT_EVENT = 'QUERY_CURRENT_EVENT';
 const QUERY_CURRENT_EVENT_FAILED = 'QUERY_CURRENT_EVENT_FAILED';
+const QUERY_SCHEDULE_FAILED = 'QUERY_SCHEDULE_FAILED';
 const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
+const SET_CHANNELS = 'SET_CHANNELS';
 
 // Flow Type Definitions
 
@@ -148,13 +150,15 @@ type SetScheduleDataType = {
   data: any,
 };
 
-type ScheduleType = {
-  id: number,
+type ScheduleType = {|
+  id: string,
   startTime: number,
   endTime: number,
   title: string,
+  fetchTime: number,
+  scheduleTime: number,
   hostInfo: string,
-};
+|};
 
 type SetScheduleType = {
   type: 'SET_SCHEDULE',
@@ -163,8 +167,8 @@ type SetScheduleType = {
 
 type EventType = {
   title: string,
-  id: number,
-  eventTimeId: number,
+  id: string,
+  eventTimeId: string,
   startTime: number,
   endTime: number,
   description?: string,
@@ -173,10 +177,10 @@ type EventType = {
   hostInfo?: string,
 };
 
-type LanguageType = {
-  code: string,
+type LanguageType = {|
   name: string,
-};
+  code: string,
+|};
 
 type OrganizationType = {
   id: number,
@@ -193,15 +197,19 @@ type PubnubKeysType = {
   subscribe: string,
 };
 
+type Permission = {|
+  key: string,
+|};
+
 type PrivateUserType = {
-  id: string,
+  id: number,
   name: string,
-  avatarUrl?: string,
+  avatar: ?string,
   pubnubToken: string,
   pubnubAccessKey: string,
   role: {
     label: string,
-    permissions: Array<string>,
+    permissions: Array<Permission>,
   },
 };
 
@@ -308,6 +316,11 @@ type RemoveChannelType = {
   type: 'REMOVE_CHANNEL',
   channel: string,
 };
+
+type SetChannelsType = {
+  type: typeof SET_CHANNELS,
+  channels: ChannelsObjectType,
+}
 
 type TogglePopUpModalType = {
   type: 'TOGGLE_POP_UP_MODAL',
@@ -452,7 +465,8 @@ type FeedActionTypes =
   | RemoveTabType
   | SetKeyboardHeightType
   | ToggleNavMenuExpandedType
-  | SetChatFocusType;
+  | SetChatFocusType
+  | SetChannelsType;
 
 // Action Creators
 const queryCurrentEvent = (): QueryCurrentEventType => (
@@ -549,7 +563,7 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
   }
 );
 
-const setEvent = (title: string, id: number, eventTimeId:number, startTime: number, endTime: number, videoStartTime: number,
+const setEvent = (title: string, id: string, eventTimeId: string, startTime: number, endTime: number, videoStartTime: number,
   speaker: string, description: string, hostInfo: string): SetEventType => (
   {
     type: SET_EVENT,
@@ -606,6 +620,15 @@ const removeChannel = (channel: string): RemoveChannelType => (
   {
     type: REMOVE_CHANNEL,
     channel,
+  }
+);
+
+const setChannels = (
+  channels: ChannelsObjectType,
+): SetChannelsType => (
+  {
+    type: SET_CHANNELS,
+    channels,
   }
 );
 
@@ -675,8 +698,8 @@ const defaultState = {
     subscribe: '',
   },
   event: {
-    id: 0,
-    eventTimeId: 0,
+    id: '',
+    eventTimeId: '',
     startTime: 0,
     endTime: 0,
     title: '',
@@ -690,10 +713,11 @@ const defaultState = {
   channels: {},
   hereNow: {},
   currentUser: {
-    id: '',
+    id: 0,
     name: '',
     pubnubToken: '',
     pubnubAccessKey: '',
+    avatar: null,
     role: {
       label: '',
       permissions: [],
@@ -708,7 +732,7 @@ const defaultState = {
   isAuthenticated: false,
   isVideoPlaying: false,
   video: {
-    type: '',
+    type: 'none',
     url: '',
   },
   currentLanguage: getLanguage(),
@@ -987,6 +1011,11 @@ const reducer = (
         },
       };
     }
+    case SET_CHANNELS:
+      return {
+        ...state,
+        channels: action.channels,
+      };
     case LOAD_HISTORY:
       if (state.channels[action.channel]) {
         return {
@@ -1259,7 +1288,7 @@ const reducer = (
         ...state,
         currentUser: {
           ...state.currentUser,
-          avatarUrl: action.url,
+          avatar: action.url,
         },
       };
     case SET_CHAT_FOCUS:
@@ -1440,7 +1469,7 @@ const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
     id: state.currentUser.id,
     pubnubToken: state.currentUser.pubnubToken,
     name: state.currentUser.name,
-    avatarUrl: state.currentUser.avatarUrl,
+    avatar: state.currentUser.avatar,
     role: {
       label: state.currentUser.role.label,
     },
@@ -1464,7 +1493,9 @@ export {
   SET_AUTHENTICATION,
   QUERY_CURRENT_EVENT,
   QUERY_CURRENT_EVENT_FAILED,
+  QUERY_SCHEDULE_FAILED,
   TOKEN_AUTH_LOGIN_FAILED,
+  SET_CHANNELS,
 };
 export {
   addChannel,
@@ -1494,6 +1525,7 @@ export {
   setHereNow,
   addHereNow,
   queryCurrentEvent,
+  setChannels,
 };
 
 export type {

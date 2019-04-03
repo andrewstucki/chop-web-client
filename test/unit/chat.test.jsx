@@ -5,7 +5,8 @@ import { fireEvent } from 'react-testing-library';
 import { renderWithReduxAndTheme } from '../testUtils';
 
 const otherUser = {
-  id: '12345',
+  id: 12345,
+  avatar: null,
   pubnubToken: '12345',
   name: 'Billy Bob',
   role: {

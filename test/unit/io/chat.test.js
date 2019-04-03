@@ -30,8 +30,8 @@ describe('Chat2 Tests', () => {
       pubnubAccessKey: '1533912921585',
     },
     event: {
-      id: 320418,
-      eventTimeId: 1920834,
+      id: '320418',
+      eventTimeId: '1920834',
       startTime: 1529425800000,
       endTime: 1529425900000,
       title: 'When Pigs Fly - Week 2',
@@ -268,7 +268,7 @@ describe('Chat2 Tests', () => {
         state: {
           available_help: true, // eslint-disable-line camelcase
           available_prayer: true, // eslint-disable-line camelcase
-          avatarUrl: undefined,
+          avatar: null,
           clientIp: '205.236.56.99',
           country_name: 'United States', // eslint-disable-line camelcase
           lat: 35.6500,
@@ -277,7 +277,8 @@ describe('Chat2 Tests', () => {
           userId: null,
           language: 'en',
         },
-      }
+      },
+      expect.any(Function)
     );
   });
 
@@ -324,7 +325,7 @@ describe('Chat2 Tests', () => {
         state: {
           available_help: true, // eslint-disable-line camelcase
           available_prayer: true, // eslint-disable-line camelcase
-          avatarUrl: undefined,
+          avatar: null,
           clientIp: '205.236.56.99',
           country_name: 'United States', // eslint-disable-line camelcase
           lat: 35.6500,
@@ -333,7 +334,8 @@ describe('Chat2 Tests', () => {
           userId: null,
           language: 'en',
         },
-      }
+      },
+      expect.any(Function)
     );
   });
 });

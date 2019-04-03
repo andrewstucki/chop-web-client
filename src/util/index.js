@@ -1,14 +1,7 @@
 // @flow strict
-import type { SharedUserType } from '../users/dux';
 import createDOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
 import dayjs from 'dayjs';
-
-type SubscriberType = {
-  avatar: string,
-  nickname: string,
-  pubnubToken: string,
-};
 
 const getFirstInitial = (name: string): string => (
   name.charAt(0).toUpperCase()
@@ -68,24 +61,6 @@ const newTimestamp = () => Date.now();
 
 const getUTCDate = (date: Date = new Date()) => new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
 
-const convertSubscribersToSharedUsers = (subscribers: Array<SubscriberType>): Array<SharedUserType> => {
-  let users: Array<SharedUserType> = [];
-
-  if (subscribers && subscribers.length) {
-    users = subscribers.map((person: SubscriberType) => (
-      {
-        id: '',
-        avatarUrl: person.avatar,
-        name: person.nickname,
-        pubnubToken: person.pubnubToken,
-        role: { label: '' },
-      }
-    ));
-  }
-
-  return users;
-};
-
 const capitalizeFirstLetter = (string: string) =>
   (string.charAt(0).toUpperCase() + string.slice(1));
 
@@ -140,7 +115,6 @@ export {
   createUid,
   newTimestamp,
   avatarImageExists,
-  convertSubscribersToSharedUsers,
   capitalizeFirstLetter,
   isEmpty,
   sanitizeString,

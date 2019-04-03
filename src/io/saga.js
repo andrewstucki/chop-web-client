@@ -11,7 +11,7 @@ import {
   REMOVE_CHANNEL_FAILED,
   TOKEN_AUTH_LOGIN_FAILED,
   QUERY_CURRENT_EVENT,
-  QUERY_CURRENT_EVENT_FAILED,
+  QUERY_CURRENT_EVENT_FAILED, QUERY_SCHEDULE_FAILED,
 } from '../feed/dux';
 import {
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
@@ -53,7 +53,8 @@ function* rootSaga (): Saga<void> {
     takeEvery(REHYDRATE, authenticateByToken),
     takeEvery(TOKEN_AUTH_LOGIN_FAILED, handleDataFetchErrors),
     takeEvery(QUERY_CURRENT_EVENT, currentEvent),
-    takeEvery(QUERY_CURRENT_EVENT_FAILED, currentEvent),
+    takeEvery(QUERY_CURRENT_EVENT_FAILED, handleDataFetchErrors),
+    takeEvery(QUERY_SCHEDULE_FAILED, handleDataFetchErrors),
   ]);
 }
 

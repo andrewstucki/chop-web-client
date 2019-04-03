@@ -12,13 +12,15 @@
     "build:staging": "webpack --config config/webpack.staging.js",
     "build:production": "webpack --config config/webpack.prod.js",
     "start": "webpack-dev-server --open --config config/webpack.dev.js",
-    "server": "node ./node_modules/.bin/ez-s ./dist",
+    "server": "yarn http-server ./dist",
     "test": "jest",
-    "coverage": "yarn test --coverage",
+    "test:coverage": "yarn test --coverage",
     "flow": "flow",
+    "flow:coverage": "yarn flow-coverage-report",
+    "flow:search": "yarn flow-typed search",
+    "flow:install": "yarn flow-typed install",
     "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/ cypress/",
     "validate": "yarn test && yarn flow && yarn lint",
-    "test:full": "yarn test && yarn flow && yarn lint",
     "cy:open": "cypress open",
     "cy:verify": "cypress verify",
     "cy:run": "cypress run",
@@ -41,6 +43,14 @@
       "react-testing-library/cleanup-after-each",
       "react-hooks-testing-library/cleanup-after-each"
     ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 59,
+        "functions": 75,
+        "lines": 79,
+        "statements": 79
+      }
+    },
     "globals": {
       "ENV": "test",
       "GATEWAY_HOST": "https://staging.chopapi.com/graphql",
@@ -50,6 +60,19 @@
         "preview": "env-X"
       }
     }
+  },
+  "flow-coverage-report": {
+    "globIncludePatterns": [
+      "src/**/*.js",
+      "src/**/*.jsx",
+      "test/**/*.js",
+      "test/**/*.jsx"
+    ],
+    "threshold": 70,
+    "reportTypes": [
+      "text",
+      "html"
+    ]
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -90,6 +113,7 @@
     "git-revision-webpack-plugin": "^3.0.3",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "http-server": "^0.11.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.5.0",
     "jest-extended": "^0.11.1",
