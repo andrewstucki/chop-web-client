@@ -114,9 +114,6 @@ class Feed extends React.Component<FeedProps> {
     const { current } = this.wrapperRef;
     if (current) {
       current.addEventListener('scroll', this.detectScroll, { passive: true });
-      if (current.getBoundingClientRect().height === this.listRef.current.scrollHeight) {
-        this.saveScrollPosition();
-      }
     }
     this.scroll();
   }
