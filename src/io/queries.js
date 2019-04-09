@@ -254,10 +254,10 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $host
     id
     name
     direct
-    subscribers {
+    participants: subscribers {
       pubnubToken
       avatar
-      nickname
+      name: nickname
     }
   }
 }
@@ -281,10 +281,10 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
     id
     name
     direct
-    subscribers {
+    participants: subscribers {
       pubnubToken
       avatar
-      nickname
+      name: nickname
     }
   }
 }`;
