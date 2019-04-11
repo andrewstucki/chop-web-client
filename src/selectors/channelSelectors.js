@@ -132,11 +132,6 @@ const getCurrentTabType = createSelector(
   pane => pane?.content?.type || '',
 );
 
-const getCurrentChannelObj = createSelector(
-  [ getCurrentChannel, getChannels ],
-  (channelId, channels) => channels[channelId]
-);
-
 const feedAnchorMoments = createSelector(
   getChannelById,
   channel => channel && channel.anchorMoments ? channel.anchorMoments : []
@@ -175,15 +170,15 @@ const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => us
 const getLastAction = (state: FeedType) => state.lastAction;
 
 const getScroll = createSelector(
-  [ getCurrentChannelObj, getLastAction, getCurrentUser ],
-  (currentChannel, action, currentUser) => {
-    if (!currentChannel) {
+  [ getChannelById, getLastAction, getCurrentUser ],
+  (channel, action, currentUser) => {
+    if (!channel) {
       return {
         type: 'SCROLL_TO',
         position: 0,
       };
     }
-    const { moments, scrollPosition } = currentChannel;
+    const { moments, scrollPosition } = channel;
 
     switch (action.type) {
       case 'PUBLISH_MOMENT_TO_CHANNEL': {
