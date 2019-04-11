@@ -21,6 +21,7 @@ describe('Navbar tests', () => {
               hasActions: false,
               otherUsersNames: [],
               isDirect: false,
+              isPlaceholder: false,
               type: EVENT,
             },
             {
@@ -30,6 +31,7 @@ describe('Navbar tests', () => {
               hasActions: false,
               otherUsersNames: [],
               isDirect: false,
+              isPlaceholder: false,
               type: CHAT,
             },
           ]}
@@ -62,7 +64,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: EVENT,
             },
             {
@@ -71,7 +73,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: CHAT,
             },
           ]}
@@ -107,7 +109,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: true,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: EVENT,
             },
             {
@@ -116,7 +118,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: CHAT,
             },
           ]}
@@ -151,7 +153,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: EVENT,
             },
             {
@@ -160,7 +162,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: true,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: CHAT,
             },
           ]}
@@ -195,7 +197,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: EVENT,
             },
             {
@@ -204,7 +206,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: CHAT,
             },
             {
@@ -214,6 +216,7 @@ describe('Navbar tests', () => {
               hasActions: false,
               otherUsersNames: ['bob'],
               isDirect: true,
+              isPlaceholder: false,
               type: CHAT,
             },
           ]}
@@ -247,7 +250,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: EVENT,
             },
             {
@@ -256,7 +259,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               otherUsersNames: [],
-              isDirect: false,
+              isDirect: false, isPlaceholder: false,
               type: CHAT,
             },
             {
@@ -266,6 +269,7 @@ describe('Navbar tests', () => {
               hasActions: false,
               otherUsersNames: ['bob'],
               isDirect: true,
+              isPlaceholder: false,
               type: CHAT,
             },
             {
@@ -275,6 +279,7 @@ describe('Navbar tests', () => {
               hasActions: false,
               otherUsersNames: ['carl'],
               isDirect: true,
+              isPlaceholder: false,
               type: CHAT,
             },
           ]}

@@ -41,11 +41,16 @@ const renderPaneContent = (pane:PaneType, isMediumPlusUp:boolean) => {
 
 const Pane = ({ isMediumPlusUp, name, pane, navbarIndex, prevNavbarIndex, setPaneToChat, hostChannel }:PanePropsType) => {
   const direction = navbarIndex > prevNavbarIndex;
+  let animate = true;
+  if (pane.type === CHAT) {
+    ({ animate } = pane.content);
+  }
+
   const transitions = useTransition(pane, hash(pane), {
     from: { transform: direction ? 'translate3d(100%,0,0)' : 'translate3d(-100%,0,0)' },
     enter: { transform: direction ? 'translate3d(0,0,0)' : 'translate3d(0,0,0)' },
     leave: { transform: direction ? 'translate3d(-100%,0,0)' : 'translate3d(100%,0,0)' },
-    immediate: prevNavbarIndex === undefined,
+    immediate: (prevNavbarIndex === undefined || !!animate),
   });
 
   // Prevent two EVENT panes on Medium+

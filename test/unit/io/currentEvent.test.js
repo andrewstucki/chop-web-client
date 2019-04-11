@@ -208,6 +208,7 @@ describe('Current Event', () => {
             id: '111',
             name: 'Public',
             direct: false,
+            placeholder: false,
             type: 'Public',
             participants: [],
             moments: [],
@@ -219,6 +220,7 @@ describe('Current Event', () => {
             id: '222',
             name: 'Direct',
             direct: true,
+            placeholder: false,
             type: 'Private',
             participants: [
               {

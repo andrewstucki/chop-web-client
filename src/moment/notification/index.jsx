@@ -122,7 +122,7 @@ const leftChannelNotificationText = (
       <div>
         <strong>{name} </strong>has left the chat
       </div>
-      <div className={styles.timestamp}>{timestamp}</div>
+      <div className={styles.timestamp}>{timestamp.toString()}</div>
     </div>
   </div>
 );

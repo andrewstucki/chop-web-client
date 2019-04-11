@@ -26,8 +26,9 @@ type MessagePropsType = {
   publishDeleteMessage: (id: string) => void,
   muteUser: (channel: string, nickname: string) => void,
   publishMuteUserNotification: (host: string, guest: string, channel: string) => void,
-  directChat: (pubnubToken: string, nickname: string) => void,
+  addPlaceholderChannel: (otherUser: SharedUserType) => string,
   mutedNotificationBanner: (guestName: string) => void,
+  setPaneToChat: (channelId: string) => void,
 };
 
 const Message = (
@@ -46,7 +47,7 @@ const Message = (
     ...otherProps
   }: MessagePropsType
 ) => {
-  const { name: senderName, pubnubToken: senderToken, role: { label: senderLabel } = {} } = sender;
+  const { name: senderName, role: { label: senderLabel } = {} } = sender;
   const renderText = linkifyHtml(text, { target: '_blank' });
 
   const openMessageTray = () => otherProps.openMessageTray(currentChannel, messageId);
@@ -61,8 +62,9 @@ const Message = (
     otherProps.publishMuteUserNotification(currentUserName, senderName, hostChannel);
     closeMessageTray();
   };
-  const directChat = () => {
-    otherProps.directChat(senderToken, senderName);
+  const addPlaceholderChannel = () => {
+    const channelId = otherProps.addPlaceholderChannel(sender);
+    otherProps.setPaneToChat(channelId);
     closeMessageTray();
   };
 
@@ -108,7 +110,7 @@ const Message = (
             <MessageTray
               deleteMessage={deleteMessage}
               muteUser={muteUser}
-              directChat={directChat}
+              directChat={addPlaceholderChannel}
               closeTray={closeMessageTray}
             />
           </AnimatedMessageTray>

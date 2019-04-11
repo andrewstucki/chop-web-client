@@ -4,6 +4,7 @@ import {
   getPublicChannelObject as publicChannel,
   getHostChannelObject as hostChannel,
   getDirectChannels as directChannels,
+  getPlaceholderChannels as placeholderChannels,
 } from '../selectors/channelSelectors';
 import { createSelector } from 'reselect';
 import { paneContentSelector } from '../selectors/paneSelectors';
@@ -25,6 +26,7 @@ type NavbarItemType = {
   hasActions: boolean,
   otherUsersNames: Array<string>,
   isDirect: boolean,
+  isPlaceholder: boolean,
   type: typeof EVENT | typeof CHAT | typeof TAB,
   tabType?: TabTypeType,
 };
@@ -73,6 +75,7 @@ const createNavChannel = (channel, currentChannel, currentUser) => (
     hasActions: hasAction(channel),
     otherUsersNames: getOtherUserNames(channel, currentUser),
     isDirect: channel.direct,
+    isPlaceholder: channel.placeholder,
     type: channel.name === 'Public' ? EVENT : CHAT,
   }
 );
@@ -93,6 +96,14 @@ const getHostChannel = createSelector(
 
 const getDirectChannels = createSelector(
   directChannels,
+  getCurrentChannel,
+  getCurrentUser,
+  (channels, currentChannel, currentUser) =>
+    Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentUser))
+);
+
+const getPlaceholderChannels = createSelector(
+  placeholderChannels,
   getCurrentChannel,
   getCurrentUser,
   (channels, currentChannel, currentUser) =>
@@ -121,6 +132,7 @@ export {
   getHostChannel,
   getPublicChannel,
   getDirectChannels,
+  getPlaceholderChannels,
   getTabs,
   setNavbarIndex,
   SET_NAVBAR_INDEX,

@@ -109,7 +109,15 @@ const getDirectChannels = createSelector(
   getChannels,
   channels =>
     channels ?
-      channelFilter(channels, id => !channels[id].direct) :
+      channelFilter(channels, id => !channels[id].direct || channels[id].placeholder) :
+      []
+);
+
+const getPlaceholderChannels = createSelector(
+  getChannels,
+  channels =>
+    channels ?
+      channelFilter(channels, id => !channels[id].placeholder) :
       []
 );
 
@@ -244,6 +252,7 @@ export {
   getPublicChannel,
   getLegacyChannel,
   getDirectChannels,
+  getPlaceholderChannels,
   getCurrentChannel,
   feedContents,
   feedAnchorMoments,
