@@ -3,7 +3,9 @@
 import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
 import { UTC_DATE_FORMAT, getUTCDate } from '../util';
+import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import type { MessageType } from '../moment/message/dux';
 import type {
   UIDType,
@@ -16,6 +18,9 @@ import type {
   LanguageCodeType,
   RoomType,
 } from '../cwc-types';
+
+dayjs.extend(customParseFormat);
+dayjs.extend(utc);
 
 // Flow Type Definitions
 
@@ -80,10 +85,14 @@ export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMess
 let _getState;
 
 const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => (
-  dayjs(getUTCDate(new Date(inTimestamp))).format('YYYY-MM-DD HH:mm:ss +0000')
+  // $FlowFixMe
+  dayjs(inTimestamp).utc().format('YYYY-MM-DD HH:mm:ss +UTC')
 );
 
-const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => dayjs(inTimestamp).valueOf();
+const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => {
+  const updatedTimestamp = inTimestamp.replace('+UTC', '+0000');
+  return dayjs.utc(updatedTimestamp, 'YYYY-MM-DD HH:mm:ss +0000').local().valueOf();
+};
 
 const Converter = {
   config: (getState: () => any) => {

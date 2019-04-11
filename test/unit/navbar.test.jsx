@@ -19,6 +19,7 @@ describe('Navbar tests', () => {
               name: 'Public',
               isCurrent: true,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false,
               isPlaceholder: false,
@@ -29,6 +30,7 @@ describe('Navbar tests', () => {
               name: 'Host',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false,
               isPlaceholder: false,
@@ -63,6 +65,7 @@ describe('Navbar tests', () => {
               name: 'Public',
               isCurrent: true,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: EVENT,
@@ -72,6 +75,7 @@ describe('Navbar tests', () => {
               name: 'Host',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: CHAT,
@@ -108,6 +112,7 @@ describe('Navbar tests', () => {
               name: 'Public',
               isCurrent: false,
               hasActions: true,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: EVENT,
@@ -117,6 +122,7 @@ describe('Navbar tests', () => {
               name: 'Host',
               isCurrent: true,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: CHAT,
@@ -152,6 +158,7 @@ describe('Navbar tests', () => {
               name: 'Public',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: EVENT,
@@ -161,6 +168,7 @@ describe('Navbar tests', () => {
               name: 'Host',
               isCurrent: true,
               hasActions: true,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: CHAT,
@@ -196,6 +204,7 @@ describe('Navbar tests', () => {
               name: 'Public',
               isCurrent: true,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: EVENT,
@@ -205,6 +214,7 @@ describe('Navbar tests', () => {
               name: 'Host',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: CHAT,
@@ -214,6 +224,7 @@ describe('Navbar tests', () => {
               name: 'direct1',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: true,
               otherUsersNames: ['bob'],
               isDirect: true,
               isPlaceholder: false,
@@ -230,11 +241,13 @@ describe('Navbar tests', () => {
       );
     });
 
-    expect.assertions(2);
+    expect.assertions(3);
     if (container) {
       const { getByTestId } = container;
       expect(getByTestId('nav-direct1')).toBeTruthy();
       expect(getByTestId('nav-direct1').textContent).toEqual('B');
+      // $FlowFixMe
+      expect(getByTestId('nav-direct1').querySelector('span').className).toStartWith('styles__Pip');
     }
   });
 
@@ -249,6 +262,7 @@ describe('Navbar tests', () => {
               name: 'Public',
               isCurrent: true,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: EVENT,
@@ -258,6 +272,7 @@ describe('Navbar tests', () => {
               name: 'Host',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: [],
               isDirect: false, isPlaceholder: false,
               type: CHAT,
@@ -267,6 +282,7 @@ describe('Navbar tests', () => {
               name: 'direct1',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: ['bob'],
               isDirect: true,
               isPlaceholder: false,
@@ -277,6 +293,7 @@ describe('Navbar tests', () => {
               name: 'direct2',
               isCurrent: false,
               hasActions: false,
+              hasNewMessages: false,
               otherUsersNames: ['carl'],
               isDirect: true,
               isPlaceholder: false,

@@ -60,7 +60,7 @@ describe('Converter Tests', () => {
         fromNickname: 'Jackie Chan',
         fromToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
         msgId: '80299c76-b08f-4700-b660-df8691969042',
-        timestamp: '2019-01-22 16:19:55 +0000',
+        timestamp: '2019-01-22 16:19:55 +UTC',
         fromAvatar: 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
         isHost: true,
         label: 'HOST',

@@ -846,14 +846,33 @@ const reducer = (
     lastAction: { ...action},
   };
   switch (action.type) {
-    case SET_PANE_CONTENT:
-      return {
-        ...state,
-        panes: {
-          ...state.panes,
-          [action.name]: action.pane,
-        },
-      };
+    case SET_PANE_CONTENT: {
+      const currentChannel = getCurrentChannel(state);
+      if (currentChannel === 'event' || currentChannel === '') {
+        return {
+          ...state,
+          panes: {
+            ...state.panes,
+            [action.name]: action.pane,
+          },
+        };
+      } else {
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            [currentChannel]: {
+              ...state.channels[currentChannel],
+              sawLastMomentAt: new Date().getTime(),
+            },
+          },
+          panes: {
+            ...state.panes,
+            [action.name]: action.pane,
+          },
+        };
+      }
+    }
     case SET_HERE_NOW:
       return {
         ...state,

@@ -80,19 +80,16 @@ const sanitizeString = (string: string, config:Config = sanitizeConfig) =>
 ;
 
 const UTC_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss ZZ';
-const EPOCH_DATE_FORMAT = 'x';
 
 const getMessageTimestamp = (timestamp: string = dayjs().format(UTC_DATE_FORMAT)) => {
   const isEpoch = timestamp.toString().match(/^\d{10}$/);
-  let time = timestamp;
-
+  let date = timestamp;
   if (isEpoch) {
-    time = parseInt(time) * 1000;
+    date = dayjs.unix(date);
+  } else {
+    date = dayjs(date);
   }
-
-  const inputFormat = isEpoch ? EPOCH_DATE_FORMAT : UTC_DATE_FORMAT;
-  const date = dayjs(time, inputFormat);
-  const format = dayjs().diff(date, 'day') === 0 ? 'h:mma' : 'h:mma, MMMM D';
+  const format = dayjs().isSame(date, 'day') === true ? 'h:mma' : 'h:mma, MMMM D';
   return date.format(format);
 };
 
