@@ -57,6 +57,7 @@ describe('Test Accept Prayer', () => {
         type: ADD_CHANNEL,
         channel: {
           direct: true,
+          placeholder: false,
           id: '12345',
           name: 'Direct',
           anchorMoments: [],

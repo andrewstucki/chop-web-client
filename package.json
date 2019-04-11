@@ -161,7 +161,7 @@
     "react-dom": "16.8.5",
     "react-gtm-module": "^2.0.4",
     "react-player": "^1.9.3",
-    "react-redux": "^5.0.7",
+    "react-redux": "7.0.0-beta.0",
     "react-responsive": "^6.1.1",
     "react-router-dom": "^5.0.0",
     "react-spring": "^8.0.18",

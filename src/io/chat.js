@@ -12,7 +12,6 @@ import {
 } from '../feed/dux';
 import type {
   FeedType,
-  ChannelType,
 } from '../feed/dux';
 import type {
   ReactionType,
@@ -22,7 +21,6 @@ import type { MomentType } from '../moment/dux';
 import { receiveMoment } from '../moment/dux';
 import { receiveAcceptedPrayerRequest } from '../moment/actionableNotification/dux';
 import {
-  receiveJoinedChatNotification,
   receiveLeftChannelNotification,
   receiveMuteUserNotification,
   receivePrayerNotification,
@@ -40,7 +38,6 @@ import {
   getMutedUsers,
 } from '../selectors/channelSelectors';
 import { getMessageTimestamp } from '../util';
-import { getCurrentUser } from '../selectors/chatSelectors';
 import type {
   PubnubReciveMessageType,
   LegacyNewMessageType,
@@ -199,11 +196,7 @@ class Chat {
     // $FlowFixMe
     this.publishReaction = this.publishReaction.bind(this);
     // $FlowFixMe
-    this.publishLeaveChannel = this.publishLeaveChannel.bind(this);
-    // $FlowFixMe
     this.publishDeleteMessage = this.publishDeleteMessage.bind(this);
-    // $FlowFixMe
-    this.publishMuteUser = this.publishMuteUser.bind(this);
     // $FlowFixMe
     this.receivePollVote = this.receivePollVote.bind(this);
     // $FlowFixMe
@@ -349,9 +342,6 @@ class Chat {
 
   onPresence (event: PubnubPresenceEventType) {
     const { action, channel, uuid } = event;
-    const currentUser = getCurrentUser(this.getState());
-
-    const name = event?.state?.nickname === currentUser.name ? 'You' : event?.state?.nickname;
 
     switch (action) {
       case 'join':
@@ -377,10 +367,6 @@ class Chat {
           removeHereNow(channel, uuid)
         );
         break;
-    }
-
-    if (name === 'Direct') {
-      this.storeDispatch(receiveJoinedChatNotification(name, channel));
     }
   }
 
@@ -506,32 +492,6 @@ class Chat {
     );
   }
 
-  publishNewMessage (moment:MomentType, channel: ChannelType) {
-    this.publish(
-      {
-        channel: channel.id,
-        message: {
-          action: 'newMessage',
-          channel: channel.id,
-          data: Converter.cwcMessageToLegacyNewMessage(moment, channel.id),
-        },
-      }
-    );
-  }
-
-  publishSystemMessage (moment:MomentType, channelId: string) {
-    this.publish(
-      {
-        channel: channelId,
-        message: {
-          action: 'systemMessage',
-          channel: channelId,
-          data: Converter.cwcToLegacySystemMessage(moment),
-        },
-      }
-    );
-  }
-
   publishReaction (reaction: ReactionType, channelId: string) {
     this.publish(
       {
@@ -561,32 +521,6 @@ class Chat {
     this.pubnub.unsubscribe (
       {
         channels,
-      }
-    );
-  }
-
-  publishLeaveChannel (moment: MomentType, channelId: string) {
-    this.publish(
-      {
-        channel: channelId,
-        message: {
-          action: 'newMessage',
-          channel: channelId,
-          data: Converter.cwcToLegacyLeaveChannel(moment, channelId),
-        },
-      }
-    );
-  }
-
-  publishMuteUser (moment: MomentType, channelId: string) {
-    this.publish(
-      {
-        channel: channelId,
-        message: {
-          action: 'muteUser',
-          channel: channelId,
-          data: Converter.cwcToLegacyMuteUser(moment),
-        },
       }
     );
   }
@@ -681,18 +615,6 @@ class Chat {
       return;
     }
     switch (action.type) {
-      case 'PUBLISH_MOMENT_TO_CHANNEL':
-
-        if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'PRAYER') {
-          this.publishSystemMessage(action.moment, action.channel);
-        } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
-          this.publishLeaveChannel(action.moment, action.channel);
-        } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'MUTE') {
-          this.publishMuteUser(action.moment, action.channel);
-        } else {
-          this.publishNewMessage(action.moment, this.getState().channels[action.channel]);
-        }
-        return;
       case 'SET_USER':
       case 'SET_PUBNUB_KEYS':
         this.init();
@@ -703,7 +625,9 @@ class Chat {
         this.setPubnubState();
         return;
       case 'ADD_CHANNEL':
-        this.addChannel(action.channel.id);
+        if (!action.channel.placeholder) {
+          this.addChannel(action.channel.id);
+        }
         return;
       case 'PUBLISH_REACTION':
         this.publishReaction(action.reaction, getLegacyChannel(this.getState()));
@@ -724,3 +648,4 @@ class Chat {
 }
 
 export default Chat;
+export type { PubnubPublishMessageType };

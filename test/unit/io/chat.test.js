@@ -157,52 +157,6 @@ describe('Chat2 Tests', () => {
     );
   });
 
-  test('Publish Message', () => {
-    const message = {
-      type: 'MESSAGE',
-      id: '123456',
-      lang: 'en',
-      text: 'You kindness leads us to repentance to the heart of God',
-      sender: {
-        pubnubToken: '098765',
-        name: 'Hillsong Young & Free',
-        role: {
-          label: '',
-        },
-      },
-      messageTrayOpen: false,
-    };
-    const dispatch = jest.fn();
-    const getState = jest.fn();
-    getState.mockReturnValue(store);
-
-    const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars
-
-    chat.init();
-
-    chat.dispatch(
-      {
-        type: 'PUBLISH_MOMENT_TO_CHANNEL',
-        moment: message,
-        channel: '123456',
-      }
-    );
-
-    expect(mockPublish).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledWith(message, '123456');
-    expect(mockPublish.mock.calls[0][0]).toEqual(
-      {
-        channel: '123456',
-        message: {
-          action: 'newMessage',
-          channel: '123456',
-          data: message,
-        },
-      }
-    );
-  });
-
   test('Receive Message', () => {
     const message = {
       type: 'MESSAGE',

@@ -34,14 +34,14 @@ describe('PopUpModal tests', () => {
     const wrapper = Enzyme.shallow(
       <PopUpModal
         togglePopUpModal={() => {}}
-        leaveChat={() => {}}
-        removeChannel={() => {}}
+        leaveChannel={() => {}}
         currentChannel="direct"
         otherUser={otherUser}
         hasOtherUsers={true}
         currentUser={currentUser}
         isPopUpModalVisible={true}
         publishLeftChannelNotification={() => {}}
+        isPlaceholder={false}
       />
     );
     expect(wrapper.find('div').at(0).props().className).toEqual('popUpModal');
@@ -53,41 +53,40 @@ describe('PopUpModal tests', () => {
 
   test('Actions can be fired', () => {
     const togglePopUpModal = sinon.spy();
-    const leaveChat = sinon.spy();
     const publishLeftChannelNotification = sinon.spy();
-    const removeChannel = sinon.spy();
+    const leaveChannel = sinon.spy();
     const wrapper = Enzyme.shallow(
       <PopUpModal
         togglePopUpModal={togglePopUpModal}
-        leaveChat={leaveChat}
-        removeChannel={removeChannel}
+        leaveChannel={leaveChannel}
         currentChannel="direct"
         otherUser={otherUser}
         hasOtherUsers={true}
         currentUser={currentUser}
         isPopUpModalVisible={true}
         publishLeftChannelNotification={publishLeftChannelNotification}
+        isPlaceholder={false}
       />
     );
     expect(wrapper.find('button').at(0).simulate('click'));
     expect(wrapper.find('button').at(1).simulate('click'));
     expect(togglePopUpModal.calledTwice).toEqual(true);
     expect(publishLeftChannelNotification.calledOnce).toEqual(true);
-    expect(removeChannel.calledOnce).toEqual(true);
+    expect(leaveChannel.calledOnce).toEqual(true);
   });
 
   test('Modal does not render if visible is set to false', () => {
     const wrapper = Enzyme.shallow(
       <PopUpModal
         togglePopUpModal={() => {}}
-        leaveChat={() => {}}
-        removeChannel={() => {}}
+        leaveChannel={() => {}}
         currentChannel="direct"
         otherUser={otherUser}
         hasOtherUsers={true}
         currentUser={currentUser}
         isPopUpModalVisible={false}
         publishLeftChannelNotification={() => {}}
+        isPlaceholder={false}
       />
     );
     expect(wrapper.find('div').exists()).toEqual(false);

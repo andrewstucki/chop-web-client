@@ -34,6 +34,7 @@ const convertChannel = (channels: Array<GraphQLChannelType>): ChannelsObjectType
       anchorMoments: [],
       scrollPosition: 0,
       sawLastMomentAt: Date.now(),
+      placeholder: false,
     };
   });
   return channelsObj;

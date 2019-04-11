@@ -16,6 +16,7 @@ import type {
 } from '../pane/content/tab/dux';
 
 import type {
+  AddMomentToChannelType,
   MomentType,
 } from '../moment/dux';
 
@@ -105,13 +106,16 @@ import {
 } from '../navbar/dux';
 import type { SharedUserType } from '../users/dux';
 
+import { createUid } from '../util';
+import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
+
 
 // Action Types
 
 const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
-const REMOVE_CHANNEL_SUCCEEDED = 'REMOVE_CHANNEL_SUCCEEDED';
-const REMOVE_CHANNEL_FAILED = 'REMOVE_CHANNEL_FAILED';
+const LEAVE_CHANNEL_SUCCEEDED = 'LEAVE_CHANNEL_SUCCEEDED';
+const LEAVE_CHANNEL_FAILED = 'LEAVE_CHANNEL_FAILED';
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const REMOVE_REACTION = 'REMOVE_REACTION';
@@ -232,8 +236,9 @@ type ChannelType = {
   id: string,
   name: string,
   direct: boolean,
+  placeholder: boolean,
   moments: Array<MomentType>,
-  participants?: Array<SharedUserType>,
+  participants: Array<SharedUserType>,
   anchorMoments: Array<AnchorMomentType>,
   scrollPosition: number,
   sawLastMomentAt: DateTimeType,
@@ -328,7 +333,6 @@ type TogglePopUpModalType = {
 
 type LeaveChannelType = {
   type: 'LEAVE_CHANNEL',
-  pubnubToken: string,
   channel: string,
 };
 
@@ -466,7 +470,8 @@ type FeedActionTypes =
   | SetKeyboardHeightType
   | ToggleNavMenuExpandedType
   | SetChatFocusType
-  | SetChannelsType;
+  | SetChannelsType
+  | AddMomentToChannelType;
 
 // Action Creators
 const queryCurrentEvent = (): QueryCurrentEventType => (
@@ -599,7 +604,8 @@ const addChannel = (
   name: string,
   id: string,
   direct: boolean,
-  participants?: Array<SharedUserType>
+  participants?: Array<SharedUserType> = [],
+  placeholder?: boolean = false,
 ): AddChannelType => (
   {
     type: ADD_CHANNEL,
@@ -607,8 +613,28 @@ const addChannel = (
       id,
       name,
       direct,
+      placeholder,
       moments: [],
       participants,
+      anchorMoments: [],
+      scrollPosition: 0,
+      sawLastMomentAt: Date.now(),
+    },
+  }
+);
+
+const addPlaceholderChannel = (
+  otherUser:SharedUserType
+): AddChannelType => (
+  {
+    type: ADD_CHANNEL,
+    channel: {
+      id: createUid(),
+      name: 'Direct',
+      direct: true,
+      placeholder: true,
+      moments: [],
+      participants: [otherUser],
       anchorMoments: [],
       scrollPosition: 0,
       sawLastMomentAt: Date.now(),
@@ -638,10 +664,9 @@ const togglePopUpModal = (): TogglePopUpModalType => (
   }
 );
 
-const leaveChannel = (pubnubToken: string, channel: string): LeaveChannelType => (
+const leaveChannel = (channel: string): LeaveChannelType => (
   {
     type: LEAVE_CHANNEL,
-    pubnubToken,
     channel,
   }
 );
@@ -966,6 +991,7 @@ const reducer = (
           [action.channel.id]: action.channel,
         },
       };
+    case LEAVE_CHANNEL:
     case REMOVE_CHANNEL: {
       const { channel: deletedChannelId } = action;
       const { [deletedChannelId]: _channel, ...updatedChannels } = state.channels;
@@ -1152,6 +1178,7 @@ const reducer = (
         },
       };
     }
+    case ADD_MOMENT_TO_CHANNEL:
     case PUBLISH_MOMENT_TO_CHANNEL: {
       // $FlowFixMe
       if (action.moment.type === MESSAGE) {
@@ -1240,48 +1267,6 @@ const reducer = (
         ...state,
         isPopUpModalVisible: !state.isPopUpModalVisible,
       };
-    }
-    case LEAVE_CHANNEL: {
-      const currentChannel = getCurrentChannel(state);
-      if (currentChannel) {
-        const {channels} = state;
-        const {pubnubToken} = action;
-        const publicChannel = getPublicChannel(state);
-        if (currentChannel &&
-        channels[currentChannel].participants &&
-        channels[currentChannel].participants.length
-        ) {
-          const {participants} = channels[currentChannel];
-          const userIndex = participants.findIndex(el => (
-            el.pubnubToken === pubnubToken
-          ));
-          if (participants) {
-            return {
-              ...state,
-              channels: {
-                ...channels,
-                [currentChannel]: {
-                  ...channels[currentChannel],
-                  participants: [
-                    ...participants.slice(0, userIndex),
-                    ...participants.slice(userIndex + 1),
-                  ],
-                },
-              },
-              panes: {
-                ...state.panes,
-                primary: {
-                  type: EVENT,
-                  content: {
-                    channelId: publicChannel,
-                  },
-                },
-              },
-            };
-          }
-        }
-      }
-      return state;
     }
     case 'SET_AVATAR':
       return {
@@ -1488,8 +1473,8 @@ export {
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   SET_NOTIFICATION_BANNER,
-  REMOVE_CHANNEL_SUCCEEDED,
-  REMOVE_CHANNEL_FAILED,
+  LEAVE_CHANNEL_SUCCEEDED,
+  LEAVE_CHANNEL_FAILED,
   SET_AUTHENTICATION,
   QUERY_CURRENT_EVENT,
   QUERY_CURRENT_EVENT_FAILED,
@@ -1498,9 +1483,10 @@ export {
   SET_CHANNELS,
 };
 export {
+  defaultState,
   addChannel,
   removeChannel,
-  defaultState,
+  addPlaceholderChannel,
   togglePopUpModal,
   leaveChannel,
   getCurrentUserAsSharedUser,
@@ -1544,6 +1530,7 @@ export type {
   ClientInfoType,
   ChannelsObjectType,
   QueryCurrentEventType,
+  SetUser,
 };
 
 export default reducer;

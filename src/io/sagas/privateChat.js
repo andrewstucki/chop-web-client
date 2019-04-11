@@ -1,17 +1,17 @@
 // @flow
-import type {RemoveChannelType} from '../../feed/dux';
-import type {Saga} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import type { LeaveChannelType } from '../../feed/dux';
+import type { Saga } from 'redux-saga';
+import { call, put, select } from 'redux-saga/effects';
 import queries from '../queries';
 import type { GraphQLParticipantsType } from '../queries';
-import {addChannel, REMOVE_CHANNEL_FAILED, REMOVE_CHANNEL_SUCCEEDED} from '../../feed/dux';
+import { addChannel, LEAVE_CHANNEL_FAILED, LEAVE_CHANNEL_SUCCEEDED } from '../../feed/dux';
 import bugsnagClient from '../../util/bugsnag';
-import type {PublishAcceptedPrayerRequestType, PublishDirectChatType} from '../../moment';
-import {setPrimaryPane} from '../../pane/dux';
-import {CHAT} from '../../pane/content/chat/dux';
-import {DIRECT_CHAT_FAILED, PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED} from '../../moment';
-import {getAvailableForPrayer} from '../../selectors/hereNowSelector';
-import type {SharedUserType} from '../../users/dux';
+import type { PublishAcceptedPrayerRequestType, PublishDirectChatType } from '../../moment';
+import { setPrimaryPane } from '../../pane/dux';
+import { CHAT } from '../../pane/content/chat/dux';
+import { DIRECT_CHAT_FAILED, PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED } from '../../moment';
+import { getAvailableForPrayer } from '../../selectors/hereNowSelector';
+import type { SharedUserType } from '../../users/dux';
 
 export const convertUser = (user: GraphQLParticipantsType):SharedUserType => {
   if (user.pubnubToken === null || user.name === null) {
@@ -28,17 +28,17 @@ export const convertUser = (user: GraphQLParticipantsType):SharedUserType => {
   };
 };
 
-function* removeChannel (action: RemoveChannelType): Saga<void> {
+function* leaveChannel (action: LeaveChannelType): Saga<void> {
   try {
     const result = yield call([queries, queries.leaveChannel], action.channel);
     if (result.leaveFeed) {
-      yield put({type: REMOVE_CHANNEL_SUCCEEDED});
+      yield put({type: LEAVE_CHANNEL_SUCCEEDED});
     } else {
-      yield put({type: REMOVE_CHANNEL_FAILED, error: 'Server returned false for leaveFeed'});
+      yield put({type: LEAVE_CHANNEL_FAILED, error: 'Server returned false for leaveFeed'});
       bugsnagClient.notify(new Error('Server returned false for leaveFeed'));
     }
   } catch (error) {
-    yield put({type: REMOVE_CHANNEL_FAILED, error: error.message});
+    yield put({type: LEAVE_CHANNEL_FAILED, error: error.message});
     bugsnagClient.notify(error);
   }
 }
@@ -49,6 +49,7 @@ function* directChat (action: PublishDirectChatType): Saga<void> {
     const { name, id, direct, participants } = result.createDirectFeed;
     yield put(addChannel(name, id, direct, participants.map(convertUser)));
     yield put(setPrimaryPane(CHAT, id));
+    return id;
   } catch (error) {
     yield put({type: DIRECT_CHAT_FAILED, error: error.message});
     bugsnagClient.notify(error);
@@ -71,7 +72,7 @@ function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType
 }
 
 export {
-  removeChannel,
+  leaveChannel,
   directChat,
   publishAcceptedPrayerRequest,
 };

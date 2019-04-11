@@ -53,7 +53,8 @@ describe('Message', () => {
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
-        directChat={() => {}}
+        addPlaceholderChannel={() => ''}
+        setPaneToChat={() => {}}
         publishMuteUserNotification={() => {}}
         mutedNotificationBanner={() => {}}
         hostChannel='host'
@@ -84,7 +85,8 @@ describe('Message', () => {
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
-        directChat={() => {}}
+        addPlaceholderChannel={() => ''}
+        setPaneToChat={() => {}}
         publishMuteUserNotification={() => {}}
         mutedNotificationBanner={() => {}}
         hostChannel='host'
@@ -116,7 +118,8 @@ describe('Message', () => {
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
-        directChat={() => {}}
+        addPlaceholderChannel={() => ''}
+        setPaneToChat={() => {}}
         publishMuteUserNotification={() => {}}
         mutedNotificationBanner={() => {}}
         hostChannel='host'

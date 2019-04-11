@@ -4,18 +4,20 @@ import NavMenu from './navMenu';
 import {setPaneToChat} from '../pane/content/chat/dux';
 import {setPaneToTab} from '../pane/content/tab/dux';
 import {setPaneToEvent} from '../pane/content/event/dux';
-import {getDirectChannels, getHostChannel, getPublicChannel, getTabs} from '../navbar/dux';
+import { getDirectChannels, getHostChannel, getPlaceholderChannels, getPublicChannel, getTabs } from '../navbar/dux';
 import {openMenu} from '../sideMenu/dux';
 import { toggleNavMenuExpanded, isNavMenuExpanded } from './dux';
 import { getCurrentTabType } from '../selectors/channelSelectors';
 
 const mapStateToProps = state => {
   const feedState = state.feed;
+  const placeholderChannels = getPlaceholderChannels(feedState);
+  const directChannels = getDirectChannels(feedState);
   return {
     organizationName: feedState.organization.name,
     publicChannel: getPublicChannel(feedState),
     hostChannel: getHostChannel(feedState),
-    directChannels: getDirectChannels(feedState),
+    directChannels: [...directChannels, ...placeholderChannels],
     currentTabType: getCurrentTabType(feedState),
     tabs: getTabs(feedState),
     expanded: isNavMenuExpanded(feedState),

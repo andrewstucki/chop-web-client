@@ -29,6 +29,7 @@ describe('Test Direct Chat', () => {
         type: ADD_CHANNEL,
         channel: {
           direct: true,
+          placeholder: false,
           id: '67890',
           name: null,
           anchorMoments: [],

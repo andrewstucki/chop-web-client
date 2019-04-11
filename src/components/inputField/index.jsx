@@ -12,9 +12,10 @@ type InputFieldProps = {
   onBlur?: (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   value?: string,
   placeholder?: string,
+  autoComplete?: string,
 };
 
-const InputField = React.forwardRef(({ type, label, name, onChange, onFocus, onBlur, value, placeholder }: InputFieldProps, ref) => {
+const InputField = React.forwardRef(({ type, label, name, onChange, onFocus, onBlur, value, placeholder, autoComplete }: InputFieldProps, ref) => {
   const inputRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
@@ -37,6 +38,7 @@ const InputField = React.forwardRef(({ type, label, name, onChange, onFocus, onB
         value={value}
         placeholder={placeholder}
         data-testid={name}
+        autoComplete={autoComplete}
       />
     </Wrapper>
   );
