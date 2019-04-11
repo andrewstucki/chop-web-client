@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import {
   feedAnchorMoments,
   hasNotSeenLatestMoments,
-  getScroll, feedContents,
+  getScroll,
+  feedContents,
 } from '../selectors/channelSelectors';
 
 import {
@@ -14,7 +15,6 @@ import { isAndroid } from '../util';
 
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
-  const cacheState = state.cache;
   const { channel } = ownProps;
   const numOfMoments = isAndroid() ? -30 : -200;
 
@@ -22,7 +22,7 @@ const mapStateToProps = (state, ownProps) => {
     moments: feedContents(feedState, channel).slice(numOfMoments),
     anchorMoments: feedAnchorMoments(feedState, channel),
     currentChannel: channel,
-    scroll: getScroll(feedState, cacheState),
+    scroll: getScroll(feedState, channel),
     currentUser: feedState.currentUser,
     showNewMessageButton: hasNotSeenLatestMoments(feedState, channel),
   };
