@@ -130,7 +130,7 @@ const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItem
       data-direct={item.isDirect}
       isCurrent={item.isCurrent}
     >
-      { item.hasActions && <Pip /> }
+      { (item.hasActions || item.hasNewMessages) && <Pip hasActions={item.hasActions}/> }
       { }
       { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : item.name }
     </NavbarItemWrapper>

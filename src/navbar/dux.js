@@ -24,6 +24,7 @@ type NavbarItemType = {
   id: string,
   isCurrent: boolean,
   hasActions: boolean,
+  hasNewMessages: boolean,
   otherUsersNames: Array<string>,
   isDirect: boolean,
   isPlaceholder: boolean,
@@ -65,6 +66,14 @@ const hasAction = channel => channel && channel.moments && channel.moments.filte
     moment.active === true)).length > 0
   : undefined;
 
+const hasNewMessage = (channel, currentUser) => {
+  if (channel && channel.sawLastMomentAt !== undefined) {
+    return channel.moments.some(moment => moment.timestamp > channel.sawLastMomentAt && moment.sender.id !== currentUser.id);
+  } else {
+    return false;
+  }
+};
+
 const getCurrentUser = state => state.currentUser;
 
 const createNavChannel = (channel, currentChannel, currentUser) => (
@@ -73,6 +82,7 @@ const createNavChannel = (channel, currentChannel, currentUser) => (
     id: channel.id,
     isCurrent: currentChannel === channel.id,
     hasActions: hasAction(channel),
+    hasNewMessages: currentChannel === channel.id ? false : hasNewMessage(channel, currentUser),
     otherUsersNames: getOtherUserNames(channel, currentUser),
     isDirect: channel.direct,
     isPlaceholder: channel.placeholder,
@@ -119,6 +129,7 @@ const getTabs = createSelector(
       id: tab.id,
       isCurrent: currentPane.type === TAB && currentPane.content.type === tab.type,
       hasActions: false,
+      hasNewMessages: false,
       otherUsersNames: [],
       isDirect: false,
       type: TAB,

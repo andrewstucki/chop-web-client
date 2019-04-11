@@ -54,7 +54,7 @@ const Pip = styled.span`
   height:8px;
   width:8px;
   border-radius: 50%;
-  background-color: ${theme.colors.primary};
+  background-color: ${props => props.hasActions ? theme.colors.primary : theme.colors.gray50};
   position: absolute;
   top: 6px;
   right: 3px;
