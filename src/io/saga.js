@@ -13,6 +13,7 @@ import {
   QUERY_CURRENT_EVENT,
   QUERY_CURRENT_EVENT_FAILED,
   QUERY_SCHEDULE_FAILED,
+  JOIN_CHANNEL,
 } from '../feed/dux';
 import {
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
@@ -33,6 +34,7 @@ import {
   leaveChannel,
   directChat,
   publishAcceptedPrayerRequest,
+  joinChannel,
 } from './sagas/privateChat';
 import {
   muteUser,
@@ -66,6 +68,7 @@ function* rootSaga (): Saga<void> {
     takeEvery(PUBLISH_MOMENT_TO_CHANNEL, publishMomentToChannel),
     takeEvery(PUBNUB_PUBLISH_FAILED, handlePubnubErrors),
     takeLeading('*', setPubnubClient),
+    takeEvery(JOIN_CHANNEL, joinChannel),
   ]);
 }
 
@@ -78,4 +81,5 @@ export {
   authenticateByToken,
   rootSaga,
   publishMomentToChannel,
+  joinChannel,
 };
