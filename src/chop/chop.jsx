@@ -10,9 +10,10 @@ import { Wrapper } from './styles';
 type ChopContainerProps = {
   organization: string,
   authenticated: boolean,
+  hasVideo: boolean,
 };
 
-const ChopContainer = ({organization, authenticated}: ChopContainerProps) => {
+const ChopContainer = ({organization, authenticated, hasVideo }: ChopContainerProps) => {
   document.title = `Live ${organization}`;
 
   if (authenticated) {
@@ -22,10 +23,10 @@ const ChopContainer = ({organization, authenticated}: ChopContainerProps) => {
           <SmallLayout />
         </Small>
         <Medium>
-          <MediumLayout />
+          <MediumLayout hasVideo={hasVideo} />
         </Medium>
         <MediumPlusUp>
-          <MediumPlusLayout />
+          <MediumPlusLayout hasVideo={hasVideo} />
         </MediumPlusUp>
       </Wrapper>
     );
