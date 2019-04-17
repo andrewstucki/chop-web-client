@@ -145,6 +145,8 @@ const QUERY_CURRENT_EVENT_FAILED = 'QUERY_CURRENT_EVENT_FAILED';
 const QUERY_SCHEDULE_FAILED = 'QUERY_SCHEDULE_FAILED';
 const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
 const SET_CHANNELS = 'SET_CHANNELS';
+const JOIN_CHANNEL = 'JOIN_CHANNEL';
+const JOIN_CHANNEL_FAILED = 'JOIN_CHANNEL_FAILED';
 
 // Flow Type Definitions
 
@@ -428,6 +430,13 @@ type SetSawLastMomentAt = {
   channelId: ChannelIdType,
 };
 
+type JoinChannelType = {
+  type: typeof JOIN_CHANNEL,
+  channel: string,
+  requesterPubnubToken: string,
+  requesterNickname: string,
+};
+
 type FeedActionTypes =
   | ReceiveMomentType
   | AddChannelType
@@ -661,6 +670,15 @@ const setChannels = (
 const togglePopUpModal = (): TogglePopUpModalType => (
   {
     type: TOGGLE_POP_UP_MODAL,
+  }
+);
+
+const joinChannel = (channel: string, requesterPubnubToken: string, requesterNickname: string):JoinChannelType => (
+  {
+    type: JOIN_CHANNEL,
+    channel,
+    requesterPubnubToken,
+    requesterNickname,
   }
 );
 
@@ -1500,11 +1518,14 @@ export {
   QUERY_SCHEDULE_FAILED,
   TOKEN_AUTH_LOGIN_FAILED,
   SET_CHANNELS,
+  JOIN_CHANNEL,
+  JOIN_CHANNEL_FAILED,
 };
 export {
   defaultState,
   addChannel,
   removeChannel,
+  joinChannel,
   addPlaceholderChannel,
   togglePopUpModal,
   leaveChannel,
@@ -1550,6 +1571,7 @@ export type {
   ChannelsObjectType,
   QueryCurrentEventType,
   SetUser,
+  JoinChannelType,
 };
 
 export default reducer;

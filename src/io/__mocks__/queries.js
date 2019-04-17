@@ -58,6 +58,31 @@ const directChat = jest.fn().mockResolvedValue(
     },
   }
 );
+
+const joinChannel = jest.fn().mockResolvedValue(
+  {
+    joinFeed: {
+      direct: true,
+      id: '67890',
+      name: null,
+      participants: [
+        {
+          id: '123',
+          pubnubToken: '4321',
+          name: 'Kilo',
+          avatar: null,
+        },
+        {
+          id: '456',
+          pubnubToken: '5432',
+          name: 'Darth',
+          avatar: null,
+        },
+      ],
+    },
+  }
+);
+
 const eventAtTime = jest.fn();
 const getSchedule = jest.fn();
 const sequence = jest.fn().mockResolvedValue(
@@ -98,6 +123,7 @@ const mockQueries = {
   eventAtTime: eventAtTime,
   schedule: getSchedule,
   sequence: sequence,
+  joinChannel: joinChannel,
 };
 
 export {
@@ -111,5 +137,6 @@ export {
   getSchedule,
   sequence,
   setAccessToken,
+  joinChannel,
 };
 export default mockQueries;

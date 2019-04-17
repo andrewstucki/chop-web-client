@@ -1,10 +1,10 @@
 // @flow
-import type { LeaveChannelType } from '../../feed/dux';
+import type { LeaveChannelType, JoinChannelType } from '../../feed/dux';
 import type { Saga } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import queries from '../queries';
 import type { GraphQLParticipantsType } from '../queries';
-import { addChannel, LEAVE_CHANNEL_FAILED, LEAVE_CHANNEL_SUCCEEDED } from '../../feed/dux';
+import { addChannel, LEAVE_CHANNEL_FAILED, LEAVE_CHANNEL_SUCCEEDED, JOIN_CHANNEL_FAILED } from '../../feed/dux';
 import bugsnagClient from '../../util/bugsnag';
 import type { PublishAcceptedPrayerRequestType, PublishDirectChatType } from '../../moment';
 import { setPrimaryPane } from '../../pane/dux';
@@ -71,8 +71,21 @@ function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType
   }
 }
 
+function* joinChannel (action: JoinChannelType): Saga<void> {
+  try {
+    const { channel, requesterPubnubToken, requesterNickname } = action;
+    const result = yield call([queries, queries.joinChannel], channel, requesterPubnubToken, requesterNickname);
+    const { name: channelName, id, direct, participants } = result.joinFeed;
+    yield put(addChannel(channelName, id, direct, participants.map(convertUser)));
+  } catch (error) {
+    yield put({type: JOIN_CHANNEL_FAILED, error: error.message});
+    bugsnagClient.notify(error);
+  }
+}
+
 export {
   leaveChannel,
   directChat,
   publishAcceptedPrayerRequest,
+  joinChannel,
 };

@@ -9,6 +9,7 @@ import {
   loadHistory,
   setSalvations,
   SET_CHANNELS,
+  joinChannel,
 } from '../feed/dux';
 import type {
   FeedType,
@@ -483,6 +484,13 @@ class Chat {
       // $FlowFixMe
         this.receivePollVote(event.message.data);
         return;
+      case 'newDirectResponseRequest': {
+        const { channel, requesterPubnubToken, requesterNickname } = event.message.data;
+        this.storeDispatch(
+          joinChannel(channel, requesterPubnubToken, requesterNickname)
+        );
+        return;
+      }
     }
   }
 
@@ -616,6 +624,9 @@ class Chat {
     }
     switch (action.type) {
       case 'SET_USER':
+        this.init();
+        this.subscribe([action.user.pubnubToken]);
+        return;
       case 'SET_PUBNUB_KEYS':
         this.init();
         return;

@@ -2,7 +2,7 @@
 import { GraphQLClient } from 'graphql-request';
 import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
-import type {URLType} from '../cwc-types';
+import type { URLType } from '../cwc-types';
 
 declare var GATEWAY_HOST:string;
 
@@ -300,6 +300,21 @@ schedule {
   hostInfo
 }`;
 
+const joinChannel = `
+mutation joinFeed($channel: String!, $requesterPubnubToken: String!, $requesterNickname: String!) {
+  joinFeed(feedToken: $channel, requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
+    id
+    name
+    direct
+    participants: subscribers {
+      pubnubToken
+      avatar
+      name: nickname
+    }
+  }
+}
+`;
+
 const currentState = `
 query CurrentState($needLanguages: Boolean!) {
   ${currentEvent}
@@ -421,6 +436,16 @@ const queries = {
       sequence,
       {
         time,
+      }
+    ),
+
+  joinChannel: async (channel: string, requesterPubnubToken: string, requesterNickname: string) =>
+    await client.request(
+      joinChannel,
+      {
+        channel,
+        requesterPubnubToken,
+        requesterNickname,
       }
     ),
 };
