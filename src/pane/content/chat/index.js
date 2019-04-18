@@ -3,7 +3,10 @@ import Chat from './chat';
 import { connect } from 'react-redux';
 import { getChannelById } from '../../../selectors/channelSelectors';
 import { getUserCountInChannel } from '../../../selectors/hereNowSelector';
-import { togglePopUpModal } from '../../../feed/dux';
+import { 
+  togglePopUpModal,
+  leaveChatType, 
+} from '../../../popUpModal/dux';
 import { getOtherUsers } from '../../../selectors/chatSelectors';
 
 const mapStateToProps = (state, ownProps) => {
@@ -28,7 +31,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  leaveChannel: () => (dispatch(togglePopUpModal())),
+  leaveChannel: () => (dispatch(togglePopUpModal(leaveChatType()))),
 });
 
 const VisibleChat = connect(

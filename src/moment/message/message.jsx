@@ -18,16 +18,12 @@ import { useTransition } from 'react-spring';
 type MessagePropsType = {
   message: MessageType,
   currentChannel: string,
-  hostChannel: string,
-  currentUser: SharedUserType,
   openMessageTray: (channel: string, id: string) => void,
   closeMessageTray: (channel: string, id: string) => void,
   deleteMessage: (id: string, channel: string) => void,
   publishDeleteMessage: (id: string) => void,
-  muteUser: (channel: string, nickname: string) => void,
-  publishMuteUserNotification: (host: string, guest: string, channel: string) => void,
+  muteUser: (user: string) => void,
   addPlaceholderChannel: (otherUser: SharedUserType) => string,
-  mutedNotificationBanner: (guestName: string) => void,
   setPaneToChat: (channelId: string) => void,
 };
 
@@ -42,11 +38,8 @@ const Message = (
       id:messageId,
     },
     currentChannel,
-    hostChannel,
-    currentUser: {
-      name:currentUserName,
-    },
   } = props;
+
   const { name: senderName, role: { label: senderLabel } = {} } = sender;
   const renderText = linkifyHtml(text, { target: '_blank' });
 
@@ -57,9 +50,7 @@ const Message = (
     props.deleteMessage(messageId, currentChannel);
   };
   const muteUser = () => {
-    props.muteUser(currentChannel, senderName);
-    props.mutedNotificationBanner(senderName);
-    props.publishMuteUserNotification(currentUserName, senderName, hostChannel);
+    props.muteUser(senderName);
     closeMessageTray();
   };
   const addPlaceholderChannel = () => {

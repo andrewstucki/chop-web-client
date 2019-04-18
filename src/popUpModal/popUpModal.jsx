@@ -1,72 +1,49 @@
 // @flow
 import React from 'react';
 
-import type { SharedUserType } from '../users/dux';
+import { 
+  LEAVE_CHAT,
+  MUTE_USER,
+} from './dux';
+import LeaveChatPopUpModal from './leaveChat/';
+import MuteUserPopUpModal from './muteUser/';
+import type { PopUpModalType } from './dux';
 import styles from './style.css';
 
-type PopUpModalPropsType = {
-  togglePopUpModal: () => void,
-  publishLeftChannelNotification: (name: string, pubnubToke: string, channelName: string, date: Date) => void,
-  leaveChannel: (channelId: string, isPlaceholder: boolean) => void,
-  otherUser: SharedUserType,
-  hasOtherUsers: boolean,
-  currentUser: SharedUserType,
-  currentChannel: string,
+type PopUpModalPropType = {
   isPopUpModalVisible: boolean,
-  isPlaceholder: boolean,
+  modal: PopUpModalType,
+  togglePopUpModal: () => void,
 };
 
-const PopUpModal = (
-  {
-    togglePopUpModal,
-    leaveChannel,
-    publishLeftChannelNotification,
-    otherUser,
-    hasOtherUsers,
-    currentUser,
-    isPopUpModalVisible,
-    currentChannel,
-    isPlaceholder,
-  }: PopUpModalPropsType
-) => {
-  if (isPopUpModalVisible) {
-    return (
-      <div className={styles.popUpModal}>
-        <div className={styles.alert}>
-          { hasOtherUsers &&
-            <div className={styles.text}>
-              Are you sure you want to end your chat with
-              <strong> {otherUser.name}</strong>?
+class PopUpModal extends React.Component<PopUpModalPropType> {
+  render () {
+    const { modal, isPopUpModalVisible, togglePopUpModal } = this.props;
+    if (isPopUpModalVisible) {
+      switch (modal.type) {
+        case LEAVE_CHAT:
+          return (
+            <div className={styles.popUpModal}>
+              <LeaveChatPopUpModal
+                togglePopUpModal={togglePopUpModal}
+              />
             </div>
-          }
-          { !hasOtherUsers &&
-            <div className={styles.text}>
-              Are you sure you want to end your chat?
+          );
+        case MUTE_USER:
+          return (
+            <div className={styles.popUpModal}>
+              <MuteUserPopUpModal
+                togglePopUpModal={togglePopUpModal}
+                user={modal.user}
+              />
             </div>
-          }
-          <div className={styles.actionContainer}>
-            <button
-              className={styles.action}
-              onClick={() => (togglePopUpModal())}
-            >
-              Keep chatting
-            </button>
-            <button
-              className={styles.action}
-              onClick={() => (
-                togglePopUpModal(),
-                publishLeftChannelNotification(currentUser.name, currentUser.pubnubToken, currentChannel, new Date),
-                leaveChannel(currentChannel, isPlaceholder)
-              )}
-            >
-              Leave
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+          );
+        default:
+          return null;
+      }
+    } 
+    return null;  
   }
-  return null;
-};
+}
 
 export default PopUpModal;

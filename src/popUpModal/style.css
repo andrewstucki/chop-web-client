@@ -22,7 +22,14 @@
 
 .text {
   line-height: 20px;
-  padding: 16px;
+  padding: 16px 16px 0px 16px;
+}
+
+.smallText {
+  line-height: 17px;
+  font-size: 13.44px;
+  padding: 4px 16px 0px;
+  color: #9F9FA0;
 }
 
 .actionContainer {
@@ -31,9 +38,16 @@
   padding-bottom: 16px;
 }
 
-.action {
-  border: none;
-  padding: 0 16px;
+.primary {
   color: var(--primaryColor);
+}
+
+.danger {
+  color: var(--dangerTextColor);
+}
+
+.primary, .danger {
+  border: none;
+  padding: 16px 16px 0px;
   background-color: var(--backgroundColor);
 }
