@@ -142,8 +142,8 @@ describe('Navbar tests', () => {
     if (container) {
       const { getByTestId } = container;
       // $FlowFixMe
-      expect(getByTestId('nav-Public').querySelector('span').className).toStartWith('styles__Pip');
-      expect(getByTestId('nav-Host').querySelector('span')).toBeNull();
+      expect(getByTestId('nav-Public').querySelector('div').className).toStartWith('styles__Pip');
+      expect(getByTestId('nav-Host').querySelector('div')).toBeNull();
     }
   });
 
@@ -188,8 +188,8 @@ describe('Navbar tests', () => {
     if (container) {
       const { getByTestId } = container;
       // $FlowFixMe
-      expect(getByTestId('nav-Host').querySelector('span').className).toStartWith('styles__Pip');
-      expect(getByTestId('nav-Public').querySelector('span')).toBeNull();
+      expect(getByTestId('nav-Host').querySelector('div').className).toStartWith('styles__Pip');
+      expect(getByTestId('nav-Public').querySelector('div')).toBeNull();
     }
   });
 
@@ -247,7 +247,7 @@ describe('Navbar tests', () => {
       expect(getByTestId('nav-direct1')).toBeTruthy();
       expect(getByTestId('nav-direct1').textContent).toEqual('B');
       // $FlowFixMe
-      expect(getByTestId('nav-direct1').querySelector('span').className).toStartWith('styles__Pip');
+      expect(getByTestId('nav-direct1').querySelector('div').className).toStartWith('styles__Pip');
     }
   });
 
