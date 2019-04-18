@@ -3,7 +3,6 @@ import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
 import {
   removeHereNow,
-  updateHereNow,
   setHereNow,
   addHereNow,
   loadHistory,
@@ -351,14 +350,6 @@ class Chat {
             channel,
             this.filterUserState(event),
 
-          )
-        );
-        break;
-      case 'state-change':
-        this.storeDispatch(
-          updateHereNow(
-            channel,
-            this.filterUserState(event),
           )
         );
         break;
