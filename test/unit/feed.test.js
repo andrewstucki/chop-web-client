@@ -3,12 +3,15 @@ import reducer, {
   addChannel,
   removeChannel,
   defaultState,
-  togglePopUpModal,
   leaveChannel,
   setUser,
   setSalvations,
   updateScrollPosition,
 } from '../../src/feed/dux';
+
+import {
+  togglePopUpModal,
+} from '../../src/popUpModal/dux';
 
 import {
   feedContents as feedContentsSelector,

@@ -75,6 +75,14 @@ import {
   SET_ANCHOR_MOMENT,
 } from '../anchorMoment/dux';
 
+import {
+  TOGGLE_POP_UP_MODAL,
+} from '../popUpModal/dux';
+
+import type {
+  PopUpModalType,
+} from '../popUpModal/dux';
+
 import type { BannerType } from '../banner/dux';
 
 import { SET_LANGUAGE } from '../languageSelector/dux';
@@ -118,7 +126,6 @@ const ADD_CHANNEL = 'ADD_CHANNEL';
 const REMOVE_CHANNEL = 'REMOVE_CHANNEL';
 const LEAVE_CHANNEL_SUCCEEDED = 'LEAVE_CHANNEL_SUCCEEDED';
 const LEAVE_CHANNEL_FAILED = 'LEAVE_CHANNEL_FAILED';
-const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
@@ -313,6 +320,7 @@ type FeedType = {
   navbarIndex: number,
   prevNavbarIndex?: number,
   lastAction?: FeedActionTypes,
+  popUpModal: PopUpModalType,
   nav: NavType,
 };
 
@@ -330,10 +338,6 @@ type SetChannelsType = {
   type: typeof SET_CHANNELS,
   channels: ChannelsObjectType,
 }
-
-type TogglePopUpModalType = {
-  type: 'TOGGLE_POP_UP_MODAL',
-};
 
 type LeaveChannelType = {
   type: 'LEAVE_CHANNEL',
@@ -654,12 +658,6 @@ const setChannels = (
   }
 );
 
-const togglePopUpModal = (): TogglePopUpModalType => (
-  {
-    type: TOGGLE_POP_UP_MODAL,
-  }
-);
-
 const joinChannel = (channel: string, requesterPubnubToken: string, requesterNickname: string):JoinChannelType => (
   {
     type: JOIN_CHANNEL,
@@ -833,6 +831,7 @@ const defaultState = {
   mutedUsers: [],
   navbarIndex: 0,
   prevNavbarIndex: undefined,
+  popUpModal: {},
   nav: {
     expanded: true,
   },
@@ -1290,6 +1289,8 @@ const reducer = (
       return {
         ...state,
         isPopUpModalVisible: !state.isPopUpModalVisible,
+        // $FlowFixMe
+        popUpModal: action.modal,
       };
     }
     case 'SET_AVATAR':
@@ -1494,7 +1495,6 @@ const getNotificationBanner = (state: FeedType): BannerType => (
 export {
   ADD_CHANNEL,
   REMOVE_CHANNEL,
-  TOGGLE_POP_UP_MODAL,
   LEAVE_CHANNEL,
   SET_NOTIFICATION_BANNER,
   LEAVE_CHANNEL_SUCCEEDED,
@@ -1514,7 +1514,6 @@ export {
   removeChannel,
   joinChannel,
   addPlaceholderChannel,
-  togglePopUpModal,
   leaveChannel,
   getCurrentUserAsSharedUser,
   removeReaction,
@@ -1547,7 +1546,6 @@ export type {
   FeedType,
   ChannelType,
   PrivateUserType,
-  TogglePopUpModalType,
   LeaveChannelType,
   LanguageType,
   OrganizationType,

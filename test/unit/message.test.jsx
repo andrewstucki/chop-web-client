@@ -55,10 +55,9 @@ describe('Message', () => {
         muteUser={() => {}}
         addPlaceholderChannel={() => ''}
         setPaneToChat={() => {}}
-        publishMuteUserNotification={() => {}}
-        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find(TextWrapper).html()).toContain('Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!');
@@ -87,10 +86,9 @@ describe('Message', () => {
         muteUser={() => {}}
         addPlaceholderChannel={() => ''}
         setPaneToChat={() => {}}
-        publishMuteUserNotification={() => {}}
-        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find(Label).text()).toEqual('Host');
@@ -120,10 +118,9 @@ describe('Message', () => {
         muteUser={() => {}}
         addPlaceholderChannel={() => ''}
         setPaneToChat={() => {}}
-        publishMuteUserNotification={() => {}}
-        mutedNotificationBanner={() => {}}
         hostChannel='host'
         currentUser={user}
+        directChat={() => {}}
       />
     );
     wrapper.find('button').at(0).simulate('click');
