@@ -1,7 +1,7 @@
 // @flow
 import type { LeaveChannelType } from '../../feed/dux';
 import type { Saga } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import queries from '../queries';
 import type { GraphQLParticipantsType } from '../queries';
 import { addChannel, LEAVE_CHANNEL_FAILED, LEAVE_CHANNEL_SUCCEEDED } from '../../feed/dux';
@@ -10,7 +10,6 @@ import type { PublishAcceptedPrayerRequestType, PublishDirectChatType } from '..
 import { setPrimaryPane } from '../../pane/dux';
 import { CHAT } from '../../pane/content/chat/dux';
 import { DIRECT_CHAT_FAILED, PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED } from '../../moment';
-import { getAvailableForPrayer } from '../../selectors/hereNowSelector';
 import type { SharedUserType } from '../../users/dux';
 
 export const convertUser = (user: GraphQLParticipantsType):SharedUserType => {
@@ -59,9 +58,8 @@ function* directChat (action: PublishDirectChatType): Saga<void> {
 function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType): Saga<void> {
   try {
     const { userRequestingPrayer: { pubnubToken, name }, prayerChannel } = action;
-    const availableForPrayer = yield select(state => getAvailableForPrayer(state.feed));
 
-    const result = yield call([queries, queries.acceptPrayer], prayerChannel, pubnubToken, availableForPrayer, name);
+    const result = yield call([queries, queries.acceptPrayer], prayerChannel, pubnubToken, name);
     const { name: channelName, id, direct, participants } = result.acceptPrayer;
     yield put(addChannel(channelName, id, direct, participants.map(convertUser)));
     yield put(setPrimaryPane(CHAT, id));

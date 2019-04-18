@@ -249,8 +249,8 @@ currentLanguages @include(if: $needLanguages) {
 }`;
 
 const acceptPrayer = `
-mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $hostTokens: [String!]!, $requesterNickname: String!) {
-  acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken, hostTokens: $hostTokens, requesterNickname: $requesterNickname) {
+mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $requesterNickname: String!) {
+  acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
     id
     name
     direct

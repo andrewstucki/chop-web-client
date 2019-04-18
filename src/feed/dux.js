@@ -375,12 +375,6 @@ type AddHereNowType = {
   user: UserState,
 };
 
-type UpdateHereNowType = {
-  type: typeof UPDATE_HERE_NOW,
-  channel: string,
-  user: UserState,
-};
-
 type RemoveHereNowType = {
   type: typeof REMOVE_HERE_NOW,
   channel: string,
@@ -448,7 +442,6 @@ type FeedActionTypes =
   | SetPubnubKeysType
   | LeaveChannelType
   | SetScheduleType
-  | UpdateHereNowType
   | AddHereNowType
   | PublishSalvationType
   | ReleaseAnchorMomentType
@@ -507,14 +500,6 @@ const setHereNow = (channel: string, users: Array<UserState>): SetHereNow => (
 const addHereNow = (channel: string, user: UserState): AddHereNowType => (
   {
     type: ADD_HERE_NOW,
-    channel,
-    user,
-  }
-);
-
-const updateHereNow = (channel: string, user: UserState): UpdateHereNowType => (
-  {
-    type: UPDATE_HERE_NOW,
     channel,
     user,
   }
@@ -1520,7 +1505,6 @@ export {
   getNotificationBanner,
   clearNotificationBanner,
   setScheduleData,
-  updateHereNow,
   removeHereNow,
   setSalvations,
   setAuthentication,
