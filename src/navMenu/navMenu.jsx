@@ -1,5 +1,22 @@
 import React from 'react';
-import { Wrapper, IconButton, NavMenuButton, NavMenuHeader, NavMenuBody, NavMenuBodySection, NavMenuFooter, NavMenuIconWrapper, NavMenuTextWrapper, NavMenuCapTextWrapper, NavMenuChurchName, InnerWrapper, Label, getColor } from './styles';
+import { 
+  Wrapper, 
+  IconButton, 
+  NavMenuButton, 
+  NavMenuHeader,
+  NavMenuBody, 
+  NavMenuBodySection, 
+  NavMenuFooter, 
+  NavMenuIconWrapper, 
+  NavMenuTextWrapper, 
+  NavMenuCapTextWrapper, 
+  NavMenuChurchName, 
+  InnerWrapper, 
+  Label, 
+  getColor,
+  PipStyle,
+  PipStyleCollapsed,
+} from './styles';
 import Hamburger from '../icons/hamburger';
 import HostChat from '../icons/hostChat';
 import HostInfo from '../icons/hostInfo';
@@ -16,8 +33,9 @@ import {HOST_INFO} from '../hostInfo/dux';
 import {getFirstInitial} from '../util';
 import {MediumDown} from '../util/responsive';
 import {DirectChatAvatar} from '../components/styles';
+import {Pip} from '../navbar/styles';
 
-const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false}) => (
+const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false, hasActions, hasNewMessages}) => (
   <Actionable onClick={onClick}>
     <NavMenuButton disabled={disabled} expanded={expanded}>
       <NavMenuIconWrapper expanded={expanded}>
@@ -42,6 +60,10 @@ const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClic
             <Label>Coming Soon</Label>
           }
         </NavMenuCapTextWrapper>
+      }
+      { expanded ?
+        (hasActions || hasNewMessages) && <PipStyle><Pip hasActions={hasActions}/></PipStyle> :
+        (hasActions || hasNewMessages) && <PipStyleCollapsed><Pip hasActions={hasActions}/></PipStyleCollapsed>
       }
     </NavMenuButton>
   </Actionable>
@@ -88,18 +110,17 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
       <NavMenuBody>
         { directChannels.length > 0 &&
         <NavMenuBodySection>
-          { directChannels.map(channel =>
-            <NavMenuItem key={channel.id} useAvatar={true} text={channel.otherUsersNames[0] || '?'} expanded={expanded}
-              selected={channel.isCurrent} onClick={() => setPaneToChat(PRIMARY_PANE, channel.id, channel.isPlaceholder || false)}
-            />
+          { directChannels.map(channel => 
+            <NavMenuItem key={channel.id} useAvatar={true} text={channel.otherUsersNames[0] || '?'} expanded={expanded} hasActions={channel.hasActions} hasNewMessages={channel.hasNewMessages}
+              selected={channel.isCurrent} onClick={() => setPaneToChat(PRIMARY_PANE, channel.id, channel.isPlaceholder || false,)}/>
           )}
         </NavMenuBodySection>
         }
         <NavMenuBodySection>
           <MediumDown>
-            <NavMenuItem Icon={Chat} text="Chat" expanded={expanded} selected={publicChannel.isCurrent} onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)} />
+            <NavMenuItem Icon={Chat} text="Chat" expanded={expanded} selected={publicChannel.isCurrent} hasActions={publicChannel.hasActions} hasNewMessages={publicChannel.hasNewMessages} onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)}/>
           </MediumDown>
-          <NavMenuItem Icon={HostChat} text="Host Chat" expanded={expanded} selected={hostChannel.isCurrent} onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)} />
+          <NavMenuItem Icon={HostChat} text="Host Chat" expanded={expanded} selected={hostChannel.isCurrent} hasActions={hostChannel.hasActions} hasNewMessages={hostChannel.hasNewMessages} onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)}/>
           <NavMenuItem Icon={HostInfo} text="Host Info" expanded={expanded} selected={currentTabType === 'HOST_INFO'} onClick={() => setPaneToTab(PRIMARY_PANE, HOST_INFO)} />
           <NavMenuItem Icon={Calendar} text="Schedule" expanded={expanded} disabled={true} />
           <NavMenuItem Icon={Document} text="Notes" expanded={expanded} disabled={true} />
