@@ -170,6 +170,7 @@ class Chat extends Component<ChatProps, ChatState> {
     window.removeEventListener('scroll', this.preventScroll);
     clearInterval(this.pollKeyboardInterval);
     clearTimeout(this.preventScrollTimer);
+    this.onBlur();
   }
 
   render () {

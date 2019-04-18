@@ -15,7 +15,7 @@ import {
   setSchedule,
 } from '../../feed/dux';
 import bugsnagClient from '../../util/bugsnag';
-import {avatarImageExists} from '../../util';
+import { avatarImageExists } from '../../util';
 import {getLanguageCount} from '../../selectors/languageSelector';
 import {setVideo} from '../../videoFeed/dux';
 import type {ChannelsObjectType} from '../../feed/dux';
@@ -71,8 +71,8 @@ function* pubnubKeys (data: GraphQLCurrentStateType): Saga<void> {
 function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
   if (data.currentUser) {
     const { currentUser: { id, name, avatar, pubnubAccessKey, pubnubToken, role: { label = '', permissions = [] } } } = data;
-    if (pubnubToken === null || pubnubAccessKey === null) {
-      throw new Error(`User with id: ${id} has null for a pubnubToken and/or pubnubAccessKey`);
+    if (pubnubToken === null || pubnubToken === undefined || pubnubToken === '') {
+      throw new Error(`User with id: ${id} does not have a pubnubToken`);
     }
     yield put(
       setUser(
@@ -80,7 +80,7 @@ function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
           id,
           name: name || '',
           avatar,
-          pubnubAccessKey,
+          pubnubAccessKey: pubnubAccessKey || '',
           pubnubToken,
           role: {
             label,
