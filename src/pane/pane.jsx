@@ -50,7 +50,7 @@ const Pane = ({ isMediumPlusUp, name, pane, navbarIndex, prevNavbarIndex, setPan
     from: { transform: direction ? 'translate3d(100%,0,0)' : 'translate3d(-100%,0,0)' },
     enter: { transform: direction ? 'translate3d(0,0,0)' : 'translate3d(0,0,0)' },
     leave: { transform: direction ? 'translate3d(-100%,0,0)' : 'translate3d(100%,0,0)' },
-    immediate: (prevNavbarIndex === undefined || !!animate),
+    immediate: (prevNavbarIndex === undefined || !animate),
   });
 
   // Prevent two EVENT panes on Medium+

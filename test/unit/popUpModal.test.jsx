@@ -20,7 +20,7 @@ const otherUser = {
 const currentUser = {
   id: 12345,
   pubnubToken: '09876',
-  pubnubAccessToken: '67890',
+  pubnubAccessKey: '67890',
   avatar: null,
   name: 'Joan Jet',
   role: {

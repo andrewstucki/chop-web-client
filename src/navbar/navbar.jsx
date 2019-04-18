@@ -35,7 +35,9 @@ type NavbarItemProps = {
 };
 
 const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneToTab, setNavbarIndex, navbarIndex }: NavbarProps) => {
-  const selectedLink = useRef(null);
+  const wrapper = useRef<?HTMLDivElement>();
+  const selectedLink = useRef<?HTMLDivElement>();
+
   const [ underlinePosition, setUnderlinePosition ] = useState < NavbarState > ({
     left: 20,
     width: 42,
@@ -67,15 +69,18 @@ const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneT
 
   useEffect(() => {
     const { current:currentLink } = selectedLink;
-    if (currentLink && typeof currentLink.getBoundingClientRect === 'function') {
-      const marginWidth = 20;
-      const { width:linkWidth } = currentLink.getBoundingClientRect();
+    const { current:currentWrapper } = wrapper;
 
-      currentLink.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'end' });
+    if (currentLink && currentWrapper) {
+      const marginWidth = 20;
+      const { clientWidth:linkWidth } = currentLink;
+      const { clientWidth:wrapperWidth } = currentWrapper;
+
+      currentWrapper.scrollLeft = currentLink.offsetLeft > (wrapperWidth - linkWidth) ? currentLink.offsetLeft : 0;
 
       const updatedLeft = currentLink.offsetLeft + marginWidth;
       const updatedWidth = linkWidth - (marginWidth * 2);
-      const updatedOpacity = (currentLink.getAttribute('data-direct') === 'true') ? 0.0 : 1.0;
+      const updatedOpacity = (currentLink?.dataset?.direct === 'true') ? 0.0 : 1.0;
 
       const { left, width, opacity } = underlinePosition;
       if (updatedLeft !== left || updatedWidth !== width || updatedOpacity !== opacity ) {
@@ -95,7 +100,7 @@ const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneT
           <Hamburger size={32}/>
         </NavbarHamburgerWrapper>
       </Actionable>
-      <NavbarItemsWrapper data-testid='navbarItems'>
+      <NavbarItemsWrapper data-testid='navbarItems' ref={wrapper}>
         <NavbarItemsInnerWrapper>
           {
             items.map((item, index) => (

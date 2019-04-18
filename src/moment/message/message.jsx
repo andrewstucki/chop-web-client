@@ -32,7 +32,9 @@ type MessagePropsType = {
 };
 
 const Message = (
-  {
+  props: MessagePropsType
+) => {
+  const {
     message: {
       sender,
       messageTrayOpen,
@@ -44,27 +46,25 @@ const Message = (
     currentUser: {
       name:currentUserName,
     },
-    ...otherProps
-  }: MessagePropsType
-) => {
+  } = props;
   const { name: senderName, role: { label: senderLabel } = {} } = sender;
   const renderText = linkifyHtml(text, { target: '_blank' });
 
-  const openMessageTray = () => otherProps.openMessageTray(currentChannel, messageId);
-  const closeMessageTray = () => messageTrayOpen ? otherProps.closeMessageTray(currentChannel, messageId) : undefined;
+  const openMessageTray = () => props.openMessageTray(currentChannel, messageId);
+  const closeMessageTray = () => messageTrayOpen ? props.closeMessageTray(currentChannel, messageId) : undefined;
   const deleteMessage = () => {
-    otherProps.publishDeleteMessage(messageId);
-    otherProps.deleteMessage(messageId, currentChannel);
+    props.publishDeleteMessage(messageId);
+    props.deleteMessage(messageId, currentChannel);
   };
   const muteUser = () => {
-    otherProps.muteUser(currentChannel, senderName);
-    otherProps.mutedNotificationBanner(senderName);
-    otherProps.publishMuteUserNotification(currentUserName, senderName, hostChannel);
+    props.muteUser(currentChannel, senderName);
+    props.mutedNotificationBanner(senderName);
+    props.publishMuteUserNotification(currentUserName, senderName, hostChannel);
     closeMessageTray();
   };
   const addPlaceholderChannel = () => {
-    const channelId = otherProps.addPlaceholderChannel(sender);
-    otherProps.setPaneToChat(channelId);
+    const channelId = props.addPlaceholderChannel(sender);
+    props.setPaneToChat(channelId);
     closeMessageTray();
   };
 

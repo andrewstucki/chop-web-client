@@ -27,7 +27,6 @@ import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
-import smoothscroll from 'smoothscroll-polyfill';
 import { warningNotificationBanner } from './banner/dux';
 import { ErrorBoundary } from './util/bugsnag';
 
@@ -39,9 +38,6 @@ if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
   whyDidYouRender(React, { include: [/^/], exclude: [/^StyledComponent/, /^Connect/, /^ReactTouchEvents/, /^MediaQuery/]});
 }
-
-// kick off the polyfill!
-smoothscroll.polyfill();
 
 TagManager.initialize(GTM);
 

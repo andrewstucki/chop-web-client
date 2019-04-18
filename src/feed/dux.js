@@ -108,6 +108,8 @@ import type { SharedUserType } from '../users/dux';
 
 import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
+import { createSelector } from 'reselect';
+import { getCurrentUser } from '../selectors/chatSelectors';
 
 
 // Action Types
@@ -1486,15 +1488,15 @@ const reducer = (
 
 // Selectors
 
-const getCurrentUserAsSharedUser = (state: FeedType): SharedUserType => (
-  {
-    id: state.currentUser.id,
-    pubnubToken: state.currentUser.pubnubToken,
-    name: state.currentUser.name,
-    avatar: state.currentUser.avatar,
-    role: {
-      label: state.currentUser.role.label,
-    },
+const getCurrentUserAsSharedUser = createSelector(
+  getCurrentUser,
+  currentUser => {
+    const { role, pubnubAccessKey: _remove, ...sharedUser } =  currentUser;
+    const { permissions: _alsoRemove, ...sharedRole } = role;
+    return {
+      ...sharedUser,
+      role: sharedRole,
+    };
   }
 );
 
