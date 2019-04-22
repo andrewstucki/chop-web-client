@@ -384,13 +384,12 @@ const queries = {
       }
     ),
 
-  acceptPrayer: async (channelId: string, requesterPubnubToken: string, hostTokens: Array<string>, requesterName: string): Promise<any> =>
+  acceptPrayer: async (channelId: string, requesterPubnubToken: string, requesterName: string): Promise<any> =>
     await client.request(
       acceptPrayer,
       {
         feedToken: channelId,
         requesterPubnubToken,
-        hostTokens,
         requesterNickname: requesterName,
       }
     ),
