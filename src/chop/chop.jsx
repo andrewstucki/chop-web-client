@@ -2,9 +2,10 @@
 import * as React from 'react';
 import SmallLayout from './layouts/small';
 import MediumLayout from './layouts/medium';
-import MediumPlusLayout from './layouts/mediumPlus';
+import LargeLayout from './layouts/large';
+import XlargeLayout from './layouts/xlarge';
 import { Redirect } from 'react-router-dom';
-import { Small, Medium, MediumPlusUp } from '../util/responsive';
+import { Small, Medium, Large, Xlarge } from '../util/responsive';
 import { Wrapper } from './styles';
 
 type ChopContainerProps = {
@@ -25,9 +26,12 @@ const ChopContainer = ({organization, authenticated, hasVideo }: ChopContainerPr
         <Medium>
           <MediumLayout hasVideo={hasVideo} />
         </Medium>
-        <MediumPlusUp>
-          <MediumPlusLayout hasVideo={hasVideo} />
-        </MediumPlusUp>
+        <Large>
+          <LargeLayout hasVideo={hasVideo} />
+        </Large>
+        <Xlarge>
+          <XlargeLayout hasVideo={hasVideo} />
+        </Xlarge>
       </Wrapper>
     );
   } else {
