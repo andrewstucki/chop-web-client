@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 }
   
   ${Button}:disabled {
-      z-index: -1;
+      display: none;
   }
 `;
 

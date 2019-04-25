@@ -11,7 +11,6 @@ config/flow-typed
 
 [options]
 esproposal.optional_chaining=enable
-esproposal.decorators=ignore
 
 [strict]
 nonstrict-import

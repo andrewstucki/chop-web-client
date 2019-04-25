@@ -15,7 +15,7 @@ type InputFieldProps = {
   autoComplete?: string,
 };
 
-const InputField = React.forwardRef(({ type, label, name, onChange, onFocus, onBlur, value, placeholder, autoComplete }: InputFieldProps, ref) => {
+function InputField ({ type, label, name, onChange, onFocus, onBlur, value, placeholder, autoComplete }: InputFieldProps, ref) {
   const inputRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
@@ -42,8 +42,7 @@ const InputField = React.forwardRef(({ type, label, name, onChange, onFocus, onB
       />
     </Wrapper>
   );
-});
+}
 
-InputField.displayName = 'InputField';
-
-export default React.memo < InputFieldProps > (InputField);
+// any is used because of useImperativeHandle. There may be a better type definition.
+export default React.forwardRef <InputFieldProps, any> (InputField);

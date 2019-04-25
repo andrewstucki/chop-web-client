@@ -61,8 +61,8 @@ import {
   CLOSE_SIDE_MENU,
 } from '../sideMenu/dux';
 
-import { SET_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../chat/dux';
-import type { SetKeyboardHeightType, SetChatFocusType } from '../chat/dux';
+import { SET_CHAT_FOCUS } from '../chat/dux';
+import type { SetChatFocusType } from '../chat/dux';
 
 import { SET_VIDEO, TOGGLE_HIDE_VIDEO } from '../videoFeed/dux';
 import type { SetVideoType, VideoType, ToggleHideVideoType } from '../videoFeed/dux';
@@ -296,7 +296,6 @@ type FeedType = {
   currentUser: PrivateUserType,
   isPopUpModalVisible: boolean,
   focusedChannel: string,
-  keyboardHeight: number | typeof undefined,
   isSideMenuClosed: boolean,
   isVideoHidden: boolean,
   isLanguageSelectorVisible: boolean,
@@ -475,7 +474,6 @@ type FeedActionTypes =
   | SetPaneType
   | AddTabType
   | RemoveTabType
-  | SetKeyboardHeightType
   | ToggleNavMenuExpandedType
   | SetChatFocusType
   | SetChannelsType
@@ -751,7 +749,6 @@ const defaultState = {
       permissions: [],
     },
   },
-  keyboardHeight: undefined,
   isPopUpModalVisible: false,
   focusedChannel: '',
   isSideMenuClosed: true,
@@ -1222,7 +1219,6 @@ const reducer = (
                 ],
               },
             },
-            chatInput: '',
           };
         }
       }
@@ -1305,11 +1301,6 @@ const reducer = (
       return {
         ...state,
         focusedChannel: action.channel,
-      };
-    case SET_KEYBOARD_HEIGHT:
-      return {
-        ...state,
-        keyboardHeight: action.height,
       };
     case TOGGLE_HIDE_VIDEO:
       return {
