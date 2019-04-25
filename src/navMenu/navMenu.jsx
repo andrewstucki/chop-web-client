@@ -31,7 +31,7 @@ import { theme } from '../styles';
 import {PRIMARY_PANE} from '../pane/dux';
 import {HOST_INFO} from '../hostInfo/dux';
 import {getFirstInitial} from '../util';
-import {MediumDown} from '../util/responsive';
+import {MediumDown, LargeDown} from '../util/responsive';
 import {DirectChatAvatar} from '../components/styles';
 import {Pip} from '../navbar/styles';
 
@@ -120,7 +120,9 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
           <MediumDown>
             <NavMenuItem Icon={Chat} text="Chat" expanded={expanded} selected={publicChannel.isCurrent} hasActions={publicChannel.hasActions} hasNewMessages={publicChannel.hasNewMessages} onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)}/>
           </MediumDown>
-          <NavMenuItem Icon={HostChat} text="Host Chat" expanded={expanded} selected={hostChannel.isCurrent} hasActions={hostChannel.hasActions} hasNewMessages={hostChannel.hasNewMessages} onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)}/>
+          <LargeDown>
+            <NavMenuItem Icon={HostChat} text="Host Chat" expanded={expanded} selected={hostChannel.isCurrent} hasActions={hostChannel.hasActions} hasNewMessages={hostChannel.hasNewMessages} onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)}/>
+          </LargeDown>
           <NavMenuItem Icon={HostInfo} text="Host Info" expanded={expanded} selected={currentTabType === 'HOST_INFO'} onClick={() => setPaneToTab(PRIMARY_PANE, HOST_INFO)} />
           <NavMenuItem Icon={Calendar} text="Schedule" expanded={expanded} disabled={true} />
           <NavMenuItem Icon={Document} text="Notes" expanded={expanded} disabled={true} />
