@@ -34,7 +34,7 @@ import {
 
 import { setVideo } from '../../src/videoFeed/dux';
 
-import { SET_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../../src/chat/dux';
+import { SET_CHAT_FOCUS } from '../../src/chat/dux';
 
 import {
   openMessageTray,
@@ -178,7 +178,6 @@ describe('Feed tests', () => {
             },
           },
         },
-        chatInput: 'this is a message',
         currentUser: currentUser,
       },
       {
@@ -234,7 +233,6 @@ describe('Feed tests', () => {
             },
           },
         },
-        chatInput: 'this is a string',
         currentUser: currentUser,
       },
       {
@@ -1948,22 +1946,6 @@ describe('Chat tests', () => {
         focusedChannel: 'abc',
       },
     );
-  });
-
-  test('keyboard height', () => {
-    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
-      {
-        ...defaultState,
-      },
-      {
-        type: SET_KEYBOARD_HEIGHT,
-        height: 300,
-      });
-
-    expect(result).toEqual({
-      ...defaultState,
-      keyboardHeight: 300,
-    });
   });
 });
 

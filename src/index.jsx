@@ -27,7 +27,6 @@ import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
-import { warningNotificationBanner } from './banner/dux';
 import { ErrorBoundary } from './util/bugsnag';
 
 declare var ENV:string;
@@ -36,7 +35,7 @@ declare var GTM;
 
 if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
-  whyDidYouRender(React, { include: [/^/], exclude: [/^StyledComponent/, /^Connect/, /^ReactTouchEvents/, /^MediaQuery/]});
+  whyDidYouRender(React);
 }
 
 TagManager.initialize(GTM);
@@ -73,10 +72,6 @@ const store = createStore(
 );
 
 sagaMiddleware.run(rootSaga);
-
-if (navigator.userAgent.match('CriOS')) {
-  store.dispatch(warningNotificationBanner('We’re optimizing Host Tools for Chrome. For now, please switch to Safari.'));
-}
 
 const persistor = persistStore(store);
 
