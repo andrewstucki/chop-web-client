@@ -1,6 +1,6 @@
-# CWC -- ChOP (Church Online Platform) Web Client
+# ChOP (Church Online Platform) Web Client (CWC)
 
-![ChOP Fusion Logo](https://in.thewardro.be/io/opennetwork/chop-web-client/raw/integration/fusion.gif)
+![ChOP Fusion Logo](https://in.thewardro.be/io/opennetwork/chop-web-client/raw/integration/church_online_platform_logo.png)
 
 A Progressive Web App for experiencing church online.
 
