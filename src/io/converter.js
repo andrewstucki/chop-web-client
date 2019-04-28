@@ -2,7 +2,7 @@
 
 import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
-import { UTC_DATE_FORMAT, getUTCDate } from '../util';
+import { getUTCDate } from '../util';
 import dayjs from 'dayjs';
 import type { MessageType } from '../moment/message/dux';
 import type {
@@ -114,7 +114,7 @@ const Converter = {
       roomType: 'public',
       channelToken: _getState().channels[channelId].id,
       eventStartTime: _getState().event.startTime,
-      platform: 'CWC'
+      platform: 'CWC',
     }
   ),
 
