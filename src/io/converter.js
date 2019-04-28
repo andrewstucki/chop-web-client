@@ -80,7 +80,7 @@ export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMess
 let _getState;
 
 const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => (
-  dayjs(getUTCDate(new Date(inTimestamp))).format('YYYY-MM-DD HH:mm:ss +0000')
+  dayjs(inTimestamp).toISOString()
 );
 
 const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => dayjs(inTimestamp).valueOf();
@@ -114,6 +114,7 @@ const Converter = {
       roomType: 'public',
       channelToken: _getState().channels[channelId].id,
       eventStartTime: _getState().event.startTime,
+      platform: 'CWC'
     }
   ),
 
@@ -194,7 +195,7 @@ const Converter = {
     );
   },
 
-  getTimestamp: () => dayjs(getUTCDate()).format(UTC_DATE_FORMAT),
+  getTimestamp: () => dayjs(getUTCDate()).toISOString(),
 
 };
 

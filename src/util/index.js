@@ -103,19 +103,9 @@ const sanitizeString = (string: string, config:any = sanitizeConfig) =>
   DOMPurify.sanitize(string, config)
 ;
 
-const UTC_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss ZZ';
-const EPOCH_DATE_FORMAT = 'x';
-
-const getMessageTimestamp = (timestamp: string = dayjs().format(UTC_DATE_FORMAT)) => {
-  const isEpoch = timestamp.toString().match(/^\d{10}$/);
-  let time = timestamp;
-
-  if (isEpoch) {
-    time = parseInt(time) * 1000;
-  }
-
-  const inputFormat = isEpoch ? EPOCH_DATE_FORMAT : UTC_DATE_FORMAT;
-  const date = dayjs(time, inputFormat);
+// Default ISO8601 Format
+const getMessageTimestamp = (timestamp: string = dayjs().format()) => {
+  const date = dayjs(timestamp);
   const format = dayjs().diff(date, 'days') === 0 ? 'h:mma' : 'h:mma, MMMM D';
   return date.format(format);
 };
@@ -134,6 +124,8 @@ const isIPhone = () => !!navigator.platform && /iPhone/.test(navigator.platform)
 const isAndroid = () => !!navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
 const getComponentDisplayName = Componenet => Componenet.displayName || Componenet.name || 'Component';
+
+const UTC_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss ZZ';
 
 export {
   getFirstInitial,
