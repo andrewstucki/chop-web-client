@@ -7,10 +7,10 @@ import { MediumUp } from '../../util/responsive';
 
 const DIRECT_CHAT_HEADER = 'DIRECT_CHAT_HEADER';
 
-type DirectChatHeaderType = {|
+type DirectChatHeaderType = {
   type: typeof DIRECT_CHAT_HEADER,
   data: DirectChatHeaderProps,
-|};
+};
 
 type DirectChatHeaderProps = {
   otherUsersName: string,

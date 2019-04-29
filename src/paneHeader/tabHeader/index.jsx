@@ -7,10 +7,10 @@ import { MediumUp, Small } from '../../util/responsive';
 
 const TAB_HEADER = 'TAB_HEADER';
 
-type TabHeaderType = {|
+type TabHeaderType = {
   type: typeof TAB_HEADER,
   data: TabHeaderProps,
-|};
+};
 
 type TabHeaderProps = {
   title: string,

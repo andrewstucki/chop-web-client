@@ -5,10 +5,10 @@ import { Wrapper } from '../styles';
 
 const CHAT_HEADER = 'CHAT_HEADER';
 
-type ChatHeaderType = {|
+type ChatHeaderType = {
   type: typeof CHAT_HEADER,
   data: ChatHeaderProps,
-|};
+};
 
 type ChatHeaderProps = {
   title: string,

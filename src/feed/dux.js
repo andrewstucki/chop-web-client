@@ -112,12 +112,13 @@ import type { SetNavbarIndexType } from '../navbar/dux';
 import {
   SET_NAVBAR_INDEX,
 } from '../navbar/dux';
-import type { SharedUserType } from '../users/dux';
+import type {
+  SharedUserType,
+  PrivateUserType,
+} from '../users/dux';
 
 import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
-import { createSelector } from 'reselect';
-import { getCurrentUser } from '../selectors/chatSelectors';
 
 
 // Action Types
@@ -165,7 +166,7 @@ type SetScheduleDataType = {
   data: any,
 };
 
-type ScheduleType = {|
+type ScheduleType = {
   id: string,
   startTime: number,
   endTime: number,
@@ -173,7 +174,7 @@ type ScheduleType = {|
   fetchTime: number,
   scheduleTime: number,
   hostInfo: string,
-|};
+};
 
 type SetScheduleType = {
   type: 'SET_SCHEDULE',
@@ -192,10 +193,10 @@ type EventType = {
   hostInfo?: string,
 };
 
-type LanguageType = {|
+type LanguageType = {
   name: string,
   code: string,
-|};
+};
 
 type OrganizationType = {
   id: number,
@@ -210,22 +211,6 @@ type SetOrganizationType = {
 type PubnubKeysType = {
   publish: string,
   subscribe: string,
-};
-
-type Permission = {|
-  key: string,
-|};
-
-type PrivateUserType = {
-  id: number,
-  name: string,
-  avatar: ?string,
-  pubnubToken: string,
-  pubnubAccessKey: string,
-  role: {
-    label: string,
-    permissions: Array<Permission>,
-  },
 };
 
 type SetUser = {
@@ -367,7 +352,9 @@ type LoadHistoryType = {
 
 type UserState = {
   id: string,
-  available_prayer?: boolean,
+  state: {
+    available_prayer?: boolean,
+  }
 };
 
 type SetHereNow = {
@@ -1289,14 +1276,16 @@ const reducer = (
         popUpModal: action.modal,
       };
     }
-    case 'SET_AVATAR':
+    case 'SET_AVATAR': {
+      const user: PrivateUserType = state.currentUser;
       return {
         ...state,
         currentUser: {
-          ...state.currentUser,
+          ...user,
           avatar: action.url,
         },
       };
+    }
     case SET_CHAT_FOCUS:
       return {
         ...state,
@@ -1465,18 +1454,6 @@ const reducer = (
 
 // Selectors
 
-const getCurrentUserAsSharedUser = createSelector(
-  getCurrentUser,
-  currentUser => {
-    const { role, pubnubAccessKey: _remove, ...sharedUser } =  currentUser;
-    const { permissions: _alsoRemove, ...sharedRole } = role;
-    return {
-      ...sharedUser,
-      role: sharedRole,
-    };
-  }
-);
-
 const getNotificationBanner = (state: FeedType): BannerType => (
   state.notificationBanner
 );
@@ -1506,7 +1483,6 @@ export {
   joinChannel,
   addPlaceholderChannel,
   leaveChannel,
-  getCurrentUserAsSharedUser,
   removeReaction,
   setUser,
   setEvent,
@@ -1532,11 +1508,11 @@ export {
 
 export type {
   AddChannelType,
+  AuthenticationType,
   RemoveChannelType,
   MomentType,
   FeedType,
   ChannelType,
-  PrivateUserType,
   LeaveChannelType,
   LanguageType,
   OrganizationType,
@@ -1545,6 +1521,8 @@ export type {
   ClientInfoType,
   ChannelsObjectType,
   QueryCurrentEventType,
+  HereNowChannels,
+  UserState,
   SetUser,
   JoinChannelType,
 };

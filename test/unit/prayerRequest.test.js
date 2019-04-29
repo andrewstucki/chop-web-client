@@ -12,7 +12,13 @@ describe('Prayer Request Tests', () => {
   const _store = {
     ...defaultState,
     currentUser: {
-      ...defaultState.currentUser,
+      id: 134,
+      name: 'Kylo Ren',
+      avatar: 'http://someimageons3.com/image/123',
+      role: {
+        label: 'Supreme Leader of the First Order',
+        permissions: ['event.event.manage'],
+      },
       pubnubToken: '123456',
       pubnubAccessKey: '1533912921585',
     },

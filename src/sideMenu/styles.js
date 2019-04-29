@@ -14,7 +14,7 @@ type LinkIconPropsType = {
 };
 
 const LinkIcon = styled.span`
-  width: 16px;
+  width: ${props => props.size}px;
   display: inline-block;
   vertical-align: middle;
   margin-left: 6px;

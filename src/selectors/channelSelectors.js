@@ -31,9 +31,9 @@ const getSawLastMomentAt = createSelector(
   channel => channel ? channel.sawLastMomentAt : 0
 );
 
-const getChannelIdByNameFactory = (name: string): ChannelIdType => (
-  createSelector(
-    getChannels,
+const getChannelIdByNameFactory = (name: string): Function  => (
+  createSelector<FeedType, void, ChannelIdType, ChannelsObjectType>(
+    [getChannels],
     channels => {
       if (channels) {
         return Object.keys(channels).find(channel => channels[channel] ? channels[channel].name.toUpperCase() === name : null);
@@ -43,7 +43,7 @@ const getChannelIdByNameFactory = (name: string): ChannelIdType => (
 );
 
 const getChannelByNameFactory = (name: string): ChannelType => (
-  createSelector(
+  createSelector<FeedType, void, ChannelType, ChannelsObjectType, string>(
     getChannels,
     getChannelIdByNameFactory(name),
     (channels, id) => channels[id]
@@ -75,27 +75,27 @@ const removeMutedUsers = (mutedUsers: Array<UIDType>) => (moment: MomentType): b
   }
 };
 
-const getHostChannelObject = createSelector(
-  getChannelByNameFactory('HOST'),
+const getHostChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
+  [getChannelByNameFactory('HOST')],
   channel => channel
 );
 
-const getHostChannel = createSelector(
+const getHostChannel = createSelector<FeedType, void, string, string>(
   getChannelIdByNameFactory('HOST'),
   channel => channel
 );
 
-const getPublicChannelObject = createSelector(
+const getPublicChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
   getChannelByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const getPublicChannel = createSelector(
+const getPublicChannel = createSelector<FeedType, void, string, string>(
   getChannelIdByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const channelFilter = (obj: ChannelsObjectType, predicate: (string, ChannelType) => boolean) => {
+const channelFilter = (obj: ChannelsObjectType, predicate: (string, ChannelType) => boolean): { [string]: ChannelType } => {
   const result = {};
   Object.keys(obj).forEach(key => {
     if (obj.hasOwnProperty(key) && !predicate(key, obj[key])) {
@@ -105,7 +105,7 @@ const channelFilter = (obj: ChannelsObjectType, predicate: (string, ChannelType)
   return result;
 };
 
-const getDirectChannels = createSelector(
+const getDirectChannels = createSelector<>(
   getChannels,
   channels =>
     channels ?

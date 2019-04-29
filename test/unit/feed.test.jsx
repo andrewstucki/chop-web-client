@@ -12,11 +12,12 @@ import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
 import { Provider } from 'react-redux';
+import type {PrivateUserType} from '../../src/users/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Feed tests', () => {
-  const user = {
+  const user: PrivateUserType = {
     pubnubToken: '12345',
     id: 1928374,
     avatar: null,
