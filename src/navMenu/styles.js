@@ -118,12 +118,24 @@ const NavMenuButton = styled.button`
   align-items: stretch;
   box-sizing: border-box;
   border-radius: 2px;
-  
+  position: relative;
+
   @media (any-hover: hover) {
     :hover {
       background-color: ${props => props.disabled ? 'transparent' : props.theme.colors.gray5};
     }
   }
+`;
+
+const PipStyle = styled.div`
+  margin: 12px;
+  align-self: center;
+`;
+
+const PipStyleCollapsed = styled.div`
+  position: absolute;
+  right: 8px;
+  top: 9px;
 `;
 
 export {
@@ -141,4 +153,6 @@ export {
   NavMenuChurchName,
   Label,
   getColor,
+  PipStyle,
+  PipStyleCollapsed,
 };

@@ -2,8 +2,9 @@
 
 import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
-import { getUTCDate } from '../util';
+import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import type { MessageType } from '../moment/message/dux';
 import type {
   UIDType,
@@ -16,6 +17,9 @@ import type {
   LanguageCodeType,
   RoomType,
 } from '../cwc-types';
+
+dayjs.extend(customParseFormat);
+dayjs.extend(utc);
 
 // Flow Type Definitions
 
@@ -71,7 +75,7 @@ export type LegcayNewMessageDataType = {
   roomType: RoomType,
   timestamp: DateTimeAsStringType,
   uniqueMessageToken: UIDType,
-  userId: UIDType | null,
+  userId: number | null,
   translations?: TranslationListType,
 }
 
@@ -79,11 +83,9 @@ export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMess
 
 let _getState;
 
-const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => (
-  dayjs(inTimestamp).toISOString()
-);
+const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => dayjs.utc(inTimestamp).toISOString();
 
-const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => dayjs(inTimestamp).valueOf();
+const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => dayjs.utc(inTimestamp).local().valueOf();
 
 const Converter = {
   config: (getState: () => any) => {
@@ -96,14 +98,14 @@ const Converter = {
       language: _getState().currentLanguage,
       eventTimeId: _getState().event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
-      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'seconds').toString(),
+      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'second').toString(),
       eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
       fromNickname: message.sender.name,
       fromToken: message.sender.pubnubToken,
       msgId: message.id,
       timestamp: timestampToString(message.timestamp),
-      fromAvatar: typeof message.sender.avatarUrl === 'string' ? message.sender.avatarUrl : 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
+      fromAvatar: typeof message.sender.avatar === 'string' ? message.sender.avatar : 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
       isHost: true,
       label: message.sender.role.label,
       isVolunteer: true,
@@ -167,9 +169,9 @@ const Converter = {
       isMuted: !!message.isMuted,
       messageTrayOpen: false,
       sender: {
-        id: message.userId,
+        id: message.userId || 0,
         name: message.fromNickname,
-        avatarUrl: message.fromAvatar,
+        avatar: message.fromAvatar,
         pubnubToken: message.fromToken,
         role: {
           label: message.label ? message.label : '',
@@ -183,8 +185,9 @@ const Converter = {
 
     return receivePrayerRequestNotification(
       {
-        id: '12345',
+        id: 12345, // Legacy doesn't forward the user id
         name: message.data.fromNickname,
+        avatar: null,
         pubnubToken: message.data.fromToken,
         role: {
           label: '',
@@ -195,7 +198,7 @@ const Converter = {
     );
   },
 
-  getTimestamp: () => dayjs(getUTCDate()).toISOString(),
+  getTimestamp: () => dayjs().utc().toISOString(),
 
 };
 

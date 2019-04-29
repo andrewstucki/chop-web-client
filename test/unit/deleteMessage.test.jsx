@@ -1,20 +1,12 @@
 // @flow
-import serviceActor from '../../src/io/serviceActor';
 import ChatActor from '../../src/io/chat';
 import { mockRequest } from 'graphql-request';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
-import { createStore, applyMiddleware, compose } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState, addChannel, loadHistory } from '../../src/feed/dux';
-import { deleteMessage, publishDeleteMessage } from '../../src/moment/message/dux';
-import actorMiddleware from '../../src/middleware/actor-middleware';
+import { defaultState } from '../../src/feed/dux';
 import testData from './io/test-data.json';
 import accessToken from './io/access-token.json';
-import { mockPublish, __messageEvent } from 'pubnub';
-import { REHYDRATE } from 'redux-persist/lib/constants';
-import { promisifyMiddleware } from '../testUtils';
-import { setPrimaryPane } from '../../src/pane/dux';
+import { __messageEvent } from 'pubnub';
 
 jest.mock('../../src/io/location');
 jest.mock('graphql-request');
@@ -31,10 +23,6 @@ describe('Test delete message', () => {
   global.document.cookie  = 'legacy_token=12345; ';
   mockRequest.mockResolvedValueOnce(accessToken);
   mockRequest.mockResolvedValueOnce(testData);
-  const actorMiddlewareApplied = actorMiddleware(
-    serviceActor,
-    ChatActor,
-  );
   const moments = [
     {
       type: 'MESSAGE',
@@ -42,6 +30,8 @@ describe('Test delete message', () => {
       lang: 'en',
       text: 'hi',
       sender: {
+        id: 1234,
+        avatar: null,
         pubnubToken: 'abc123xyz',
         name: 'Tony Hoare',
         role: { label: '' },
@@ -54,7 +44,9 @@ describe('Test delete message', () => {
       lang: 'en',
       text: 'hey',
       sender: {
+        id: 1234,
         pubnubToken: '54353',
+        avatar: null,
         name: 'Shaq O.',
         role: { label: '' },
       },
@@ -62,59 +54,12 @@ describe('Test delete message', () => {
     },
   ];
 
-  test.skip('Delete message and publish on pubnub', async () => {
-    const participants = [
-      {
-        id: '12345',
-        pubnubToken: 'abc123xyz',
-        name: 'Tony Hoare',
-        role: { label: '' },
-      },
-      {
-        id: '12345',
-        pubnubToken: '54353',
-        name: 'Shaq O.',
-        role: { label: '' },
-      },
-    ];
-
-    const middlewareList = [promisifyMiddleware, actorMiddlewareApplied];
-    const store = createStore(
-      reducer,
-      compose(
-        applyMiddleware(...middlewareList)
-      )
-    );
-
-    return store.dispatch({ type: REHYDRATE }).then(() => {
-      store.dispatch(addChannel('test', 'test', false, participants));
-      store.dispatch(setPrimaryPane('EVENT', 'test'));
-      store.dispatch(loadHistory(moments, 'test'));
-      store.dispatch(deleteMessage('123456', 'test'));
-      store.dispatch(publishDeleteMessage('123456'));
-
-      mockRequest.mockResolvedValueOnce(accessToken);
-
-      expect(mockPublish).toHaveBeenCalledTimes(1);
-      expect(mockPublish.mock.calls[0][0]).toEqual(
-        {
-          channel: 'test',
-          message: {
-            action: 'muteMessage',
-            channel: 'test',
-            data: message,
-          },
-        }
-      );
-      expect(store.getState().feed.channels.test.moments.length).toEqual(1);
-    });
-  });
-
   test('Receive delete message notification and delete message', () => {
     const store = {
       ...defaultState,
       currentUser: {
-        id: '12234',
+        id: 12234,
+        avatar: null,
         pubnubToken: '54353',
         pubnubAccessKey: '09876',
         name: 'Shaq O.',

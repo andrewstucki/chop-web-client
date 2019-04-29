@@ -17,8 +17,8 @@ describe('Prayer Request Tests', () => {
       pubnubAccessKey: '1533912921585',
     },
     event: {
-      id: 320418,
-      eventTimeId: 1920834,
+      id: '320418',
+      eventTimeId: '1920834',
       startTime: 1529425800000,
       endTime: 1529425900000,
       title: 'When Pigs Fly - Week 2',
@@ -55,14 +55,20 @@ describe('Prayer Request Tests', () => {
     },
   };
 
+  const dispatch = jest.fn();
+  const getState = jest.fn();
+  getState.mockReturnValue(_store);
+
+  const chat = new Chat(dispatch, getState);
+  chat.init();
+
+  afterEach(() => {
+    dispatch.mockClear();
+    getState.mockClear();
+    mockHereNow.mockClear();
+  });
+
   test('Receive prayer request from legacy', () => {
-    const dispatch = jest.fn();
-    const getState = jest.fn();
-
-    getState.mockReturnValue(_store);
-
-    const chat = new Chat(dispatch, getState);
-
     chat.dispatch(
       {
         type: 'SET_PUBNUB_KEYS',
@@ -108,14 +114,6 @@ describe('Prayer Request Tests', () => {
   });
 
   test('Receive accepted prayer request', () => {
-    const dispatch = jest.fn();
-    const getState = jest.fn();
-    getState.mockReturnValue(_store);
-
-    const chat = new Chat(dispatch, getState);
-
-    chat.init();
-
     __messageEvent(
       {
         channel: 'Host',
@@ -171,14 +169,6 @@ describe('Prayer Request Tests', () => {
   });
 
   test('Receive publish notification to host channel', () => {
-    const dispatch = jest.fn();
-    const getState = jest.fn();
-    getState.mockReturnValue(_store);
-
-    const chat = new Chat(dispatch, getState);
-
-    chat.init();
-
     __messageEvent(
       {
         channel: 'Host',

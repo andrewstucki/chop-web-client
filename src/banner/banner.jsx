@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import Dismiss from '../icons/dismissButton';
 import type { BannerType } from './dux';

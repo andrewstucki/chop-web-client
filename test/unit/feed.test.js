@@ -3,12 +3,15 @@ import reducer, {
   addChannel,
   removeChannel,
   defaultState,
-  togglePopUpModal,
   leaveChannel,
   setUser,
   setSalvations,
   updateScrollPosition,
 } from '../../src/feed/dux';
+
+import {
+  togglePopUpModal,
+} from '../../src/popUpModal/dux';
 
 import {
   feedContents as feedContentsSelector,
@@ -31,7 +34,7 @@ import {
 
 import { setVideo } from '../../src/videoFeed/dux';
 
-import { SET_CHAT_FOCUS, SET_KEYBOARD_HEIGHT } from '../../src/chat/dux';
+import { SET_CHAT_FOCUS } from '../../src/chat/dux';
 
 import {
   openMessageTray,
@@ -54,17 +57,19 @@ import { setLanguage } from '../../src/languageSelector/dux';
 import { setPrimaryPane } from '../../src/pane/dux';
 
 const otherUser = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '12345',
+  avatar: null,
   name: 'Billy Bob',
   role: {
     label: '',
   },
 };
 const currentUser = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '09876',
   pubnubAccessKey: '67890',
+  avatar: null,
   name: 'Joan Jet',
   role: {
     label: '',
@@ -90,6 +95,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -99,6 +105,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -117,6 +124,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -126,6 +134,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -140,7 +149,7 @@ describe('Feed tests', () => {
             },
           },
         },
-      }
+      },
     );
   });
 
@@ -154,6 +163,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -168,7 +178,6 @@ describe('Feed tests', () => {
             },
           },
         },
-        chatInput: 'this is a message',
         currentUser: currentUser,
       },
       {
@@ -181,11 +190,11 @@ describe('Feed tests', () => {
           sender: currentUser,
           messageTrayOpen: false,
         },
-      }
+      },
     );
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
-    expect(result.channels.public.moments[0].sender.id).toEqual('12345');
+    expect(result.channels.public.moments[0].sender.id).toEqual(12345);
     expect(result.channels.public.moments[0].sender.name).toEqual('Joan Jet');
   });
 
@@ -199,6 +208,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -208,6 +218,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -222,7 +233,6 @@ describe('Feed tests', () => {
             },
           },
         },
-        chatInput: 'this is a string',
         currentUser: currentUser,
       },
       {
@@ -235,7 +245,7 @@ describe('Feed tests', () => {
           sender: otherUser,
           messageTrayOpen: false,
         },
-      }
+      },
     );
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
@@ -254,6 +264,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -263,6 +274,7 @@ describe('Feed tests', () => {
             id: '67890',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -279,7 +291,7 @@ describe('Feed tests', () => {
           name: '',
         },
         messageTrayOpen: false,
-      })
+      }),
     );
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
@@ -288,7 +300,8 @@ describe('Feed tests', () => {
   });
 
   test('adds a prayer request to host', () => {
-    const action = () => {};
+    const action = () => {
+    };
     const result = reducer(
       {
         ...defaultState,
@@ -298,6 +311,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -307,6 +321,7 @@ describe('Feed tests', () => {
             id: '67890',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -322,7 +337,7 @@ describe('Feed tests', () => {
         timestamp: '4:53pm',
         active: true,
         action: action,
-      })
+      }),
     );
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].id.length).toEqual(5);
@@ -344,14 +359,16 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
-      addChannel('host', '12345', false)
+      addChannel('host', '12345', false),
     );
     expect(result).toEqual(
       {
@@ -361,10 +378,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
           '12345': {
             id: '12345',
@@ -372,9 +391,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             name: 'host',
             direct: false,
-            participants: undefined,
+            placeholder: false,
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -387,7 +407,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
       },
-      addChannel('direct', '12345', true, [otherUser])
+      addChannel('direct', '12345', true, [otherUser]),
     );
     expect(result).toEqual(
       {
@@ -396,6 +416,7 @@ describe('Feed tests', () => {
           '12345': {
             id: '12345',
             direct: true,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             name: 'direct',
@@ -420,10 +441,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       }
@@ -437,13 +460,15 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -456,10 +481,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'other',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -477,6 +504,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'other',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -484,7 +512,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      removeChannel('other')
+      removeChannel('other'),
     );
     expect(result).toEqual(defaultState);
   });
@@ -516,7 +544,7 @@ describe('Feed tests', () => {
         },
         currentUser: currentUser,
       },
-      'public'
+      'public',
     );
     expect(result).toEqual(
       [
@@ -568,7 +596,7 @@ describe('Feed tests', () => {
         },
         currentUser: currentUser,
       },
-      'host'
+      'host',
     );
     expect(result).toEqual(
       [
@@ -582,7 +610,7 @@ describe('Feed tests', () => {
           },
           messageTrayOpen: false,
         },
-      ]
+      ],
     );
   });
 
@@ -628,7 +656,7 @@ describe('Feed tests', () => {
         currentLanguage: 'ko',
         currentUser: currentUser,
       },
-      'public'
+      'public',
     );
     expect(result).toEqual(
       [
@@ -682,7 +710,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      'public'
+      'public',
     );
     expect(result).toEqual(
       [
@@ -692,7 +720,7 @@ describe('Feed tests', () => {
         {
           id: '6789',
         },
-      ]
+      ],
     );
   });
 
@@ -702,7 +730,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         currentUser: currentUser,
-      }
+      },
     );
   });
 
@@ -715,6 +743,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -740,6 +769,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
         panes: {
@@ -760,6 +790,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -785,6 +816,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
         panes: {
@@ -795,7 +827,7 @@ describe('Feed tests', () => {
             },
           },
         },
-      }
+      },
     );
   });
 
@@ -808,6 +840,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -833,6 +866,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
         panes: {
@@ -844,7 +878,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      openMessageTray('host','123'));
+      openMessageTray('host', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -853,6 +887,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -878,6 +913,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
         panes: {
@@ -888,7 +924,7 @@ describe('Feed tests', () => {
             },
           },
         },
-      }
+      },
     );
   });
 
@@ -901,6 +937,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -926,6 +963,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
         panes: {
@@ -937,7 +975,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      closeMessageTray('public','123'));
+      closeMessageTray('public', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -946,6 +984,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -971,6 +1010,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
         panes: {
@@ -981,7 +1021,7 @@ describe('Feed tests', () => {
             },
           },
         },
-      }
+      },
     );
   });
 
@@ -994,6 +1034,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -1029,10 +1070,11 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
-      deleteMessage('123', 'public')
+      deleteMessage('123', 'public'),
     );
     expect(result).toEqual(
       {
@@ -1042,6 +1084,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -1067,6 +1110,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1082,10 +1126,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1100,7 +1146,7 @@ describe('Feed tests', () => {
           guest: 'Beefie',
           timestamp: '4:53pm',
         },
-      }
+      },
     );
     expect(result).toEqual(
       {
@@ -1110,6 +1156,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1123,9 +1170,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -1138,10 +1186,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1155,7 +1205,7 @@ describe('Feed tests', () => {
           name: 'Boofie',
           timestamp: '4:53pm',
         },
-      }
+      },
     );
     expect(result).toEqual(
       {
@@ -1165,6 +1215,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1177,9 +1228,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -1192,10 +1244,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'host',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1209,7 +1263,7 @@ describe('Feed tests', () => {
           name: 'Boofie',
           timestamp: '4:53pm',
         },
-      }
+      },
     );
     expect(result).toEqual(
       {
@@ -1218,7 +1272,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1231,9 +1285,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -1245,11 +1300,12 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1263,7 +1319,7 @@ describe('Feed tests', () => {
           name: 'Boofie',
           timestamp: '4:53pm',
         },
-      }
+      },
     );
     expect(result).toEqual(
       {
@@ -1272,7 +1328,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1285,9 +1341,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -1300,11 +1357,12 @@ describe('Feed tests', () => {
 
             id: '12345',
             name: 'host',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1318,7 +1376,7 @@ describe('Feed tests', () => {
           name: 'Boofie',
           timestamp: '4:53pm',
         },
-      }
+      },
     );
     expect(result).toEqual(
       {
@@ -1328,7 +1386,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [
               {
                 type: 'NOTIFICATION',
@@ -1341,9 +1399,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -1356,11 +1415,12 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1385,7 +1445,7 @@ describe('Feed tests', () => {
           public: {
             id: '12345',
             name: 'public',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [
               {
                 type: 'AVATAR_MOMENT',
@@ -1399,9 +1459,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -1413,11 +1474,12 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1435,7 +1497,7 @@ describe('Feed tests', () => {
           timestamp: '4:53pm',
           active: true,
         },
-      }
+      },
     );
     expect(result).toEqual(
       {
@@ -1445,7 +1507,7 @@ describe('Feed tests', () => {
           host: {
             id: '12345',
             name: 'host',
-            direct: false,
+            direct: false, placeholder: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
@@ -1462,6 +1524,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1477,10 +1540,12 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1503,6 +1568,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [
               {
@@ -1514,6 +1580,7 @@ describe('Feed tests', () => {
             ],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1529,6 +1596,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [
               {
@@ -1540,10 +1608,11 @@ describe('Feed tests', () => {
             ],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
-      releaseAnchorMoment('public', '12345')
+      releaseAnchorMoment('public', '12345'),
     );
     expect(result).toEqual(
       {
@@ -1553,6 +1622,7 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: 'ANCHOR_MOMENT',
@@ -1564,9 +1634,10 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 
@@ -1581,7 +1652,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
         salvations: 4,
-      }
+      },
     );
   });
 
@@ -1594,13 +1665,15 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Host',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
@@ -1611,10 +1684,20 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
-      publishAcceptedPrayerRequest('123456', '12345')
+      publishAcceptedPrayerRequest(
+        '123456',
+        '12345',
+        {
+          id: 67890,
+          avatar: null,
+          pubnubToken: 1234,
+          name: 'Burglekutt',
+        },
+        false)
     );
     expect(result).toEqual(
       {
@@ -1624,23 +1707,27 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Host',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
                 active: false,
+                cancelled: false,
                 prayerChannel: '123456',
               },
             ],
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1656,13 +1743,15 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Host',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
@@ -1673,10 +1762,11 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
-      receiveAcceptedPrayerRequest('123456', '12345')
+      receiveAcceptedPrayerRequest('123456', '12345'),
     );
     expect(result).toEqual(
       {
@@ -1686,13 +1776,15 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Host',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
                 user: {
-                  id: '67890',
+                  id: 67890,
+                  avatar: null,
                   name: 'Burglekutt',
                 },
                 timestamp: '4:53pm',
@@ -1703,6 +1795,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
@@ -1733,10 +1826,10 @@ describe('Feed tests', () => {
         },
         currentUser: currentUser,
       },
-      'direct'
+      'direct',
     );
     expect(result).toEqual(
-      [otherUser]
+      [otherUser],
     );
   });
 
@@ -1746,13 +1839,13 @@ describe('Feed tests', () => {
         ...defaultState,
         isPopUpModalVisible: false,
       },
-      togglePopUpModal()
+      togglePopUpModal(),
     );
     expect(result).toEqual(
       {
         ...defaultState,
         isPopUpModalVisible: true,
-      }
+      },
     );
   });
 
@@ -1765,12 +1858,14 @@ describe('Feed tests', () => {
             id: '12345',
             name: 'Carl',
             direct: true,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             participants: [
               {
-                id: '12345',
+                id: 12345,
                 pubnubToken: currentUser.pubnubToken,
+                avatar: currentUser.avatar,
                 name: currentUser.name,
                 role: {
                   label: currentUser.role.label,
@@ -1785,6 +1880,7 @@ describe('Feed tests', () => {
             id: '67890',
             name: 'Public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             participants: [],
@@ -1802,28 +1898,17 @@ describe('Feed tests', () => {
         },
         currentUser: currentUser,
       },
-      leaveChannel(currentUser.pubnubToken, 'direct')
+      leaveChannel('direct'),
     );
     expect(result).toEqual(
       {
         ...defaultState,
         channels: {
-          direct: {
-            id: '12345',
-            name: 'Carl',
-            direct: true,
-            moments: [],
-            anchorMoments: [],
-            participants: [
-              otherUser,
-            ],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-          },
           public: {
             id: '67890',
             name: 'Public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             participants: [],
@@ -1840,7 +1925,7 @@ describe('Feed tests', () => {
           },
         },
         currentUser: currentUser,
-      }
+      },
     );
   });
 });
@@ -1859,24 +1944,8 @@ describe('Chat tests', () => {
       {
         ...defaultState,
         focusedChannel: 'abc',
-      }
-    );
-  });
-
-  test('keyboard height', () => {
-    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
-      {
-        ...defaultState,
       },
-      {
-        type: SET_KEYBOARD_HEIGHT,
-        height: 300,
-      });
-
-    expect(result).toEqual({
-      ...defaultState,
-      keyboardHeight: 300,
-    });
+    );
   });
 });
 
@@ -1887,13 +1956,13 @@ describe('SideMenu tests', () => {
         ...defaultState,
         isSideMenuClosed: false,
       },
-      closeMenu()
+      closeMenu(),
     );
     expect(results).toEqual(
       {
         ...defaultState,
         isSideMenuClosed: true,
-      }
+      },
     );
   });
 
@@ -1903,13 +1972,13 @@ describe('SideMenu tests', () => {
         ...defaultState,
         isSideMenuClosed: true,
       },
-      closeMenu()
+      closeMenu(),
     );
     expect(results).toEqual(
       {
         ...defaultState,
         isSideMenuClosed: true,
-      }
+      },
     );
   });
 
@@ -1919,13 +1988,13 @@ describe('SideMenu tests', () => {
         ...defaultState,
         isSideMenuClosed: true,
       },
-      openMenu()
+      openMenu(),
     );
     expect(results).toEqual(
       {
         ...defaultState,
         isSideMenuClosed: false,
-      }
+      },
     );
   });
 
@@ -1935,13 +2004,13 @@ describe('SideMenu tests', () => {
         ...defaultState,
         isSideMenuClosed: false,
       },
-      openMenu()
+      openMenu(),
     );
     expect(results).toEqual(
       {
         ...defaultState,
         isSideMenuClosed: false,
-      }
+      },
     );
   });
 
@@ -1954,14 +2023,16 @@ describe('SideMenu tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: -1,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
       },
-      updateScrollPosition(31, 'public', 1546896104521)
+      updateScrollPosition(31, 'public', 1546896104521),
     );
     expect(results).toEqual(
       {
@@ -1971,13 +2042,15 @@ describe('SideMenu tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [],
             anchorMoments: [],
             scrollPosition: 31,
             sawLastMomentAt: 1546896104521,
+            participants: [],
           },
         },
-      }
+      },
     );
   });
 });
@@ -1986,7 +2059,7 @@ describe('VideoFeed tests', () => {
   test('set url', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       defaultState,
-      setVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Standard')
+      setVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'videoFeed')
     );
     expect(result).toEqual(
       {
@@ -1995,9 +2068,9 @@ describe('VideoFeed tests', () => {
         video: {
           ...defaultState.video,
           url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-          type: 'Standard',
+          type: 'videoFeed',
         },
-      }
+      },
     );
   });
 });
@@ -2009,18 +2082,18 @@ describe('LanguageSelector tests', () => {
         ...defaultState,
         currentLanguage: 'en',
       },
-      setLanguage('ko')
+      setLanguage('ko'),
     );
     expect(result).toEqual(
       {
         ...defaultState,
         currentLanguage: 'ko',
-      }
+      },
     );
   });
 
   describe('hasNotSeenLatestMoments', () => {
-    test('is true when message timestamps are newer then sawLastMomentAt' , () => {
+    test('is true when message timestamps are newer then sawLastMomentAt', () => {
       const state = {
         ...defaultState,
         channels: {
@@ -2028,6 +2101,7 @@ describe('LanguageSelector tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,
@@ -2062,7 +2136,7 @@ describe('LanguageSelector tests', () => {
       expect(hasNotSeenLatestMoments(state, channelId)).toBeTruthy();
     });
 
-    test('is false when message timestamps are older then sawLastMomentAt' , () => {
+    test('is false when message timestamps are older then sawLastMomentAt', () => {
       const state = {
         ...defaultState,
         channels: {
@@ -2070,6 +2144,7 @@ describe('LanguageSelector tests', () => {
             id: '12345',
             name: 'public',
             direct: false,
+            placeholder: false,
             moments: [
               {
                 type: MESSAGE,

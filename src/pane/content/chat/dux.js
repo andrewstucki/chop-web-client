@@ -7,10 +7,11 @@ type ChatPaneType = {
   type: typeof CHAT,
   content: {
     channelId: string,
+    animate: boolean,
   },
 };
 
-const setPaneToChat = (name: string, channelId: string) => (
+const setPaneToChat = (name: string, channelId: string, animate: boolean = true) => (
   {
     type: SET_PANE_CONTENT,
     name,
@@ -18,6 +19,7 @@ const setPaneToChat = (name: string, channelId: string) => (
       type: CHAT,
       content: {
         channelId,
+        animate,
       },
     },
   }

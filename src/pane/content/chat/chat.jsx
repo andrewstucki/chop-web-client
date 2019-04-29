@@ -1,48 +1,77 @@
 // @flow
-import styles from './styles.css';
 import React from 'react';
 import Feed from '../../../feed';
 import ChatInputBox from '../../../chat';
 import ReactionsContainer from '../../../reactions/reactionsContainer';
 import PaneHeader from '../../../paneHeader';
+import CommentOutline from '../../../icons/commentOutline';
 import { CHAT_HEADER } from '../../../paneHeader/chatHeader';
 import { DIRECT_CHAT_HEADER } from '../../../paneHeader/directChatHeader';
 import { MediumUp } from '../../../util/responsive';
+import { ChatInputs, PlaceholderWrapper, PlaceholderText } from './styles';
 
 type ChatPropsType = {
   channel: string,
   name: string,
   userCount?: number,
   isDirect: boolean,
+  isPlaceholder: boolean,
   leaveChannel: () => void,
   otherUsersName: string,
   hideReactions: boolean,
 };
 
-const Chat = ({channel, name, userCount, isDirect, leaveChannel, otherUsersName, hideReactions}:ChatPropsType) => (
+const Chat = (props:ChatPropsType) => (
   <>
-    {
-      isDirect ?
-        <PaneHeader type={DIRECT_CHAT_HEADER} data={{
-          otherUsersName,
-          leaveChannel,
-        }} />
-        :
-        <MediumUp>
-          <PaneHeader type={CHAT_HEADER} data={{
-            title: `${name} chat`,
-            subtitle: userCount,
-          }} />
-        </MediumUp>
-    }
-    <Feed key={channel} channel={channel} />
-    <div className={styles.inputs}>
-      <ChatInputBox channel={channel} hideReactions={hideReactions} />
-      {!hideReactions &&
+    <ChatFeed {...props} />
+    <ChatInputs>
+      <ChatInputBox channel={props.channel} hideReactions={props.hideReactions} />
+      {!props.hideReactions &&
         <ReactionsContainer/>
       }
-    </div>
+    </ChatInputs>
   </>
+);
+
+const ChatFeed = React.memo < ChatPropsType > (
+  function ChatFeed ({ otherUsersName, isDirect, leaveChannel, name, userCount, channel, isPlaceholder }: ChatPropsType) {
+    return (
+      <>
+        {
+          (isDirect || isPlaceholder) ?
+            <PaneHeader type={DIRECT_CHAT_HEADER} data={{
+              otherUsersName,
+              leaveChannel,
+            }}/>
+            :
+            <MediumUp>
+              <PaneHeader type={CHAT_HEADER} data={{
+                title: `${name} chat`,
+                subtitle: userCount,
+              }}/>
+            </MediumUp>
+        }
+        {
+          isPlaceholder ? <ChatPlaceholder otherUsersName={otherUsersName} /> : <Feed key={channel} channel={channel}/>
+        }
+      </>
+    );
+  }
+);
+
+type ChatPlaceholderProps = {
+  otherUsersName: string,
+};
+
+const ChatPlaceholder = React.memo < ChatPlaceholderProps > (
+  function ChatPlaceholder ({ otherUsersName }: ChatPlaceholderProps) {
+    return (
+      <PlaceholderWrapper>
+        <CommentOutline />
+        <PlaceholderText>Start chatting with <strong>{otherUsersName}</strong>.</PlaceholderText>
+      </PlaceholderWrapper>
+    );
+  }
 );
 
 export default React.memo < ChatPropsType > (Chat);

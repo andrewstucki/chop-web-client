@@ -21,6 +21,7 @@ describe('Testing Pane and Pane Content', () => {
         type: 'CHAT',
         content: {
           channelId: 'Host',
+          animate: true,
         },
       }
     );

@@ -1,4 +1,4 @@
-image: quay.io/lifechurch/k8s-deploy-helper:3.0.1
+image: quay.io/lifechurch/k8s-deploy-helper:5.0.0
 variables:
   # Application deployment domain
   KUBE_DOMAIN: churchonline.us
@@ -71,7 +71,8 @@ test:
     - yarn install --pure-lockfile
     - yarn lint
     - yarn flow check
-    - yarn coverage # Use coverage to generate coverage report
+    - yarn flow:coverage
+    - yarn test:coverage # Use coverage to generate coverage report
   artifacts:
     expire_in: 1 day
     paths:
@@ -218,7 +219,7 @@ code_coverage_report_master:
     - chmod +x ./cc-test-reporter
     - ./cc-test-reporter before-build
     - yarn install
-    - yarn coverage
+    - yarn test:coverage
     - yarn cy:run
     - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.cy.json cy-coverage/lcov.info
     - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.jest.json coverage/lcov.info

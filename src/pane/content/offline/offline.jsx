@@ -8,11 +8,18 @@ type OfflinePropsType = {
 };
 
 const Offline = ({ eventName, eventTime }: OfflinePropsType) => (
-  <Wrapper>
+  <Wrapper data-testid='offline'>
     <div>
-      <Heading>Upcoming Event</Heading>
-      <EventName>{eventName}</EventName>
-      <p>{eventTime}</p>
+      {
+        eventName && eventTime ?
+          <>
+            <Heading data-testid='offline-header'>Upcoming Event</Heading>
+            <EventName data-testid='offline-name'>{eventName}</EventName>
+            <p data-testid='offline-time'>{eventTime}</p>
+          </>
+          :
+          <Heading data-testid='offline-noevent'>No upcoming Event.</Heading>
+      }
     </div>
   </Wrapper>
 );

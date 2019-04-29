@@ -114,7 +114,7 @@ describe('Feed scrolling', () => {
             id: 1022905,
             pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
             name: 'G. Boole',
-            avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
+            avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',
             },
@@ -150,7 +150,7 @@ describe('Feed scrolling', () => {
             id: 1022906,
             pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3',
             name: 'Other User',
-            avatarUrl: null,
+            avatar: null,
             role: {
               label: '',
             },
@@ -186,7 +186,7 @@ describe('Feed scrolling', () => {
             id: 1022905,
             pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
             name: 'G. Boole',
-            avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
+            avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',
             },
@@ -318,7 +318,7 @@ describe('Feed scrolling with anchor moment', () => {
             id: 1022905,
             pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
             name: 'G. Boole',
-            avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
+            avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',
             },
@@ -368,7 +368,7 @@ describe('Feed scrolling with anchor moment', () => {
             id: 1022906,
             pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3',
             name: 'Other User',
-            avatarUrl: null,
+            avatar: null,
             role: {
               label: '',
             },
@@ -418,7 +418,7 @@ describe('Feed scrolling with anchor moment', () => {
             id: 1022905,
             pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
             name: 'G. Boole',
-            avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
+            avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',
             },

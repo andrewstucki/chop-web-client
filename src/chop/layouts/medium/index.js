@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import Medium from './medium';
 import {toggleHideVideo} from '../../../videoFeed/dux';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   isVideoHidden: state.feed.isVideoHidden,
+  hasVideo: ownProps.hasVideo,
 });
 
 const mapDispatchToProps = dispatch => ({

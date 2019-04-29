@@ -11,9 +11,11 @@ import {
 import { mockDate } from '../../testUtils';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import {getLegacyToken} from '../../../src/io/legacyToken';
+import { currentEvent } from '../../../src/io/sagas/currentEvent';
 
 jest.mock('../../../src/io/queries');
 jest.mock('../../../src/io/legacyToken');
+jest.mock('../../../src/io/sagas/currentEvent');
 const mock = (mockFn: any) => mockFn;
 
 describe('Test Auth', () => {
@@ -21,6 +23,7 @@ describe('Test Auth', () => {
   const mockAuthenticateByRefreshToken = mock(queries.authenticateByRefreshToken);
   const mockAuthenticateByLegacyToken = mock(queries.authenticateByLegacyToken);
   const mockGetLegacyToken = mock(getLegacyToken);
+  const mockCurrentEvent = mock(currentEvent);
   test('Basic Auth success', async () => {
     mockDate(1553266446136);
     const dispatched = [];
@@ -75,7 +78,7 @@ describe('Test Auth', () => {
     { type: REHYDRATE }).toPromise();
 
     expect(setAccessToken).toBeCalledWith('123456');
-    expect(dispatched).toEqual([queryCurrentEvent()]);
+    expect(currentEvent).toBeCalled();
   });
 
   test('Auth with refresh token success', async () => {
@@ -86,16 +89,14 @@ describe('Test Auth', () => {
           refreshToken: '0987654321',
         },
       }
-    );
-    const dispatched = [];
-    const mockDispatch: (action: any) => void = jest.fn();
-    mockDispatch.mockImplementationOnce(() => {
-      throw new Error('Broken');
+    ).mockClear();
+    mockCurrentEvent.mockReset().mockImplementationOnce(() => {
+      throw new Error('Skip access token');
     });
-    mockDispatch.mockImplementation(action => dispatched.push(action));
+    const dispatched = [];
 
     await runSaga({
-      dispatch: mockDispatch,
+      dispatch: action => dispatched.push(action),
       getState: () => (
         {
           feed: {
@@ -111,9 +112,9 @@ describe('Test Auth', () => {
     { type: REHYDRATE }).toPromise();
 
     expect(mockAuthenticateByRefreshToken).toBeCalledWith('098765');
+    expect(mockCurrentEvent).toHaveBeenCalledTimes(2);
     expect(dispatched).toEqual([
       setAuthentication('1234567890', '0987654321'),
-      queryCurrentEvent(),
     ]);
   });
 
@@ -137,6 +138,7 @@ describe('Test Auth', () => {
     { type: REHYDRATE }).toPromise();
 
     expect(mockAuthenticateByLegacyToken).toBeCalledWith('10293847856');
+    expect(currentEvent).toBeCalled();
   });
 
   test('Auth by token failed', async () => {

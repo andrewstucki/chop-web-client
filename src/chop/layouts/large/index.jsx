@@ -17,7 +17,11 @@ import { PaneWrapper, PaneContentWrapper } from '../../../pane/styles';
 // For some reason the height: 100% doesn't take the height: calc() into account
 const GridCell = styled(Cell)`height: initial`;
 
-const MediumPlus = () => (
+type LargeProps = {
+  hasVideo: boolean,
+};
+
+const Large = ({hasVideo}:LargeProps) => (
   <Container>
     <SideMenu />
     <PopUpModal />
@@ -35,14 +39,16 @@ const MediumPlus = () => (
       <GridCell area="menu">
         <NavMenu/>
       </GridCell>
-      <GridCell area="video">
-        <CellContainer topCell>
-          <VideoFeed />
-        </CellContainer>
-      </GridCell>
+      {hasVideo &&
+        <GridCell area="video">
+          <CellContainer topCell>
+            <VideoFeed/>
+          </CellContainer>
+        </GridCell>
+      }
       <GridCell area="chat">
         <CellContainer bottomCell>
-          <Pane name={PRIMARY_PANE} isMediumPlusUp />
+          <Pane name={PRIMARY_PANE} isLarge />
         </CellContainer>
       </GridCell>
       <GridCell area="public">
@@ -59,4 +65,4 @@ const MediumPlus = () => (
 );
 
 
-export default React.memo < {} > (MediumPlus);
+export default React.memo < LargeProps > (Large);

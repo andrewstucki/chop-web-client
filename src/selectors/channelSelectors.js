@@ -1,12 +1,13 @@
 // @flow
 import { createSelector } from 'reselect';
-import { objectFilter } from '../util';
 import type {
   FeedType,
   ChannelsObjectType,
   ChannelType,
-  SharedUserType,
 } from '../feed/dux';
+import type {
+  SharedUserType,
+} from '../users/dux';
 import type {
   ChannelIdType,
   LanguageCodeType,
@@ -94,11 +95,29 @@ const getPublicChannel = createSelector(
   channel => channel
 );
 
+const channelFilter = (obj: ChannelsObjectType, predicate: (string, ChannelType) => boolean) => {
+  const result = {};
+  Object.keys(obj).forEach(key => {
+    if (obj.hasOwnProperty(key) && !predicate(key, obj[key])) {
+      result[key] = obj[key];
+    }
+  });
+  return result;
+};
+
 const getDirectChannels = createSelector(
   getChannels,
   channels =>
     channels ?
-      objectFilter(channels, id => !channels[id].direct) :
+      channelFilter(channels, id => !channels[id].direct || channels[id].placeholder) :
+      []
+);
+
+const getPlaceholderChannels = createSelector(
+  getChannels,
+  channels =>
+    channels ?
+      channelFilter(channels, id => !channels[id].placeholder) :
       []
 );
 
@@ -119,11 +138,6 @@ const getCurrentChannel = createSelector(
 const getCurrentTabType = createSelector(
   getPrimaryPane,
   pane => pane?.content?.type || '',
-);
-
-const getCurrentChannelObj = createSelector(
-  [ getCurrentChannel, getChannels ],
-  (channelId, channels) => channels[channelId]
 );
 
 const feedAnchorMoments = createSelector(
@@ -164,15 +178,15 @@ const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => us
 const getLastAction = (state: FeedType) => state.lastAction;
 
 const getScroll = createSelector(
-  [ getCurrentChannelObj, getLastAction, getCurrentUser ],
-  (currentChannel, action, currentUser) => {
-    if (!currentChannel) {
+  [ getChannelById, getLastAction, getCurrentUser ],
+  (channel, action, currentUser) => {
+    if (!channel) {
       return {
         type: 'SCROLL_TO',
         position: 0,
       };
     }
-    const { moments, scrollPosition } = currentChannel;
+    const { moments, scrollPosition } = channel;
 
     switch (action.type) {
       case 'PUBLISH_MOMENT_TO_CHANNEL': {
@@ -233,6 +247,7 @@ export {
   getPublicChannel,
   getLegacyChannel,
   getDirectChannels,
+  getPlaceholderChannels,
   getCurrentChannel,
   feedContents,
   feedAnchorMoments,

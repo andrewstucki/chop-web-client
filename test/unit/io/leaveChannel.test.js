@@ -1,8 +1,8 @@
 // @flow
 import queries from '../../../src/io/queries';
-import {removeChannel} from '../../../src/io/saga';
+import { leaveChannel } from '../../../src/io/saga';
 import { runSaga } from 'redux-saga';
-import {REMOVE_CHANNEL, REMOVE_CHANNEL_FAILED, REMOVE_CHANNEL_SUCCEEDED} from '../../../src/feed/dux';
+import { LEAVE_CHANNEL, LEAVE_CHANNEL_FAILED, LEAVE_CHANNEL_SUCCEEDED } from '../../../src/feed/dux';
 
 jest.mock('../../../src/io/queries');
 const mock = (mockFn: any) => mockFn;
@@ -14,10 +14,10 @@ describe('Remove Channel', () => {
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-    }, removeChannel, {type: REMOVE_CHANNEL, channel: '12345'}).toPromise();
+    }, leaveChannel, {type: LEAVE_CHANNEL, channel: '12345'}).toPromise();
 
     expect(mockLeaveChannel).toBeCalledWith('12345');
-    expect(dispatched).toEqual([{type: REMOVE_CHANNEL_SUCCEEDED}]);
+    expect(dispatched).toEqual([{type: LEAVE_CHANNEL_SUCCEEDED}]);
   });
 
 
@@ -27,10 +27,10 @@ describe('Remove Channel', () => {
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-    }, removeChannel, {type: REMOVE_CHANNEL, channel: '12345'}).toPromise();
+    }, leaveChannel, {type: LEAVE_CHANNEL, channel: '12345'}).toPromise();
 
     expect(mockLeaveChannel).toBeCalledWith('12345');
-    expect(dispatched).toEqual([{type: REMOVE_CHANNEL_FAILED, error: 'Server returned false for leaveFeed'}]);
+    expect(dispatched).toEqual([{type: LEAVE_CHANNEL_FAILED, error: 'Server returned false for leaveFeed'}]);
   });
 
 
@@ -43,9 +43,9 @@ describe('Remove Channel', () => {
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-    }, removeChannel, {type: REMOVE_CHANNEL, channel: '12345'}).toPromise();
+    }, leaveChannel, {type: LEAVE_CHANNEL, channel: '12345'}).toPromise();
 
     expect(mockLeaveChannel).toBeCalledWith('12345');
-    expect(dispatched).toEqual([{type: REMOVE_CHANNEL_FAILED, error: 'Broken'}]);
+    expect(dispatched).toEqual([{type: LEAVE_CHANNEL_FAILED, error: 'Broken'}]);
   });
 });

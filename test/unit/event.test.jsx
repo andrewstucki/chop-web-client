@@ -10,42 +10,7 @@ import { createStore } from 'redux';
 import { mockDate, mountWithTheme } from '../testUtils';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-test.skip('Offline renders when no event.', () => {
-  mockDate('Wed Nov 28 2018 21:00:00 GMT-0000');
-
-  const store = createStore(
-    reducer,
-    {
-      feed: {
-        ...defaultState,
-        schedule: [
-          {
-            endTime: 1543439700,
-            fetchTime: 1543437972,
-            id: '132487',
-            scheduleTime: 1543438800,
-            startTime: 1543438200,
-            title: 'Church Service',
-          },
-        ],
-      },
-    }
-  );
-
-  const wrapper = Enzyme.mount(
-    <Provider store={store}>
-      <div>
-        <Event />
-      </div>
-    </Provider>
-  );
-
-  expect(wrapper.find('p')).toHaveLength(3);
-  expect(wrapper.find('p').at(0).text()).toEqual('Upcoming Event');
-  expect(wrapper.find('p').at(1).text()).toEqual('Church Service');
-  expect(wrapper.find('p').at(2).text()).toEqual('3:00pm Wednesday, Nov. 28');
-});
+mockDate('Wed Nov 28 2018 21:00:00 GMT-0000');
 
 test('Event renders when there is an event.', () => {
   const store = createStore(
