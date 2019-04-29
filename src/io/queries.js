@@ -20,75 +20,92 @@ type AuthenticateType = {
   password?: string
 }
 
-export type GraphQLOrganizationType = {|
-  id: number,
-  name: GraphQLString,
-|};
+export type GraphQLAuthType = {
+  authenticate: {
+    accessToken: GraphQLString,
+    refreshToken: GraphQLString,
+  }
+}
 
-export type GraphQLParticipantsType = {|
+export type GraphQLOrganizationType = {
+  currentOrganization: {
+    id: number,
+    name: GraphQLString,
+  }
+};
+
+export type GraphQLParticipantsType = {
   id: GraphQLInt,
   pubnubToken: GraphQLString,
   avatar: GraphQLString,
   name: GraphQLString,
-|};
+};
 
-export type GraphQLChannelType = {|
+export type GraphQLChannelType = {
   id: string,
   name: GraphQLString,
   type: GraphQLString,
   direct: GraphQLBoolean,
   participants: Array<GraphQLParticipantsType>,
-|};
+};
 
-export type GraphQLEventTimeType = {|
+export type GraphQLEventTimeType = {
   id: GraphQLID,
-|};
+};
 
-export type GraphQLVideoType = {|
+export type GraphQLVideoType = {
   type: VideoTypeType,
   url: URLType,
-|};
+};
 
-export type GraphQLSequenceStepType = {|
+export type GraphQLSequenceStepType = {
   fetchTime: number,
   queries: Array<string>,
   transitionTime: number,
-|};
+};
 
-export type GraphQLSequenceType = {|
+export type GraphQLSequenceType = {
   serverTime: number,
   steps: Array<GraphQLSequenceStepType>,
-|};
+};
 
-export type GraphQLLanguageType = {|
+type GraphQLLanguageItemType = {
   name: string,
   code: string,
-|};
+};
 
-export type GraphQLPermission = {|
+export type GraphQLLanguageType = {
+  currentLanguages: Array<GraphQLLanguageItemType>
+}
+
+export type GraphQLPermission = {
   key: string,
-|};
+};
 
-export type GraphQlRole = {|
+export type GraphQlRole = {
   label: string,
   permissions: Array<GraphQLPermission>,
-|};
+};
 
-export type GraphQLUserType = {|
-  avatar: GraphQLString,
-  id: number,
-  name: GraphQLString,
-  pubnubAccessKey: GraphQLString,
-  pubnubToken: GraphQLString,
-  role: GraphQlRole,
-|};
+export type GraphQLUserType = {
+  currentUser: {
+    avatar: GraphQLString,
+    id: number,
+    name: GraphQLString,
+    pubnubAccessKey: GraphQLString,
+    pubnubToken: GraphQLString,
+    role: GraphQlRole,
+  }
+};
 
-export type GraphQLPubnubKeys = {|
-  publishKey: string,
-  subscribeKey: string,
-|};
+export type GraphQLPubnubKeys = {
+  pubnubKeys: {
+    publishKey: string,
+    subscribeKey: string,
+  }
+};
 
-export type GraphQLCurrentEventType = {|
+export type GraphQLEventType = {
   description: GraphQLString,
   endTime: GraphQLInt,
   eventTime: GraphQLEventTimeType,
@@ -101,9 +118,23 @@ export type GraphQLCurrentEventType = {|
   videoStartTime: GraphQLInt,
   video: GraphQLVideoType,
   feeds: Array<GraphQLChannelType>,
-|};
+};
 
-export type GraphQLSchedule = {|
+export type GraphQLCurrentEventType = {
+  currentEvent: GraphQLEventType,
+};
+
+export type GraphQLEventAtType = {
+  eventAt: GraphQLEventType,
+};
+
+export type GraphQLEventAtSequenceType = {
+  eventAt: {
+    sequence: GraphQLSequenceType,
+  },
+};
+
+type GraphQLScheduleItem = {
   id: string,
   startTime: GraphQLInt,
   endTime: GraphQLInt,
@@ -111,16 +142,34 @@ export type GraphQLSchedule = {|
   fetchTime: GraphQLInt,
   scheduleTime: GraphQLInt,
   hostInfo: GraphQLString,
-|};
+}
 
-export type GraphQLCurrentStateType = {|
-  currentEvent: GraphQLCurrentEventType,
-  currentOrganization: GraphQLOrganizationType,
-  currentLanguages: Array<GraphQLLanguageType>,
-  currentUser: GraphQLUserType,
-  pubnubKeys: GraphQLPubnubKeys,
-  schedule: Array<GraphQLSchedule>,
-|};
+export type GraphQLSchedule = {
+  schedule: Array<GraphQLScheduleItem>,
+};
+
+export type GraphQLCurrentStateType =
+  GraphQLCurrentEventType &
+  GraphQLOrganizationType &
+  GraphQLLanguageType &
+  GraphQLUserType &
+  GraphQLPubnubKeys & GraphQLSchedule;
+
+export type GraphQLAcceptPrayer = {
+  acceptPrayer: boolean,
+}
+
+export type GraphQLMuteUserType = {
+  muteUser: boolean,
+}
+
+export type GraphQLLeaveChannelType = {
+  leaveChannel: boolean,
+}
+
+export type GraphQLDirectChatType = {
+  createDirectFeed: GraphQLChannelType,
+}
 
 const accessToken = `
 mutation AccessToken($type: String!, $email: String, $password: String, $legacyToken: String, $refreshToken: String) {
@@ -176,6 +225,7 @@ currentEvent {
     type
     direct
     participants: subscribers {
+      id: userId
       pubnubToken
       avatar
       name: nickname
@@ -253,8 +303,10 @@ mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $requ
   acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
     id
     name
+    type
     direct
     participants: subscribers {
+      id: userId
       pubnubToken
       avatar
       name: nickname
@@ -280,8 +332,10 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
   createDirectFeed(targetPubnubToken: $pubnubToken, targetNickname: $nickname) {
     id
     name
+    type
     direct
     participants: subscribers {
+      id: userId
       pubnubToken
       avatar
       name: nickname
@@ -343,7 +397,7 @@ const setAccessToken = (accessToken: string): void => {
 
 const queries = {
 
-  authenticate: async ({type, legacyToken, refreshToken, email, password}:AuthenticateType): Promise<void> => {
+  authenticate: async ({type, legacyToken, refreshToken, email, password}:AuthenticateType): Promise<GraphQLAuthType> => {
     const data = await client.request(accessToken, {
       type,
       legacyToken,
@@ -357,20 +411,20 @@ const queries = {
     return data;
   },
 
-  authenticateByLegacyToken: async (legacyToken: string): Promise<void> =>
+  authenticateByLegacyToken: async (legacyToken: string): Promise<GraphQLAuthType> =>
     await queries.authenticate({
       type: 'LegacyAuth',
       legacyToken,
     }),
 
-  authenticateByBasicAuth: async (email: string, password: string): Promise<void> =>
+  authenticateByBasicAuth: async (email: string, password: string): Promise<GraphQLAuthType> =>
     await queries.authenticate({
       type: 'BasicAuth',
       email,
       password,
     }),
 
-  authenticateByRefreshToken: async (refreshToken: string): Promise<void> =>
+  authenticateByRefreshToken: async (refreshToken: string): Promise<GraphQLAuthType> =>
     await queries.authenticate({
       type: 'Refresh',
       refreshToken,
@@ -384,7 +438,7 @@ const queries = {
       }
     ),
 
-  acceptPrayer: async (channelId: string, requesterPubnubToken: string, requesterName: string): Promise<any> =>
+  acceptPrayer: async (channelId: string, requesterPubnubToken: string, hostTokens: Array<string>, requesterName: string): Promise<GraphQLAcceptPrayer> =>
     await client.request(
       acceptPrayer,
       {
@@ -394,7 +448,7 @@ const queries = {
       }
     ),
 
-  muteUser: async (feedToken: string, nickname: string) =>
+  muteUser: async (feedToken: string, nickname: string): Promise<GraphQLMuteUserType> =>
     await client.request(
       muteUser,
       {
@@ -403,7 +457,7 @@ const queries = {
       }
     ),
 
-  directChat: async (pubnubToken: string, nickname: string) =>
+  directChat: async (pubnubToken: string, nickname: string): Promise<GraphQLDirectChatType> =>
     await client.request(
       createDirectFeed,
       {
@@ -412,7 +466,7 @@ const queries = {
       }
     ),
 
-  leaveChannel: async (channelId: string) =>
+  leaveChannel: async (channelId: string): Promise<GraphQLLeaveChannelType> =>
     await client.request(
       leaveChannel,
       {
@@ -420,9 +474,10 @@ const queries = {
       }
     ),
 
-  schedule: async () => await client.request(schedule),
+  schedule: async (): Promise<GraphQLSchedule> =>
+    await client.request(schedule),
 
-  eventAtTime: async (time: number) =>
+  eventAtTime: async (time: number): Promise<GraphQLEventAtType> =>
     await client.request(
       eventAt,
       {
@@ -430,7 +485,7 @@ const queries = {
       }
     ),
 
-  sequence: async (time: number) =>
+  sequence: async (time: number): Promise<GraphQLEventAtSequenceType> =>
     await client.request(
       sequence,
       {

@@ -2,13 +2,13 @@
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React, {useCallback} from 'react';
 
-import type {LanguageType } from '../feed/dux';
-import type { SharedUserType} from '../users/dux';
+import type {PrivateUserType} from '../users/dux';
+import type {LanguageType} from '../feed/dux';
 
 import SideMenuItem from './sideMenuItem';
 import LanguageSelector from '../languageSelector';
-import GuestExperienceLink from '../../assets/guest-experience-link.svg';
-import FeedbackLink from '../../assets/feedback-link.svg';
+import GuestExperienceLink from '../icons/guestExperienceLink';
+import FeedbackLink from '../icons/feedbackLink';
 import PublicChat from '../../assets/public-chat.svg';
 import HostChat from '../../assets/host-chat.svg';
 import HostInfo from '../../assets/host-info.svg';
@@ -27,6 +27,9 @@ import type {TabTypeType} from '../pane/content/tab/dux';
 import Avatar from '../avatar';
 import MediaQuery from 'react-responsive';
 import ReactTouchEvents from 'react-touch-events';
+import { admin } from '../users/permissions';
+import {usePermissions} from '../hooks/usePermissions';
+import {privateUserToSharedUser} from '../users/dux';
 
 type SideMenuType = {
   logout: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -45,7 +48,7 @@ type SideMenuType = {
   organizationName: string,
   eventTitle: string,
   eventDescription: string,
-  currentUser: SharedUserType,
+  currentUser: PrivateUserType,
 };
 
 const SideMenu = (
@@ -68,9 +71,11 @@ const SideMenu = (
     eventDescription,
     currentUser,
   }: SideMenuType
-) => (
-  <>
-    <Overlay onClick={close} visible={!isClosed} />
+) => {
+  const hasAdminLinkPermissions = usePermissions(currentUser, admin);
+  return (
+    <>
+    <Overlay onClick={close} visible={!isClosed}/>
     <ReactTouchEvents onSwipe={onSwipe}>
       <Menu
         open={!isClosed}
@@ -84,14 +89,14 @@ const SideMenu = (
         <EventDescription>{eventDescription}</EventDescription>
 
         <Profile>
-          <Avatar user={currentUser} large/>
+          <Avatar user={privateUserToSharedUser(currentUser)} large/>
           <Nickname>{currentUser.name}</Nickname>
           <ProfileActions>
             <LogOutButton
               data-testid='logout'
               onClick={logout}>
               <LinkIcon
-                dangerouslySetInnerHTML={{ __html: Exit }}
+                dangerouslySetInnerHTML={{__html: Exit}}
               /> Log Out
             </LogOutButton>
           </ProfileActions>
@@ -118,14 +123,14 @@ const SideMenu = (
             active={false}
             icon={HostInfo}
             title='host info'
-            onClick={() => addTab(HOST_INFO, 'hostInfo', 'Host Info' ) && setPaneToTab(PRIMARY_PANE, HOST_INFO) && close()}
+            onClick={() => addTab(HOST_INFO, 'hostInfo', 'Host Info') && setPaneToTab(PRIMARY_PANE, HOST_INFO) && close()}
           />
 
           <SideMenuItem
             active={false}
             icon={Calendar}
             title='schedule'
-            onClick={(event:SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
+            onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
             comingSoon
           />
 
@@ -133,7 +138,7 @@ const SideMenu = (
             active={false}
             icon={Document}
             title='notes'
-            onClick={(event:SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
+            onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
             comingSoon
           />
 
@@ -141,11 +146,11 @@ const SideMenu = (
             active={false}
             icon={Bible}
             title='bible'
-            onClick={(event:SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
+            onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
             comingSoon
           />
 
-          <hr />
+          <hr/>
 
         </MediaQuery>
 
@@ -166,11 +171,22 @@ const SideMenu = (
             href={`${window.location.origin.toString()}/guest_experience`}
           >
             Guest experience
-            <LinkIcon
-              dangerouslySetInnerHTML={{ __html: GuestExperienceLink }}
-              withStroke
-            />
+            <LinkIcon size={16}>
+              <GuestExperienceLink/>
+            </LinkIcon>
           </ExternalLink>
+
+          { hasAdminLinkPermissions &&
+            <ExternalLink
+              data-testid="admin-link"
+              href={`${window.location.origin.toString()}/admin`}
+            >
+              Admin
+              <LinkIcon size={14}>
+                <FeedbackLink/>
+              </LinkIcon>
+            </ExternalLink>
+          }
 
           <ExternalLink
             data-testid="support"
@@ -179,10 +195,9 @@ const SideMenu = (
             href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
           >
             Support
-            <LinkIcon
-              dangerouslySetInnerHTML={{ __html: FeedbackLink }}
-              withStroke
-            />
+            <LinkIcon size={14}>
+              <FeedbackLink/>
+            </LinkIcon>
           </ExternalLink>
 
           <ExternalLink
@@ -192,16 +207,16 @@ const SideMenu = (
             href="https://lifechurch.formstack.com/forms/host_feedback_2"
           >
             Give feedback
-            <LinkIcon
-              dangerouslySetInnerHTML={{ __html: FeedbackLink }}
-              withStroke
-            />
+            <LinkIcon size={14}>
+              <FeedbackLink/>
+            </LinkIcon>
           </ExternalLink>
         </div>
 
       </Menu>
     </ReactTouchEvents>
   </>
-);
+  );
+};
 
 export default React.memo < SideMenuType > (SideMenu);

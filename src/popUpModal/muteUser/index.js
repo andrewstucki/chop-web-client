@@ -9,7 +9,7 @@ import {
   getHostChannel,
   getCurrentChannel,
 } from '../../selectors/channelSelectors';
-import { getCurrentUserAsSharedUser } from '../../feed/dux';
+import { getCurrentUserAsSharedUser } from '../../users/dux';
 
 import MuteUser from './muteUser';
 

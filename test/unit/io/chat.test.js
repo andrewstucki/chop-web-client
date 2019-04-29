@@ -25,7 +25,13 @@ describe('Chat2 Tests', () => {
   const store = {
     ...defaultState,
     currentUser: {
-      ...defaultState.currentUser,
+      id: 134,
+      name: 'Kylo Ren',
+      avatar: 'http://someimageons3.com/image/123',
+      role: {
+        label: 'Supreme Leader of the First Order',
+        permissions: ['event.event.manage'],
+      },
       pubnubToken: '123456',
       pubnubAccessKey: '1533912921585',
     },
@@ -222,12 +228,12 @@ describe('Chat2 Tests', () => {
         state: {
           available_help: true, // eslint-disable-line camelcase
           available_prayer: true, // eslint-disable-line camelcase
-          avatar: null,
+          avatar: 'http://someimageons3.com/image/123',
           clientIp: '205.236.56.99',
           country_name: 'United States', // eslint-disable-line camelcase
           lat: 35.6500,
           lon: -97.4214,
-          nickname: '',
+          nickname: 'Kylo Ren',
           userId: null,
           language: 'en',
         },
@@ -279,12 +285,12 @@ describe('Chat2 Tests', () => {
         state: {
           available_help: true, // eslint-disable-line camelcase
           available_prayer: true, // eslint-disable-line camelcase
-          avatar: null,
+          avatar: 'http://someimageons3.com/image/123',
           clientIp: '205.236.56.99',
           country_name: 'United States', // eslint-disable-line camelcase
           lat: 35.6500,
           lon: -97.4214,
-          nickname: '',
+          nickname: 'Kylo Ren',
           userId: null,
           language: 'en',
         },

@@ -55,6 +55,7 @@ import { mockDate } from '../testUtils';
 import { setLanguage } from '../../src/languageSelector/dux';
 
 import { setPrimaryPane } from '../../src/pane/dux';
+import type {PrivateUserType} from '../../src/users/dux';
 
 const otherUser = {
   id: 12345,
@@ -65,7 +66,7 @@ const otherUser = {
     label: '',
   },
 };
-const currentUser = {
+const currentUser: PrivateUserType = {
   id: 12345,
   pubnubToken: '09876',
   pubnubAccessKey: '67890',

@@ -2,7 +2,7 @@
 import ActionableNotification from './actionableNotification';
 import { connect } from 'react-redux';
 
-import { getCurrentUserAsSharedUser } from '../../feed/dux';
+import { getCurrentUserAsSharedUser } from '../../users/dux';
 import { publishAcceptedPrayerRequest } from './dux';
 import { getHostChannel } from '../../selectors/channelSelectors';
 

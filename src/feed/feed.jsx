@@ -1,7 +1,7 @@
 // @flow
 /* global TimeoutID */
 import React from 'react';
-import type { PrivateUserType } from './dux';
+import type { PrivateUserType } from '../users/dux';
 
 import type { MomentType } from '../moment/dux';
 import type { AnchorMomentType } from '../anchorMoment/dux';

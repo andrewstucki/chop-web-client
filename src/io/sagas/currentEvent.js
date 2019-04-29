@@ -2,7 +2,11 @@
 import {call, put, select} from 'redux-saga/effects';
 import type {Saga} from 'redux-saga';
 import queries from '../queries';
-import type { GraphQLCurrentStateType, GraphQLCurrentEventType, GraphQLChannelType } from '../queries';
+import type {
+  GraphQLCurrentStateType,
+  GraphQLChannelType,
+  GraphQLEventType,
+} from '../queries';
 import {
   setPubnubKeys,
   QUERY_CURRENT_EVENT_FAILED,
@@ -84,7 +88,7 @@ function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
           pubnubToken,
           role: {
             label,
-            permissions,
+            permissions: permissions.map(permission => permission.key),
           },
         }
       )
@@ -116,7 +120,7 @@ function* languageOptions (data: GraphQLCurrentStateType): Saga<void> {
 }
 
 function* event (data: GraphQLCurrentStateType): Saga<void> {
-  const event: GraphQLCurrentEventType = data.currentEvent || data.eventAt;
+  const { currentEvent: event } = data;
   if (event && event.id) {
     yield* eventMain(event);
     yield* sequence(event);
@@ -125,7 +129,7 @@ function* event (data: GraphQLCurrentStateType): Saga<void> {
   }
 }
 
-function* eventMain (event: GraphQLCurrentEventType): Saga<void> {
+function* eventMain (event: GraphQLEventType): Saga<void> {
   yield put(
     setEvent(
       event.title || '',
@@ -141,7 +145,7 @@ function* eventMain (event: GraphQLCurrentEventType): Saga<void> {
   );
 }
 
-function* sequence (event: GraphQLCurrentEventType): Saga<void> {
+function* sequence (event: GraphQLEventType): Saga<void> {
   const { sequence } = event;
   if (sequence?.steps?.length > 0) {
     const now = Date.now();
@@ -159,14 +163,14 @@ function* sequence (event: GraphQLCurrentEventType): Saga<void> {
   }
 }
 
-function* channels (event: GraphQLCurrentEventType): Saga<void> {
+function* channels (event: GraphQLEventType): Saga<void> {
   const { feeds: channels } = event;
   if (channels) {
     yield put(setChannels(convertChannel(channels)));
   }
 }
 
-function* video (event: GraphQLCurrentEventType): Saga<void> {
+function* video (event: GraphQLEventType): Saga<void> {
   const { video } = event;
   if (video) {
     yield put(

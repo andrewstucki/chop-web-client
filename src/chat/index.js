@@ -12,7 +12,7 @@ import {
 import { publishMessage } from '../moment';
 
 import Chat from './chat';
-import { getCurrentUserAsSharedUser } from '../feed/dux';
+import { getCurrentUserAsSharedUser } from '../users/dux';
 
 const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;

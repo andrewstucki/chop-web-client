@@ -1,4 +1,4 @@
-import { getCurrentUserAsSharedUser } from '../../../src/feed/dux';
+import { getCurrentUserAsSharedUser } from '../../../src/users/dux';
 
 describe('getCurrentUserAsSharedUser', () => {
   test('It removes the permissions and pubnubAccessKey', () => {

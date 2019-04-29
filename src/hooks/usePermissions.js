@@ -1,6 +1,6 @@
 // @flow
 import { useMemo } from 'react';
-import type { PrivateUserType } from '../feed/dux';
+import type { PrivateUserType } from '../users/dux';
 
 /*
   Example Usage:
