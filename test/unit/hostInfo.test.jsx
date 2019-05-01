@@ -17,6 +17,11 @@ describe('Host Info tests', () => {
     const store = createStore(
       reducer,
       {
+        schedule: [],
+        sequence: {
+          serverTime: 0,
+          steps: [],
+        },
         feed: {
           ...defaultState,
           event: {
@@ -42,17 +47,21 @@ describe('Host Info tests', () => {
     const store = createStore(
       reducer,
       {
+        schedule: [
+          {
+            id: '1',
+            startTime: 0,
+            endTime: 0,
+            title: 'Next Event',
+            hostInfo: '<p>The information for the hosts.</p>',
+          },
+        ],
+        sequence: {
+          serverTime: 0,
+          steps: [],
+        },
         feed: {
           ...defaultState,
-          schedule: [
-            {
-              id: '1',
-              startTime: 0,
-              endTime: 0,
-              title: 'Next Event',
-              hostInfo: '<p>The information for the hosts.</p>',
-            },
-          ],
         },
       }
     );
@@ -70,6 +79,11 @@ describe('Host Info tests', () => {
       reducer,
       {
         feed: defaultState,
+        schedule: [],
+        sequence: {
+          serverTime: 0,
+          steps: [],
+        },
       }
     );
 

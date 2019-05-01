@@ -9,12 +9,16 @@ import {
   setPubnubKeys,
   setUser,
   setChannels,
-  setSchedule,
 } from '../../../src/feed/dux';
+import {
+  setSchedule,
+} from '../../../src/schedule/dux';
 import {avatarImageExists} from '../../../src/util';
 import { mockDate } from '../../testUtils';
 import {setVideo} from '../../../src/videoFeed/dux';
+import { startTimer as _startTimer } from '../../../src/io/sagas/sequence';
 
+jest.mock('../../../src/io/sagas/sequence');
 jest.mock('../../../src/io/queries');
 jest.mock('../../../src/util');
 const mock = (mockFn: any) => mockFn;
@@ -138,6 +142,11 @@ describe('Current Event', () => {
       dispatch: action => dispatched.push(action),
       getState: () => (
         {
+          sequence: {
+            startTime: 0,
+            steps: [],
+          },
+          schedule: [],
           feed: {
             event: {
               // because the event defined above doesn't get set

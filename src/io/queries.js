@@ -4,7 +4,7 @@ import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
 import type { URLType } from '../cwc-types';
 
-declare var GATEWAY_HOST:string;
+declare var GATEWAY_HOST: string;
 
 // By default GraphQL types are Nullable
 type GraphQLString = string | null;
@@ -17,8 +17,8 @@ type AuthenticateType = {
   legacyToken?: string,
   refreshToken?: string,
   email?: string,
-  password?: string
-}
+  password?: string,
+};
 
 export type GraphQLAuthType = {
   authenticate: {
@@ -124,17 +124,25 @@ export type GraphQLCurrentEventType = {
   currentEvent: GraphQLEventType,
 };
 
-export type GraphQLEventAtType = {
-  eventAt: GraphQLEventType,
+export type GraphQLEventAtType = {|
+  description: GraphQLString,
+  endTime: GraphQLInt,
+  eventTime: GraphQLEventTimeType,
+  hostInfo: GraphQLString,
+  id: GraphQLString,
+  speaker: GraphQLString,
+  startTime: GraphQLInt,
+  title: GraphQLString,
+  videoStartTime: GraphQLInt,
+  video: GraphQLVideoType,
+  feeds: Array<GraphQLChannelType>,
+|};
+
+export type GraphQLEventAtTimeType = {
+  eventAt: GraphQLEventAtType,
 };
 
-export type GraphQLEventAtSequenceType = {
-  eventAt: {
-    sequence: GraphQLSequenceType,
-  },
-};
-
-type GraphQLScheduleItem = {
+export type GraphQLScheduleItem = {
   id: string,
   startTime: GraphQLInt,
   endTime: GraphQLInt,
@@ -385,7 +393,6 @@ let client = new GraphQLClient(GATEWAY_HOST, {
   },
 });
 
-
 const setAccessToken = (accessToken: string): void => {
   client = new GraphQLClient(GATEWAY_HOST, {
     headers: {
@@ -396,8 +403,13 @@ const setAccessToken = (accessToken: string): void => {
 };
 
 const queries = {
-
-  authenticate: async ({type, legacyToken, refreshToken, email, password}:AuthenticateType): Promise<GraphQLAuthType> => {
+  authenticate: async ({
+    type,
+    legacyToken,
+    refreshToken,
+    email,
+    password,
+  }: AuthenticateType): Promise<void> => {
     const data = await client.request(accessToken, {
       type,
       legacyToken,
@@ -417,7 +429,10 @@ const queries = {
       legacyToken,
     }),
 
-  authenticateByBasicAuth: async (email: string, password: string): Promise<GraphQLAuthType> =>
+  authenticateByBasicAuth: async (
+    email: string,
+    password: string
+  ): Promise<void> =>
     await queries.authenticate({
       type: 'BasicAuth',
       email,
@@ -430,68 +445,55 @@ const queries = {
       refreshToken,
     }),
 
-  currentState: async (needLanguages: boolean = true): Promise<GraphQLCurrentStateType> =>
-    await client.request(
-      currentState,
-      {
-        needLanguages,
-      }
-    ),
+  currentState: async (
+    needLanguages: boolean = true
+  ): Promise<GraphQLCurrentStateType> =>
+    await client.request(currentState, {
+      needLanguages,
+    }),
 
-  acceptPrayer: async (channelId: string, requesterPubnubToken: string, hostTokens: Array<string>, requesterName: string): Promise<GraphQLAcceptPrayer> =>
-    await client.request(
-      acceptPrayer,
-      {
-        feedToken: channelId,
-        requesterPubnubToken,
-        requesterNickname: requesterName,
-      }
-    ),
+  acceptPrayer: async (
+    channelId: string,
+    requesterPubnubToken: string,
+
+    requesterName: string
+  ): Promise<GraphQLAcceptPrayer> =>
+    await client.request(acceptPrayer, {
+      feedToken: channelId,
+      requesterPubnubToken,
+
+      requesterNickname: requesterName,
+    }),
 
   muteUser: async (feedToken: string, nickname: string): Promise<GraphQLMuteUserType> =>
-    await client.request(
-      muteUser,
-      {
-        feedToken,
-        nickname,
-      }
-    ),
+    await client.request(muteUser, {
+      feedToken,
+      nickname,
+    }),
 
   directChat: async (pubnubToken: string, nickname: string): Promise<GraphQLDirectChatType> =>
-    await client.request(
-      createDirectFeed,
-      {
-        pubnubToken,
-        nickname,
-      }
-    ),
+    await client.request(createDirectFeed, {
+      pubnubToken,
+      nickname,
+    }),
 
   leaveChannel: async (channelId: string): Promise<GraphQLLeaveChannelType> =>
-    await client.request(
-      leaveChannel,
-      {
-        feedToken: channelId,
-      }
-    ),
+    await client.request(leaveChannel, {
+      feedToken: channelId,
+    }),
 
   schedule: async (): Promise<GraphQLSchedule> =>
     await client.request(schedule),
 
-  eventAtTime: async (time: number): Promise<GraphQLEventAtType> =>
-    await client.request(
-      eventAt,
-      {
-        time,
-      }
-    ),
+  eventAtTime: async (time: number): Promise<GraphQLEventAtTimeType> =>
+    await client.request(eventAt, {
+      time,
+    }),
 
-  sequence: async (time: number): Promise<GraphQLEventAtSequenceType> =>
-    await client.request(
-      sequence,
-      {
-        time,
-      }
-    ),
+  sequence: async (time: number): Promise<GraphQLSequenceType> =>
+    await client.request(sequence, {
+      time,
+    }),
 
   joinChannel: async (channel: string, requesterPubnubToken: string, requesterNickname: string) =>
     await client.request(
@@ -506,6 +508,4 @@ const queries = {
 
 export default queries;
 
-export {
-  setAccessToken,
-};
+export { setAccessToken };

@@ -83,7 +83,7 @@ const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneT
       const updatedOpacity = (currentLink?.dataset?.direct === 'true') ? 0.0 : 1.0;
 
       const { left, width, opacity } = underlinePosition;
-      if (updatedLeft !== left || updatedWidth !== width || updatedOpacity !== opacity ) {
+      if ((updatedLeft && updatedLeft !== left) || (updatedWidth && updatedWidth !== width) || updatedOpacity !== opacity ) {
         setUnderlinePosition({
           left: updatedLeft,
           width: updatedWidth,

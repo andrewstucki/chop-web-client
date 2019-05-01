@@ -254,6 +254,11 @@ describe('Chat tests', () => {
 
   test('pressing key other than enter does not send the message', () => {
     const initialState = {
+      sequence: {
+        serverTime: 0,
+        steps: [],
+      },
+      schedule: [],
       feed: {
         ...defaultState,
         channels: {
