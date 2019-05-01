@@ -2,7 +2,6 @@
 
 import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
-import { UTC_DATE_FORMAT, getUTCDate } from '../util';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -84,15 +83,9 @@ export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMess
 
 let _getState;
 
-const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => (
-  // $FlowFixMe
-  dayjs(inTimestamp).utc().format('YYYY-MM-DD HH:mm:ss +UTC')
-);
+const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => dayjs.utc(inTimestamp).toISOString();
 
-const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => {
-  const updatedTimestamp = inTimestamp.replace('+UTC', '+0000');
-  return dayjs.utc(updatedTimestamp, 'YYYY-MM-DD HH:mm:ss +0000').local().valueOf();
-};
+const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => dayjs.utc(inTimestamp).local().valueOf();
 
 const Converter = {
   config: (getState: () => any) => {
@@ -123,6 +116,7 @@ const Converter = {
       roomType: 'public',
       channelToken: _getState().channels[channelId].id,
       eventStartTime: _getState().event.startTime,
+      platform: 'CWC',
     }
   ),
 
@@ -204,7 +198,7 @@ const Converter = {
     );
   },
 
-  getTimestamp: () => dayjs(getUTCDate()).format(UTC_DATE_FORMAT),
+  getTimestamp: () => dayjs().utc().toISOString(),
 
 };
 

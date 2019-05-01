@@ -1,7 +1,11 @@
-// @flow strict
+// @flow
 import createDOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
+import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
+
+
+dayjs.extend(utc);
 
 const getFirstInitial = (name: string): string => (
   name.charAt(0).toUpperCase()
@@ -79,17 +83,10 @@ const sanitizeString = (string: string, config:Config = sanitizeConfig) =>
   DOMPurify.sanitize(string, config)
 ;
 
-const UTC_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss ZZ';
-
-const getMessageTimestamp = (timestamp: string = dayjs().format(UTC_DATE_FORMAT)) => {
-  const isEpoch = timestamp.toString().match(/^\d{10}$/);
-  let date = timestamp;
-  if (isEpoch) {
-    date = dayjs.unix(date);
-  } else {
-    date = dayjs(date);
-  }
-  const format = dayjs().isSame(date, 'day') === true ? 'h:mma' : 'h:mma, MMMM D';
+// Default ISO8601 Format
+const getMessageTimestamp = (timestamp: string = dayjs().format()) => {
+  const date = dayjs.utc(timestamp);
+  const format = dayjs().utc().isSame(date, 'day') === true ? 'h:mma' : 'h:mma, MMMM D';
   return date.format(format);
 };
 
@@ -116,7 +113,6 @@ export {
   isEmpty,
   sanitizeString,
   getMessageTimestamp,
-  UTC_DATE_FORMAT,
   isMobileDevice,
   isIOS,
   isIPhone,

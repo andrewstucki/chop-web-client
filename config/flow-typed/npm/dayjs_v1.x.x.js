@@ -80,6 +80,8 @@ declare class Dayjs {
 
   isAfter(date: ConfigType, unit?: OpUnitType): boolean;
 
+  utc(date?: any): Dayjs;
+
   locale:dayjs$localefunction;
 }
 
@@ -93,6 +95,7 @@ declare type isDayjs = (d: any) => boolean;
 
 declare type unix = (t: number) => Dayjs;
 
+declare type utc = (d: any) => Dayjs;
 
 declare module 'dayjs' {
   declare module.exports: dayjs;
