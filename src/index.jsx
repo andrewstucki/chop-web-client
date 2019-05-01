@@ -22,13 +22,10 @@ import Login from './login';
 import reducer from './chop/dux';
 import actorMiddleware from './middleware/actor-middleware';
 import ChatActor from './io/chat';
-import serviceActor from './io/serviceActor';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
-import smoothscroll from 'smoothscroll-polyfill';
-import { warningNotificationBanner } from './banner/dux';
 import { ErrorBoundary } from './util/bugsnag';
 
 declare var ENV:string;
@@ -37,17 +34,13 @@ declare var GTM;
 
 if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
-  whyDidYouRender(React, { include: [/^/], exclude: [/^StyledComponent/, /^Connect/, /^ReactTouchEvents/, /^MediaQuery/]});
+  whyDidYouRender(React);
 }
-
-// kick off the polyfill!
-smoothscroll.polyfill();
 
 TagManager.initialize(GTM);
 
 const actorMiddlewareApplied = actorMiddleware(
   ChatActor,
-  serviceActor,
 );
 
 const sagaMiddleware = createSagaMiddleware();
@@ -59,8 +52,9 @@ const persistConfig = {
   key: 'root',
   storage,
   stateReconciler: autoMergeLevel2,
+  blacklist: ['sequence', 'schedule'],
   transforms: [
-    createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt']),
+    createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt', 'languageOptions']),
     createExpirationTransform({
       defaultState,
     }),
@@ -77,10 +71,6 @@ const store = createStore(
 );
 
 sagaMiddleware.run(rootSaga);
-
-if (navigator.userAgent.match('CriOS')) {
-  store.dispatch(warningNotificationBanner('We’re optimizing Host Tools for Chrome. For now, please switch to Safari.'));
-}
 
 const persistor = persistStore(store);
 

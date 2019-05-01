@@ -14,6 +14,7 @@ import { Grid, Cell } from 'styled-css-grid';
 type MediumProps = {
   isVideoHidden: boolean,
   toggleHideVideo: (hidden:boolean) => void,
+  hasVideo: boolean,
 };
 
 type MediumState = {
@@ -57,6 +58,7 @@ class Medium extends React.Component<MediumProps, MediumState> {
   }
 
   render () {
+    const { hasVideo } = this.props;
     return (
       <Container>
         <SideMenu />
@@ -74,11 +76,13 @@ class Medium extends React.Component<MediumProps, MediumState> {
           <Cell area="menu">
             <NavMenu/>
           </Cell>
-          <Cell area="video">
-            <CellContainerTop>
-              <VideoFeed />
-            </CellContainerTop>
-          </Cell>
+          { hasVideo &&
+            <Cell area="video">
+              <CellContainerTop>
+                <VideoFeed/>
+              </CellContainerTop>
+            </Cell>
+          }
           <Cell area="chat">
             <CellContainerBottom>
               <Pane name={PRIMARY_PANE} />

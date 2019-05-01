@@ -1,12 +1,13 @@
 // @flow
 import { createSelector } from 'reselect';
-import { objectFilter } from '../util';
 import type {
   FeedType,
   ChannelsObjectType,
   ChannelType,
-  SharedUserType,
 } from '../feed/dux';
+import type {
+  SharedUserType,
+} from '../users/dux';
 import type {
   ChannelIdType,
   LanguageCodeType,
@@ -30,9 +31,9 @@ const getSawLastMomentAt = createSelector(
   channel => channel ? channel.sawLastMomentAt : 0
 );
 
-const getChannelIdByNameFactory = (name: string): ChannelIdType => (
-  createSelector(
-    getChannels,
+const getChannelIdByNameFactory = (name: string): Function  => (
+  createSelector<FeedType, void, ChannelIdType, ChannelsObjectType>(
+    [getChannels],
     channels => {
       if (channels) {
         return Object.keys(channels).find(channel => channels[channel] ? channels[channel].name.toUpperCase() === name : null);
@@ -42,7 +43,7 @@ const getChannelIdByNameFactory = (name: string): ChannelIdType => (
 );
 
 const getChannelByNameFactory = (name: string): ChannelType => (
-  createSelector(
+  createSelector<FeedType, void, ChannelType, ChannelsObjectType, string>(
     getChannels,
     getChannelIdByNameFactory(name),
     (channels, id) => channels[id]
@@ -74,31 +75,49 @@ const removeMutedUsers = (mutedUsers: Array<UIDType>) => (moment: MomentType): b
   }
 };
 
-const getHostChannelObject = createSelector(
-  getChannelByNameFactory('HOST'),
+const getHostChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
+  [getChannelByNameFactory('HOST')],
   channel => channel
 );
 
-const getHostChannel = createSelector(
+const getHostChannel = createSelector<FeedType, void, string, string>(
   getChannelIdByNameFactory('HOST'),
   channel => channel
 );
 
-const getPublicChannelObject = createSelector(
+const getPublicChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
   getChannelByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const getPublicChannel = createSelector(
+const getPublicChannel = createSelector<FeedType, void, string, string>(
   getChannelIdByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const getDirectChannels = createSelector(
+const channelFilter = (obj: ChannelsObjectType, predicate: (string, ChannelType) => boolean): { [string]: ChannelType } => {
+  const result = {};
+  Object.keys(obj).forEach(key => {
+    if (obj.hasOwnProperty(key) && !predicate(key, obj[key])) {
+      result[key] = obj[key];
+    }
+  });
+  return result;
+};
+
+const getDirectChannels = createSelector<>(
   getChannels,
   channels =>
     channels ?
-      objectFilter(channels, id => !channels[id].direct) :
+      channelFilter(channels, id => !channels[id].direct || channels[id].placeholder) :
+      []
+);
+
+const getPlaceholderChannels = createSelector(
+  getChannels,
+  channels =>
+    channels ?
+      channelFilter(channels, id => !channels[id].placeholder) :
       []
 );
 
@@ -119,11 +138,6 @@ const getCurrentChannel = createSelector(
 const getCurrentTabType = createSelector(
   getPrimaryPane,
   pane => pane?.content?.type || '',
-);
-
-const getCurrentChannelObj = createSelector(
-  [ getCurrentChannel, getChannels ],
-  (channelId, channels) => channels[channelId]
 );
 
 const feedAnchorMoments = createSelector(
@@ -164,15 +178,15 @@ const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => us
 const getLastAction = (state: FeedType) => state.lastAction;
 
 const getScroll = createSelector(
-  [ getCurrentChannelObj, getLastAction, getCurrentUser ],
-  (currentChannel, action, currentUser) => {
-    if (!currentChannel) {
+  [ getChannelById, getLastAction, getCurrentUser ],
+  (channel, action, currentUser) => {
+    if (!channel) {
       return {
         type: 'SCROLL_TO',
         position: 0,
       };
     }
-    const { moments, scrollPosition } = currentChannel;
+    const { moments, scrollPosition } = channel;
 
     switch (action.type) {
       case 'PUBLISH_MOMENT_TO_CHANNEL': {
@@ -233,6 +247,7 @@ export {
   getPublicChannel,
   getLegacyChannel,
   getDirectChannels,
+  getPlaceholderChannels,
   getCurrentChannel,
   feedContents,
   feedAnchorMoments,

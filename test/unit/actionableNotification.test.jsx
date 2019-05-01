@@ -10,14 +10,16 @@ import ActionableNotification from '../../src/moment/actionableNotification/acti
 Enzyme.configure({ adapter: new Adapter() });
 
 const yablby = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '12345',
+  avatar: null,
   name: 'yablby',
   role: { label: '' },
 };
 const billBogus = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '5483',
+  avatar: null,
   name: 'Bill Bogus',
   role: { label: '' },
 };

@@ -6,7 +6,6 @@ const Container = styled.div`
   background-color: ${props => props.theme.colors.gray10};
   height: 100%;
   box-sizing: border-box;
-  padding: 0 8px 0 0;
 `;
 
 type CellContainerProps = {
@@ -23,8 +22,7 @@ const CellContainer = styled.div`
   overflow: hidden;
   background-color: ${(props:CellContainerProps) => props.theme.colors.background};
   margin-top: ${(props:CellContainerProps) => props.bottomCell ? '0' : '8px'};
-  margin-right: ${(props:CellContainerProps) => props.topCell || props.bottomCell ? '4px' : 0 };
-  margin-left: ${(props:CellContainerProps) => props.staticCell ? '4px' : 0};
+  margin-right: 8px;
 `;
 export {
   Container,

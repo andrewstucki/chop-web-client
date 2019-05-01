@@ -12,8 +12,9 @@ import { TextWrapper } from '../../src/moment/message/styles';
 Enzyme.configure({ adapter: new Adapter() });
 
 const otherUser = {
-  id: '12345',
+  id: 12345,
   pubnubToken: '12345',
+  avatar: null,
   name: 'Billy Bob',
   role: {
     label: 'Host',
@@ -21,8 +22,9 @@ const otherUser = {
 };
 
 const user = {
-  id: '12345',
+  id: 12345,
   name: 'name',
+  avatar: null,
   pubnubToken: '123',
   role: {
     label: '',
@@ -51,11 +53,11 @@ describe('Message', () => {
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
-        directChat={() => {}}
-        publishMuteUserNotification={() => {}}
-        mutedNotificationBanner={() => {}}
+        addPlaceholderChannel={() => ''}
+        setPaneToChat={() => {}}
         hostChannel='host'
         currentUser={user}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find(TextWrapper).html()).toContain('Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!');
@@ -82,11 +84,11 @@ describe('Message', () => {
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
-        directChat={() => {}}
-        publishMuteUserNotification={() => {}}
-        mutedNotificationBanner={() => {}}
+        addPlaceholderChannel={() => ''}
+        setPaneToChat={() => {}}
         hostChannel='host'
         currentUser={user}
+        directChat={() => {}}
       />
     );
     expect(wrapper.find(Label).text()).toEqual('Host');
@@ -114,11 +116,11 @@ describe('Message', () => {
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
-        directChat={() => {}}
-        publishMuteUserNotification={() => {}}
-        mutedNotificationBanner={() => {}}
+        addPlaceholderChannel={() => ''}
+        setPaneToChat={() => {}}
         hostChannel='host'
         currentUser={user}
+        directChat={() => {}}
       />
     );
     wrapper.find('button').at(0).simulate('click');

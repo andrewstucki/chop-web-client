@@ -1,7 +1,7 @@
 // @flow
 /* global TimeoutID */
 import React from 'react';
-import type { PrivateUserType } from './dux';
+import type { PrivateUserType } from '../users/dux';
 
 import type { MomentType } from '../moment/dux';
 import type { AnchorMomentType } from '../anchorMoment/dux';
@@ -114,6 +114,9 @@ class Feed extends React.Component<FeedProps> {
     const { current } = this.wrapperRef;
     if (current) {
       current.addEventListener('scroll', this.detectScroll, { passive: true });
+      if (Math.round(this.listRef.current.scrollHeight) - Math.round(current.getBoundingClientRect().height) === 0) {
+        this.saveScrollPosition();
+      }
     }
     this.scroll();
   }

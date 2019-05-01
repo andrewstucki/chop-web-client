@@ -9,28 +9,32 @@ import { PaneWrapper, PaneContentWrapper } from './styles';
 import hash from 'object-hash';
 import { useTransition } from 'react-spring';
 import { TAB } from './content/tab/dux';
+import type { TabTypeType } from './content/tab/dux';
 import Tab from './content/tab';
+import { HOST_INFO } from '../hostInfo/dux';
 import { Small, MediumUp } from '../util/responsive';
 import { isEmpty } from '../util';
 
 type PanePropsType = {
   name: string,
-  isMediumPlusUp: boolean,
+  isLarge: boolean,
+  isXlarge: boolean,
   pane: PaneType,
   navbarIndex: number,
   prevNavbarIndex: number,
   hostChannel: string,
   setPaneToChat: (pane:string, channel:string) => void,
+  setPaneToTab: (name:string, type:TabTypeType) => void,
 };
 
-const renderPaneContent = (pane:PaneType, isMediumPlusUp:boolean) => {
+const renderPaneContent = (pane:PaneType, hideReactions:boolean) => {
   const { type, content } = pane;
   switch (type) {
     case EVENT:
       return <Event />;
     case CHAT:
     // $FlowFixMe
-      return <Chat key={content.channelId} channel={content.channelId} hideReactions={isMediumPlusUp} />;
+      return <Chat key={content.channelId} channel={content.channelId} hideReactions={hideReactions} />;
     case TAB:
     // $FlowFixMe
       return <Tab type={content.type}/>;
@@ -39,19 +43,27 @@ const renderPaneContent = (pane:PaneType, isMediumPlusUp:boolean) => {
   }
 };
 
-const Pane = ({ isMediumPlusUp, name, pane, navbarIndex, prevNavbarIndex, setPaneToChat, hostChannel }:PanePropsType) => {
+const Pane = ({ isLarge, isXlarge, name, pane, navbarIndex, prevNavbarIndex, setPaneToChat, setPaneToTab, hostChannel }:PanePropsType) => {
   const direction = navbarIndex > prevNavbarIndex;
+  const hideReactions = isLarge || isXlarge;
+  let animate = true;
+  if (pane.type === CHAT) {
+    ({ animate } = pane.content);
+  }
+
   const transitions = useTransition(pane, hash(pane), {
     from: { transform: direction ? 'translate3d(100%,0,0)' : 'translate3d(-100%,0,0)' },
     enter: { transform: direction ? 'translate3d(0,0,0)' : 'translate3d(0,0,0)' },
     leave: { transform: direction ? 'translate3d(-100%,0,0)' : 'translate3d(100%,0,0)' },
-    immediate: prevNavbarIndex === undefined,
+    immediate: (prevNavbarIndex === undefined || !animate),
   });
 
-  // Prevent two EVENT panes on Medium+
+  // Prevent two of the same panes
   useEffect(() => {
-    if (isMediumPlusUp && pane.type === EVENT && !isEmpty(hostChannel)) {
+    if (isLarge && pane.type === EVENT && !isEmpty(hostChannel)) {
       setPaneToChat(name, hostChannel);
+    } else if (isXlarge && (pane.type === EVENT || pane.content.channelId === hostChannel)) {
+      setPaneToTab(name, HOST_INFO);
     }
   });
 
@@ -62,13 +74,13 @@ const Pane = ({ isMediumPlusUp, name, pane, navbarIndex, prevNavbarIndex, setPan
           <PaneContentWrapper
             key={key}
             style={props}>
-            {renderPaneContent(pane, isMediumPlusUp)}
+            {renderPaneContent(pane, hideReactions)}
           </PaneContentWrapper>)
         )}
       </Small>
       <MediumUp>
         <PaneContentWrapper>
-          {renderPaneContent(pane, isMediumPlusUp)}
+          {renderPaneContent(pane, hideReactions)}
         </PaneContentWrapper>
       </MediumUp>
     </PaneWrapper>

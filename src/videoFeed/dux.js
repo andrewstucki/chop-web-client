@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import YouTubePlayer from 'react-player/lib/players/YouTube';
 import VimeoPlayer from 'react-player/lib/players/Vimeo';
 import WistiaPlayer from 'react-player/lib/players/Wistia';
+import type {URLType} from '../cwc-types';
 
 // Action Types
 
@@ -14,9 +15,11 @@ const TOGGLE_HIDE_VIDEO = 'TOGGLE_HIDE_VIDEO';
 
 // Type Definitions
 
+type VideoTypeType = 'videoFeed' | 'simulated' | 'live' | 'offline' | 'none';
+
 type VideoType = {
-  type: string,
-  url: string,
+  type: VideoTypeType,
+  url: URLType,
 };
 
 type SetVideoType = {
@@ -52,7 +55,7 @@ type ToggleHideVideoType = {
 
 // Action Creators
 
-const setVideo = (url: string, type: string): SetVideoType => (
+const setVideo = (url: URLType, type: VideoTypeType): SetVideoType => (
   {
     type: SET_VIDEO,
     video: {
@@ -128,6 +131,7 @@ export type {
   SimulatedLivePlayerPropsType,
   OfflinePlayerPropsType,
   ToggleHideVideoType,
+  VideoTypeType,
 };
 
 export {

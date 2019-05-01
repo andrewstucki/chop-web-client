@@ -8,7 +8,7 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 1. Locally run `yarn validate` on your code and make sure all tests pass.
 2. Push your branch to gitLab (https://in.thewardro.be/io/opennetwork/chop-web-client) and create a merge request.
-3. Once approved by a reviewer you may merge your changes into master
+3. Once approved by a reviewer a maintainer will merge your changes into master
 
 ## Code of Conduct
 

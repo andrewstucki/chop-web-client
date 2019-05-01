@@ -51,24 +51,31 @@ describe('Test Accept Prayer', () => {
       cancelled: false,
     }).toPromise();
 
-    expect(mockAcceptPrayer).toBeCalledWith('12345', '67890', [ '45678' ], 'James T. Kirk');
+    expect(mockAcceptPrayer).toBeCalledWith('12345', '67890', 'James T. Kirk');
     expect(dispatched).toEqual([
       {
         type: ADD_CHANNEL,
         channel: {
           direct: true,
+          placeholder: false,
           id: '12345',
           name: 'Direct',
           anchorMoments: [],
           moments: [],
           participants: [
             {
+              id: '123',
+              avatar: null,
               name: 'James T. Kirk',
               pubnubToken: '67890',
+              role: { label: '' },
             },
             {
+              id: '456',
+              avatar: null,
               name: 'Will Brown',
               pubnubToken: '54320',
+              role: { label: '' },
             },
           ],
           scrollPosition: 0,
@@ -130,7 +137,7 @@ describe('Test Accept Prayer', () => {
       cancelled: false,
     }).toPromise();
 
-    expect(mockAcceptPrayer).toBeCalledWith('12345', '67890', [ '45678' ], 'James T. Kirk');
+    expect(mockAcceptPrayer).toBeCalledWith('12345', '67890', 'James T. Kirk');
     expect(dispatched).toEqual([{type: PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, error: 'Broken'}]);
   });
 });

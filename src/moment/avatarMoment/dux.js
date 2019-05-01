@@ -1,5 +1,5 @@
 // @flow
-import type { SharedUserType } from '../../feed/dux';
+import type { SharedUserType } from '../../users/dux';
 import { createUid } from '../../util';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 

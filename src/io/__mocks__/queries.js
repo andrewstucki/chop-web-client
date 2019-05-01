@@ -16,13 +16,17 @@ const acceptPrayer = jest.fn().mockResolvedValue(
       name: 'Direct',
       id: '12345',
       direct: true,
-      subscribers: [
+      participants: [
         {
-          nickname: 'James T. Kirk',
+          id: '123',
+          avatar: null,
+          name: 'James T. Kirk',
           pubnubToken: '67890',
         },
         {
-          nickname: 'Will Brown',
+          id: '456',
+          avatar: null,
+          name: 'Will Brown',
           pubnubToken: '54320',
         },
       ],
@@ -37,24 +41,74 @@ const directChat = jest.fn().mockResolvedValue(
       direct: true,
       id: '67890',
       name: null,
-      subscribers: [
+      participants: [
         {
-          pubnubToken: 4321,
-          nickname: 'Fred',
+          id: '123',
+          pubnubToken: '4321',
+          name: 'Fred',
           avatar: null,
         },
         {
-          pubnubToken: 5432,
-          nickname: 'Barny',
+          id: '456',
+          pubnubToken: '5432',
+          name: 'Barny',
           avatar: null,
         },
       ],
     },
   }
 );
+
+const joinChannel = jest.fn().mockResolvedValue(
+  {
+    joinFeed: {
+      direct: true,
+      id: '67890',
+      name: null,
+      participants: [
+        {
+          id: '123',
+          pubnubToken: '4321',
+          name: 'Kilo',
+          avatar: null,
+        },
+        {
+          id: '456',
+          pubnubToken: '5432',
+          name: 'Darth',
+          avatar: null,
+        },
+      ],
+    },
+  }
+);
+
 const eventAtTime = jest.fn();
 const getSchedule = jest.fn();
-const getSequence = jest.fn();
+const sequence = jest.fn().mockResolvedValue(
+  {
+    sequence: {
+      serverTime: 1539966236,
+      steps: [
+        {
+          fetchTime: 1542289491,
+          query: ['feed'],
+          transitionTime: 1542289492,
+        },
+        {
+          fetchTime: 1542289493,
+          query: ['event', 'video'],
+          transitionTime: 1542289494,
+        },
+        {
+          fetchTime: 1542289495,
+          query: ['event', 'video', 'feed'],
+          transitionTime: 1542289496,
+        },
+      ],
+    },
+  }
+);
 
 const mockQueries = {
   authenticate: authenticate,
@@ -68,7 +122,8 @@ const mockQueries = {
   directChat: directChat,
   eventAtTime: eventAtTime,
   schedule: getSchedule,
-  sequence: getSequence,
+  sequence: sequence,
+  joinChannel: joinChannel,
 };
 
 export {
@@ -80,7 +135,8 @@ export {
   directChat,
   eventAtTime,
   getSchedule,
-  getSequence,
+  sequence,
   setAccessToken,
+  joinChannel,
 };
 export default mockQueries;

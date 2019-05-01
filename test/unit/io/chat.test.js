@@ -25,13 +25,19 @@ describe('Chat2 Tests', () => {
   const store = {
     ...defaultState,
     currentUser: {
-      ...defaultState.currentUser,
+      id: 134,
+      name: 'Kylo Ren',
+      avatar: 'http://someimageons3.com/image/123',
+      role: {
+        label: 'Supreme Leader of the First Order',
+        permissions: ['event.event.manage'],
+      },
       pubnubToken: '123456',
       pubnubAccessKey: '1533912921585',
     },
     event: {
-      id: 320418,
-      eventTimeId: 1920834,
+      id: '320418',
+      eventTimeId: '1920834',
       startTime: 1529425800000,
       endTime: 1529425900000,
       title: 'When Pigs Fly - Week 2',
@@ -157,52 +163,6 @@ describe('Chat2 Tests', () => {
     );
   });
 
-  test('Publish Message', () => {
-    const message = {
-      type: 'MESSAGE',
-      id: '123456',
-      lang: 'en',
-      text: 'You kindness leads us to repentance to the heart of God',
-      sender: {
-        pubnubToken: '098765',
-        name: 'Hillsong Young & Free',
-        role: {
-          label: '',
-        },
-      },
-      messageTrayOpen: false,
-    };
-    const dispatch = jest.fn();
-    const getState = jest.fn();
-    getState.mockReturnValue(store);
-
-    const chat = new Chat(dispatch, getState); // eslint-disable-line no-unused-vars
-
-    chat.init();
-
-    chat.dispatch(
-      {
-        type: 'PUBLISH_MOMENT_TO_CHANNEL',
-        moment: message,
-        channel: '123456',
-      }
-    );
-
-    expect(mockPublish).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledTimes(1);
-    expect(Converter.cwcMessageToLegacyNewMessage).toHaveBeenCalledWith(message, '123456');
-    expect(mockPublish.mock.calls[0][0]).toEqual(
-      {
-        channel: '123456',
-        message: {
-          action: 'newMessage',
-          channel: '123456',
-          data: message,
-        },
-      }
-    );
-  });
-
   test('Receive Message', () => {
     const message = {
       type: 'MESSAGE',
@@ -268,16 +228,17 @@ describe('Chat2 Tests', () => {
         state: {
           available_help: true, // eslint-disable-line camelcase
           available_prayer: true, // eslint-disable-line camelcase
-          avatarUrl: undefined,
+          avatar: 'http://someimageons3.com/image/123',
           clientIp: '205.236.56.99',
           country_name: 'United States', // eslint-disable-line camelcase
           lat: 35.6500,
           lon: -97.4214,
-          nickname: '',
+          nickname: 'Kylo Ren',
           userId: null,
           language: 'en',
         },
-      }
+      },
+      expect.any(Function)
     );
   });
 
@@ -324,16 +285,17 @@ describe('Chat2 Tests', () => {
         state: {
           available_help: true, // eslint-disable-line camelcase
           available_prayer: true, // eslint-disable-line camelcase
-          avatarUrl: undefined,
+          avatar: 'http://someimageons3.com/image/123',
           clientIp: '205.236.56.99',
           country_name: 'United States', // eslint-disable-line camelcase
           lat: 35.6500,
           lon: -97.4214,
-          nickname: '',
+          nickname: 'Kylo Ren',
           userId: null,
           language: 'en',
         },
-      }
+      },
+      expect.any(Function)
     );
   });
 });

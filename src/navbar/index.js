@@ -2,7 +2,7 @@
 import Navbar from './navbar';
 import { connect } from 'react-redux';
 
-import { getHostChannel, getPublicChannel, getDirectChannels, getTabs, setNavbarIndex } from './dux';
+import { getHostChannel, getPublicChannel, getDirectChannels, getTabs, getPlaceholderChannels, setNavbarIndex } from './dux';
 import { openMenu } from '../sideMenu/dux';
 import { setPaneToEvent } from '../pane/content/event/dux';
 import { setPaneToChat } from '../pane/content/chat/dux';
@@ -13,10 +13,12 @@ const mapStateToProps = state => {
   const publicChannel = getPublicChannel(feedState);
   const hostChannel = getHostChannel(feedState);
   const directChannels = getDirectChannels(feedState);
+  const placeholderChannels = getPlaceholderChannels(feedState);
   const tabs = getTabs(feedState);
   const { navbarIndex } = feedState;
+
   return {
-    items: [publicChannel, hostChannel, ...directChannels, ...tabs],
+    items: [publicChannel, hostChannel, ...directChannels, ...placeholderChannels, ...tabs],
     navbarIndex,
   };
 };

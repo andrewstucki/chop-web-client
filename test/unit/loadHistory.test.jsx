@@ -96,7 +96,13 @@ describe('Load history', () => {
     const store = {
       ...defaultState,
       currentUser: {
-        ...defaultState.currentUser,
+        id: 134,
+        name: 'Kylo Ren',
+        avatar: 'http://someimageons3.com/image/123',
+        role: {
+          label: 'Supreme Leader of the First Order',
+          permissions: ['event.event.manage'],
+        },
         pubnubToken: '123456',
         pubnubAccessKey: '1533912921585',
       },
@@ -148,7 +154,13 @@ describe('Load history', () => {
       {
         ...defaultState,
         currentUser: {
-          ...defaultState.currentUser,
+          id: 134,
+          name: 'Kylo Ren',
+          avatar: 'http://someimageons3.com/image/123',
+          role: {
+            label: 'Supreme Leader of the First Order',
+            permissions: ['event.event.manage'],
+          },
           pubnubToken: '123456',
           pubnubAccessKey: '1533912921585',
         },
@@ -197,9 +209,9 @@ describe('Load history', () => {
         ],
         sender:
         {
-          id: undefined,
+          id: 0,
           name: 'G. Boole',
-          avatarUrl: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
+          avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
           pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
           role: {
             label: 'Admin',

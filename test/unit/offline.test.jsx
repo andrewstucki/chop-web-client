@@ -1,48 +1,54 @@
 // @flow
-import Adapter from 'enzyme-adapter-react-16';
-import Offline from '../../src/pane/content/offline';
-import Enzyme from 'enzyme';
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
+import Offline from '../../src/pane/content/offline';
 import { defaultState } from '../../src/feed/dux';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { mockDate, renderWithReduxAndTheme } from '../testUtils';
 
 describe('Offline Componenet', () => {
-  // TODO: Timezone while running in CI does not match local timezone, skipping for now
-  test.skip('renders when no event', () => {
-    const store = createStore(
-      reducer,
+  mockDate(1546896104521);
+  test('renders when no event', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Offline/>,
       {
+        schedule: [
+          {
+            endTime: 1543439700,
+            fetchTime: 1543437972,
+            id: '132487',
+            scheduleTime: 1543438800,
+            startTime: 1543438200,
+            title: 'Church Service',
+          },
+        ],
+        sequence: {
+          serverTime: 0,
+          steps: [],
+        },
         feed: {
           ...defaultState,
-          schedule: [
-            {
-              endTime: 1543439700,
-              fetchTime: 1543437972,
-              id: '132487',
-              scheduleTime: 1543438800,
-              startTime: 1543438200,
-              title: 'Church Service',
-            },
-          ],
         },
       }
     );
 
-    const wrapper = Enzyme.mount(
-      <Provider store={store}>
-        <div>
-          <Offline />
-        </div>   
-      </Provider>
+    expect(getByTestId('offline')).toBeTruthy();
+    expect(getByTestId('offline-header').textContent).toEqual('Upcoming Event');
+    expect(getByTestId('offline-name').textContent).toEqual('Church Service');
+    // GitLab CI runs this test in a different timezone ???
+    expect(getByTestId('offline-time').textContent).toBeOneOf(['3:21pm Monday, Jan. 7', '9:21pm Monday, Jan. 7']);
+  });
+
+  test('notifies of no upcoming event', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Offline/>,
+      {
+        feed: {
+          ...defaultState,
+          schedule: [],
+        },
+      }
     );
 
-    expect(wrapper.find('p')).toHaveLength(3);
-    expect(wrapper.find('p').at(0).text()).toEqual('Upcoming Event');
-    expect(wrapper.find('p').at(1).text()).toEqual('Church Service');
-    expect(wrapper.find('p').at(2).text()).toEqual('3:00pm Wednesday, Nov. 28');
+    expect(getByTestId('offline')).toBeTruthy();
+    expect(getByTestId('offline-noevent').textContent).toEqual('No upcoming Event.');
   });
 });

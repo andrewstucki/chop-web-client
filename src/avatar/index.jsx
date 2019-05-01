@@ -2,7 +2,7 @@
 import React from 'react';
 import InitialAvatar from './initialAvatar';
 import ImageAvatar from './imageAvatar';
-import type { SharedUserType } from '../feed/dux';
+import type { SharedUserType } from '../users/dux';
 
 type AvatarProps = {
   user: SharedUserType,
@@ -10,9 +10,9 @@ type AvatarProps = {
 };
 
 const Avatar = ({user, large = false}:AvatarProps) => {
-  if (user.avatarUrl && user.avatarUrl.indexOf('missing.png') === -1) {
+  if (user.avatar && user.avatar.indexOf('missing.png') === -1) {
     return (
-      <ImageAvatar url={user.avatarUrl} large={large} />
+      <ImageAvatar url={user.avatar} large={large} />
     );
   } else {
     return (

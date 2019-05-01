@@ -1,34 +1,22 @@
 // @flow
-import serviceActor from '../../src/io/serviceActor';
 import ChatActor from '../../src/io/chat';
 import { mockRequest } from 'graphql-request';
-import queries from '../../src/io/queries';
-import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState, addChannel, togglePopUpModal } from '../../src/feed/dux';
-import PopUpModal from '../../src/popUpModal';
-import actorMiddleware from '../../src/middleware/actor-middleware';
+import { defaultState } from '../../src/feed/dux';
 import testData from './io/test-data.json';
 import accessToken from './io/access-token.json';
-import { mockPublish, mockUnsubscribe, __messageEvent } from 'pubnub';
-import { mockDate, promisifyMiddleware } from '../testUtils';
-import { REHYDRATE } from 'redux-persist/lib/constants';
-import { setPrimaryPane } from '../../src/pane/dux';
+import { __messageEvent } from 'pubnub';
+import { mockDate } from '../testUtils';
 
 jest.mock('../../src/io/location');
 jest.mock('graphql-request');
 jest.mock('../../src/io/queries');
 jest.mock('pubnub');
-const mock = (mockFn: any) => mockFn;
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Test leave channel', () => {
-  const mockLeaveChannel = mock(queries.leaveChannel);
   mockDate('Wed Jun 27 2018 16:53:06 GMT-0000');
   const message = {
     channelToken: 'test',
@@ -42,80 +30,15 @@ describe('Test leave channel', () => {
   global.document.cookie  = 'legacy_token=12345; ';
   mockRequest.mockResolvedValueOnce(accessToken);
   mockRequest.mockResolvedValueOnce(testData);
-  const actorMiddlewareApplied = actorMiddleware(
-    serviceActor,
-    ChatActor,
-  );
-
-  test.skip('Remove channel and send pubnub notification', () => {
-    const participants = [
-      {
-        id: '12345',
-        pubnubToken: 'abc123xyz',
-        name: 'Tony Hoare',
-        role: { label: '' },
-      },
-      {
-        id: '12345',
-        pubnubToken: '54353',
-        name: 'Shaq O.',
-        role: { label: '' },
-      },
-    ];
-
-    const middlewareList = [promisifyMiddleware, actorMiddlewareApplied];
-    const store = createStore(
-      reducer,
-      compose(
-        applyMiddleware(...middlewareList)
-      )
-    );
-
-    return store.dispatch({ type: REHYDRATE }).then(() => {
-      store.dispatch(
-        addChannel('test', 'test', false, participants)
-      );
-
-      store.dispatch(
-        setPrimaryPane('CHAT', 'test' )
-      );
-
-      store.dispatch(
-        togglePopUpModal()
-      );
-
-      mockRequest.mockResolvedValueOnce(accessToken);
-
-      const wrapper = Enzyme.mount(
-        <Provider store={store}>
-          <div>
-            <PopUpModal />
-          </div>
-        </Provider>
-      );
-
-      wrapper.find('button').at(1).simulate('click');
-      expect(mockPublish).toHaveBeenCalledTimes(1);
-      expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
-      expect(mockUnsubscribe).toHaveBeenCalledWith(
-        {
-          channels: ['test'],
-        }
-      );
-      expect(Object.keys(store.getState().feed.channels).length).toEqual(4);
-      expect(store.getState().panes.primary.content.channelId).toEqual('1ebd2b8e3530d1acaeba2be9c1875ad21376134e4b49e17fdbea6b6ba0930b6c');
-      expect(mockLeaveChannel).toHaveBeenCalledTimes(1);
-      expect(mockLeaveChannel).toHaveBeenCalledWith('test');
-    });
-  });
 
   test('Receive leave channel and publish notification', () => {
     const store = {
       ...defaultState,
       currentUser: {
-        id: '12234',
+        id: 12234,
         pubnubToken: '54353',
         pubnubAccessKey: '09876',
+        avatar: null,
         name: 'Shaq O.',
         role: {
           label: '',
@@ -140,14 +63,16 @@ describe('Test leave channel', () => {
           anchorMoments: [],
           participants: [
             {
-              id: '12345',
+              id: 12345,
               pubnubToken: 'abc123xyz',
+              avatar: null,
               name: 'Tony Hoare',
               role: { label: '' },
             },
             {
-              id: '12345',
+              id: 12345,
               pubnubToken: '54353',
+              avatar: null,
               name: 'Shaq O.',
               role: { label: '' },
             },

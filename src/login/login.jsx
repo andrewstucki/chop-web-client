@@ -61,6 +61,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
             label='Email'
             onChange={onChange}
             value={values.email}
+            autoComplete='email'
           />
           <InputField
             ref={passwordRef}
@@ -69,6 +70,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
             label='Password'
             onChange={onChange}
             value={values.password}
+            autoComplete='current-password'
           />
           <ButtonWrapper>
             <Button

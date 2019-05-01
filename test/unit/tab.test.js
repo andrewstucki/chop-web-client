@@ -5,9 +5,11 @@ import { defaultState } from '../../src/feed/dux';
 import { addTab, removeTab, setPaneToTab, TAB } from '../../src/pane/content/tab/dux';
 import { HOST_INFO } from '../../src/hostInfo/dux';
 import {EVENT} from '../../src/pane/content/event/dux';
+import { mockDate } from '../testUtils';
 
 describe('Tab tests', () => {
   test('Pane can be set to tab', () => {
+    mockDate(1546896104521);
     const store = createStore(
       reducer,
       {
@@ -34,6 +36,11 @@ describe('Tab tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
+        channels: {
+          Public: {
+            sawLastMomentAt: 1546896104521,
+          },
+        },
         panes: {
           primary: {
             type: TAB,

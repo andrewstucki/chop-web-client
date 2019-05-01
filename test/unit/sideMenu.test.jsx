@@ -10,6 +10,7 @@ import { mountWithTheme, renderWithTheme } from '../testUtils';
 import { fireEvent } from 'react-testing-library';
 import {EventDescription, EventTitle, OrganizationTitle} from '../../src/sideMenu/styles';
 import Avatar from '../../src/avatar';
+import type {PrivateUserType} from '../../src/users/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -51,13 +52,15 @@ const currentPane = {
   },
 };
 
-const currentUser = {
-  id: '134',
+const currentUser: PrivateUserType = {
+  id: 134,
   pubnubToken: '12sd0fj230jsdf;',
   name: 'Kylo Ren',
-  avatarUrl: 'http://someimageons3.com/image/123',
+  avatar: 'http://someimageons3.com/image/123',
+  pubnubAccessKey: '12347893456',
   role: {
     label: 'Supreme Leader of the First Order',
+    permissions: ['event.event.manage'],
   },
 };
 
@@ -113,7 +116,7 @@ describe('SideBar tests', () => {
     expect(wrapper.find('a[data-testid="guest-experience"]').length)
       .toBe(1);
     expect(wrapper.find('a[data-testid="guest-experience"]').text())
-      .toBe('Guest experienceFile');
+      .toBe('Guest experience');
   });
 
   test('SideBar has link to give feedback', () => {
@@ -141,7 +144,7 @@ describe('SideBar tests', () => {
     expect(wrapper.find('a[data-testid="feedback"]').length)
       .toBe(1);
     expect(wrapper.find('a[data-testid="feedback"]').text())
-      .toBe('Give feedbackFile');
+      .toBe('Give feedback');
     expect(wrapper.find('a[data-testid="feedback"]').props().href)
       .toBe('https://lifechurch.formstack.com/forms/host_feedback_2');
   });
