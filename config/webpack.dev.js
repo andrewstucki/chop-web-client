@@ -10,7 +10,7 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       ENV: JSON.stringify('development'),
       GATEWAY_HOST: JSON.stringify('https://staging.chopapi.com/graphql'),
-      //GATEWAY_HOST: JSON.stringify('http://localhost:3000/graphql'),
+      // GATEWAY_HOST: JSON.stringify('http://localhost:3000/graphql'),
       GTM: {
         gtmId: JSON.stringify('GTM-XXXXXXX'),
         auth: JSON.stringify('XXXXXXXXXXXXXXXXXX'),

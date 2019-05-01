@@ -22,7 +22,6 @@ import Login from './login';
 import reducer from './chop/dux';
 import actorMiddleware from './middleware/actor-middleware';
 import ChatActor from './io/chat';
-import serviceActor from './io/serviceActor';
 import tagManagerMiddleware from './middleware/tagmanager-middleware';
 import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
@@ -42,7 +41,6 @@ TagManager.initialize(GTM);
 
 const actorMiddlewareApplied = actorMiddleware(
   ChatActor,
-  serviceActor,
 );
 
 const sagaMiddleware = createSagaMiddleware();
@@ -54,6 +52,7 @@ const persistConfig = {
   key: 'root',
   storage,
   stateReconciler: autoMergeLevel2,
+  blacklist: ['sequence', 'schedule'],
   transforms: [
     createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt', 'languageOptions']),
     createExpirationTransform({

@@ -91,7 +91,7 @@ function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void
 }
 
 function* handlePubnubErrors (action: PubnubPublishFailedType): Saga<void> {
-  yield call(bugsnagClient.notify(action.error));
+  yield call([bugsnagClient, bugsnagClient.notify], action.error);
 }
 
 const publishSystemMessage = (moment:MomentType, channelId: string) => (

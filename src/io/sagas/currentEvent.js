@@ -4,20 +4,25 @@ import type {Saga} from 'redux-saga';
 import queries from '../queries';
 import type {
   GraphQLCurrentStateType,
-  GraphQLChannelType,
   GraphQLEventType,
+  GraphQLChannelType,
+  GraphQLEventAtType,
+  GraphQLVideoType,
+  GraphQLSequenceType,
 } from '../queries';
 import {
   setPubnubKeys,
   QUERY_CURRENT_EVENT_FAILED,
-  QUERY_SCHEDULE_FAILED,
   setUser,
   setOrganization,
   setLanguageOptions,
   setEvent,
   setChannels,
-  setSchedule,
 } from '../../feed/dux';
+import {
+  setSchedule,
+  QUERY_SCHEDULE_FAILED,
+} from '../../schedule/dux';
 import bugsnagClient from '../../util/bugsnag';
 import { avatarImageExists } from '../../util';
 import {getLanguageCount} from '../../selectors/languageSelector';
@@ -25,6 +30,7 @@ import {setVideo} from '../../videoFeed/dux';
 import type {ChannelsObjectType} from '../../feed/dux';
 import {convertUser} from './privateChat';
 import {isOffline} from '../../selectors/eventSelectors';
+import { startTimer } from './sequence';
 
 const isTimeInFuture = (seconds: number): boolean => (seconds * 1000) > Date.now();
 
@@ -33,7 +39,7 @@ const convertChannel = (channels: Array<GraphQLChannelType>): ChannelsObjectType
   channels.forEach(channel => {
     channelsObj[channel.id] = {
       ...channel,
-      participants: channel.participants.map(convertUser),
+      participants: channel.participants && channel.participants.length > 0 ? channel.participants.map(convertUser) : [],
       moments: [],
       anchorMoments: [],
       scrollPosition: 0,
@@ -50,6 +56,7 @@ function* currentEvent (): Saga<void> {
   try {
     const result: GraphQLCurrentStateType = yield call([queries, queries.currentState], needLanguages);
     yield* dispatchData(result);
+    yield call(startTimer);
   } catch (error) {
     yield put({type: QUERY_CURRENT_EVENT_FAILED, error: error.message});
     bugsnagClient.notify(error);
@@ -119,17 +126,25 @@ function* languageOptions (data: GraphQLCurrentStateType): Saga<void> {
   }
 }
 
-function* event (data: GraphQLCurrentStateType): Saga<void> {
+export function* event (data: GraphQLCurrentStateType): Saga<void> {
   const { currentEvent: event } = data;
-  if (event && event.id) {
+  if (event) {
     yield* eventMain(event);
-    yield* sequence(event);
-    yield* channels(event);
-    yield* video(event);
+    yield* sequence(event.sequence);
+    yield* channels(event.feeds);
+    yield* video(event.video);
   }
 }
 
-function* eventMain (event: GraphQLEventType): Saga<void> {
+export function* eventAt (event: GraphQLEventAtType): Saga<void> {
+  if (event) {
+    yield* eventMain(event);
+    yield* channels(event.feeds);
+    yield* video(event.video);
+  }
+}
+
+function* eventMain (event: GraphQLEventAtType | GraphQLEventType): Saga<void> {
   yield put(
     setEvent(
       event.title || '',
@@ -145,8 +160,7 @@ function* eventMain (event: GraphQLEventType): Saga<void> {
   );
 }
 
-function* sequence (event: GraphQLEventType): Saga<void> {
-  const { sequence } = event;
+export function* sequence (sequence: GraphQLSequenceType): Saga<void> {
   if (sequence?.steps?.length > 0) {
     const now = Date.now();
     const updatedSequence = {
@@ -163,20 +177,18 @@ function* sequence (event: GraphQLEventType): Saga<void> {
   }
 }
 
-function* channels (event: GraphQLEventType): Saga<void> {
-  const { feeds: channels } = event;
+function* channels (channels: Array<GraphQLChannelType>): Saga<void> {
   if (channels) {
     yield put(setChannels(convertChannel(channels)));
   }
 }
 
-function* video (event: GraphQLEventType): Saga<void> {
-  const { video } = event;
+function* video (video: GraphQLVideoType): Saga<void> {
   if (video) {
     yield put(
       setVideo(
-        video.url,
-        video.type,
+        video.url || '',
+        video.type || 'none',
       )
     );
   }

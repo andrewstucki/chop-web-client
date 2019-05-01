@@ -10,18 +10,22 @@ describe('Offline Componenet', () => {
     const { getByTestId } = renderWithReduxAndTheme(
       <Offline/>,
       {
+        schedule: [
+          {
+            endTime: 1543439700,
+            fetchTime: 1543437972,
+            id: '132487',
+            scheduleTime: 1543438800,
+            startTime: 1543438200,
+            title: 'Church Service',
+          },
+        ],
+        sequence: {
+          serverTime: 0,
+          steps: [],
+        },
         feed: {
           ...defaultState,
-          schedule: [
-            {
-              endTime: 1543439700,
-              fetchTime: 1543437972,
-              id: '132487',
-              scheduleTime: 1543438800,
-              startTime: 1543438200,
-              title: 'Church Service',
-            },
-          ],
         },
       }
     );

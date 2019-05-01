@@ -136,7 +136,6 @@ const SET_ORGANIZATION = 'SET_ORGANIZATION';
 const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const LOAD_HISTORY = 'LOAD_HISTORY';
-const SET_SCHEDULE = 'SET_SCHEDULE';
 const SET_AUTHENTICATION = 'SET_AUTHENTICATION';
 const REMOVE_AUTHENTICATION = 'REMOVE_AUTHENTICATION';
 const CLEAR_NOTIFICATION_BANNER = 'CLEAR_NOTIFICATION_BANNER';
@@ -144,7 +143,6 @@ const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
 const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
-const SET_SCHEDULE_DATA = 'SET_SCHEDULE_DATA';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
@@ -152,34 +150,12 @@ const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 const QUERY_CURRENT_EVENT = 'QUERY_CURRENT_EVENT';
 const QUERY_CURRENT_EVENT_FAILED = 'QUERY_CURRENT_EVENT_FAILED';
-const QUERY_SCHEDULE_FAILED = 'QUERY_SCHEDULE_FAILED';
 const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
 const SET_CHANNELS = 'SET_CHANNELS';
 const JOIN_CHANNEL = 'JOIN_CHANNEL';
 const JOIN_CHANNEL_FAILED = 'JOIN_CHANNEL_FAILED';
 
 // Flow Type Definitions
-
-type SetScheduleDataType = {
-  type: 'SET_SCHEDULE_DATA',
-  time: number,
-  data: any,
-};
-
-type ScheduleType = {
-  id: string,
-  startTime: number,
-  endTime: number,
-  title: string,
-  fetchTime: number,
-  scheduleTime: number,
-  hostInfo: string,
-};
-
-type SetScheduleType = {
-  type: 'SET_SCHEDULE',
-  schedule: Array<ScheduleType>,
-};
 
 type EventType = {
   title: string,
@@ -442,7 +418,6 @@ type FeedActionTypes =
   | SetOrganizationType
   | SetPubnubKeysType
   | LeaveChannelType
-  | SetScheduleType
   | AddHereNowType
   | PublishSalvationType
   | ReleaseAnchorMomentType
@@ -452,7 +427,6 @@ type FeedActionTypes =
   | RemoveAuthenticationType
   | AddErrorType
   | RemoveErrorType
-  | SetScheduleDataType
   | SetClientInfoType
   | SetHereNow
   | SetSawLastMomentAt
@@ -517,21 +491,6 @@ const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOp
   {
     type: SET_LANGUAGE_OPTIONS,
     languageOptions,
-  }
-);
-
-const setScheduleData = (time: number, data: any):SetScheduleDataType => (
-  {
-    type: SET_SCHEDULE_DATA,
-    time,
-    data,
-  }
-);
-
-const setSchedule = (schedule: Array<ScheduleType>): SetScheduleType => (
-  {
-    type: SET_SCHEDULE,
-    schedule,
   }
 );
 
@@ -718,7 +677,6 @@ const defaultState = {
     title: '',
     hostInfo: '',
   },
-  schedule: [],
   organization: {
     id: 0,
     name: '',
@@ -893,20 +851,19 @@ const reducer = (
       };
     }
     case REMOVE_HERE_NOW: {
-      const { userToken } = action;
-      return {
-        ...state,
-        hereNow: {
-          ...state.hereNow,
-          [action.channel]: state.hereNow[action.channel].filter(item => item.id !==  userToken),
-        },
-      };
+      if (state.hereNow[action.channel]) {
+        const { userToken } = action;
+        return {
+          ...state,
+          hereNow: {
+            ...state.hereNow,
+            [action.channel]: state.hereNow[action.channel].filter(item => item.id !==  userToken),
+          },
+        };
+      } else {
+        return state;
+      }
     }
-    case 'SET_SEQUENCE':
-      return {
-        ...state,
-        sequence: action.sequence,
-      };
     case SET_LANGUAGE_OPTIONS:
       return {
         ...state,
@@ -929,25 +886,6 @@ const reducer = (
       return {
         ...state,
         event: action.event,
-      };
-    case SET_SCHEDULE_DATA:
-      return {
-        ...state,
-        sequence: {
-          ...state.sequence,
-          steps: [
-            {
-              ...state.sequence.steps[0],
-              data: action.data,
-            },
-            ...state.sequence.steps.slice(1),
-          ],
-        },
-      };
-    case SET_SCHEDULE:
-      return {
-        ...state,
-        schedule: action.schedule,
       };
     case SET_AUTHENTICATION:
       return {
@@ -1470,7 +1408,6 @@ export {
   SET_AUTHENTICATION,
   QUERY_CURRENT_EVENT,
   QUERY_CURRENT_EVENT_FAILED,
-  QUERY_SCHEDULE_FAILED,
   TOKEN_AUTH_LOGIN_FAILED,
   SET_CHANNELS,
   JOIN_CHANNEL,
@@ -1490,10 +1427,8 @@ export {
   setLanguageOptions,
   setPubnubKeys,
   loadHistory,
-  setSchedule,
   getNotificationBanner,
   clearNotificationBanner,
-  setScheduleData,
   removeHereNow,
   setSalvations,
   setAuthentication,

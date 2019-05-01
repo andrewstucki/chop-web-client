@@ -1,12 +1,11 @@
 // @flow
 import { connect } from 'react-redux';
 import Offline from './offline';
-import { getNextEventData } from '../../../selectors/eventSelectors';
+import { getNextEventData } from '../../../schedule/dux';
 import dayjs from 'dayjs';
 
 const mapStateToProps = state => {
-  const { feed:feedState } = state;
-  const nextEvent = getNextEventData(feedState);
+  const nextEvent = getNextEventData(state);
   if (nextEvent) {
     const { title, scheduleTime } = nextEvent;
 

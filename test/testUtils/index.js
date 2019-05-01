@@ -6,7 +6,7 @@ import { theme } from '../../src/styles';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
 
 const mockDate = date => {
   const RealDate = Date;
@@ -22,6 +22,15 @@ const mockDate = date => {
   };
 };
 
+const defaultState = {
+  feed: defaultFeedState,
+  schedule: [],
+  sequence: {
+    serverTime: 0,
+    steps: [],
+  },
+};
+
 const promisifyMiddleware = ({_dispatch, _getState}) => next => action => new Promise( resolve => resolve(next(action)) );
 
 const mountWithTheme = children => mount(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
@@ -35,7 +44,7 @@ const ChopTheme = ({ children }) => (
 const renderWithTheme = (ui, options = {}) =>
   render(ui, { wrapper: ChopTheme, ...options });
 
-const renderWithRedux = (ui, state = { feed: defaultState }) => {
+const renderWithRedux = (ui, state = defaultState) => {
   const store = createStore(reducer, state);
   return {
     ...render(<Provider store={store}>{ui}</Provider>),
@@ -43,7 +52,7 @@ const renderWithRedux = (ui, state = { feed: defaultState }) => {
   };
 };
 
-const renderWithReduxAndTheme = (ui, state = { feed: defaultState }, options = {}) => {
+const renderWithReduxAndTheme = (ui, state = defaultState, options = {}) => {
   const store = createStore(reducer, state);
   return {
     ...render(<Provider store={store}>{ui}</Provider>, { wrapper: ChopTheme, ...options }),
