@@ -1,6 +1,11 @@
 // @flow
 
-import { receivePrayerRequestNotification } from '../moment/actionableNotification/dux';
+import {
+  receivePrayerRequestNotification,
+} from '../moment/actionableNotification/dux';
+import {
+  receivePrayerRequestNotification as receivePrayerRequestNotificationText,
+} from '../moment/notification/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
@@ -194,6 +199,23 @@ const Converter = {
         },
       },
       message.data.channel,
+      hostChannel,
+    );
+  },
+
+  legacyToCwcPrayerNotification: (message: any) => {
+    const hostChannel = getHostChannel(_getState());
+
+    return receivePrayerRequestNotificationText(
+      {
+        id: 12345, // Legacy doesn't forward the user id
+        name: message.data.fromNickname,
+        avatar: null,
+        pubnubToken: message.data.fromToken,
+        role: {
+          label: '',
+        },
+      },
       hostChannel,
     );
   },

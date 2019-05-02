@@ -2,6 +2,7 @@
 import type { PublishMomentToChannelType, ReceiveMomentType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL, RECEIVE_MOMENT } from '../dux';
 import {createUid, getMessageTimestamp} from '../../util';
+import type { SharedUserType } from '../../users/dux';
 
 // Action Types
 
@@ -9,12 +10,14 @@ const NOTIFICATION = 'NOTIFICATION';
 const LEFT_CHANNEL = 'LEFT_CHANNEL';
 const JOINED_CHAT = 'JOINED_CHAT';
 const PRAYER = 'PRAYER';
+const PRAYER_REQUEST = 'PRAYER_REQUEST';
 const MUTE = 'MUTE';
 
 // Flow Type Definitions
 
 type NotificationType =
   | PrayerNotificationType
+  | PrayerRequestNotificationType
   | JoinedChatNotificationType
   | LeftChannelNotificationType
   | MuteUserNotificationType;
@@ -40,6 +43,14 @@ type PrayerNotificationType = {
   notificationType: 'PRAYER',
   id: string,
   host: string,
+  guest: string,
+  timestamp: string,
+};
+
+type PrayerRequestNotificationType = {
+  type: typeof NOTIFICATION,
+  notificationType: typeof PRAYER_REQUEST,
+  id: string,
   guest: string,
   timestamp: string,
 };
@@ -71,6 +82,23 @@ const receivePrayerNotification = (
       host,
       guest,
       timestamp,
+    },
+  }
+);
+
+const receivePrayerRequestNotification = (
+  guest: SharedUserType,
+  channel: string,
+): ReceiveMomentType => (
+  {
+    type: RECEIVE_MOMENT,
+    channel,
+    moment: {
+      type: NOTIFICATION,
+      notificationType: PRAYER_REQUEST,
+      id: createUid(),
+      guest: guest.name,
+      timestamp: getMessageTimestamp(),
     },
   }
 );
@@ -195,6 +223,7 @@ export type {
   JoinedChatNotificationType,
   MuteUserNotificationType,
   PrayerNotificationType,
+  PrayerRequestNotificationType,
 };
 
 export {
@@ -205,10 +234,12 @@ export {
   publishLeftChannelNotification,
   receiveLeftChannelNotification,
   receivePrayerNotification,
+  receivePrayerRequestNotification,
 };
 
 export {
   PRAYER,
+  PRAYER_REQUEST,
   MUTE,
   JOINED_CHAT,
   LEFT_CHANNEL,

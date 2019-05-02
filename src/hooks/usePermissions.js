@@ -1,6 +1,7 @@
 // @flow
 import { useMemo } from 'react';
 import type { PrivateUserType } from '../users/dux';
+import { checkForPermissions } from '../users/dux';
 
 /*
   Example Usage:
@@ -19,17 +20,7 @@ import type { PrivateUserType } from '../users/dux';
 
 const usePermissions = (user:PrivateUserType, requiredPermissions:Array<string>, requireAll:boolean = false):boolean => (
   useMemo <boolean> (
-    () => {
-      if (requireAll) {
-        return requiredPermissions.every(
-          permission => user.role.permissions.includes(permission)
-        );
-      } else {
-        return user.role.permissions.some(
-          permission => requiredPermissions.includes(permission)
-        );
-      }
-    },
+    () => checkForPermissions(user, requiredPermissions, requireAll),
     [user, requiredPermissions, requireAll]
   )
 );

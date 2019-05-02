@@ -3,6 +3,7 @@ import React from 'react';
 
 import {
   PRAYER,
+  PRAYER_REQUEST,
   MUTE,
   JOINED_CHAT,
   LEFT_CHANNEL,
@@ -10,6 +11,7 @@ import {
 
 import type {
   PrayerNotificationType,
+  PrayerRequestNotificationType,
   MuteUserNotificationType,
   JoinedChatNotificationType,
   LeftChannelNotificationType,
@@ -42,6 +44,28 @@ const prayerNotificationText = (
     <div className={styles.text}>
       <div>
         <strong>{host} </strong>started a live prayer with<strong> {guest}</strong>
+      </div>
+      <div className={styles.timestamp}>{timestamp}</div>
+    </div>
+  </div>
+);
+
+const prayerRequestNotificationText = (
+  {
+    guest,
+    timestamp,
+  }: PrayerRequestNotificationType
+) => (
+  <div className={styles.notification}>
+    <span
+      className={styles.icon}
+      dangerouslySetInnerHTML={
+        { __html: ChatNotification }
+      }
+    />
+    <div className={styles.text}>
+      <div>
+        <strong>{guest} </strong>has request prayer.
       </div>
       <div className={styles.timestamp}>{timestamp}</div>
     </div>
@@ -131,6 +155,8 @@ const getNotificationText = notification => {
   switch (notification.notificationType) {
     case PRAYER:
       return prayerNotificationText(notification);
+    case PRAYER_REQUEST:
+      return prayerRequestNotificationText(notification);
     case MUTE:
       return MuteUserNotificationText(notification);
     case JOINED_CHAT:
