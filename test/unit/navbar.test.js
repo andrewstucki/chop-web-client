@@ -2,7 +2,11 @@
 import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
-import { setNavbarIndex } from '../../src/navbar/dux';
+import { CHAT } from '../../src/pane/content/chat/dux';
+import {
+  setNavbarIndex,
+  getHostChannel,
+} from '../../src/navbar/dux';
 
 describe('NavBar tests', () => {
   test('Navbar index is updated', () => {
@@ -24,6 +28,56 @@ describe('NavBar tests', () => {
         ...defaultState,
         navbarIndex: 2,
         prevNavbarIndex: 0,
+      }
+    );
+  });
+
+  test('get host channel', () => {
+    const store = createStore(
+      reducer,
+      {
+        feed: {
+          ...defaultState,
+          panes: {
+            primary: {
+              content: {
+                channelId: 'abc',
+              },
+            },
+          },
+          channels: {
+            abc: {
+              name: 'Host',
+              id: 'abc',
+              moments: [],
+              direct: false,
+              placeholder: false,
+            },
+            xyz: {
+              name: 'Public',
+              id: 'xyz',
+              moments: [],
+              direct: false,
+              placeholder: false,
+            },
+          },
+        },
+      }
+    );
+
+    const result = getHostChannel(store.getState().feed);
+
+    expect(result).toEqual(
+      {
+        name: 'Host',
+        id: 'abc',
+        isCurrent: true,
+        hasActions: false,
+        hasNewMessages: false,
+        otherUsersNames: [],
+        isDirect: false,
+        isPlaceholder: false,
+        type: CHAT,
       }
     );
   });

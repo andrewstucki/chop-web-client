@@ -1,40 +1,46 @@
 // @flow
 import { createSelector } from 'reselect';
-import type {FeedType} from '../feed/dux';
+import type { FeedType } from '../feed/dux';
 
-// Flow Types
-
-type BaseUserType = {
+// Flow types
+export type SharedUserType = {
   id: number,
   name: string,
   avatar: ?string,
   pubnubToken: string,
-}
-
-type BaseUserRoleType = {
-  label: string,
+  role: {
+    label: string,
+  },
 };
 
-export type SharedUserType =
-  BaseUserType & {
-  role: BaseUserRoleType,
-};
-
-type PrivateUserRoleType =
-  BaseUserRoleType & {
-  permissions: Array<string>,
-};
-
-export type PrivateUserType =
-  BaseUserType &
-  {
+export type PrivateUserType = {
+  id: number,
+  name: string,
+  avatar: ?string,
+  pubnubToken: string,
   pubnubAccessKey: string,
-  role: PrivateUserRoleType,
+  role: {
+    label: string,
+    permissions: Array<string>,
+  },
 };
+
 
 
 // Selectors
 export const getCurrentUser = (state: FeedType): PrivateUserType => state.currentUser;
+
+export const checkForPermissions = (user: PrivateUserType, requiredPermissions: Array<string>, requireAll: boolean): boolean => {
+  if (requireAll) {
+    return requiredPermissions.every(
+      permission => user.role.permissions.includes(permission)
+    );
+  } else {
+    return user.role.permissions.some(
+      permission => requiredPermissions.includes(permission)
+    );
+  }
+};
 
 export const privateUserToSharedUser = (user: PrivateUserType): SharedUserType => {
   const { id, name, avatar, pubnubToken, role: { label }} = user;
@@ -48,6 +54,13 @@ export const privateUserToSharedUser = (user: PrivateUserType): SharedUserType =
     },
   };
 };
+
+export const hasPermissions = createSelector(
+  getCurrentUser,
+  (_state, requiredPermissions, _requireAll) => requiredPermissions,
+  (_state, _requiredPermissions, requireAll) => requireAll,
+  checkForPermissions
+);
 
 export const getCurrentUserAsSharedUser = createSelector<FeedType, void, SharedUserType, PrivateUserType>(
   [getCurrentUser],

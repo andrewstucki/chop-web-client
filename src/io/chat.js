@@ -10,6 +10,9 @@ import {
   SET_CHANNELS,
   joinChannel,
 } from '../feed/dux';
+import {
+  hasPermissions,
+} from '../users/dux';
 import type {
   FeedType,
 } from '../feed/dux';
@@ -432,9 +435,15 @@ class Chat {
         return;
       case 'newLiveResponseRequest':
         if (event.message.data.type === 'prayer') {
-          this.storeDispatch(
-            Converter.legacyToCwcPrayer(event.message)
-          );
+          if (hasPermissions(this.getState(), ['feed.direct.accept'], true)) {
+            this.storeDispatch(
+              Converter.legacyToCwcPrayer(event.message)
+            );
+          } else {
+            this.storeDispatch(
+              Converter.legacyToCwcPrayerNotification(event.message)
+            );
+          }
         }
         return;
       case 'muteMessage': {
