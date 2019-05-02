@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { getChannelById } from './channelSelectors';
+import { getCurrentUser } from '../users/dux';
 
 const PUBLIC = 'PUBLIC';
 const HOST = 'HOST';
@@ -21,8 +22,6 @@ const getChannelType = createSelector(
     return UNKNOWN;
   }
 );
-
-const getCurrentUser = state => state.currentUser;
 
 const getOtherUsers = createSelector(
   getChannelById,

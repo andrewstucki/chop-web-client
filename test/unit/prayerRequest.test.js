@@ -17,7 +17,7 @@ describe('Prayer Request Tests', () => {
       avatar: 'http://someimageons3.com/image/123',
       role: {
         label: 'Supreme Leader of the First Order',
-        permissions: ['event.event.manage'],
+        permissions: ['event.event.manage', 'feed.direct.accept'],
       },
       pubnubToken: '123456',
       pubnubAccessKey: '1533912921585',

@@ -1,5 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
+import { getCurrentUser } from '../users/dux';
 import type {
   FeedType,
   ChannelsObjectType,
@@ -168,8 +169,6 @@ const hasNotSeenLatestMoments = createSelector(
     }
   }
 );
-
-const getCurrentUser = (state: FeedType) => state.currentUser;
 
 const lastInArray = <I>(array: Array<I>): I => array[array.length - 1];
 
