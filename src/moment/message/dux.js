@@ -110,12 +110,13 @@ const newMessage = (
 const publishMessage = (
   channel: string,
   text: string,
-  user: SharedUserType
+  user: SharedUserType,
+  language: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
-    moment: newMessage(text, user, 'en'),
+    moment: newMessage(text, user, language),
   }
 );
 

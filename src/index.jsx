@@ -27,6 +27,11 @@ import TagManager from 'react-gtm-module';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
 import { ErrorBoundary } from './util/bugsnag';
+import i18n from 'i18next';
+import XHR from 'i18next-xhr-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
+import { setLanguage } from './languageSelector/dux';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
@@ -72,29 +77,53 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga);
 
+// Leaving this in the index for now so it can have access to store
+i18n
+  .use(XHR)
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    ns: ['common','forms','moments','notifications'],
+    defaultNS: 'common',
+    load: 'currentOnly',
+    fallbackLng: 'en-US',
+    whitelist: ['en'],
+    nonExplicitWhitelist: true,  // allows 'en' and 'en-US'
+    debug: ENV !== 'production',
+    interpolation: {
+      escapeValue: false, // React already escapes by default
+    },
+    react: {
+      wait: true,
+    },
+  }, () => store.dispatch(setLanguage(i18n.language)));
+
 const persistor = persistStore(store);
 
 const content = document.getElementById('content');
 
 if (content) {
   ReactDOM.render(
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ErrorBoundary>
-          <ThemeProvider theme={theme}>
-            <>
-              <GlobalStyle />
-              <Router basename={ROUTE_BASENAME}>
-                <Switch>
-                  <Route exact path='/' component={Chop}/>
-                  <Route exact path='/login' component={Login}/>
-                </Switch>
-              </Router>
-            </>
-          </ThemeProvider>
-        </ErrorBoundary>
-      </PersistGate>
-    </Provider>,
+    <React.Suspense fallback=''>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ErrorBoundary>
+            <ThemeProvider theme={theme}>
+                <>
+                  <GlobalStyle />
+                  <Router basename={ROUTE_BASENAME}>
+                    <Switch>
+                      <Route exact path='/' component={Chop}/>
+                      <Route exact path='/login' component={Login}/>
+                    </Switch>
+                  </Router>
+                </>
+            </ThemeProvider>
+          </ErrorBoundary>
+        </PersistGate>
+      </Provider>
+    </React.Suspense>
+    ,
     content);
 }
 
@@ -111,3 +140,5 @@ if (document.body) {
     window.scrollTo({top:0, behavior:'instant'});
   });
 }
+
+export { i18n };

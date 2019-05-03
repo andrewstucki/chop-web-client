@@ -30,6 +30,7 @@ import ReactTouchEvents from 'react-touch-events';
 import { admin } from '../users/permissions';
 import {usePermissions} from '../hooks/usePermissions';
 import {privateUserToSharedUser} from '../users/dux';
+import { useTranslation } from 'react-i18next';
 
 type SideMenuType = {
   logout: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
@@ -49,6 +50,7 @@ type SideMenuType = {
   eventTitle: string,
   eventDescription: string,
   currentUser: PrivateUserType,
+  currentLanguage: string,
 };
 
 const SideMenu = (
@@ -70,152 +72,155 @@ const SideMenu = (
     eventTitle,
     eventDescription,
     currentUser,
+    currentLanguage,
   }: SideMenuType
 ) => {
+  const { t } = useTranslation();
   const hasAdminLinkPermissions = usePermissions(currentUser, admin);
   return (
     <>
-    <Overlay onClick={close} visible={!isClosed}/>
-    <ReactTouchEvents onSwipe={onSwipe}>
-      <Menu
-        open={!isClosed}
-        onTransitionEnd={useCallback(event => {
-          if (event.target && isClosed) {
-            event.target.scrollTop = 0;
-          }
-        }, [isClosed])}>
-        <OrganizationTitle>{organizationName}</OrganizationTitle>
-        <EventTitle>{eventTitle}</EventTitle>
-        <EventDescription>{eventDescription}</EventDescription>
+      <Overlay onClick={close} visible={!isClosed}/>
+      <ReactTouchEvents onSwipe={onSwipe}>
+        <Menu
+          open={!isClosed}
+          onTransitionEnd={useCallback(event => {
+            if (event.target && isClosed) {
+              event.target.scrollTop = 0;
+            }
+          }, [isClosed])}>
+          <OrganizationTitle>{organizationName}</OrganizationTitle>
+          <EventTitle>{eventTitle}</EventTitle>
+          <EventDescription>{eventDescription}</EventDescription>
 
-        <Profile>
-          <Avatar user={privateUserToSharedUser(currentUser)} large/>
-          <Nickname>{currentUser.name}</Nickname>
-          <ProfileActions>
-            <LogOutButton
-              data-testid='logout'
-              onClick={logout}>
-              <LinkIcon
-                dangerouslySetInnerHTML={{__html: Exit}}
-              /> Log Out
-            </LogOutButton>
-          </ProfileActions>
-        </Profile>
+          <Profile>
+            <Avatar user={privateUserToSharedUser(currentUser)} large/>
+            <Nickname>{currentUser.name}</Nickname>
+            <ProfileActions>
+              <LogOutButton
+                data-testid='logout'
+                onClick={logout}>
+                <LinkIcon
+                  dangerouslySetInnerHTML={{ __html: Exit }}
+                /> { t('log_out') }
+              </LogOutButton>
+            </ProfileActions>
+          </Profile>
 
-        <MediaQuery maxWidth={639}>
+          <MediaQuery maxWidth={639}>
 
-          <SideMenuItem
-            active={currentPane.type === EVENT}
-            icon={PublicChat}
-            title='public chat'
-            onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel) && close()}
+            <SideMenuItem
+              active={currentPane.type === EVENT}
+              icon={PublicChat}
+              title={ t('public_chat') }
+              onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel) && close()}
+            />
+
+            <SideMenuItem
+              // $FlowFixMe
+              active={currentPane.type === CHAT && currentPane.content.channelId === hostChannel}
+              icon={HostChat}
+              title={ t('host_chat') }
+              onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel) && close()}
+            />
+
+            <SideMenuItem
+              active={false}
+              icon={HostInfo}
+              title={ t('host_info') }
+              onClick={() => addTab(HOST_INFO, 'hostInfo', 'Host Info') && setPaneToTab(PRIMARY_PANE, HOST_INFO) && close()}
+            />
+
+            <SideMenuItem
+              active={false}
+              icon={Calendar}
+              title={ t('schedule') }
+              onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
+              comingSoon
+            />
+
+            <SideMenuItem
+              active={false}
+              icon={Document}
+              title={ t('notes') }
+              onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
+              comingSoon
+            />
+
+            <SideMenuItem
+              active={false}
+              icon={Bible}
+              title={ t('bible') }
+              onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
+              comingSoon
+            />
+
+            <hr/>
+
+          </MediaQuery>
+
+          <LanguageSelector
+            setLanguage={setLanguage}
+            languageOptions={languageOptions}
+            currentLanguage={currentLanguage}
           />
 
-          <SideMenuItem
-            // $FlowFixMe
-            active={currentPane.type === CHAT && currentPane.content.channelId === hostChannel}
-            icon={HostChat}
-            title='host chat'
-            onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel) && close()}
-          />
-
-          <SideMenuItem
-            active={false}
-            icon={HostInfo}
-            title='host info'
-            onClick={() => addTab(HOST_INFO, 'hostInfo', 'Host Info') && setPaneToTab(PRIMARY_PANE, HOST_INFO) && close()}
-          />
-
-          <SideMenuItem
-            active={false}
-            icon={Calendar}
-            title='schedule'
-            onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
-            comingSoon
-          />
-
-          <SideMenuItem
-            active={false}
-            icon={Document}
-            title='notes'
-            onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
-            comingSoon
-          />
-
-          <SideMenuItem
-            active={false}
-            icon={Bible}
-            title='bible'
-            onClick={(event: SyntheticMouseEvent<HTMLDivElement>) => event.preventDefault()}
-            comingSoon
-          />
-
-          <hr/>
-
-        </MediaQuery>
-
-        <LanguageSelector
-          setLanguage={setLanguage}
-          languageOptions={languageOptions}
-        />
-
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <ExternalLink
-            data-testid="guest-experience"
-            href={`${window.location.origin.toString()}/guest_experience`}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            Guest experience
-            <LinkIcon size={16}>
-              <GuestExperienceLink/>
-            </LinkIcon>
-          </ExternalLink>
+            <ExternalLink
+              data-testid="guest-experience"
+              href={`${window.location.origin.toString()}/guest_experience`}
+            >
+              { t('guest_experience') }
+              <LinkIcon size={16}>
+                <GuestExperienceLink/>
+              </LinkIcon>
+            </ExternalLink>
 
-          { hasAdminLinkPermissions &&
+            { hasAdminLinkPermissions &&
             <ExternalLink
               data-testid="admin-link"
               href={`${window.location.origin.toString()}/admin`}
             >
-              Admin
+              { t('admin') }
               <LinkIcon size={14}>
                 <FeedbackLink/>
               </LinkIcon>
             </ExternalLink>
-          }
+            }
 
-          <ExternalLink
-            data-testid="support"
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
-          >
-            Support
-            <LinkIcon size={14}>
-              <FeedbackLink/>
-            </LinkIcon>
-          </ExternalLink>
+            <ExternalLink
+              data-testid="support"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
+            >
+              { t('support') }
+              <LinkIcon size={14}>
+                <FeedbackLink/>
+              </LinkIcon>
+            </ExternalLink>
 
-          <ExternalLink
-            data-testid="feedback"
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://lifechurch.formstack.com/forms/host_feedback_2"
-          >
-            Give feedback
-            <LinkIcon size={14}>
-              <FeedbackLink/>
-            </LinkIcon>
-          </ExternalLink>
-        </div>
+            <ExternalLink
+              data-testid="feedback"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://lifechurch.formstack.com/forms/host_feedback_2"
+            >
+              { t('give_feedback') }
+              <LinkIcon size={14}>
+                <FeedbackLink/>
+              </LinkIcon>
+            </ExternalLink>
+          </div>
 
-      </Menu>
-    </ReactTouchEvents>
-  </>
+        </Menu>
+      </ReactTouchEvents>
+    </>
   );
 };
 

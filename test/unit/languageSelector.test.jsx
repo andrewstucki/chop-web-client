@@ -1,23 +1,19 @@
 // @flow
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
-import Enzyme from 'enzyme';
 import sinon from 'sinon';
-
 import LanguageSelector from '../../src/languageSelector';
-import { mountWithTheme } from '../testUtils';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { renderWithTheme } from '../testUtils';
+import { fireEvent } from 'react-testing-library';
 
 describe('LanguageSelector tests', () => {
   test('LanguageSelector renders', () => {
     const setLanguage = sinon.spy();
     const event = {
       target: {
-        value: 'English',
+        value: 'fr',
       },
     };
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <LanguageSelector
         languageOptions={
           [
@@ -52,12 +48,14 @@ describe('LanguageSelector tests', () => {
           ]
         }
         setLanguage={setLanguage}
+        currentLanguage='en'
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('container');
-    expect(wrapper.find('select').at(0).props().className).toEqual('languageSelector');
-    expect(wrapper.find('option').at(0).text()).toEqual('English');
-    wrapper.find('select').at(0).simulate('change', event);
+
+    const select = getByTestId('languageSelector-select');
+    expect(select.children[0].value).toEqual('en');
+    fireEvent.change(select, event);
     expect(setLanguage.calledOnce).toEqual(true);
+    expect(setLanguage.calledWith('fr')).toBeTrue();
   });
 });

@@ -9,24 +9,26 @@ import { Background, Wrapper } from './styles';
 import ChatInput from '../components/chatInput';
 
 type ChatProps = {
-  publishMessage: (channel: string, text: string, user: SharedUserType) => void,
+  publishMessage: (channel: string, text: string, user: SharedUserType, language: string) => void,
   setChatFocus: (channel: string) => void,
   focused: boolean,
   currentPlaceholder: string,
   currentUser: SharedUserType,
   currentChannel: string,
   hideReactions: boolean,
+  translateLanguage: string,
 };
 
 function Chat (props:ChatProps) {
-  const { publishMessage, setChatFocus, focused, currentPlaceholder, currentUser, currentChannel, hideReactions } = props;
+  const { publishMessage, setChatFocus, focused, currentPlaceholder, currentUser, currentChannel, hideReactions, translateLanguage } = props;
   const [ message, setMessage ] = useState <string> ('');
 
   const sendMessage = () => {
     publishMessage(
       currentChannel,
       message,
-      currentUser
+      currentUser,
+      translateLanguage,
     );
     setMessage('');
   };

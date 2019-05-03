@@ -29,7 +29,7 @@ describe('Login tests', () => {
     fireEvent.change(passwordInput, { target: { value: 'password' } });
     expect(passwordInput.value).toBe('password');
 
-    const loginButton = getByTestId('Log In');
+    const loginButton = getByTestId('login.submit');
     fireEvent.click(loginButton);
     expect(basicAuthLogin.calledOnce).toEqual(true);
   });

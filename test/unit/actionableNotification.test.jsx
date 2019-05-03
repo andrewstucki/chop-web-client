@@ -1,13 +1,9 @@
 // @flow
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
-import Enzyme from 'enzyme';
 import sinon from 'sinon';
-import { mountWithTheme } from '../testUtils';
-
 import ActionableNotification from '../../src/moment/actionableNotification/actionableNotification';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { renderWithTheme } from '../testUtils';
+import { fireEvent } from 'react-testing-library';
 
 const yablby = {
   id: 12345,
@@ -33,7 +29,7 @@ const hostChannel = {
 describe('ActionableNotification tests', () => {
   test('Active prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <ActionableNotification
         notification={
           {
@@ -52,21 +48,16 @@ describe('ActionableNotification tests', () => {
         hostChannel={hostChannel.id}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual(
-      'actionableNotification'
-    );
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(3).text()).toEqual(
-      'yablby has requested prayer'
-    );
-    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
-    expect(wrapper.find('button').at(0).text()).toEqual('Accept');
-    wrapper.find('button').at(0).simulate('click');
+    expect(getByTestId('actionableNotification')).toBeTruthy();
+    expect(getByTestId('actionableNotification-text').textContent).toEqual('yablby has requested prayer');
+    expect(getByTestId('actionableNotification-timestamp').textContent).toEqual('9:33pm');
+    expect(getByTestId('actionableNotification-accept').textContent).toEqual('actionable.accept');
+    fireEvent.click(getByTestId('actionableNotification-accept'));
     expect(acceptPrayerRequest.calledOnce).toEqual(true);
   });
 
   test('Inactive prayer request notification renders', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId, queryByTestId } = renderWithTheme(
       <ActionableNotification
         notification={
           {
@@ -86,18 +77,13 @@ describe('ActionableNotification tests', () => {
         hostChannel={hostChannel.id}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(3).text()).toEqual(
-      'yablby has requested prayer'
-    );
-    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
-    expect(wrapper.find('div').at(5).text()).toEqual('Accepted');
+    expect(queryByTestId('actionableNotificiation-accept')).toBeNull();
+    expect(getByTestId('actionableNotification-accepted').textContent).toEqual('actionable.accepted');
   });
 
   test('Cancelled prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
-    const wrapper = mountWithTheme(
+    const { getByTestId, queryByTestId } = renderWithTheme(
       <ActionableNotification
         notification={
           {
@@ -116,14 +102,8 @@ describe('ActionableNotification tests', () => {
         hostChannel={hostChannel.id}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual(
-      'notification'
-    );
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
-    expect(wrapper.find('div').at(3).text()).toEqual(
-      'yablby has requested prayer'
-    );
-    expect(wrapper.find('div').at(4).text()).toEqual('9:33pm');
-    expect(wrapper.find('div').at(5).text()).toEqual('Cancelled');
+
+    expect(queryByTestId('actionableNotificiation-accept')).toBeNull();
+    expect(getByTestId('actionableNotification-accepted').textContent).toEqual('actionable.cancelled');
   });
 });

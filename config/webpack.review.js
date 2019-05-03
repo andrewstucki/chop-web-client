@@ -1,8 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const CompressionPlugin = require('compression-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -17,10 +15,6 @@ module.exports = merge(common, {
       },
       ROUTE_BASENAME: JSON.stringify('/')
     }),
-    new CompressionPlugin(),
-    new CopyWebpackPlugin([
-      { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
-    ]),
     new webpack.HashedModuleIdsPlugin(),
   ],
   devtool: 'inline-source-map',

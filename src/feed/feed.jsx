@@ -11,10 +11,11 @@ import type {
 } from '../cwc-types';
 
 import Moment from '../moment/moment';
-import AnchorMoment from '../anchorMoment/';
-import styles from './styles.css';
+import AnchorMoment from '../anchorMoment';
 import { createUid } from '../util';
 import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../components/button';
+import { withTranslation } from 'react-i18next';
+import { Wrapper, AnchorMomentWrapper, MomentList, AnchorMomentList, NewMessageButtonContainer, NewMessageButtonWrapper, ListContainer } from './styles';
 
 const NO_SCROLL = 'NO_SCROLL';
 const SCROLL_TO = 'SCROLL_TO';
@@ -142,9 +143,11 @@ class Feed extends React.Component<FeedProps> {
     } = this.props;
 
     const hasAnchorMoments = anchorMoments?.length > 0;
-    const momentListItems = moments.map((moment: MomentType) => (
+    const momentLiStyle = { margin: '0 8px' };
+
+    const momentListItems = moments.reverse().map((moment: MomentType) => (
       // $FlowFixMe
-      <li key={moment.id || createUid()}>
+      <li key={moment.id || createUid()} style={momentLiStyle}>
         <Moment
           currentChannel={currentChannel}
           data={moment}
@@ -162,47 +165,47 @@ class Feed extends React.Component<FeedProps> {
     ));
     return (
       <React.Fragment>
-        <div
+        <Wrapper
           data-testid='feed'
           // $FlowFixMe
           ref={this.wrapperRef}
-          className={styles.scroll}
         >
-          <div style={{width: '100%'}}>
-            <ul
-              // $FlowFixMe
+          <ListContainer>
+            <MomentList
+              data-testid='feed-momentList'
               ref={this.listRef}
               key={currentChannel}
-              className={styles.feed}
             >
-              <span style={{margin: '0 8px 0'}}>{momentListItems}</span>
-            </ul>
-          </div>
-        </div>
+              {momentListItems}
+            </MomentList>
+          </ListContainer>
+        </Wrapper>
         { showNewMessageButton &&
-          <div className={styles.newMessageButtonContainer}>
-            <div className={styles.newMessageButtonWrapper}>
+          <NewMessageButtonContainer data-testid='feed-newMessages'>
+            <NewMessageButtonWrapper>
               <Button
                 onClick={this.setScrollPositionToBottom}
                 variant={BUTTON_SECONDARY}
                 size={BUTTON_SMALL}>
-                New Messages
+                {/*$FlowFixMe - TODO: withTranslation() adds this prop, how do we do this with Flow? */}
+                { this.props.t('new_messages') }
               </Button>
-            </div>
-          </div>
+            </NewMessageButtonWrapper>
+          </NewMessageButtonContainer>
         }
         { hasAnchorMoments &&
-          <div className={styles.nonScroll}>
-            <div style={{width: '100%'}}>
-              <ul className={styles.anchorMoments}>
+          <AnchorMomentWrapper>
+            <ListContainer>
+              <AnchorMomentList>
                 {anchorMomentListItems}
-              </ul>
-            </div>
-          </div>
+              </AnchorMomentList>
+            </ListContainer>
+          </AnchorMomentWrapper>
         }
       </React.Fragment>
     );
   }
 }
 
-export default React.memo < FeedProps > (Feed);
+const EnhancedFeed = withTranslation()(Feed);
+export default React.memo < FeedProps > (EnhancedFeed);

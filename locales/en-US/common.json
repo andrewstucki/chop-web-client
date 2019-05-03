@@ -1,0 +1,33 @@
+{
+  "admin": "Admin",
+  "bible": "Bible",
+  "buttons": {
+    "close": "Close",
+    "delete_message": "Delete message",
+    "direct_chat": "Chat",
+    "mute_user": "Mute"
+  },
+  "channels": {
+    "host": "Host",
+    "public": "Public"
+  },
+  "chat": "Chat",
+  "chat_with": "Chat with {{name}}",
+  "coming_soon": "Coming Soon",
+  "give_feedback": "Give feedback",
+  "guest_experience": "Guest experience",
+  "hide_tab": "Hide Tab",
+  "host_chat": "Host Chat",
+  "host_info": "Host Info",
+  "host_info_empty": "There is no Host Info for this Event.",
+  "leave": "Leave",
+  "live": "Live",
+  "log_out": "Log Out",
+  "new_messages": "New Messages",
+  "no_upcoming_event": "No Upcoming Event.",
+  "public_chat": "Public Chat",
+  "notes": "Notes",
+  "schedule": "Schedule",
+  "support": "Support",
+  "upcoming_event": "Upcoming Event"
+}

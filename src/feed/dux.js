@@ -204,9 +204,12 @@ type ReceiveReactionType = {
   reaction: ReactionType,
 }
 
+type ChannelTypeType = 'prayer' | 'host' | 'direct' | 'legacy' | 'public';
+
 type ChannelType = {
   id: string,
   name: string,
+  type: ChannelTypeType,
   direct: boolean,
   placeholder: boolean,
   moments: Array<MomentType>,
@@ -547,6 +550,7 @@ const setUser = (user: PrivateUserType): SetUser => (
 const addChannel = (
   name: string,
   id: string,
+  type: ChannelTypeType,
   direct: boolean,
   participants?: Array<SharedUserType> = [],
   placeholder?: boolean = false,
@@ -556,6 +560,7 @@ const addChannel = (
     channel: {
       id,
       name,
+      type,
       direct,
       placeholder,
       moments: [],
@@ -575,6 +580,7 @@ const addPlaceholderChannel = (
     channel: {
       id: createUid(),
       name: 'Direct',
+      type: 'direct',
       direct: true,
       placeholder: true,
       moments: [],
@@ -655,15 +661,6 @@ const setClientInfo = (data: ClientInfoType) => (
   }
 );
 
-// Default State
-
-const getLanguage = () => {
-  const bcp47 = window.navigator.language || 'en';
-  const iso639 = bcp47.substring(0, bcp47.indexOf('-'));
-  // Google Translate requires ISO 639 format except for Chinese where they need BCP 47
-  return iso639 === 'zh' ? bcp47 : iso639;
-};
-
 const defaultState = {
   pubnubKeys: {
     publish: '',
@@ -705,7 +702,7 @@ const defaultState = {
     type: 'none',
     url: '',
   },
-  currentLanguage: getLanguage(),
+  currentLanguage: 'en',
   languageOptions: [
     {
       code: 'en',
@@ -1460,6 +1457,7 @@ export type {
   UserState,
   SetUser,
   JoinChannelType,
+  ChannelTypeType,
 };
 
 export default reducer;

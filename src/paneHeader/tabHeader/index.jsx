@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Wrapper, Title } from '../styles';
 import Actionable from '../../components/Actionable';
 import { MediumUp, Small } from '../../util/responsive';
+import { useTranslation } from 'react-i18next';
 
 const TAB_HEADER = 'TAB_HEADER';
 
@@ -29,22 +30,25 @@ const Action = styled.button`
   margin-left: auto;
 `;
 
-const TabHeader = ({ title, hideTab }:TabHeaderProps) => (
-  <Wrapper data-testid='tabHeader'>
-    <MediumUp>
-      <Title data-testid='tabHeader-title'>
-        {title}
-      </Title>
-    </MediumUp>
-    <Small>
-      <Actionable onClick={hideTab} keepFocus={false}>
-        <Action data-testid='tabHeader-hide'>
-          Hide Tab
-        </Action>
-      </Actionable>
-    </Small>
-  </Wrapper>
-);
+const TabHeader = ({ title, hideTab }:TabHeaderProps) => {
+  const { t } = useTranslation();
+  return (
+    <Wrapper data-testid='tabHeader'>
+      <MediumUp>
+        <Title data-testid='tabHeader-title'>
+          {title}
+        </Title>
+      </MediumUp>
+      <Small>
+        <Actionable onClick={hideTab} keepFocus={false}>
+          <Action data-testid='tabHeader-hide'>
+            { t('hide_tab') }
+          </Action>
+        </Actionable>
+      </Small>
+    </Wrapper>
+  );
+};
 
 export default React.memo < TabHeaderProps > (TabHeader);
 export { TAB_HEADER };

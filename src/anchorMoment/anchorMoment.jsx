@@ -1,18 +1,10 @@
 // @flow
 import React from 'react';
-
 import ReleaseAnchorButton from '../../assets/release-anchor-button.svg';
-
-import {
-  SALVATION,
-} from './dux';
-
-import type {
-  SalvationType,
-  AnchorMomentType,
-} from './dux';
-
+import { SALVATION } from './dux';
+import type { AnchorMomentType } from './dux';
 import { Wrapper, ReleaseButton, Text, SubText, MomentWrapper } from './styles';
+import { useTranslation } from 'react-i18next';
 
 type AnchorMomentPropsType = {
   anchorMoment: AnchorMomentType,
@@ -22,26 +14,24 @@ type AnchorMomentPropsType = {
   salvations: number,
 };
 
-const salvationMoment = (
-  {
-    text,
-  }: SalvationType,
-  salvations,
-) => (
-  <div>
-    <Text>
-      {text}
-    </Text>
-    <SubText>
-      {salvations === 1 ? `${salvations} hand raised` : `${salvations} hands raised`}
-    </SubText>
-  </div>
-);
+type SalvationMomentPropsType = {
+  salvations: number,
+};
 
-const getAnchorMoment = (anchorMoment, salvations) => {
+const SalvationMoment = ({salvations}: SalvationMomentPropsType) => {
+  const { t } = useTranslation('moments');
+  return (
+    <div>
+      <Text data-testid='salvationText'>{t('salvation.text')}</Text>
+      <SubText data-testid='salvationHands'>{t('salvation.hands_raised', {count: salvations})}</SubText>
+    </div>
+  );
+};
+
+const getAnchorMoment = (anchorMoment:AnchorMomentType, salvations:number) => {
   switch (anchorMoment.anchorMomentType) {
     case SALVATION:
-      return salvationMoment(anchorMoment, salvations);
+      return <SalvationMoment salvations={salvations}/>;
   }
 };
 
@@ -53,22 +43,26 @@ const AnchorMoment = (
     currentChannel,
     salvations,
   }: AnchorMomentPropsType
-) => (
-  <Wrapper anchored={isAnchorMomentAnchored}>
-    {
-      isAnchorMomentAnchored &&
-          <ReleaseButton
-            dangerouslySetInnerHTML={{ __html: ReleaseAnchorButton }}
-            onClick={() => {
-              // $FlowFixMe
-              releaseAnchorMoment(currentChannel, anchorMoment.id);
-            }}
-          />
-    }
-    <MomentWrapper>
-      {getAnchorMoment(anchorMoment, salvations)}
-    </MomentWrapper>
-  </Wrapper>
-);
+) => {
+  const callReleaseAnchorMoment = () => {
+    releaseAnchorMoment(currentChannel, anchorMoment.id);
+  };
 
-export default React.memo < AnchorMomentPropsType > (AnchorMoment);
+  return (
+    <Wrapper anchored={isAnchorMomentAnchored}>
+      {
+        isAnchorMomentAnchored &&
+            <ReleaseButton
+              data-testid='releaseAnchorMoment'
+              dangerouslySetInnerHTML={{ __html: ReleaseAnchorButton }}
+              onClick={callReleaseAnchorMoment}
+            />
+      }
+      <MomentWrapper>
+        {getAnchorMoment(anchorMoment, salvations)}
+      </MomentWrapper>
+    </Wrapper>
+  );
+};
+
+export default AnchorMoment;

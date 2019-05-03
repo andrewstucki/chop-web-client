@@ -8,7 +8,7 @@ const hostname = (): string => {
     hostname.indexOf('.churchonline.us') > -1
   ) {
     if (hash.length > 1) {
-      return hash.substr(1); // First charater in hash is always '#'
+      return hash.substr(1); // First character in hash is always '#'
     } else {
       return 'digerati.chopdev.com';
     }
