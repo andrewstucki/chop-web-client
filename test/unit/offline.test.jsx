@@ -31,7 +31,7 @@ describe('Offline Componenet', () => {
     );
 
     expect(getByTestId('offline')).toBeTruthy();
-    expect(getByTestId('offline-header').textContent).toEqual('Upcoming Event');
+    expect(getByTestId('offline-header').textContent).toEqual('upcoming_event');
     expect(getByTestId('offline-name').textContent).toEqual('Church Service');
     // GitLab CI runs this test in a different timezone ???
     expect(getByTestId('offline-time').textContent).toBeOneOf(['3:21pm Monday, Jan. 7', '9:21pm Monday, Jan. 7']);
@@ -49,6 +49,6 @@ describe('Offline Componenet', () => {
     );
 
     expect(getByTestId('offline')).toBeTruthy();
-    expect(getByTestId('offline-noevent').textContent).toEqual('No upcoming Event.');
+    expect(getByTestId('offline-noevent').textContent).toEqual('no_upcoming_event');
   });
 });

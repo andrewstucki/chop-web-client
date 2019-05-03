@@ -6,13 +6,9 @@ import {
   MESSAGE,
   Notification,
   ActionableNotification,
-  Text,
-  AvatarMoment,
 } from './index';
 import { NOTIFICATION } from './notification/dux';
 import { ACTIONABLE_NOTIFICATION } from './actionableNotification/dux';
-import { BASIC_TEXT } from './text/dux';
-import { AVATAR_MOMENT } from './avatarMoment/dux';
 import AnchorMoment from '../anchorMoment';
 import { ANCHOR_MOMENT } from '../anchorMoment/dux';
 import type { MomentType } from './dux';
@@ -49,23 +45,11 @@ class Moment extends React.Component<MomentPropType> {
             notification={data}
           />
         );
-      case AVATAR_MOMENT:
-        return (
-          <AvatarMoment
-            avatarMoment={data}
-          />
-        );
       case ANCHOR_MOMENT:
         return (
           <AnchorMoment
             anchorMoment={data}
             isAnchorMomentAnchored={false}
-          />
-        );
-      case BASIC_TEXT:
-        return (
-          <Text
-            text={data}
           />
         );
       default:

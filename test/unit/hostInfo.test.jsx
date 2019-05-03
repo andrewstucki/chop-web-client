@@ -94,6 +94,6 @@ describe('Host Info tests', () => {
     );
     expect(wrapper.find(Wrapper).exists()).toBeFalsy();
     expect(wrapper.find(NoHostInfo).exists()).toBeTruthy();
-    expect(wrapper.find(NoHostInfo).text()).toEqual('There is no Host Info for this event.');
+    expect(wrapper.find(NoHostInfo).text()).toEqual('host_info_empty');
   });
 });

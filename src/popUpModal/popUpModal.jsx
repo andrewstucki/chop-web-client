@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import { 
+import {
   LEAVE_CHAT,
   MUTE_USER,
 } from './dux';
@@ -23,7 +23,7 @@ class PopUpModal extends React.Component<PopUpModalPropType> {
       switch (modal.type) {
         case LEAVE_CHAT:
           return (
-            <div className={styles.popUpModal}>
+            <div className={styles.popUpModal} data-testid='popUpModal'>
               <LeaveChatPopUpModal
                 togglePopUpModal={togglePopUpModal}
               />
@@ -31,7 +31,7 @@ class PopUpModal extends React.Component<PopUpModalPropType> {
           );
         case MUTE_USER:
           return (
-            <div className={styles.popUpModal}>
+            <div className={styles.popUpModal} data-testid='popUpModal'>
               <MuteUserPopUpModal
                 togglePopUpModal={togglePopUpModal}
                 user={modal.user}
@@ -41,8 +41,8 @@ class PopUpModal extends React.Component<PopUpModalPropType> {
         default:
           return null;
       }
-    } 
-    return null;  
+    }
+    return null;
   }
 }
 

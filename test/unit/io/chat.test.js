@@ -251,7 +251,7 @@ describe('Chat2 Tests', () => {
 
     chat.init();
 
-    chat.dispatch(addChannel('direct', 'asd2389dhsdf', true));
+    chat.dispatch(addChannel('direct', 'asd2389dhsdf', 'direct', true));
 
     expect(mockSubscribe).toHaveBeenCalledTimes(1);
     expect(mockSubscribe).toHaveBeenCalledWith(

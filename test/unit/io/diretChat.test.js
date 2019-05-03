@@ -31,6 +31,7 @@ describe('Test Direct Chat', () => {
           direct: true,
           placeholder: false,
           id: '67890',
+          type: 'direct',
           name: null,
           anchorMoments: [],
           moments: [],

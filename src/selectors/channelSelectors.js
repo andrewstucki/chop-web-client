@@ -53,9 +53,9 @@ const getChannelByNameFactory = (name: string): ChannelType => (
 
 const translateMoment = (currentLanguage: LanguageCodeType) => (moment: MomentType): MomentType => {
   if (moment.type === 'MESSAGE' &&
-      moment.lang !== currentLanguage &&
+      !currentLanguage.includes(moment.lang) &&
       moment.translations) {
-    const translation = moment.translations.find(translation => translation.languageCode === currentLanguage);
+    const translation = moment.translations.find(translation => currentLanguage.includes(translation.languageCode));
     if (translation && translation.text) {
       return {
         ...moment,
@@ -65,6 +65,16 @@ const translateMoment = (currentLanguage: LanguageCodeType) => (moment: MomentTy
   }
   return moment;
 };
+
+const getTranslateLanguage = createSelector(
+  getCurrentLanguage,
+  // Google Translate requires ISO 639 format except for Chinese where they need BCP 47
+  // https://cloud.google.com/translate/docs/languages
+  language => {
+    const substringEnd = language.indexOf('-') > -1 ? language.indexOf('-') : language.length;
+    return language.includes('zh') ? language : language.substring(0, substringEnd);
+  }
+);
 
 const mutedMoment = (moment: MomentType): boolean => !moment.isMuted;
 
@@ -256,4 +266,5 @@ export {
   getHostChannelObject,
   getPublicChannelObject,
   hasNotSeenLatestMoments,
+  getTranslateLanguage,
 };

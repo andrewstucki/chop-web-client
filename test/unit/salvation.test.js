@@ -91,7 +91,6 @@ describe('Salvation Moment Tests', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
-          text: 'I commit my life to Christ.',
         },
       }
     );
@@ -139,7 +138,6 @@ describe('Salvation Moment Tests', () => {
               type: 'ANCHOR_MOMENT',
               anchorMomentType: 'SALVATION',
               id: '123456',
-              text: 'I commit my life to Christ.',
             },
           ],
           scrollPosition: 0,
@@ -226,7 +224,6 @@ describe('Salvation Moment Tests', () => {
               type: 'ANCHOR_MOMENT',
               anchorMomentType: 'SALVATION',
               id: '123456',
-              text: 'I commit my life to Christ.',
             },
           ],
           anchorMoments: [],

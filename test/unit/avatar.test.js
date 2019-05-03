@@ -39,7 +39,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      addChannel('public', 'public', false, [])
+      addChannel('public', 'public', 'public', false, [])
     );
 
     store.dispatch(
@@ -55,7 +55,7 @@ describe('Test Avatar', () => {
         role: {
           label: 'host',
         },
-      })
+      }, 'en')
     );
 
     wrapper.update();
@@ -87,7 +87,7 @@ describe('Test Avatar', () => {
     );
 
     store.dispatch(
-      addChannel('public', 'public', false, [])
+      addChannel('public', 'public', 'public', false, [])
     );
 
     store.dispatch(
@@ -103,7 +103,7 @@ describe('Test Avatar', () => {
         role: {
           label: 'host',
         },
-      })
+      }, 'en')
     );
 
     wrapper.update();

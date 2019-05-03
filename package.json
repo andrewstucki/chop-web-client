@@ -12,7 +12,6 @@
     "build:staging": "webpack --config config/webpack.staging.js",
     "build:production": "webpack --config config/webpack.prod.js",
     "start": "webpack-dev-server --open --config config/webpack.dev.js",
-    "server": "yarn http-server ./dist",
     "test": "jest",
     "test:coverage": "yarn test --coverage",
     "flow": "flow",
@@ -20,7 +19,7 @@
     "flow:search": "yarn flow-typed search",
     "flow:install": "yarn flow-typed install",
     "lint": "eslint -c config/.eslintrc.json --ext .jsx,.js src/ test/ cypress/",
-    "validate": "yarn test && yarn flow && yarn lint",
+    "validate": "yarn test:coverage && yarn flow && yarn lint",
     "cy:open": "cypress open",
     "cy:verify": "cypress verify",
     "cy:run": "cypress run",
@@ -43,7 +42,7 @@
       "global": {
         "statements": 82,
         "branches": 63,
-        "functions": 77,
+        "functions": 75,
         "lines": 82
       }
     },
@@ -55,7 +54,15 @@
         "auth": "XXXXXXXXXXXXXXXXXX",
         "preview": "env-X"
       }
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "test/testUtils/",
+      "/test/fileMock.js",
+      "/src/index.jsx",
+      "/src/styles.js",
+      "/src/util/bugsnag.js"
+    ]
   },
   "flow-coverage-report": {
     "globIncludePatterns": [
@@ -108,7 +115,6 @@
     "git-revision-webpack-plugin": "^3.0.3",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
-    "http-server": "^0.11.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.7.1",
     "jest-extended": "^0.11.1",
@@ -147,6 +153,9 @@
     "dayjs": "^1.8.12",
     "dompurify": "^1.0.10",
     "graphql-request": "^1.8.2",
+    "i18next": "^15.1.0",
+    "i18next-browser-languagedetector": "^3.0.1",
+    "i18next-xhr-backend": "^2.0.1",
     "linkifyjs": "^2.1.8",
     "object-hash": "^1.3.1",
     "prettier": "^1.17.0",
@@ -155,6 +164,7 @@
     "react-countdown-now": "^2.1.0",
     "react-dom": "^16.8.6",
     "react-gtm-module": "^2.0.4",
+    "react-i18next": "^10.9.0",
     "react-player": "^1.11.0",
     "react-redux": "^7.0.2",
     "react-responsive": "^6.1.1",

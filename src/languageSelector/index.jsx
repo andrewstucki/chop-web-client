@@ -2,34 +2,45 @@
 import React from 'react';
 
 import type { LanguageType } from '../feed/dux';
-import styles from './style.css';
 import Globe from '../../assets/globe.svg';
+import { useTranslation } from 'react-i18next';
+import { Wrapper, DropdownContainer, GlobeContainer, LanguageSelect } from './styles';
 
 type LanguageSelectorPropsType = {
   setLanguage: (language: string) => void,
   languageOptions: Array<LanguageType>,
+  currentLanguage: string,
 };
 
 const LanguageSelector = (
   {
     setLanguage,
     languageOptions,
+    currentLanguage,
   }: LanguageSelectorPropsType
 ) => {
-  const handleChange = event => setLanguage(event.target.value);
+  const { i18n } = useTranslation();
+
+  const handleChange = event => {
+    const { value } = event.target;
+    if (currentLanguage !== value) {
+      setLanguage(value);
+      i18n.changeLanguage(value);
+    }
+  };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.dropdownContainer}>
-        <div
+    <Wrapper data-testid='languageSelector'>
+      <DropdownContainer>
+        <GlobeContainer
           dangerouslySetInnerHTML={{ __html: Globe }}
-          className={styles.globe}
         />
-        <select
+        <LanguageSelect
+          data-testid='languageSelector-select'
           onChange={handleChange}
           onBlur={handleChange}
-          className={styles.languageSelector}
           tabIndex="-1"
+          value={currentLanguage}
         >
           {
             languageOptions.map(language => (
@@ -41,9 +52,9 @@ const LanguageSelector = (
               </option>
             ))
           }
-        </select>
-      </div>
-    </div>
+        </LanguageSelect>
+      </DropdownContainer>
+    </Wrapper>
   );
 };
 

@@ -1,6 +1,6 @@
 # Church Online Platform Web Client (CWC)
 
-![ChOP Fusion Logo](https://in.thewardro.be/io/opennetwork/chop-web-client/raw/integration/church_online_platform_logo.png)
+![ChOP Web Client](https://in.thewardro.be/io/opennetwork/chop-web-client/raw/integration/church_online_platform_logo.png)
 
 A Progressive Web App for experiencing church online.
 
@@ -48,29 +48,17 @@ domain for it to work with the service.
 
 ## Running the tests
 
-To run the Unit Tests. Unit tests validate code logic without
-interactive with UI.
+To run the Unit Tests.
 ```
 yarn test
 ```
 
-To run the Functional Tests. Functional tests validate state and behavior of React UI. NOTE: these tests will only pass if you are **running the server locally** in another terminal window with `yarn start`.
-```
-yarn functional
-```
-
-To run a specific Unit or Functional test.
+To run a specific Unit test.
 ```
 yarn test -t <Name of Test>
-```
-or
-```
-yarn functional -t <Name of Test>
-```
+
 Where <Name of Test> is replaced with the string in the describe or test function.
-i.e.
-```
-yarn test -t "TextField tests"
+i.e. yarn test -t "TextField tests"
 ```
 
 To have the tests watch for file changes and re-run once you've edited and saved
@@ -81,7 +69,7 @@ yarn test --watch
 
 To view code coverage.
 ```
-yarn coverage
+yarn test:coverage
 ```
 
 To run the Linter (eslint)
@@ -94,17 +82,25 @@ To run the Flow type-checker
 yarn flow
 ```
 
-To run all the validation (test, functional, flow and lint)
+To view the Flow coverage.
+```
+yarn flow:coverage
+``` 
+
+To run all the validation (test, flow and lint)
 ```
 yarn validate
 ```
 
-To run all the tests (test, flow and lint)
+To run all the end-to-end tests (Cypress)
 ```
-yarn test:full
+yarn start && yarn cy:run
 ```
 
-Remember, the functional tests will only work if you have first run `yarn start`.
+To open the Cypress GUI
+```
+yarn cy:open
+```
 
 ## Production Build
 

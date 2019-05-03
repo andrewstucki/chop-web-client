@@ -11,6 +11,7 @@ import { PRIMARY_PANE } from '../pane/dux';
 import { NavbarWrapper, NavbarItemsWrapper, NavbarItemsInnerWrapper, Underline, NavbarHamburgerWrapper, NavbarItemWrapper, Pip, PipStyle } from './styles';
 import Actionable from '../components/Actionable';
 import DirectChatIcon from './directChatIcon';
+import { useTranslation } from 'react-i18next';
 
 type NavbarProps = {
   items: Array<NavbarItemType>,
@@ -126,21 +127,24 @@ const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneT
   );
 };
 
-const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItemProps, ref) => (
-  <Actionable key={item.id} onClick={(event:SyntheticMouseEvent<HTMLButtonElement>) => handleItemClick(event, item)}>
-    <NavbarItemWrapper
-      ref={ref}
-      data-testid={'nav-' + item.name.replace(/ /g,'')}
-      data-index={index}
-      data-direct={item.isDirect}
-      isCurrent={item.isCurrent}
-    >
-      { (item.hasActions || item.hasNewMessages) && <PipStyle><Pip hasActions={item.hasActions}/></PipStyle> }
-      { }
-      { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : item.name }
-    </NavbarItemWrapper>
-  </Actionable>
-));
+const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItemProps, ref) => {
+  const { t } = useTranslation();
+  return (
+    <Actionable key={item.id} onClick={(event:SyntheticMouseEvent<HTMLButtonElement>) => handleItemClick(event, item)}>
+      <NavbarItemWrapper
+        ref={ref}
+        data-testid={'nav-' + item.name.replace(/ /g,'')}
+        data-index={index}
+        data-direct={item.isDirect}
+        isCurrent={item.isCurrent}
+      >
+        { (item.hasActions || item.hasNewMessages) && <PipStyle><Pip hasActions={item.hasActions}/></PipStyle> }
+        { }
+        { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : t(`channels.${item.name.toLowerCase()}`) }
+      </NavbarItemWrapper>
+    </Actionable>
+  );
+});
 
 NavbarItem.displayName = 'NavbarItem';
 

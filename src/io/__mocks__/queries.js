@@ -15,6 +15,7 @@ const acceptPrayer = jest.fn().mockResolvedValue(
     acceptPrayer: {
       name: 'Direct',
       id: '12345',
+      type: 'direct',
       direct: true,
       participants: [
         {
@@ -40,6 +41,7 @@ const directChat = jest.fn().mockResolvedValue(
     createDirectFeed: {
       direct: true,
       id: '67890',
+      type: 'direct',
       name: null,
       participants: [
         {
@@ -64,6 +66,7 @@ const joinChannel = jest.fn().mockResolvedValue(
     joinFeed: {
       direct: true,
       id: '67890',
+      type: 'direct',
       name: null,
       participants: [
         {

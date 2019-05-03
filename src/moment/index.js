@@ -27,17 +27,15 @@ import {
   receiveAcceptedPrayerRequest,
 } from './actionableNotification/dux';
 
-import { 
-  PUBLISH_MOMENT_TO_CHANNEL, 
-  RECEIVE_MOMENT, 
+import {
+  PUBLISH_MOMENT_TO_CHANNEL,
+  RECEIVE_MOMENT,
 } from './dux';
 
 // Component Imports
 
 import ActionableNotification from './actionableNotification';
-import Text from './text';
 import Message from './message';
-import AvatarMoment from './avatarMoment';
 import Notification from './notification';
 
 
@@ -49,8 +47,6 @@ export {
   Message,
   Notification,
   ActionableNotification,
-  Text,
-  AvatarMoment,
   publishAcceptedPrayerRequest,
   receiveAcceptedPrayerRequest,
   publishLeftChannelNotification,

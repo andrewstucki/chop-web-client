@@ -9,6 +9,8 @@ import {
   getPlaceholder,
 } from '../selectors/chatSelectors';
 
+import { getTranslateLanguage } from '../selectors/channelSelectors';
+
 import { publishMessage } from '../moment';
 
 import Chat from './chat';
@@ -22,14 +24,15 @@ const mapStateToProps = (state, ownProps) => {
     currentUser: getCurrentUserAsSharedUser(feedState),
     currentChannel: ownProps.channel,
     hideReactions: ownProps.hideReactions,
+    translateLanguage: getTranslateLanguage(feedState),
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
     setChatFocus: channel => dispatch(setChatFocus(channel)),
-    publishMessage: (channel, text, user) => dispatch(
-      publishMessage(channel, text, user)
+    publishMessage: (channel, text, user, language) => dispatch(
+      publishMessage(channel, text, user, language)
     ),
   }
 );

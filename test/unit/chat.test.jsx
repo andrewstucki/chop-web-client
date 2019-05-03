@@ -30,6 +30,7 @@ describe('Chat tests', () => {
         currentUser={otherUser}
         publishMessage={() => {}}
         hideReactions={true}
+        translateLanguage='en'
       />
     );
 
@@ -51,6 +52,7 @@ describe('Chat tests', () => {
         currentUser={otherUser}
         publishMessage={() => {}}
         hideReactions={true}
+        translateLanguage='en'
       />
     );
 
@@ -65,6 +67,7 @@ describe('Chat tests', () => {
           public: {
             id: 'public',
             name: 'public',
+            type: 'public',
             direct: false,
             placeholder: false,
             moments: [],
@@ -95,6 +98,7 @@ describe('Chat tests', () => {
           public: {
             id: 'public',
             name: 'public',
+            type: 'public',
             direct: false,
             placeholder: false,
             moments: [],
@@ -138,6 +142,7 @@ describe('Chat tests', () => {
           public: {
             id: 'public',
             name: 'public',
+            type: 'public',
             direct: false,
             placeholder: false,
             moments: [],
@@ -205,6 +210,7 @@ describe('Chat tests', () => {
           public: {
             id: 'public',
             name: 'public',
+            type: 'public',
             direct: false,
             placeholder: false,
             moments: [],
@@ -265,6 +271,7 @@ describe('Chat tests', () => {
           public: {
             id: 'public',
             name: 'public',
+            type: 'public',
             direct: false,
             placeholder: false,
             moments: [],

@@ -49,12 +49,14 @@ describe('NavBar tests', () => {
             abc: {
               name: 'Host',
               id: 'abc',
+              type: 'host',
               moments: [],
               direct: false,
               placeholder: false,
             },
             xyz: {
               name: 'Public',
+              type: 'public',
               id: 'xyz',
               moments: [],
               direct: false,
