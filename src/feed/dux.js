@@ -1,7 +1,6 @@
 // @flow
 import type {
-  OpenMessageTrayType,
-  CloseMessageTrayType,
+  ToggleMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
   ReceiveMomentType,
@@ -32,8 +31,7 @@ import type {
 } from '../anchorMoment/dux';
 
 import {
-  OPEN_MESSAGE_TRAY,
-  CLOSE_MESSAGE_TRAY,
+  TOGGLE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
@@ -112,14 +110,16 @@ import type { SetNavbarIndexType } from '../navbar/dux';
 import {
   SET_NAVBAR_INDEX,
 } from '../navbar/dux';
-import type {
+import type { 
   SharedUserType,
+  UpdateUserSucceededType,
   PrivateUserType,
 } from '../users/dux';
 
 import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
-
+import { UPDATE_USER_SUCCEEDED } from '../users/dux';
+import { COMPACT } from '../textModeToggle/dux';
 
 // Action Types
 
@@ -407,8 +407,7 @@ type FeedActionTypes =
   | AddChannelType
   | RemoveChannelType
   | SetUser
-  | OpenMessageTrayType
-  | CloseMessageTrayType
+  | ToggleMessageTrayType
   | DeleteMessageType
   | ToggleCloseTrayButtonType
   | PublishAcceptedPrayerRequestType
@@ -441,7 +440,8 @@ type FeedActionTypes =
   | ToggleNavMenuExpandedType
   | SetChatFocusType
   | SetChannelsType
-  | AddMomentToChannelType;
+  | AddMomentToChannelType
+  | UpdateUserSucceededType;
 
 // Action Creators
 const queryCurrentEvent = (): QueryCurrentEventType => (
@@ -690,6 +690,9 @@ const defaultState = {
       label: '',
       permissions: [],
     },
+    preferences: {
+      textMode: COMPACT,
+    },
   },
   isPopUpModalVisible: false,
   focusedChannel: '',
@@ -806,7 +809,9 @@ const reducer = (
             ...state.channels,
             [currentChannel]: {
               ...state.channels[currentChannel],
-              sawLastMomentAt: new Date().getTime(),
+              sawLastMomentAt: state.channels[currentChannel] &&
+                state.channels[currentChannel].sawLastMomentAt > 0 ?
+                state.channels[currentChannel].sawLastMomentAt : new Date().getTime(),
             },
           },
           panes: {
@@ -1006,7 +1011,7 @@ const reducer = (
         ...state,
         currentUser: action.user,
       };
-    case OPEN_MESSAGE_TRAY: {
+    case TOGGLE_MESSAGE_TRAY: {
       // $FlowFixMe
       const { channel, id } = action;
       if (state.channels[channel]) {
@@ -1017,12 +1022,19 @@ const reducer = (
             [channel]: {
               ...state.channels[channel],
               moments: state.channels[channel].moments.map(
-                message => (
-                  {
-                    ...message,
-                    messageTrayOpen: message.id === id,
+                message => {
+                  if (message.id === id) {
+                    return {
+                      ...message,
+                      messageTrayOpen: !message.messageTrayOpen,
+                    };
+                  } else {
+                    return {
+                      ...message,
+                      messageTrayOpen: false,
+                    };
                   }
-                )
+                }
               ),
             },
           },
@@ -1039,30 +1051,6 @@ const reducer = (
         // ensure no duplicates in the array
         mutedUsers: [...new Set(newArray)],
       };
-    }
-    case CLOSE_MESSAGE_TRAY: {
-      // $FlowFixMe
-      const { channel } = action;
-      if (state.channels[channel]) {
-        return {
-          ...state,
-          channels: {
-            ...state.channels,
-            [channel]: {
-              ...state.channels[channel],
-              moments: state.channels[channel].moments.map(
-                message => (
-                  {
-                    ...message,
-                    messageTrayOpen: false,
-                  }
-                )
-              ),
-            },
-          },
-        };
-      }
-      return state;
     }
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
     case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
@@ -1378,6 +1366,18 @@ const reducer = (
             content: {
               channelId: publicChannel,
             },
+          },
+        },
+      };
+    }
+    case UPDATE_USER_SUCCEEDED: {
+      const { user } = action;
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          preferences: {
+            ...user.preferences,
           },
         },
       };

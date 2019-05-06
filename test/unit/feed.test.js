@@ -37,8 +37,7 @@ import { setVideo } from '../../src/videoFeed/dux';
 import { SET_CHAT_FOCUS } from '../../src/chat/dux';
 
 import {
-  openMessageTray,
-  closeMessageTray,
+  toggleMessageTray,
   deleteMessage,
   publishAcceptedPrayerRequest,
   receiveAcceptedPrayerRequest,
@@ -65,6 +64,9 @@ const otherUser = {
   role: {
     label: '',
   },
+  preferences: {
+    textMode: 'COMPACT',
+  },
 };
 const currentUser: PrivateUserType = {
   id: 12345,
@@ -75,6 +77,9 @@ const currentUser: PrivateUserType = {
   role: {
     label: '',
     permissions: [],
+  },
+  preferences: {
+    textMode: 'COMPACT',
   },
 };
 
@@ -868,7 +873,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      openMessageTray('public', '123'));
+      toggleMessageTray('public', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -967,7 +972,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      openMessageTray('host', '123'));
+      toggleMessageTray('host', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -1066,7 +1071,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      closeMessageTray('public', '123'));
+      toggleMessageTray('public', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -1510,70 +1515,6 @@ describe('Feed tests', () => {
     );
   });
 
-  // TODO this won't go in event, but I don't know where else to put it right now
-  test('Can publish an AvatarMoment in event channel', () => {
-    const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
-      {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            moments: [],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-            participants: [],
-          },
-        },
-      },
-      {
-        type: 'PUBLISH_MOMENT_TO_CHANNEL',
-        channel: 'public',
-        moment: {
-          type: 'AVATAR_MOMENT',
-          id: '12345',
-          user: {
-            id: '6789',
-            name: 'Madmartigan',
-          },
-        },
-      },
-    );
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        channels: {
-          ...defaultState.channels,
-          public: {
-            id: '12345',
-            name: 'public',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            moments: [
-              {
-                type: 'AVATAR_MOMENT',
-                id: '12345',
-                user: {
-                  id: '6789',
-                  name: 'Madmartigan',
-                },
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-            participants: [],
-          },
-        },
-      },
-    );
-  });
-
   test('Can publish a prayer request notification host', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
@@ -1986,6 +1927,9 @@ describe('Feed tests', () => {
                 name: currentUser.name,
                 role: {
                   label: currentUser.role.label,
+                },
+                preferences: {
+                  textMode: 'COMPACT',
                 },
               },
               otherUser,

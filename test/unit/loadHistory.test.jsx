@@ -105,6 +105,9 @@ describe('Load history', () => {
         },
         pubnubToken: '123456',
         pubnubAccessKey: '1533912921585',
+        preferences: {
+          textMode: 'COMPACT',
+        },
       },
       organization: {
         id: 2,

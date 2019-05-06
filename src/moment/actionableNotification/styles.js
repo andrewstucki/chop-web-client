@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Wrapper as NotificationWrapper } from '../notification/styles';
 
 const ActionableContainer = styled.div`
@@ -8,12 +8,12 @@ const ActionableContainer = styled.div`
 `;
 
 const ActionableWrapper = styled(NotificationWrapper)`
-  padding: 8px 0;
+  padding: ${props => props.isCompact ? '0' : '8px 0'};
   
   ${ActionableContainer} {
     border: 1px solid ${props => props.theme.colors.gray10};
     border-radius: 2px;
-    padding: 4px 0;
+    padding: ${props => props.isCompact ? '1px 0' : '4px 0'};
   }
 `;
 
@@ -24,13 +24,18 @@ const AcceptButton = styled.button`
   padding: 8px;
   background-color: transparent;
   font-weight: 500;
+  font-size: ${props => props.isCompact ? '14px' : '16px'};
 `;
 
 const AcceptedText = styled.div`
-  display: initial;
-  font-size: 16px;
+  font-size: ${props => props.isCompact ? '14px' : '16px'};
   margin-right: 16px;
-  ${props => props.hide && css`display: none;`}
+  display:${props => props.hide ? 'none' : 'initial'};
 `;
 
-export { ActionableWrapper, ActionableContainer, AcceptButton, AcceptedText };
+export {
+  ActionableWrapper,
+  AcceptButton,
+  AcceptedText,
+  ActionableContainer,
+};

@@ -11,6 +11,10 @@ const getFirstInitial = (name: string): string => (
   name.charAt(0).toUpperCase()
 );
 
+const getFirstWordInName = (name: string): string => (
+  name.split(' ', 1)[0] || ''
+);
+
 function avatarImageExists (userId: string): Promise<boolean> {
   return new Promise(resolve => {
     const image = new Image();
@@ -109,4 +113,5 @@ export {
   isMobileDevice,
   isAndroid,
   getUTCDate,
+  getFirstWordInName,
 };

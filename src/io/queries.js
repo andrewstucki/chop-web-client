@@ -3,6 +3,7 @@ import { GraphQLClient } from 'graphql-request';
 import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
 import type { URLType } from '../cwc-types';
+import type { UserInputType } from '../users/dux';
 
 declare var GATEWAY_HOST: string;
 
@@ -87,6 +88,10 @@ export type GraphQlRole = {
   permissions: Array<GraphQLPermission>,
 };
 
+export type GraphQlPreferences = {|
+  textMode: string,
+|};
+
 export type GraphQLUserType = {
   currentUser: {
     avatar: GraphQLString,
@@ -95,6 +100,7 @@ export type GraphQLUserType = {
     pubnubAccessKey: GraphQLString,
     pubnubToken: GraphQLString,
     role: GraphQlRole,
+    preferences: GraphQlPreferences,
   }
 };
 
@@ -286,6 +292,9 @@ currentUser {
       key
     }
   }
+  preferences {
+    textMode
+  }
 }`;
 
 const currentOrganization = `
@@ -373,6 +382,26 @@ mutation joinFeed($channel: String!, $requesterPubnubToken: String!, $requesterN
       pubnubToken
       avatar
       name: nickname
+    }
+  }
+}
+`;
+
+const updateUser = `
+mutation updateUser($id: ID!, $input: UserInput!) {
+  updateUser(id: $id, input: $input) {
+    id
+    name: nickname
+    avatar
+    pubnubToken
+    role {
+      label
+      permissions {
+        key
+      }
+    }
+    preferences {
+      textMode
     }
   }
 }
@@ -471,6 +500,15 @@ const queries = {
       feedToken,
       nickname,
     }),
+
+  updateUser: async (id: string, input: UserInputType) =>
+    await client.request(
+      updateUser,
+      {
+        id,
+        input,
+      }
+    ),
 
   directChat: async (pubnubToken: string, nickname: string): Promise<GraphQLDirectChatType> =>
     await client.request(createDirectFeed, {

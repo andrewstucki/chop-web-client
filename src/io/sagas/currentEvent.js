@@ -30,6 +30,7 @@ import {setVideo} from '../../videoFeed/dux';
 import type {ChannelsObjectType} from '../../feed/dux';
 import {convertUser} from './privateChat';
 import {isOffline} from '../../selectors/eventSelectors';
+import {COMPACT} from '../../textModeToggle/dux';
 import { startTimer } from './sequence';
 
 const isTimeInFuture = (seconds: number): boolean => (seconds * 1000) > Date.now();
@@ -81,7 +82,7 @@ function* pubnubKeys (data: GraphQLCurrentStateType): Saga<void> {
 
 function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
   if (data.currentUser) {
-    const { currentUser: { id, name, avatar, pubnubAccessKey, pubnubToken, role: { label = '', permissions = [] } } } = data;
+    const { currentUser: { id, name, avatar, pubnubAccessKey, pubnubToken, role: { label = '', permissions = [] }, preferences: { textMode = COMPACT } } } = data;
     if (pubnubToken === null || pubnubToken === undefined || pubnubToken === '') {
       throw new Error(`User with id: ${id} does not have a pubnubToken`);
     }
@@ -96,6 +97,9 @@ function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
           role: {
             label,
             permissions: permissions.map(permission => permission.key),
+          },
+          preferences: {
+            textMode,
           },
         }
       )

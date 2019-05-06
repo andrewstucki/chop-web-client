@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
 import sinon from 'sinon';
-import ActionableNotification from '../../src/moment/actionableNotification/actionableNotification';
 import { renderWithTheme } from '../testUtils';
 import { fireEvent } from 'react-testing-library';
+
+import ActionableNotification from '../../src/moment/actionableNotification/actionableNotification';
 
 const yablby = {
   id: 12345,
@@ -11,6 +12,9 @@ const yablby = {
   avatar: null,
   name: 'yablby',
   role: { label: '' },
+  preferences: {
+    textMode: 'COMPACT',
+  },
 };
 const billBogus = {
   id: 12345,
@@ -18,6 +22,9 @@ const billBogus = {
   avatar: null,
   name: 'Bill Bogus',
   role: { label: '' },
+  preferences: {
+    textMode: 'COMPACT',
+  },
 };
 const hostChannel = {
   id: 'host',
@@ -46,12 +53,16 @@ describe('ActionableNotification tests', () => {
         acceptPrayerRequest={acceptPrayerRequest}
         currentUser={billBogus}
         hostChannel={hostChannel.id}
+        isCompact={true}
       />
     );
     expect(getByTestId('actionableNotification')).toBeTruthy();
-    expect(getByTestId('actionableNotification-text').textContent).toEqual('yablby has requested prayer');
+    expect(getByTestId('actionableNotification-icon')).toBeTruthy();
+    expect(getByTestId('actionableNotification-message').textContent).toEqual(
+      'yablby has requested prayer9:33pm'
+    );
     expect(getByTestId('actionableNotification-timestamp').textContent).toEqual('9:33pm');
-    expect(getByTestId('actionableNotification-accept').textContent).toEqual('actionable.accept');
+    expect(getByTestId('actionableNotification-accept')).toBeTruthy();
     fireEvent.click(getByTestId('actionableNotification-accept'));
     expect(acceptPrayerRequest.calledOnce).toEqual(true);
   });
@@ -75,6 +86,7 @@ describe('ActionableNotification tests', () => {
         publishPrayerNotification={() => {}}
         currentUser={billBogus}
         hostChannel={hostChannel.id}
+        isCompact={true}
       />
     );
     expect(queryByTestId('actionableNotificiation-accept')).toBeNull();
@@ -83,7 +95,7 @@ describe('ActionableNotification tests', () => {
 
   test('Cancelled prayer request notification renders', () => {
     const acceptPrayerRequest = sinon.spy();
-    const { getByTestId, queryByTestId } = renderWithTheme(
+    const { queryByTestId } = renderWithTheme(
       <ActionableNotification
         notification={
           {
@@ -100,10 +112,10 @@ describe('ActionableNotification tests', () => {
         acceptPrayerRequest={acceptPrayerRequest}
         currentUser={billBogus}
         hostChannel={hostChannel.id}
+        isCompact={true}
       />
     );
-
+    expect(queryByTestId('actionableNotification-accepted').textContent).toEqual('actionable.cancelled');
     expect(queryByTestId('actionableNotificiation-accept')).toBeNull();
-    expect(getByTestId('actionableNotification-accepted').textContent).toEqual('actionable.cancelled');
   });
 });

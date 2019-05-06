@@ -45,6 +45,9 @@ describe('Current Event', () => {
             label: '',
             permissions: [],
           },
+          preferences: {
+            textMode: 'COMPACT',
+          },
         },
         currentOrganization: {
           id: 0,
@@ -173,6 +176,7 @@ describe('Current Event', () => {
           label: '',
           permissions: [],
         },
+        preferences: { textMode: 'COMPACT' },
       }),
       {
         type: 'SET_AVATAR',

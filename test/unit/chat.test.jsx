@@ -14,6 +14,9 @@ const otherUser = {
   role: {
     label: '',
   },
+  preferences: {
+    textMode: 'COMPACT',
+  },
 };
 
 describe('Chat tests', () => {
@@ -137,6 +140,9 @@ describe('Chat tests', () => {
             label: '',
             permissions: [],
           },
+          preferences: {
+            textMode: '',
+          },
         },
         channels: {
           public: {
@@ -204,6 +210,9 @@ describe('Chat tests', () => {
           role: {
             label: '',
             permissions: [],
+          },
+          preferences: {
+            textMode: '',
           },
         },
         channels: {

@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import Banner from './banner';
 import { getNotificationBanner, clearNotificationBanner } from '../feed/dux';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
+  const { fullWidth = false } = ownProps;
   return {
     banner: getNotificationBanner(feedState),
+    fullWidth,
   };
 };
 

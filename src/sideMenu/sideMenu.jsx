@@ -7,6 +7,7 @@ import type {LanguageType} from '../feed/dux';
 
 import SideMenuItem from './sideMenuItem';
 import LanguageSelector from '../languageSelector';
+import TextModeToggle from '../textModeToggle';
 import GuestExperienceLink from '../icons/guestExperienceLink';
 import FeedbackLink from '../icons/feedbackLink';
 import PublicChat from '../../assets/public-chat.svg';
@@ -83,14 +84,15 @@ const SideMenu = (
       <ReactTouchEvents onSwipe={onSwipe}>
         <Menu
           open={!isClosed}
+          data-testid='side-menu'
           onTransitionEnd={useCallback(event => {
             if (event.target && isClosed) {
               event.target.scrollTop = 0;
             }
           }, [isClosed])}>
-          <OrganizationTitle>{organizationName}</OrganizationTitle>
-          <EventTitle>{eventTitle}</EventTitle>
-          <EventDescription>{eventDescription}</EventDescription>
+          <OrganizationTitle data-testid='organization-title'>{organizationName}</OrganizationTitle>
+          <EventTitle data-testid='event-title'>{eventTitle}</EventTitle>
+          <EventDescription data-testid='event-description'>{eventDescription}</EventDescription>
 
           <Profile>
             <Avatar user={privateUserToSharedUser(currentUser)} large/>
@@ -163,6 +165,8 @@ const SideMenu = (
             languageOptions={languageOptions}
             currentLanguage={currentLanguage}
           />
+
+          <TextModeToggle />
 
           <div
             style={{
