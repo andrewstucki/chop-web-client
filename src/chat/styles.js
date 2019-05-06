@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   align-items: center;
   touch-action: none;
   background-color: ${props => props.theme.colors.gray5};
+  border: 1px solid transparent;
   
   ${props => props.focused && 
     css`
