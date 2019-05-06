@@ -59,6 +59,19 @@ describe('Feed tests', () => {
   });
 
   test('has a single message', () => {
+    const moments = [
+      {
+        type: MESSAGE,
+        id: 'string',
+        text: 'This is a message',
+        sender: {
+          id: '12345',
+          name: 'Billy Bob',
+        },
+        messageTrayOpen: false,
+      },
+    ];
+    
     const { getByTestId } = renderWithReduxAndTheme(
       <Feed
         offset={0}
@@ -82,7 +95,7 @@ describe('Feed tests', () => {
     );
 
     expect(getByTestId('feed-momentList')).toBeTruthy();
-    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBillyThis is a messageFile');
+    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBillyThis is a message');
   });
 
   test('check for key prop', () => {
@@ -108,7 +121,7 @@ describe('Feed tests', () => {
       />
     );
     expect(getByTestId('feed-momentList').children.length).toBe(1);
-    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBillyThis is a messageFile');
+    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBillyThis is a message');
   });
 
   test('Feed with New Message button', () => {

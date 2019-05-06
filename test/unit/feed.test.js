@@ -37,8 +37,7 @@ import { setVideo } from '../../src/videoFeed/dux';
 import { SET_CHAT_FOCUS } from '../../src/chat/dux';
 
 import {
-  openMessageTray,
-  closeMessageTray,
+  toggleMessageTray,
   deleteMessage,
   publishAcceptedPrayerRequest,
   receiveAcceptedPrayerRequest,
@@ -874,7 +873,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      openMessageTray('public', '123'));
+      toggleMessageTray('public', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -973,7 +972,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      openMessageTray('host', '123'));
+      toggleMessageTray('host', '123'));
     expect(result).toEqual(
       {
         ...defaultState,
@@ -1072,7 +1071,7 @@ describe('Feed tests', () => {
           },
         },
       },
-      closeMessageTray('public', '123'));
+      toggleMessageTray('public', '123'));
     expect(result).toEqual(
       {
         ...defaultState,

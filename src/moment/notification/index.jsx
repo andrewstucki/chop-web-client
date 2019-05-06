@@ -74,9 +74,10 @@ const PrayerRequestNotification = (
   <Wrapper data-testid={'notification'}>
     <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
     <Text isCompact={isCompact} data-testid={'notification-message'}>
-      <div>
-        <strong>{guest} </strong>has request prayer.
-      </div>
+      <Trans ns='moments' i18nKey='prayer.request'>
+        {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+        <strong>{{guest}}</strong> has requested prayer.
+      </Trans>
       <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>

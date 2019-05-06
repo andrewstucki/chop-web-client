@@ -5,22 +5,21 @@ import type { MessageType } from './dux';
 import type { SharedUserType } from '../../users/dux';
 import Avatar from '../../avatar';
 
-import OpenTrayButtonIcon from '../../../assets/open-tray-button.svg';
 import MessageTray from '../../components/messageTray';
 import Actionable from '../../components/Actionable';
 import linkifyHtml from 'linkifyjs/html';
 import { sanitizeString, getFirstWordInName } from '../../util';
 import Label from '../../components/label';
 
-import { MessageWrapper, Wrapper, BodyWrapper, NameWrapper, OpenTrayButton, TextWrapper, AnimatedMessageTray } from './styles';
-import { useTransition } from 'react-spring';
+import { MessageWrapper, Wrapper, BodyWrapper, NameWrapper, TextWrapper, ActionableWrapper } from './styles';
 
 type MessagePropsType = {
   message: MessageType,
   currentChannel: string,
   isCompact: boolean,
-  openMessageTray: (channel: string, id: string) => void,
-  closeMessageTray: (channel: string, id: string) => void,
+  chatPermissions: boolean,
+  moderationPermissions: boolean,
+  toggleMessageTray: (channel: string, id: string) => void,
   deleteMessage: (id: string, channel: string) => void,
   publishDeleteMessage: (id: string) => void,
   muteUser: (user: string) => void,
@@ -39,37 +38,30 @@ const Message = (
       id:messageId,
     },
     currentChannel,
+    isCompact,
+    chatPermissions,
+    moderationPermissions,
   } = props;
-
-  const { isCompact } = props;
 
   const { name: senderName, role: { label: senderLabel } = {} } = sender;
   const renderText = linkifyHtml(text, { target: '_blank' });
 
-  const openMessageTray = () => props.openMessageTray(currentChannel, messageId);
-  const closeMessageTray = () => messageTrayOpen ? props.closeMessageTray(currentChannel, messageId) : undefined;
+  const toggleMessageTray = () => props.toggleMessageTray(currentChannel, messageId);
   const deleteMessage = () => {
     props.publishDeleteMessage(messageId);
     props.deleteMessage(messageId, currentChannel);
   };
   const muteUser = () => {
     props.muteUser(senderName);
-    closeMessageTray();
+    toggleMessageTray();
   };
   const addPlaceholderChannel = () => {
     const channelId = props.addPlaceholderChannel(sender);
     props.setPaneToChat(channelId);
-    closeMessageTray();
+    toggleMessageTray();
   };
 
-  const OpenMessageTrayButton = () => (
-    <Actionable onClick={openMessageTray} keepFocus={true}>
-      <OpenTrayButton
-        dangerouslySetInnerHTML={{ __html: OpenTrayButtonIcon }}
-        isCompact={isCompact}
-      />
-    </Actionable>
-  );
+  const hasPermissions = chatPermissions || moderationPermissions;
 
   const MessageBody = () => (
     <>
@@ -84,35 +76,36 @@ const Message = (
     </>
   );
 
-  const transitions = useTransition(messageTrayOpen, null, {
-    from: { transform:  'translate3d(316px,0,0)' },
-    enter: { transform: 'translate3d(8px,0,0)' },
-    leave: { transform: 'translate3d(316px,0,0)' },
-  });
-
-  return (
-    <Wrapper data-testid='messageContainer'>
-      <Actionable onClick={closeMessageTray} keepFocus={true} tabable={false}>
-        <MessageWrapper messageTrayOpen={messageTrayOpen} isCompact={isCompact}>
-          <MessageBody />
-          <OpenMessageTrayButton />
-        </MessageWrapper>
-      </Actionable>
-
-      { transitions.map(({ item, props, key }) => (
-        item &&
-          <AnimatedMessageTray style={props} key={key}>
+  if (hasPermissions) {
+    return (
+      <Wrapper data-testid='messageContainer' hasPermissions={hasPermissions}>
+        <Actionable onClick={toggleMessageTray} keepFocus={true} tabable={false}>
+          <ActionableWrapper messageTrayOpen={messageTrayOpen} isCompact={isCompact}>
+            <MessageWrapper isCompact={isCompact}>
+              <MessageBody />
+            </MessageWrapper>
             <MessageTray
+              messageTrayOpen={messageTrayOpen}
+              isCompact={isCompact}
               deleteMessage={deleteMessage}
               muteUser={muteUser}
               directChat={addPlaceholderChannel}
-              closeTray={closeMessageTray}
+              chatPermissions={chatPermissions}
+              moderationPermissions={moderationPermissions}
             />
-          </AnimatedMessageTray>
-      ))}
-
-    </Wrapper>
-  );
+          </ActionableWrapper>
+        </Actionable>
+      </Wrapper>
+    );
+  } else {
+    return (
+      <Wrapper data-testid='messageContainer' hasPermissions={hasPermissions}>
+        <MessageWrapper isCompact={isCompact}>
+          <MessageBody />
+        </MessageWrapper>
+      </Wrapper>
+    );
+  }
 };
 
 export default React.memo < MessagePropsType > (Message);
