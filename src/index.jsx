@@ -99,7 +99,7 @@ i18n
     },
     backend: {
       loadPath: `${CWC_PATH}/locales/{{lng}}/{{ns}}.json`,
-      crossDomain: true
+      crossDomain: true,
     },
   }, () => store.dispatch(setLanguage(i18n.language)));
 
