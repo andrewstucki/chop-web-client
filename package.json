@@ -54,7 +54,7 @@
         "auth": "XXXXXXXXXXXXXXXXXX",
         "preview": "env-X"
       },
-      "CWC_PATH": ""
+      "CWC_HOST": ""
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/",

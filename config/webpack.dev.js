@@ -17,7 +17,7 @@ module.exports = merge(common, {
         preview: JSON.stringify('env-X')
       },
       ROUTE_BASENAME: JSON.stringify('/'),
-      CWC_PATH: JSON.stringify('')
+      CWC_HOST: JSON.stringify('')
     }),
     //new BundleAnalyzerPlugin(),
   ],

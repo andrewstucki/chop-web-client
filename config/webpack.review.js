@@ -14,7 +14,7 @@ module.exports = merge(common, {
         preview: JSON.stringify('env-5')
       },
       ROUTE_BASENAME: JSON.stringify('/'),
-      CWC_PATH: JSON.stringify('/')
+      CWC_HOST: JSON.stringify('')
     }),
     new webpack.HashedModuleIdsPlugin(),
   ],

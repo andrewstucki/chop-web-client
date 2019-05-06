@@ -17,7 +17,7 @@ module.exports = merge(common, {
         preview: JSON.stringify('env-2')
       },
       ROUTE_BASENAME: JSON.stringify('/host_mobile'),
-      CWC_PATH: JSON.stringify('https://churchonline.us')
+      CWC_HOST: JSON.stringify('https://churchonline.us')
     }),
     new webpack.HashedModuleIdsPlugin(),
     new BugsnagBuildReporterPlugin({
