@@ -44,6 +44,9 @@ describe('Test leave channel', () => {
           label: '',
           permissions: [],
         },
+        preferences: {
+          textMode: 'COMPACT',
+        },
       },
       organization: {
         id: 2,

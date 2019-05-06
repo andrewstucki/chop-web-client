@@ -16,9 +16,10 @@ import { setPaneToChat } from '../../pane/content/chat/dux';
 import { PRIMARY_PANE } from '../../pane/dux';
 
 const mapStateToProps = (state, ownProps) => {
-  const { currentChannel } = ownProps;
+  const { currentChannel, isCompact } = ownProps;
   return {
     currentChannel,
+    isCompact,
   };
 };
 

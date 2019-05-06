@@ -112,14 +112,16 @@ import type { SetNavbarIndexType } from '../navbar/dux';
 import {
   SET_NAVBAR_INDEX,
 } from '../navbar/dux';
-import type {
+import type { 
   SharedUserType,
+  UpdateUserSucceededType,
   PrivateUserType,
 } from '../users/dux';
 
 import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
-
+import { UPDATE_USER_SUCCEEDED } from '../users/dux';
+import { COMPACT } from '../textModeToggle/dux';
 
 // Action Types
 
@@ -441,7 +443,8 @@ type FeedActionTypes =
   | ToggleNavMenuExpandedType
   | SetChatFocusType
   | SetChannelsType
-  | AddMomentToChannelType;
+  | AddMomentToChannelType
+  | UpdateUserSucceededType;
 
 // Action Creators
 const queryCurrentEvent = (): QueryCurrentEventType => (
@@ -689,6 +692,9 @@ const defaultState = {
     role: {
       label: '',
       permissions: [],
+    },
+    preferences: {
+      textMode: COMPACT,
     },
   },
   isPopUpModalVisible: false,
@@ -1379,6 +1385,15 @@ const reducer = (
               channelId: publicChannel,
             },
           },
+        },
+      };
+    }
+    case UPDATE_USER_SUCCEEDED: {
+      const { user } = action;
+      return {
+        ...state,
+        currentUser: {
+          ...user,
         },
       };
     }

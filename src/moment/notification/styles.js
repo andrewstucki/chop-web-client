@@ -9,15 +9,6 @@ const Wrapper = styled.div`
   color: ${props => props.theme.colors.gray50};
 `;
 
-const Icon = styled.span`
-  line-height: 0;
-  
-  svg {
-    width: 20px;
-    padding: 8px 18px 8px 10px;
-  }
-`;
-
 const Timestamp = styled.div`
   font-size: 10.72px;
   margin-top: 2px;
@@ -25,7 +16,21 @@ const Timestamp = styled.div`
 
 const Text = styled.div`
   width: 100%;
-  padding: 8px 8px 8px 0;
+  padding: ${props => props.isCompact ? '5px 8px 5px 0' : '8px 8px 8px 0'};
 `;
 
-export { Wrapper, Icon, Timestamp, Text };
+const Icon = styled.span`
+  line-height: 0;
+
+  svg {
+    width: 20px;
+    padding: ${props => props.isCompact ? '5px 11px 5px 1px' : '8px 16px 8px 8px'};
+  }
+`;
+
+export {
+  Wrapper,
+  Timestamp,
+  Text,
+  Icon,
+};

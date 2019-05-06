@@ -16,7 +16,23 @@ describe('Feed tests', () => {
       label: '',
       permissions: [],
     },
+    preferences: {
+      textMode: 'COMPACT',
+    },
   };
+
+  const moments = [
+    {
+      type: MESSAGE,
+      id: 'string',
+      text: 'This is a message',
+      sender: {
+        id: '12345',
+        name: 'Billy Bob',
+      },
+      messageTrayOpen: false,
+    },
+  ];
 
   test('has an empty feed', () => {
     const { getByTestId } = renderWithTheme(
@@ -35,6 +51,7 @@ describe('Feed tests', () => {
         showNewMessageButton={false}
         focusedChannel=''
         setSawLastMomentAt={() => {}}
+        textMode={'COMPACT'}
         t={text => text}
       />
     );
@@ -42,19 +59,6 @@ describe('Feed tests', () => {
   });
 
   test('has a single message', () => {
-    const moments = [
-      {
-        type: MESSAGE,
-        id: 'string',
-        text: 'This is a message',
-        sender: {
-          id: '12345',
-          name: 'Billy Bob',
-        },
-        messageTrayOpen: false,
-      },
-    ];
-
     const { getByTestId } = renderWithReduxAndTheme(
       <Feed
         offset={0}
@@ -73,11 +77,38 @@ describe('Feed tests', () => {
         showNewMessageButton={false}
         focusedChannel=''
         setSawLastMomentAt={() => {}}
+        textMode={'COMPACT'}
       />
     );
 
+    expect(getByTestId('feed-momentList')).toBeTruthy();
+    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBillyThis is a messageFile');
+  });
+
+  test('check for key prop', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Feed
+        offset={0}
+        moments={moments}
+        anchorMoments={[]}
+        onMessageRender={function () {}}
+        currentChannel="default"
+        appendingMessage={false}
+        showLeaveChat={true}
+        isPopUpModalVisible={false}
+        togglePopUpModal={() => {}}
+        scroll={{type: 'NO_SCROLL'}}
+        currentUser={user}
+        updateScrollPosition={() => {}}
+        channel="default"
+        showNewMessageButton={false}
+        focusedChannel=''
+        setSawLastMomentAt={() => {}}
+        textMode={'COMPACT'}
+      />
+    );
     expect(getByTestId('feed-momentList').children.length).toBe(1);
-    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBilly BobThis is a messageFile');
+    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBillyThis is a messageFile');
   });
 
   test('Feed with New Message button', () => {
@@ -99,6 +130,7 @@ describe('Feed tests', () => {
         showNewMessageButton={true}
         focusedChannel=''
         setSawLastMomentAt={() => {}}
+        textMode={'COMPACT'}
       />
     );
     const button = getByTestId('feed-newMessages');

@@ -5,12 +5,16 @@ import { Icon } from './styles';
 type ImageAvatarProps = {
   url: string,
   large: boolean,
+  small: boolean,
+  id: string,
 };
 
-const ImageAvatar = ({url, large}:ImageAvatarProps) => (
+const ImageAvatar = ({url, large, small, id}:ImageAvatarProps) => (
   <Icon
     large={large}
+    small={small}
     style={{backgroundImage: `url(${url})`, backgroundSize: 'cover'}}
+    id={id}
   >
   </Icon>
 );

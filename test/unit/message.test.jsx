@@ -19,6 +19,9 @@ const otherUser = {
   role: {
     label: 'Host',
   },
+  preferences: {
+    textMode: 'COMPACT',
+  },
 };
 
 const user = {
@@ -28,6 +31,9 @@ const user = {
   pubnubToken: '123',
   role: {
     label: '',
+  },
+  preferences: {
+    textMode: 'COMPACT',
   },
 };
 
@@ -58,6 +64,7 @@ describe('Message', () => {
         hostChannel='host'
         currentUser={user}
         directChat={() => {}}
+        isCompact={true}
       />
     );
     expect(wrapper.find(TextWrapper).html()).toContain('Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!');
@@ -89,6 +96,7 @@ describe('Message', () => {
         hostChannel='host'
         currentUser={user}
         directChat={() => {}}
+        isCompact={true}
       />
     );
     expect(wrapper.find(Label).text()).toEqual('Host');
@@ -121,6 +129,7 @@ describe('Message', () => {
         hostChannel='host'
         currentUser={user}
         directChat={() => {}}
+        isCompact={true}
       />
     );
     wrapper.find('button').at(0).simulate('click');

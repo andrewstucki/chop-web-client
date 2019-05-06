@@ -42,6 +42,9 @@ import {
   muteUser,
 } from './sagas/moderation';
 import {
+  updateUser,
+} from './sagas/user';
+import {
   handleDataFetchErrors,
 } from './sagas/errorHandling';
 import {
@@ -50,6 +53,7 @@ import {
   setPubnubClient,
   handlePubnubErrors,
 } from './sagas/pubnub';
+import { UPDATE_USER } from '../users/dux';
 
 function* rootSaga (): Saga<void> {
   yield all([
@@ -71,11 +75,13 @@ function* rootSaga (): Saga<void> {
     takeEvery(PUBNUB_PUBLISH_FAILED, handlePubnubErrors),
     takeLeading('*', setPubnubClient),
     takeEvery(JOIN_CHANNEL, joinChannel),
+    takeEvery(UPDATE_USER, updateUser),
   ]);
 }
 
 export {
   muteUser,
+  updateUser,
   leaveChannel,
   directChat,
   publishAcceptedPrayerRequest,

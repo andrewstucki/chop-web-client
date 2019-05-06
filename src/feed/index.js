@@ -25,6 +25,7 @@ const mapStateToProps = (state, ownProps) => {
     scroll: getScroll(feedState, channel),
     currentUser: feedState.currentUser,
     showNewMessageButton: hasNotSeenLatestMoments(feedState, channel),
+    textMode: feedState.currentUser.preferences.textMode,
   };
 };
 

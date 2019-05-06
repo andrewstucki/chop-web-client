@@ -61,7 +61,7 @@ class Small extends React.Component<SmallProps, SmallState> {
         <SideMenu />
         <Container>
           <PopUpModal />
-          <Banner />
+          <Banner fullWidth/>
           <NavBar />
           <VideoFeed />
           <Pane name={PRIMARY_PANE} />

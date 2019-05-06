@@ -55,6 +55,9 @@ describe('Test Avatar', () => {
         role: {
           label: 'host',
         },
+        preferences: {
+          textMode: 'COMPACT',
+        },
       }, 'en')
     );
 
@@ -102,6 +105,9 @@ describe('Test Avatar', () => {
         pubnubToken: '123456',
         role: {
           label: 'host',
+        },
+        preferences: {
+          textMode: 'COMPACT',
         },
       }, 'en')
     );
