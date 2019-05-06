@@ -812,7 +812,9 @@ const reducer = (
             ...state.channels,
             [currentChannel]: {
               ...state.channels[currentChannel],
-              sawLastMomentAt: new Date().getTime(),
+              sawLastMomentAt: state.channels[currentChannel] &&
+                state.channels[currentChannel].sawLastMomentAt > 0 ?
+                state.channels[currentChannel].sawLastMomentAt : new Date().getTime(),
             },
           },
           panes: {
