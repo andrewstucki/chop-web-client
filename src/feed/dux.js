@@ -1,7 +1,6 @@
 // @flow
 import type {
-  OpenMessageTrayType,
-  CloseMessageTrayType,
+  ToggleMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
   ReceiveMomentType,
@@ -32,8 +31,7 @@ import type {
 } from '../anchorMoment/dux';
 
 import {
-  OPEN_MESSAGE_TRAY,
-  CLOSE_MESSAGE_TRAY,
+  TOGGLE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   MESSAGE,
   PUBLISH_ACCEPTED_PRAYER_REQUEST,
@@ -409,8 +407,7 @@ type FeedActionTypes =
   | AddChannelType
   | RemoveChannelType
   | SetUser
-  | OpenMessageTrayType
-  | CloseMessageTrayType
+  | ToggleMessageTrayType
   | DeleteMessageType
   | ToggleCloseTrayButtonType
   | PublishAcceptedPrayerRequestType
@@ -1014,7 +1011,7 @@ const reducer = (
         ...state,
         currentUser: action.user,
       };
-    case OPEN_MESSAGE_TRAY: {
+    case TOGGLE_MESSAGE_TRAY: {
       // $FlowFixMe
       const { channel, id } = action;
       if (state.channels[channel]) {
@@ -1025,12 +1022,19 @@ const reducer = (
             [channel]: {
               ...state.channels[channel],
               moments: state.channels[channel].moments.map(
-                message => (
-                  {
-                    ...message,
-                    messageTrayOpen: message.id === id,
+                message => {
+                  if (message.id === id) {
+                    return {
+                      ...message,
+                      messageTrayOpen: !message.messageTrayOpen,
+                    };
+                  } else {
+                    return {
+                      ...message,
+                      messageTrayOpen: false,
+                    };
                   }
-                )
+                }
               ),
             },
           },
@@ -1047,30 +1051,6 @@ const reducer = (
         // ensure no duplicates in the array
         mutedUsers: [...new Set(newArray)],
       };
-    }
-    case CLOSE_MESSAGE_TRAY: {
-      // $FlowFixMe
-      const { channel } = action;
-      if (state.channels[channel]) {
-        return {
-          ...state,
-          channels: {
-            ...state.channels,
-            [channel]: {
-              ...state.channels[channel],
-              moments: state.channels[channel].moments.map(
-                message => (
-                  {
-                    ...message,
-                    messageTrayOpen: false,
-                  }
-                )
-              ),
-            },
-          },
-        };
-      }
-      return state;
     }
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
     case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
@@ -1395,7 +1375,10 @@ const reducer = (
       return {
         ...state,
         currentUser: {
-          ...user,
+          ...state.currentUser,
+          preferences: {
+            ...user.preferences,
+          },
         },
       };
     }

@@ -1,85 +1,86 @@
 // @flow
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
-import Enzyme from 'enzyme';
 import sinon from 'sinon';
+import { renderWithReduxAndTheme } from '../../testUtils';
+import { fireEvent } from 'react-testing-library';
+import { defaultState } from '../../../src/feed/dux';
 
 import MessageTray from '../../../src/components/messageTray';
-import { mountWithTheme } from '../../testUtils';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('MessageTray tests', () => {
   test('MessageTray has buttons', () => {
-    const muteUser = sinon.spy();
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <MessageTray
         deleteMessage={() => {}}
-        muteUser={muteUser}
-        directChat={() => {}}
-        closeTray={() => {}}
-      />
-    );
-    expect(wrapper.find('button').length).toEqual(4);
-  });
-
-  test('Can click delete', () => {
-    const deleteMessage = sinon.spy();
-    const wrapper = mountWithTheme(
-      <MessageTray
-        deleteMessage={deleteMessage}
         muteUser={() => {}}
         directChat={() => {}}
-        closeTray={() => {}}
+        isCompact={true}
+        messageTrayOpen={true}
+        chatPermissions={true}
+        moderationPermissions={true}
       />
     );
-
-    wrapper.find('[data-testid="deleteButton"]').first().simulate('click');
-    expect(deleteMessage.calledOnce).toEqual(true);
+    expect(queryByTestId('messageTray')).toBeTruthy();
   });
 
-  test('Can click delete', () => {
+  test('Can click delete and mute', () => {
+    const deleteMessage = sinon.spy();
     const muteUser = sinon.spy();
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <MessageTray
-        deleteMessage={() => {}}
+        deleteMessage={deleteMessage}
         muteUser={muteUser}
         directChat={() => {}}
-        closeTray={() => {}}
-      />
+        isCompact={true}
+        messageTrayOpen={true}
+        chatPermissions={false}
+        moderationPermissions={true}
+      />,
+      {
+        feed: {
+          ...defaultState,
+          currentUser: {
+            ...defaultState.currentUser,
+            role: {
+              label: 'Host',
+              permissions: ['feed.user.mute', 'feed.message.delete'],
+            },
+          },
+        },
+      }
     );
-
-    wrapper.find('[data-testid="muteButton"]').first().simulate('click');
+    fireEvent.click(queryByTestId('deleteButton'));
+    fireEvent.click(queryByTestId('muteButton'));
+    expect(deleteMessage.calledOnce).toEqual(true);
     expect(muteUser.calledOnce).toEqual(true);
   });
 
   test('Can click direct chat', () => {
     const directChat = sinon.spy();
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <MessageTray
         deleteMessage={() => {}}
         muteUser={() => {}}
         directChat={directChat}
-        closeTray={() => {}}
-      />
+        isCompact={true}
+        messageTrayOpen={true}
+        chatPermissions={true}
+        moderationPermissions={false}
+      />,
+      {
+        feed: {
+          ...defaultState,
+          currentUser: {
+            ...defaultState.currentUser,
+            role: {
+              label: 'Host',
+              permissions: ['feed.direct.create'],
+            },
+          },
+        },
+      }
     );
-
-    wrapper.find('[data-testid="directChatButton"]').first().simulate('click');
+    fireEvent.click(queryByTestId('directChatButton'));
     expect(directChat.calledOnce).toEqual(true);
-  });
-
-  test('Can click close', () => {
-    const closeTray = sinon.spy();
-    const wrapper = mountWithTheme(
-      <MessageTray
-        deleteMessage={() => {}}
-        muteUser={() => {}}
-        directChat={() => {}}
-        closeTray={closeTray}
-      />
-    );
-
-    wrapper.find('[data-testid="closeButton"]').first().simulate('click');
-    expect(closeTray.calledOnce).toEqual(true);
   });
 });

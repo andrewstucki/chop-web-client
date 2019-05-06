@@ -37,7 +37,7 @@ const TextModeSelector = (
             toggleTextMode(userId, mode === COMFORTABLE ? COMPACT : COMFORTABLE)
           )}
         />
-        <Toggle for='checkbox'>
+        <Toggle htmlFor='checkbox'>
           <ToggleContent checked={checked} dangerouslySetInnerHTML={{ __html: Text }}/>
         </Toggle>
       </ToggleWrapper>

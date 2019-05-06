@@ -13,8 +13,7 @@ import type {
 
 // Action Types
 
-const OPEN_MESSAGE_TRAY = 'OPEN_MESSAGE_TRAY';
-const CLOSE_MESSAGE_TRAY = 'CLOSE_MESSAGE_TRAY';
+const TOGGLE_MESSAGE_TRAY = 'TOGGLE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const MESSAGE = 'MESSAGE';
 const RECEIVE_MUTE_USER = 'RECEIVE_MUTE_USER';
@@ -43,14 +42,8 @@ type MessageType = {
   isMuted: boolean,
 } & BaseMomentType<typeof MESSAGE, SharedUserType>;
 
-type OpenMessageTrayType = {
-  type: 'OPEN_MESSAGE_TRAY',
-  channel: string,
-  id: string,
-};
-
-type CloseMessageTrayType = {
-  type: 'CLOSE_MESSAGE_TRAY',
+type ToggleMessageTrayType = {
+  type: 'TOGGLE_MESSAGE_TRAY',
   channel: string,
   id: string,
 };
@@ -59,11 +52,6 @@ type DeleteMessageType = {
   type: 'DELETE_MESSAGE',
   id: string,
   channel: string,
-};
-
-type ToggleCloseTrayButtonType = {
-  type: 'TOGGLE_CLOSE_TRAY_BUTTON',
-  id: string,
 };
 
 type ReceiveMuteUserType = {
@@ -120,17 +108,9 @@ const publishMessage = (
   }
 );
 
-const openMessageTray = (channel: string, id: string): OpenMessageTrayType => (
+const toggleMessageTray = (channel: string, id: string): ToggleMessageTrayType => (
   {
-    type: OPEN_MESSAGE_TRAY,
-    channel,
-    id,
-  }
-);
-
-const closeMessageTray = (channel:string, id: string): CloseMessageTrayType => (
-  {
-    type: CLOSE_MESSAGE_TRAY,
+    type: TOGGLE_MESSAGE_TRAY,
     channel,
     id,
   }
@@ -177,8 +157,7 @@ const directChat = (otherUserPubnubToken: string, otherUserNickname: string): Pu
 // Exports
 
 export {
-  OPEN_MESSAGE_TRAY,
-  CLOSE_MESSAGE_TRAY,
+  TOGGLE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   MESSAGE,
   MUTE_USER_SUCCEEDED,
@@ -191,8 +170,7 @@ export {
 };
 
 export {
-  openMessageTray,
-  closeMessageTray,
+  toggleMessageTray,
   deleteMessage,
   publishMessage,
   publishDeleteMessage,
@@ -204,10 +182,8 @@ export {
 
 export type {
   MessageType,
-  OpenMessageTrayType,
-  CloseMessageTrayType,
+  ToggleMessageTrayType,
   DeleteMessageType,
-  ToggleCloseTrayButtonType,
   PublishMuteUserType,
   ReceiveMuteUserType,
   PublishDeleteMessageType,

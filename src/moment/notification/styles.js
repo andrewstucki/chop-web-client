@@ -24,7 +24,7 @@ const Icon = styled.span`
 
   svg {
     width: 20px;
-    padding: ${props => props.isCompact ? '5px 11px 5px 1px' : '8px 16px 8px 8px'};
+    padding: ${props => props.isCompact ? '5px 10px 5px 6px' : '8px 16px 8px 12px'};
   }
 `;
 

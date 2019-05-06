@@ -4,7 +4,6 @@ import Message from '../../src/moment/message/message';
 import { MESSAGE } from '../../src/moment/message/dux';
 import Enzyme from 'enzyme';
 import React from 'react';
-import sinon from 'sinon';
 import { mountWithTheme } from '../testUtils';
 import Label from '../../src/components/label';
 import { TextWrapper } from '../../src/moment/message/styles';
@@ -18,19 +17,6 @@ const otherUser = {
   name: 'Billy Bob',
   role: {
     label: 'Host',
-  },
-  preferences: {
-    textMode: 'COMPACT',
-  },
-};
-
-const user = {
-  id: 12345,
-  name: 'name',
-  avatar: null,
-  pubnubToken: '123',
-  role: {
-    label: '',
   },
   preferences: {
     textMode: 'COMPACT',
@@ -54,17 +40,17 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        closeMessageTray={() => {}}
-        openMessageTray={() => {}}
+        toggleMessageTray={() => {}}
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
         addPlaceholderChannel={() => ''}
         setPaneToChat={() => {}}
         hostChannel='host'
-        currentUser={user}
         directChat={() => {}}
         isCompact={true}
+        chatPermissions={true}
+        moderationPermissions={true}
       />
     );
     expect(wrapper.find(TextWrapper).html()).toContain('Go to <a target="_blank" class="linkified" href="https://live.life.church">https://live.life.church</a> young man!');
@@ -86,53 +72,19 @@ describe('Message', () => {
           }
         }
         currentChannel='public'
-        closeMessageTray={() => {}}
-        openMessageTray={() => {}}
+        toggleMessageTray={() => {}}
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
         muteUser={() => {}}
         addPlaceholderChannel={() => ''}
         setPaneToChat={() => {}}
         hostChannel='host'
-        currentUser={user}
         directChat={() => {}}
         isCompact={true}
+        chatPermissions={true}
+        moderationPermissions={true}
       />
     );
     expect(wrapper.find(Label).text()).toEqual('Host');
-  });
-
-  test('has a tray open button and it can be clicked', () => {
-    const openTray = sinon.spy();
-    const wrapper = mountWithTheme(
-      <Message
-        message={
-          {
-            type: MESSAGE,
-            id: '1234',
-            timestamp: 1546570485391,
-            lang: 'en',
-            text: 'Go west young man!',
-            sender: otherUser,
-            messageTrayOpen: false,
-            isMuted: false,
-          }
-        }
-        currentChannel='public'
-        closeMessageTray={() => {}}
-        openMessageTray={openTray}
-        deleteMessage={() => {}}
-        publishDeleteMessage={() => {}}
-        muteUser={() => {}}
-        addPlaceholderChannel={() => ''}
-        setPaneToChat={() => {}}
-        hostChannel='host'
-        currentUser={user}
-        directChat={() => {}}
-        isCompact={true}
-      />
-    );
-    wrapper.find('button').at(0).simulate('click');
-    expect(openTray.calledOnce).toEqual(true);
   });
 });

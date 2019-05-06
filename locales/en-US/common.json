@@ -3,7 +3,7 @@
   "bible": "Bible",
   "buttons": {
     "close": "Close",
-    "delete_message": "Delete message",
+    "delete_message": "Delete",
     "direct_chat": "Chat",
     "mute_user": "Mute"
   },

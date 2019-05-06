@@ -2,8 +2,7 @@
 import { connect } from 'react-redux';
 import Message from './message';
 import {
-  openMessageTray,
-  closeMessageTray,
+  toggleMessageTray,
   deleteMessage,
   publishDeleteMessage,
 } from './dux';
@@ -14,19 +13,21 @@ import {
 import { addPlaceholderChannel } from '../../feed/dux';
 import { setPaneToChat } from '../../pane/content/chat/dux';
 import { PRIMARY_PANE } from '../../pane/dux';
+import { hasPermissions } from '../../users/dux';
 
 const mapStateToProps = (state, ownProps) => {
   const { currentChannel, isCompact } = ownProps;
   return {
     currentChannel,
     isCompact,
+    chatPermissions: hasPermissions(state.feed, ['feed.direct.create']),
+    moderationPermissions: hasPermissions(state.feed, ['feed.user.mute', 'feed.message.delete'], true),
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    openMessageTray: (channel, id) => dispatch(openMessageTray(channel, id)),
-    closeMessageTray: (channel, id) => dispatch(closeMessageTray(channel, id)),
+    toggleMessageTray: (channel, id) => dispatch(toggleMessageTray(channel, id)),
     deleteMessage: (id, channel) => dispatch(deleteMessage(id, channel)),
     publishDeleteMessage: id => dispatch(publishDeleteMessage(id)),
     muteUser: user => dispatch(togglePopUpModal(muteUserType(user))),
