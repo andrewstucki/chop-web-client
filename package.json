@@ -53,7 +53,8 @@
         "gtmId": "GTM-XXXXXXX",
         "auth": "XXXXXXXXXXXXXXXXXX",
         "preview": "env-X"
-      }
+      },
+      "CWC_PATH": ""
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/",

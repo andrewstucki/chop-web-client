@@ -36,6 +36,7 @@ import { setLanguage } from './languageSelector/dux';
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
 declare var GTM;
+declare var CWC_PATH:string;
 
 if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
@@ -95,6 +96,10 @@ i18n
     },
     react: {
       wait: true,
+    },
+    backend: {
+      loadPath: `${CWC_PATH}/locales/{{lng}}/{{ns}}.json`,
+      crossDomain: true
     },
   }, () => store.dispatch(setLanguage(i18n.language)));
 
