@@ -13,7 +13,8 @@ module.exports = merge(common, {
         auth: JSON.stringify('I28B6zHKm1IufUQpkVRF_w'),
         preview: JSON.stringify('env-5')
       },
-      ROUTE_BASENAME: JSON.stringify('/')
+      ROUTE_BASENAME: JSON.stringify('/'),
+      CWC_HOST: JSON.stringify('')
     }),
     new webpack.HashedModuleIdsPlugin(),
   ],
