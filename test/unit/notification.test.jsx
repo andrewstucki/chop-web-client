@@ -24,8 +24,7 @@ describe('Notification test', () => {
         }
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
+
     expect(wrapper.find('div').at(2).text()).toEqual(
       'yablby started a live prayer with cookietree'
     );
@@ -46,8 +45,7 @@ describe('Notification test', () => {
         }
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
+
     expect(wrapper.find('div').at(2).text()).toEqual(
       'cookietree has joined the chat'
     );
@@ -68,8 +66,7 @@ describe('Notification test', () => {
         }
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
+
     expect(wrapper.find('div').at(2).text()).toEqual(
       'cookietree has left the chat'
     );
@@ -91,8 +88,7 @@ describe('Notification test', () => {
         }
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
+
     expect(wrapper.find('div').at(2).text()).toEqual(
       'host muted guest'
     );
@@ -114,8 +110,7 @@ describe('Notification test', () => {
         }
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('notification');
-    expect(wrapper.find('span').at(0).props().className).toEqual('icon');
+
     expect(wrapper.find('div').at(2).text()).toEqual(
       'guest was muted'
     );

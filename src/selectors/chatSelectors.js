@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { getChannelById } from './channelSelectors';
 import { getCurrentUser } from '../users/dux';
+import { i18n } from '../index';
 
 const PUBLIC = 'PUBLIC';
 const HOST = 'HOST';
@@ -48,12 +49,12 @@ const getPlaceholder = createSelector(
   (channelType, otherUserNames) => {
     switch (channelType) {
       case HOST:
-        return 'Chat with hosts';
+        return i18n.t('chat_with', { name: 'hosts'});
       case DIRECT:
-        return `Chat with ${otherUserNames.join(', ').replace(/,\s([^,]*)$/, ' and $1')}`;
+        return `${i18n.t('chat_with')}${otherUserNames.join(', ').replace(/,\\s([^,]*)$/, ' and $1')}`;
       case PUBLIC:
       default:
-        return 'Chat';
+        return i18n.t('chat');
     }
   }
 );

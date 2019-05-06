@@ -85,6 +85,7 @@ describe('SideBar tests', () => {
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
+        currentLanguage='en'
       />
     );
     expect(wrapper.find('styles__Menu').length).toBe(1);
@@ -111,12 +112,13 @@ describe('SideBar tests', () => {
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
+        currentLanguage='en'
       />
     );
     expect(wrapper.find('a[data-testid="guest-experience"]').length)
       .toBe(1);
     expect(wrapper.find('a[data-testid="guest-experience"]').text())
-      .toBe('Guest experience');
+      .toBe('guest_experience');
   });
 
   test('SideBar has link to give feedback', () => {
@@ -138,13 +140,14 @@ describe('SideBar tests', () => {
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
+        currentLanguage='en'
       />
     );
 
     expect(wrapper.find('a[data-testid="feedback"]').length)
       .toBe(1);
     expect(wrapper.find('a[data-testid="feedback"]').text())
-      .toBe('Give feedback');
+      .toBe('give_feedback');
     expect(wrapper.find('a[data-testid="feedback"]').props().href)
       .toBe('https://lifechurch.formstack.com/forms/host_feedback_2');
   });
@@ -169,11 +172,12 @@ describe('SideBar tests', () => {
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
+        currentLanguage='en'
       />
     );
     const logout = getByTestId('logout');
     expect(logout).toBeTruthy();
-    expect(logout.textContent).toEqual('File Log Out');
+    expect(logout.textContent).toEqual('File log_out');
     fireEvent.click(logout);
     expect(logoutButton.calledOnce).toBeTruthy();
   });
@@ -197,6 +201,7 @@ describe('SideBar tests', () => {
         eventDescription='The Description'
         eventTitle='Event Title'
         organizationName='The Church'
+        currentLanguage='en'
       />
     );
     expect(wrapper.find(OrganizationTitle).length)
@@ -224,6 +229,7 @@ describe('SideBar tests', () => {
         eventDescription='The Description'
         eventTitle='Event Title'
         organizationName='The Church'
+        currentLanguage='en'
       />
     );
     expect(wrapper.find(EventTitle).length)
@@ -255,6 +261,7 @@ describe('SideBar tests', () => {
         eventDescription='The Description'
         eventTitle='Event Title'
         organizationName='The Church'
+        currentLanguage='en'
       />
     );
     expect(wrapper.find(Avatar).length)

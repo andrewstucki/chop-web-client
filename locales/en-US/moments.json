@@ -1,0 +1,27 @@
+{
+  "actionable": {
+    "cancelled": "Cancelled",
+    "accepted": "Accepted",
+    "accept": "Accept"
+  },
+  "join_chat": {
+    "notification": "<strong>{{name}}</strong> has joined the chat",
+    "notification_you": "You have joined the chat"
+  },
+  "left_chat": {
+    "notification": "<strong>{{name}}</strong> has left the chat"
+  },
+  "mute": {
+    "notification": "<strong>{{guest}}</strong> was muted",
+    "notification_host": "<strong>{{host}}</strong> muted <strong>{{guest}}</strong>"
+  },
+  "prayer": {
+    "notification": "<strong>{{host}}</strong> started a live prayer with <strong>{{guest}}</strong>",
+    "request": "<strong>{{name}}</strong> has requested prayer"
+  },
+  "salvation": {
+    "text": "I commit my life to Christ.",
+    "hands_raised": "{{count}} hand raised",
+    "hands_raised_plural": "{{count}} hands raised"
+  }
+}

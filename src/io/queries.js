@@ -368,6 +368,7 @@ mutation joinFeed($channel: String!, $requesterPubnubToken: String!, $requesterN
     id
     name
     direct
+    type
     participants: subscribers {
       pubnubToken
       avatar

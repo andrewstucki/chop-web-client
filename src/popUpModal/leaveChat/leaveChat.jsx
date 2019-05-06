@@ -3,6 +3,7 @@ import React from 'react';
 
 import type { SharedUserType } from '../../users/dux';
 import styles from '../style.css';
+import { useTranslation, Trans } from 'react-i18next';
 
 type LeaveChatPropsType = {
   togglePopUpModal: () => void,
@@ -26,38 +27,47 @@ const LeaveChatPopUpModal = (
     currentChannel,
     isPlaceholder,
   }: LeaveChatPropsType
-) => (
-  <div className={styles.alert} data-testid='leave-chat-modal'>
-    { hasOtherUsers &&
-      <div className={styles.text}>
-        Are you sure you want to end your chat with
-        <strong> {otherUser.name}</strong>?
+) => {
+  const { t } = useTranslation('forms');
+  const callLeaveChannel = () => {
+    togglePopUpModal();
+    publishLeftChannelNotification(currentUser.name, currentUser.pubnubToken, currentChannel, new Date());
+    leaveChannel(currentChannel, isPlaceholder);
+  };
+
+  return (
+    <div className={styles.alert} data-testid='leaveChat'>
+      {hasOtherUsers &&
+      <div className={styles.text} data-testid='leaveChat-confirmText'>
+        <Trans ns='forms' i18nKey='leave_chat.confirm_user'>
+          {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+          Are you sure you want to end your chat with <strong>{{name: otherUser.name}}</strong>?
+        </Trans>
       </div>
-    }
-    { !hasOtherUsers &&
+      }
+      {!hasOtherUsers &&
       <div className={styles.text}>
-        Are you sure you want to end your chat?
+        { t('leave_chat.confirm') }
       </div>
-    }
-    <div className={styles.actionContainer}>
-      <button
-        className={styles.primary}
-        onClick={() => (togglePopUpModal())}
-      >
-        Keep chatting
-      </button>
-      <button
-        className={styles.primary}
-        onClick={() => (
-          togglePopUpModal(),
-          publishLeftChannelNotification(currentUser.name, currentUser.pubnubToken, currentChannel, new Date),
-          leaveChannel(currentChannel, isPlaceholder)
-        )}
-      >
-        Leave
-      </button>
+      }
+      <div className={styles.actionContainer}>
+        <button
+          className={styles.primary}
+          onClick={togglePopUpModal}
+          data-testid='leaveChat-keepChatting'
+        >
+          { t('leave_chat.keep_chatting') }
+        </button>
+        <button
+          className={styles.primary}
+          onClick={callLeaveChannel}
+          data-testid='leaveChat-leaveButton'
+        >
+          { t('leave_chat.leave') }
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default LeaveChatPopUpModal;

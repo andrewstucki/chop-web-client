@@ -44,6 +44,9 @@ https://babeljs.io/
 Styled Components -- CSS in JS
 https://www.styled-components.com/
 
+React i18next -- Internationalization
+https://react.i18next.com/
+
 GitLab CI/CD -- Continues Integration and Deployment
 https://about.gitlab.com/features/gitlab-ci-cd/
 

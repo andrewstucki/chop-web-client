@@ -4,8 +4,10 @@ import React from 'react';
 import type { ActionableNotificationType } from './dux';
 
 import ChatNotification from '../../../assets/chat-notification.svg';
-import styles from './style.css';
 import type {SharedUserType} from '../../users/dux';
+import { Trans, useTranslation } from 'react-i18next';
+import { Wrapper as NotificationWrapper, Text, Timestamp, Icon } from '../notification/styles';
+import { ActionableWrapper, ActionableContainer, AcceptButton, AcceptedText } from './styles';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
@@ -28,46 +30,45 @@ const ActionableNotification = (
     prayerChannel,
   } = notification;
 
-  const notificationStyle =
-    active ? styles.actionableNotification : styles.notification;
+  const { t } = useTranslation('moments');
 
-  const acceptedTextStyle =
-    !active ? styles.showText : styles.hideText;
+  const Wrapper =
+    active ? ActionableWrapper : NotificationWrapper;
 
   const acceptedText =
-    cancelled ? 'Cancelled' : 'Accepted';
+    cancelled ? t('actionable.cancelled') : t('actionable.accepted');
+
+  const callAcceptPrayerRequest = () => acceptPrayerRequest(prayerChannel, hostChannel, user, false);
 
   return (
-    <div className={notificationStyle}>
-      <div className={styles.actionableWrapper}>
-        <span
-          className={styles.icon}
+    <Wrapper data-testid='actionableNotification'>
+      <ActionableContainer>
+        <Icon
           dangerouslySetInnerHTML={
             { __html: ChatNotification }
           }
         />
-        <div className={styles.text}>
-          <div>
-            <strong>{user.name}</strong> has requested prayer
+        <Text>
+          <div data-testid='actionableNotification-text'>
+            <Trans ns='moments' i18nKey='prayer.request'>
+              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+              <strong>{{name: user.name}}</strong> has requested prayer
+            </Trans>
           </div>
-          <div className={styles.timestamp}>{timestamp}</div>
-        </div>
+          <Timestamp data-testid='actionableNotification-timestamp'>{timestamp}</Timestamp>
+        </Text>
         {
           active &&
-            <button
-              className={styles.acceptButton}
-              onClick={
-                () => (
-                  acceptPrayerRequest(prayerChannel, hostChannel, user, false)
-                )
-              }
+            <AcceptButton
+              data-testid='actionableNotification-accept'
+              onClick={callAcceptPrayerRequest}
             >
-              Accept
-            </button>
+              {t('actionable.accept')}
+            </AcceptButton>
         }
-        <div className={acceptedTextStyle}>{acceptedText}</div>
-      </div>
-    </div>
+        <AcceptedText hide={active} data-testid='actionableNotification-accepted'>{acceptedText}</AcceptedText>
+      </ActionableContainer>
+    </Wrapper>
   );
 };
 

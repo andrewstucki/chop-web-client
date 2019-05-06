@@ -278,7 +278,6 @@ describe('Feed scrolling with anchor moment', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: '123345',
-          text: 'I commit my life to Christ.',
         },
       });
 
@@ -296,7 +295,6 @@ describe('Feed scrolling with anchor moment', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: '123345',
-          text: 'I commit my life to Christ.',
         },
       });
 
@@ -342,7 +340,6 @@ describe('Feed scrolling with anchor moment', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: '123345',
-          text: 'I commit my life to Christ.',
         },
       });
 
@@ -392,7 +389,6 @@ describe('Feed scrolling with anchor moment', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: '123345',
-          text: 'I commit my life to Christ.',
         },
       });
 
@@ -442,7 +438,6 @@ describe('Feed scrolling with anchor moment', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: '123345',
-          text: 'I commit my life to Christ.',
         },
       });
 
@@ -487,7 +482,6 @@ describe('Feed scrolling with anchor moment', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: '123345',
-          text: 'I commit my life to Christ.',
         },
       });
 

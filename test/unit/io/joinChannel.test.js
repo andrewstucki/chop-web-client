@@ -26,6 +26,7 @@ describe('Test join channel', () => {
         channel: {
           direct: true,
           placeholder: false,
+          type: 'direct',
           id: '67890',
           name: null,
           anchorMoments: [],

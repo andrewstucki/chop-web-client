@@ -31,8 +31,6 @@ const defaultState = {
   },
 };
 
-const promisifyMiddleware = ({_dispatch, _getState}) => next => action => new Promise( resolve => resolve(next(action)) );
-
 const mountWithTheme = children => mount(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
 
 const ChopTheme = ({ children }) => (
@@ -60,4 +58,4 @@ const renderWithReduxAndTheme = (ui, state = defaultState, options = {}) => {
   };
 };
 
-export { mockDate, promisifyMiddleware, mountWithTheme, renderWithTheme, renderWithRedux, renderWithReduxAndTheme };
+export { mockDate, mountWithTheme, renderWithTheme, renderWithRedux, renderWithReduxAndTheme, defaultState };

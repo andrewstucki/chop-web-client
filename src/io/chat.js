@@ -295,9 +295,12 @@ class Chat {
           return;
         }
         case 'newLiveResponseRequest':
+          /* TODO: Update this to loop through remaining messages and see if there is a 'removeLiveResponseRequest'
+              for this channel. If there is, do nothing, if there isn't, publish a pending prayer request.
           if (message.entry.data.type === 'prayer') {
-            moments.push(Converter.legacyToCwcPrayer(message.entry));
+            moments.push(Converter.legacyToCwcPrayer(message.entry).moment);
           }
+          */
           return;
         case 'muteMessage':
           moments.splice(moments.findIndex(moment => moment.id === message.entry.data.umt));
@@ -309,7 +312,7 @@ class Chat {
 
           if (!mutedUsers.includes(nickname) && currentUserName !== nickname) {
             this.storeDispatch(
-            // $FlowFixMe
+              // $FlowFixMe
               receiveMuteUser(nickname)
             );
 

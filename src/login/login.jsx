@@ -6,6 +6,7 @@ import InputField from '../components/inputField';
 import Button, {BUTTON_MEDIUM, BUTTON_PRIMARY} from '../components/button';
 import Errors from '../errors';
 import { Redirect } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 type LoginProps = {
   basicAuthLogin: (email: string, password: string) => void,
@@ -19,6 +20,7 @@ type LoginState = {
 };
 
 const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => {
+  const { t } = useTranslation('forms');
   const [values, setValues] = useState < LoginState > ({ email: '', password: '' });
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -51,14 +53,14 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
   } else {
     return (
       <Wrapper data-testid="login">
-        <h1>Log In</h1>
+        <h1>{t('login.title')}</h1>
         <Errors />
         <form onSubmit={handleLogin}>
           <InputField
             ref={emailRef}
             type='email'
             name='email'
-            label='Email'
+            label={t('login.email')}
             onChange={onChange}
             value={values.email}
             autoComplete='email'
@@ -67,7 +69,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
             ref={passwordRef}
             type='password'
             name='password'
-            label='Password'
+            label={t('login.password')}
             onChange={onChange}
             value={values.password}
             autoComplete='current-password'
@@ -78,7 +80,7 @@ const Login = ({ basicAuthLogin, isAuthenticated, clearErrors }: LoginProps) => 
               variant={BUTTON_PRIMARY}
               size={BUTTON_MEDIUM}
             >
-              Log In
+              { t('login.submit') }
             </Button>
           </ButtonWrapper>
         </form>

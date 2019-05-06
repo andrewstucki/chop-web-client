@@ -5,6 +5,7 @@ import HostInfo from '../../../hostInfo';
 import type { TabTypeType } from './dux';
 import PaneHeader from '../../../paneHeader';
 import { TAB_HEADER } from '../../../paneHeader/tabHeader';
+import { useTranslation } from 'react-i18next';
 
 type TabPropsType = {
   type: TabTypeType,
@@ -22,14 +23,18 @@ const renderTabContent = type => {
   }
 };
 
-const Tab = ({ type, hideTab }:TabPropsType) => (
-  <>
-    <PaneHeader type={TAB_HEADER} data={{
-      title: type.replace(/_/g, ' '),
-      hideTab: () => hideTab(type),
-    }}/>
-    { renderTabContent(type) }
-  </>
-);
+const Tab = ({ type, hideTab }:TabPropsType) => {
+  const { t } = useTranslation();
+  const headerData = {
+    title: t(type.toLowerCase()).toUpperCase(),
+    hideTab: () => hideTab(type),
+  };
+  return (
+    <>
+      <PaneHeader type={TAB_HEADER} data={headerData}/>
+      {renderTabContent(type)}
+    </>
+  );
+};
 
 export default React.memo < TabPropsType > (Tab);

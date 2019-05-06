@@ -2,7 +2,6 @@
 import React from 'react';
 import Dismiss from '../icons/dismissButton';
 import type { BannerType } from './dux';
-import { capitalizeFirstLetter } from '../util/index';
 import IconButton from '../components/iconButton';
 import {
   WarningBanner,
@@ -11,6 +10,7 @@ import {
   BannerMessage,
 } from './styles';
 import { theme } from '../styles';
+import { Trans } from 'react-i18next';
 
 type BannerProps = {
   banner: BannerType,
@@ -33,13 +33,20 @@ const Banner = (
     return null;
   }
   switch (banner.bannerType) {
-    case 'notification':
+    case 'notification': {
+      const name = banner.message;
       return (
         <NotificationBanner>
           <DismissButton dismissNotification={dismissNotification}/>
-          <BannerMessage><strong>{capitalizeFirstLetter(banner.message)}</strong> was muted.</BannerMessage>
+          <BannerMessage>
+            <Trans ns='notifications' i18nKey='user_muted'>
+              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+              <strong>{{name}}</strong> was muted.
+            </Trans>
+          </BannerMessage>
         </NotificationBanner>
       );
+    }
     case 'error':
       return (
         <ErrorBanner>
