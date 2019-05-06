@@ -9,10 +9,11 @@ import { CHAT_HEADER } from '../../../paneHeader/chatHeader';
 import { DIRECT_CHAT_HEADER } from '../../../paneHeader/directChatHeader';
 import { MediumUp } from '../../../util/responsive';
 import { ChatInputs, PlaceholderWrapper, PlaceholderText } from './styles';
+import { useTranslation } from 'react-i18next';
 
 type ChatPropsType = {
   channel: string,
-  name: string,
+  type: string,
   userCount?: number,
   isDirect: boolean,
   isPlaceholder: boolean,
@@ -34,21 +35,25 @@ const Chat = (props:ChatPropsType) => (
 );
 
 const ChatFeed = React.memo < ChatPropsType > (
-  function ChatFeed ({ otherUsersName, isDirect, leaveChannel, name, userCount, channel, isPlaceholder }: ChatPropsType) {
+  function ChatFeed ({ otherUsersName, isDirect, leaveChannel, type, userCount, channel, isPlaceholder }: ChatPropsType) {
+    const { t } = useTranslation();
+    const directChatHeaderData = {
+      otherUsersName,
+      leaveChannel,
+    };
+    const chatHeaderData = {
+      title: `${t(`channels.${type}`)} ${t('chat')}`,
+      subtitle: userCount,
+    };
+
     return (
       <>
         {
           (isDirect || isPlaceholder) ?
-            <PaneHeader type={DIRECT_CHAT_HEADER} data={{
-              otherUsersName,
-              leaveChannel,
-            }}/>
+            <PaneHeader type={DIRECT_CHAT_HEADER} data={directChatHeaderData}/>
             :
             <MediumUp>
-              <PaneHeader type={CHAT_HEADER} data={{
-                title: `${name} chat`,
-                subtitle: userCount,
-              }}/>
+              <PaneHeader type={CHAT_HEADER} data={chatHeaderData}/>
             </MediumUp>
         }
         {

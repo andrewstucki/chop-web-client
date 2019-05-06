@@ -10,159 +10,199 @@ import {
 } from './dux';
 
 import type {
-  PrayerNotificationType,
-  PrayerRequestNotificationType,
-  MuteUserNotificationType,
-  JoinedChatNotificationType,
-  LeftChannelNotificationType,
   NotificationType,
 } from './dux';
 
 import ChatNotification from '../../../assets/chat-notification.svg';
 import EndChatNotification from '../../../assets/end-chat-notification.svg';
-import MuteUserNotification from '../../../assets/mute-user-notification.svg';
-import styles from './style.css';
+import MuteUserNotificationIcon from '../../../assets/mute-user-notification.svg';
+import { Wrapper, Icon, Timestamp, Text } from './styles';
+import { Trans, useTranslation } from 'react-i18next';
 
 type NotificationPropsType = {
   notification: NotificationType,
 };
 
-const prayerNotificationText = (
+type PrayerNotificationPropsType = {
+  host: string,
+  guest: string,
+  timestamp: string,
+};
+
+const PrayerNotification = (
   {
     host,
     guest,
     timestamp,
-  }: PrayerNotificationType
+  }: PrayerNotificationPropsType
 ) => (
-  <div className={styles.notification}>
-    <span
-      className={styles.icon}
+  <Wrapper>
+    <Icon
       dangerouslySetInnerHTML={
         { __html: ChatNotification }
       }
     />
-    <div className={styles.text}>
+    <Text>
       <div>
-        <strong>{host} </strong>started a live prayer with<strong> {guest}</strong>
+        <Trans ns='moments' i18nKey='prayer.notification'>
+          {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+          <strong>{{host}}</strong> started a live prayer with <strong>{{guest}}</strong>
+        </Trans>
       </div>
-      <div className={styles.timestamp}>{timestamp}</div>
-    </div>
-  </div>
+      <Timestamp>{timestamp}</Timestamp>
+    </Text>
+  </Wrapper>
 );
 
-const prayerRequestNotificationText = (
+type PrayerRequestNotificationPropsType = {
+  guest: string,
+  timestamp: string,
+};
+
+const PrayerRequestNotification = (
   {
     guest,
     timestamp,
-  }: PrayerRequestNotificationType
+  }: PrayerRequestNotificationPropsType
 ) => (
-  <div className={styles.notification}>
-    <span
-      className={styles.icon}
+  <Wrapper>
+    <Icon
       dangerouslySetInnerHTML={
         { __html: ChatNotification }
       }
     />
-    <div className={styles.text}>
+    <Text>
       <div>
         <strong>{guest} </strong>has request prayer.
       </div>
-      <div className={styles.timestamp}>{timestamp}</div>
-    </div>
-  </div>
+      <Timestamp>{timestamp}</Timestamp>
+    </Text>
+  </Wrapper>
 );
 
-const MuteUserNotificationText = (
+
+type MuteUserNotificationPropsType = {
+  host: string,
+  guest: string,
+  timestamp: string,
+};
+
+const MuteUserNotification = (
   {
     host,
     guest,
     timestamp,
-  }: MuteUserNotificationType
+  }: MuteUserNotificationPropsType
 ) => (
-  <div className={styles.notification}>
-    <span
-      className={styles.icon}
+  <Wrapper>
+    <Icon
       dangerouslySetInnerHTML={
-        {__html: MuteUserNotification}
+        { __html: MuteUserNotificationIcon }
       }
     />
-    <div className={styles.text}>
+    <Text>
       <div>
         {
           host ? (
-            <span>
-              <strong>{host} </strong>muted<strong> {guest}</strong>
-            </span>
+            <Trans ns='moments' i18nKey='mute.notification_host'>
+              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+              <strong>{{host}}</strong> muted <strong>{{guest}}</strong>
+            </Trans>
           ) : (
-            <span>
-              <strong>{guest} </strong>was muted
-            </span>
+            <Trans ns='moments' i18nKey='mute.notification'>
+              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+              <strong>{{guest}}</strong> was muted
+            </Trans>
           )
         }
       </div>
-      <div className={styles.timestamp}>{timestamp}</div>
-    </div>
-  </div>
+      <Timestamp>{timestamp}</Timestamp>
+    </Text>
+  </Wrapper>
 );
 
-const joinedChatNotificationText = (
+type JoinedChatNotificationPropsType = {
+  name: string,
+  timestamp: string,
+};
+
+const JoinedChatNotification = (
   {
     name,
     timestamp,
-  }: JoinedChatNotificationType
-) => (
-  <div className={styles.notification}>
-    <span
-      className={styles.icon}
-      dangerouslySetInnerHTML={
-        { __html: ChatNotification }
-      }
-    />
-    <div className={styles.text}>
-      <div>
-        { name === 'You' ?
-          <span>{name} have joined the chat</span> : <span><strong>{name}</strong> has joined the chat</span>
+  }: JoinedChatNotificationPropsType
+) => {
+  const { t } = useTranslation('moments');
+  return (
+    <Wrapper>
+      <Icon
+        dangerouslySetInnerHTML={
+          { __html: ChatNotification }
         }
-      </div>
-      <div className={styles.timestamp}>{timestamp}</div>
-    </div>
-  </div>
-);
+      />
+      <Text>
+        <div>
+          {
+            name === 'You' ? (
+              t('joined_chat.notification_you')
+            ) : (
+              <Trans ns='moments' i18nKey='joined_chat.notification'>
+                {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+                <strong>{{name}}</strong> has joined the chat
+              </Trans>
+            )
+          }
+          {name === 'You' ?
+            <span>{name} have joined the chat</span> : <span></span>
+          }
+        </div>
+        <Timestamp>{timestamp}</Timestamp>
+      </Text>
+    </Wrapper>
+  );
+};
 
-const leftChannelNotificationText = (
+type LeftChatNotificationPropsType = {
+  name: string,
+  timestamp: string,
+};
+
+const LeftChannelNotification = (
   {
     name,
     timestamp,
-  }: LeftChannelNotificationType
+  }: LeftChatNotificationPropsType
 ) => (
-  <div className={styles.notification}>
-    <span
-      className={styles.icon}
+  <Wrapper>
+    <Icon
       dangerouslySetInnerHTML={
         { __html: EndChatNotification }
       }
     />
-    <div className={styles.text}>
+    <Text>
       <div>
-        <strong>{name} </strong>has left the chat
+        <Trans ns='moments' i18nKey='left_chat.notification'>
+          {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+          <strong>{{name}}</strong> has left the chat
+        </Trans>
       </div>
-      <div className={styles.timestamp}>{timestamp.toString()}</div>
-    </div>
-  </div>
+      <Timestamp>{timestamp}</Timestamp>
+    </Text>
+  </Wrapper>
 );
 
 const getNotificationText = notification => {
   switch (notification.notificationType) {
     case PRAYER:
-      return prayerNotificationText(notification);
+      return <PrayerNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} />;
     case PRAYER_REQUEST:
-      return prayerRequestNotificationText(notification);
+      return <PrayerRequestNotification guest={notification.guest} timestamp={notification.timestamp} />;
     case MUTE:
-      return MuteUserNotificationText(notification);
+      return <MuteUserNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} />;
     case JOINED_CHAT:
-      return joinedChatNotificationText(notification);
+      return <JoinedChatNotification name={notification.name} timestamp={notification.timestamp} />;
     case LEFT_CHANNEL:
-      return leftChannelNotificationText(notification);
+      return <LeftChannelNotification name={notification.name} timestamp={notification.timestamp} />;
     default:
       return null;
   }

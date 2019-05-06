@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
-import Enzyme from 'enzyme';
 import sinon from 'sinon';
-
+import { fireEvent } from 'react-testing-library';
 import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
@@ -12,15 +10,13 @@ import {
   leaveChatType,
   muteUserType,
 } from '../../src/popUpModal/dux';
-
-import PopUpModal from '../../src/popUpModal/popUpModal';
+import PopUpModal from '../../src/popUpModal';
 import LeaveChat from '../../src/popUpModal/leaveChat/leaveChat';
+import LeaveChatConnected from '../../src/popUpModal/leaveChat';
 import MuteUser from '../../src/popUpModal/muteUser/muteUser';
 import MuteUserConnected from '../../src/popUpModal/muteUser';
-import LeaveChatConnected from '../../src/popUpModal/leaveChat';
-import { renderWithReduxAndTheme } from '../testUtils';
+import { renderWithReduxAndTheme, defaultState as defaultTestState } from '../testUtils';
 
-Enzyme.configure({ adapter: new Adapter() });
 
 const otherUser = {
   id: 12345,
@@ -31,6 +27,7 @@ const otherUser = {
     label: '',
   },
 };
+
 const currentUser = {
   id: 12345,
   pubnubToken: '09876',
@@ -85,7 +82,7 @@ describe('PopUpModal tests', () => {
     const togglePopUpModal = sinon.spy();
     const leaveChannel = sinon.spy();
     const publishLeftChannelNotification = sinon.spy();
-    const wrapper = Enzyme.shallow(
+    const { getByTestId } = renderWithReduxAndTheme(
       <LeaveChat
         togglePopUpModal={togglePopUpModal}
         leaveChannel={leaveChannel}
@@ -97,12 +94,12 @@ describe('PopUpModal tests', () => {
         isPlaceholder={false}
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('alert');
-    expect(wrapper.find('div').at(1).text()).toEqual(
+
+    expect(getByTestId('leaveChat-confirmText').textContent).toEqual(
       'Are you sure you want to end your chat with Billy Bob?'
     );
-    expect(wrapper.find('button').at(0).simulate('click'));
-    expect(wrapper.find('button').at(1).simulate('click'));
+    fireEvent.click(getByTestId('leaveChat-keepChatting'));
+    fireEvent.click(getByTestId('leaveChat-leaveButton'));
     expect(togglePopUpModal.calledTwice).toEqual(true);
     expect(publishLeftChannelNotification.calledOnce).toEqual(true);
     expect(leaveChannel.calledOnce).toEqual(true);
@@ -113,7 +110,7 @@ describe('PopUpModal tests', () => {
     const muteUser = sinon.spy();
     const publishMuteUserNotification = sinon.spy();
     const mutedNotificationBanner = sinon.spy();
-    const wrapper = Enzyme.shallow(
+    const { getByTestId } = renderWithReduxAndTheme(
       <MuteUser
         togglePopUpModal={togglePopUpModal}
         muteUser={muteUser}
@@ -125,15 +122,15 @@ describe('PopUpModal tests', () => {
         currentChannel='public'
       />
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('alert');
-    expect(wrapper.find('div').at(1).text()).toEqual(
+
+    expect(getByTestId('muteUser-confirmText').textContent).toEqual(
       'Are you sure you want to mute Billy Bob?'
     );
-    expect(wrapper.find('div').at(2).text()).toEqual(
-      'All of their messages will be deleted.'
+    expect(getByTestId('muteUser-allMessages').textContent).toEqual(
+      'mute_user.all_messages'
     );
-    expect(wrapper.find('button').at(0).simulate('click'));
-    expect(wrapper.find('button').at(1).simulate('click'));
+    fireEvent.click(getByTestId('muteUser-cancel'));
+    fireEvent.click(getByTestId('muteUser-mute'));
     expect(togglePopUpModal.calledTwice).toEqual(true);
     expect(publishMuteUserNotification.calledOnce).toEqual(true);
     expect(muteUser.calledOnce).toEqual(true);
@@ -141,27 +138,37 @@ describe('PopUpModal tests', () => {
   });
 
   test('Modal has background', () => {
-    const wrapper = Enzyme.shallow(
-      <PopUpModal
-        togglePopUpModal={() => {}}
-        isPopUpModalVisible={true}
-        modal={{
-          type: 'LEAVE_CHAT',
-        }}
-      />
+    const { queryByTestId } = renderWithReduxAndTheme(
+      <PopUpModal />,
+      {
+        ...defaultTestState,
+        feed: {
+          ...defaultTestState.feed,
+          isPopUpModalVisible: true,
+          popUpModal: {
+            type: 'LEAVE_CHAT',
+          },
+        },
+      }
     );
-    expect(wrapper.find('div').at(0).props().className).toEqual('popUpModal');
+    expect(queryByTestId('popUpModal')).toBeTruthy();
   });
 
   test('Modal does not render if visible is set to false', () => {
-    const wrapper = Enzyme.shallow(
-      <PopUpModal
-        togglePopUpModal={() => {}}
-        modal={{}}
-        isPopUpModalVisible={false}
-      />
+    const { queryByTestId } = renderWithReduxAndTheme(
+      <PopUpModal />,
+      {
+        ...defaultTestState,
+        feed: {
+          ...defaultTestState.feed,
+          isPopUpModalVisible: false,
+          popUpModal: {
+            type: '',
+          },
+        },
+      }
     );
-    expect(wrapper.find('div').exists()).toEqual(false);
+    expect(queryByTestId('popUpModal')).toBeFalsy();
   });
 
   test('Mute user modal displays', () => {
@@ -200,7 +207,7 @@ describe('PopUpModal tests', () => {
         togglePopUpModal={() => {}}
       />, state
     );
-    expect(getByTestId('mute-user-modal')).toBeTruthy();
+    expect(getByTestId('muteUser-modal')).toBeTruthy();
   });
 
   test('Leave chat modal displays', () => {
@@ -238,6 +245,6 @@ describe('PopUpModal tests', () => {
         togglePopUpModal={() => {}}
       />, state
     );
-    expect(getByTestId('leave-chat-modal')).toBeTruthy();
+    expect(getByTestId('leaveChat')).toBeTruthy();
   });
 });

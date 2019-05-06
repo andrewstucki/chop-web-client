@@ -1,0 +1,20 @@
+{
+  "leave_chat": {
+    "confirm": "Are you sure you want to end your chat?",
+    "confirm_user": "Are you sure you want to end your chat with <strong>{{name}}</strong>?",
+    "keep_chatting": "Keep chatting",
+    "leave": "Leave"
+  },
+  "login": {
+    "title": "Log In",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Log In"
+  },
+  "mute_user": {
+    "all_messages": "All of their messages will be deleted.",
+    "cancel": "Cancel",
+    "confirm": "Are you sure you want to mute <strong>{{user}}</strong>?",
+    "mute": "Mute"
+  }
+}

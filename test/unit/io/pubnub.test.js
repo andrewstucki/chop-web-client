@@ -61,7 +61,7 @@ describe('Pubnub saga', () => {
       }),
     },
     publishMomentToChannel,
-    publishMessage('public', `It's not my fault.`, sender)).toPromise();
+    publishMessage('public', `It's not my fault.`, sender, 'en')).toPromise();
 
     expect(mockPublish).toHaveBeenCalledTimes(1);
     expect(mockPublish.mock.calls[0][0]).toMatchObject(
@@ -230,7 +230,7 @@ describe('Pubnub saga', () => {
       }),
     },
     publishMomentToChannel,
-    publishMessage('placeholder', `It's not my fault.`, sender)).toPromise();
+    publishMessage('placeholder', `It's not my fault.`, sender, 'en')).toPromise();
 
     expect(dispatched.length).toEqual(5);
     expect(dispatched).toMatchObject([

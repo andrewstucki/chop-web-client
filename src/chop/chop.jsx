@@ -7,6 +7,7 @@ import XlargeLayout from './layouts/xlarge';
 import { Redirect } from 'react-router-dom';
 import { Small, Medium, Large, Xlarge } from '../util/responsive';
 import { Wrapper } from './styles';
+import { useTranslation } from 'react-i18next';
 
 type ChopContainerProps = {
   organization: string,
@@ -15,7 +16,8 @@ type ChopContainerProps = {
 };
 
 const ChopContainer = ({organization, authenticated, hasVideo }: ChopContainerProps) => {
-  document.title = `Live ${organization}`;
+  const { t } = useTranslation();
+  document.title = `${t('live')} ${organization}`;
 
   if (authenticated) {
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { SharedUserType } from '../../users/dux';
-
+import { Trans, useTranslation } from 'react-i18next';
 import styles from '../style.css';
 
 type MuteUserPropsType = {
@@ -26,35 +26,43 @@ const MuteUserPopUpModal = (
     currentChannel,
     currentUser,
   }: MuteUserPropsType
-) => (
-  <div className={styles.alert} data-testid='mute-user-modal'>
-    <div className={styles.text}>
-      Are you sure you want to mute
-      <strong> {user}</strong>?
+) => {
+  const { t } = useTranslation('forms');
+  const callMuteUser = () => {
+    togglePopUpModal();
+    publishMuteUserNotification(currentUser, user, hostChannel);
+    muteUser(currentChannel, user);
+    mutedNotificationBanner(user);
+  };
+
+  return (
+    <div className={styles.alert} data-testid='muteUser-modal'>
+      <div className={styles.text} data-testid='muteUser-confirmText'>
+        <Trans ns='forms' i18nKey='mute_user.confirm'>
+          Are you sure you want to mute <strong>{{ user }}</strong>?
+        </Trans>
+      </div>
+      <div className={styles.smallText} data-testid='muteUser-allMessages'>
+        { t('mute_user.all_messages') }
+      </div>
+      <div className={styles.actionContainer}>
+        <button
+          className={styles.primary}
+          onClick={togglePopUpModal}
+          data-testid='muteUser-cancel'
+        >
+          { t('mute_user.cancel') }
+        </button>
+        <button
+          className={styles.danger}
+          onClick={callMuteUser}
+          data-testid='muteUser-mute'
+        >
+          { t('mute_user.mute') }
+        </button>
+      </div>
     </div>
-    <div className={styles.smallText}>
-      All of their messages will be deleted.
-    </div>
-    <div className={styles.actionContainer}>
-      <button
-        className={styles.primary}
-        onClick={() => (togglePopUpModal())}
-      >
-        Cancel
-      </button>
-      <button
-        className={styles.danger}
-        onClick={() => (
-          togglePopUpModal(),
-          publishMuteUserNotification(currentUser, user, hostChannel),
-          muteUser(currentChannel, user),
-          mutedNotificationBanner(user)
-        )}
-      >
-        Mute
-      </button>
-    </div>
-  </div>
-);
+  );
+};
 
 export default MuteUserPopUpModal;

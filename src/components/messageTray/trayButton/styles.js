@@ -31,13 +31,4 @@ const ActionButton = styled.button`
   
 `;
 
-const CloseButton = styled.button`
-  line-height: 0;
-  padding: 0 8px;
-  
-  div {
-    display: none;
-  }
-`;
-
-export { ActionButton, CloseButton };
+export { ActionButton };

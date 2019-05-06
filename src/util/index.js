@@ -65,9 +65,6 @@ const newTimestamp = () => Date.now();
 
 const getUTCDate = (date: Date = new Date()) => new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
 
-const capitalizeFirstLetter = (string: string) =>
-  (string.charAt(0).toUpperCase() + string.slice(1));
-
 const isEmpty = (string: string) =>
   (!string || string.length === 0);
 
@@ -98,9 +95,6 @@ const isMobileDevice = () => { /* eslint-disable */
   return check;
 };
 
-const isIOS = () => !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-const isIPhone = () => !!navigator.platform && /iPhone/.test(navigator.platform);
-
 const isAndroid = () => !!navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
 export {
@@ -109,13 +103,10 @@ export {
   createUid,
   newTimestamp,
   avatarImageExists,
-  capitalizeFirstLetter,
   isEmpty,
   sanitizeString,
   getMessageTimestamp,
   isMobileDevice,
-  isIOS,
-  isIPhone,
   isAndroid,
   getUTCDate,
 };

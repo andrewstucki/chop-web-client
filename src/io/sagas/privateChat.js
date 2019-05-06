@@ -45,8 +45,8 @@ function* leaveChannel (action: LeaveChannelType): Saga<void> {
 function* directChat (action: PublishDirectChatType): Saga<void> {
   try {
     const result = yield call([queries, queries.directChat], action.otherUserPubnubToken, action.otherUserNickname);
-    const { name, id, direct, participants } = result.createDirectFeed;
-    yield put(addChannel(name, id, direct, participants.map(convertUser)));
+    const { name, id, direct, type, participants } = result.createDirectFeed;
+    yield put(addChannel(name, id, type, direct, participants.map(convertUser)));
     yield put(setPrimaryPane(CHAT, id));
     return id;
   } catch (error) {
@@ -60,8 +60,8 @@ function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType
     const { userRequestingPrayer: { pubnubToken, name }, prayerChannel } = action;
 
     const result = yield call([queries, queries.acceptPrayer], prayerChannel, pubnubToken, name);
-    const { name: channelName, id, direct, participants } = result.acceptPrayer;
-    yield put(addChannel(channelName, id, direct, participants.map(convertUser)));
+    const { name: channelName, id, direct, type, participants } = result.acceptPrayer;
+    yield put(addChannel(channelName, id, type, direct, participants.map(convertUser)));
     yield put(setPrimaryPane(CHAT, id));
   } catch (error) {
     yield put({type: PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, error: error.message});
@@ -73,8 +73,8 @@ function* joinChannel (action: JoinChannelType): Saga<void> {
   try {
     const { channel, requesterPubnubToken, requesterNickname } = action;
     const result = yield call([queries, queries.joinChannel], channel, requesterPubnubToken, requesterNickname);
-    const { name: channelName, id, direct, participants } = result.joinFeed;
-    yield put(addChannel(channelName, id, direct, participants.map(convertUser)));
+    const { name: channelName, id, direct, type, participants } = result.joinFeed;
+    yield put(addChannel(channelName, id, type, direct, participants.map(convertUser)));
   } catch (error) {
     yield put({type: JOIN_CHANNEL_FAILED, error: error.message});
     bugsnagClient.notify(error);

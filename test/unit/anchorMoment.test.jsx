@@ -1,24 +1,21 @@
 // @flow
 import React from 'react';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
-import { mountWithTheme } from '../testUtils';
+import { fireEvent } from 'react-testing-library';
+import { renderWithTheme } from '../testUtils';
 
 import AnchorMoment from '../../src/anchorMoment/anchorMoment';
 
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('AnchorMoment tests', () => {
   test('Salvation AnchorMoment renders', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <AnchorMoment
         anchorMoment={
           {
             type: 'ANCHOR_MOMENT',
             anchorMomentType: 'SALVATION',
             id: '12345',
-            text: 'I commit my life to Christ.',
           }
         }
         releaseAnchorMoment={() => {}}
@@ -28,21 +25,20 @@ describe('AnchorMoment tests', () => {
       />
     );
 
-    expect(wrapper.find('div').at(3).text()).toEqual(
-      'I commit my life to Christ.'
+    expect(getByTestId('salvationText').textContent).toEqual(
+      'salvation.text'
     );
-    expect(wrapper.find('div').at(4).text()).toEqual('4 hands raised');
+    expect(getByTestId('salvationHands').textContent).toEqual('salvation.hands_raised');
   });
 
   test('Salvation AnchorMoment renders in feed', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <AnchorMoment
         anchorMoment={
           {
             type: 'ANCHOR_MOMENT',
             anchorMomentType: 'SALVATION',
             id: '12345',
-            text: 'I commit my life to Christ.',
           }
         }
         releaseAnchorMoment={() => {}}
@@ -52,22 +48,21 @@ describe('AnchorMoment tests', () => {
       />
     );
 
-    expect(wrapper.find('div').at(3).text()).toEqual(
-      'I commit my life to Christ.'
+    expect(getByTestId('salvationText').textContent).toEqual(
+      'salvation.text'
     );
-    expect(wrapper.find('div').at(4).text()).toEqual('1 hand raised');
+    expect(getByTestId('salvationHands').textContent).toEqual('salvation.hands_raised');
   });
 
   test('AnchorMoment has a close button and it can be clicked', () => {
     const releaseAnchorMoment = sinon.spy();
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <AnchorMoment
         anchorMoment={
           {
             type: 'ANCHOR_MOMENT',
             anchorMomentType: 'SALVATION',
             id: '12345',
-            text: 'I commit my life to Christ.',
           }
         }
         releaseAnchorMoment={releaseAnchorMoment}
@@ -77,7 +72,7 @@ describe('AnchorMoment tests', () => {
       />
     );
 
-    wrapper.find('button').simulate('click');
+    fireEvent.click(getByTestId('releaseAnchorMoment'));
     expect(releaseAnchorMoment.calledOnce).toEqual(true);
   });
 });

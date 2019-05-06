@@ -16,7 +16,6 @@ type SalvationType = {
   type: 'ANCHOR_MOMENT',
   anchorMomentType: 'SALVATION',
   id: string,
-  text: string,
 };
 
 type PublishSalvationType = {
@@ -31,7 +30,7 @@ type ReleaseAnchorMomentType = {
   channel: string,
 };
 
-type AnchorMomentType = 
+type AnchorMomentType =
   | SalvationType;
 
 type AnchorMomentActionType =
@@ -56,7 +55,6 @@ const publishSalvation = (channel:string): PublishSalvationType => (
       type: ANCHOR_MOMENT,
       anchorMomentType: SALVATION,
       id: createUid(),
-      text: 'I commit my life to Christ.',
     },
   }
 );
@@ -64,7 +62,7 @@ const publishSalvation = (channel:string): PublishSalvationType => (
 // Selectors
 
 const salvationMomentExists = (state:FeedType, eventChannel:string): boolean => {
-  if (state.channels[eventChannel].moments.find(moment => moment.anchorMomentType === SALVATION) 
+  if (state.channels[eventChannel].moments.find(moment => moment.anchorMomentType === SALVATION)
       || state.channels[eventChannel].anchorMoments.find(anchorMoment => anchorMoment.anchorMomentType === SALVATION)) {
     return true;
   }

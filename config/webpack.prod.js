@@ -2,8 +2,6 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const constants = require('./webpack.constants.js');
-const CompressionPlugin = require('compression-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { BugsnagBuildReporterPlugin } = require('webpack-bugsnag-plugins');
 
 module.exports = merge(common, {
@@ -18,12 +16,9 @@ module.exports = merge(common, {
         auth: JSON.stringify('ZHTvYO-PubfNDm1dBAWrQA'),
         preview: JSON.stringify('env-2')
       },
-      ROUTE_BASENAME: JSON.stringify('/host_mobile')
+      ROUTE_BASENAME: JSON.stringify('/host_mobile'),
+      CWC_HOST: JSON.stringify('https://churchonline.us')
     }),
-    new CompressionPlugin(),
-    new CopyWebpackPlugin([
-      { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
-    ]),
     new webpack.HashedModuleIdsPlugin(),
     new BugsnagBuildReporterPlugin({
       ...constants.BUGSNAG,

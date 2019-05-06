@@ -1,56 +1,134 @@
 // @flow
 import React from 'react';
-import Pane from '../../src/pane/pane';
-import sinon from 'sinon';
-import { renderWithReduxAndTheme } from '../testUtils';
-
+import Pane from '../../src/pane';
+import { renderWithReduxAndTheme, defaultState } from '../testUtils';
+import { act } from 'react-testing-library';
 
 describe('Pane', () => {
   test('It prevents two event panes from rendering on Large', () => {
-    const setPaneToChat = sinon.spy();
-    const { queryByTestId } = renderWithReduxAndTheme(
-      <Pane
-        name='primary'
-        isLarge={true}
-        isXlarge={false}
-        pane={{
-          type: 'EVENT',
-          content: {
-            channelId: 'public',
+    let wrapper = null;
+    act(() => {
+      wrapper = renderWithReduxAndTheme(
+        <Pane
+          name='primary'
+          isLarge={true}
+          isXlarge={false}
+        />,
+        {
+          ...defaultState,
+          feed: {
+            ...defaultState.feed,
+            channels: {
+              host: {
+                id: 'host',
+                name: 'host',
+                type: 'host',
+                direct: false,
+                placeholder: false,
+                moments: [],
+                anchorMoments: [],
+                scrollPosition: 0,
+                sawLastMomentAt: 1546896104521,
+              },
+              public: {
+                id: 'public',
+                name: 'public',
+                type: 'public',
+                direct: false,
+                placeholder: false,
+                moments: [],
+                anchorMoments: [],
+                scrollPosition: 0,
+                sawLastMomentAt: 1546896104521,
+              },
+            },
+            panes: {
+              primary: {
+                type: 'EVENT',
+                content: {
+                  channelId: 'public',
+                },
+              },
+            },
+            navbarIndex: 0,
+            prevNavbarIndex: 0,
           },
-        }}
-        hostChannel='host'
-        prevNavbarIndex={0}
-        navbarIndex={0}
-        setPaneToChat={setPaneToChat}
-        setPaneToTab={() => {}}
-      />);
+        });
+    });
 
-    expect(queryByTestId('pane')).toBeTruthy();
-    expect(setPaneToChat.calledOnce).toBeTruthy();
+    expect.assertions(2);
+    if (wrapper) {
+      expect(wrapper.findByTestId('pane')).toBeTruthy();
+      expect(wrapper.store.getState().feed.panes.primary).toEqual({
+        content: {
+          animate: true,
+          channelId: 'host',
+        },
+        type: 'CHAT',
+      });
+    }
   });
 
   test('It prevents two event or host panes from rendering on Xlarge', () => {
-    const setPaneToTab = sinon.spy();
-    const { queryByTestId } = renderWithReduxAndTheme(
-      <Pane
-        name='primary'
-        isLarge={false}
-        isXlarge={true}
-        pane={{
-          type: 'EVENT',
-          content: {
-            channelId: 'public',
+    let wrapper = null;
+    act(() => {
+      wrapper = renderWithReduxAndTheme(
+        <Pane
+          name='primary'
+          isLarge={false}
+          isXlarge={true}
+        />,
+        {
+          ...defaultState,
+          feed: {
+            ...defaultState.feed,
+            channels: {
+              host: {
+                id: 'host',
+                name: 'host',
+                type: 'host',
+                direct: false,
+                placeholder: false,
+                moments: [],
+                anchorMoments: [],
+                scrollPosition: 0,
+                sawLastMomentAt: 1546896104521,
+              },
+              public: {
+                id: 'public',
+                name: 'public',
+                type: 'public',
+                direct: false,
+                placeholder: false,
+                moments: [],
+                anchorMoments: [],
+                scrollPosition: 0,
+                sawLastMomentAt: 1546896104521,
+              },
+            },
+            panes: {
+              primary: {
+                type: 'EVENT',
+                content: {
+                  channelId: 'public',
+                },
+              },
+            },
+            navbarIndex: 0,
+            prevNavbarIndex: 0,
           },
-        }}
-        hostChannel='host'
-        prevNavbarIndex={0}
-        navbarIndex={0}
-        setPaneToChat={() => {}}
-        setPaneToTab={setPaneToTab}
-      />);
+        });
+    });
 
-    expect(queryByTestId('pane')).toBeTruthy();
-    expect(setPaneToTab.calledOnce).toBeTruthy();
+    expect.assertions(2);
+    if (wrapper) {
+      expect(wrapper.findByTestId('pane')).toBeTruthy();
+      expect(wrapper.store.getState().feed.panes.primary).toEqual({
+        content: {
+          type: 'HOST_INFO',
+        },
+        type: 'TAB',
+      });
+    }
   });
 });

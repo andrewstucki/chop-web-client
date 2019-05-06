@@ -1,20 +1,9 @@
 // @flow
-import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import Enzyme from 'enzyme';
-import { mountWithTheme } from '../testUtils';
-
+import { renderWithReduxAndTheme, renderWithTheme } from '../testUtils';
 import { MESSAGE } from '../../src/moment';
-
 import Feed from '../../src/feed/feed';
-import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../../src/components/button';
-import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
-import { Provider } from 'react-redux';
 import type {PrivateUserType} from '../../src/users/dux';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('Feed tests', () => {
   const user: PrivateUserType = {
@@ -30,7 +19,7 @@ describe('Feed tests', () => {
   };
 
   test('has an empty feed', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <Feed
         moments={[]}
         anchorMoments={[]}
@@ -46,9 +35,10 @@ describe('Feed tests', () => {
         showNewMessageButton={false}
         focusedChannel=''
         setSawLastMomentAt={() => {}}
+        t={text => text}
       />
     );
-    expect(wrapper.find('ul').children().length).toBe(1);
+    expect(getByTestId('feed-momentList').children.length).toEqual(0);
   });
 
   test('has a single message', () => {
@@ -65,55 +55,10 @@ describe('Feed tests', () => {
       },
     ];
 
-    const store = createStore(
-      reducer,
-      {
-        feed: defaultState,
-      }
-    );
-    const wrapper = mountWithTheme(
-      <Provider store={store}>
-        <Feed
-          offset={0}
-          moments={moments}
-          anchorMoments={[]}
-          onMessageRender={function () {}}
-          currentChannel="default"
-          appendingMessage={false}
-          showLeaveChat={true}
-          isPopUpModalVisible={false}
-          togglePopUpModal={() => {}}
-          scroll={{type: 'NO_SCROLL'}}
-          currentUser={user}
-          updateScrollPosition={() => {}}
-          channel="default"
-          showNewMessageButton={false}
-          focusedChannel=''
-          setSawLastMomentAt={() => {}}
-        />
-      </Provider>
-    );
-
-    expect(wrapper.find('ul').children().length).toBe(1);
-    expect(wrapper.find('li').at(0).childAt(0).props().data).toEqual(
-      {
-        id: 'string',
-        text: 'This is a message',
-        sender: {
-          id: '12345',
-          name: 'Billy Bob',
-        },
-        type: 'MESSAGE',
-        messageTrayOpen: false,
-      }
-    );
-  });
-
-  test('check for key prop', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithReduxAndTheme(
       <Feed
         offset={0}
-        moments={[]}
+        moments={moments}
         anchorMoments={[]}
         onMessageRender={function () {}}
         currentChannel="default"
@@ -130,11 +75,13 @@ describe('Feed tests', () => {
         setSawLastMomentAt={() => {}}
       />
     );
-    expect(wrapper.find('ul').first().key()).toEqual('default');
+
+    expect(getByTestId('feed-momentList').children.length).toBe(1);
+    expect(getByTestId('feed-momentList').children[0].textContent).toEqual('BBilly BobThis is a messageFile');
   });
 
   test('Feed with New Message button', () => {
-    const wrapper = mountWithTheme(
+    const { getByTestId } = renderWithTheme(
       <Feed
         offset={0}
         moments={[]}
@@ -154,16 +101,8 @@ describe('Feed tests', () => {
         setSawLastMomentAt={() => {}}
       />
     );
-    const button = wrapper.find(Button);
-    expect(button.exists()).toBeTruthy();
-    expect(button.length).toBe(1);
-    const {
-      children,
-      variant,
-      size,
-    } = button.first().props();
-    expect(children).toBe('New Messages');
-    expect(variant).toBe(BUTTON_SECONDARY);
-    expect(size).toBe(BUTTON_SMALL);
+    const button = getByTestId('feed-newMessages');
+    expect(button).toBeTruthy();
+    expect(button.textContent).toEqual('new_messages');
   });
 });

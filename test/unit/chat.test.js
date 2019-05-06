@@ -18,7 +18,7 @@ describe('Chat', () => {
         },
       },
     );
-    expect(result).toEqual('Chat');
+    expect(result).toEqual('chat');
   });
 
   test('get placeholder for host', () => {
@@ -57,7 +57,7 @@ describe('Chat', () => {
       },
       'host',
     );
-    expect(result).toEqual('Chat with hosts');
+    expect(result).toEqual('chat_with');
   });
 
   test('get placeholder for direct chat', () => {
@@ -69,6 +69,7 @@ describe('Chat', () => {
           direct: {
             id: '12345',
             name: 'Direct',
+            type: 'direct',
             moments: [],
             anchorMoments: [],
             participants: [
@@ -107,6 +108,6 @@ describe('Chat', () => {
       },
       'direct',
     );
-    expect(result).toEqual('Chat');
+    expect(result).toEqual('chat');
   });
 });

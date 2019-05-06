@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Wrapper, Title } from '../styles';
 import Actionable from '../../components/Actionable';
 import { MediumUp } from '../../util/responsive';
+import { useTranslation } from 'react-i18next';
 
 const DIRECT_CHAT_HEADER = 'DIRECT_CHAT_HEADER';
 
@@ -29,20 +30,23 @@ const Action = styled.button`
   font-weight: 500;
 `;
 
-const DirectChatHeader = ({ otherUsersName, leaveChannel }:DirectChatHeaderProps) => (
-  <Wrapper data-testid='directChatHeader'>
-    <MediumUp>
-      <Title data-testid='otherUsersName'>
-        {otherUsersName}
-      </Title>
-    </MediumUp>
-    <Actionable onClick={leaveChannel} keepFocus={false}>
-      <Action data-testid='leave'>
-        Leave
-      </Action>
-    </Actionable>
-  </Wrapper>
-);
+const DirectChatHeader = ({ otherUsersName, leaveChannel }:DirectChatHeaderProps) => {
+  const { t } = useTranslation();
+  return (
+    <Wrapper data-testid='directChatHeader'>
+      <MediumUp>
+        <Title data-testid='otherUsersName'>
+          {otherUsersName}
+        </Title>
+      </MediumUp>
+      <Actionable onClick={leaveChannel} keepFocus={false}>
+        <Action data-testid='leave'>
+          { t('leave') }
+        </Action>
+      </Actionable>
+    </Wrapper>
+  );
+};
 
 export default React.memo < DirectChatHeaderProps > (DirectChatHeader);
 export { DIRECT_CHAT_HEADER };

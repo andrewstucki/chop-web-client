@@ -60,6 +60,7 @@ describe('Test Accept Prayer', () => {
           placeholder: false,
           id: '12345',
           name: 'Direct',
+          type: 'direct',
           anchorMoments: [],
           moments: [],
           participants: [

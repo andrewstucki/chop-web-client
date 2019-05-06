@@ -27,6 +27,7 @@ const mapStateToProps = state => {
     eventTitle,
     eventDescription,
     currentUser: feedState.currentUser,
+    currentLanguage: feedState.currentLanguage,
   };
 };
 

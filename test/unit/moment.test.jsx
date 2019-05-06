@@ -8,8 +8,6 @@ import {
   Message,
   Notification,
   ActionableNotification,
-  Text,
-  AvatarMoment,
 } from '../../src/moment';
 import { mountWithTheme } from '../testUtils';
 
@@ -222,7 +220,6 @@ describe('Moment tests', () => {
               type: 'ANCHOR_MOMENT',
               anchorMomentType: 'SALVATION',
               id: '12345',
-              text: 'I commit my life to Christ',
             }
           }
           isAnchorMomentAnchored={false}
@@ -235,60 +232,8 @@ describe('Moment tests', () => {
           type: 'ANCHOR_MOMENT',
           anchorMomentType: 'SALVATION',
           id: '12345',
-          text: 'I commit my life to Christ',
         },
         isAnchorMomentAnchored: false,
-      }
-    );
-  });
-
-  test('Text renders', () => {
-    const wrapper = mountWithTheme(
-      <Moment
-        data={
-          {
-            type: 'BASIC_TEXT',
-            text: 'Chat request pending',
-          }
-        }
-      />
-    );
-    expect(wrapper.find(Text).at(0).props()).toEqual(
-      {
-        text: {
-          type: 'BASIC_TEXT',
-          text: 'Chat request pending',
-        },
-      }
-    );
-  });
-
-  test('AvatarMoment renders', () => {
-    const wrapper = mountWithTheme(
-      <Moment
-        data={
-          {
-            type: 'AVATAR_MOMENT',
-            id: '12345',
-            user: {
-              id: '6789',
-              name: 'Madmartigan',
-            },
-          }
-        }
-      />
-    );
-
-    expect(wrapper.find(AvatarMoment).at(0).props()).toEqual(
-      {
-        avatarMoment: {
-          type: 'AVATAR_MOMENT',
-          id: '12345',
-          user: {
-            id: '6789',
-            name: 'Madmartigan',
-          },
-        },
       }
     );
   });

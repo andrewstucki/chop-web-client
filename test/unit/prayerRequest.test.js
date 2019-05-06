@@ -253,6 +253,7 @@ describe('Prayer Request Tests', () => {
       addChannel(
         'public',
         '123456',
+        'public',
         false,
         [])
     );

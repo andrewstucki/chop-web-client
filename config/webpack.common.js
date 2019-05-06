@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const constants = require('./webpack.constants.js');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 
@@ -52,7 +54,7 @@ module.exports = {
             }
           }
         ]
-      }
+      },
     ]
   },
   resolve: {
@@ -62,6 +64,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './assets/index.html'
     }),
+    new CompressionPlugin(),
+    new CopyWebpackPlugin([
+      { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
+      { from: 'locales', to: 'locales' }
+    ]),
     new BugsnagSourceMapUploaderPlugin({...constants.BUGSNAG, overwrite: true}),
   ],
   output: {

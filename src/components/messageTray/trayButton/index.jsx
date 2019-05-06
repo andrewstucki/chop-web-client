@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Actionable from '../../Actionable';
-import { ActionButton, CloseButton } from './styles';
+import { ActionButton } from './styles';
 
 const MESSAGE_ACTION = 'MESSAGE_ACTION';
 const CLOSE_TRAY = 'CLOSE_TRAY';
@@ -15,18 +15,18 @@ type TrayButtonProps = {
 };
 
 const TrayButton = ({ type = MESSAGE_ACTION, icon, color, text, onClick }:TrayButtonProps) => {
-  const Button = type === CLOSE_TRAY ? CloseButton : ActionButton;
-
+  const textStyle = { display: type === CLOSE_TRAY ? 'none' : 'block' };
   return (
     <Actionable onClick={onClick} keepFocus={true}>
-      <Button color={color}>
+      <ActionButton color={color}>
         <span
           dangerouslySetInnerHTML={{__html: icon}}
         />
-        <div style={{display: text !== 'Close' ? 'block' : 'none'}}>{text}</div>
-      </Button>
+        <div style={textStyle}>{text}</div>
+      </ActionButton>
     </Actionable>
   );
 };
 
 export default React.memo < TrayButtonProps > (TrayButton);
+export { CLOSE_TRAY };
