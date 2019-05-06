@@ -16,7 +16,8 @@ module.exports = merge(common, {
         auth: JSON.stringify('XXXXXXXXXXXXXXXXXX'),
         preview: JSON.stringify('env-X')
       },
-      ROUTE_BASENAME: JSON.stringify('/')
+      ROUTE_BASENAME: JSON.stringify('/'),
+      CWC_HOST: JSON.stringify('')
     }),
     //new BundleAnalyzerPlugin(),
   ],
