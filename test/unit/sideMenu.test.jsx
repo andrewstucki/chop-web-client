@@ -1,18 +1,11 @@
 // @flow
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import sinon from 'sinon';
+import { renderWithReduxAndTheme } from '../testUtils';
 
 import SideMenu from '../../src/sideMenu/sideMenu';
-import LanguageSelector from '../../src/languageSelector';
-import { mountWithTheme, renderWithTheme } from '../testUtils';
 import { fireEvent } from 'react-testing-library';
-import {EventDescription, EventTitle, OrganizationTitle} from '../../src/sideMenu/styles';
-import Avatar from '../../src/avatar';
 import type {PrivateUserType} from '../../src/users/dux';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const languageOptions = [
   {
@@ -62,12 +55,15 @@ const currentUser: PrivateUserType = {
     label: 'Supreme Leader of the First Order',
     permissions: ['event.event.manage'],
   },
+  preferences: {
+    textMode: 'COMPACT',
+  },
 };
 
 describe('SideBar tests', () => {
   test('SideBar renders', () => {
     const closeFunction = () => {};
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <SideMenu
         logout={() => {}}
         close={closeFunction}
@@ -88,13 +84,12 @@ describe('SideBar tests', () => {
         currentLanguage='en'
       />
     );
-    expect(wrapper.find('styles__Menu').length).toBe(1);
-    expect(wrapper.find('styles__Menu').props().open).toBe(true);
-    expect(wrapper.find(LanguageSelector).length).toBe(1);
+    expect(queryByTestId('side-menu')).toBeTruthy();
+    expect(queryByTestId('languageSelector-select')).toBeTruthy();
   });
 
   test('SideBar has link to guest experience', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -115,14 +110,12 @@ describe('SideBar tests', () => {
         currentLanguage='en'
       />
     );
-    expect(wrapper.find('a[data-testid="guest-experience"]').length)
-      .toBe(1);
-    expect(wrapper.find('a[data-testid="guest-experience"]').text())
-      .toBe('guest_experience');
+    expect(queryByTestId('guest-experience')).toBeTruthy();
+    expect(queryByTestId('guest-experience').textContent).toEqual('guest_experience');
   });
 
   test('SideBar has link to give feedback', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -143,18 +136,14 @@ describe('SideBar tests', () => {
         currentLanguage='en'
       />
     );
-
-    expect(wrapper.find('a[data-testid="feedback"]').length)
-      .toBe(1);
-    expect(wrapper.find('a[data-testid="feedback"]').text())
-      .toBe('give_feedback');
-    expect(wrapper.find('a[data-testid="feedback"]').props().href)
-      .toBe('https://lifechurch.formstack.com/forms/host_feedback_2');
+    expect(queryByTestId('feedback')).toBeTruthy();
+    expect(queryByTestId('feedback').textContent).toEqual('give_feedback');
+    expect(queryByTestId('feedback').href).toEqual('https://lifechurch.formstack.com/forms/host_feedback_2');
   });
 
   test('SideBar has logout button', () => {
     const logoutButton = sinon.spy();
-    const { getByTestId } = renderWithTheme(
+    const { getByTestId } = renderWithReduxAndTheme(
       <SideMenu
         logout={logoutButton}
         close={() => {}}
@@ -183,7 +172,7 @@ describe('SideBar tests', () => {
   });
 
   test('SideBar has organization title', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -204,14 +193,12 @@ describe('SideBar tests', () => {
         currentLanguage='en'
       />
     );
-    expect(wrapper.find(OrganizationTitle).length)
-      .toBe(1);
-    expect(wrapper.find(OrganizationTitle).text())
-      .toBe('The Church');
+    expect(queryByTestId('organization-title')).toBeTruthy();
+    expect(queryByTestId('organization-title').textContent).toEqual('The Church');
   });
 
   test('SideBar has event information', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -232,18 +219,14 @@ describe('SideBar tests', () => {
         currentLanguage='en'
       />
     );
-    expect(wrapper.find(EventTitle).length)
-      .toBe(1);
-    expect(wrapper.find(EventTitle).text())
-      .toBe('Event Title');
-    expect(wrapper.find(EventDescription).length)
-      .toBe(1);
-    expect(wrapper.find(EventDescription).text())
-      .toBe('The Description');
+    expect(queryByTestId('event-title')).toBeTruthy();
+    expect(queryByTestId('event-title').textContent).toEqual('Event Title');
+    expect(queryByTestId('event-description')).toBeTruthy();
+    expect(queryByTestId('event-description').textContent).toEqual('The Description');
   });
 
   test('SideBar has avatar', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <SideMenu
         logout={() => {}}
         close={() => {}}
@@ -264,7 +247,6 @@ describe('SideBar tests', () => {
         currentLanguage='en'
       />
     );
-    expect(wrapper.find(Avatar).length)
-      .toBe(1);
+    expect(queryByTestId('side-menu-avatar')).toBeTruthy;
   });
 });

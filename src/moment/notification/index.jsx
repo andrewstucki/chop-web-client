@@ -16,17 +16,24 @@ import type {
 import ChatNotification from '../../../assets/chat-notification.svg';
 import EndChatNotification from '../../../assets/end-chat-notification.svg';
 import MuteUserNotificationIcon from '../../../assets/mute-user-notification.svg';
-import { Wrapper, Icon, Timestamp, Text } from './styles';
+import {
+  Wrapper,
+  Timestamp,
+  Text,
+  Icon,
+} from './styles';
 import { Trans, useTranslation } from 'react-i18next';
 
 type NotificationPropsType = {
   notification: NotificationType,
+  isCompact: boolean,
 };
 
 type PrayerNotificationPropsType = {
   host: string,
   guest: string,
   timestamp: string,
+  isCompact: boolean,
 };
 
 const PrayerNotification = (
@@ -34,22 +41,19 @@ const PrayerNotification = (
     host,
     guest,
     timestamp,
-  }: PrayerNotificationPropsType
+    isCompact,
+  }: PrayerNotificationPropsType,
 ) => (
-  <Wrapper>
-    <Icon
-      dangerouslySetInnerHTML={
-        { __html: ChatNotification }
-      }
-    />
-    <Text>
+  <Wrapper data-testid={'notification'}>
+    <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
+    <Text isCompact={isCompact} data-testid={'notification-message'}>
       <div>
         <Trans ns='moments' i18nKey='prayer.notification'>
           {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
           <strong>{{host}}</strong> started a live prayer with <strong>{{guest}}</strong>
         </Trans>
       </div>
-      <Timestamp>{timestamp}</Timestamp>
+      <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>
 );
@@ -57,25 +61,23 @@ const PrayerNotification = (
 type PrayerRequestNotificationPropsType = {
   guest: string,
   timestamp: string,
+  isCompact: boolean,
 };
 
 const PrayerRequestNotification = (
   {
     guest,
     timestamp,
-  }: PrayerRequestNotificationPropsType
+    isCompact,
+  }: PrayerRequestNotificationPropsType,
 ) => (
-  <Wrapper>
-    <Icon
-      dangerouslySetInnerHTML={
-        { __html: ChatNotification }
-      }
-    />
-    <Text>
+  <Wrapper data-testid={'notification'}>
+    <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
+    <Text isCompact={isCompact} data-testid={'notification-message'}>
       <div>
         <strong>{guest} </strong>has request prayer.
       </div>
-      <Timestamp>{timestamp}</Timestamp>
+      <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>
 );
@@ -85,6 +87,7 @@ type MuteUserNotificationPropsType = {
   host: string,
   guest: string,
   timestamp: string,
+  isCompact: boolean,
 };
 
 const MuteUserNotification = (
@@ -92,15 +95,12 @@ const MuteUserNotification = (
     host,
     guest,
     timestamp,
-  }: MuteUserNotificationPropsType
+    isCompact,
+  }: MuteUserNotificationPropsType,
 ) => (
-  <Wrapper>
-    <Icon
-      dangerouslySetInnerHTML={
-        { __html: MuteUserNotificationIcon }
-      }
-    />
-    <Text>
+  <Wrapper data-testid={'notification'}>
+    <Icon dangerouslySetInnerHTML={{ __html: MuteUserNotificationIcon }} isCompact={isCompact} data-testid={'notification-icon'}/>
+    <Text isCompact={isCompact} data-testid={'notification-message'}>
       <div>
         {
           host ? (
@@ -116,7 +116,7 @@ const MuteUserNotification = (
           )
         }
       </div>
-      <Timestamp>{timestamp}</Timestamp>
+      <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>
 );
@@ -124,23 +124,21 @@ const MuteUserNotification = (
 type JoinedChatNotificationPropsType = {
   name: string,
   timestamp: string,
+  isCompact: boolean,
 };
 
 const JoinedChatNotification = (
   {
     name,
     timestamp,
-  }: JoinedChatNotificationPropsType
+    isCompact,
+  }: JoinedChatNotificationPropsType,
 ) => {
   const { t } = useTranslation('moments');
   return (
-    <Wrapper>
-      <Icon
-        dangerouslySetInnerHTML={
-          { __html: ChatNotification }
-        }
-      />
-      <Text>
+    <Wrapper data-testid={'notification'}>
+      <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
+      <Text isCompact={isCompact} data-testid={'notification-message'}>
         <div>
           {
             name === 'You' ? (
@@ -156,60 +154,58 @@ const JoinedChatNotification = (
             <span>{name} have joined the chat</span> : <span></span>
           }
         </div>
-        <Timestamp>{timestamp}</Timestamp>
+        <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
       </Text>
     </Wrapper>
   );
 };
 
-type LeftChatNotificationPropsType = {
+type LeftChannelNotificationPropsType = {
   name: string,
   timestamp: string,
+  isCompact: boolean,
 };
 
 const LeftChannelNotification = (
   {
     name,
     timestamp,
-  }: LeftChatNotificationPropsType
+    isCompact,
+  }: LeftChannelNotificationPropsType,
 ) => (
-  <Wrapper>
-    <Icon
-      dangerouslySetInnerHTML={
-        { __html: EndChatNotification }
-      }
-    />
-    <Text>
+  <Wrapper data-testid={'notification'}>
+    <Icon dangerouslySetInnerHTML={{ __html: EndChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
+    <Text isCompact={isCompact} data-testid={'notification-message'}>
       <div>
         <Trans ns='moments' i18nKey='left_chat.notification'>
           {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
           <strong>{{name}}</strong> has left the chat
         </Trans>
       </div>
-      <Timestamp>{timestamp}</Timestamp>
+      <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>
 );
 
-const getNotificationText = notification => {
+const getNotificationText = (notification, isCompact) => {
   switch (notification.notificationType) {
     case PRAYER:
-      return <PrayerNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} />;
+      return <PrayerNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
     case PRAYER_REQUEST:
-      return <PrayerRequestNotification guest={notification.guest} timestamp={notification.timestamp} />;
+      return <PrayerRequestNotification guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
     case MUTE:
-      return <MuteUserNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} />;
+      return <MuteUserNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
     case JOINED_CHAT:
-      return <JoinedChatNotification name={notification.name} timestamp={notification.timestamp} />;
+      return <JoinedChatNotification name={notification.name} timestamp={notification.timestamp} isCompact={isCompact} />;
     case LEFT_CHANNEL:
-      return <LeftChannelNotification name={notification.name} timestamp={notification.timestamp} />;
+      return <LeftChannelNotification name={notification.name} timestamp={notification.timestamp} isCompact={isCompact} />;
     default:
       return null;
   }
 };
 
-const Notification = ({ notification }: NotificationPropsType) => (
-  getNotificationText(notification)
+const Notification = ({ notification, isCompact }: NotificationPropsType) => (
+  getNotificationText(notification, isCompact)
 );
 
 export default React.memo < NotificationPropsType > (Notification);

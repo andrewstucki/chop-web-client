@@ -2,7 +2,6 @@
 import React from 'react';
 
 import type { ActionableNotificationType } from './dux';
-
 import ChatNotification from '../../../assets/chat-notification.svg';
 import type {SharedUserType} from '../../users/dux';
 import { Trans, useTranslation } from 'react-i18next';
@@ -13,6 +12,7 @@ type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
   acceptPrayerRequest: (prayerChannel: string, hostChannel:string, user: SharedUserType, accepted: boolean) => void,
   hostChannel: string,
+  isCompact: boolean,
 };
 
 const ActionableNotification = (
@@ -20,7 +20,8 @@ const ActionableNotification = (
     notification,
     acceptPrayerRequest,
     hostChannel,
-  }: ActionableNotificationPropsType
+    isCompact,
+  }: ActionableNotificationPropsType,
 ) => {
   const {
     active,
@@ -41,14 +42,10 @@ const ActionableNotification = (
   const callAcceptPrayerRequest = () => acceptPrayerRequest(prayerChannel, hostChannel, user, false);
 
   return (
-    <Wrapper data-testid='actionableNotification'>
+    <Wrapper data-testid='actionableNotification' isCompact={isCompact}>
       <ActionableContainer>
-        <Icon
-          dangerouslySetInnerHTML={
-            { __html: ChatNotification }
-          }
-        />
-        <Text>
+        <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'actionableNotification-icon'}/>
+        <Text data-testid={'actionableNotification-message'} isCompact={isCompact}>
           <div data-testid='actionableNotification-text'>
             <Trans ns='moments' i18nKey='prayer.request'>
               {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
@@ -62,11 +59,12 @@ const ActionableNotification = (
             <AcceptButton
               data-testid='actionableNotification-accept'
               onClick={callAcceptPrayerRequest}
+              isCompact={isCompact}
             >
               {t('actionable.accept')}
             </AcceptButton>
         }
-        <AcceptedText hide={active} data-testid='actionableNotification-accepted'>{acceptedText}</AcceptedText>
+        <AcceptedText hide={active} data-testid='actionableNotification-accepted' isCompact={isCompact}>{acceptedText}</AcceptedText>
       </ActionableContainer>
     </Wrapper>
   );

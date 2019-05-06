@@ -108,6 +108,9 @@ type ThemeType = {
     easeInOut: string,
     duration: string,
   },
+  shadows: {
+    shadow2: string,
+  },
 };
 
 // Once we get into light/dark mode we will want to look into styled-themeing
@@ -151,6 +154,9 @@ const theme:ThemeType = {
     easeOut:    'cubic-bezier(0.2, 0.7, 0.4, 1)',
     easeInOut:  'cubic-bezier(0.7, 0, 0.3, 1)',
     duration:   '300ms',
+  },
+  shadows: {
+    shadow2: '0 2px 6px rgba(45, 45, 46, 0.25)',
   },
 };
 

@@ -13,6 +13,9 @@ describe('getCurrentUserAsSharedUser', () => {
           label: '',
           permissions: ['global.admin'],
         },
+        preferences: {
+          textMode: 'COMPACT',
+        },
       },
     };
 

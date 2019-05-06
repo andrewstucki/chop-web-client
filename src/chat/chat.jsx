@@ -63,7 +63,7 @@ function Chat (props:ChatProps) {
 
         <IconButton
           id="chat-submit-button"
-          size={36}
+          size={32}
           onClick={sendMessage}
           keepFocus={true}
           disabled={!message}

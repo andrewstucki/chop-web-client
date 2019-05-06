@@ -4,11 +4,11 @@ import { animated } from 'react-spring';
 
 const MessageWrapper = styled.div`
   width: 100%;
-  min-height: 40px;
+  min-height: ${props => props.isCompact ? '24px' : '40px'};
   display: flex;
   background: #fff;
   overflow: hidden;
-  padding: 8px 0 8px;
+  padding: 5px 0 5px;
   transition: opacity 300ms cubic-bezier(0.7, 0, 0.3, 1);
   opacity: ${props => props.messageTrayOpen ? '0.5' : '1.0'};
 `;
@@ -23,6 +23,7 @@ const Wrapper = styled.div`
     position: relative;
     bottom: 1px;
     left: 4px;
+    margin-right: 3px;
   }
 
   div {
@@ -41,6 +42,7 @@ const NameWrapper = styled.strong`
   font-weight: bold;
   font-size: 13.44px;
   line-height: 1.25;
+  color: ${props => props.theme.colors.gray50};
 `;
 
 const OpenTrayButton = styled.button`
@@ -51,7 +53,7 @@ const OpenTrayButton = styled.button`
   outline-style: none;
   -webkit-tap-highlight-color: transparent;
   position: relative;
-  height: 40px;
+  height: ${props => props.isCompact ? '24px' : '40px'};
   align-self: center;
   
   svg {
@@ -69,7 +71,7 @@ const OpenTrayButton = styled.button`
     margin-top: -16px;
     width: 32px;
     height: 32px;
-    background: ${props => props.theme.colors.gray10}
+    background: ${props => props.theme.colors.gray10};
   }
 
   
@@ -79,6 +81,9 @@ const TextWrapper = styled.div`
   line-height: 1.25;
   overflow-wrap: break-word;
   word-break: break-word;
+  display: ${props => props.isCompact ? 'inline' : 'block'};
+  font-size: ${props => props.isCompact ? '15px' : '16px'};
+  margin-left: ${props => props.isCompact ? '8px' : '0px'};
 `;
 
 const AnimatedMessageTray = styled(animated.div)`

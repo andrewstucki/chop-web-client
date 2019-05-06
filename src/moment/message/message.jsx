@@ -9,7 +9,7 @@ import OpenTrayButtonIcon from '../../../assets/open-tray-button.svg';
 import MessageTray from '../../components/messageTray';
 import Actionable from '../../components/Actionable';
 import linkifyHtml from 'linkifyjs/html';
-import { sanitizeString } from '../../util';
+import { sanitizeString, getFirstWordInName } from '../../util';
 import Label from '../../components/label';
 
 import { MessageWrapper, Wrapper, BodyWrapper, NameWrapper, OpenTrayButton, TextWrapper, AnimatedMessageTray } from './styles';
@@ -18,6 +18,7 @@ import { useTransition } from 'react-spring';
 type MessagePropsType = {
   message: MessageType,
   currentChannel: string,
+  isCompact: boolean,
   openMessageTray: (channel: string, id: string) => void,
   closeMessageTray: (channel: string, id: string) => void,
   deleteMessage: (id: string, channel: string) => void,
@@ -39,6 +40,8 @@ const Message = (
     },
     currentChannel,
   } = props;
+
+  const { isCompact } = props;
 
   const { name: senderName, role: { label: senderLabel } = {} } = sender;
   const renderText = linkifyHtml(text, { target: '_blank' });
@@ -63,19 +66,20 @@ const Message = (
     <Actionable onClick={openMessageTray} keepFocus={true}>
       <OpenTrayButton
         dangerouslySetInnerHTML={{ __html: OpenTrayButtonIcon }}
+        isCompact={isCompact}
       />
     </Actionable>
   );
 
   const MessageBody = () => (
     <>
-      <Avatar user={sender} />
+      <Avatar user={sender} small={isCompact}/>
       <BodyWrapper>
-        <NameWrapper>{senderName}</NameWrapper>
+        <NameWrapper isCompact={isCompact}>{isCompact ? getFirstWordInName(senderName) : senderName}</NameWrapper>
         {senderLabel &&
           <Label text={senderLabel} />
         }
-        <TextWrapper key={messageId} data-node='text' dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} />
+        <TextWrapper key={messageId} data-node='text' dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} isCompact={isCompact} />
       </BodyWrapper>
     </>
   );
@@ -89,7 +93,7 @@ const Message = (
   return (
     <Wrapper data-testid='messageContainer'>
       <Actionable onClick={closeMessageTray} keepFocus={true} tabable={false}>
-        <MessageWrapper messageTrayOpen={messageTrayOpen}>
+        <MessageWrapper messageTrayOpen={messageTrayOpen} isCompact={isCompact}>
           <MessageBody />
           <OpenMessageTrayButton />
         </MessageWrapper>

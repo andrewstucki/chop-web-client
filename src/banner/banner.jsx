@@ -8,59 +8,87 @@ import {
   ErrorBanner,
   NotificationBanner,
   BannerMessage,
+  BannerWrapper,
 } from './styles';
 import { theme } from '../styles';
-import { Trans } from 'react-i18next';
+import { COMPACT } from '../textModeToggle/dux';
+import {
+  MUTED_NOTIFICATION,
+  ERROR,
+  WARNING,
+  TEXT_MODE_NOTIFICATION,
+} from './dux';
+import { Trans, useTranslation } from 'react-i18next';
 
 type BannerProps = {
   banner: BannerType,
+  fullWidth: boolean,
   dismissNotification: () => void,
 };
 
 const DismissButton = ({dismissNotification}) => (
-  <IconButton onClick={dismissNotification} size={48} >
-    <Dismiss size={16} color={theme.colors.textColor} />
+  <IconButton onClick={dismissNotification} size={48} id='banner-dismiss-button'>
+    <Dismiss size={16} color={theme.colors.alternateTextColor} />
   </IconButton>
 );
 
 const Banner = (
   {
     banner,
+    fullWidth,
     dismissNotification,
   }: BannerProps
 ) => {
+  const { t } = useTranslation('notifications');
   if (banner.message === '') {
     return null;
   }
   switch (banner.bannerType) {
-    case 'notification': {
-      const name = banner.message;
+    case MUTED_NOTIFICATION:
       return (
-        <NotificationBanner>
-          <DismissButton dismissNotification={dismissNotification}/>
-          <BannerMessage>
-            <Trans ns='notifications' i18nKey='user_muted'>
-              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-              <strong>{{name}}</strong> was muted.
-            </Trans>
-          </BannerMessage>
-        </NotificationBanner>
+        <BannerWrapper>
+          <NotificationBanner fullWidth={fullWidth} data-testid='notification-banner'>
+            <DismissButton dismissNotification={dismissNotification}/>
+            <BannerMessage>
+              <Trans ns='notifications' i18nKey='user_muted'>
+                {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+                <strong>{{name}}</strong> was muted.
+              </Trans>
+            </BannerMessage>
+          </NotificationBanner>
+        </BannerWrapper>
+      );
+    case ERROR:
+      return (
+        <BannerWrapper>
+          <ErrorBanner fullWidth={fullWidth}>
+            <DismissButton dismissNotification={dismissNotification}/>
+            <BannerMessage>{banner.message}</BannerMessage>
+          </ErrorBanner>
+        </BannerWrapper>
+      );
+    case WARNING:
+      return (
+        <BannerWrapper>
+          <WarningBanner fullWidth={fullWidth}>
+            <DismissButton dismissNotification={dismissNotification}/>
+            <BannerMessage>{banner.message}</BannerMessage>
+          </WarningBanner>
+        </BannerWrapper>
+      );
+    case TEXT_MODE_NOTIFICATION: {
+      const text = banner.message === COMPACT ? 'decreased' : 'increased';
+      return (
+        <BannerWrapper>
+          <NotificationBanner fullWidth={fullWidth}>
+            <DismissButton dismissNotification={dismissNotification}/>
+            <BannerMessage>
+              {t('text_mode_updated', {text})}
+            </BannerMessage>
+          </NotificationBanner>
+        </BannerWrapper>
       );
     }
-    case 'error':
-      return (
-        <ErrorBanner>
-          <DismissButton dismissNotification={dismissNotification}/>
-          <BannerMessage>{banner.message}</BannerMessage>
-        </ErrorBanner>
-      );
-    case 'warning':
-      return (
-        <WarningBanner>
-          <DismissButton dismissNotification={dismissNotification}/>
-          <BannerMessage>{banner.message}</BannerMessage>
-        </WarningBanner>
-      );
     default:
       return null;
   }

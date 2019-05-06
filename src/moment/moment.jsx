@@ -16,11 +16,12 @@ import type { MomentType } from './dux';
 type MomentPropType = {
   currentChannel: string,
   data: MomentType,
+  isCompact: boolean,
 };
 
 class Moment extends React.Component<MomentPropType> {
   render () {
-    const { currentChannel, data } = this.props;
+    const { currentChannel, data, isCompact } = this.props;
     switch (data.type) {
       case MESSAGE:
         if (!data.text) {
@@ -30,6 +31,7 @@ class Moment extends React.Component<MomentPropType> {
             <Message
               currentChannel={currentChannel}
               message={data}
+              isCompact={isCompact}
             />
           );
         }
@@ -37,12 +39,14 @@ class Moment extends React.Component<MomentPropType> {
         return (
           <Notification
             notification={data}
+            isCompact={isCompact}
           />
         );
       case ACTIONABLE_NOTIFICATION:
         return (
           <ActionableNotification
             notification={data}
+            isCompact={isCompact}
           />
         );
       case ANCHOR_MOMENT:

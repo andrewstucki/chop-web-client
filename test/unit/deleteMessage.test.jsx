@@ -35,6 +35,7 @@ describe('Test delete message', () => {
         pubnubToken: 'abc123xyz',
         name: 'Tony Hoare',
         role: { label: '' },
+        preferences: { textMode: 'COMPACT' },
       },
       messageTrayOpen: false,
     },
@@ -49,6 +50,7 @@ describe('Test delete message', () => {
         avatar: null,
         name: 'Shaq O.',
         role: { label: '' },
+        preferences: { textMode: 'COMPACT' },
       },
       messageTrayOpen: false,
     },
@@ -66,6 +68,9 @@ describe('Test delete message', () => {
         role: {
           label: '',
           permissions: [],
+        },
+        preferences: {
+          textMode: 'COMPACT',
         },
       },
       organization: {

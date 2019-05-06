@@ -1,9 +1,9 @@
-import { mutedNotificationBanner, warningNotificationBanner, errorNotificationBanner } from '../../src/banner/dux';
+import { mutedNotificationBanner, warningNotificationBanner, errorNotificationBanner, textModeNotificationBanner } from '../../src/banner/dux';
 
 describe('Banner Action Creators', () => {
   test('Mute notification', () => {
     expect(mutedNotificationBanner('guest')).toEqual({
-      bannerType: 'notification',
+      bannerType: 'MUTED_NOTIFICATION',
       message: 'guest',
       type: 'SET_NOTIFICATION_BANNER',
     });
@@ -11,7 +11,7 @@ describe('Banner Action Creators', () => {
 
   test('Warning banner', () => {
     expect(warningNotificationBanner('warning message')).toEqual({
-      bannerType: 'warning',
+      bannerType: 'WARNING',
       message: 'warning message',
       type: 'SET_NOTIFICATION_BANNER',
     });
@@ -19,8 +19,16 @@ describe('Banner Action Creators', () => {
 
   test('Error banner', () => {
     expect(errorNotificationBanner('error message')).toEqual({
-      bannerType: 'error',
+      bannerType: 'ERROR',
       message: 'error message',
+      type: 'SET_NOTIFICATION_BANNER',
+    });
+  });
+
+  test('Text mode banner', () => {
+    expect(textModeNotificationBanner('COMPACT')).toEqual({
+      bannerType: 'TEXT_MODE_NOTIFICATION',
+      message: 'COMPACT',
       type: 'SET_NOTIFICATION_BANNER',
     });
   });

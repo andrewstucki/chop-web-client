@@ -14,6 +14,7 @@ import Moment from '../moment/moment';
 import AnchorMoment from '../anchorMoment';
 import { createUid } from '../util';
 import Button, {BUTTON_SECONDARY, BUTTON_SMALL} from '../components/button';
+import { COMPACT } from '../textModeToggle/dux';
 import { withTranslation } from 'react-i18next';
 import { Wrapper, AnchorMomentWrapper, MomentList, AnchorMomentList, NewMessageButtonContainer, NewMessageButtonWrapper, ListContainer } from './styles';
 
@@ -43,6 +44,7 @@ type FeedProps = {
   setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => void,
   showNewMessageButton: boolean,
   scroll: Scroll,
+  textMode: string,
 };
 
 type RefObject = { current: any };
@@ -140,6 +142,7 @@ class Feed extends React.Component<FeedProps> {
       moments,
       anchorMoments,
       showNewMessageButton,
+      textMode,
     } = this.props;
 
     const hasAnchorMoments = anchorMoments?.length > 0;
@@ -151,6 +154,7 @@ class Feed extends React.Component<FeedProps> {
         <Moment
           currentChannel={currentChannel}
           data={moment}
+          isCompact={textMode === COMPACT}
         />
       </li>
     ));

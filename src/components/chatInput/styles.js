@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const ChatInput = styled.input`
   border: none;
   color: ${props => props.theme.colors.textColor};
-  height: 24px;
+  height: 20px;
   flex: 1;
   background-color: transparent;
   outline: none;

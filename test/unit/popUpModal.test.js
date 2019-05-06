@@ -26,6 +26,9 @@ const otherUser = {
   role: {
     label: '',
   },
+  preferences: {
+    textMode: 'COMPACT',
+  },
 };
 
 const currentUser = {
@@ -37,6 +40,9 @@ const currentUser = {
   role: {
     label: '',
     permissions: [],
+  },
+  preferences: {
+    textMode: 'COMPACT',
   },
 };
 

@@ -32,17 +32,20 @@ const OrganizationTitle = styled.div`
   line-height: 25px;
   font-size: 20px;
   margin-bottom: 0.5rem;
+  color: ${props => props.theme.colors.gray100};
 `;
 
 const EventTitle = styled.div`
   font-weight: bold;
   line-height: 20px;
+  color: ${props => props.theme.colors.gray100};
 `;
 
 const EventDescription = styled.div`
   line-height: 17px;
   font-size: 13px;
   margin-bottom: 40px;
+  color: ${props => props.theme.colors.gray100};
 `;
 
 const Profile = styled.div`

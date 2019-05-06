@@ -2,7 +2,7 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
-import { mountWithTheme } from '../testUtils';
+import { renderWithReduxAndTheme } from '../testUtils';
 
 import Notification from '../../src/moment/notification';
 
@@ -10,7 +10,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Notification test', () => {
   test('Prayer notification renders', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <Notification
         notification={
           {
@@ -22,17 +22,19 @@ describe('Notification test', () => {
             timestamp: '9:33pm',
           }
         }
+        isCompact={true}
       />
     );
-
-    expect(wrapper.find('div').at(2).text()).toEqual(
-      'yablby started a live prayer with cookietree'
+    expect(queryByTestId('notification')).toBeTruthy();
+    expect(queryByTestId('notification-icon')).toBeTruthy();
+    expect(queryByTestId('notification-message').textContent).toEqual(
+      'yablby started a live prayer with cookietree9:33pm'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+    expect(queryByTestId('notification-timestamp').textContent).toEqual('9:33pm');
   });
 
   test('Joined chat notification renders', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <Notification
         notification={
           {
@@ -43,17 +45,19 @@ describe('Notification test', () => {
             timestamp: '9:33pm',
           }
         }
+        isCompact={true}
       />
     );
-
-    expect(wrapper.find('div').at(2).text()).toEqual(
-      'cookietree has joined the chat'
+    expect(queryByTestId('notification')).toBeTruthy();
+    expect(queryByTestId('notification-icon')).toBeTruthy();
+    expect(queryByTestId('notification-message').textContent).toEqual(
+      'cookietree has joined the chat9:33pm'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+    expect(queryByTestId('notification-timestamp').textContent).toEqual('9:33pm');
   });
 
   test('Left channel notification renders', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <Notification
         notification={
           {
@@ -64,17 +68,19 @@ describe('Notification test', () => {
             timestamp: '9:33pm',
           }
         }
+        isCompact={true}
       />
     );
-
-    expect(wrapper.find('div').at(2).text()).toEqual(
-      'cookietree has left the chat'
+    expect(queryByTestId('notification')).toBeTruthy();
+    expect(queryByTestId('notification-icon')).toBeTruthy();
+    expect(queryByTestId('notification-message').textContent).toEqual(
+      'cookietree has left the chat9:33pm'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+    expect(queryByTestId('notification-timestamp').textContent).toEqual('9:33pm');
   });
 
   test('Mute notification renders with a host', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <Notification
         notification={
           {
@@ -86,17 +92,19 @@ describe('Notification test', () => {
             timestamp: '9:33pm',
           }
         }
+        isCompact={true}
       />
     );
-
-    expect(wrapper.find('div').at(2).text()).toEqual(
-      'host muted guest'
+    expect(queryByTestId('notification')).toBeTruthy();
+    expect(queryByTestId('notification-icon')).toBeTruthy();
+    expect(queryByTestId('notification-message').textContent).toEqual(
+      'host muted guest9:33pm'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+    expect(queryByTestId('notification-timestamp').textContent).toEqual('9:33pm');
   });
 
   test('Mute notification renders without a host', () => {
-    const wrapper = mountWithTheme(
+    const { queryByTestId } = renderWithReduxAndTheme(
       <Notification
         notification={
           {
@@ -108,12 +116,14 @@ describe('Notification test', () => {
             timestamp: '9:33pm',
           }
         }
+        isCompact={true}
       />
     );
-
-    expect(wrapper.find('div').at(2).text()).toEqual(
-      'guest was muted'
+    expect(queryByTestId('notification')).toBeTruthy();
+    expect(queryByTestId('notification-icon')).toBeTruthy();
+    expect(queryByTestId('notification-message').textContent).toEqual(
+      'guest was muted9:33pm'
     );
-    expect(wrapper.find('div').at(3).text()).toEqual('9:33pm');
+    expect(queryByTestId('notification-timestamp').textContent).toEqual('9:33pm');
   });
 });
