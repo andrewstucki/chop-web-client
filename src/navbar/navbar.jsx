@@ -129,6 +129,7 @@ const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneT
 
 const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItemProps, ref) => {
   const { t } = useTranslation();
+  const nameKey = (item.type === TAB && item.tabType !== undefined) ? item.tabType.toLowerCase() : `channels.${item.name.toLowerCase()}`;
   return (
     <Actionable key={item.id} onClick={(event:SyntheticMouseEvent<HTMLButtonElement>) => handleItemClick(event, item)}>
       <NavbarItemWrapper
@@ -140,7 +141,7 @@ const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItem
       >
         { (item.hasActions || item.hasNewMessages) && <PipStyle><Pip hasActions={item.hasActions}/></PipStyle> }
         { }
-        { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : t(`channels.${item.name.toLowerCase()}`) }
+        { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : t(nameKey) }
       </NavbarItemWrapper>
     </Actionable>
   );
