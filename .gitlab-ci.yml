@@ -9,7 +9,6 @@ stages:
   - test
   - build
   - review
-  - staging
   - cypress
   - coverage
   - canary
@@ -29,34 +28,20 @@ compile:app-review:
   stage: compile
   script:
     - yarn install --pure-lockfile
-    - yarn build:review
+    - yarn build --env.WEBPACK_MODE=$REVIEW_WEBPACK_MODE --env.ENV=$REVIEW_ENV --env.GATEWAY_HOST=$REVIEW_GATEWAY_HOST --env.GTM_GTMID=$REVIEW_GTM_GTMID --env.GTM_AUTH=$REVIEW_GTM_AUTH --env.GTM_PREVIEW=$REVIEW_GTM_PREVIEW --env.ROUTE_BASENAME=$REVIEW_ROUTE_BASENAME --env.PUBLIC_PATH=$REVIEW_PUBLIC_PATH --env.CWC_HOST=$REVIEW_CWC_HOST
   artifacts:
     expire_in: 1 day
     paths:
       - dist/
   except:
     - master
-    - integration
-
-compile:app-staging:
-  image: node:lts
-  stage: compile
-  script:
-    - yarn install --pure-lockfile
-    - yarn build:staging
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - dist/
-  only:
-    - integration
 
 compile:app-production:
   image: node:lts
   stage: compile
   script:
     - yarn install --pure-lockfile
-    - yarn build:production
+    - yarn build --env.WEBPACK_MODE=$PRODUCTION_WEBPACK_MODE --env.ENV=$PRODUCTION_ENV --env.GATEWAY_HOST=$PRODUCTION_GATEWAY_HOST --env.GTM_GTMID=$PRODUCTION_GTM_GTMID --env.GTM_AUTH=$PRODUCTION_GTM_AUTH --env.GTM_PREVIEW=$PRODUCTION_GTM_PREVIEW --env.ROUTE_BASENAME=$PRODUCTION_ROUTE_BASENAME --env.PUBLIC_PATH=$PRODUCTION_PUBLIC_PATH --env.CWC_HOST=$PRODUCTION_CWC_HOST
   artifacts:
     expire_in: 1 day
     paths:
@@ -77,8 +62,6 @@ test:
     expire_in: 1 day
     paths:
       - coverage/
-  except:
-    - master
 
 build:image-review:
   stage: build
@@ -93,24 +76,6 @@ build:image-review:
     - branches
   except:
     - master
-    - integration
-
-build:image-staging:
-  stage: build
-  cache:
-    untracked: false
-    policy: pull
-  script:
-    - command build Dockerfile-app
-    - echo "https://digerati.chopdev.com" > environmentUrl.txt
-  artifacts:
-    expire_in: 1 hr
-    paths:
-      - environmentUrl.txt
-  dependencies:
-    - compile:app-staging
-  only:
-    - integration
 
 build:image-production:
   stage: build
@@ -146,7 +111,6 @@ review:
     - branches
   except:
     - master
-    - integration
 
 cypress:tests-review:
   image: cypress/base:10
@@ -163,18 +127,6 @@ cypress:tests-review:
     - review
   except:
     - master
-    - integration
-
-cypress:tests-staging:
-  image: cypress/base:10
-  stage: cypress
-  allow_failure: true
-  script:
-    - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl="https://digerati.chopdev.com/host_mobile"
-  dependencies:
-    - build:image-staging
-  only:
-    - integration
 
 stop_review:
   stage: review
@@ -190,22 +142,6 @@ stop_review:
     - branches
   except:
     - master
-    - integration
-
-staging:
-  stage: staging
-  cache:
-    untracked: false
-    policy: pull
-  variables:
-    CI_ENVIRONMENT_URL: https://staging.$KUBE_DOMAIN
-  script:
-    - command deploy
-  environment:
-    name: staging
-    url: https://staging.$KUBE_DOMAIN
-  only:
-    - integration
 
 code_coverage_report_master:
   stage: coverage

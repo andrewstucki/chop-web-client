@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -64,6 +65,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './assets/index.html'
     }),
+    new webpack.HashedModuleIdsPlugin(),
     new CompressionPlugin(),
     new CopyWebpackPlugin([
       { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
