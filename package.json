@@ -8,9 +8,7 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build:review": "webpack --config config/webpack.review.js",
-    "build:staging": "webpack --config config/webpack.staging.js",
-    "build:production": "webpack --config config/webpack.prod.js",
+    "build": "webpack --config config/webpack.config.js",
     "start": "webpack-dev-server --open --config config/webpack.dev.js",
     "test": "jest",
     "test:coverage": "yarn test --coverage",
