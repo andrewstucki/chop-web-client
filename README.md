@@ -1,6 +1,6 @@
 # Church Online Platform Web Client (CWC)
 
-![ChOP Web Client](https://in.thewardro.be/io/opennetwork/chop-web-client/raw/integration/church_online_platform_logo.png)
+![ChOP Web Client](https://in.thewardro.be/io/opennetwork/chop-web-client/raw/master/church_online_platform_logo.png)
 
 A Progressive Web App for experiencing church online.
 
@@ -116,13 +116,13 @@ yarn server
 
 ## Merge Requests
 
-You should always work in your own branch. We follow the convention of naming our branches `<initials>/<feature-name>`. So a branch where I'm (Kenny Heaton) developing a feature to add login might be called `kh/add-login`. You can also add the JIRA ticket `kh/add-login_CHOP-1234`.
+You should always work in your own branch. We follow the convention of naming our branches `<initials>/<feature-name>`.
 
-Once your ready run `yarn validate` and make sure everything passes. Push your branch to our repository on GitLab (git@in.thewardro.be:io/opennetwork/chop-web-client.git) and open a merge request.
+Once your ready run `yarn validate` and make sure everything passes. Push your branch to our repository and open a merge request.
 
-An approved merger will review your changes and either leave feedback or mark as approved for merging. Once approved you should mere your own change and insure the the CI/CD pipeline passes (https://in.thewardro.be/io/opennetwork/chop-web-client/pipelines) and your changes are deployed correctly and everything works in production.
+An approved merger will review your changes and either leave feedback or mark as approved for merging.
 
-You can validate production at this URL: https://cwc-chopapi.global.ssl.fastly.net/
+You can validate production at this URL: https://digerati.churchonline.org/host_mobile
 
 ## Deployment
 
