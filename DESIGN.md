@@ -151,3 +151,53 @@ You'll also need to make a new action creator. You can use the action types:
 
 - PUBLISH_MOMENT_TO_CHANNEL - to add a moment to a channel and publish it across the WebSocket
 - RECEIVE_MOMENT - when you receive a moment over the WebSocket and need to act on it
+
+## Localization
+
+We use an internationalization framework for React called [react-i18next](https://react.i18next.com/) that is built on top of the Javascript library [i18next](https://www.i18next.com/). Our localization files are stored in this repository in the [locales](https://in.thewardro.be/io/opennetwork/chop-web-client/tree/master/locales) folder. Inside that folder will be a sub-folder for each language this application supports. There will be multiple `*.json` files in each language folder, and each of those files represents a namespace within the application. 
+
+### Adding a New Language
+
+There are three steps to adding a new language:
+1. Duplicate the `locales/en-US` folder and rename the new folder to match the language and region code of the language you are translating (i.e. - ru, es-mx).
+2. Translate the keys in each namespace to the new language (following the guidelines in the Translating a Key section below).
+3. Add the new language code to the whitelist for `i18-next`, which is defined in `src/index.jsx`.
+
+
+### Translating a Key
+
+The translation files are in a format called JSON that looks like: `{ "key": "value" }`. When you are updating a key for a new translation, only the `value` position should be updated, and the key should remain the same.
+
+Some files might have nested keys:
+```json
+{
+  "key": {
+    "nested_key": "value"
+  }
+}
+```
+
+Some keys might have variables (wrapped in `{{ }}`) or HTML. For these keys, the variable names and HTML tags should remain the same:
+```
+{
+  "key": "<strong>{{name}}</strong> was muted." // only 'was muted' should be translated in this key
+}
+```
+
+Here is an example localization file, and how it should be translated:
+```
+// English
+{
+   "user_muted": "<strong>{{name}}</strong> was muted.",
+   "text_mode_updated": "Chat size {{text}}."
+}
+```
+
+```
+// Russian
+{
+   "user_muted": "<strong>{{name}}</strong> был отключён.",
+   "text_mode_updated": "размер чата {{text}}."
+}
+```
+
