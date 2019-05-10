@@ -178,14 +178,14 @@ Some files might have nested keys:
 ```
 
 Some keys might have variables (wrapped in `{{ }}`) or HTML. For these keys, the variable names and HTML tags should remain the same:
-```
+```javascript
 {
   "key": "<strong>{{name}}</strong> was muted." // only 'was muted' should be translated in this key
 }
 ```
 
 Here is an example localization file, and how it should be translated:
-```
+```javascript
 // English
 {
    "user_muted": "<strong>{{name}}</strong> was muted.",
@@ -193,7 +193,7 @@ Here is an example localization file, and how it should be translated:
 }
 ```
 
-```
+```javascript
 // Russian
 {
    "user_muted": "<strong>{{name}}</strong> был отключён.",
