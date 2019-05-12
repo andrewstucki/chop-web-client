@@ -437,7 +437,7 @@ class Chat {
         }
         return;
       case 'newLiveResponseRequest':
-        if (event.message.data.type === 'prayer') {
+        if (event.message.data.type === 'prayer' && event.message.data.transfer !== 'true') {
           if (hasPermissions(this.getState(), ['feed.direct.accept'], true)) {
             this.storeDispatch(
               Converter.legacyToCwcPrayer(event.message)
