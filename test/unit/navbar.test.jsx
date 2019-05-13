@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
-import { act } from 'react-testing-library';
-
 import Navbar from '../../src/navbar/navbar';
+import { act } from 'react-testing-library';
 import { EVENT } from '../../src/pane/content/event/dux';
 import { CHAT } from '../../src/pane/content/chat/dux';
 import { renderWithTheme } from '../testUtils';
@@ -94,7 +93,7 @@ describe('Navbar tests', () => {
     expect.assertions(3);
     if (container) {
       const { getByTestId, getByText } = container;
-      const buttons = getByTestId('navbarItems').querySelectorAll('button');
+      const buttons = getByTestId('navbar').querySelectorAll('button');
       expect(buttons.length).toBe(2);
       expect(getByText('channels.public')).toBeTruthy();
       expect(getByText('channels.host')).toBeTruthy();
@@ -313,7 +312,7 @@ describe('Navbar tests', () => {
     expect.assertions(5);
     if (container) {
       const { getByTestId } = container;
-      const buttons = getByTestId('navbarItems').querySelectorAll('button');
+      const buttons = getByTestId('navbar').querySelectorAll('button');
       expect(buttons.length).toEqual(4);
       expect(buttons[0].textContent).toEqual('channels.public');
       expect(buttons[1].textContent).toEqual('channels.host');

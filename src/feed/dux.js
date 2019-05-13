@@ -9,12 +9,6 @@ import type {
 } from '../moment';
 
 import type {
-  TabType,
-  AddTabType,
-  RemoveTabType,
-} from '../pane/content/tab/dux';
-
-import type {
   AddMomentToChannelType,
   MomentType,
 } from '../moment/dux';
@@ -102,15 +96,12 @@ import type {
   ChannelIdType,
 } from '../cwc-types';
 
-import { ADD_TAB, REMOVE_TAB } from '../pane/content/tab/dux';
-
-// $FlowFixMe - this module does not resolve in GitLab CI
 import type { SetNavbarIndexType } from '../navbar/dux';
 
 import {
   SET_NAVBAR_INDEX,
 } from '../navbar/dux';
-import type { 
+import type {
   SharedUserType,
   UpdateUserSucceededType,
   PrivateUserType,
@@ -120,6 +111,8 @@ import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
 import { UPDATE_USER_SUCCEEDED } from '../users/dux';
 import { COMPACT } from '../textModeToggle/dux';
+import { HOST_INFO } from '../hostInfo/dux';
+import { type TabType } from '../pane/content/tab/dux';
 
 // Action Types
 
@@ -277,7 +270,6 @@ type FeedType = {
   panes: {
     [string]: PaneType,
   },
-  tabs: Array<TabType>,
   clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
   navbarIndex: number,
@@ -285,6 +277,7 @@ type FeedType = {
   lastAction?: FeedActionTypes,
   popUpModal: PopUpModalType,
   nav: NavType,
+  tabs: Array<TabType>,
 };
 
 type AddChannelType = {
@@ -435,8 +428,6 @@ type FeedActionTypes =
   | ToggleHideVideoType
   | SetNavbarIndexType
   | SetPaneType
-  | AddTabType
-  | RemoveTabType
   | ToggleNavMenuExpandedType
   | SetChatFocusType
   | SetChannelsType
@@ -705,10 +696,10 @@ const defaultState = {
     type: 'none',
     url: '',
   },
-  currentLanguage: 'en',
+  currentLanguage: 'en-US',
   languageOptions: [
     {
-      code: 'en',
+      code: 'en-US',
       name: 'English',
     },
     {
@@ -744,7 +735,6 @@ const defaultState = {
       },
     },
   },
-  tabs: [],
   reactions: [],
   notificationBanner: {
     message: '',
@@ -777,6 +767,9 @@ const defaultState = {
   nav: {
     expanded: true,
   },
+  tabs: [
+    HOST_INFO,
+  ],
 };
 
 // Reducer
@@ -1336,40 +1329,6 @@ const reducer = (
         navbarIndex: action.index,
         prevNavbarIndex: state.navbarIndex,
       };
-    case ADD_TAB: {
-      const { tab } = action;
-      const exists = state.tabs.filter(item => item.type === tab.type).length > 0;
-
-      if (exists) {
-        return state;
-      } else {
-        return {
-          ...state,
-          tabs: [
-            ...state.tabs,
-            tab,
-          ],
-        };
-      }
-    }
-    case REMOVE_TAB: {
-      const { tabType } = action;
-      const publicChannel = getPublicChannel(state) || 'event';
-
-      return {
-        ...state,
-        tabs: state.tabs.filter(item => item.type !== tabType),
-        panes: {
-          ...state.panes,
-          primary: {
-            type: EVENT,
-            content: {
-              channelId: publicChannel,
-            },
-          },
-        },
-      };
-    }
     case UPDATE_USER_SUCCEEDED: {
       const { user } = action;
       return {

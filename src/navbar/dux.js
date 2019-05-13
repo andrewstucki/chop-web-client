@@ -13,7 +13,7 @@ import { PRIMARY_PANE } from '../pane/dux';
 import { TAB } from '../pane/content/tab/dux';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
-import type { TabTypeType } from '../pane/content/tab/dux';
+import type { TabType } from '../pane/content/tab/dux';
 
 // Action Types
 const SET_NAVBAR_INDEX = 'SET_NAVBAR_INDEX';
@@ -30,7 +30,7 @@ type NavbarItemType = {
   isDirect: boolean,
   isPlaceholder: boolean,
   type: typeof EVENT | typeof CHAT | typeof TAB,
-  tabType?: TabTypeType,
+  tabType?: TabType,
 };
 
 type SetNavbarIndexType = {
@@ -101,8 +101,8 @@ const createNavChannel = (channel, currentChannel, currentUser, mutedUsers) => (
 const getPublicChannel = createSelector(
   state => publicChannel(state) || { name: 'Public', id: 'event', moments: [], direct: false },
   getCurrentChannel,
-  getCurrentUser, 
-  getMutedUsers,  
+  getCurrentUser,
+  getMutedUsers,
   createNavChannel
 );
 
@@ -137,9 +137,9 @@ const getTabs = createSelector(
   state => paneContentSelector(state, PRIMARY_PANE),
   (tabs, currentPane) =>
     tabs.map(tab => ({
-      name: tab.name,
-      id: tab.id,
-      isCurrent: currentPane.type === TAB && currentPane.content.type === tab.type,
+      name: tab,
+      id: tab,
+      isCurrent: currentPane.type === TAB && currentPane.content.type === tab,
       hasActions: false,
       hasNewMessages: false,
       otherUsersNames: [],

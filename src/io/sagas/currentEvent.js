@@ -32,6 +32,8 @@ import {convertUser} from './privateChat';
 import {isOffline} from '../../selectors/eventSelectors';
 import {COMPACT} from '../../textModeToggle/dux';
 import { startTimer } from './sequence';
+import { PRIMARY_PANE } from '../../pane/dux';
+import { setPaneToEvent } from '../../pane/content/event/dux';
 
 const isTimeInFuture = (seconds: number): boolean => (seconds * 1000) > Date.now();
 
@@ -184,6 +186,10 @@ export function* sequence (sequence: GraphQLSequenceType): Saga<void> {
 function* channels (channels: Array<GraphQLChannelType>): Saga<void> {
   if (channels) {
     yield put(setChannels(convertChannel(channels)));
+    const [publicChannel] = channels.filter(channel => channel.type === 'public');
+    if (publicChannel) {
+      yield put(setPaneToEvent(PRIMARY_PANE, publicChannel.id));
+    }
   }
 }
 

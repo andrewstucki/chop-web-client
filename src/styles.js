@@ -123,6 +123,7 @@ const theme:ThemeType = {
     textColor:  ionDesignValues.colors.grayscale.gray100,
     alternateTextColor: ionDesignValues.colors.grayscale.white,
     black:      ionDesignValues.colors.grayscale.black,
+    white:      ionDesignValues.colors.grayscale.white,
     gray100:    ionDesignValues.colors.grayscale.gray100,
     gray50:     ionDesignValues.colors.grayscale.gray50,
     gray30:     ionDesignValues.colors.grayscale.gray30,

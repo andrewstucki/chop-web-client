@@ -183,7 +183,7 @@ const LeftChannelNotification = (
           <strong>{{name}}</strong> has left the chat
         </Trans>
       </div>
-      <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
+      <Timestamp data-testid={'notification-timestamp'}>{timestamp.toString()}</Timestamp>
     </Text>
   </Wrapper>
 );

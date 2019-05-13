@@ -9,7 +9,7 @@ import { PaneWrapper, PaneContentWrapper } from './styles';
 import hash from 'object-hash';
 import { useTransition } from 'react-spring';
 import { TAB } from './content/tab/dux';
-import type { TabTypeType } from './content/tab/dux';
+import type { TabType } from './content/tab/dux';
 import Tab from './content/tab';
 import { HOST_INFO } from '../hostInfo/dux';
 import { Small, MediumUp } from '../util/responsive';
@@ -24,7 +24,7 @@ type PanePropsType = {
   prevNavbarIndex: number,
   hostChannel: string,
   setPaneToChat: (pane:string, channel:string) => void,
-  setPaneToTab: (name:string, type:TabTypeType) => void,
+  setPaneToTab: (name:string, type:TabType) => void,
 };
 
 const renderPaneContent = (pane:PaneType, hideReactions:boolean) => {
