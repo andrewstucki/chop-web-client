@@ -105,7 +105,7 @@ const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setN
 
 const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItemProps, ref) => {
   const { t } = useTranslation();
-  const nameKey = (item.type === TAB && item.tabType !== undefined) ? item.tabType.toLowerCase() : `channels.${item.name.toLowerCase()}`;
+  const nameKey = (item.type === TAB && item.tabType !== undefined) ? item.tabType.toLowerCase() : item.type.toLowerCase();
   return (
     <Actionable key={item.id} onClick={(event:SyntheticMouseEvent<HTMLButtonElement>) => handleItemClick(event, item)}>
       <NavbarItemWrapper

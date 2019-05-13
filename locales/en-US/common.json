@@ -7,16 +7,13 @@
     "direct_chat": "Chat",
     "mute_user": "Mute"
   },
-  "channels": {
-    "host": "Host",
-    "public": "Public"
-  },
   "chat": "Chat",
   "chat_with": "Chat with {{name}}",
   "coming_soon": "Coming Soon",
   "give_feedback": "Give feedback",
   "guest_experience": "Guest experience",
   "hide_tab": "Hide Tab",
+  "host": "Host",
   "host_chat": "Host Chat",
   "host_info": "Host Info",
   "host_info_empty": "There is no Host Info for this Event.",
@@ -25,8 +22,9 @@
   "log_out": "Log Out",
   "new_messages": "New Messages",
   "no_upcoming_event": "No Upcoming Event.",
-  "public_chat": "Public Chat",
   "notes": "Notes",
+  "public": "Public",
+  "public_chat": "Public Chat",
   "schedule": "Schedule",
   "support": "Support",
   "upcoming_event": "Upcoming Event"

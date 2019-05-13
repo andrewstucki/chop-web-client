@@ -42,7 +42,7 @@ const ChatFeed = React.memo < ChatPropsType > (
       leaveChannel,
     };
     const chatHeaderData = {
-      title: `${t(`channels.${type}`)} ${t('chat')}`,
+      title: `${t(type)} ${t('chat')}`,
       subtitle: userCount,
     };
 
