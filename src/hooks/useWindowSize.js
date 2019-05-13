@@ -1,6 +1,6 @@
 // @flow
 import { useEffect, useState } from 'react';
-import { isClient } from './index';
+import { isClient } from '../util';
 
 type StateType = {
   width: number,

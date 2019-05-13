@@ -5,7 +5,7 @@ import ChatInputBox from '../../../chat';
 import ReactionsContainer from '../../../reactions/reactionsContainer';
 import PaneHeader from '../../../paneHeader';
 import CommentOutline from '../../../icons/commentOutline';
-import { CHAT_HEADER } from '../../../paneHeader/chatHeader';
+import { CHAT_HEADER, type ChatHeaderProps } from '../../../paneHeader/chatHeader';
 import { DIRECT_CHAT_HEADER } from '../../../paneHeader/directChatHeader';
 import { MediumUp } from '../../../util/responsive';
 import { ChatInputs, PlaceholderWrapper, PlaceholderText } from './styles';
@@ -41,7 +41,7 @@ const ChatFeed = React.memo < ChatPropsType > (
       otherUsersName,
       leaveChannel,
     };
-    const chatHeaderData = {
+    const chatHeaderData:ChatHeaderProps = {
       title: `${t(type)} ${t('chat')}`,
       subtitle: userCount,
     };

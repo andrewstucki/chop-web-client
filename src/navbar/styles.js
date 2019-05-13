@@ -19,6 +19,7 @@ const NavbarItemWrapper = styled.button`
   color: ${props => props.isCurrent ? props.theme.colors.textColor : props.theme.colors.gray50};
   font-size: 10.72px;
   text-transform: uppercase;
+  white-space: nowrap;
   position: relative;
   font-weight: 500;
   border: none;
@@ -29,24 +30,27 @@ const NavbarItemWrapper = styled.button`
 `;
 
 const Pip = styled.div`
-  height:8px;
-  width:8px;
+  height: ${props => props.hasActions ? '8px' : '6px'};
+  width: ${props => props.hasActions ? '8px' : '6px'};
   border-radius: 50%;
   background-color: ${props => props.hasActions ? props.theme.colors.primary : props.theme.colors.gray50};
+  margin: 0 auto;
 `;
 
 const PipStyle = styled.div`
   position: absolute;
-  top: 2px;
+  top: 4px;
   right: 2px;
-  height: 10px;
-  width: 10px;
+  height: 8px;
+  width: 8px;
 `;
 
 const TabOverflow = styled.div`
   position: fixed;
   cursor: pointer;
   z-index: 2;
+  width: 24px;
+  height: 32px;
 `;
 
 const TabOverflowWrapper = styled(TabOverflow)`

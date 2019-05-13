@@ -10,6 +10,7 @@
   "chat": "Chat",
   "chat_with": "Chat with {{name}}",
   "coming_soon": "Coming Soon",
+  "feature_coming_soon": "<strong>{{feature}}</strong> is Coming Soon.",
   "give_feedback": "Give feedback",
   "guest_experience": "Guest experience",
   "hide_tab": "Hide Tab",

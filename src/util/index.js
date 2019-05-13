@@ -101,6 +101,8 @@ const isMobileDevice = () => { /* eslint-disable */
 
 const isAndroid = () => !!navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
+const isClient = typeof window === 'object';
+
 export {
   getFirstInitial,
   getAvatarColor,
@@ -114,4 +116,5 @@ export {
   isAndroid,
   getUTCDate,
   getFirstWordInName,
+  isClient,
 };

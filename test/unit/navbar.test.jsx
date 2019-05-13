@@ -95,8 +95,8 @@ describe('Navbar tests', () => {
       const { getByTestId, getByText } = container;
       const buttons = getByTestId('navbar').querySelectorAll('button');
       expect(buttons.length).toBe(2);
-      expect(getByText('channels.public')).toBeTruthy();
-      expect(getByText('channels.host')).toBeTruthy();
+      expect(getByText('public')).toBeTruthy();
+      expect(getByText('host')).toBeTruthy();
     }
   });
 
@@ -314,8 +314,8 @@ describe('Navbar tests', () => {
       const { getByTestId } = container;
       const buttons = getByTestId('navbar').querySelectorAll('button');
       expect(buttons.length).toEqual(4);
-      expect(buttons[0].textContent).toEqual('channels.public');
-      expect(buttons[1].textContent).toEqual('channels.host');
+      expect(buttons[0].textContent).toEqual('public');
+      expect(buttons[1].textContent).toEqual('host');
       expect(buttons[2].textContent).toEqual('B');
       expect(buttons[3].textContent).toEqual('C');
     }
