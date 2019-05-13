@@ -145,7 +145,7 @@ const getTabs = createSelector(
       otherUsersNames: [],
       isDirect: false,
       type: TAB,
-      tabType: tab.type,
+      tabType: tab,
     }))
 );
 
