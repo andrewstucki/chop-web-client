@@ -2,6 +2,11 @@
 import React from 'react';
 
 import type { ActionableNotificationType } from './dux';
+import FilePlayer from 'react-player/lib/players/FilePlayer';
+// $FlowFixMe - why won't these resolve?
+import PopPopMp3 from '../../../assets/audio/pop_pop.mp3';
+// $FlowFixMe - why won't these resolve?
+import PopPopOgg from '../../../assets/audio/pop_pop.ogg';
 import ChatNotification from '../../../assets/chat-notification.svg';
 import type {SharedUserType} from '../../users/dux';
 import { Trans, useTranslation } from 'react-i18next';
@@ -41,6 +46,12 @@ const ActionableNotification = (
 
   const callAcceptPrayerRequest = () => acceptPrayerRequest(prayerChannel, hostChannel, user, false);
 
+  const PlayerConfig = {
+    file: {
+      forceAudio: true,
+    },
+  };
+
   return (
     <Wrapper data-testid='actionableNotification' isCompact={isCompact}>
       <ActionableContainer>
@@ -56,13 +67,20 @@ const ActionableNotification = (
         </Text>
         {
           active &&
-            <AcceptButton
-              data-testid='actionableNotification-accept'
-              onClick={callAcceptPrayerRequest}
-              isCompact={isCompact}
-            >
-              {t('actionable.accept')}
-            </AcceptButton>
+            <>
+              <AcceptButton
+                data-testid='actionableNotification-accept'
+                onClick={callAcceptPrayerRequest}
+                isCompact={isCompact}
+              >
+                {t('actionable.accept')}
+              </AcceptButton>
+              <FilePlayer
+                playing
+                url={[PopPopMp3, PopPopOgg]}
+                config={PlayerConfig}
+              />
+            </>
         }
         <AcceptedText hide={active} data-testid='actionableNotification-accepted' isCompact={isCompact}>{acceptedText}</AcceptedText>
       </ActionableContainer>

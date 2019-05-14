@@ -29,15 +29,7 @@ const NavbarItemWrapper = styled.button`
   overflow: visible;
 `;
 
-const Pip = styled.div`
-  height: ${props => props.hasActions ? '8px' : '6px'};
-  width: ${props => props.hasActions ? '8px' : '6px'};
-  border-radius: 50%;
-  background-color: ${props => props.hasActions ? props.theme.colors.primary : props.theme.colors.gray50};
-  margin: 0 auto;
-`;
-
-const PipStyle = styled.div`
+const PipWrapper = styled.div`
   position: absolute;
   top: 4px;
   right: 2px;
@@ -65,8 +57,7 @@ const InvertedTabOverflowWrapper = styled(TabOverflow)`
 export {
   NavbarWrapper,
   NavbarItemWrapper,
-  Pip,
-  PipStyle,
+  PipWrapper,
   TabOverflowWrapper,
   InvertedTabOverflowWrapper,
 };
