@@ -56,6 +56,17 @@ module.exports = {
           }
         ]
       },
+      {
+        test: /\.(ogg|mp3)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'audio',
+            }
+          }
+        ]
+      }      
     ]
   },
   resolve: {

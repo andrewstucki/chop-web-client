@@ -14,8 +14,8 @@ import {
   InnerWrapper,
   Label,
   getColor,
-  PipStyle,
-  PipStyleCollapsed,
+  PipWrapper,
+  PipWrapperCollapsed, 
 } from './styles';
 import Hamburger from '../icons/hamburger';
 import HostChat from '../icons/hostChat';
@@ -33,7 +33,7 @@ import {HOST_INFO} from '../hostInfo/dux';
 import {getFirstInitial} from '../util';
 import {MediumDown, LargeDown} from '../util/responsive';
 import {DirectChatAvatar} from '../components/styles';
-import {Pip} from '../navbar/styles';
+import Pip from '../components/pip';
 import { useTranslation } from 'react-i18next';
 
 const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false, hasActions, hasNewMessages}) => {
@@ -65,8 +65,8 @@ const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClic
         </NavMenuCapTextWrapper>
         }
         { expanded ?
-          (hasActions || hasNewMessages) && <PipStyle><Pip hasActions={hasActions}/></PipStyle> :
-          (hasActions || hasNewMessages) && <PipStyleCollapsed><Pip hasActions={hasActions}/></PipStyleCollapsed>
+          (hasActions || hasNewMessages) && <PipWrapper><Pip hasActions={hasActions} theme={theme}/></PipWrapper> :
+          (hasActions || hasNewMessages) && <PipWrapperCollapsed><Pip hasActions={hasActions} theme={theme}/></PipWrapperCollapsed>
         }
       </NavMenuButton>
     </Actionable>

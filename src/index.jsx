@@ -32,6 +32,8 @@ import XHR from 'i18next-xhr-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import { setLanguage } from './languageSelector/dux';
+// $FlowFixMe - why won't this resolve?
+import SilentAudio from '../assets/audio/250-milliseconds-of-silence.mp3';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
@@ -115,6 +117,8 @@ if (content) {
           <ErrorBoundary>
             <ThemeProvider theme={theme}>
                 <>
+                  { /* This helps with autoplaying audio later on in the application */ }
+                  <iframe src={SilentAudio} allow='autoplay' id='silentAudio' title='silentAudio' style={{display: 'none'}}></iframe>
                   <GlobalStyle />
                   <Router basename={ROUTE_BASENAME}>
                     <Switch>

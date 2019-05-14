@@ -127,12 +127,12 @@ const NavMenuButton = styled.button`
   }
 `;
 
-const PipStyle = styled.div`
+const PipWrapper = styled.div`
   margin: 12px;
   align-self: center;
 `;
 
-const PipStyleCollapsed = styled.div`
+const PipWrapperCollapsed = styled.div`
   position: absolute;
   right: 8px;
   top: 9px;
@@ -153,6 +153,6 @@ export {
   NavMenuChurchName,
   Label,
   getColor,
-  PipStyle,
-  PipStyleCollapsed,
+  PipWrapper,
+  PipWrapperCollapsed,
 };

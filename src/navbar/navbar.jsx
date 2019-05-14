@@ -8,10 +8,12 @@ import { CHAT } from '../pane/content/chat/dux';
 import type { TabTypeType } from '../pane/content/tab/dux';
 import { TAB} from '../pane/content/tab/dux';
 import { PRIMARY_PANE } from '../pane/dux';
-import { NavbarWrapper, NavbarItemsWrapper, NavbarItemsInnerWrapper, Underline, NavbarHamburgerWrapper, NavbarItemWrapper, Pip, PipStyle } from './styles';
+import { NavbarWrapper, NavbarItemsWrapper, NavbarItemsInnerWrapper, Underline, NavbarHamburgerWrapper, NavbarItemWrapper, PipWrapper } from './styles';
 import Actionable from '../components/Actionable';
 import DirectChatIcon from './directChatIcon';
+import Pip from '../components/pip';
 import { useTranslation } from 'react-i18next';
+import { theme } from '../styles';
 
 type NavbarProps = {
   items: Array<NavbarItemType>,
@@ -139,7 +141,7 @@ const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItem
         data-direct={item.isDirect}
         isCurrent={item.isCurrent}
       >
-        { (item.hasActions || item.hasNewMessages) && <PipStyle><Pip hasActions={item.hasActions}/></PipStyle> }
+        { (item.hasActions || item.hasNewMessages) && <PipWrapper><Pip hasActions={item.hasActions} theme={theme}/></PipWrapper> }
         { }
         { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : t(nameKey) }
       </NavbarItemWrapper>
