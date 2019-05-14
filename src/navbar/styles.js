@@ -50,14 +50,7 @@ const NavbarHamburgerWrapper = styled.button`
   background: transparent;
 `;
 
-const Pip = styled.div`
-  height:8px;
-  width:8px;
-  border-radius: 50%;
-  background-color: ${props => props.hasActions ? theme.colors.primary : theme.colors.gray50};
-`;
-
-const PipStyle = styled.div`
+const PipWrapper = styled.div`
   position: absolute;
   top: 6px;
   right: 3px;
@@ -84,7 +77,6 @@ export {
   NavbarItemsInnerWrapper,
   NavbarItemWrapper,
   NavbarHamburgerWrapper,
-  Pip,
-  PipStyle,
+  PipWrapper,
   Underline,
 };
