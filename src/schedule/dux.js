@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 
 // Action Types
 const ID = 'schedule';
+export const SCHEDULE = 'SCHEDULE';
 export const POP_SCHEDULE = 'POP_SCHEDULE';
 export const SET_SCHEDULE = 'SET_SCHEDULE';
 export const QUERY_SCHEDULE_FAILED = 'QUERY_SCHEDULE_FAILED';
@@ -21,7 +22,7 @@ type EventScheduleType = {
   hostInfo: string,
 };
 
-type ScheduleType = Array<EventScheduleType>;
+export type ScheduleType = Array<EventScheduleType>;
 
 type PopScheduleType = {
   type: typeof POP_SCHEDULE,
@@ -88,5 +89,5 @@ export const getNextStartTime = createSelector(
 
 export const getScheduleGroupedByDay = createSelector(
   local,
-  schedule => groupBy(schedule, item => dayjs(item.startTime).day())
+  schedule => groupBy(schedule, item => dayjs.unix(item.startTime).day())
 );

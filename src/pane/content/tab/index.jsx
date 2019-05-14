@@ -2,11 +2,13 @@
 import React from 'react';
 import { HOST_INFO } from '../../../hostInfo/dux';
 import HostInfo from '../../../hostInfo';
-import { BIBLE, SCHEDULE, NOTES, type TabType} from './dux';
+import { BIBLE, NOTES, type TabType} from './dux';
+import { SCHEDULE } from '../../../schedule/dux';
 import PaneHeader from '../../../paneHeader';
 import { TAB_HEADER } from '../../../paneHeader/tabHeader';
 import { Trans, useTranslation } from 'react-i18next';
 import { ComingSoonWrapper, ComingSoonText } from './styles';
+import Schedule from '../../../schedule';
 
 type TabPropsType = {
   type: TabType,
@@ -18,6 +20,7 @@ const renderTabContent = type => {
       return <HostInfo />;
     case BIBLE:
     case SCHEDULE:
+      return <Schedule />;
     case NOTES:
       return <ComingSoon type={type} />;
     default:

@@ -112,7 +112,8 @@ import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
 import { UPDATE_USER_SUCCEEDED } from '../users/dux';
 import { COMPACT } from '../textModeToggle/dux';
 import { HOST_INFO } from '../hostInfo/dux';
-import { BIBLE, SCHEDULE, NOTES, type TabType} from '../pane/content/tab/dux';
+import { BIBLE, NOTES, type TabType} from '../pane/content/tab/dux';
+import { SCHEDULE } from '../schedule/dux';
 
 // Action Types
 

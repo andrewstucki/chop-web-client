@@ -362,16 +362,14 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
 }`;
 
 const schedule = `
-query Schedule($endTime: Timestamp) {
-  schedule(endTime: $endTime) {
-    fetchTime
-    startTime
-    endTime
-    id
-    title
-    scheduleTime
-    hostInfo
-  }
+schedule {
+  fetchTime
+  startTime
+  endTime
+  id
+  title
+  scheduleTime
+  hostInfo
 }`;
 
 const joinChannel = `
