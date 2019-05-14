@@ -60,7 +60,6 @@ const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setN
   const showLeftIndicator = scrollLeft > 0;
   const showRightIndicator = ((scrollArea && scrollArea.scrollWidth > window.innerWidth) && (scrollArea && scrollArea.scrollWidth - scrollLeft !== window.innerWidth));
 
-
   // Scroll enough so that the scroll-snap kicks in
   const handleScrollLeft = () => {
     if (scrollArea) {
@@ -80,7 +79,7 @@ const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setN
         <Actionable onClick={handleScrollLeft}>
           <InvertedTabOverflowWrapper>
             <TabOverflow />
-            { itemWithActions.current && itemWithActions.current.getBoundingClientRect().x < 0 && <PipStyle><Pip/></PipStyle> }
+            { itemWithActions.current && itemWithActions.current.getBoundingClientRect().left < 0 && <NavbarPip /> }
           </InvertedTabOverflowWrapper>
         </Actionable>
       }
@@ -99,7 +98,7 @@ const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setN
         <Actionable onClick={handleScrollRight}>
           <TabOverflowWrapper>
             <TabOverflow/>
-            { itemWithActions.current && itemWithActions.current.getBoundingClientRect().x > window.innerWidth && <PipStyle><Pip/></PipStyle> }
+            { itemWithActions.current && itemWithActions.current.getBoundingClientRect().left > window.innerWidth && <NavbarPip /> }
           </TabOverflowWrapper>
         </Actionable>
       }
@@ -119,12 +118,18 @@ const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItem
         data-direct={item.isDirect}
         isCurrent={item.isCurrent}
       >
-        { (item.hasActions || item.hasNewMessages) && <PipStyle ref={ref}><Pip hasActions={item.hasActions}/></PipStyle> }
+        { (item.hasActions || item.hasNewMessages) && <NavbarPip ref={ref} hasActions={item.hasActions} /> }
         { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : t(nameKey) }
       </NavbarItemWrapper>
     </Actionable>
   );
 });
+
+const NavbarPip = React.forwardRef(({ hasActions = false }: {| hasActions?: boolean |}, ref) => (
+  <PipStyle ref={ref}>
+    <Pip hasActions={hasActions}/>
+  </PipStyle>
+));
 
 NavbarItem.displayName = 'NavbarItem';
 
