@@ -1,5 +1,7 @@
 // @flow
 import { createSelector } from 'reselect';
+import { groupBy } from 'lodash';
+import dayjs from 'dayjs';
 
 // Action Types
 const ID = 'schedule';
@@ -82,4 +84,9 @@ export const getNextEventData = createSelector(
 export const getNextStartTime = createSelector(
   local,
   schedule => schedule[0].startTime
+);
+
+export const getScheduleGroupedByDay = createSelector(
+  local,
+  schedule => groupBy(schedule, item => dayjs(item.startTime).day())
 );

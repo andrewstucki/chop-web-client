@@ -1,4 +1,5 @@
 // @flow
+import dayjs from 'dayjs';
 import { GraphQLClient } from 'graphql-request';
 import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
@@ -361,14 +362,16 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
 }`;
 
 const schedule = `
-schedule {
-  fetchTime
-  startTime
-  endTime
-  id
-  title
-  scheduleTime
-  hostInfo
+query Schedule($endTime: Timestamp) {
+  schedule(endTime: $endTime) {
+    fetchTime
+    startTime
+    endTime
+    id
+    title
+    scheduleTime
+    hostInfo
+  }
 }`;
 
 const joinChannel = `
@@ -522,7 +525,9 @@ const queries = {
     }),
 
   schedule: async (): Promise<GraphQLSchedule> =>
-    await client.request(schedule),
+    await client.request(schedule, {
+      endTime: dayjs().add(1, 'week').endOf('day').unix(),
+    }),
 
   eventAtTime: async (time: number): Promise<GraphQLEventAtTimeType> =>
     await client.request(eventAt, {
