@@ -4,11 +4,10 @@ import reducer, {
   removeChannel,
   defaultState,
   leaveChannel,
-  setUser,
   setSalvations,
   updateScrollPosition,
 } from '../../src/feed/dux';
-
+import { defaultState as defaultChopState } from '../../src/chop/dux';
 import {
   togglePopUpModal,
 } from '../../src/popUpModal/dux';
@@ -545,29 +544,35 @@ describe('Feed tests', () => {
   test('Feed contents', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          ...defaultState,
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  text: 'I like socks',
+                  sender: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
                 },
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
           },
         },
-        currentUser: currentUser,
+        user: {
+          ...defaultChopState.user,
+          currentUser: currentUser,
+        },
       },
       'public',
     );
@@ -590,36 +595,42 @@ describe('Feed tests', () => {
   test('Feed contents not public', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-          },
-          host: {
-            id: '12345',
-            name: 'host',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          ...defaultState,
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
+            host: {
+              id: '12345',
+              name: 'host',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  text: 'I like socks',
+                  sender: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
                 },
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+            },
           },
         },
-        currentUser: currentUser,
+        user: {
+          ...defaultChopState.user,
+          currentUser: currentUser,
+        },
       },
       'host',
     );
@@ -640,46 +651,52 @@ describe('Feed tests', () => {
   });
 
   test('feedContents selector works without a channel', () => {
-    expect(feedContentsSelector(defaultState, 'public')).toEqual([]);
+    expect(feedContentsSelector(defaultChopState, 'public')).toEqual([]);
   });
 
   test('feedContents selector returns translations', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          ...defaultState,
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  text: 'I like socks',
+                  sender: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
+                  translations: [
+                    {
+                      languageCode: 'en',
+                      text: 'I like socks',
+                    },
+                    {
+                      languageCode: 'ko',
+                      text: '나는 양말을 좋아한다.',
+                    },
+                  ],
                 },
-                messageTrayOpen: false,
-                translations: [
-                  {
-                    languageCode: 'en',
-                    text: 'I like socks',
-                  },
-                  {
-                    languageCode: 'ko',
-                    text: '나는 양말을 좋아한다.',
-                  },
-                ],
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
           },
+          currentLanguage: 'ko',
         },
-        currentLanguage: 'ko',
-        currentUser: currentUser,
+        user: {
+          ...defaultChopState.user,
+          currentUser: currentUser,
+        },
       },
       'public',
     );
@@ -712,40 +729,46 @@ describe('Feed tests', () => {
   test('feedContents selector returns translations with region', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          ...defaultState,
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  text: 'I like socks',
+                  sender: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
+                  translations: [
+                    {
+                      languageCode: 'en',
+                      text: 'I like socks',
+                    },
+                    {
+                      languageCode: 'ko',
+                      text: '나는 양말을 좋아한다.',
+                    },
+                  ],
                 },
-                messageTrayOpen: false,
-                translations: [
-                  {
-                    languageCode: 'en',
-                    text: 'I like socks',
-                  },
-                  {
-                    languageCode: 'ko',
-                    text: '나는 양말을 좋아한다.',
-                  },
-                ],
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
           },
+          currentLanguage: 'en-US',
         },
-        currentLanguage: 'en-US',
-        currentUser: currentUser,
+        user: {
+          ...defaultChopState.user,
+          currentUser: currentUser,
+        },
       },
       'public',
     );
@@ -815,15 +838,6 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Accepts a user', () => {
-    const { lastAction, ...result } = reducer(defaultState, setUser(currentUser)); // eslint-disable-line no-unused-vars
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        currentUser: currentUser,
-      },
-    );
-  });
 
   test('Opens only the correct message tray public channel', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars

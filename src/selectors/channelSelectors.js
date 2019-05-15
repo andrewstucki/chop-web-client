@@ -1,11 +1,11 @@
 // @flow
 import { createSelector } from 'reselect';
-import { getCurrentUser } from '../users/dux';
+import { getCurrentUser, getMutedUsers } from '../users/dux';
 import type {
-  FeedType,
   ChannelsObjectType,
   ChannelType,
 } from '../feed/dux';
+import type { ChopStateType } from '../chop/dux';
 import type {
   SharedUserType,
 } from '../users/dux';
@@ -17,15 +17,16 @@ import type {
 import type { PaneType } from '../pane/dux';
 import type { MomentType } from '../moment/dux';
 
-const getChannels = (state: FeedType): ChannelsObjectType => state.channels;
+const ID = 'feed';
+const local = state => state[ID] || state;
 
-const getChannelById = (state: FeedType, id: ChannelIdType): ChannelType => getChannels(state)[id];
+const getChannels = (state: ChopStateType): ChannelsObjectType => local(state).channels;
 
-const getCurrentLanguage = (state: FeedType): LanguageCodeType => state.currentLanguage;
+const getChannelById = (state: ChopStateType, id: ChannelIdType): ChannelType => getChannels(state)[id];
 
-const getPrimaryPane = (state: FeedType): PaneType => state.panes.primary;
+const getCurrentLanguage = (state: ChopStateType): LanguageCodeType => local(state).currentLanguage;
 
-const getMutedUsers = (state: FeedType):Array<UIDType>  => state.mutedUsers;
+const getPrimaryPane = (state: ChopStateType): PaneType => local(state).panes.primary;
 
 const getSawLastMomentAt = createSelector(
   getChannelById,
@@ -33,7 +34,7 @@ const getSawLastMomentAt = createSelector(
 );
 
 const getChannelIdByNameFactory = (name: string): Function  => (
-  createSelector<FeedType, void, ChannelIdType, ChannelsObjectType>(
+  createSelector<ChopStateType, void, ChannelIdType, ChannelsObjectType>(
     [getChannels],
     channels => {
       if (channels) {
@@ -44,7 +45,7 @@ const getChannelIdByNameFactory = (name: string): Function  => (
 );
 
 const getChannelByNameFactory = (name: string): ChannelType => (
-  createSelector<FeedType, void, ChannelType, ChannelsObjectType, string>(
+  createSelector<ChopStateType, void, ChannelType, ChannelsObjectType, string>(
     getChannels,
     getChannelIdByNameFactory(name),
     (channels, id) => channels[id]
@@ -86,22 +87,22 @@ const removeMutedUsers = (mutedUsers: Array<UIDType>) => (moment: MomentType): b
   }
 };
 
-const getHostChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
+const getHostChannelObject = createSelector<ChopStateType, void, ChannelType, ChannelType>(
   [getChannelByNameFactory('HOST')],
   channel => channel
 );
 
-const getHostChannel = createSelector<FeedType, void, string, string>(
+const getHostChannel = createSelector<ChopStateType, void, string, string>(
   getChannelIdByNameFactory('HOST'),
   channel => channel
 );
 
-const getPublicChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
+const getPublicChannelObject = createSelector<ChopStateType, void, ChannelType, ChannelType>(
   getChannelByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const getPublicChannel = createSelector<FeedType, void, string, string>(
+const getPublicChannel = createSelector<ChopStateType, void, string, string>(
   getChannelIdByNameFactory('PUBLIC'),
   channel => channel
 );
@@ -184,7 +185,7 @@ const lastInArray = <I>(array: Array<I>): I => array[array.length - 1];
 
 const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => userA.pubnubToken === userB.pubnubToken;
 
-const getLastAction = (state: FeedType) => state.lastAction;
+const getLastAction = (state: ChopStateType) => local(state).lastAction;
 
 const getScroll = createSelector(
   [ getChannelById, getLastAction, getCurrentUser ],
@@ -261,7 +262,6 @@ export {
   feedContents,
   feedAnchorMoments,
   getChannelById,
-  getMutedUsers,
   getCurrentTabType,
   getHostChannelObject,
   getPublicChannelObject,

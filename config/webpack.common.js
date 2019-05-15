@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const constants = require('./webpack.constants.js');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
+const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 module.exports = {
   entry: './src/index.jsx',
@@ -83,6 +84,10 @@ module.exports = {
       { from: 'locales', to: 'locales' }
     ]),
     new BugsnagSourceMapUploaderPlugin({...constants.BUGSNAG, overwrite: true}),
+    new CircularDependencyPlugin({
+      exclude: /node_modules/,
+      cwd: process.cwd(),
+    })
   ],
   output: {
     filename: '[name].[hash].js',

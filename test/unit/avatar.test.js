@@ -4,8 +4,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState, addChannel } from '../../src/feed/dux';
+import reducer, { defaultState } from '../../src/chop/dux';
+import { addChannel } from '../../src/feed/dux';
 import { publishMessage } from '../../src/moment/message/dux';
 import ImageAvatar from '../../src/avatar/imageAvatar';
 import InitialAvatar from '../../src/avatar/initialAvatar';
@@ -20,8 +20,9 @@ describe('Test Avatar', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           panes: {
             primary: {
               type: 'CHAT',
@@ -71,8 +72,9 @@ describe('Test Avatar', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           panes: {
             primary: {
               type: 'CHAT',

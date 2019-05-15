@@ -20,8 +20,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     currentChannel,
     isCompact,
-    chatPermissions: hasPermissions(state.feed, ['feed.direct.create']),
-    moderationPermissions: hasPermissions(state.feed, ['feed.user.mute', 'feed.message.delete'], true),
+    chatPermissions: hasPermissions(state, ['feed.direct.create']),
+    moderationPermissions: hasPermissions(state, ['feed.user.mute', 'feed.message.delete'], true),
   };
 };
 

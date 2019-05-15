@@ -7,9 +7,9 @@ import {
   setLanguageOptions,
   setOrganization,
   setPubnubKeys,
-  setUser,
   setChannels,
 } from '../../../src/feed/dux';
+import { setUser } from '../../../src/users/dux';
 import {
   setSchedule,
 } from '../../../src/schedule/dux';
@@ -17,6 +17,8 @@ import {avatarImageExists} from '../../../src/util';
 import { mockDate } from '../../testUtils';
 import {setVideo} from '../../../src/videoFeed/dux';
 import { startTimer as _startTimer } from '../../../src/io/sagas/sequence';
+import { PRIMARY_PANE } from '../../../src/pane/dux';
+import { setPaneToEvent } from '../../../src/pane/content/event/dux';
 
 jest.mock('../../../src/io/sagas/sequence');
 jest.mock('../../../src/io/queries');
@@ -151,9 +153,14 @@ describe('Current Event', () => {
           },
           schedule: [],
           feed: {
+            // because the state isn't updated as the test runs
+            // we have to set some default values here
+            channels: {
+              '111': {
+                name: 'Public',
+              },
+            },
             event: {
-              // because the event defined above doesn't get set
-              // in the context of the test we have to set it here
               id: '888',
             },
             languageOptions: [],
@@ -275,6 +282,7 @@ describe('Current Event', () => {
           hostInfo: '',
         },
       ]),
+      setPaneToEvent(PRIMARY_PANE, '111'),
     ]);
   });
 });

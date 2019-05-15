@@ -5,6 +5,7 @@ import ConnectedChat from '../../src/chat';
 import { fireEvent } from 'react-testing-library';
 import { mockDate, renderWithReduxAndTheme } from '../testUtils';
 import { defaultState } from '../../src/feed/dux';
+import { defaultState as defaultChopState } from '../../src/chop/dux';
 
 const otherUser = {
   id: 12345,
@@ -130,20 +131,6 @@ describe('Chat tests', () => {
     const initialState = {
       feed: {
         ...defaultState,
-        currentUser: {
-          id: 12345,
-          pubnubToken: '09876',
-          pubnubAccessKey: '67890',
-          avatar: null,
-          name: 'Kylo Ren',
-          role: {
-            label: '',
-            permissions: [],
-          },
-          preferences: {
-            textMode: '',
-          },
-        },
         channels: {
           public: {
             id: 'public',
@@ -156,6 +143,22 @@ describe('Chat tests', () => {
             scrollPosition: 0,
             sawLastMomentAt: 0,
             participants: [],
+          },
+        },
+      },
+      user: {
+        currentUser: {
+          id: 12345,
+          pubnubToken: '09876',
+          pubnubAccessKey: '67890',
+          avatar: null,
+          name: 'Kylo Ren',
+          role: {
+            label: '',
+            permissions: [],
+          },
+          preferences: {
+            textMode: '',
           },
         },
       },
@@ -201,20 +204,6 @@ describe('Chat tests', () => {
     const initialState = {
       feed: {
         ...defaultState,
-        currentUser: {
-          id: 12345,
-          pubnubToken: '09876',
-          pubnubAccessKey: '67890',
-          avatar: null,
-          name: 'Kylo Ren',
-          role: {
-            label: '',
-            permissions: [],
-          },
-          preferences: {
-            textMode: '',
-          },
-        },
         channels: {
           public: {
             id: 'public',
@@ -227,6 +216,22 @@ describe('Chat tests', () => {
             scrollPosition: 0,
             sawLastMomentAt: 0,
             participants: [],
+          },
+        },
+      },
+      user: {
+        currentUser: {
+          id: 12345,
+          pubnubToken: '09876',
+          pubnubAccessKey: '67890',
+          avatar: null,
+          name: 'Kylo Ren',
+          role: {
+            label: '',
+            permissions: [],
+          },
+          preferences: {
+            textMode: '',
           },
         },
       },
@@ -269,11 +274,7 @@ describe('Chat tests', () => {
 
   test('pressing key other than enter does not send the message', () => {
     const initialState = {
-      sequence: {
-        serverTime: 0,
-        steps: [],
-      },
-      schedule: [],
+      ...defaultChopState,
       feed: {
         ...defaultState,
         channels: {

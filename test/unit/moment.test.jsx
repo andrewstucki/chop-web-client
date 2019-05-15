@@ -13,8 +13,7 @@ import { mountWithTheme } from '../testUtils';
 
 import AnchorMoment from '../../src/anchorMoment';
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
+import reducer, { defaultState } from '../../src/chop/dux';
 import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -23,9 +22,7 @@ describe('Moment tests', () => {
   test('Moment renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>
@@ -51,9 +48,7 @@ describe('Moment tests', () => {
   test('Message renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>
@@ -169,9 +164,7 @@ describe('Moment tests', () => {
   test('Prayer request notification renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>
@@ -208,9 +201,7 @@ describe('Moment tests', () => {
   test('Salvation anchor moment renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>

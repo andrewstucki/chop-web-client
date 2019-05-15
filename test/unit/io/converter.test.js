@@ -7,22 +7,24 @@ describe('Converter Tests', () => {
     Converter.config(
       () => (
         {
-          event: {
-            id: '320418',
-            eventTimeId: '3908134',
-            startTime: 1548165600,
-            title: 'When Pigs Fly - Week 2',
-          },
-          organization: {
-            id: 2,
-            name: 'Life.Church',
-          },
-          channels: {
-            public: {
-              id: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
+          feed: {
+            event: {
+              id: '320418',
+              eventTimeId: '3908134',
+              startTime: 1548165600,
+              title: 'When Pigs Fly - Week 2',
             },
+            organization: {
+              id: 2,
+              name: 'Life.Church',
+            },
+            channels: {
+              '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7': {
+                id: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
+              },
+            },
+            currentLanguage: 'en',
           },
-          currentLanguage: 'en',
         }
       )
     );
@@ -47,7 +49,7 @@ describe('Converter Tests', () => {
           },
           isMuted: false,
         },
-        'public'
+        '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7'
       )
     ).toEqual(
       {

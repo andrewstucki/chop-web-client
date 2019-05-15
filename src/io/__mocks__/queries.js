@@ -113,6 +113,25 @@ const sequence = jest.fn().mockResolvedValue(
   }
 );
 
+const updateUser = jest.fn().mockResolvedValue(
+  {
+    updateUser: {
+      id: 128,
+      name: 'Joe',
+      avatar: null,
+      pubnubToken: '6789',
+      pubnubAccessKey: '1234',
+      role: {
+        label: '',
+        permissions: [],
+      },
+      preferences: {
+        textMode: 'COMFORTABLE',
+      },
+    },
+  }
+);
+
 const mockQueries = {
   authenticate: authenticate,
   authenticateByLegacyToken: authenticate,
@@ -127,6 +146,7 @@ const mockQueries = {
   schedule: getSchedule,
   sequence: sequence,
   joinChannel: joinChannel,
+  updateUser: updateUser,
 };
 
 export {
@@ -141,5 +161,6 @@ export {
   sequence,
   setAccessToken,
   joinChannel,
+  updateUser,
 };
 export default mockQueries;
