@@ -9,13 +9,12 @@ import { setPaneToChat } from '../pane/content/chat/dux';
 import { setPaneToTab } from '../pane/content/tab/dux';
 
 const mapStateToProps = state => {
-  const { feed:feedState } = state;
-  const publicChannel = getPublicChannel(feedState);
-  const hostChannel = getHostChannel(feedState);
-  const directChannels = getDirectChannels(feedState);
-  const placeholderChannels = getPlaceholderChannels(feedState);
-  const tabs = getTabs(feedState);
-  const { navbarIndex } = feedState;
+  const publicChannel = getPublicChannel(state);
+  const hostChannel = getHostChannel(state);
+  const directChannels = getDirectChannels(state);
+  const placeholderChannels = getPlaceholderChannels(state);
+  const tabs = getTabs(state);
+  const { navbarIndex } = state.feed;
 
   return {
     items: [publicChannel, hostChannel, ...directChannels, ...placeholderChannels, ...tabs],

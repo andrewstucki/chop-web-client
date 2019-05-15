@@ -3,13 +3,10 @@ import { connect } from 'react-redux';
 import { updateUser, updateTextMode } from '../users/dux';
 import TextModeToggle from './textModeToggle';
 
-const mapStateToProps = state => {
-  const feedState = state.feed;
-  return {
-    mode: feedState.currentUser.preferences.textMode,
-    userId: feedState.currentUser.id,
-  };
-};
+const mapStateToProps = state => ({
+  mode: state.user.currentUser.preferences.textMode,
+  userId: state.user.currentUser.id,
+});
 
 const mapDispatchToProps = dispatch => (
   {

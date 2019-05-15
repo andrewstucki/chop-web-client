@@ -3,7 +3,7 @@ import React from 'react';
 import sinon from 'sinon';
 import { renderWithReduxAndTheme } from '../../testUtils';
 import { fireEvent } from 'react-testing-library';
-import { defaultState } from '../../../src/feed/dux';
+import { defaultState } from '../../../src/chop/dux';
 
 import MessageTray from '../../../src/components/messageTray';
 
@@ -37,10 +37,10 @@ describe('MessageTray tests', () => {
         moderationPermissions={true}
       />,
       {
-        feed: {
-          ...defaultState,
+        user: {
+          ...defaultState.user,
           currentUser: {
-            ...defaultState.currentUser,
+            ...defaultState.user.currentUser,
             role: {
               label: 'Host',
               permissions: ['feed.user.mute', 'feed.message.delete'],
@@ -68,10 +68,10 @@ describe('MessageTray tests', () => {
         moderationPermissions={false}
       />,
       {
-        feed: {
-          ...defaultState,
+        user: {
+          ...defaultState.user,
           currentUser: {
-            ...defaultState.currentUser,
+            ...defaultState.user.currentUser,
             role: {
               label: 'Host',
               permissions: ['feed.direct.create'],

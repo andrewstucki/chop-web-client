@@ -1,7 +1,6 @@
 // @flow
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
+import reducer, { defaultState } from '../../src/chop/dux';
 import { addTab, removeTab, setPaneToTab, TAB } from '../../src/pane/content/tab/dux';
 import { HOST_INFO } from '../../src/hostInfo/dux';
 import {EVENT} from '../../src/pane/content/event/dux';
@@ -13,8 +12,9 @@ describe('Tab tests', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           panes: {
             primary: {
               type: 'CHAT',
@@ -31,11 +31,11 @@ describe('Tab tests', () => {
       setPaneToTab('primary', HOST_INFO)
     );
 
-    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+    const { lastAction: _lastAction, ...result } = store.getState().feed;
 
     expect(result).toEqual(
       {
-        ...defaultState,
+        ...defaultState.feed,
         channels: {
           Public: {
             sawLastMomentAt: 1546896104521,
@@ -56,20 +56,18 @@ describe('Tab tests', () => {
   test('Tab can be added to state.', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
 
     store.dispatch(
       addTab(HOST_INFO, 'hostInfo', 'Host Info')
     );
 
-    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+    const { lastAction: _lastAction, ...result } = store.getState().feed;
 
     expect(result).toEqual(
       {
-        ...defaultState,
+        ...defaultState.feed,
         tabs: [
           {
             type: HOST_INFO,
@@ -85,8 +83,9 @@ describe('Tab tests', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           tabs: [
             {
               type: HOST_INFO,
@@ -102,11 +101,11 @@ describe('Tab tests', () => {
       addTab(HOST_INFO, 'hostInfo', 'Host Info')
     );
 
-    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+    const { lastAction: _lastAction, ...result } = store.getState().feed;
 
     expect(result).toEqual(
       {
-        ...defaultState,
+        ...defaultState.feed,
         tabs: [
           {
             type: HOST_INFO,
@@ -123,8 +122,9 @@ describe('Tab tests', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           tabs: [
             {
               type: HOST_INFO,
@@ -149,11 +149,11 @@ describe('Tab tests', () => {
       removeTab(HOST_INFO)
     );
 
-    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+    const { lastAction: _lastAction, ...result } = store.getState().feed;
 
     expect(result).toEqual(
       {
-        ...defaultState,
+        ...defaultState.feed,
         channels: {
           public: {
             id: 'public',

@@ -1,31 +1,34 @@
 // @flow
-import { receiveMuteUser } from '../../src/moment/message/dux';
-import reducer, { defaultState} from '../../src/feed/dux';
+import { receiveMuteUser } from '../../src/users/dux';
+import reducer, { defaultState} from '../../src/chop/dux';
 
 describe('Mute User tests', () => {
   test('User is added when a mute message is received.', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
-        channels: {
-          test: {
-            id: 'test',
-            name: 'test',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            anchorMoments: [],
-            moments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-            participants: [],
+        feed: {
+          ...defaultState.feed,
+          channels: {
+            test: {
+              id: 'test',
+              name: 'test',
+              type: 'public',
+              direct: false,
+              placeholder: false,
+              anchorMoments: [],
+              moments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+              participants: [],
+            },
           },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'test',
+          panes: {
+            primary: {
+              type: 'EVENT',
+              content: {
+                channelId: 'test',
+              },
             },
           },
         },
@@ -35,31 +38,37 @@ describe('Mute User tests', () => {
     expect(result).toEqual(
       {
         ...defaultState,
-        channels: {
-          test: {
-            id: 'test',
-            name: 'test',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            anchorMoments: [],
-            moments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-            participants: [],
+        feed: {
+          ...defaultState.feed,
+          channels: {
+            test: {
+              id: 'test',
+              name: 'test',
+              type: 'public',
+              direct: false,
+              placeholder: false,
+              anchorMoments: [],
+              moments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+              participants: [],
+            },
           },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'test',
+          panes: {
+            primary: {
+              type: 'EVENT',
+              content: {
+                channelId: 'test',
+              },
             },
           },
         },
-        mutedUsers: [
-          'blockme',
-        ],
+        user: {
+          ...defaultState.user,
+          mutedUsers: [
+            'blockme',
+          ],
+        },
       }
     );
   });
@@ -68,60 +77,72 @@ describe('Mute User tests', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
       {
         ...defaultState,
-        channels: {
-          test: {
-            id: 'test',
-            name: 'test',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            anchorMoments: [],
-            moments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-            participants: [],
+        feed: {
+          ...defaultState.feed,
+          channels: {
+            test: {
+              id: 'test',
+              name: 'test',
+              type: 'public',
+              direct: false,
+              placeholder: false,
+              anchorMoments: [],
+              moments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+              participants: [],
+            },
           },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'test',
+          panes: {
+            primary: {
+              type: 'EVENT',
+              content: {
+                channelId: 'test',
+              },
             },
           },
         },
-        mutedUsers: ['blockme'],
+        user: {
+          ...defaultState.user,
+          mutedUsers: ['blockme'],
+        },
       },
       receiveMuteUser('blockme'));
 
     expect(result).toEqual(
       {
         ...defaultState,
-        channels: {
-          test: {
-            id: 'test',
-            name: 'test',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            anchorMoments: [],
-            moments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-            participants: [],
+        feed: {
+          ...defaultState.feed,
+          channels: {
+            test: {
+              id: 'test',
+              name: 'test',
+              type: 'public',
+              direct: false,
+              placeholder: false,
+              anchorMoments: [],
+              moments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+              participants: [],
+            },
           },
-        },
-        panes: {
-          primary: {
-            type: 'EVENT',
-            content: {
-              channelId: 'test',
+          panes: {
+            primary: {
+              type: 'EVENT',
+              content: {
+                channelId: 'test',
+              },
             },
           },
         },
-        mutedUsers: [
-          'blockme',
-        ],
+        user: {
+          ...defaultState.user,
+          mutedUsers: [
+            'blockme',
+          ],
+        },
       }
     );
   });

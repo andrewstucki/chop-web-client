@@ -7,13 +7,10 @@ import {
 
 import PopUpModal from './popUpModal';
 
-const mapStateToProps = state => {
-  const feedState = state.feed;
-  return {
-    isPopUpModalVisible: feedState.isPopUpModalVisible,
-    modal: feedState.popUpModal,
-  };
-};
+const mapStateToProps = state => ({
+  isPopUpModalVisible: state.feed.isPopUpModalVisible,
+  modal: state.feed.popUpModal,
+});
 
 const mapDispatchToProps = dispatch => (
   {

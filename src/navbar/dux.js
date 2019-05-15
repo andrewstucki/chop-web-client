@@ -5,8 +5,8 @@ import {
   getHostChannelObject as hostChannel,
   getDirectChannels as directChannels,
   getPlaceholderChannels as placeholderChannels,
-  getMutedUsers,
 } from '../selectors/channelSelectors';
+import { getMutedUsers } from '../users/dux';
 import { createSelector } from 'reselect';
 import { paneContentSelector } from '../selectors/paneSelectors';
 import { PRIMARY_PANE } from '../pane/dux';
@@ -82,7 +82,7 @@ const hasNewMessage = (channel, currentUser, mutedUsers) => {
   }
 };
 
-const getCurrentUser = state => state.currentUser;
+const getCurrentUser = state => state.user.currentUser;
 
 const createNavChannel = (channel, currentChannel, currentUser, mutedUsers) => (
   {
@@ -132,8 +132,10 @@ const getPlaceholderChannels = createSelector(
     Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentUser, mutedUsers))
 );
 
+const local = state => state.feed || state;
+
 const getTabs = createSelector(
-  state => state.tabs,
+  state => local(state).tabs,
   state => paneContentSelector(state, PRIMARY_PANE),
   (tabs, currentPane) =>
     tabs.map(tab => ({

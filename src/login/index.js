@@ -4,12 +4,9 @@ import Login from './login';
 import { basicAuthLogin } from './dux';
 import { clearErrors } from '../errors/dux';
 
-const mapStateToProps = state => {
-  const feedState = state.feed;
-  return {
-    isAuthenticated: feedState.isAuthenticated,
-  };
-};
+const mapStateToProps = state => ({
+  isAuthenticated: state.feed.isAuthenticated,
+});
 
 const mapDispatchToProps = dispatch => (
   {
