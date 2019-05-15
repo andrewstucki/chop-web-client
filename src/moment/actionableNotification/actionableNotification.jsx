@@ -79,6 +79,8 @@ const ActionableNotification = (
                 playing
                 url={[PopPopMp3, PopPopOgg]}
                 config={PlayerConfig}
+                width={0}
+                height={0}
               />
             </>
         }

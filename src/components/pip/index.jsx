@@ -27,6 +27,8 @@ const Pip = ({hasActions}:PipPropsType) => (
         playing
         url={[PopPopMp3, PopPopOgg]}
         config={PlayerConfig}
+        width={0}
+        height={0}
       />
     </MediumDown>
   }
