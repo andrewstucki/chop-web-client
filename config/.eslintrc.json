@@ -10,7 +10,7 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:jsx-a11y/strict"
+        "plugin:jsx-a11y/recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -36,7 +36,9 @@
         }
     },
     "globals": {
-        "SyntheticMouseEvent": "readonly"
+        "SyntheticMouseEvent": "readonly",
+        "SyntheticKeyboardEvent": "readonly",
+        "SyntheticFocusEvent": "readonly"
     },
     "rules": {
         "arrow-body-style": [

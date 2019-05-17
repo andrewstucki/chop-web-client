@@ -168,7 +168,8 @@ export type GraphQLCurrentStateType =
   GraphQLOrganizationType &
   GraphQLLanguageType &
   GraphQLUserType &
-  GraphQLPubnubKeys & GraphQLSchedule;
+  GraphQLPubnubKeys &
+  GraphQLSchedule;
 
 export type GraphQLAcceptPrayer = {
   acceptPrayer: boolean,
@@ -362,7 +363,7 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
 }`;
 
 const schedule = `
-schedule {
+schedule(endTime: $scheduleEndTime) {
   fetchTime
   startTime
   endTime
@@ -409,7 +410,7 @@ mutation updateUser($id: ID!, $input: UserInput!) {
 `;
 
 const currentState = `
-query CurrentState($needLanguages: Boolean!) {
+query CurrentState($needLanguages: Boolean!, $scheduleEndTime: Timestamp) {
   ${currentEvent}
   ${currentUser}
   ${currentOrganization}
@@ -477,10 +478,12 @@ const queries = {
     }),
 
   currentState: async (
-    needLanguages: boolean = true
+    needLanguages: boolean = true,
+    scheduleEndTime: number,
   ): Promise<GraphQLCurrentStateType> =>
     await client.request(currentState, {
       needLanguages,
+      scheduleEndTime,
     }),
 
   acceptPrayer: async (
@@ -524,7 +527,7 @@ const queries = {
 
   schedule: async (): Promise<GraphQLSchedule> =>
     await client.request(schedule, {
-      endTime: dayjs().add(1, 'week').endOf('day').unix(),
+      scheduleEndTime: dayjs().add(1, 'week').endOf('day').unix(),
     }),
 
   eventAtTime: async (time: number): Promise<GraphQLEventAtTimeType> =>

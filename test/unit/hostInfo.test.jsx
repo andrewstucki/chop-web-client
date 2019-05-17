@@ -9,6 +9,7 @@ import { createStore } from 'redux';
 import reducer, {defaultState} from '../../src/feed/dux';
 import { Provider } from 'react-redux';
 import { mountWithTheme } from '../testUtils';
+import { defaultState as defaultStateSchedule } from '../../src/schedule/dux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -17,7 +18,7 @@ describe('Host Info tests', () => {
     const store = createStore(
       reducer,
       {
-        schedule: [],
+        schedule: defaultStateSchedule,
         sequence: {
           serverTime: 0,
           steps: [],
@@ -47,15 +48,18 @@ describe('Host Info tests', () => {
     const store = createStore(
       reducer,
       {
-        schedule: [
-          {
-            id: '1',
-            startTime: 0,
-            endTime: 0,
-            title: 'Next Event',
-            hostInfo: '<p>The information for the hosts.</p>',
-          },
-        ],
+        schedule: {
+          items: [
+            {
+              id: '1',
+              startTime: 0,
+              endTime: 0,
+              title: 'Next Event',
+              hostInfo: '<p>The information for the hosts.</p>',
+            },
+          ],
+          timeZone: '',
+        },
         sequence: {
           serverTime: 0,
           steps: [],
@@ -79,7 +83,7 @@ describe('Host Info tests', () => {
       reducer,
       {
         feed: defaultState,
-        schedule: [],
+        schedule: defaultStateSchedule,
         sequence: {
           serverTime: 0,
           steps: [],

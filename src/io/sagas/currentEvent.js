@@ -2,6 +2,7 @@
 import {call, put, select} from 'redux-saga/effects';
 import type {Saga} from 'redux-saga';
 import queries from '../queries';
+import dayjs from 'dayjs';
 import type {
   GraphQLCurrentStateType,
   GraphQLEventType,
@@ -56,8 +57,9 @@ const convertChannel = (channels: Array<GraphQLChannelType>): ChannelsObjectType
 function* currentEvent (): Saga<void> {
   const languageCount = yield select(state => getLanguageCount(state.feed));
   const needLanguages = languageCount === 0;
+  const scheduleEndTime = dayjs().add(1, 'week').endOf('day').unix();
   try {
-    const result: GraphQLCurrentStateType = yield call([queries, queries.currentState], needLanguages);
+    const result: GraphQLCurrentStateType = yield call([queries, queries.currentState], needLanguages, scheduleEndTime);
     yield* dispatchData(result);
     yield call(startTimer);
   } catch (error) {

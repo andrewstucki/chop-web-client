@@ -1,5 +1,4 @@
 // @flow strict
-
 export type UIDType = string;
 
 export type DateTimeType = number;
@@ -22,4 +21,6 @@ export type UserLabelType = null | string;
 
 export type LanguageCodeType = string;
 
-export type RoomType = 'public'
+export type RoomType = 'public';
+
+export type NoPropsType = {};

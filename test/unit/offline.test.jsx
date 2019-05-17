@@ -10,16 +10,19 @@ describe('Offline Componenet', () => {
     const { getByTestId } = renderWithReduxAndTheme(
       <Offline/>,
       {
-        schedule: [
-          {
-            endTime: 1543439700,
-            fetchTime: 1543437972,
-            id: '132487',
-            scheduleTime: 1543438800,
-            startTime: 1543438200,
-            title: 'Church Service',
-          },
-        ],
+        schedule: {
+          items:[
+            {
+              endTime: 1543439700,
+              fetchTime: 1543437972,
+              id: '132487',
+              scheduleTime: 1543438800,
+              startTime: 1543438200,
+              title: 'Church Service',
+            },
+          ],
+          timeZone: '',
+        },
         sequence: {
           serverTime: 0,
           steps: [],
@@ -39,13 +42,7 @@ describe('Offline Componenet', () => {
 
   test('notifies of no upcoming event', () => {
     const { getByTestId } = renderWithReduxAndTheme(
-      <Offline/>,
-      {
-        feed: {
-          ...defaultState,
-          schedule: [],
-        },
-      }
+      <Offline/>
     );
 
     expect(getByTestId('offline')).toBeTruthy();

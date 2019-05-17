@@ -4,6 +4,7 @@ import { getScheduleGroupedByDay } from './dux';
 
 const mapStateToProps = state => ({
   schedule: getScheduleGroupedByDay(state),
+  timeZone: state.feed.scheduleTimeZone,
 });
 
 export default connect(

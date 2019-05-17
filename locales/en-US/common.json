@@ -23,10 +23,12 @@
   "log_out": "Log Out",
   "new_messages": "New Messages",
   "no_upcoming_event": "No Upcoming Event.",
+  "no_upcoming_schedule": "No Upcoming Schedule.",
   "notes": "Notes",
   "public": "Public",
   "public_chat": "Public Chat",
   "schedule": "Schedule",
   "support": "Support",
+  "timezone": "Timezone",
   "upcoming_event": "Upcoming Event"
 }
