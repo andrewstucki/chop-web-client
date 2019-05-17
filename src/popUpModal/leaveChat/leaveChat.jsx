@@ -4,10 +4,11 @@ import React from 'react';
 import type { SharedUserType } from '../../users/dux';
 import styles from '../style.css';
 import { useTranslation, Trans } from 'react-i18next';
+import dayjs from 'dayjs';
 
 type LeaveChatPropsType = {
   togglePopUpModal: () => void,
-  publishLeftChannelNotification: (name: string, pubnubToke: string, channelName: string, date: Date) => void,
+  publishLeftChannelNotification: (name: string, pubnubToke: string, channelName: string, date: string) => void,
   leaveChannel: (channelId: string, isPlaceholder: boolean) => void,
   otherUser: SharedUserType,
   hasOtherUsers: boolean,
