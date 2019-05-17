@@ -9,7 +9,7 @@ const NavHeaderWrapper:ComponentType<NoPropsType> = styled.div`
   height: 48px;
   width: 100%;
   z-index: 1;
-
+  align-items: center;
 `;
 
 const NavHeaderHamburgerWrapper:ComponentType<NoPropsType> = styled.button`
@@ -26,4 +26,14 @@ const NavHeaderHamburgerWrapper:ComponentType<NoPropsType> = styled.button`
   background: transparent;
 `;
 
-export { NavHeaderWrapper, NavHeaderHamburgerWrapper };
+type NavHeaderLogoProps = {
+  src: string,
+};
+
+const NavHeaderLogo:ComponentType<NavHeaderLogoProps> = styled.img`
+  max-width: 240px;
+  max-height: 40px;
+  object-fit: contain;
+`;
+
+export { NavHeaderWrapper, NavHeaderHamburgerWrapper, NavHeaderLogo };

@@ -120,8 +120,8 @@ function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
 
 function* organization (data: GraphQLCurrentStateType): Saga<void> {
   if (data.currentOrganization) {
-    const { currentOrganization: { id, name } } = data;
-    yield put(setOrganization(id, name || ''));
+    const { currentOrganization: { id, name, logoUrl } } = data;
+    yield put(setOrganization(id, name || '', logoUrl || ''));
   }
 }
 

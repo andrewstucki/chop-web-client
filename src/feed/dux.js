@@ -170,6 +170,7 @@ type LanguageType = {
 type OrganizationType = {
   id: number,
   name: string,
+  logoUrl: string,
 };
 
 type SetOrganizationType = {
@@ -488,12 +489,13 @@ const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOp
   }
 );
 
-const setOrganization = (id: number, name: string): SetOrganizationType => (
+const setOrganization = (id: number, name: string, logoUrl: string): SetOrganizationType => (
   {
     type: SET_ORGANIZATION,
     organization: {
       id,
       name,
+      logoUrl,
     },
   }
 );
@@ -668,6 +670,7 @@ const defaultState = {
   organization: {
     id: 0,
     name: '',
+    logoUrl: '',
   },
   channels: {},
   hereNow: {},

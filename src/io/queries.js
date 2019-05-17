@@ -32,6 +32,7 @@ export type GraphQLOrganizationType = {
   currentOrganization: {
     id: number,
     name: GraphQLString,
+    logoUrl:GraphQLString,
   }
 };
 
@@ -301,6 +302,7 @@ const currentOrganization = `
 currentOrganization {
   id
   name
+  logoUrl
 }`;
 
 const pubnubKeys = `
