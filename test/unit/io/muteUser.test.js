@@ -2,7 +2,7 @@
 import queries from '../../../src/io/queries';
 import { muteUser } from '../../../src/io/saga';
 import { runSaga } from 'redux-saga';
-import {PUBLISH_MUTE_USER, MUTE_USER_SUCCEEDED, MUTE_USER_FAILED} from '../../../src/users/dux';
+import {PUBLISH_MUTE_USER, MUTE_USER_SUCCEEDED, MUTE_USER_FAILED} from '../../../src/moment';
 
 jest.mock('../../../src/io/queries');
 const mock = (mockFn: any) => mockFn;

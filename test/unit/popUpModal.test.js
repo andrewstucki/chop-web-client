@@ -3,7 +3,7 @@ import React from 'react';
 import sinon from 'sinon';
 import { fireEvent } from 'react-testing-library';
 import { createStore } from 'redux';
-import reducer, { defaultState as defaultChopState } from '../../src/chop/dux';
+import reducer from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
 import {
   togglePopUpModal,
@@ -15,7 +15,7 @@ import LeaveChat from '../../src/popUpModal/leaveChat/leaveChat';
 import LeaveChatConnected from '../../src/popUpModal/leaveChat';
 import MuteUser from '../../src/popUpModal/muteUser/muteUser';
 import MuteUserConnected from '../../src/popUpModal/muteUser';
-import { renderWithReduxAndTheme } from '../testUtils';
+import { renderWithReduxAndTheme, defaultState as defaultTestState } from '../testUtils';
 
 
 const otherUser = {
@@ -147,9 +147,9 @@ describe('PopUpModal tests', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
       <PopUpModal />,
       {
-        ...defaultChopState,
+        ...defaultTestState,
         feed: {
-          ...defaultChopState.feed,
+          ...defaultTestState.feed,
           isPopUpModalVisible: true,
           popUpModal: {
             type: 'LEAVE_CHAT',
@@ -164,9 +164,9 @@ describe('PopUpModal tests', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
       <PopUpModal />,
       {
-        ...defaultChopState,
+        ...defaultTestState,
         feed: {
-          ...defaultChopState.feed,
+          ...defaultTestState.feed,
           isPopUpModalVisible: false,
           popUpModal: {
             type: '',

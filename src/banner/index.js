@@ -4,9 +4,10 @@ import Banner from './banner';
 import { getNotificationBanner, clearNotificationBanner } from '../feed/dux';
 
 const mapStateToProps = (state, ownProps) => {
+  const feedState = state.feed;
   const { fullWidth = false } = ownProps;
   return {
-    banner: getNotificationBanner(state),
+    banner: getNotificationBanner(feedState),
     fullWidth,
   };
 };

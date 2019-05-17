@@ -7,9 +7,12 @@ import {
   getReactions,
 } from './dux';
 
-const mapStateToProps = state => ({
-  reactions: getReactions(state),
-});
+const mapStateToProps = state => {
+  const feedState = state.feed;
+  return {
+    reactions: getReactions(feedState),
+  };
+};
 
 const VisibleReactionsContainer = connect(
   mapStateToProps

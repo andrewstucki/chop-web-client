@@ -4,11 +4,12 @@ import { releaseAnchorMoment } from './dux';
 import AnchorMoment from './anchorMoment';
 
 const mapStateToProps = (state, ownProps) => {
+  const feedState = state.feed;
   const { currentChannel } = ownProps;
 
   return {
     currentChannel,
-    salvations: state.feed.salvations,
+    salvations: feedState.salvations,
   };
 };
 

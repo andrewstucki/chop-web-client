@@ -10,8 +10,9 @@ import {
 import { isMobileDevice } from '../util';
 
 const mapStateToProps = state => {
-  const { type } = state.feed.video;
-  let { url } = state.feed.video;
+  const feedState = state.feed;
+  const { type } = feedState.video;
+  let { url } = feedState.video;
 
   const urlYoutube = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
   const urlVimeo = /https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/;
@@ -23,12 +24,12 @@ const mapStateToProps = state => {
   }
 
   return {
-    isVideoHidden: state.feed.isVideoHidden,
+    isVideoHidden: feedState.isVideoHidden,
     type,
     url,
-    Player: videoPlayerFactory(state),
-    startAt: videoStartAtTime(state, Date.now()),
-    isVideoPlaying: state.feed.isVideoPlaying,
+    Player: videoPlayerFactory(feedState),
+    startAt: videoStartAtTime(feedState, Date.now()),
+    isVideoPlaying: feedState.isVideoPlaying,
     isMobileDevice: isMobileDevice(),
   };
 };

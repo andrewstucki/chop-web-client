@@ -14,17 +14,18 @@ import {
 import { isAndroid } from '../util';
 
 const mapStateToProps = (state, ownProps) => {
+  const feedState = state.feed;
   const { channel } = ownProps;
   const numOfMoments = isAndroid() ? -30 : -200;
 
   return {
-    moments: feedContents(state, channel).slice(numOfMoments),
-    anchorMoments: feedAnchorMoments(state, channel),
+    moments: feedContents(feedState, channel).slice(numOfMoments),
+    anchorMoments: feedAnchorMoments(feedState, channel),
     currentChannel: channel,
-    scroll: getScroll(state, channel),
-    currentUser: state.user.currentUser,
-    showNewMessageButton: hasNotSeenLatestMoments(state, channel),
-    textMode: state.user.currentUser.preferences.textMode,
+    scroll: getScroll(feedState, channel),
+    currentUser: feedState.currentUser,
+    showNewMessageButton: hasNotSeenLatestMoments(feedState, channel),
+    textMode: feedState.currentUser.preferences.textMode,
   };
 };
 

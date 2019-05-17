@@ -85,9 +85,8 @@ const toggleHideVideo = (hidden: boolean): ToggleHideVideoType => (
 );
 
 // Selectors
-const local = state => state.feed || state;
 
-const getVideo = state => local(state).video;
+const getVideo = state => state.video;
 
 const videoPlayerFactory = createSelector(
   getVideo,
@@ -106,7 +105,7 @@ const videoPlayerFactory = createSelector(
   }
 );
 
-const getVideoStartTime = state => local(state).event.videoStartTime;
+const getVideoStartTime = state => state.event.videoStartTime;
 
 const videoStartAtTime = createSelector(
   getVideoStartTime,

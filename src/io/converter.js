@@ -100,11 +100,11 @@ const Converter = {
   cwcMessageToLegacyNewMessage:( message: MessageType, channelId: ChannelIdType): LegcayNewMessageDataType => (
     {
       messageText: message.text,
-      language: _getState().feed.currentLanguage,
-      eventTimeId: _getState().feed.event.eventTimeId,
+      language: _getState().currentLanguage,
+      eventTimeId: _getState().event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
-      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().feed.event.startTime), 'second').toString(),
-      eventTitle: _getState().feed.event.title,
+      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'second').toString(),
+      eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
       fromNickname: message.sender.name,
       fromToken: message.sender.pubnubToken,
@@ -116,11 +116,11 @@ const Converter = {
       isVolunteer: true,
       isUser: true,
       userId: message.sender.id,
-      organizationId: _getState().feed.organization.id,
-      organizationName: _getState().feed.organization.name,
+      organizationId: _getState().organization.id,
+      organizationName: _getState().organization.name,
       roomType: 'public',
-      channelToken: channelId,
-      eventStartTime: _getState().feed.event.startTime,
+      channelToken: _getState().channels[channelId].id,
+      eventStartTime: _getState().event.startTime,
       platform: 'CWC',
     }
   ),

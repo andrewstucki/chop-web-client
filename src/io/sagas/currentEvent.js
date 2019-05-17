@@ -13,6 +13,7 @@ import type {
 import {
   setPubnubKeys,
   QUERY_CURRENT_EVENT_FAILED,
+  setUser,
   setOrganization,
   setLanguageOptions,
   setEvent,
@@ -31,10 +32,6 @@ import {convertUser} from './privateChat';
 import {isOffline} from '../../selectors/eventSelectors';
 import {COMPACT} from '../../textModeToggle/dux';
 import { startTimer } from './sequence';
-import { setUser } from '../../users/dux';
-import { PRIMARY_PANE } from '../../pane/dux';
-import { setPaneToEvent } from '../../pane/content/event/dux';
-import { getPublicChannel } from '../../selectors/channelSelectors';
 
 const isTimeInFuture = (seconds: number): boolean => (seconds * 1000) > Date.now();
 
@@ -55,13 +52,11 @@ const convertChannel = (channels: Array<GraphQLChannelType>): ChannelsObjectType
 };
 
 function* currentEvent (): Saga<void> {
-  const languageCount = yield select(getLanguageCount);
+  const languageCount = yield select(state => getLanguageCount(state.feed));
   const needLanguages = languageCount === 0;
   try {
     const result: GraphQLCurrentStateType = yield call([queries, queries.currentState], needLanguages);
     yield* dispatchData(result);
-    const channelId = yield select(getPublicChannel);
-    yield put(setPaneToEvent(PRIMARY_PANE, channelId));
     yield call(startTimer);
   } catch (error) {
     yield put({type: QUERY_CURRENT_EVENT_FAILED, error: error.message});
@@ -206,7 +201,7 @@ function* video (video: GraphQLVideoType): Saga<void> {
 function* schedule (data: GraphQLCurrentStateType): Saga<void> {
   const { schedule } = data;
   if (schedule) {
-    const isBetweenEvents = yield select(isOffline);
+    const isBetweenEvents = yield select(state => isOffline(state.feed));
     const futureScheduleEvents = schedule.filter(event => {
       if (event.startTime && event.endTime && event.fetchTime && event.scheduleTime) {
         return isTimeInFuture(event.startTime);

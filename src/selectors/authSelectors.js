@@ -1,20 +1,15 @@
 // @flow
 import { createSelector } from 'reselect';
-import type {AuthenticationType} from '../feed/dux';
-import type { ChopStateType } from '../chop/dux';
+import type {FeedType, AuthenticationType} from '../feed/dux';
 
-const ID = 'feed';
+const getAuth = state => state?.feed?.auth;
 
-const local = state => state[ID] || state;
-
-const getAuth = state => local(state).auth;
-
-const getAccessToken = createSelector<ChopStateType, void, string, AuthenticationType>(
+const getAccessToken = createSelector<{feed: FeedType}, void, string, AuthenticationType>(
   getAuth,
   auth => auth?.accessToken
 );
 
-const getRefreshToken = createSelector<ChopStateType, void, string, AuthenticationType>(
+const getRefreshToken = createSelector<{feed: FeedType}, void, string, AuthenticationType>(
   getAuth,
   auth => auth?.refreshToken
 );

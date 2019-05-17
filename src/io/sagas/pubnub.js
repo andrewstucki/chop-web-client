@@ -27,6 +27,8 @@ function* setPubnubClient (): Saga<boolean> {
     take('SET_PUBNUB_KEYS'),
   ]);
 
+  const state = yield select();
+
   PubnubClient.config({
     publishKey: pubnubKeys.publish,
     subscribeKey: pubnubKeys.subscribe,
@@ -34,12 +36,14 @@ function* setPubnubClient (): Saga<boolean> {
     uuid: currentUser.user.pubnubToken,
   });
 
+  Converter.config(state.feed);
+
   return true;
 }
 
 function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void> {
   try {
-    const channel:ChannelType = yield select(getChannelById, action.channel);
+    const channel:ChannelType = yield select(state => getChannelById(state.feed, action.channel));
     let publishChannel = action.channel;
 
     if (channel && channel.placeholder && action.moment.type === MESSAGE) {

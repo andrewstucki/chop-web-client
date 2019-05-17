@@ -1,15 +1,11 @@
 //@flow
 import { createSelector } from 'reselect';
+import type { FeedType } from '../feed/dux';
 import type {PaneType} from '../pane/dux';
-import type { ChopStateType } from '../chop/dux';
 
-const ID = 'feed';
+const getPane = (state:FeedType, name:string) => state.panes[name];
 
-const local = state => state[ID] || state;
-
-const getPane = (state:ChopStateType, name:string) => local(state).panes[name];
-
-const paneContentSelector = createSelector<ChopStateType, string, PaneType, PaneType>(
+const paneContentSelector = createSelector<FeedType, string, PaneType, PaneType>(
   getPane,
   pane => pane,
 );

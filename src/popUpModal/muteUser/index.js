@@ -3,20 +3,24 @@ import { connect } from 'react-redux';
 
 import { publishMuteUserNotification } from '../../moment/notification/dux';
 import { mutedNotificationBanner } from '../../banner/dux';
-import { publishMuteUser, getCurrentUserAsSharedUser } from '../../users/dux';
+import { publishMuteUser } from '../../moment/message/dux';
 import { getMessageTimestamp } from '../../util';
 import { 
   getHostChannel,
   getCurrentChannel,
 } from '../../selectors/channelSelectors';
+import { getCurrentUserAsSharedUser } from '../../users/dux';
 
 import MuteUser from './muteUser';
 
-const mapStateToProps = state => ({
-  hostChannel: getHostChannel(state),
-  currentChannel: getCurrentChannel(state),
-  currentUser: getCurrentUserAsSharedUser(state).name,
-});
+const mapStateToProps = state => {
+  const feedState = state.feed;
+  return {
+    hostChannel: getHostChannel(feedState),
+    currentChannel: getCurrentChannel(feedState),
+    currentUser: getCurrentUserAsSharedUser(feedState).name,
+  };
+};
 
 const mapDispatchToProps = dispatch => (
   {

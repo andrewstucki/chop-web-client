@@ -19,12 +19,13 @@ import {
 import LeaveChat from './leaveChat';
 
 const mapStateToProps = state => {
-  const currentChannel = getCurrentChannel(state);
-  const channel = getChannelById(state, currentChannel);
+  const feedState = state.feed;
+  const currentChannel = getCurrentChannel(feedState);
+  const channel = getChannelById(feedState, currentChannel);
   return {
-    otherUser: getOtherUsers(state, currentChannel)[0],
-    hasOtherUsers: hasOtherUsers(state, currentChannel),
-    currentUser: state.user.currentUser,
+    otherUser: getOtherUsers(feedState, currentChannel)[0],
+    hasOtherUsers: hasOtherUsers(feedState, currentChannel),
+    currentUser: feedState.currentUser,
     currentChannel,
     isPlaceholder: channel?.placeholder || false,
   };

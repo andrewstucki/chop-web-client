@@ -5,7 +5,6 @@ import ConnectedChat from '../../src/chat';
 import { fireEvent } from 'react-testing-library';
 import { mockDate, renderWithReduxAndTheme } from '../testUtils';
 import { defaultState } from '../../src/feed/dux';
-import { defaultState as defaultChopState } from '../../src/chop/dux';
 
 const otherUser = {
   id: 12345,
@@ -131,22 +130,6 @@ describe('Chat tests', () => {
     const initialState = {
       feed: {
         ...defaultState,
-        channels: {
-          public: {
-            id: 'public',
-            name: 'public',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            moments: [],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 0,
-            participants: [],
-          },
-        },
-      },
-      user: {
         currentUser: {
           id: 12345,
           pubnubToken: '09876',
@@ -159,6 +142,20 @@ describe('Chat tests', () => {
           },
           preferences: {
             textMode: '',
+          },
+        },
+        channels: {
+          public: {
+            id: 'public',
+            name: 'public',
+            type: 'public',
+            direct: false,
+            placeholder: false,
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 0,
+            sawLastMomentAt: 0,
+            participants: [],
           },
         },
       },
@@ -204,22 +201,6 @@ describe('Chat tests', () => {
     const initialState = {
       feed: {
         ...defaultState,
-        channels: {
-          public: {
-            id: 'public',
-            name: 'public',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            moments: [],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 0,
-            participants: [],
-          },
-        },
-      },
-      user: {
         currentUser: {
           id: 12345,
           pubnubToken: '09876',
@@ -232,6 +213,20 @@ describe('Chat tests', () => {
           },
           preferences: {
             textMode: '',
+          },
+        },
+        channels: {
+          public: {
+            id: 'public',
+            name: 'public',
+            type: 'public',
+            direct: false,
+            placeholder: false,
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 0,
+            sawLastMomentAt: 0,
+            participants: [],
           },
         },
       },
@@ -274,7 +269,11 @@ describe('Chat tests', () => {
 
   test('pressing key other than enter does not send the message', () => {
     const initialState = {
-      ...defaultChopState,
+      sequence: {
+        serverTime: 0,
+        steps: [],
+      },
+      schedule: [],
       feed: {
         ...defaultState,
         channels: {

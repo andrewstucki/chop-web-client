@@ -3,48 +3,42 @@ import {
   __messageEvent, 
 } from 'pubnub';
 import Chat from '../../../src/io/chat';
-import reducer, { defaultState } from '../../../src/chop/dux';
+import reducer, { defaultState } from '../../../src/feed/dux';
 import { createStore } from 'redux';
   
 describe('Reaction2 Tests', () => {
   const store = {
     ...defaultState,
-    user: {
-      ...defaultState.user,
-      currentUser: {
-        ...defaultState.user.currentUser,
-        pubnubToken: '123456',
-        pubnubAccessKey: '1533912921585',
-      },
+    currentUser: {
+      ...defaultState.currentUser,
+      pubnubToken: '123456',
+      pubnubAccessKey: '1533912921585',
     },
-    feed: {
-      ...defaultState.feed,
-      event: {
-        id: 320418,
-        startTime: 1529425800000,
-        title: 'When Pigs Fly - Week 2',
-        timezone: 'Central',
+    event: {
+      id: 320418,
+      startTime: 1529425800000,
+      title: 'When Pigs Fly - Week 2',
+      timezone: 'Central',
+    },
+    organization: {
+      id: 2,
+      name: 'Life.Church',
+    },
+    pubnubKeys: {
+      publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+      subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+    },
+    channels: {
+      ...defaultState.channels,
+      public: {
+        id: '123456',
+        name: 'Public',
+        moments: [],
       },
-      organization: {
-        id: 2,
-        name: 'Life.Church',
-      },
-      pubnubKeys: {
-        publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
-        subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
-      },
-      channels: {
-        ...defaultState.feed.channels,
-        public: {
-          id: '123456',
-          name: 'Public',
-          moments: [],
-        },
-        legacy: {
-          id: '789012',
-          name: 'Legacy',
-          moments: [],
-        },
+      legacy: {
+        id: '789012',
+        name: 'Legacy',
+        moments: [],
       },
     },
   };
@@ -137,13 +131,10 @@ describe('Reaction2 Tests', () => {
       reducer,
       {
         ...defaultState,
-        user: {
-          ...defaultState.user,
-          currentUser: {
-            pubnubToken: '123456',
-            name: 'Billy Bob',
-            role: { label: '' },
-          },
+        currentUser: {
+          pubnubToken: '123456',
+          name: 'Billy Bob',
+          role: { label: '' },
         },
       }
     );
@@ -159,8 +150,8 @@ describe('Reaction2 Tests', () => {
       }
     );
 
-    expect(store.getState().feed.reactions.length).toBe(1);
-    expect(store.getState().feed.reactions[0]).toEqual(
+    expect(store.getState().reactions.length).toBe(1);
+    expect(store.getState().reactions[0]).toEqual(
       {
         type: 'REACTION',
         id: '123456',

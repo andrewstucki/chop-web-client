@@ -4,8 +4,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducer, { defaultState } from '../../src/chop/dux';
-import { removeReaction } from '../../src/feed/dux';
+import reducer from '../../src/chop/dux';
+import { defaultState, removeReaction } from '../../src/feed/dux';
 
 import ReactionsContainer from '../../src/reactions/reactionsContainer';
 
@@ -16,9 +16,8 @@ describe('Reaction tests', () => {
     const store = createStore(
       reducer,
       {
-        ...defaultState,
-        user: {
-          ...defaultState.user,
+        feed: {
+          ...defaultState,
           currentUser: {
             pubnubToken: '123456',
             name: 'Billy Bob',
@@ -44,17 +43,13 @@ describe('Reaction tests', () => {
   test('Remove Reaction removes a reaction from state', () => {
     const reactionId = expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/);
     const state = {
-      ...defaultState,
-      user: {
-        ...defaultState.user,
+      feed: {
+        ...defaultState,
         currentUser: {
           pubnubToken: '123456',
           name: 'Billy Bob',
           role: { label: '' },
         },
-      },
-      feed: {
-        ...defaultState.feed,
         reactions: [
           {
             type: 'REACTION',
@@ -68,13 +63,18 @@ describe('Reaction tests', () => {
         ],
       },
     };
-    const { lastAction: _lastAction, ...result } = reducer(state, removeReaction(reactionId)).feed;
+    const { lastAction, ...result } = reducer(state, removeReaction(reactionId)).feed; // eslint-disable-line no-unused-vars
 
     expect(result).toEqual(
       {
-        ...defaultState.feed,
+        ...defaultState,
+        currentUser: {
+          pubnubToken: '123456',
+          name: 'Billy Bob',
+          role: { label: '' },
+        },
         reactions: [],
-      }
+      },
     );
   });
 });

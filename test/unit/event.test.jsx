@@ -2,7 +2,7 @@
 import Adapter from 'enzyme-adapter-react-16';
 import Event from '../../src/pane/content/event';
 import Chat from '../../src/pane/content/chat';
-import reducer, { defaultState } from '../../src/chop/dux';
+import reducer, { defaultState } from '../../src/feed/dux';
 import Enzyme from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -16,9 +16,8 @@ test('Event renders when there is an event.', () => {
   const store = createStore(
     reducer,
     {
-      ...defaultState,
       feed: {
-        ...defaultState.feed,
+        ...defaultState,
         event: {
           title: 'Mastermind',
           id: 129073,
