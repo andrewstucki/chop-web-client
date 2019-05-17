@@ -76,11 +76,13 @@ const SideMenu = (
             </ProfileActions>
           </Profile>
 
-          <LanguageSelector
-            setLanguage={setLanguage}
-            languageOptions={languageOptions}
-            currentLanguage={currentLanguage}
-          />
+          <div css={`margin-top: auto;`}>
+            <LanguageSelector
+              setLanguage={setLanguage}
+              languageOptions={languageOptions}
+              currentLanguage={currentLanguage}
+            />
+          </div>
 
           <TextModeToggle />
 

@@ -5,7 +5,9 @@ const ExternalLink = styled.a`
     color: ${props => props.theme.colors.gray50};
   }
   
-  margin-bottom: 24px;
+  &:not(:last-of-type) {
+    margin-bottom: 24px;
+  }
 `;
 
 type LinkIconPropsType = {
@@ -97,6 +99,8 @@ const Overlay = styled.div`
 `;
 
 const Menu = styled.div`
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 0px;
   left: 0px;

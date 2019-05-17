@@ -12,7 +12,7 @@ describe('Schedule', () => {
   });
 
   test('Renders the schedule when it exists', () => {
-    const { queryAllByTestId, getByTestId } = renderWithReduxAndTheme(
+    const { queryAllByTestId, getAllByTestId } = renderWithReduxAndTheme(
       <Schedule />,
       {
         schedule: {
@@ -54,7 +54,7 @@ describe('Schedule', () => {
     expect(groupOne.textContent).toEqual('Friday May, 17');
     expect(groupTwo.textContent).toEqual('Saturday May, 18');
     expect(groupThree.textContent).toEqual('Sunday May, 19');
-    expect(getByTestId('schedule-itemTime').textContent).toEqual('8:00am');
-    expect(getByTestId('schedule-itemTitle').textContent).toEqual('Staging Event 24/7');
+    expect(getAllByTestId('schedule-itemTime')[0].textContent).toEqual('8:00am');
+    expect(getAllByTestId('schedule-itemTitle')[0].textContent).toEqual('Staging Event 24/7');
   });
 });
