@@ -2,30 +2,23 @@
 import Navbar from './navbar';
 import { connect } from 'react-redux';
 
-import { getHostChannel, getPublicChannel, getDirectChannels, getTabs, getPlaceholderChannels, setNavbarIndex } from './dux';
-import { openMenu } from '../sideMenu/dux';
+import { getNavbarChannels, setNavbarIndex } from './dux';
 import { setPaneToEvent } from '../pane/content/event/dux';
 import { setPaneToChat } from '../pane/content/chat/dux';
 import { setPaneToTab } from '../pane/content/tab/dux';
 
 const mapStateToProps = state => {
   const { feed:feedState } = state;
-  const publicChannel = getPublicChannel(feedState);
-  const hostChannel = getHostChannel(feedState);
-  const directChannels = getDirectChannels(feedState);
-  const placeholderChannels = getPlaceholderChannels(feedState);
-  const tabs = getTabs(feedState);
   const { navbarIndex } = feedState;
-
+  const items = getNavbarChannels(feedState);
   return {
-    items: [publicChannel, hostChannel, ...directChannels, ...placeholderChannels, ...tabs],
+    items,
     navbarIndex,
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    openMenu: () => dispatch(openMenu()),
     setPaneToChat: (name, channelId) => (dispatch(setPaneToChat(name, channelId))),
     setPaneToTab: (name, type) => (dispatch(setPaneToTab(name, type))),
     setPaneToEvent: (name, channelId) => (dispatch(setPaneToEvent(name, channelId))),

@@ -1,6 +1,7 @@
-// @flow
+// @flow strict
 import createDOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
+// $FlowFixMe
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 
@@ -101,6 +102,8 @@ const isMobileDevice = () => { /* eslint-disable */
 
 const isAndroid = () => !!navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
+const isClient = typeof window === 'object';
+
 export {
   getFirstInitial,
   getAvatarColor,
@@ -114,4 +117,5 @@ export {
   isAndroid,
   getUTCDate,
   getFirstWordInName,
+  isClient,
 };

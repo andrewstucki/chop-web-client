@@ -238,7 +238,7 @@ describe('Chat2 Tests', () => {
           lon: -97.4214,
           nickname: 'Kylo Ren',
           userId: null,
-          language: 'en',
+          language: 'en-US',
         },
       },
       expect.any(Function)
@@ -295,7 +295,7 @@ describe('Chat2 Tests', () => {
           lon: -97.4214,
           nickname: 'Kylo Ren',
           userId: null,
-          language: 'en',
+          language: 'en-US',
         },
       },
       expect.any(Function)

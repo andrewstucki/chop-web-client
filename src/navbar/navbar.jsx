@@ -1,51 +1,30 @@
 // @flow
-/* global SyntheticMouseEvent */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
+import Actionable from '../components/Actionable';
+import TabOverflow from '../icons/tabOverflow';
+import NavbarPip from './navbarPip';
+import NavbarItem from './navbarItem';
 import type { NavbarItemType } from './dux';
-import Hamburger from '../icons/hamburger';
 import { EVENT } from '../pane/content/event/dux';
 import { CHAT } from '../pane/content/chat/dux';
-import type { TabTypeType } from '../pane/content/tab/dux';
-import { TAB} from '../pane/content/tab/dux';
+import { TAB, type TabType } from '../pane/content/tab/dux';
 import { PRIMARY_PANE } from '../pane/dux';
-import { NavbarWrapper, NavbarItemsWrapper, NavbarItemsInnerWrapper, Underline, NavbarHamburgerWrapper, NavbarItemWrapper, PipWrapper } from './styles';
-import Actionable from '../components/Actionable';
-import DirectChatIcon from './directChatIcon';
-import Pip from '../components/pip';
-import { useTranslation } from 'react-i18next';
-import { theme } from '../styles';
+import { NavbarWrapper, InvertedTabOverflowWrapper, TabOverflowWrapper } from './styles';
+import { useScroll } from '../hooks';
 
 type NavbarProps = {
   items: Array<NavbarItemType>,
-  openMenu: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   setPaneToEvent: (name: string, channelId: string) => void,
   setPaneToChat: (name: string, channelId: string) => void,
-  setPaneToTab: (name: string, type: TabTypeType) => void,
+  setPaneToTab: (name: string, type: TabType) => void,
   setNavbarIndex: (index: number) => void,
   navbarIndex: number,
 };
 
-type NavbarState = {
-  left: number,
-  width: number,
-  opacity: number,
-};
-
-type NavbarItemProps = {
-  item: NavbarItemType,
-  index: number,
-  handleItemClick: (event:SyntheticMouseEvent<HTMLButtonElement>, item: NavbarItemType) => void,
-};
-
-const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneToTab, setNavbarIndex, navbarIndex }: NavbarProps) => {
-  const wrapper = useRef<?HTMLDivElement>();
-  const selectedLink = useRef<?HTMLDivElement>();
-
-  const [ underlinePosition, setUnderlinePosition ] = useState < NavbarState > ({
-    left: 20,
-    width: 42,
-    opacity: 1.0,
-  });
+const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setNavbarIndex, navbarIndex }: NavbarProps) => {
+  const wrapper = useRef<?HTMLElement>();
+  const itemWithActions = useRef<?HTMLElement>();
+  const itemsHaveActions = items.filter(item => item.hasActions).length > 0;
 
   const handleItemClick = (event:SyntheticMouseEvent<HTMLButtonElement>, item: NavbarItemType):void => {
     const { index } = event.currentTarget.dataset;
@@ -70,87 +49,59 @@ const Navbar = ( { items = [], openMenu, setPaneToEvent, setPaneToChat, setPaneT
     }
   };
 
-  useEffect(() => {
-    const { current:currentLink } = selectedLink;
-    const { current:currentWrapper } = wrapper;
+  const { current: scrollArea } = wrapper;
+  const { scrollLeft } = useScroll(wrapper);
 
-    if (currentLink && currentWrapper) {
-      const marginWidth = 20;
-      const { clientWidth:linkWidth } = currentLink;
-      const { clientWidth:wrapperWidth } = currentWrapper;
+  const showLeftIndicator = scrollLeft > 0;
+  const showRightIndicator = ((scrollArea && scrollArea.scrollWidth > window.innerWidth) && (scrollArea && scrollArea.scrollWidth - scrollLeft !== window.innerWidth));
 
-      currentWrapper.scrollLeft = currentLink.offsetLeft > (wrapperWidth - linkWidth) ? currentLink.offsetLeft : 0;
-
-      const updatedLeft = currentLink.offsetLeft + marginWidth;
-      const updatedWidth = linkWidth - (marginWidth * 2);
-      const updatedOpacity = (currentLink?.dataset?.direct === 'true') ? 0.0 : 1.0;
-
-      const { left, width, opacity } = underlinePosition;
-      if ((updatedLeft && updatedLeft !== left) || (updatedWidth && updatedWidth !== width) || updatedOpacity !== opacity ) {
-        setUnderlinePosition({
-          left: updatedLeft,
-          width: updatedWidth,
-          opacity: updatedOpacity,
-        });
-      }
+  // Scroll enough so that the scroll-snap kicks in
+  const handleScrollLeft = () => {
+    if (scrollArea) {
+      scrollArea.scrollLeft = scrollArea.scrollLeft - 50;
     }
-  });
+  };
+
+  const handleScrollRight = () => {
+    if (scrollArea) {
+      scrollArea.scrollLeft = scrollArea.scrollLeft + 50;
+    }
+  };
+
+  const showLeftPip = itemWithActions.current && itemWithActions.current.getBoundingClientRect().left < 0;
+  const showRightPip = itemWithActions.current && itemWithActions.current.getBoundingClientRect().left > window.innerWidth;
 
   return (
-    <NavbarWrapper data-testid='navbar'>
-      <Actionable onClick={openMenu}>
-        <NavbarHamburgerWrapper>
-          <Hamburger size={32}/>
-        </NavbarHamburgerWrapper>
-      </Actionable>
-      <NavbarItemsWrapper data-testid='navbarItems' ref={wrapper}>
-        <NavbarItemsInnerWrapper>
-          {
-            items.map((item, index) => (
-              <MemoizedNavbarItem
-                ref={item.isCurrent ? selectedLink : null}
-                key={index}
-                item={item}
-                index={index}
-                handleItemClick={event => handleItemClick(event, item)}
-              />
-            ))
-          }
-          {
-            <Underline
-              left={underlinePosition.left}
-              width={underlinePosition.width}
-              opacity={underlinePosition.opacity}
-            />
-          }
-        </NavbarItemsInnerWrapper>
-      </NavbarItemsWrapper>
+    <NavbarWrapper ref={wrapper} data-testid='navbar'>
+      { showLeftIndicator &&
+        <Actionable onClick={handleScrollLeft}>
+          <InvertedTabOverflowWrapper>
+            <TabOverflow />
+            { showLeftPip && <NavbarPip hasActions={itemsHaveActions} /> }
+          </InvertedTabOverflowWrapper>
+        </Actionable>
+      }
+      {
+        items.map((item, index) => (
+          <NavbarItem
+            ref={itemWithActions}
+            key={index}
+            item={item}
+            index={index}
+            handleItemClick={event => handleItemClick(event, item)}
+          />
+        ))
+      }
+      { showRightIndicator &&
+        <Actionable onClick={handleScrollRight}>
+          <TabOverflowWrapper>
+            <TabOverflow/>
+            { showRightPip && <NavbarPip hasActions={itemsHaveActions} /> }
+          </TabOverflowWrapper>
+        </Actionable>
+      }
     </NavbarWrapper>
   );
 };
-
-const NavbarItem = React.forwardRef(({ item, index, handleItemClick }:NavbarItemProps, ref) => {
-  const { t } = useTranslation();
-  const nameKey = (item.type === TAB && item.tabType !== undefined) ? item.tabType.toLowerCase() : `channels.${item.name.toLowerCase()}`;
-  return (
-    <Actionable key={item.id} onClick={(event:SyntheticMouseEvent<HTMLButtonElement>) => handleItemClick(event, item)}>
-      <NavbarItemWrapper
-        ref={ref}
-        data-testid={'nav-' + item.name.replace(/ /g,'')}
-        data-index={index}
-        data-direct={item.isDirect}
-        isCurrent={item.isCurrent}
-      >
-        { (item.hasActions || item.hasNewMessages) && <PipWrapper><Pip hasActions={item.hasActions} theme={theme}/></PipWrapper> }
-        { }
-        { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : t(nameKey) }
-      </NavbarItemWrapper>
-    </Actionable>
-  );
-});
-
-NavbarItem.displayName = 'NavbarItem';
-
-const MemoizedNavbarItem = React.memo < NavbarItemProps > (NavbarItem);
 
 export default React.memo < NavbarProps > (Navbar);

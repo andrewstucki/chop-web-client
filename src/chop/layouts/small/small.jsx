@@ -1,7 +1,7 @@
 // @flow
-import * as React from 'react';
-
+import React from 'react';
 import Banner from '../../../banner';
+import NavHeader from '../../../navHeader';
 import NavBar from '../../../navbar';
 import VideoFeed from '../../../videoFeed';
 import SideMenu from '../../../sideMenu';
@@ -9,66 +9,35 @@ import PopUpModal from '../../../popUpModal';
 import Pane from '../../../pane';
 import { PRIMARY_PANE } from '../../../pane/dux';
 import { Container } from './styles';
+import { useWindowSize } from '../../../hooks';
 
 type SmallProps = {
   isVideoHidden: boolean,
   toggleHideVideo: (hidden:boolean) => void,
 };
 
-type SmallState = {
-  previousInnerHeight: number,
+const Small = ({ isVideoHidden, toggleHideVideo }:SmallProps) => {
+  const { height } = useWindowSize();
+
+  if (height < 400 && !isVideoHidden) {
+    toggleHideVideo(true);
+  } else if (height >= 400) {
+    toggleHideVideo(false);
+  }
+
+  return (
+    <>
+      <SideMenu />
+      <Container>
+        <PopUpModal />
+        <Banner fullWidth/>
+        <NavHeader />
+        <VideoFeed />
+        <NavBar />
+        <Pane name={PRIMARY_PANE} />
+      </Container>
+    </>
+  );
 };
-
-class Small extends React.Component<SmallProps, SmallState> {
-  handleResize: () => void;
-
-  constructor (props:SmallProps) {
-    super(props);
-
-    this.handleResize = this.handleResize.bind(this);
-
-    this.state = {
-      previousInnerHeight: window.innerHeight,
-    };
-  }
-
-  componentDidMount () {
-    window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount (): void {
-    window.removeEventListener('resize', this.handleResize);
-  }
-
-  handleResize (): void {
-    const { isVideoHidden, toggleHideVideo } = this.props;
-    const { previousInnerHeight } = this.state;
-    const { innerHeight: currentInnerHeight } = window;
-    const resizeSmaller = currentInnerHeight < previousInnerHeight;
-
-    if (resizeSmaller && !isVideoHidden) {
-      toggleHideVideo(true);
-    } else if (isVideoHidden) {
-      toggleHideVideo(false);
-    }
-
-    this.setState({previousInnerHeight: currentInnerHeight});
-  }
-
-  render () {
-    return (
-      <>
-        <SideMenu />
-        <Container>
-          <PopUpModal />
-          <Banner fullWidth/>
-          <NavBar />
-          <VideoFeed />
-          <Pane name={PRIMARY_PANE} />
-        </Container>
-      </>
-    );
-  }
-}
 
 export default React.memo < SmallProps > (Small);

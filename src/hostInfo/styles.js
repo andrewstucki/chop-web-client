@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  padding: 48px 16px 24px 16px;
+  padding: 0 16px 24px 16px;
   overflow-x: scroll;
   height: 100%;
   word-break: break-word;
+  
+  @media (min-width: 640px) {
+    padding-top: 48px;
+  }
   
   iframe {
     overflow: hidden;

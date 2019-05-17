@@ -133,6 +133,12 @@ const LogOutButton = styled.button`
   }
 `;
 
+const LinkWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export {
   ExternalLink,
   LinkIcon,
@@ -145,4 +151,5 @@ export {
   Overlay,
   Menu,
   LogOutButton,
+  LinkWrapper,
 };

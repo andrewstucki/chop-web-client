@@ -39,4 +39,4 @@ const ChatHeader = ({ title, subtitle }:ChatHeaderProps) => (
 
 export default React.memo < ChatHeaderProps > (ChatHeader);
 export { CHAT_HEADER };
-export type { ChatHeaderType };
+export type { ChatHeaderType, ChatHeaderProps };

@@ -17,6 +17,8 @@ import {avatarImageExists} from '../../../src/util';
 import { mockDate } from '../../testUtils';
 import {setVideo} from '../../../src/videoFeed/dux';
 import { startTimer as _startTimer } from '../../../src/io/sagas/sequence';
+import { PRIMARY_PANE } from '../../../src/pane/dux';
+import { setPaneToEvent } from '../../../src/pane/content/event/dux';
 
 jest.mock('../../../src/io/sagas/sequence');
 jest.mock('../../../src/io/queries');
@@ -251,6 +253,7 @@ describe('Current Event', () => {
           },
         }
       ),
+      setPaneToEvent(PRIMARY_PANE, '111'),
       setVideo(
         'https://www.youtube.com/watch?v=TD2XGwmRJi8',
         'simulated'
