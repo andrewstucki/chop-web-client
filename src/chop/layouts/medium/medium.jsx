@@ -10,6 +10,7 @@ import { PRIMARY_PANE } from '../../../pane/dux';
 import NavMenu from '../../../navMenu';
 import { Container, CellContainerTop, CellContainerBottom } from './styles';
 import { Grid, Cell } from 'styled-css-grid';
+import { useWindowSize } from '../../../hooks';
 
 type MediumProps = {
   isVideoHidden: boolean,
@@ -17,81 +18,47 @@ type MediumProps = {
   hasVideo: boolean,
 };
 
-type MediumState = {
-  previousInnerHeight: number,
+const Medium = ({ isVideoHidden, toggleHideVideo, hasVideo }:MediumProps) => {
+  const { height } = useWindowSize();
+
+  if (height < 400 && !isVideoHidden) {
+    toggleHideVideo(true);
+  } else if (height >= 400) {
+    toggleHideVideo(false);
+  }
+
+  return (
+    <Container>
+      <SideMenu />
+      <PopUpModal />
+      <Banner />
+      <Grid columns={'max-content 1fr'}
+        rows={'max-content 1fr'}
+        areas={[
+          'menu video',
+          'menu chat',
+        ]}
+        height="100%"
+        width="100%"
+        columnGap="0px">
+        <Cell area="menu">
+          <NavMenu/>
+        </Cell>
+        { hasVideo &&
+        <Cell area="video">
+          <CellContainerTop>
+            <VideoFeed/>
+          </CellContainerTop>
+        </Cell>
+        }
+        <Cell area="chat">
+          <CellContainerBottom>
+            <Pane name={PRIMARY_PANE} />
+          </CellContainerBottom>
+        </Cell>
+      </Grid>
+    </Container>
+  );
 };
-
-class Medium extends React.Component<MediumProps, MediumState> {
-  handleResize: () => void;
-
-  constructor (props:MediumProps) {
-    super(props);
-
-    this.handleResize = this.handleResize.bind(this);
-
-    this.state = {
-      previousInnerHeight: window.innerHeight,
-    };
-  }
-
-  componentDidMount () {
-    window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount (): void {
-    window.removeEventListener('resize', this.handleResize);
-  }
-
-  handleResize (): void {
-    const { isVideoHidden, toggleHideVideo } = this.props;
-    const { previousInnerHeight } = this.state;
-    const { innerHeight: currentInnerHeight } = window;
-    const resizeSmaller = currentInnerHeight < previousInnerHeight;
-
-    if (resizeSmaller && !isVideoHidden) {
-      toggleHideVideo(true);
-    } else if (isVideoHidden) {
-      toggleHideVideo(false);
-    }
-
-    this.setState({previousInnerHeight: currentInnerHeight});
-  }
-
-  render () {
-    const { hasVideo } = this.props;
-    return (
-      <Container>
-        <SideMenu />
-        <PopUpModal />
-        <Banner />
-        <Grid columns={'max-content 1fr'}
-          rows={'max-content 1fr'}
-          areas={[
-            'menu video',
-            'menu chat',
-          ]}
-          height="100%"
-          width="100%"
-          columnGap="0px">
-          <Cell area="menu">
-            <NavMenu/>
-          </Cell>
-          { hasVideo &&
-            <Cell area="video">
-              <CellContainerTop>
-                <VideoFeed/>
-              </CellContainerTop>
-            </Cell>
-          }
-          <Cell area="chat">
-            <CellContainerBottom>
-              <Pane name={PRIMARY_PANE} />
-            </CellContainerBottom>
-          </Cell>
-        </Grid>
-      </Container>
-    );
-  }
-}
 
 export default React.memo < MediumProps > (Medium);

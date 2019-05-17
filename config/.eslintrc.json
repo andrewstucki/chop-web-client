@@ -35,6 +35,10 @@
             "flowVersion": "0.90.0"
         }
     },
+    "globals": {
+        "AnimationFrameID": "readonly",
+        "SyntheticMouseEvent": "readonly"
+    },
     "rules": {
         "arrow-body-style": [
             "error",

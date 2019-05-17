@@ -46,7 +46,6 @@ describe('Pane Header tests', () => {
         type={TAB_HEADER}
         data={{
           title: 'Host Info',
-          hideTab: () => {},
         }}
       />
     );
@@ -142,28 +141,11 @@ describe('TabHeader', () => {
         type={TAB_HEADER}
         data={{
           title: 'Host Info',
-          hideTab: () => {},
         }}
       />
     );
 
     const title = getByTestId('tabHeader-title');
     expect(title.textContent).toEqual('Host Info');
-  });
-
-  test('It can be hidden', () => {
-    const hideTab = sinon.spy();
-    const { getByTestId } = renderWithTheme(
-      <PaneHeader
-        type={TAB_HEADER}
-        data={{
-          title: 'Host Info',
-          hideTab,
-        }}
-      />
-    );
-
-    fireEvent.click(getByTestId('tabHeader-hide'));
-    expect(hideTab.calledOnce).toBeTruthy();
   });
 });

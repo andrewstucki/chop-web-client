@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 declare var ENV:string;
 
 /* istanbul ignore file */
-function useWhyDidYouUpdate (name, props) {
+export default (name, props) => {
   // Get a mutable ref object where we can store props ...
   // ... for comparison next time this hook runs.
   const previousProps = useRef();
@@ -38,6 +38,4 @@ function useWhyDidYouUpdate (name, props) {
     // Finally update previousProps with current props for next hook call
     previousProps.current = props;
   });
-}
-
-export { useWhyDidYouUpdate };
+};
