@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { useEffect, useState } from 'react';
 import { isClient } from '../util';
 

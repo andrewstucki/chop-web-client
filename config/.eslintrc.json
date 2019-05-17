@@ -36,6 +36,7 @@
         }
     },
     "globals": {
+        "AnimationFrameID": "readonly",
         "SyntheticMouseEvent": "readonly",
         "SyntheticKeyboardEvent": "readonly",
         "SyntheticFocusEvent": "readonly"

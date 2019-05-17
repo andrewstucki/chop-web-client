@@ -1,5 +1,4 @@
 // @flow
-/* global SyntheticMouseEvent */
 import React from 'react';
 import Actionable from '../components/Actionable';
 import Hamburger from '../icons/hamburger';

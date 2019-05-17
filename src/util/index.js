@@ -1,6 +1,7 @@
-// @flow
+// @flow strict
 import createDOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
+// $FlowFixMe
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 
@@ -86,8 +87,8 @@ const sanitizeString = (string: string, config:Config = sanitizeConfig) =>
 
 // Default ISO8601 Format
 const getMessageTimestamp = (timestamp: string = dayjs().format()) => {
-  const date = dayjs.utc(timestamp);
-  const format = dayjs().utc().isSame(date, 'day') === true ? 'h:mma' : 'h:mma, MMMM D';
+  const date = dayjs(timestamp);
+  const format = dayjs().isSame(date, 'day') === true ? 'h:mma' : 'h:mma, MMMM D';
   return date.format(format);
 };
 

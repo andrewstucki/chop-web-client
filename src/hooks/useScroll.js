@@ -1,5 +1,4 @@
-// @flow
-/* global AnimationFrameID */
+// @flow strict
 import { useState, useEffect, useRef} from 'react';
 
 type StateType = {
@@ -8,7 +7,6 @@ type StateType = {
   scrollWidth: number,
 };
 
-/* istanbul ignore file */
 export default (ref: {| current: ?HTMLElement |}): StateType => {
   const frame = useRef<?AnimationFrameID>();
   const [state, setState] = useState<StateType>({

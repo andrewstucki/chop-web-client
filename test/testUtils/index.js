@@ -10,7 +10,7 @@ import reducer from '../../src/chop/dux';
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
 import { defaultState as defaultScheduleState } from '../../src/schedule/dux';
 
-const mockDate = (date:any) => {
+const mockDate = (date:Date | number | string) => {
   const RealDate = Date;
   global.Date = class extends RealDate {
     constructor () {
@@ -19,6 +19,7 @@ const mockDate = (date:any) => {
     }
 
     static now () {
+      // $FlowFixMe
       return date;
     }
   };

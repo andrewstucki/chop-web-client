@@ -1,7 +1,9 @@
 // @flow
 import styled from 'styled-components';
+import type { ComponentType } from 'react';
+import type { NoPropsType } from '../cwc-types';
 
-const NavHeaderWrapper = styled.div`
+const NavHeaderWrapper:ComponentType<NoPropsType> = styled.div`
   display: flex;
   background-color: ${props => props.theme.colors.gray5};
   height: 48px;
@@ -10,7 +12,7 @@ const NavHeaderWrapper = styled.div`
 
 `;
 
-const NavHeaderHamburgerWrapper = styled.button`
+const NavHeaderHamburgerWrapper:ComponentType<NoPropsType> = styled.button`
   display: flex;
   align-items: center;
   color: ${props => props.theme.colors.textColor };

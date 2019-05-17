@@ -1,6 +1,9 @@
+// @flow
 import styled from 'styled-components';
+import type { ComponentType } from 'react';
+import type { NoPropsType } from '../cwc-types';
 
-const NavbarWrapper = styled.div`
+const NavbarWrapper:ComponentType<NoPropsType> = styled.div`
   display: flex;
   background-color: ${props => props.theme.colors.gray5};
   height: 32px;
@@ -12,7 +15,11 @@ const NavbarWrapper = styled.div`
   scroll-padding: 0 24px;
 `;
 
-const NavbarItemWrapper = styled.button`
+type NavbarItemWrapperProps = {
+  isCurrent: boolean,
+};
+
+const NavbarItemWrapper:ComponentType<NavbarItemWrapperProps> = styled.button`
   display: flex;
   align-items: center;
   padding: 0 12px;
@@ -29,7 +36,7 @@ const NavbarItemWrapper = styled.button`
   overflow: visible;
 `;
 
-const PipWrapper = styled.div`
+const PipWrapper:ComponentType<NoPropsType> = styled.div`
   position: absolute;
   top: 4px;
   right: 2px;
@@ -37,7 +44,7 @@ const PipWrapper = styled.div`
   width: 8px;
 `;
 
-const TabOverflow = styled.div`
+const TabOverflow:ComponentType<NoPropsType> = styled.div`
   position: fixed;
   cursor: pointer;
   z-index: 2;
@@ -45,11 +52,11 @@ const TabOverflow = styled.div`
   height: 32px;
 `;
 
-const TabOverflowWrapper = styled(TabOverflow)`
+const TabOverflowWrapper:ComponentType<NoPropsType> = styled(TabOverflow)`
   right: 0;
 `;
 
-const InvertedTabOverflowWrapper = styled(TabOverflow)`
+const InvertedTabOverflowWrapper:ComponentType<NoPropsType> = styled(TabOverflow)`
   left: 0;
   transform: scale(-1,1);
 `;

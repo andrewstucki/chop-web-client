@@ -4,7 +4,6 @@ import { HOST_INFO } from '../../../hostInfo/dux';
 import { SCHEDULE } from '../../../schedule/dux';
 import type { SetPaneType } from '../../dux';
 
-
 const TAB = 'TAB';
 
 // TODO: Move these constants when the features are actually created.

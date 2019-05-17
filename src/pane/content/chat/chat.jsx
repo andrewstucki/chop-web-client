@@ -63,6 +63,7 @@ const ChatFeed = React.memo < ChatPropsType > (
     );
   }
 );
+ChatFeed.displayName = 'ChatFeed';
 
 type ChatPlaceholderProps = {
   otherUsersName: string,
@@ -78,5 +79,6 @@ const ChatPlaceholder = React.memo < ChatPlaceholderProps > (
     );
   }
 );
+ChatPlaceholder.displayName = 'ChatPlaceholder';
 
 export default React.memo < ChatPropsType > (Chat);

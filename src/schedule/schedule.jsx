@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs-ext';
 import timeZone from 'dayjs-ext/plugin/timeZone-2012-2022';
 import type { EventScheduleType } from './dux';
 import { Wrapper, GroupHeader, ItemsWrapper, Item, ItemTime, ItemTitle, NoScheduleWrapper, NoScheduleText } from './styles';

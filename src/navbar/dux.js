@@ -149,6 +149,16 @@ const getTabs = createSelector(
     }))
 );
 
+const getNavbarChannels = createSelector(
+  getPublicChannel,
+  getDirectChannels,
+  getPlaceholderChannels,
+  getHostChannel,
+  getTabs,
+  (publicChannel, directChannels, placeholderChannels, hostChannel, tabs) =>
+    [publicChannel, ...directChannels, ...placeholderChannels, hostChannel, ...tabs]
+);
+
 // Exports
 
 export {
@@ -159,6 +169,7 @@ export {
   getTabs,
   setNavbarIndex,
   SET_NAVBAR_INDEX,
+  getNavbarChannels,
 };
 
 export type {

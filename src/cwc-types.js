@@ -1,4 +1,5 @@
 // @flow strict
+
 export type UIDType = string;
 
 export type DateTimeType = number;

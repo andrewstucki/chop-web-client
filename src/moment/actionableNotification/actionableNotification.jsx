@@ -2,7 +2,7 @@
 import React from 'react';
 
 import type { ActionableNotificationType } from './dux';
-import FilePlayer from 'react-player/lib/players/FilePlayer';
+import AudioPlayer from '../../components/audioPlayer';
 // $FlowFixMe - why won't these resolve?
 import PopPopMp3 from '../../../assets/audio/pop_pop.mp3';
 // $FlowFixMe - why won't these resolve?
@@ -46,12 +46,6 @@ const ActionableNotification = (
 
   const callAcceptPrayerRequest = () => acceptPrayerRequest(prayerChannel, hostChannel, user, false);
 
-  const PlayerConfig = {
-    file: {
-      forceAudio: true,
-    },
-  };
-
   return (
     <Wrapper data-testid='actionableNotification' isCompact={isCompact}>
       <ActionableContainer>
@@ -75,10 +69,8 @@ const ActionableNotification = (
               >
                 {t('actionable.accept')}
               </AcceptButton>
-              <FilePlayer
-                playing
+              <AudioPlayer
                 url={[PopPopMp3, PopPopOgg]}
-                config={PlayerConfig}
               />
             </>
         }

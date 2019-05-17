@@ -1,6 +1,9 @@
+// @flow
 import styled from 'styled-components';
+import type { ComponentType } from 'react';
+import type { NoPropsType } from '../../../cwc-types';
 
-const ComingSoonWrapper = styled.div`
+const ComingSoonWrapper:ComponentType<NoPropsType> = styled.div`
   display: flex;
   flex-grow: 1;
   align-items: center;
@@ -9,7 +12,7 @@ const ComingSoonWrapper = styled.div`
   flex-direction: column;
 `;
 
-const ComingSoonText = styled.div`
+const ComingSoonText:ComponentType<NoPropsType> = styled.div`
   margin-top: 8px;
   color: ${props => props.theme.colors.gray50};
 `;
