@@ -10,23 +10,24 @@ import { setPaneToChat } from '../pane/content/chat/dux';
 import { setPaneToTab, addTab } from '../pane/content/tab/dux';
 
 const mapStateToProps = state => {
-  const hostChannel = getHostChannel(state);
-  const publicChannel = getPublicChannel(state);
-  const { primary: currentPane } = state.feed.panes;
-  const { name:organizationName } = state.feed.organization;
-  const { title:eventTitle, description:eventDescription } = state.feed.event;
+  const feedState = state.feed;
+  const hostChannel = getHostChannel(feedState);
+  const publicChannel = getPublicChannel(feedState);
+  const { primary: currentPane } = feedState.panes;
+  const { name:organizationName } = feedState.organization;
+  const { title:eventTitle, description:eventDescription } = feedState.event;
 
   return {
-    isClosed: state.feed.isSideMenuClosed,
-    languageOptions: state.feed.languageOptions,
+    isClosed: feedState.isSideMenuClosed,
+    languageOptions: feedState.languageOptions,
     hostChannel,
     publicChannel,
     currentPane,
     organizationName,
     eventTitle,
     eventDescription,
-    currentUser: state.user.currentUser,
-    currentLanguage: state.feed.currentLanguage,
+    currentUser: feedState.currentUser,
+    currentLanguage: feedState.currentLanguage,
   };
 };
 

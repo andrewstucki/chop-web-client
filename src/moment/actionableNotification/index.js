@@ -7,10 +7,11 @@ import { publishAcceptedPrayerRequest } from './dux';
 import { getHostChannel } from '../../selectors/channelSelectors';
 
 const mapStateToProps = state => {
-  const hostChannel = getHostChannel(state);
+  const feedState = state.feed;
+  const hostChannel = getHostChannel(feedState);
 
   return {
-    currentUser: getCurrentUserAsSharedUser(state),
+    currentUser: getCurrentUserAsSharedUser(feedState),
     hostChannel,
   };
 };

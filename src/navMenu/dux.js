@@ -1,5 +1,5 @@
 // @flow
-import type { ChopStateType } from '../chop/dux';
+import type { FeedType } from '../feed/dux';
 
 const TOGGLE_NAV_MENU_EXPANDED = 'TOGGLE_NAV_MENU_EXPANDED';
 
@@ -13,7 +13,7 @@ const toggleNavMenuExpanded = (): ToggleNavMenuExpandedType => (
   }
 );
 
-const isNavMenuExpanded = (state:ChopStateType) => state.feed.nav.expanded;
+const isNavMenuExpanded = (state:FeedType) => state.nav.expanded;
 
 export {
   toggleNavMenuExpanded,

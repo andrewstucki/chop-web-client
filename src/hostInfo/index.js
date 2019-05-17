@@ -5,7 +5,8 @@ import { isOffline } from '../selectors/eventSelectors';
 import { getNextEventData } from '../schedule/dux';
 
 const mapStateToProps = state => {
-  const { hostInfo } = isOffline(state) ? getNextEventData(state) || {} : state.feed.event;
+  const { feed:feedState } = state;
+  const { hostInfo } = isOffline(feedState) ? getNextEventData(state) || {} : feedState.event;
 
   return {
     hostInfo,

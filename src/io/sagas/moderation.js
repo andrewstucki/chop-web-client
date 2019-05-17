@@ -3,7 +3,7 @@ import type {PublishMuteUserType} from '../../moment';
 import type {Saga} from 'redux-saga';
 import {call, put} from 'redux-saga/effects';
 import queries from '../queries';
-import {MUTE_USER_FAILED, MUTE_USER_SUCCEEDED} from '../../users/dux';
+import {MUTE_USER_FAILED, MUTE_USER_SUCCEEDED} from '../../moment';
 import bugsnagClient from '../../util/bugsnag';
 
 function* muteUser (action: PublishMuteUserType): Saga<void> {

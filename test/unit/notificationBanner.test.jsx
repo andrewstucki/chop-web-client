@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { defaultState } from '../../src/chop/dux';
+import { defaultState } from '../../src/feed/dux';
 import Banner from '../../src/banner';
 import { renderWithReduxAndTheme } from '../testUtils';
 import { fireEvent } from 'react-testing-library';
@@ -10,9 +10,8 @@ describe('NotificationBanner test', () => {
     const { getByTestId, store } = renderWithReduxAndTheme(
       <Banner />,
       {
-        ...defaultState,
         feed: {
-          ...defaultState.feed,
+          ...defaultState,
           notificationBanner: {
             message: 'G. Boole',
             bannerType: 'MUTED_NOTIFICATION',

@@ -1,6 +1,7 @@
 // @flow
 import { all, takeEvery, takeLeading } from 'redux-saga/effects';
 import {
+  PUBLISH_MUTE_USER,
   DIRECT_CHAT,
   DIRECT_CHAT_FAILED,
 } from '../moment/message/dux';
@@ -52,10 +53,7 @@ import {
   setPubnubClient,
   handlePubnubErrors,
 } from './sagas/pubnub';
-import { 
-  UPDATE_USER,
-  PUBLISH_MUTE_USER,
-} from '../users/dux';
+import { UPDATE_USER } from '../users/dux';
 
 function* rootSaga (): Saga<void> {
   yield all([

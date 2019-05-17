@@ -19,7 +19,7 @@ type EventScheduleType = {
   hostInfo: string,
 };
 
-export type ScheduleType = Array<EventScheduleType>;
+type ScheduleType = Array<EventScheduleType>;
 
 type PopScheduleType = {
   type: typeof POP_SCHEDULE,
@@ -51,12 +51,10 @@ export const popSchedule = (now: number): PopScheduleType => (
   }
 );
 
-// default state
-export const defaultState = [];
-
 // reducer
+
 export default (
-  state: ScheduleType = defaultState,
+  state: ScheduleType = [],
   action?: ActionType,
 ): ScheduleType => {
   if (!action || !action.type) {
@@ -74,7 +72,7 @@ export default (
 };
 
 // selectors
-const local = state => state[ID] || state;
+const local = state => state[ID];
 
 export const getNextEventData = createSelector(
   local,

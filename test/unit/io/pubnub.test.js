@@ -4,7 +4,7 @@ import { runSaga } from 'redux-saga';
 import { publishMomentToChannel } from '../../../src/io/saga';
 import { publishLeftChannelNotification, publishMessage } from '../../../src/moment';
 import { publishMuteUserNotification } from '../../../src/moment/notification/dux';
-import { defaultState } from '../../../src/chop/dux';
+import { defaultState } from '../../../src/feed/dux';
 import PubnubClient from '../../../src/io/pubnubClient';
 import queries from '../../../src/io/queries';
 import { mockDate } from '../../testUtils';
@@ -42,9 +42,8 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
-        ...defaultState,
         feed: {
-          ...defaultState.feed,
+          ...defaultState,
           channels: {
             public: {
               id: 'public',
@@ -90,9 +89,8 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
-        ...defaultState,
         feed: {
-          ...defaultState.feed,
+          ...defaultState,
           channels: {
             host: {
               id: 'host',
@@ -124,9 +122,8 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
-        ...defaultState,
         feed: {
-          ...defaultState.feed,
+          ...defaultState,
           channels: {
             host: {
               id: 'host',
@@ -159,9 +156,8 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
-        ...defaultState,
         feed: {
-          ...defaultState.feed,
+          ...defaultState,
           channels: {
             host: {
               id: 'host',
@@ -205,9 +201,8 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
-        ...defaultState,
         feed: {
-          ...defaultState.feed,
+          ...defaultState,
           channels: {
             placeholder: {
               id: 'placeholder',

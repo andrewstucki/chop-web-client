@@ -2,20 +2,20 @@
 import Pubnub from 'pubnub';
 import { Dispatch  } from 'redux';
 import {
+  removeHereNow,
+  setHereNow,
+  addHereNow,
   loadHistory,
   setSalvations,
   SET_CHANNELS,
   joinChannel,
 } from '../feed/dux';
-import {getReactions} from '../reactions/reactionsContainer/dux';
 import {
-  removeHereNow,
-  setHereNow,
-  addHereNow,
   hasPermissions,
-  receiveMuteUser,
-  getMutedUsers,
 } from '../users/dux';
+import type {
+  FeedType,
+} from '../feed/dux';
 import type {
   ReactionType,
 } from '../reactions/reactionButton/dux';
@@ -28,7 +28,7 @@ import {
   receiveMuteUserNotification,
   receivePrayerNotification,
 } from '../moment/notification/dux';
-import { deleteMessage } from '../moment/message/dux';
+import { deleteMessage, receiveMuteUser } from '../moment/message/dux';
 import {
   publishSalvation,
   salvationMomentExists,
@@ -38,6 +38,7 @@ import {
   getHostChannel,
   getPublicChannel,
   getCurrentChannel,
+  getMutedUsers,
 } from '../selectors/channelSelectors';
 import { getMessageTimestamp } from '../util';
 import type {
@@ -45,7 +46,6 @@ import type {
   LegacyNewMessageType,
 } from './converter';
 import bugsnagClient from '../util/bugsnag';
-import type { ChopStateType } from '../chop/dux';
 
 type PubnubStatusEventType = {
   affectedChannelGroups: Array<string>,
@@ -182,10 +182,10 @@ type PubnubPublishMessageType = {
 class Chat {
   pubnub: Pubnub;
   storeDispatch: Dispatch;
-  getState: () => ChopStateType;
+  getState: () => FeedType;
   previousLanguage: string | null;
 
-  constructor (dispatch: Dispatch, getState: () => ChopStateType) {
+  constructor (dispatch: Dispatch, getState: () => FeedType) {
     // $FlowFixMe
     this.onStatus = this.onStatus.bind(this);
     // $FlowFixMe
@@ -215,19 +215,21 @@ class Chat {
     const state = this.getState();
 
     if (this.pubnub ||
-        !(state.feed.pubnubKeys.publish &&
-          state.feed.pubnubKeys.subscribe &&
+        !(state.pubnubKeys.publish &&
+          state.pubnubKeys.subscribe &&
           //  state.currentUser.pubnubAccessKey &&
-          state.user.currentUser.pubnubToken)) {
+          state.currentUser.pubnubToken)) {
       return;
     }
 
+    Converter.config(this.getState);
+
     this.pubnub = new Pubnub(
       {
-        publishKey: state.feed.pubnubKeys.publish,
-        subscribeKey: state.feed.pubnubKeys.subscribe,
-        authKey: state.user.currentUser.pubnubAccessKey,
-        uuid: state.user.currentUser.pubnubToken,
+        publishKey: state.pubnubKeys.publish,
+        subscribeKey: state.pubnubKeys.subscribe,
+        authKey: state.currentUser.pubnubAccessKey,
+        uuid: state.currentUser.pubnubToken,
       }
     );
 
@@ -241,7 +243,7 @@ class Chat {
   }
 
   setPubnubState () {
-    const { user: { currentUser: { avatar, name }}, feed: { currentLanguage: language, channels }} = this.getState();
+    const { currentUser: { avatar, name }, currentLanguage: language, channels } = this.getState();
     const channelList = Object.keys(channels);
     if (channelList.length > 0) { // Don't set the state before channels have loaded
       this.pubnub.setState(
@@ -261,9 +263,7 @@ class Chat {
           },
         },
         (status, _response) => {
-          if (status.error) {
-            bugsnagClient.notify(`Pubnub Error with setState: message: ${status.message}, type: ${status.type}`);
-          }
+          bugsnagClient.notify(`Pubnub Error with setState: message: ${status.message}, type: ${status.type}`);
         }
       );
     }
@@ -308,7 +308,7 @@ class Chat {
         case 'muteUser': {
           const mutedUsers = getMutedUsers(this.getState());
           const { nickname, fromNickname, timestamp } = message.entry.data;
-          const { user: { currentUser: { name:currentUserName }}} = this.getState();
+          const { name:currentUserName } = this.getState().currentUser;
 
           if (!mutedUsers.includes(nickname) && currentUserName !== nickname) {
             this.storeDispatch(
@@ -369,7 +369,7 @@ class Chat {
   }
 
   onMessage (event: PubnubReciveMessageType<LegacyNewMessageType>) {
-    const { feed: { channels }} = this.getState();
+    const { channels } = this.getState();
     let hasMomentBeenRecieved = false;
     switch (event.message.action) {
       case 'newMessage': {
@@ -401,7 +401,7 @@ class Chat {
         const mutedUsers = getMutedUsers(this.getState());
         // $FlowFixMe
         const { nickname, fromNickname, timestamp } = event.message.data;
-        const { user: { currentUser: { name:currentUserName }}} = this.getState();
+        const { name:currentUserName } = this.getState().currentUser;
 
         if (!mutedUsers.includes(nickname) && currentUserName !== nickname) {
           this.storeDispatch(
@@ -423,7 +423,7 @@ class Chat {
       }
       case 'videoReaction':
       // $FlowFixMe
-        if (getReactions(this.getState()).find(reaction => event.message.data.reactionId === reaction.id) === undefined) {
+        if (this.getState().reactions.find(reaction => event.message.data.reactionId === reaction.id) === undefined) {
           this.storeDispatch(
             {
               type: 'RECEIVE_REACTION',
@@ -451,7 +451,7 @@ class Chat {
         return;
       case 'muteMessage': {
         const { channelToken, umt } = event.message.data;
-        const { feed: { channels }} = this.getState();
+        const { channels } = this.getState();
 
         if (channels[channelToken]) {
           const { moments } = channels[channelToken];

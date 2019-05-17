@@ -2,9 +2,12 @@
 import { connect } from 'react-redux';
 import Errors from './errors';
 
-const mapStateToProps = state => ({
-  errors: state.feed.errors,
-});
+const mapStateToProps = state => {
+  const feedState = state.feed;
+  return {
+    errors: feedState.errors,
+  };
+};
 
 const mapDispatchToProps = () => ({});
 

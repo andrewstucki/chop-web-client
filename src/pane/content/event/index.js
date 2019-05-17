@@ -5,9 +5,10 @@ import { isOffline } from '../../../selectors/eventSelectors';
 import { getPublicChannel } from '../../../selectors/channelSelectors';
 
 const mapStateToProps = state => {
-  const channel = getPublicChannel(state);
+  const feedState = state.feed;
+  const channel = getPublicChannel(feedState);
   return {
-    isOffline: isOffline(state),
+    isOffline: isOffline(feedState),
     channel,
   };
 };

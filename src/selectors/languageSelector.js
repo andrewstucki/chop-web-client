@@ -1,15 +1,10 @@
 // @flow
 import { createSelector } from 'reselect';
-import type {LanguageType} from '../feed/dux';
-import type { ChopStateType } from '../chop/dux';
+import type {FeedType, LanguageType} from '../feed/dux';
 
-const ID = 'feed';
+const getLanguages = state => state.languageOptions;
 
-const local = state => state[ID] || state;
-
-const getLanguages = state => local(state).languageOptions;
-
-const getLanguageCount = createSelector<ChopStateType, void, number, Array<LanguageType>>(
+const getLanguageCount = createSelector<FeedType, void, number, Array<LanguageType>>(
   [getLanguages],
   languages => languages.length
 );

@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import VideoHeader from './videoHeader';
 
 const mapStateToProps = state => {
-  const { title, description, endTime } = state.feed.event;
+  const feedState = state.feed;
+  const { title, description, endTime } = feedState.event;
 
   return {
     title,
