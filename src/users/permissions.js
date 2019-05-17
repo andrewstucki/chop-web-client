@@ -8,7 +8,7 @@ export const admin = [
   'event.slides.manage',
   'event.times.manage',
   'event.video.manage',
-  'profile.users.manage',
+  'profile.subscribers.manage',
   'profile.roles.manage',
   'profile.organization.manage',
   'custom.links.manage',

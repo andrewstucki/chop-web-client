@@ -16,6 +16,7 @@ describe('Converter Tests', () => {
           organization: {
             id: 2,
             name: 'Life.Church',
+            logoUrl: '',
           },
           channels: {
             public: {
@@ -91,6 +92,7 @@ describe('Converter Tests', () => {
           organization: {
             id: 2,
             name: 'Life.Church',
+            logoUrl: '',
           },
           channels: {
             public: {

@@ -1,11 +1,11 @@
-import { 
+import {
   mockPublish,
-  __messageEvent, 
+  __messageEvent,
 } from 'pubnub';
 import Chat from '../../../src/io/chat';
 import reducer, { defaultState } from '../../../src/feed/dux';
 import { createStore } from 'redux';
-  
+
 describe('Reaction2 Tests', () => {
   const store = {
     ...defaultState,
@@ -23,6 +23,7 @@ describe('Reaction2 Tests', () => {
     organization: {
       id: 2,
       name: 'Life.Church',
+      logoUrl: '',
     },
     pubnubKeys: {
       publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
@@ -98,7 +99,7 @@ describe('Reaction2 Tests', () => {
 
     const chat = new Chat(dispatch, getState);
     chat.init();
-    
+
     __messageEvent(
       {
         channel: '123456',
@@ -138,7 +139,7 @@ describe('Reaction2 Tests', () => {
         },
       }
     );
-    
+
     const chat = new Chat(store.dispatch, store.getState);
     chat.onMessage(
       {

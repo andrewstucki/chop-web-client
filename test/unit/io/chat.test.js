@@ -49,6 +49,7 @@ describe('Chat2 Tests', () => {
     organization: {
       id: 2,
       name: 'Life.Church',
+      logoUrl: '',
     },
     pubnubKeys: {
       publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',

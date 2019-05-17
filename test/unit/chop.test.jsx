@@ -12,7 +12,9 @@ describe('Chop', () => {
           ...defaultState.feed,
           isAuthenticated: true,
           organization: {
+            id: 0,
             name: 'Jedi Academy',
+            logoUrl: '',
           },
         },
       });
