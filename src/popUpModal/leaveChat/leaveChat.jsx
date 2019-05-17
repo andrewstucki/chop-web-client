@@ -31,7 +31,7 @@ const LeaveChatPopUpModal = (
   const { t } = useTranslation('forms');
   const callLeaveChannel = () => {
     togglePopUpModal();
-    publishLeftChannelNotification(currentUser.name, currentUser.pubnubToken, currentChannel, new Date());
+    publishLeftChannelNotification(currentUser.name, currentUser.pubnubToken, currentChannel, dayjs().toISOString());
     leaveChannel(currentChannel, isPlaceholder);
   };
 
