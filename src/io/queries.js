@@ -479,11 +479,10 @@ const queries = {
 
   currentState: async (
     needLanguages: boolean = true,
-    scheduleEndTime: number,
   ): Promise<GraphQLCurrentStateType> =>
     await client.request(currentState, {
       needLanguages,
-      scheduleEndTime,
+      scheduleEndTime: dayjs().add(1, 'week').endOf('day').unix(),
     }),
 
   acceptPrayer: async (
@@ -495,7 +494,6 @@ const queries = {
     await client.request(acceptPrayer, {
       feedToken: channelId,
       requesterPubnubToken,
-
       requesterNickname: requesterName,
     }),
 

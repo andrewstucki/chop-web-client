@@ -10,7 +10,7 @@ const hostname = (): string => {
     if (hash.length > 1) {
       return hash.substr(1); // First character in hash is always '#'
     } else {
-      return 'digerati.chopdev.com';
+      return 'gracebiblechurch.chopdev.com';
     }
   } else {
     return global.location.hostname;
