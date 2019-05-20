@@ -33,14 +33,14 @@ const Schedule = ({schedule, timeZone }:ScheduleProps) => {
         Object.keys(schedule).map(day => (
           <div key={day}>
             <GroupHeader data-testid='schedule-groupHeader'>
-              { dayjs.unix(schedule[day][0].startTime).format('dddd MMMM, D', { timeZone }) }
+              { dayjs.unix(schedule[day][0].scheduleTime).format('dddd MMMM, D', { timeZone }) }
             </GroupHeader>
             <ItemsWrapper data-testid='schedule-itemsWrapper'>
               {
                 schedule[day].map((item, index) => (
-                  <Item showBorder={index !== schedule[day].length - 1} key={item.startTime}>
+                  <Item showBorder={index !== schedule[day].length - 1} key={item.scheduleTime}>
                     <ItemTime data-testid='schedule-itemTime'>
-                      { dayjs.unix(item.startTime).format('h:mma', { timeZone }) }
+                      { dayjs.unix(item.scheduleTime).format('h:mma', { timeZone }) }
                     </ItemTime>
                     <ItemTitle data-testid='schedule-itemTitle'>
                       { item.title }
