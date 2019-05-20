@@ -6,7 +6,7 @@ import {
 import {
   receivePrayerRequestNotification as receivePrayerRequestNotificationText,
 } from '../moment/notification/dux';
-import { getHostChannel } from '../selectors/channelSelectors';
+import { getHostChannel, getTranslateLanguage } from '../selectors/channelSelectors';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -100,7 +100,7 @@ const Converter = {
   cwcMessageToLegacyNewMessage:( message: MessageType, channelId: ChannelIdType): LegcayNewMessageDataType => (
     {
       messageText: message.text,
-      language: _getState().currentLanguage,
+      language: getTranslateLanguage(_getState()),
       eventTimeId: _getState().event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
       eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'second').toString(),
