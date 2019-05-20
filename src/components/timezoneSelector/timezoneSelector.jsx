@@ -31,7 +31,7 @@ const TimezoneSelector = ({ timeZone, setScheduleTimeZone }:TimezoneSelectorProp
           defaultValue={timeZone}
         >
           <option value='' hidden disabled>Select a timezone</option>
-          { listTimeZones().sort().map(tz => <option value={tz} key={tz}>{ tz }</option>) }
+          { listTimeZones().sort().map(tz => <option value={tz} key={tz}>{ tz.replace(/_/g, '') }</option>) }
         </Select>
       </Label>
     </Wrapper>

@@ -1,4 +1,4 @@
-image: quay.io/lifechurch/k8s-deploy-helper:5.0.0
+image: quay.io/lifechurch/k8s-deploy-helper:6.0.0
 variables:
   # Application deployment domain
   KUBE_DOMAIN: churchonline.us
@@ -26,11 +26,9 @@ cache:
 compile:app-review:
   image: node:lts
   stage: compile
-  variables:
-    CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
     - yarn install --pure-lockfile
-    - yarn build --env.WEBPACK_MODE=$REVIEW_WEBPACK_MODE --env.ENV=$REVIEW_ENV --env.GATEWAY_HOST=$REVIEW_GATEWAY_HOST --env.GTM_GTMID=$REVIEW_GTM_GTMID --env.GTM_AUTH=$REVIEW_GTM_AUTH --env.GTM_PREVIEW=$REVIEW_GTM_PREVIEW --env.ROUTE_BASENAME=$REVIEW_ROUTE_BASENAME --env.PUBLIC_PATH=$REVIEW_PUBLIC_PATH --env.CWC_HOST=$CI_ENVIRONMENT_URL
+    - yarn build --env.WEBPACK_MODE=$REVIEW_WEBPACK_MODE --env.ENV=$REVIEW_ENV --env.GATEWAY_HOST=$REVIEW_GATEWAY_HOST --env.GTM_GTMID=$REVIEW_GTM_GTMID --env.GTM_AUTH=$REVIEW_GTM_AUTH --env.GTM_PREVIEW=$REVIEW_GTM_PREVIEW --env.ROUTE_BASENAME=$REVIEW_ROUTE_BASENAME --env.PUBLIC_PATH=$REVIEW_PUBLIC_PATH --env.CWC_HOST=https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   artifacts:
     expire_in: 1 day
     paths:
