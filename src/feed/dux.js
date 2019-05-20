@@ -112,7 +112,8 @@ import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
 import { UPDATE_USER_SUCCEEDED } from '../users/dux';
 import { COMPACT } from '../textModeToggle/dux';
 import { HOST_INFO } from '../hostInfo/dux';
-import { BIBLE, SCHEDULE, NOTES, type TabType} from '../pane/content/tab/dux';
+import { BIBLE, NOTES, type TabType} from '../pane/content/tab/dux';
+import { SCHEDULE } from '../schedule/dux';
 
 // Action Types
 
@@ -137,7 +138,6 @@ const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
 const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
-const SET_CLIENT_INFO = 'SET_CLIENT_INFO';
 const SET_HERE_NOW = 'SET_HERE_NOW';
 const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
@@ -217,17 +217,6 @@ type HereNowChannels = {
   [string]: Array<UserState>,
 };
 
-type ClientInfoType = {
-  countryCode?: string,
-  countryName?: string,
-  city?: string,
-  postal?: string,
-  latitude?: number,
-  longitude?: number,
-  ip?: string,
-  state?: string,
-};
-
 type AuthenticationType = {
   accessToken: string,
   refreshToken: string,
@@ -271,7 +260,6 @@ type FeedType = {
   panes: {
     [string]: PaneType,
   },
-  clientInfo: ClientInfoType,
   mutedUsers: Array<string>,
   navbarIndex: number,
   prevNavbarIndex?: number,
@@ -378,11 +366,6 @@ type UpdateScrollPositionType = {
   timestamp: number,
 };
 
-type SetClientInfoType = {
-  type: 'SET_CLIENT_INFO',
-  data: ClientInfoType,
-};
-
 type SetSawLastMomentAt = {
   type: typeof SET_SAW_LAST_MOMENT_AT,
   timestamp: DateTimeType,
@@ -423,7 +406,6 @@ type FeedActionTypes =
   | RemoveAuthenticationType
   | AddErrorType
   | RemoveErrorType
-  | SetClientInfoType
   | SetHereNow
   | SetSawLastMomentAt
   | ToggleHideVideoType
@@ -647,13 +629,6 @@ const updateScrollPosition = (scrollPosition: number, channel: string, timestamp
   }
 );
 
-const setClientInfo = (data: ClientInfoType) => (
-  {
-    type: SET_CLIENT_INFO,
-    data,
-  }
-);
-
 const defaultState = {
   pubnubKeys: {
     publish: '',
@@ -753,16 +728,6 @@ const defaultState = {
     refreshToken: '',
   },
   persistExpiresAt: dayjs().add(1, 'month').format(),
-  clientInfo: {
-    countryCode: '',
-    countryName: '',
-    city: '',
-    postal: '',
-    latitude: 0,
-    longitude: 0,
-    ip: '',
-    state: '',
-  },
   mutedUsers: [],
   navbarIndex: 0,
   prevNavbarIndex: undefined,
@@ -1314,11 +1279,6 @@ const reducer = (
           expanded: !state.nav.expanded,
         },
       };
-    case SET_CLIENT_INFO:
-      return {
-        ...state,
-        clientInfo: action.data,
-      };
     case 'PLAY_VIDEO':
       return {
         ...state,
@@ -1396,7 +1356,6 @@ export {
   setAuthentication,
   removeAuthentication,
   updateScrollPosition,
-  setClientInfo,
   setHereNow,
   addHereNow,
   queryCurrentEvent,
@@ -1415,7 +1374,6 @@ export type {
   OrganizationType,
   SetSalvationsType,
   SetNotificationBannerType,
-  ClientInfoType,
   ChannelsObjectType,
   QueryCurrentEventType,
   HereNowChannels,

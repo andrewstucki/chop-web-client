@@ -1,4 +1,5 @@
 // @flow
+import dayjs from 'dayjs';
 import { GraphQLClient } from 'graphql-request';
 import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
@@ -168,7 +169,8 @@ export type GraphQLCurrentStateType =
   GraphQLOrganizationType &
   GraphQLLanguageType &
   GraphQLUserType &
-  GraphQLPubnubKeys & GraphQLSchedule;
+  GraphQLPubnubKeys &
+  GraphQLSchedule;
 
 export type GraphQLAcceptPrayer = {
   acceptPrayer: boolean,
@@ -363,7 +365,7 @@ mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
 }`;
 
 const schedule = `
-schedule {
+schedule(endTime: $scheduleEndTime) {
   fetchTime
   startTime
   endTime
@@ -410,7 +412,7 @@ mutation updateUser($id: ID!, $input: UserInput!) {
 `;
 
 const currentState = `
-query CurrentState($needLanguages: Boolean!) {
+query CurrentState($needLanguages: Boolean!, $scheduleEndTime: Timestamp) {
   ${currentEvent}
   ${currentUser}
   ${currentOrganization}
@@ -478,10 +480,11 @@ const queries = {
     }),
 
   currentState: async (
-    needLanguages: boolean = true
+    needLanguages: boolean = true,
   ): Promise<GraphQLCurrentStateType> =>
     await client.request(currentState, {
       needLanguages,
+      scheduleEndTime: dayjs().add(1, 'week').endOf('day').unix(),
     }),
 
   acceptPrayer: async (
@@ -493,7 +496,6 @@ const queries = {
     await client.request(acceptPrayer, {
       feedToken: channelId,
       requesterPubnubToken,
-
       requesterNickname: requesterName,
     }),
 
@@ -524,7 +526,9 @@ const queries = {
     }),
 
   schedule: async (): Promise<GraphQLSchedule> =>
-    await client.request(schedule),
+    await client.request(schedule, {
+      scheduleEndTime: dayjs().add(1, 'week').endOf('day').unix(),
+    }),
 
   eventAtTime: async (time: number): Promise<GraphQLEventAtTimeType> =>
     await client.request(eventAt, {

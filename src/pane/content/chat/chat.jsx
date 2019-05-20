@@ -63,6 +63,7 @@ const ChatFeed = React.memo < ChatPropsType > (
     );
   }
 );
+ChatFeed.displayName = 'ChatFeed';
 
 ChatFeed.displayName = 'ChatPlaceholder';
 
@@ -80,6 +81,7 @@ const ChatPlaceholder = React.memo < ChatPlaceholderProps > (
     );
   }
 );
+ChatPlaceholder.displayName = 'ChatPlaceholder';
 
 ChatPlaceholder.displayName = 'ChatPlaceholder';
 

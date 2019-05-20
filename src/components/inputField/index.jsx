@@ -1,5 +1,4 @@
 // @flow
-/* global SyntheticKeyboardEvent, SyntheticFocusEvent */
 import React, { useRef, useImperativeHandle } from 'react';
 import { Wrapper, Input, Label } from './styles';
 
@@ -13,6 +12,10 @@ type InputFieldProps = {
   value?: string,
   placeholder?: string,
   autoComplete?: string,
+};
+
+type ImperativeHandleType = {
+  value: () => string,
 };
 
 function InputField ({ type, label, name, onChange, onFocus, onBlur, value, placeholder, autoComplete }: InputFieldProps, ref) {
@@ -44,5 +47,4 @@ function InputField ({ type, label, name, onChange, onFocus, onBlur, value, plac
   );
 }
 
-// any is used because of useImperativeHandle. There may be a better type definition.
-export default React.forwardRef <InputFieldProps, any> (InputField);
+export default React.forwardRef <InputFieldProps, ImperativeHandleType> (InputField);

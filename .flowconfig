@@ -8,6 +8,7 @@
 config/flow-typed
 
 [lints]
+deprecated-utility=warn
 
 [options]
 esproposal.optional_chaining=enable
@@ -22,3 +23,4 @@ sketchy-null
 
 [untyped]
 <PROJECT_ROOT>/node_modules/redux-persist/lib/integration/react.js.flow
+<PROJECT_ROOT>/node_modules/redux-persist/lib/persistReducer.js.flow

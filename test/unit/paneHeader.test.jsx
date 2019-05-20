@@ -1,12 +1,13 @@
 // @flow
 import React from 'react';
 import sinon from 'sinon';
-import { renderWithTheme } from '../testUtils';
+import { renderWithTheme, renderWithReduxAndTheme } from '../testUtils';
 import PaneHeader from '../../src/paneHeader';
 import { CHAT_HEADER } from '../../src/paneHeader/chatHeader';
 import { TAB_HEADER } from '../../src/paneHeader/tabHeader';
 import { DIRECT_CHAT_HEADER } from '../../src/paneHeader/directChatHeader';
 import { fireEvent } from 'react-testing-library';
+import { SCHEDULE_HEADER } from '../../src/paneHeader/scheduleHeader';
 
 
 describe('Pane Header tests', () => {
@@ -51,6 +52,20 @@ describe('Pane Header tests', () => {
     );
 
     const paneHeader = getByTestId('tabHeader');
+    expect(paneHeader).toBeTruthy();
+  });
+
+  test('It renders schedule type', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <PaneHeader
+        type={SCHEDULE_HEADER}
+        data={{
+          title: 'Schedule',
+        }}
+      />
+    );
+
+    const paneHeader = getByTestId('scheduleHeader');
     expect(paneHeader).toBeTruthy();
   });
 });

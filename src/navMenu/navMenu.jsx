@@ -15,7 +15,7 @@ import {
   Label,
   getColor,
   PipWrapper,
-  PipWrapperCollapsed, 
+  PipWrapperCollapsed,
 } from './styles';
 import Hamburger from '../icons/hamburger';
 import HostChat from '../icons/hostChat';
@@ -35,6 +35,7 @@ import {MediumDown, LargeDown} from '../util/responsive';
 import {DirectChatAvatar} from '../components/styles';
 import Pip from '../components/pip';
 import { useTranslation } from 'react-i18next';
+import { SCHEDULE } from '../schedule/dux';
 
 const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false, hasActions, hasNewMessages}) => {
   const { t } = useTranslation();
@@ -135,9 +136,10 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
                 hasActions={hostChannel.hasActions} hasNewMessages={hostChannel.hasNewMessages}
                 onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)}/>
             </LargeDown>
-            <NavMenuItem Icon={HostInfo} text={t('host_info')} expanded={expanded} selected={currentTabType === 'HOST_INFO'}
+            <NavMenuItem Icon={HostInfo} text={t('host_info')} expanded={expanded} selected={currentTabType === HOST_INFO}
               onClick={() => setPaneToTab(PRIMARY_PANE, HOST_INFO)}/>
-            <NavMenuItem Icon={Calendar} text={t('schedule')} expanded={expanded} disabled={true}/>
+            <NavMenuItem Icon={Calendar} text={t('schedule')} expanded={expanded} selected={currentTabType === SCHEDULE}
+              onClick={() => setPaneToTab(PRIMARY_PANE, SCHEDULE)}/>
             <NavMenuItem Icon={Document} text={t('notes')} expanded={expanded} disabled={true}/>
             <NavMenuItem Icon={Bible} text={t('bible')} expanded={expanded} disabled={true}/>
           </NavMenuBodySection>

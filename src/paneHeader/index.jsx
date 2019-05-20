@@ -1,16 +1,15 @@
 // @flow
 import React from 'react';
-import ChatHeader, { CHAT_HEADER} from './chatHeader';
-import type { ChatHeaderType } from './chatHeader';
-import DirectChatHeader, { DIRECT_CHAT_HEADER} from './directChatHeader';
-import type { DirectChatHeaderType } from './directChatHeader';
-import TabHeader, { TAB_HEADER} from './tabHeader';
-import type { TabHeaderType } from './tabHeader';
+import ChatHeader, { CHAT_HEADER, type ChatHeaderType } from './chatHeader';
+import DirectChatHeader, { DIRECT_CHAT_HEADER, type DirectChatHeaderType } from './directChatHeader';
+import TabHeader, { TAB_HEADER, type TabHeaderType} from './tabHeader';
+import ScheduleHeader, { SCHEDULE_HEADER, type ScheduleHeaderType } from './scheduleHeader';
 
 type PaneHeaderProps =
   | ChatHeaderType
   | DirectChatHeaderType
-  | TabHeaderType;
+  | TabHeaderType
+  | ScheduleHeaderType;
 
 const PaneHeader = (pane: PaneHeaderProps) => {
   switch (pane.type) {
@@ -25,6 +24,10 @@ const PaneHeader = (pane: PaneHeaderProps) => {
     case TAB_HEADER: {
       const { title } = pane.data;
       return <TabHeader title={title} />;
+    }
+    case SCHEDULE_HEADER: {
+      const { title } = pane.data;
+      return <ScheduleHeader title={title} />;
     }
     default:
       return null;

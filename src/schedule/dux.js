@@ -1,15 +1,19 @@
 // @flow
 import { createSelector } from 'reselect';
+import { groupBy } from 'lodash';
+import dayjs from 'dayjs';
 
 // Action Types
 const ID = 'schedule';
+export const SCHEDULE = 'SCHEDULE';
 export const POP_SCHEDULE = 'POP_SCHEDULE';
 export const SET_SCHEDULE = 'SET_SCHEDULE';
 export const QUERY_SCHEDULE_FAILED = 'QUERY_SCHEDULE_FAILED';
+export const SET_SCHEDULE_TIMEZONE = 'SET_SCHEDULE_TIMEZONE';
 
 // FLow Types
 
-type EventScheduleType = {
+export type EventScheduleType = {
   id: string,
   startTime: number,
   endTime: number,
@@ -19,7 +23,10 @@ type EventScheduleType = {
   hostInfo: string,
 };
 
-type ScheduleType = Array<EventScheduleType>;
+type ScheduleType = {
+  items: Array<EventScheduleType>,
+  timeZone: string,
+};
 
 type PopScheduleType = {
   type: typeof POP_SCHEDULE,
@@ -28,16 +35,22 @@ type PopScheduleType = {
 
 type SetScheduleType = {
   type: typeof SET_SCHEDULE,
-  schedule: ScheduleType,
+  schedule: Array<EventScheduleType>,
+};
+
+type SetScheduleTimeZoneType = {
+  type: typeof SET_SCHEDULE_TIMEZONE,
+  timeZone: string,
 };
 
 type ActionType =
   | SetScheduleType
-  | PopScheduleType;
+  | PopScheduleType
+  | SetScheduleTimeZoneType;
 
 // Action Creators
 
-export const setSchedule = (schedule: ScheduleType): SetScheduleType => (
+export const setSchedule = (schedule: Array<EventScheduleType>): SetScheduleType => (
   {
     type: SET_SCHEDULE,
     schedule,
@@ -51,10 +64,21 @@ export const popSchedule = (now: number): PopScheduleType => (
   }
 );
 
+export const setScheduleTimeZone = (timeZone: string):SetScheduleTimeZoneType => (
+  {
+    type: SET_SCHEDULE_TIMEZONE,
+    timeZone,
+  }
+);
+
 // reducer
+export const defaultState = {
+  items: [],
+  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+};
 
 export default (
-  state: ScheduleType = [],
+  state: ScheduleType = defaultState,
   action?: ActionType,
 ): ScheduleType => {
   if (!action || !action.type) {
@@ -62,11 +86,22 @@ export default (
   }
   switch (action.type) {
     case SET_SCHEDULE:
-      return action.schedule;
+      return {
+        ...state,
+        items: action.schedule,
+      };
     case POP_SCHEDULE: {
       const { now } = action;
-      return state.filter(time => (time.startTime * 1000) > now);
+      return {
+        ...state,
+        items: state.items.filter(time => (time.startTime * 1000) > now),
+      };
     }
+    case SET_SCHEDULE_TIMEZONE:
+      return {
+        ...state,
+        timeZone: action.timeZone,
+      };
   }
   return state;
 };
@@ -76,10 +111,20 @@ const local = state => state[ID];
 
 export const getNextEventData = createSelector(
   local,
-  schedule => schedule[0]
+  schedule => schedule.items?.[0] || {}
 );
 
 export const getNextStartTime = createSelector(
   local,
-  schedule => schedule[0].startTime
+  schedule => schedule.items?.[0]?.startTime || 0
+);
+
+export const getScheduleGroupedByDay = createSelector(
+  local,
+  schedule => groupBy(schedule.items, item => dayjs.unix(item.startTime).format('YYYYMMDD'))
+);
+
+export const getScheduleTimeZone = createSelector(
+  local,
+  schedule => schedule.timeZone,
 );

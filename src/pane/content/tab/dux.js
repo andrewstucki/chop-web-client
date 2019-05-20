@@ -1,13 +1,13 @@
 // @flow
 import { SET_PANE_CONTENT } from '../../dux';
 import { HOST_INFO } from '../../../hostInfo/dux';
+import { SCHEDULE } from '../../../schedule/dux';
 import type { SetPaneType } from '../../dux';
 
 const TAB = 'TAB';
 
 // TODO: Move these constants when the features are actually created.
 const BIBLE = 'BIBLE';
-const SCHEDULE = 'SCHEDULE';
 const NOTES = 'NOTES';
 
 type TabType =
@@ -41,7 +41,6 @@ export {
   SET_PANE_CONTENT,
   TAB,
   BIBLE,
-  SCHEDULE,
   NOTES,
 };
 

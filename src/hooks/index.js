@@ -1,3 +1,4 @@
+// @flow
 import useScroll from './useScroll';
 import useWindowSize from './useWindowSize';
 import useWhyDidYouUpdate from './useWhyDidYouUpdate';

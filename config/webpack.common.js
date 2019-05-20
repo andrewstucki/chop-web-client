@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const constants = require('./webpack.constants.js');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
   entry: './src/index.jsx',
@@ -13,8 +14,13 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)?$/,
-        use: 'babel-loader',
-        exclude: /node_modules/
+        use: {
+          loader: 'babel-loader',
+          options: {
+            exclude: /node_modules/,
+            plugins: ['lodash']
+          },
+        },
       },
       {
         test: /\.css$/,
@@ -66,7 +72,7 @@ module.exports = {
             }
           }
         ]
-      }      
+      }
     ]
   },
   resolve: {
@@ -77,6 +83,7 @@ module.exports = {
       template: './assets/index.html'
     }),
     new webpack.HashedModuleIdsPlugin(),
+    new LodashModuleReplacementPlugin(),
     new CompressionPlugin(),
     new CopyWebpackPlugin([
       { from: 'assets/manifest.webmanifest', to: 'manifest.webmanifest' },
