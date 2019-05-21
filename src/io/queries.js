@@ -113,6 +113,10 @@ export type GraphQLPubnubKeys = {
   }
 };
 
+export type GraphQLEnabledFeatures = {
+  chat: boolean,
+}
+
 export type GraphQLEventType = {
   description: GraphQLString,
   endTime: GraphQLInt,
@@ -126,6 +130,7 @@ export type GraphQLEventType = {
   videoStartTime: GraphQLInt,
   video: GraphQLVideoType,
   feeds: Array<GraphQLChannelType>,
+  enabledFeatures: GraphQLEnabledFeatures,
 };
 
 export type GraphQLCurrentEventType = {
@@ -247,6 +252,9 @@ currentEvent {
       avatar
       name: nickname
     }
+  }
+  enabledFeatures {
+    chat
   }
 }`;
 

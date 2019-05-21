@@ -150,6 +150,10 @@ const JOIN_CHANNEL_FAILED = 'JOIN_CHANNEL_FAILED';
 
 // Flow Type Definitions
 
+type EnabledFeaturesType = {
+  chat:boolean,
+};
+
 type EventType = {
   title: string,
   id: string,
@@ -160,6 +164,7 @@ type EventType = {
   hostInfo?: string,
   speaker?: string,
   hostInfo?: string,
+  enabledFeatures: EnabledFeaturesType,
 };
 
 type LanguageType = {
@@ -491,7 +496,7 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
 );
 
 const setEvent = (title: string, id: string, eventTimeId: string, startTime: number, endTime: number, videoStartTime: number,
-  speaker: string, description: string, hostInfo: string): SetEventType => (
+  speaker: string, description: string, hostInfo: string, enabledFeatures: EnabledFeaturesType ): SetEventType => (
   {
     type: SET_EVENT,
     event: {
@@ -504,6 +509,7 @@ const setEvent = (title: string, id: string, eventTimeId: string, startTime: num
       speaker,
       description,
       hostInfo,
+      enabledFeatures,
     },
   }
 );
@@ -641,6 +647,9 @@ const defaultState = {
     endTime: 0,
     title: '',
     hostInfo: '',
+    enabledFeatures: {
+      chat: false,
+    },
   },
   organization: {
     id: 0,

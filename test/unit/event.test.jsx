@@ -23,11 +23,16 @@ test('Event renders when there is an event.', () => {
           id: 129073,
           startTime: 1543585500,
           videoStartTime: 1543586400,
+          enabledFeatures: {
+            chat: true,
+          },
         },
         panes: {
           primary: {
             type: 'EVENT',
-            content: {},
+            content: {
+              channelId: 'event',
+            },
           },
         },
       },

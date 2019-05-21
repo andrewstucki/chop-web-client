@@ -27,6 +27,7 @@
   "notes": "Notes",
   "public": "Public",
   "public_chat": "Public Chat",
+  "public_chat_disabled": "Public chat has been disabled for this event",
   "schedule": "Schedule",
   "support": "Support",
   "timezone": "Timezone",

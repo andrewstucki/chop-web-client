@@ -162,6 +162,7 @@ function* eventMain (event: GraphQLEventAtType | GraphQLEventType): Saga<void> {
       event.speaker || '',
       event.description || '',
       event.hostInfo || '',
+      event.enabledFeatures || { chat: false },
     )
   );
 }
