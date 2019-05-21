@@ -119,6 +119,9 @@ describe('Current Event', () => {
             url: 'https://www.youtube.com/watch?v=TD2XGwmRJi8',
             type: 'simulated',
           },
+          enabledFeatures: {
+            chat: true,
+          },
         },
         schedule: [
           {
@@ -200,6 +203,7 @@ describe('Current Event', () => {
         'John',
         'John talks about the book of John.',
         'Yo!',
+        { chat: true },
       ),
       {
         type: 'SET_SEQUENCE',
