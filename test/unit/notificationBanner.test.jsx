@@ -19,13 +19,70 @@ describe('NotificationBanner test', () => {
         },
       },
     );
-    expect(getByTestId('notification-banner')).toBeTruthy();
+    expect(getByTestId('muted-notification-banner')).toBeTruthy();
     fireEvent.click(getByTestId('banner-dismiss-button'));
     expect(store.getState().feed.notificationBanner).toEqual(
       {
         message: '',
         bannerType: '',
       },
+    );
+  });
+
+  test('Text mode banner displays', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Banner />,
+      {
+        feed: {
+          ...defaultState,
+          notificationBanner: {
+            message: 'COMPACT',
+            bannerType: 'TEXT_MODE_NOTIFICATION',
+          },
+        },
+      },
+    );
+    expect(getByTestId('text-mode-notification-banner')).toBeTruthy();
+    expect(getByTestId('banner-message').textContent).toEqual(
+      'text_mode_updated'
+    );
+  });
+
+  test('Error banner displays', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Banner />,
+      {
+        feed: {
+          ...defaultState,
+          notificationBanner: {
+            message: 'There was an error.',
+            bannerType: 'ERROR',
+          },
+        },
+      },
+    );
+    expect(getByTestId('error-banner')).toBeTruthy();
+    expect(getByTestId('banner-message').textContent).toEqual(
+      'There was an error.'
+    );
+  });
+
+  test('Warning banner displays', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Banner />,
+      {
+        feed: {
+          ...defaultState,
+          notificationBanner: {
+            message: 'This is a warning.',
+            bannerType: 'WARNING',
+          },
+        },
+      },
+    );
+    expect(getByTestId('warning-banner')).toBeTruthy();
+    expect(getByTestId('banner-message').textContent).toEqual(
+      'This is a warning.'
     );
   });
 });

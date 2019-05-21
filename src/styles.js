@@ -158,6 +158,7 @@ const theme:ThemeType = {
   },
   shadows: {
     shadow2: '0 2px 6px rgba(45, 45, 46, 0.25)',
+    shadow3: '0px 8px 16px rgba(30, 31, 35, 0.25)',
   },
 };
 

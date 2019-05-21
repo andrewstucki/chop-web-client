@@ -98,6 +98,7 @@ describe('PopUpModal tests', () => {
         currentUser={currentUser}
         publishLeftChannelNotification={publishLeftChannelNotification}
         isPlaceholder={false}
+        isSmall={false}
       />
     );
 
@@ -126,11 +127,12 @@ describe('PopUpModal tests', () => {
         user={otherUser.name}
         hostChannel='host'
         currentChannel='public'
+        isSmall={false}
       />
     );
 
     expect(getByTestId('muteUser-confirmText').textContent).toEqual(
-      'Are you sure you want to mute Billy Bob?'
+      'Are you sure you want to mute Billy Bob?mute_user.all_messages'
     );
     expect(getByTestId('muteUser-allMessages').textContent).toEqual(
       'mute_user.all_messages'
@@ -251,6 +253,6 @@ describe('PopUpModal tests', () => {
         togglePopUpModal={() => {}}
       />, state
     );
-    expect(getByTestId('leaveChat')).toBeTruthy();
+    expect(getByTestId('leaveChat-modal')).toBeTruthy();
   });
 });

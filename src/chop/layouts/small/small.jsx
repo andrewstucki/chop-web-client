@@ -29,7 +29,7 @@ const Small = ({ isVideoHidden, toggleHideVideo }:SmallProps) => {
     <>
       <SideMenu />
       <Container>
-        <PopUpModal />
+        <PopUpModal isSmall/>
         <Banner fullWidth/>
         <NavHeader />
         <VideoFeed />

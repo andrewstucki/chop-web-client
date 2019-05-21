@@ -47,9 +47,9 @@ const Banner = (
     case MUTED_NOTIFICATION:
       return (
         <BannerWrapper>
-          <NotificationBanner fullWidth={fullWidth} data-testid='notification-banner'>
+          <NotificationBanner fullWidth={fullWidth} data-testid='muted-notification-banner'>
             <DismissButton dismissNotification={dismissNotification}/>
-            <BannerMessage>
+            <BannerMessage data-testid='banner-message'>
               <Trans ns='notifications' i18nKey='user_muted'>
                 {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
                 <strong>{{name}}</strong> was muted.
@@ -61,18 +61,18 @@ const Banner = (
     case ERROR:
       return (
         <BannerWrapper>
-          <ErrorBanner fullWidth={fullWidth}>
+          <ErrorBanner fullWidth={fullWidth} data-testid='error-banner'>
             <DismissButton dismissNotification={dismissNotification}/>
-            <BannerMessage>{banner.message}</BannerMessage>
+            <BannerMessage data-testid='banner-message'>{banner.message}</BannerMessage>
           </ErrorBanner>
         </BannerWrapper>
       );
     case WARNING:
       return (
         <BannerWrapper>
-          <WarningBanner fullWidth={fullWidth}>
+          <WarningBanner fullWidth={fullWidth} data-testid='warning-banner'>
             <DismissButton dismissNotification={dismissNotification}/>
-            <BannerMessage>{banner.message}</BannerMessage>
+            <BannerMessage data-testid='banner-message'>{banner.message}</BannerMessage>
           </WarningBanner>
         </BannerWrapper>
       );
@@ -80,9 +80,9 @@ const Banner = (
       const text = banner.message === COMPACT ? 'decreased' : 'increased';
       return (
         <BannerWrapper>
-          <NotificationBanner fullWidth={fullWidth}>
+          <NotificationBanner fullWidth={fullWidth} data-testid='text-mode-notification-banner'>
             <DismissButton dismissNotification={dismissNotification}/>
-            <BannerMessage>
+            <BannerMessage data-testid='banner-message'>
               {t('text_mode_updated', {text})}
             </BannerMessage>
           </NotificationBanner>

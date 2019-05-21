@@ -23,27 +23,6 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
-        use: [
-          { loader: 'style-loader' },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              importLoaders: 1
-            }
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              config: {
-                path: 'config/postcss.config.js'
-              }
-            }
-          }
-        ]
-      },
-      {
         test: /\.html$/,
         use: 'html-loader',
       },
@@ -76,7 +55,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [ '.jsx', '.js', '.css' ]
+    extensions: [ '.jsx', '.js' ]
   },
   plugins: [
     new HtmlWebpackPlugin({

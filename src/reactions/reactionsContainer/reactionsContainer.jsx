@@ -2,7 +2,6 @@
 import React from 'react';
 import Reaction from '../reaction';
 import ReactionButton from '../reactionButton';
-import style from './style.css';
 
 import type { ReactionType } from '../reactionButton/dux';
 
@@ -11,7 +10,12 @@ type ReactionsContainerProps = {
 };
 
 const ReactionsContainer = ({reactions}: ReactionsContainerProps) => (
-  <div className={style.container}>
+  <div
+    data-testid={'reactionContainer'}
+    css={`
+      position: relative;
+      z-index: 1;
+  `}>
     { reactions.map(reaction =>
       <Reaction key={reaction.id} reactionId={reaction.id}/>
     )}

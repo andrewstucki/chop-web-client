@@ -2,7 +2,8 @@ import React from 'react';
 
 import type { SharedUserType } from '../../users/dux';
 import { Trans, useTranslation } from 'react-i18next';
-import styles from '../style.css';
+import { Button, ActionContainer, Text, SmallText, REGRESS, DANGER } from '../styles';
+import { Modal } from '../popUpModal';
 
 type MuteUserPropsType = {
   togglePopUpModal: () => void,
@@ -13,6 +14,7 @@ type MuteUserPropsType = {
   hostChannel: string,
   currentChannel: string,
   currentUser: SharedUserType,
+  isSmall: boolean,
 };
 
 const MuteUserPopUpModal = (
@@ -25,6 +27,7 @@ const MuteUserPopUpModal = (
     hostChannel,
     currentChannel,
     currentUser,
+    isSmall,
   }: MuteUserPropsType
 ) => {
   const { t } = useTranslation('forms');
@@ -36,32 +39,24 @@ const MuteUserPopUpModal = (
   };
 
   return (
-    <div className={styles.alert} data-testid='muteUser-modal'>
-      <div className={styles.text} data-testid='muteUser-confirmText'>
+    <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} id="muteUser-modal">
+      <Text data-testid='muteUser-confirmText'>
         <Trans ns='forms' i18nKey='mute_user.confirm'>
           Are you sure you want to mute <strong>{{ user }}</strong>?
         </Trans>
-      </div>
-      <div className={styles.smallText} data-testid='muteUser-allMessages'>
-        { t('mute_user.all_messages') }
-      </div>
-      <div className={styles.actionContainer}>
-        <button
-          className={styles.primary}
-          onClick={togglePopUpModal}
-          data-testid='muteUser-cancel'
-        >
+        <SmallText data-testid='muteUser-allMessages'>
+          { t('mute_user.all_messages') }
+        </SmallText>
+      </Text>
+      <ActionContainer>
+        <Button type={REGRESS} onClick={togglePopUpModal} data-testid='muteUser-cancel' >
           { t('mute_user.cancel') }
-        </button>
-        <button
-          className={styles.danger}
-          onClick={callMuteUser}
-          data-testid='muteUser-mute'
-        >
+        </Button>
+        <Button type={DANGER} onClick={callMuteUser} data-testid='muteUser-mute'>
           { t('mute_user.mute') }
-        </button>
-      </div>
-    </div>
+        </Button>
+      </ActionContainer>
+    </Modal>
   );
 };
 
