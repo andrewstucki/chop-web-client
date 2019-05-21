@@ -18,7 +18,7 @@ import {
 
 import LeaveChat from './leaveChat';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const feedState = state.feed;
   const currentChannel = getCurrentChannel(feedState);
   const channel = getChannelById(feedState, currentChannel);
@@ -28,6 +28,7 @@ const mapStateToProps = state => {
     currentUser: feedState.currentUser,
     currentChannel,
     isPlaceholder: channel?.placeholder || false,
+    isSmall: ownProps.isSmall,
   };
 };
 

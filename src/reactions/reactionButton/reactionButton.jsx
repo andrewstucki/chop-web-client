@@ -3,7 +3,7 @@ import React from 'react';
 import type { SharedUserType } from '../../users/dux';
 
 import HeartButton from '../../../assets/heart-button.svg';
-import styles from './style.css';
+import { Container, Button } from './styles';
 import Actionable from '../../components/Actionable';
 
 type ReactionButtonPropsType = {
@@ -15,14 +15,14 @@ const ReactionButton = ({ buttonClick: _click, currentUser }: ReactionButtonProp
   const buttonClick = () => _click(currentUser);
 
   return (
-    <div className={styles.container}>
+    <Container>
       <Actionable onClick={buttonClick} keepFocus={true}>
-        <button
-          className={styles.reactionButton}
+        <Button
+          data-testid={'reactionButton'}
           dangerouslySetInnerHTML={{ __html: HeartButton }}
         />
       </Actionable>
-    </div>
+    </Container>
   );
 };
 

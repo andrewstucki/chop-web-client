@@ -1,15 +1,11 @@
 // @flow
-import Adapter from 'enzyme-adapter-react-16';
-import Errors from '../../src/errors';
-import Enzyme from 'enzyme';
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import Errors from '../../src/errors';
 
-Enzyme.configure({ adapter: new Adapter() });
+import { renderWithReduxAndTheme } from '../testUtils';
 
 test('Errors render.', () => {
-  const store = createStore(() => (
+  const state =
     {
       feed: {
         errors: [
@@ -23,18 +19,14 @@ test('Errors render.', () => {
           },
         ],
       },
-    }
-  ));
+    };
 
-  const wrapper = Enzyme.mount(
-    <Provider store={store}>
-      <div>
-        <Errors />
-      </div>   
-    </Provider>
+  const { getByTestId, getAllByTestId } = renderWithReduxAndTheme(
+    <Errors />,
+    state
   );
 
-  expect(wrapper.find('p')).toHaveLength(2);
-  expect(wrapper.find('p').at(0).text()).toEqual('You do not have access to this area of the application.');
-  expect(wrapper.find('p').at(1).text()).toEqual('Email address is required.');
+  expect(getByTestId('errors').children).toHaveLength(2);
+  expect(getAllByTestId('error-message')[0].textContent).toEqual('You do not have access to this area of the application.');
+  expect(getAllByTestId('error-message')[1].textContent).toEqual('Email address is required.');
 });

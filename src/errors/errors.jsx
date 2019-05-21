@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import styles from './styles.css';
+import { Wrapper } from './styles';
 import type { ErrorType } from './dux';
 
 type ErrorsProps = {
@@ -8,13 +8,13 @@ type ErrorsProps = {
 };
 
 const Errors = ({ errors = [] }: ErrorsProps) => (
-  <div className={styles.errors}>
+  <Wrapper data-testid='errors'>
     {
-      errors.map(error => 
+      errors.map(error =>
         <p data-testid="error-message" key={error.id}>{error.message}</p>
       )
     }
-  </div>
+  </Wrapper>
 );
 
 export default Errors;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from './style.css';
+import { Wrapper } from './styles';
 
 import Heart from '../../../assets/heart.svg';
 
@@ -36,13 +36,13 @@ class Reaction extends Component<ReactionProps> {
     };
 
     return (
-      <div
+      <Wrapper
+        data-testid={'reaction'}
         onAnimationEnd={this.removeReaction}
-        className={styles.animate}
         style={heartStyle}
         ref={this.reactionRef}
-        dangerouslySetInnerHTML={{ __html: Heart }} 
-      ></div>
+        dangerouslySetInnerHTML={{ __html: Heart }}
+      ></Wrapper>
     );
   }
 }
