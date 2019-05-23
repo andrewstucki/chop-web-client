@@ -68,7 +68,7 @@ const hasAction = channel => channel && channel.moments && channel.moments.filte
   : undefined;
 
 const hasNewMessage = (channel, currentUser, mutedUsers) => {
-  if (channel && channel.sawLastMomentAt !== undefined) {
+  if (channel && channel.sawLastMomentAt !== undefined && channel.type !== 'public') {
     return channel.moments.some(moment => {
       if (moment.sender) {
         const muted = mutedUsers.some(mutedUser => mutedUser === moment.sender.name);

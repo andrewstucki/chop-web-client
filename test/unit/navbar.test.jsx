@@ -1,11 +1,13 @@
 // @flow
 import React from 'react';
 import sinon from 'sinon';
+import { defaultState } from '../../src/feed/dux';
 import Navbar from '../../src/navbar/navbar';
+import NavbarIndex from '../../src/navbar';
 import { act, fireEvent } from 'react-testing-library';
 import { EVENT } from '../../src/pane/content/event/dux';
 import { CHAT } from '../../src/pane/content/chat/dux';
-import { renderWithTheme } from '../testUtils';
+import { renderWithTheme, renderWithReduxAndTheme } from '../testUtils';
 import { PRIMARY_PANE } from '../../src/pane/dux';
 import { TAB } from '../../src/pane/content/tab/dux';
 import { HOST_INFO } from '../../src/hostInfo/dux';
@@ -106,54 +108,6 @@ describe('Navbar tests', () => {
     }
   });
 
-  test('displaying pip on public', () => {
-    let container = null;
-    act (() => {
-      container = renderWithTheme(
-        <Navbar
-          items={[
-            {
-              id: '123456',
-              name: 'Public',
-              isCurrent: false,
-              hasActions: true,
-              hasNewMessages: false,
-              otherUsersNames: [],
-              isDirect: false,
-              isPlaceholder: false,
-              type: EVENT,
-            },
-            {
-              id: '1346546',
-              name: 'Host',
-              isCurrent: true,
-              hasActions: false,
-              hasNewMessages: false,
-              otherUsersNames: [],
-              isDirect: false,
-              isPlaceholder: false,
-              type: CHAT,
-            },
-          ]}
-          openMenu={() => {}}
-          setPaneToEvent={() => {}}
-          setPaneToChat={() => {}}
-          setPaneToTab={() => {}}
-          setNavbarIndex={() => {}}
-          navbarIndex={0}
-        />
-      );
-    });
-
-    expect.assertions(2);
-    if (container) {
-      const { getByTestId } = container;
-      // $FlowFixMe
-      expect(getByTestId('nav-Public').querySelector('div').className).toStartWith('styles__Pip');
-      expect(getByTestId('nav-Host').querySelector('div')).toBeNull();
-    }
-  });
-
   test('displaying pip on host', () => {
     let container = null;
     act (() => {
@@ -190,6 +144,69 @@ describe('Navbar tests', () => {
           setNavbarIndex={() => {}}
           navbarIndex={0}
         />
+      );
+    });
+
+    expect.assertions(2);
+    if (container) {
+      const { getByTestId } = container;
+      // $FlowFixMe
+      expect(getByTestId('nav-Host').querySelector('div').className).toStartWith('styles__Pip');
+      expect(getByTestId('nav-Public').querySelector('div')).toBeNull();
+    }
+  });
+
+  test('not displaying pip on public', () => {
+    let container = null;
+    act (() => {
+      container = renderWithReduxAndTheme(
+        <NavbarIndex />,
+        {
+          feed: {
+            ...defaultState,
+            currentUser: {
+              id: '456',
+            },
+            channels: {
+              '123456': {
+                name: 'Public',
+                type: 'public',
+                direct: false, 
+                id: '123456',
+                sawLastMomentAt: 1558450899,
+                moments: [
+                  {
+                    type: 'MESSAGE',
+                    id: '123',
+                    timestamp: 1558537299,
+                    text: 'Hi',
+                    sender: {
+                      id: '123',
+                    },
+                  },
+                ],
+              },
+              '789123': {
+                name: 'Host',
+                type: 'host',
+                direct: false, 
+                id: '789123',
+                sawLastMomentAt: 1558533699,
+                moments: [
+                  {
+                    type: 'MESSAGE',
+                    id: '123',
+                    timestamp: 1558537299,
+                    text: 'Hi',
+                    sender: {
+                      id: '123',
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        }
       );
     });
 
