@@ -3,9 +3,13 @@ import styled from 'styled-components';
 import type { ComponentType } from 'react';
 import type { NoPropsType } from '../cwc-types';
 
-const NavHeaderWrapper:ComponentType<NoPropsType> = styled.div`
+type NavHeaderWrapperProps = {
+  backgroundColor: string,
+};
+
+const NavHeaderWrapper:ComponentType<NavHeaderWrapperProps> = styled.div`
   display: flex;
-  background-color: ${props => props.theme.colors.gray5};
+  background-color: ${props => props.backgroundColor ? props.backgroundColor : props.theme.colors.gray5};
   height: 48px;
   width: 100%;
   z-index: 1;

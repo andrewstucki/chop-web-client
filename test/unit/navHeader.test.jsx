@@ -9,7 +9,7 @@ import { fireEvent } from 'react-testing-library';
 describe('NavHeader tests', () => {
   test('Component renders', () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
-      <NavHeader openMenu={() => {}} logoUrl={''} />
+      <NavHeader openMenu={() => {}} logoUrl={''} backgroundColor='' iconColor='' />
     );
     expect(getByTestId('navHeader')).toBeTruthy();
     expect(queryByTestId('navHeader-logo')).toBeFalsy();
@@ -18,7 +18,7 @@ describe('NavHeader tests', () => {
   test('Clicking the hamburger triggers openMenu', () => {
     const openMenu = sinon.spy();
     const { getByTestId } = renderWithTheme(
-      <NavHeader openMenu={openMenu} logoUrl={''} />
+      <NavHeader openMenu={openMenu} logoUrl={''} backgroundColor='' iconColor='' />
     );
 
     fireEvent.click(getByTestId('navHeader-openMenu'));
@@ -43,6 +43,10 @@ describe('NavHeader tests', () => {
             id: 0,
             name: 'Jedi Academy',
             logoUrl: 'https://chop.com/logo/url',
+            theme: {
+              headerBackgroundColor: 'red',
+              headerMenuIconColor: 'white',
+            },
           },
         },
       }

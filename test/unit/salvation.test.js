@@ -37,6 +37,10 @@ describe('Salvation Moment Tests', () => {
         id: 2,
         name: 'Life.Church',
         logoUrl: '',
+        theme: {
+          headerBackgroundColor: '',
+          headerMenuIconColor: '',
+        },
       },
       pubnubKeys: {
         publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
@@ -135,6 +139,10 @@ describe('Salvation Moment Tests', () => {
         id: 2,
         name: 'Life.Church',
         logoUrl: '',
+        theme: {
+          headerBackgroundColor: '',
+          headerMenuIconColor: '',
+        },
       },
       pubnubKeys: {
         publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
@@ -229,6 +237,10 @@ describe('Salvation Moment Tests', () => {
         id: 2,
         name: 'Life.Church',
         logoUrl: '',
+        theme: {
+          headerBackgroundColor: '',
+          headerMenuIconColor: '',
+        },
       },
       pubnubKeys: {
         publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',

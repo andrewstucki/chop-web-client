@@ -34,6 +34,7 @@ import {COMPACT} from '../../textModeToggle/dux';
 import { startTimer } from './sequence';
 import { PRIMARY_PANE } from '../../pane/dux';
 import { setPaneToEvent } from '../../pane/content/event/dux';
+import { theme } from '../../styles';
 
 const isTimeInFuture = (seconds: number): boolean => (seconds * 1000) > Date.now();
 
@@ -120,8 +121,12 @@ function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
 
 function* organization (data: GraphQLCurrentStateType): Saga<void> {
   if (data.currentOrganization) {
-    const { currentOrganization: { id, name, logoUrl } } = data;
-    yield put(setOrganization(id, name || '', logoUrl || ''));
+    const { currentOrganization: { id, name, logoUrl, theme:queryTheme } } = data;
+    const organizationTheme = {
+      headerBackgroundColor: queryTheme.headerBackgroundColor || theme.colors.gray5,
+      headerMenuIconColor: queryTheme.headerMenuIconColor || theme.colors.gray50,
+    };
+    yield put(setOrganization(id, name || '', logoUrl || '', organizationTheme));
   }
 }
 

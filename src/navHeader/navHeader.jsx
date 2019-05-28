@@ -6,14 +6,16 @@ import { NavHeaderWrapper, NavHeaderHamburgerWrapper, NavHeaderLogo } from './st
 
 type NavHeaderProps = {
   logoUrl: string,
+  backgroundColor: string,
+  iconColor: string,
   openMenu: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
 };
 
-const NavHeader = ({ openMenu, logoUrl }:NavHeaderProps) => (
-  <NavHeaderWrapper data-testid='navHeader'>
+const NavHeader = ({ openMenu, logoUrl, backgroundColor, iconColor }:NavHeaderProps) => (
+  <NavHeaderWrapper data-testid='navHeader' backgroundColor={backgroundColor}>
     <Actionable onClick={openMenu}>
       <NavHeaderHamburgerWrapper data-testid='navHeader-openMenu'>
-        <Hamburger size={32}/>
+        <Hamburger size={32} color={iconColor} />
       </NavHeaderHamburgerWrapper>
     </Actionable>
     { !!logoUrl && <NavHeaderLogo data-testid={'navHeader-logo'} src={logoUrl} /> }

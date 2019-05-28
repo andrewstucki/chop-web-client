@@ -55,6 +55,10 @@ describe('Current Event', () => {
           id: 0,
           name: 'First Church of the World',
           logoUrl: 'https://chop.com/image/url',
+          theme: {
+            headerBackgroundColor: 'red',
+            headerMenuIconColor: 'white',
+          },
         },
         currentLanguages: [
           { name: 'English', code: 'en' },
@@ -188,7 +192,7 @@ describe('Current Event', () => {
         type: 'SET_AVATAR',
         url: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1234/thumb/photo.jpg',
       },
-      setOrganization(0, 'First Church of the World', 'https://chop.com/image/url'),
+      setOrganization(0, 'First Church of the World', 'https://chop.com/image/url', { headerBackgroundColor: 'red', headerMenuIconColor: 'white'}),
       setLanguageOptions([
         { name: 'English', code: 'en' },
         { name: 'Spanish', code: 'es' },

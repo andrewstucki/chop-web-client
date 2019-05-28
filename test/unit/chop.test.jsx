@@ -15,6 +15,10 @@ describe('Chop', () => {
             id: 0,
             name: 'Jedi Academy',
             logoUrl: '',
+            theme: {
+              headerBackgroundColor: '',
+              headerMenuIconColor: '',
+            },
           },
         },
       });

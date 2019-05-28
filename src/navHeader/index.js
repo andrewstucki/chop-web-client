@@ -4,7 +4,12 @@ import { bindActionCreators } from 'redux';
 import { openMenu } from '../sideMenu/dux';
 import NavHeader from './navHeader';
 
-const mapStateToProps = state => ({ logoUrl: state.feed.organization.logoUrl });
+const mapStateToProps = state => ({
+  logoUrl: state.feed.organization.logoUrl,
+  backgroundColor: state.feed.organization.theme.headerBackgroundColor,
+  iconColor: state.feed.organization.theme.headerMenuIconColor,
+});
+
 const mapDispatchToProps = dispatch => bindActionCreators({ openMenu }, dispatch);
 
 const VisibleNavHeader = connect(
