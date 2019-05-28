@@ -17,6 +17,10 @@ describe('Converter Tests', () => {
             id: 2,
             name: 'Life.Church',
             logoUrl: '',
+            theme: {
+              headerBackgroundColor: '',
+              headerMenuIconColor: '',
+            },
           },
           channels: {
             public: {
@@ -93,6 +97,10 @@ describe('Converter Tests', () => {
             id: 2,
             name: 'Life.Church',
             logoUrl: '',
+            theme: {
+              headerBackgroundColor: '',
+              headerMenuIconColor: '',
+            },
           },
           channels: {
             public: {

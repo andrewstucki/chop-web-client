@@ -172,10 +172,16 @@ type LanguageType = {
   code: string,
 };
 
+type OrganizationThemeType = {
+  headerBackgroundColor?: string,
+  headerMenuIconColor?: string,
+};
+
 type OrganizationType = {
   id: number,
   name: string,
   logoUrl: string,
+  theme: OrganizationThemeType,
 };
 
 type SetOrganizationType = {
@@ -476,13 +482,14 @@ const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOp
   }
 );
 
-const setOrganization = (id: number, name: string, logoUrl: string): SetOrganizationType => (
+const setOrganization = (id: number, name: string, logoUrl: string, theme: OrganizationThemeType): SetOrganizationType => (
   {
     type: SET_ORGANIZATION,
     organization: {
       id,
       name,
       logoUrl,
+      theme,
     },
   }
 );
@@ -655,6 +662,10 @@ const defaultState = {
     id: 0,
     name: '',
     logoUrl: '',
+    theme: {
+      headerBackgroundColor: '',
+      headerMenuIconColor: '',
+    },
   },
   channels: {},
   hereNow: {},

@@ -34,6 +34,10 @@ export type GraphQLOrganizationType = {
     id: number,
     name: GraphQLString,
     logoUrl:GraphQLString,
+    theme: {
+      headerBackgroundColor: GraphQLString,
+      headerMenuIconColor: GraphQLString,
+    },
   }
 };
 
@@ -313,6 +317,10 @@ currentOrganization {
   id
   name
   logoUrl
+  theme {
+    headerBackgroundColor
+    headerMenuIconColor
+  }
 }`;
 
 const pubnubKeys = `
