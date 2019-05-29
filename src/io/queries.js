@@ -29,15 +29,17 @@ export type GraphQLAuthType = {
   }
 }
 
+export type GraphQLThemeType = {
+  headerBackgroundColor: GraphQLString,
+  headerMenuIconColor: GraphQLString,
+};
+
 export type GraphQLOrganizationType = {
   currentOrganization: {
     id: number,
     name: GraphQLString,
     logoUrl:GraphQLString,
-    theme: {
-      headerBackgroundColor: GraphQLString,
-      headerMenuIconColor: GraphQLString,
-    },
+    theme: ?GraphQLThemeType,
   }
 };
 

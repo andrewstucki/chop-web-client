@@ -123,8 +123,8 @@ function* organization (data: GraphQLCurrentStateType): Saga<void> {
   if (data.currentOrganization) {
     const { currentOrganization: { id, name, logoUrl, theme:queryTheme } } = data;
     const organizationTheme = {
-      headerBackgroundColor: queryTheme.headerBackgroundColor || theme.colors.gray5,
-      headerMenuIconColor: queryTheme.headerMenuIconColor || theme.colors.gray50,
+      headerBackgroundColor: queryTheme?.headerBackgroundColor || theme.colors.gray5,
+      headerMenuIconColor: queryTheme?.headerMenuIconColor || theme.colors.gray50,
     };
     yield put(setOrganization(id, name || '', logoUrl || '', organizationTheme));
   }
