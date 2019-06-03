@@ -6,6 +6,7 @@ import {
   checkForSequence,
   delay,
   getNextEvent,
+  startTimer,
 } from '../../../src/io/sagas/sequence';
 import {
   getNextFetchTime,
@@ -85,5 +86,13 @@ describe('Test Sequence saga', () => {
     const gen = getNextEvent();
 
     expect(gen.next().value).toEqual(put(popSchedule(1556302450836)));
+  });
+
+  test('breaks out of a fast iterating loop', () => {
+    const gen = startTimer();
+
+    gen.next();
+    gen.next();
+    expect(gen.next().done).toBeTruthy();
   });
 });

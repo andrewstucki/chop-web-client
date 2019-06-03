@@ -16,6 +16,7 @@ import {
 } from '../../sequence/dux';
 import {
   popSchedule,
+  setSchedule,
   getNextStartTime,
 } from '../../schedule/dux';
 import queries from '../queries';
@@ -47,8 +48,13 @@ export function* getNextEvent (): Saga<void> {
   try {
     yield put(popSchedule(Date.now()));
     const startTime = yield select(getNextStartTime);
-    const result = yield call([queries, queries.sequence], startTime);
-    yield call(sequence, result.eventAt.sequence);
+    if (startTime === 0) {
+      const newSchedule = yield call([queries, queries.schedule]);
+      setSchedule(newSchedule);
+    } else {
+      const result = yield call([queries, queries.sequence], startTime);
+      yield call(sequence, result.eventAt.sequence);
+    }
   } catch (error) {
     bugsnagClient.notify(error);
   }
@@ -88,11 +94,16 @@ export function* transitionSequence (): Saga<void> {
 }
 
 export function* startTimer (): Saga<void> {
-  while (true) {
+  // t0 and t1 are used for preventing a fast iterating loop. 
+  let t0;
+  let t1;
+  do {
+    t0 = performance.now();
     yield call(checkForSequence);
     yield all([
       call(fetchNextState),
       call(transitionSequence),
     ]);
-  }
+    t1 = performance.now();
+  } while (true && t1 - t0 > 2000);
 }
