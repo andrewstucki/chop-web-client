@@ -3,8 +3,8 @@ import { mockPublish } from 'pubnub';
 import { runSaga } from 'redux-saga';
 import { publishMomentToChannel } from '../../../src/io/saga';
 import { publishLeftChannelNotification, publishMessage } from '../../../src/moment';
-import { publishMuteUserNotification } from '../../../src/moment/notification/dux';
-import { defaultState } from '../../../src/feed/dux';
+import { publishMuteSubscriberNotification } from '../../../src/moment/notification/dux';
+import { defaultState } from '../../../src/chop/dux';
 import PubnubClient from '../../../src/io/pubnubClient';
 import queries from '../../../src/io/queries';
 import { mockDate } from '../../testUtils';
@@ -29,8 +29,7 @@ describe('Pubnub saga', () => {
   });
 
   test('Publish Message', async () => {
-    const sender = {
-      pubnubToken: '098765',
+    const subscriber = {
       name: 'Han Solo',
       role: {
         label: '',
@@ -42,8 +41,9 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           channels: {
             public: {
               id: 'public',
@@ -54,14 +54,14 @@ describe('Pubnub saga', () => {
               anchorMoments: [],
               scrollPosition: 0,
               sawLastMomentAt: 1546896104521,
-              participants: [],
+              subscribers: [],
             },
           },
         },
       }),
     },
     publishMomentToChannel,
-    publishMessage('public', `It's not my fault.`, sender, 'en')).toPromise();
+    publishMessage('public', `It's not my fault.`, subscriber, 'en')).toPromise();
 
     expect(mockPublish).toHaveBeenCalledTimes(1);
     expect(mockPublish.mock.calls[0][0]).toMatchObject(
@@ -75,7 +75,7 @@ describe('Pubnub saga', () => {
             id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
             lang: 'en',
             text: `It's not my fault.`,
-            sender,
+            subscriber,
             messageTrayOpen: false,
             isMuted: false,
           },
@@ -89,8 +89,9 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           channels: {
             host: {
               id: 'host',
@@ -101,7 +102,7 @@ describe('Pubnub saga', () => {
               anchorMoments: [],
               scrollPosition: 0,
               sawLastMomentAt: 1546896104521,
-              participants: [],
+              subscribers: [],
             },
           },
         },
@@ -117,13 +118,14 @@ describe('Pubnub saga', () => {
     expect(mockPublish).toHaveBeenCalledTimes(1);
   });
 
-  test('Publish muteUser', async () => {
+  test('Publish muteSubscriber', async () => {
     const dispatched = [];
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           channels: {
             host: {
               id: 'host',
@@ -134,14 +136,14 @@ describe('Pubnub saga', () => {
               anchorMoments: [],
               scrollPosition: 0,
               sawLastMomentAt: 1546896104521,
-              participants: [],
+              subscribers: [],
             },
           },
         },
       }),
     },
     publishMomentToChannel,
-    publishMuteUserNotification(
+    publishMuteSubscriberNotification(
       'host',
       'guest',
       'host',
@@ -156,8 +158,9 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           channels: {
             host: {
               id: 'host',
@@ -168,14 +171,14 @@ describe('Pubnub saga', () => {
               anchorMoments: [],
               scrollPosition: 0,
               sawLastMomentAt: 1546896104521,
-              participants: [],
+              subscribers: [],
             },
           },
         },
       }),
     },
     publishMomentToChannel,
-    publishMuteUserNotification(
+    publishMuteSubscriberNotification(
       'host',
       'guest',
       'host',
@@ -188,8 +191,7 @@ describe('Pubnub saga', () => {
   test('Publish Message to placeholder channel', async () => {
     mock(queries.directChat);
     mockDate(1553266446136);
-    const sender = {
-      pubnubToken: '098765',
+    const subscriber = {
       name: 'Han Solo',
       role: {
         label: '',
@@ -201,8 +203,9 @@ describe('Pubnub saga', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => ({
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           channels: {
             placeholder: {
               id: 'placeholder',
@@ -213,10 +216,9 @@ describe('Pubnub saga', () => {
               anchorMoments: [],
               scrollPosition: 0,
               sawLastMomentAt: 1546896104521,
-              participants: [
+              subscribers: [
                 {
                   id: 12345,
-                  pubnubToken: '12345',
                   avatar: null,
                   name: 'Kilo Ren',
                   role: {
@@ -230,7 +232,7 @@ describe('Pubnub saga', () => {
       }),
     },
     publishMomentToChannel,
-    publishMessage('placeholder', `It's not my fault.`, sender, 'en')).toPromise();
+    publishMessage('placeholder', `It's not my fault.`, subscriber, 'en')).toPromise();
 
     expect(dispatched.length).toEqual(5);
     expect(dispatched).toMatchObject([
@@ -242,11 +244,10 @@ describe('Pubnub saga', () => {
           direct: true,
           placeholder: false,
           moments: [],
-          participants: [
+          subscribers: [
             {
               id: '123',
-              name: 'Fred',
-              pubnubToken: '4321',
+              nickname: 'Fred',
               avatar: null,
               role: {
                 label: '',
@@ -254,8 +255,7 @@ describe('Pubnub saga', () => {
             },
             {
               id: '456',
-              name: 'Barny',
-              pubnubToken: '5432',
+              nickname: 'Barny',
               avatar: null,
               role: {
                 label: '',
@@ -300,8 +300,7 @@ describe('Pubnub saga', () => {
           timestamp: 1553266446136,
           lang: 'en',
           text: `It's not my fault.`,
-          sender: {
-            pubnubToken: '098765',
+          subscriber: {
             name: 'Han Solo',
             role: {
               label: '',
@@ -324,7 +323,7 @@ describe('Pubnub saga', () => {
             id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
             lang: 'en',
             text: `It's not my fault.`,
-            sender,
+            subscriber,
             messageTrayOpen: false,
             isMuted: false,
           },

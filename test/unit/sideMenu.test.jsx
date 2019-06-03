@@ -5,7 +5,7 @@ import { renderWithReduxAndTheme } from '../testUtils';
 
 import SideMenu from '../../src/sideMenu/sideMenu';
 import { fireEvent } from 'react-testing-library';
-import type {PrivateUserType} from '../../src/users/dux';
+import type {PrivateSubscriberType} from '../../src/subscriber/dux';
 
 const languageOptions = [
   {
@@ -45,10 +45,9 @@ const currentPane = {
   },
 };
 
-const currentUser: PrivateUserType = {
-  id: 134,
-  pubnubToken: '12sd0fj230jsdf;',
-  name: 'Kylo Ren',
+const currentSubscriber: PrivateSubscriberType = {
+  id: '134',
+  nickname: 'Kylo Ren',
   avatar: 'http://someimageons3.com/image/123',
   pubnubAccessKey: '12347893456',
   role: {
@@ -77,7 +76,7 @@ describe('SideBar tests', () => {
         setPaneToEvent={() => {}}
         setPaneToTab={() => {}}
         addTab={() => {}}
-        currentUser={currentUser}
+        currentSubscriber={currentSubscriber}
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
@@ -103,7 +102,7 @@ describe('SideBar tests', () => {
         setPaneToEvent={() => {}}
         setPaneToTab={() => {}}
         addTab={() => {}}
-        currentUser={currentUser}
+        currentSubscriber={currentSubscriber}
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
@@ -129,7 +128,7 @@ describe('SideBar tests', () => {
         setPaneToEvent={() => {}}
         setPaneToTab={() => {}}
         addTab={() => {}}
-        currentUser={currentUser}
+        currentSubscriber={currentSubscriber}
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
@@ -157,7 +156,7 @@ describe('SideBar tests', () => {
         setPaneToEvent={() => {}}
         setPaneToTab={() => {}}
         addTab={() => {}}
-        currentUser={currentUser}
+        currentSubscriber={currentSubscriber}
         eventDescription='The Description'
         eventTitle='Evenet Title'
         organizationName='The Church'
@@ -186,7 +185,7 @@ describe('SideBar tests', () => {
         setPaneToEvent={() => {}}
         setPaneToTab={() => {}}
         addTab={() => {}}
-        currentUser={currentUser}
+        currentSubscriber={currentSubscriber}
         eventDescription='The Description'
         eventTitle='Event Title'
         organizationName='The Church'
@@ -212,7 +211,7 @@ describe('SideBar tests', () => {
         setPaneToEvent={() => {}}
         setPaneToTab={() => {}}
         addTab={() => {}}
-        currentUser={currentUser}
+        currentSubscriber={currentSubscriber}
         eventDescription='The Description'
         eventTitle='Event Title'
         organizationName='The Church'
@@ -240,7 +239,7 @@ describe('SideBar tests', () => {
         setPaneToEvent={() => {}}
         setPaneToTab={() => {}}
         addTab={() => {}}
-        currentUser={currentUser}
+        currentSubscriber={currentSubscriber}
         eventDescription='The Description'
         eventTitle='Event Title'
         organizationName='The Church'

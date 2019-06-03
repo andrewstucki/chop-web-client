@@ -3,7 +3,7 @@ import React from 'react';
 import sinon from 'sinon';
 import { renderWithReduxAndTheme } from '../../testUtils';
 import { fireEvent } from 'react-testing-library';
-import { defaultState } from '../../../src/feed/dux';
+import { defaultState } from '../../../src/chop/dux';
 
 import MessageTray from '../../../src/components/messageTray';
 
@@ -12,7 +12,7 @@ describe('MessageTray tests', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
       <MessageTray
         deleteMessage={() => {}}
-        muteUser={() => {}}
+        muteSubscriber={() => {}}
         directChat={() => {}}
         isCompact={true}
         messageTrayOpen={true}
@@ -25,11 +25,11 @@ describe('MessageTray tests', () => {
 
   test('Can click delete and mute', () => {
     const deleteMessage = sinon.spy();
-    const muteUser = sinon.spy();
+    const muteSubscriber = sinon.spy();
     const { queryByTestId } = renderWithReduxAndTheme(
       <MessageTray
         deleteMessage={deleteMessage}
-        muteUser={muteUser}
+        muteSubscriber={muteSubscriber}
         directChat={() => {}}
         isCompact={true}
         messageTrayOpen={true}
@@ -37,13 +37,13 @@ describe('MessageTray tests', () => {
         moderationPermissions={true}
       />,
       {
-        feed: {
-          ...defaultState,
-          currentUser: {
-            ...defaultState.currentUser,
+        subscriber: {
+          ...defaultState.subscriber,
+          currentSubscriber: {
+            ...defaultState.subscriber.currentSubscriber,
             role: {
               label: 'Host',
-              permissions: ['feed.user.mute', 'feed.message.delete'],
+              permissions: ['feed.subscriber.mute', 'feed.message.delete'],
             },
           },
         },
@@ -52,7 +52,7 @@ describe('MessageTray tests', () => {
     fireEvent.click(queryByTestId('deleteButton'));
     fireEvent.click(queryByTestId('muteButton'));
     expect(deleteMessage.calledOnce).toEqual(true);
-    expect(muteUser.calledOnce).toEqual(true);
+    expect(muteSubscriber.calledOnce).toEqual(true);
   });
 
   test('Can click direct chat', () => {
@@ -60,7 +60,7 @@ describe('MessageTray tests', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
       <MessageTray
         deleteMessage={() => {}}
-        muteUser={() => {}}
+        muteSubscriber={() => {}}
         directChat={directChat}
         isCompact={true}
         messageTrayOpen={true}
@@ -68,10 +68,10 @@ describe('MessageTray tests', () => {
         moderationPermissions={false}
       />,
       {
-        feed: {
-          ...defaultState,
-          currentUser: {
-            ...defaultState.currentUser,
+        subscriber: {
+          ...defaultState.subscriber,
+          currentSubscriber: {
+            ...defaultState.subscriber.currentSubscriber,
             role: {
               label: 'Host',
               permissions: ['feed.direct.create'],

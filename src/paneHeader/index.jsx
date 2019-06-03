@@ -18,8 +18,8 @@ const PaneHeader = (pane: PaneHeaderProps) => {
       return <ChatHeader title={title} subtitle={subtitle} />;
     }
     case DIRECT_CHAT_HEADER: {
-      const { otherUsersName, leaveChannel } = pane.data;
-      return <DirectChatHeader otherUsersName={otherUsersName} leaveChannel={leaveChannel} />;
+      const { otherSubscribersName, leaveChannel } = pane.data;
+      return <DirectChatHeader otherSubscribersName={otherSubscribersName} leaveChannel={leaveChannel} />;
     }
     case TAB_HEADER: {
       const { title } = pane.data;

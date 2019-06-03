@@ -2,24 +2,19 @@
 import ActionableNotification from './actionableNotification';
 import { connect } from 'react-redux';
 
-import { getCurrentUserAsSharedUser } from '../../users/dux';
+import { getCurrentSubscriberAsSharedSubscriber } from '../../subscriber/dux';
 import { publishAcceptedPrayerRequest } from './dux';
 import { getHostChannel } from '../../selectors/channelSelectors';
 
-const mapStateToProps = state => {
-  const feedState = state.feed;
-  const hostChannel = getHostChannel(feedState);
-
-  return {
-    currentUser: getCurrentUserAsSharedUser(feedState),
-    hostChannel,
-  };
-};
+const mapStateToProps = state => ({
+  currentSubscriber: getCurrentSubscriberAsSharedSubscriber(state),
+  hostChannel: getHostChannel(state),
+});
 
 const mapDispatchToProps = dispatch => (
   {
-    acceptPrayerRequest: (prayerChannel, hostChannel, user, cancelled) => {
-      dispatch(publishAcceptedPrayerRequest(prayerChannel, hostChannel, user, cancelled));
+    acceptPrayerRequest: (prayerChannel, hostChannel, subscriber, cancelled) => {
+      dispatch(publishAcceptedPrayerRequest(prayerChannel, hostChannel, subscriber, cancelled));
     },
   }
 );

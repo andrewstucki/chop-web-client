@@ -1,4 +1,5 @@
 // @flow
+import type { ChopStateType } from '../chop/dux';
 import type {
   ToggleMessageTrayType,
   DeleteMessageType,
@@ -32,7 +33,6 @@ import {
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   PUBLISH_MOMENT_TO_CHANNEL,
   RECEIVE_MOMENT,
-  RECEIVE_MUTE_USER,
 } from '../moment';
 
 import {
@@ -102,15 +102,11 @@ import {
   SET_NAVBAR_INDEX,
 } from '../navbar/dux';
 import type {
-  SharedUserType,
-  UpdateUserSucceededType,
-  PrivateUserType,
-} from '../users/dux';
+  SharedSubscriberType,
+} from '../subscriber/dux';
 
 import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
-import { UPDATE_USER_SUCCEEDED } from '../users/dux';
-import { COMPACT } from '../textModeToggle/dux';
 import { HOST_INFO } from '../hostInfo/dux';
 import { BIBLE, NOTES, type TabType} from '../pane/content/tab/dux';
 import { SCHEDULE } from '../schedule/dux';
@@ -124,7 +120,6 @@ const LEAVE_CHANNEL_FAILED = 'LEAVE_CHANNEL_FAILED';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
-const SET_USER = 'SET_USER';
 const SET_EVENT = 'SET_EVENT';
 const SET_ORGANIZATION = 'SET_ORGANIZATION';
 const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
@@ -134,12 +129,8 @@ const SET_AUTHENTICATION = 'SET_AUTHENTICATION';
 const REMOVE_AUTHENTICATION = 'REMOVE_AUTHENTICATION';
 const CLEAR_NOTIFICATION_BANNER = 'CLEAR_NOTIFICATION_BANNER';
 const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
-const REMOVE_HERE_NOW = 'REMOVE_HERE_NOW';
-const UPDATE_HERE_NOW = 'UPDATE_HERE_NOW';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
-const SET_HERE_NOW = 'SET_HERE_NOW';
-const ADD_HERE_NOW = 'ADD_HERE_NOW';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
 const QUERY_CURRENT_EVENT = 'QUERY_CURRENT_EVENT';
 const QUERY_CURRENT_EVENT_FAILED = 'QUERY_CURRENT_EVENT_FAILED';
@@ -194,11 +185,6 @@ type PubnubKeysType = {
   subscribe: string,
 };
 
-type SetUser = {
-  type: 'SET_USER',
-  user: PrivateUserType,
-};
-
 type RemoveReactionType = {
   type: 'REMOVE_REACTION',
   id: string,
@@ -218,14 +204,10 @@ type ChannelType = {
   direct: boolean,
   placeholder: boolean,
   moments: Array<MomentType>,
-  participants: Array<SharedUserType>,
+  subscribers: Array<SharedSubscriberType>,
   anchorMoments: Array<AnchorMomentType>,
   scrollPosition: number,
   sawLastMomentAt: DateTimeType,
-};
-
-type HereNowChannels = {
-  [string]: Array<UserState>,
 };
 
 type AuthenticationType = {
@@ -250,8 +232,6 @@ type FeedType = {
   event: EventType,
   organization: OrganizationType,
   channels: ChannelsObjectType,
-  hereNow: HereNowChannels,
-  currentUser: PrivateUserType,
   isPopUpModalVisible: boolean,
   focusedChannel: string,
   isSideMenuClosed: boolean,
@@ -271,7 +251,7 @@ type FeedType = {
   panes: {
     [string]: PaneType,
   },
-  mutedUsers: Array<string>,
+  tabs: Array<TabType>,
   navbarIndex: number,
   prevNavbarIndex?: number,
   lastAction?: FeedActionTypes,
@@ -322,31 +302,6 @@ type LoadHistoryType = {
   moments: Array<MomentType>,
 };
 
-type UserState = {
-  id: string,
-  state: {
-    available_prayer?: boolean,
-  }
-};
-
-type SetHereNow = {
-  type: typeof SET_HERE_NOW,
-  channel: string,
-  users: Array<UserState>,
-};
-
-type AddHereNowType = {
-  type: typeof ADD_HERE_NOW,
-  channel: string,
-  user: UserState,
-};
-
-type RemoveHereNowType = {
-  type: typeof REMOVE_HERE_NOW,
-  channel: string,
-  userToken: string,
-};
-
 type SetSalvationsType = {
   type: 'SET_SALVATIONS',
   count: number,
@@ -386,7 +341,7 @@ type SetSawLastMomentAt = {
 type JoinChannelType = {
   type: typeof JOIN_CHANNEL,
   channel: string,
-  requesterPubnubToken: string,
+  requesterId: string,
   requesterNickname: string,
 };
 
@@ -394,7 +349,6 @@ type FeedActionTypes =
   | ReceiveMomentType
   | AddChannelType
   | RemoveChannelType
-  | SetUser
   | ToggleMessageTrayType
   | DeleteMessageType
   | ToggleCloseTrayButtonType
@@ -408,16 +362,13 @@ type FeedActionTypes =
   | SetOrganizationType
   | SetPubnubKeysType
   | LeaveChannelType
-  | AddHereNowType
   | PublishSalvationType
   | ReleaseAnchorMomentType
   | SetSalvationsType
-  | RemoveHereNowType
   | SetAuthenticationType
   | RemoveAuthenticationType
   | AddErrorType
   | RemoveErrorType
-  | SetHereNow
   | SetSawLastMomentAt
   | ToggleHideVideoType
   | SetNavbarIndexType
@@ -426,7 +377,6 @@ type FeedActionTypes =
   | SetChatFocusType
   | SetChannelsType
   | AddMomentToChannelType
-  | UpdateUserSucceededType;
 
 // Action Creators
 const queryCurrentEvent = (): QueryCurrentEventType => (
@@ -448,30 +398,6 @@ const setAuthentication = (accessToken: string, refreshToken: string): SetAuthen
 const removeAuthentication = (): RemoveAuthenticationType => (
   {
     type: REMOVE_AUTHENTICATION,
-  }
-);
-
-const setHereNow = (channel: string, users: Array<UserState>): SetHereNow => (
-  {
-    type: SET_HERE_NOW,
-    channel,
-    users,
-  }
-);
-
-const addHereNow = (channel: string, user: UserState): AddHereNowType => (
-  {
-    type: ADD_HERE_NOW,
-    channel,
-    user,
-  }
-);
-
-const removeHereNow = (channel: string, userToken: string): RemoveHereNowType => (
-  {
-    type: REMOVE_HERE_NOW,
-    userToken,
-    channel,
   }
 );
 
@@ -528,19 +454,12 @@ const removeReaction = (id: string): RemoveReactionType => (
   }
 );
 
-const setUser = (user: PrivateUserType): SetUser => (
-  {
-    type: SET_USER,
-    user,
-  }
-);
-
 const addChannel = (
   name: string,
   id: string,
   type: ChannelTypeType,
   direct: boolean,
-  participants?: Array<SharedUserType> = [],
+  subscribers?: Array<SharedSubscriberType> = [],
   placeholder?: boolean = false,
 ): AddChannelType => (
   {
@@ -552,7 +471,7 @@ const addChannel = (
       direct,
       placeholder,
       moments: [],
-      participants,
+      subscribers,
       anchorMoments: [],
       scrollPosition: 0,
       sawLastMomentAt: Date.now(),
@@ -561,7 +480,7 @@ const addChannel = (
 );
 
 const addPlaceholderChannel = (
-  otherUser:SharedUserType
+  otherSubscriber:SharedSubscriberType
 ): AddChannelType => (
   {
     type: ADD_CHANNEL,
@@ -572,7 +491,7 @@ const addPlaceholderChannel = (
       direct: true,
       placeholder: true,
       moments: [],
-      participants: [otherUser],
+      subscribers: [otherSubscriber],
       anchorMoments: [],
       scrollPosition: 0,
       sawLastMomentAt: Date.now(),
@@ -596,11 +515,11 @@ const setChannels = (
   }
 );
 
-const joinChannel = (channel: string, requesterPubnubToken: string, requesterNickname: string):JoinChannelType => (
+const joinChannel = (channel: string, requesterId: string, requesterNickname: string):JoinChannelType => (
   {
     type: JOIN_CHANNEL,
     channel,
-    requesterPubnubToken,
+    requesterId,
     requesterNickname,
   }
 );
@@ -668,21 +587,6 @@ const defaultState = {
     },
   },
   channels: {},
-  hereNow: {},
-  currentUser: {
-    id: 0,
-    name: '',
-    pubnubToken: '',
-    pubnubAccessKey: '',
-    avatar: null,
-    role: {
-      label: '',
-      permissions: [],
-    },
-    preferences: {
-      textMode: COMPACT,
-    },
-  },
   isPopUpModalVisible: false,
   focusedChannel: '',
   isSideMenuClosed: true,
@@ -748,7 +652,6 @@ const defaultState = {
     refreshToken: '',
   },
   persistExpiresAt: dayjs().add(1, 'month').format(),
-  mutedUsers: [],
   navbarIndex: 0,
   prevNavbarIndex: undefined,
   popUpModal: {},
@@ -803,51 +706,6 @@ const reducer = (
             [action.name]: action.pane,
           },
         };
-      }
-    }
-    case SET_HERE_NOW:
-      return {
-        ...state,
-        hereNow: {
-          ...state.hereNow,
-          [action.channel]: action.users,
-        },
-      };
-    case ADD_HERE_NOW:
-      return {
-        ...state,
-        hereNow: {
-          ...state.hereNow,
-          [action.channel]: [
-            ...state.hereNow[action.channel] || [],
-            action.user,
-          ],
-        },
-      };
-    case UPDATE_HERE_NOW: {
-      const { user } = action;
-      return {
-        ...state,
-        hereNow: {
-          ...state.hereNow,
-          [action.channel]: (state.hereNow[action.channel] || []).map(item => (
-            item.id === user.id ? user : item
-          )),
-        },
-      };
-    }
-    case REMOVE_HERE_NOW: {
-      if (state.hereNow[action.channel]) {
-        const { userToken } = action;
-        return {
-          ...state,
-          hereNow: {
-            ...state.hereNow,
-            [action.channel]: state.hereNow[action.channel].filter(item => item.id !==  userToken),
-          },
-        };
-      } else {
-        return state;
       }
     }
     case SET_LANGUAGE_OPTIONS:
@@ -990,11 +848,6 @@ const reducer = (
         };
       }
       return state;
-    case SET_USER:
-      return {
-        ...state,
-        currentUser: action.user,
-      };
     case TOGGLE_MESSAGE_TRAY: {
       // $FlowFixMe
       const { channel, id } = action;
@@ -1027,15 +880,6 @@ const reducer = (
         return state;
       }
     }
-    case RECEIVE_MUTE_USER: {
-    // $FlowFixMe
-      const newArray = [...state.mutedUsers, action.nickname];
-      return {
-        ...state,
-        // ensure no duplicates in the array
-        mutedUsers: [...new Set(newArray)],
-      };
-    }
     case PUBLISH_ACCEPTED_PRAYER_REQUEST:
     case RECEIVE_ACCEPTED_PRAYER_REQUEST: {
     // $FlowFixMe
@@ -1048,11 +892,8 @@ const reducer = (
           ...state,
           channels: {
             ...state.channels,
-            // $FlowFixMe
             [hostChannel]: {
-            // $FlowFixMe
               ...state.channels[hostChannel],
-              // $FlowFixMe
               moments: [
                 ...state.channels[hostChannel].moments.slice(0, messageIndex),
                 {
@@ -1183,16 +1024,6 @@ const reducer = (
         popUpModal: action.modal,
       };
     }
-    case 'SET_AVATAR': {
-      const user: PrivateUserType = state.currentUser;
-      return {
-        ...state,
-        currentUser: {
-          ...user,
-          avatar: action.url,
-        },
-      };
-    }
     case SET_CHAT_FOCUS:
       return {
         ...state,
@@ -1315,27 +1146,16 @@ const reducer = (
         navbarIndex: action.index,
         prevNavbarIndex: state.navbarIndex,
       };
-    case UPDATE_USER_SUCCEEDED: {
-      const { user } = action;
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          preferences: {
-            ...user.preferences,
-          },
-        },
-      };
-    }
     default:
       return inboundState;
   }
 };
 
 // Selectors
+const local = state => state.feed || state;
 
-const getNotificationBanner = (state: FeedType): BannerType => (
-  state.notificationBanner
+const getNotificationBanner = (state: ChopStateType): BannerType => (
+  local(state).notificationBanner
 );
 
 // Exports
@@ -1363,7 +1183,6 @@ export {
   addPlaceholderChannel,
   leaveChannel,
   removeReaction,
-  setUser,
   setEvent,
   setOrganization,
   setLanguageOptions,
@@ -1371,13 +1190,10 @@ export {
   loadHistory,
   getNotificationBanner,
   clearNotificationBanner,
-  removeHereNow,
   setSalvations,
   setAuthentication,
   removeAuthentication,
   updateScrollPosition,
-  setHereNow,
-  addHereNow,
   queryCurrentEvent,
   setChannels,
 };
@@ -1396,9 +1212,6 @@ export type {
   SetNotificationBannerType,
   ChannelsObjectType,
   QueryCurrentEventType,
-  HereNowChannels,
-  UserState,
-  SetUser,
   JoinChannelType,
   ChannelTypeType,
 };

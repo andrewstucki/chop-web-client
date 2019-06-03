@@ -31,19 +31,17 @@ describe('Test join channel', () => {
           name: null,
           anchorMoments: [],
           moments: [],
-          participants: [
+          subscribers: [
             {
               id: '123',
               avatar: null,
-              name: 'Kilo',
-              pubnubToken: '4321',
+              nickname: 'Kilo',
               role: { label: '' },
             },
             {
               id: '456',
               avatar: null,
-              name: 'Darth',
-              pubnubToken: '5432',
+              nickname: 'Darth',
               role: { label: '' },
             },
           ],
@@ -54,7 +52,7 @@ describe('Test join channel', () => {
     ]);
   });
 
-  test('Direct Chat user failure', async () => {
+  test('Direct Chat subscriber failure', async () => {
     mockJoinChannel.mockImplementation(() => {
       throw new Error('Broken');
     });

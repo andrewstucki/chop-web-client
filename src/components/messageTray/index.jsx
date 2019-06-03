@@ -9,8 +9,8 @@ type MessageTrayPropsType = {
   chatPermissions: boolean,
   moderationPermissions: boolean,
   deleteMessage: (id: string, channel:string) => void,
-  muteUser: (pubnubToken: string) => void,
-  directChat: (pubnubToken: string, nickname: string) => void,
+  muteSubscriber: (id: string) => void,
+  directChat: (id: string, nickname: string) => void,
 };
 
 const MessageTray = (
@@ -18,7 +18,7 @@ const MessageTray = (
     messageTrayOpen,
     isCompact,
     deleteMessage,
-    muteUser,
+    muteSubscriber,
     directChat,
     chatPermissions,
     moderationPermissions,
@@ -30,7 +30,7 @@ const MessageTray = (
       { moderationPermissions &&
         <>
           <TrayButton onClick={deleteMessage} data-testid='deleteButton'>{t('buttons.delete_message')}</TrayButton>
-          <TrayButton onClick={muteUser} data-testid='muteButton'>{t('buttons.mute_user')}</TrayButton>
+          <TrayButton onClick={muteSubscriber} data-testid='muteButton'>{t('buttons.mute_subscriber')}</TrayButton>
         </>
       }
       { chatPermissions &&

@@ -22,40 +22,38 @@ type PubnubPublishFailedType = {
 const PUBNUB_PUBLISH_FAILED = 'PUBNUB_PUBLISH_FAILED';
 
 function* setPubnubClient (): Saga<boolean> {
-  const [ currentUser, pubnubKeys ] = yield all([
-    take('SET_USER'),
+  const [ currentSubscriber, pubnubKeys ] = yield all([
+    take('SET_SUBSCRIBER'),
     take('SET_PUBNUB_KEYS'),
   ]);
-
-  const state = yield select();
 
   PubnubClient.config({
     publishKey: pubnubKeys.publish,
     subscribeKey: pubnubKeys.subscribe,
-    authKey: currentUser.user.pubnubAccessKey,
-    uuid: currentUser.user.pubnubToken,
+    authKey: currentSubscriber.subscriber.pubnubAccessKey,
+    uuid: currentSubscriber.subscriber.id,
   });
-
-  Converter.config(state.feed);
 
   return true;
 }
 
 function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void> {
   try {
-    const channel:ChannelType = yield select(state => getChannelById(state.feed, action.channel));
+    const channel:ChannelType = yield select(getChannelById, action.channel);
     let publishChannel = action.channel;
 
     if (channel && channel.placeholder && action.moment.type === MESSAGE) {
       // Create the real channel
-      const [ otherUser ] = channel.participants;
+      const [ otherSubscriber ] = channel.subscribers;
 
-      if (otherUser) {
-        const directChatChannel = yield* directChat({
-          type: DIRECT_CHAT,
-          otherUserPubnubToken: otherUser.pubnubToken,
-          otherUserNickname: otherUser.name,
-        });
+      if (otherSubscriber) {
+        const directChatChannel = (yield* directChat(
+          {
+            type: DIRECT_CHAT,
+            otherSubscriberId: otherSubscriber.id,
+            otherSubscriberNickname: otherSubscriber.nickname,
+          },
+        ));
 
         publishChannel = directChatChannel;
 
@@ -70,7 +68,7 @@ function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void
           yield put(addMomentToChannel(publishChannel, action.moment));
         }
       } else {
-        throw new Error('Other user was not in the channel participants.');
+        throw new Error('Other subscriber was not in the channel subscribers.');
       }
     }
 
@@ -80,7 +78,7 @@ function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
         publishLeaveChannel(action.moment, publishChannel);
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'MUTE') {
-        publishMuteUser(action.moment, publishChannel);
+        publishMuteSubscriber(action.moment, publishChannel);
       } else {
         publishNewMessage(action.moment, publishChannel);
       }
@@ -120,14 +118,14 @@ const publishLeaveChannel = (moment: MomentType, channelId: string) => (
   )
 );
 
-const publishMuteUser = (moment: MomentType, channelId: string) => (
+const publishMuteSubscriber = (moment: MomentType, channelId: string) => (
   PubnubClient.publish(
     {
       channel: channelId,
       message: {
-        action: 'muteUser',
+        action: 'muteSubscriber',
         channel: channelId,
-        data: Converter.cwcToLegacyMuteUser(moment),
+        data: Converter.cwcToLegacyMuteSubscriber(moment),
       },
     }
   )

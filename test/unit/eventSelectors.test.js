@@ -1,15 +1,18 @@
 // @flow
 import { isOffline, isChatEnabled } from '../../src/selectors/eventSelectors';
-import { defaultState } from '../../src/feed/dux';
+import { defaultState } from '../../src/chop/dux';
 
 describe('Offline Selector Tests', () => {
   test('Test online', () => {
     const store = {
       ...defaultState,
-      event: {
-        id: 320418,
-        startTime: 1529425800000,
-        title: 'When Pigs Fly - Week 2',
+      feed: {
+        ...defaultState.feed,
+        event: {
+          id: 320418,
+          startTime: 1529425800000,
+          title: 'When Pigs Fly - Week 2',
+        },
       },
     };
     const offline = isOffline(store);
@@ -19,10 +22,13 @@ describe('Offline Selector Tests', () => {
   test('Test offline', () => {
     const store = {
       ...defaultState,
-      event: {
-        id: 0,
-        startTime: 0,
-        title: '',
+      feed: {
+        ...defaultState.feed,
+        event: {
+          id: 0,
+          startTime: 0,
+          title: '',
+        },
       },
     };
     const offline = isOffline(store);
@@ -32,8 +38,10 @@ describe('Offline Selector Tests', () => {
   test('Public chat enabled', () => {
     const store = {
       ...defaultState,
-      event: {
-        enabledFeatures: { chat: true },
+      feed: {
+        event: {
+          enabledFeatures: { chat: true },
+        },
       },
     };
     const chatEnabled = isChatEnabled(store);

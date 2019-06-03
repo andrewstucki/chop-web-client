@@ -34,13 +34,13 @@ describe('Sequence Tests', () => {
         type: 'offline',
         url: '',
       },
-      feeds: [
+      feed: [
         {
           id: '',
           name: '',
           type: '',
           direct: false,
-          participants: [],
+          subscribers: [],
         },
       ],
     },

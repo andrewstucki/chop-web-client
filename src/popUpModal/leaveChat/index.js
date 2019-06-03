@@ -12,20 +12,19 @@ import {
 } from '../../selectors/channelSelectors';
 
 import {
-  getOtherUsers,
-  hasOtherUsers,
+  getOtherSubscribers,
+  hasOtherSubscribers,
 } from '../../selectors/chatSelectors';
 
 import LeaveChat from './leaveChat';
 
 const mapStateToProps = (state, ownProps) => {
-  const feedState = state.feed;
-  const currentChannel = getCurrentChannel(feedState);
-  const channel = getChannelById(feedState, currentChannel);
+  const currentChannel = getCurrentChannel(state);
+  const channel = getChannelById(state, currentChannel);
   return {
-    otherUser: getOtherUsers(feedState, currentChannel)[0],
-    hasOtherUsers: hasOtherUsers(feedState, currentChannel),
-    currentUser: feedState.currentUser,
+    otherSubscriber: getOtherSubscribers(state, currentChannel)[0],
+    hasOtherSubscribers: hasOtherSubscribers(state, currentChannel),
+    currentSubscriber: state.subscriber.currentSubscriber,
     currentChannel,
     isPlaceholder: channel?.placeholder || false,
     isSmall: ownProps.isSmall,
@@ -35,7 +34,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => (
   {
     leaveChannel: (channelId, isPlaceholder) => isPlaceholder ? dispatch(removeChannel(channelId)) : dispatch(leaveChannel(channelId)),
-    publishLeftChannelNotification: (name, pubnubToken, channel, date) => (dispatch(publishLeftChannelNotification(name, pubnubToken, channel, date))),
+    publishLeftChannelNotification: (name, id, channel, date) => (dispatch(publishLeftChannelNotification(name, id, channel, date))),
   }
 );
 

@@ -38,9 +38,8 @@ describe('Test Accept Prayer', () => {
       }),
     }, publishAcceptedPrayerRequest, {
       type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
-      userRequestingPrayer: {
-        pubnubToken: '67890',
-        name: 'James T. Kirk',
+      subscriberRequestingPrayer: {
+        nickname: 'James T. Kirk',
         id: '09876',
         role: {
           label: '',
@@ -51,7 +50,7 @@ describe('Test Accept Prayer', () => {
       cancelled: false,
     }).toPromise();
 
-    expect(mockAcceptPrayer).toBeCalledWith('12345', '67890', 'James T. Kirk');
+    expect(mockAcceptPrayer).toBeCalledWith('12345', '09876', 'James T. Kirk');
     expect(dispatched).toEqual([
       {
         type: ADD_CHANNEL,
@@ -63,19 +62,17 @@ describe('Test Accept Prayer', () => {
           type: 'direct',
           anchorMoments: [],
           moments: [],
-          participants: [
+          subscribers: [
             {
               id: '123',
               avatar: null,
-              name: 'James T. Kirk',
-              pubnubToken: '67890',
+              nickname: 'James T. Kirk',
               role: { label: '' },
             },
             {
               id: '456',
               avatar: null,
-              name: 'Will Brown',
-              pubnubToken: '54320',
+              nickname: 'Will Brown',
               role: { label: '' },
             },
           ],
@@ -125,9 +122,8 @@ describe('Test Accept Prayer', () => {
       }),
     }, publishAcceptedPrayerRequest, {
       type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
-      userRequestingPrayer: {
-        pubnubToken: '67890',
-        name: 'James T. Kirk',
+      subscriberRequestingPrayer: {
+        nickname: 'James T. Kirk',
         id: '09876',
         role: {
           label: '',
@@ -138,7 +134,7 @@ describe('Test Accept Prayer', () => {
       cancelled: false,
     }).toPromise();
 
-    expect(mockAcceptPrayer).toBeCalledWith('12345', '67890', 'James T. Kirk');
+    expect(mockAcceptPrayer).toBeCalledWith('12345', '09876', 'James T. Kirk');
     expect(dispatched).toEqual([{type: PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, error: 'Broken'}]);
   });
 });

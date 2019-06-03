@@ -2,7 +2,7 @@
 import type { PublishMomentToChannelType, ReceiveMomentType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL, RECEIVE_MOMENT } from '../dux';
 import {createUid, getMessageTimestamp} from '../../util';
-import type { SharedUserType } from '../../users/dux';
+import type { SharedSubscriberType } from '../../subscriber/dux';
 
 // Action Types
 
@@ -20,13 +20,13 @@ type NotificationType =
   | PrayerRequestNotificationType
   | JoinedChatNotificationType
   | LeftChannelNotificationType
-  | MuteUserNotificationType;
+  | MuteSubscriberNotificationType;
 
 type LeftChannelNotificationType = {
   type: 'NOTIFICATION',
   notificationType: 'LEFT_CHANNEL',
   id: string,
-  name: string,
+  nickname: string,
   timestamp: string,
 };
 
@@ -34,7 +34,7 @@ type JoinedChatNotificationType = {
   type: 'NOTIFICATION',
   notificationType: 'JOINED_CHAT',
   id: string,
-  name: string,
+  nickname: string,
   timestamp: string,
 };
 
@@ -55,7 +55,7 @@ type PrayerRequestNotificationType = {
   timestamp: string,
 };
 
-type MuteUserNotificationType = {
+type MuteSubscriberNotificationType = {
   type: 'NOTIFICATION',
   notificationType: 'MUTE',
   id: string,
@@ -87,7 +87,7 @@ const receivePrayerNotification = (
 );
 
 const receivePrayerRequestNotification = (
-  guest: SharedUserType,
+  guest: SharedSubscriberType,
   channel: string,
 ): ReceiveMomentType => (
   {
@@ -97,15 +97,15 @@ const receivePrayerRequestNotification = (
       type: NOTIFICATION,
       notificationType: PRAYER_REQUEST,
       id: createUid(),
-      guest: guest.name,
+      guest: guest.nickname,
       timestamp: getMessageTimestamp(),
     },
   }
 );
 
 const publishLeftChannelNotification = (
-  name: string,
-  pubnubToken: string,
+  nickname: string,
+  id: string,
   channel: string,
   timestamp: string,
 ): PublishMomentToChannelType => (
@@ -115,16 +115,15 @@ const publishLeftChannelNotification = (
     moment: {
       type: NOTIFICATION,
       notificationType: LEFT_CHANNEL,
-      pubnubToken,
-      id: createUid(),
-      name,
+      id,
+      nickname,
       timestamp,
     },
   }
 );
 
 const receiveLeftChannelNotification = (
-  name: string,
+  nickname: string,
   channel: string,
   timestamp: string,
 ): ReceiveMomentType => (
@@ -135,7 +134,7 @@ const receiveLeftChannelNotification = (
       type: NOTIFICATION,
       notificationType: LEFT_CHANNEL,
       id: createUid(),
-      name,
+      nickname,
       timestamp,
     },
   }
@@ -175,7 +174,7 @@ const receiveJoinedChatNotification = (
   }
 );
 
-const publishMuteUserNotification = (
+const publishMuteSubscriberNotification = (
   host: string,
   guest: string,
   channel: string,
@@ -195,7 +194,7 @@ const publishMuteUserNotification = (
   }
 );
 
-const receiveMuteUserNotification = (
+const receiveMuteSubscriberNotification = (
   host: string,
   guest: string,
   channel: string,
@@ -221,7 +220,7 @@ export type {
   NotificationType,
   LeftChannelNotificationType,
   JoinedChatNotificationType,
-  MuteUserNotificationType,
+  MuteSubscriberNotificationType,
   PrayerNotificationType,
   PrayerRequestNotificationType,
 };
@@ -229,8 +228,8 @@ export type {
 export {
   publishJoinedChatNotification,
   receiveJoinedChatNotification,
-  publishMuteUserNotification,
-  receiveMuteUserNotification,
+  publishMuteSubscriberNotification,
+  receiveMuteSubscriberNotification,
   publishLeftChannelNotification,
   receiveLeftChannelNotification,
   receivePrayerNotification,

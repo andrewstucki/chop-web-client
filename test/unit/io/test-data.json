@@ -38,7 +38,7 @@
       "endTime": 1531964800
     }
   ],
-  "currentUser": {
+  "currentSubscriber": {
     "id": 123456,
     "nickname": "Tony Hoare",
     "pubnubAccessKey": "abc123xyz",

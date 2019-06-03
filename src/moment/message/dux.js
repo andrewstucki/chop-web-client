@@ -1,5 +1,5 @@
 // @flow
-import type { SharedUserType } from '../../users/dux';
+import { type SharedSubscriberType } from '../../subscriber/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
 import {createUid, newTimestamp} from '../../util';
@@ -16,22 +16,18 @@ import type {
 const TOGGLE_MESSAGE_TRAY = 'TOGGLE_MESSAGE_TRAY';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const MESSAGE = 'MESSAGE';
-const RECEIVE_MUTE_USER = 'RECEIVE_MUTE_USER';
-const PUBLISH_MUTE_USER = 'PUBLISH_MUTE_USER';
-const MUTE_USER_FAILED = 'MUTE_USER_FAILED';
 const DIRECT_CHAT = 'DIRECT_CHAT';
-const MUTE_USER_SUCCEEDED = 'MUTE_USER_SUCCEEDED';
 const DIRECT_CHAT_FAILED = 'DIRECT_CHAT_FAILED';
 const PUBLISH_DELETE_MESSAGE = 'PUBLISH_DELETE_MESSAGE';
 
 // Flow Type Definitions
 
-type SenderType = System | SharedUserType;
+type SenderType = System | SharedSubscriberType;
 
 type BaseMomentType<T: MomentNameType, S: SenderType> = {
   id: UIDType,
   timestamp: DateTimeType,
-  sender: S,
+  subscriber: S,
   type: T,
 };
 
@@ -40,7 +36,7 @@ type MessageType = {
   text: string,
   messageTrayOpen: boolean,
   isMuted: boolean,
-} & BaseMomentType<typeof MESSAGE, SharedUserType>;
+} & BaseMomentType<typeof MESSAGE, SharedSubscriberType>;
 
 type ToggleMessageTrayType = {
   type: 'TOGGLE_MESSAGE_TRAY',
@@ -54,17 +50,6 @@ type DeleteMessageType = {
   channel: string,
 };
 
-type ReceiveMuteUserType = {
-  type: 'RECEIVE_MUTE_USER',
-  nickname: string,
-};
-
-type PublishMuteUserType = {
-  type: 'PUBLISH_MUTE_USER',
-  channelId: string,
-  userName: string,
-};
-
 type PublishDeleteMessageType = {
   type: 'PUBLISH_DELETE_MESSAGE',
   id: string,
@@ -72,15 +57,15 @@ type PublishDeleteMessageType = {
 
 type PublishDirectChatType = {
   type: typeof DIRECT_CHAT,
-  otherUserPubnubToken: string,
-  otherUserNickname: string,
+  otherSubscriberId: string,
+  otherSubscriberNickname: string,
 };
 
 // Action Creators
 
 const newMessage = (
   text: string,
-  sender: SharedUserType,
+  subscriber: SharedSubscriberType,
   lang: LanguageType
 ): MessageType => (
   {
@@ -89,7 +74,7 @@ const newMessage = (
     timestamp: newTimestamp(),
     lang,
     text,
-    sender,
+    subscriber,
     messageTrayOpen: false,
     isMuted: false,
   }
@@ -98,13 +83,13 @@ const newMessage = (
 const publishMessage = (
   channel: string,
   text: string,
-  user: SharedUserType,
+  subscriber: SharedSubscriberType,
   language: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
-    moment: newMessage(text, user, language),
+    moment: newMessage(text, subscriber, language),
   }
 );
 
@@ -131,26 +116,11 @@ const publishDeleteMessage = (id:string): PublishDeleteMessageType => (
   }
 );
 
-const receiveMuteUser = (nickname:string): ReceiveMuteUserType => (
-  {
-    type: RECEIVE_MUTE_USER,
-    nickname,
-  }
-);
-
-const publishMuteUser = (channelId:string, userName:string): PublishMuteUserType => (
-  {
-    type: PUBLISH_MUTE_USER,
-    channelId,
-    userName,
-  }
-);
-
-const directChat = (otherUserPubnubToken: string, otherUserNickname: string): PublishDirectChatType => (
+const directChat = (otherSubscriberId: string, otherSubscriberNickname: string): PublishDirectChatType => (
   {
     type: DIRECT_CHAT,
-    otherUserPubnubToken,
-    otherUserNickname,
+    otherSubscriberId,
+    otherSubscriberNickname,
   }
 );
 
@@ -160,10 +130,6 @@ export {
   TOGGLE_MESSAGE_TRAY,
   DELETE_MESSAGE,
   MESSAGE,
-  MUTE_USER_SUCCEEDED,
-  MUTE_USER_FAILED,
-  PUBLISH_MUTE_USER,
-  RECEIVE_MUTE_USER,
   DIRECT_CHAT,
   DIRECT_CHAT_FAILED,
   PUBLISH_DELETE_MESSAGE,
@@ -174,8 +140,6 @@ export {
   deleteMessage,
   publishMessage,
   publishDeleteMessage,
-  publishMuteUser,
-  receiveMuteUser,
   directChat,
   newMessage,
 };
@@ -184,8 +148,6 @@ export type {
   MessageType,
   ToggleMessageTrayType,
   DeleteMessageType,
-  PublishMuteUserType,
-  ReceiveMuteUserType,
   PublishDeleteMessageType,
   PublishDirectChatType,
 };

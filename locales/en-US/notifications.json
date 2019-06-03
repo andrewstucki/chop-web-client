@@ -1,4 +1,4 @@
 {
-  "user_muted": "<strong>{{name}}</strong> was muted.",
+  "subscriber_muted": "<strong>{{nickname}}</strong> was muted.",
   "text_mode_updated": "Chat size {{text}}."
 }

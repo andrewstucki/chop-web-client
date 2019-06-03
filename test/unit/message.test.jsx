@@ -10,16 +10,12 @@ import { TextWrapper } from '../../src/moment/message/styles';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const otherUser = {
-  id: 12345,
-  pubnubToken: '12345',
+const otherSubscriber = {
+  id: '12345',
   avatar: null,
-  name: 'Billy Bob',
+  nickname: 'Billy Bob',
   role: {
     label: 'Host',
-  },
-  preferences: {
-    textMode: 'COMPACT',
   },
 };
 
@@ -34,7 +30,7 @@ describe('Message', () => {
             timestamp: 1546570485391,
             lang: 'en',
             text: 'Go to https://live.life.church young man!<script>sinister script</script>',
-            sender: otherUser,
+            subscriber: otherSubscriber,
             messageTrayOpen: false,
             isMuted: false,
           }
@@ -43,7 +39,7 @@ describe('Message', () => {
         toggleMessageTray={() => {}}
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
-        muteUser={() => {}}
+        muteSubscriber={() => {}}
         addPlaceholderChannel={() => ''}
         setPaneToChat={() => {}}
         hostChannel='host'
@@ -66,7 +62,7 @@ describe('Message', () => {
             timestamp: 1546570485391,
             lang: 'en',
             text: 'Go west young man!',
-            sender: otherUser,
+            subscriber: otherSubscriber,
             messageTrayOpen: false,
             isMuted: false,
           }
@@ -75,7 +71,7 @@ describe('Message', () => {
         toggleMessageTray={() => {}}
         deleteMessage={() => {}}
         publishDeleteMessage={() => {}}
-        muteUser={() => {}}
+        muteSubscriber={() => {}}
         addPlaceholderChannel={() => ''}
         setPaneToChat={() => {}}
         hostChannel='host'

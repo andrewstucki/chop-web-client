@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { getChannelById } from './channelSelectors';
-import { getCurrentUser } from '../users/dux';
+import { getCurrentSubscriber } from '../subscriber/dux';
 import { i18n } from '../index';
 
 const PUBLIC = 'PUBLIC';
@@ -24,34 +24,34 @@ const getChannelType = createSelector(
   }
 );
 
-const getOtherUsers = createSelector(
+const getOtherSubscribers = createSelector(
   getChannelById,
-  getCurrentUser,
-  (channel, currentUser) => channel && channel.participants ?
-    channel.participants
-      .filter(participant => participant.pubnubToken !== currentUser.pubnubToken)
+  getCurrentSubscriber,
+  (channel, currentSubscriber) => channel && channel.subscribers ?
+    channel.subscribers
+      .filter(subscriber => subscriber.id !== currentSubscriber.id)
     : []
 );
 
-const hasOtherUsers = createSelector(
-  getOtherUsers,
-  users => users.length > 0
+const hasOtherSubscribers = createSelector(
+  getOtherSubscribers,
+  subscribers => subscribers.length > 0
 );
 
-const getOtherUsersNames = createSelector(
-  getOtherUsers,
-  users => users.map(participant => participant.name)
+const getOtherSubscribersNames = createSelector(
+  getOtherSubscribers,
+  subscribers => subscribers.map(subscriber => subscriber.nickname)
 );
 
 const getPlaceholder = createSelector(
   getChannelType,
-  getOtherUsersNames,
-  (channelType, otherUserNames) => {
+  getOtherSubscribersNames,
+  (channelType, otherSubscriberNames) => {
     switch (channelType) {
       case HOST:
-        return i18n.t('chat_with', { name: 'hosts'});
+        return i18n.t('chat_with', { nickname: 'hosts'});
       case DIRECT:
-        return `${i18n.t('chat_with')}${otherUserNames.join(', ').replace(/,\\s([^,]*)$/, ' and $1')}`;
+        return `${i18n.t('chat_with')}${otherSubscriberNames.join(', ').replace(/,\\s([^,]*)$/, ' and $1')}`;
       case PUBLIC:
       default:
         return i18n.t('chat');
@@ -61,7 +61,7 @@ const getPlaceholder = createSelector(
 
 export {
   getPlaceholder,
-  getOtherUsers,
-  hasOtherUsers,
-  getCurrentUser,
+  getOtherSubscribers,
+  hasOtherSubscribers,
+  getCurrentSubscriber,
 };

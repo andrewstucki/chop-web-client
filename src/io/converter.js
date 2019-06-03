@@ -18,7 +18,7 @@ import type {
   URLType,
   ChannelGroupType,
   ChannelIdType,
-  UserLabelType,
+  SubscriberLabelType,
   LanguageCodeType,
   RoomType,
 } from '../cwc-types';
@@ -71,7 +71,7 @@ export type LegcayNewMessageDataType = {
   isUser: boolean,
   isVolunteer: boolean,
   isMuted?: boolean,
-  label: UserLabelType,
+  label: SubscriberLabelType,
   language: LanguageCodeType,
   messageText: string,
   msgId: UIDType,
@@ -101,33 +101,33 @@ const Converter = {
     {
       messageText: message.text,
       language: getTranslateLanguage(_getState()),
-      eventTimeId: _getState().event.eventTimeId,
+      eventTimeId: _getState().feed.event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
-      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'second').toString(),
-      eventTitle: _getState().event.title,
+      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().feed.event.startTime), 'second').toString(),
+      eventTitle: _getState().feed.event.title,
       uniqueMessageToken: message.id,
-      fromNickname: message.sender.name,
-      fromToken: message.sender.pubnubToken,
+      fromNickname: message.subscriber.nickname,
+      fromToken: message.subscriber.id,
       msgId: message.id,
       timestamp: timestampToString(message.timestamp),
-      fromAvatar: typeof message.sender.avatar === 'string' ? message.sender.avatar : 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
+      fromAvatar: typeof message.subscriber.avatar === 'string' ? message.subscriber.avatar : 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
       isHost: true,
-      label: message.sender.role.label,
+      label: message.subscriber.role.label,
       isVolunteer: true,
       isUser: true,
-      userId: message.sender.id,
-      organizationId: _getState().organization.id,
-      organizationName: _getState().organization.name,
+      userId: message.subscriber.userId || 0,
+      organizationId: _getState().feed.organization.id,
+      organizationName: _getState().feed.organization.name,
       roomType: 'public',
-      channelToken: _getState().channels[channelId].id,
-      eventStartTime: _getState().event.startTime,
+      channelToken: channelId,
+      eventStartTime: _getState().feed.event.startTime,
       platform: 'CWC',
     }
   ),
 
   cwcToLegacyReaction: (reaction: any, channelId: string) => (
     {
-      nickname: reaction.user.name,
+      nickname: reaction.subscriber.nickname,
       channelToken: channelId,
       reactionId: reaction.id,
     }
@@ -136,24 +136,24 @@ const Converter = {
   cwcToLegacySystemMessage:(message: any) => (
     {
       fromNickname: 'System',
-      messageText: `${message.host.name} started a live prayer with ${message.guest.name}`,
+      messageText: `${message.host.nickname} started a live prayer with ${message.guest.nickname}`,
       timestamp: Converter.getTimestamp(),
     }
   ),
 
   cwcToLegacyLeaveChannel:(moment: any, channelId: string) => (
     {
-      messageText: `${moment.name} has left the chat`,
+      messageText: `${moment.nickname} has left the chat`,
       timestamp: Converter.getTimestamp(),
-      userId: moment.pubnubToken,
-      fromNickname: moment.name,
+      userId: moment.user_id,
+      fromNickname: moment.nickname,
       type: 'system',
       roomType: 'public',
       channelToken: channelId,
     }
   ),
 
-  cwcToLegacyMuteUser:(moment: any) => {
+  cwcToLegacyMuteSubscriber:(moment: any) => {
     const hostChannel = getHostChannel(_getState());
     return {
       nickname: moment.guest,
@@ -173,11 +173,10 @@ const Converter = {
       translations: message.translations ? message.translations : [],
       isMuted: !!message.isMuted,
       messageTrayOpen: false,
-      sender: {
-        id: message.userId || 0,
-        name: message.fromNickname,
+      subscriber: {
+        id: message.fromToken,
+        nickname: message.fromNickname,
         avatar: message.fromAvatar,
-        pubnubToken: message.fromToken,
         role: {
           label: message.label ? message.label : '',
         },
@@ -190,10 +189,9 @@ const Converter = {
 
     return receivePrayerRequestNotification(
       {
-        id: 12345, // Legacy doesn't forward the user id
-        name: message.data.fromNickname,
+        id: message.data.fromToken,
+        nickname: message.data.fromNickname,
         avatar: null,
-        pubnubToken: message.data.fromToken,
         role: {
           label: '',
         },
@@ -208,10 +206,9 @@ const Converter = {
 
     return receivePrayerRequestNotificationText(
       {
-        id: 12345, // Legacy doesn't forward the user id
-        name: message.data.fromNickname,
+        id: message.data.fromToken,
+        nickname: message.data.fromNickname,
         avatar: null,
-        pubnubToken: message.data.fromToken,
         role: {
           label: '',
         },

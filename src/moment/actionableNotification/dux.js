@@ -1,5 +1,5 @@
 // @flow
-import type { SharedUserType } from '../../users/dux';
+import type { SharedSubscriberType } from '../../subscriber/dux';
 import type { ReceiveMomentType } from '../dux';
 import { RECEIVE_MOMENT } from '../dux';
 import { createUid, getMessageTimestamp } from '../../util';
@@ -18,7 +18,7 @@ type PrayerRequestNotificationType = {
   type: 'ACTIONABLE_NOTIFICATION',
   notificationType: 'PRAYER_REQUEST',
   id: string,
-  user: SharedUserType,
+  subscriber: SharedSubscriberType,
   timestamp: string,
   active: boolean,
   cancelled: boolean,
@@ -32,7 +32,7 @@ type PublishAcceptedPrayerRequestType = {
   type: 'PUBLISH_ACCEPTED_PRAYER_REQUEST',
   prayerChannel: string,
   hostChannel: string,
-  userRequestingPrayer: SharedUserType,
+  subscriberRequestingPrayer: SharedSubscriberType,
   cancelled: boolean,
 };
 
@@ -45,7 +45,7 @@ type ReceiveAcceptedPrayerRequestType = {
 // Action Creators
 
 const receivePrayerRequestNotification = (
-  user: SharedUserType,
+  subscriber: SharedSubscriberType,
   prayerChannel: string,
   hostChannel: string,
 ): ReceiveMomentType => (
@@ -56,7 +56,7 @@ const receivePrayerRequestNotification = (
       type: ACTIONABLE_NOTIFICATION,
       notificationType: PRAYER_REQUEST,
       id: createUid(),
-      user,
+      subscriber,
       active: true,
       cancelled: false,
       timestamp: getMessageTimestamp(),
@@ -68,14 +68,14 @@ const receivePrayerRequestNotification = (
 const publishAcceptedPrayerRequest = (
   prayerChannel: string,
   hostChannel: string,
-  userRequestingPrayer: SharedUserType,
+  subscriberRequestingPrayer: SharedSubscriberType,
   cancelled: boolean,
 ): PublishAcceptedPrayerRequestType => (
   {
     type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
     prayerChannel,
     hostChannel,
-    userRequestingPrayer,
+    subscriberRequestingPrayer,
     cancelled,
   }
 );

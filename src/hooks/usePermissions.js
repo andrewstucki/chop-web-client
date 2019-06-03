@@ -1,14 +1,14 @@
 // @flow
 import { useMemo } from 'react';
-import type { PrivateUserType } from '../users/dux';
-import { checkForPermissions } from '../users/dux';
+import type { PrivateSubscriberType } from '../subscriber/dux';
+import { checkForPermissions } from '../subscriber/dux';
 
 /*
   Example Usage:
 
-  function MuteUserButton (props) {
-    const { currentUser } = props;
-    const hasPermissions = usePermissions(currentUser, ['feed.user.mute']);
+  function MuteSubscriberButton (props) {
+    const { currentSubscriber } = props;
+    const hasPermissions = usePermissions(currentSubscriber, ['feed.subscriber.mute']);
 
     if (hasPermissions) {
       ...render
@@ -18,10 +18,10 @@ import { checkForPermissions } from '../users/dux';
   }
  */
 
-const usePermissions = (user:PrivateUserType, requiredPermissions:Array<string>, requireAll:boolean = false):boolean => (
+const usePermissions = (subscriber:PrivateSubscriberType, requiredPermissions:Array<string>, requireAll:boolean = false):boolean => (
   useMemo <boolean> (
-    () => checkForPermissions(user, requiredPermissions, requireAll),
-    [user, requiredPermissions, requireAll]
+    () => checkForPermissions(subscriber, requiredPermissions, requireAll),
+    [subscriber, requiredPermissions, requireAll]
   )
 );
 

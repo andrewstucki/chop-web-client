@@ -6,18 +6,17 @@ import SideMenu from './sideMenu';
 import { removeAuthentication } from '../feed/dux';
 
 const mapStateToProps = state => {
-  const feedState = state.feed;
-  const { name:organizationName } = feedState.organization;
-  const { title:eventTitle, description:eventDescription } = feedState.event;
+  const { name:organizationName } = state.feed.organization;
+  const { title:eventTitle, description:eventDescription } = state.feed.event;
 
   return {
-    isClosed: feedState.isSideMenuClosed,
-    languageOptions: feedState.languageOptions,
+    isClosed: state.feed.isSideMenuClosed,
+    languageOptions: state.feed.languageOptions,
     organizationName,
     eventTitle,
     eventDescription,
-    currentUser: feedState.currentUser,
-    currentLanguage: feedState.currentLanguage,
+    currentSubscriber: state.subscriber.currentSubscriber,
+    currentLanguage: state.feed.currentLanguage,
   };
 };
 

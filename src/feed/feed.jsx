@@ -1,7 +1,7 @@
 // @flow
 /* global TimeoutID */
 import React from 'react';
-import type { PrivateUserType } from '../users/dux';
+import type { PrivateSubscriberType } from '../subscriber/dux';
 
 import type { MomentType } from '../moment/dux';
 import type { AnchorMomentType } from '../anchorMoment/dux';
@@ -39,7 +39,7 @@ type FeedProps = {
   anchorMoments: Array<AnchorMomentType>,
   currentChannel: string,
   channel: string,
-  currentUser: PrivateUserType,
+  currentSubscriber: PrivateSubscriberType,
   updateScrollPosition: (scrollPosition: number, channel: string, timestamp: number) => void,
   setSawLastMomentAt: (timestamp: DateTimeType, channelId: ChannelIdType) => void,
   showNewMessageButton: boolean,
@@ -149,7 +149,6 @@ class Feed extends React.Component<FeedProps> {
     const momentLiStyle = { margin: '0 8px' };
 
     const momentListItems = moments.reverse().map((moment: MomentType) => (
-      // $FlowFixMe
       <li key={moment.id || createUid()} style={momentLiStyle}>
         <Moment
           currentChannel={currentChannel}
@@ -171,7 +170,6 @@ class Feed extends React.Component<FeedProps> {
       <React.Fragment>
         <Wrapper
           data-testid='feed'
-          // $FlowFixMe
           ref={this.wrapperRef}
         >
           <ListContainer>

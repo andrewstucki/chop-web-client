@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import type { SharedUserType } from '../../users/dux';
+import type { SharedSubscriberType, PrivateSubscriberType } from '../../subscriber/dux';
 import { useTranslation, Trans } from 'react-i18next';
 import { Button, ActionContainer, Text, PROGRESS, REGRESS } from '../styles';
 import { Modal } from '../popUpModal';
@@ -9,11 +9,11 @@ import dayjs from 'dayjs';
 
 type LeaveChatPropsType = {
   togglePopUpModal: () => void,
-  publishLeftChannelNotification: (name: string, pubnubToke: string, channelName: string, date: string) => void,
+  publishLeftChannelNotification: (nickname: string, id: string, channelName: string, date: string) => void,
   leaveChannel: (channelId: string, isPlaceholder: boolean) => void,
-  otherUser: SharedUserType,
-  hasOtherUsers: boolean,
-  currentUser: SharedUserType,
+  otherSubscriber: SharedSubscriberType,
+  hasOtherSubscribers: boolean,
+  currentSubscriber: PrivateSubscriberType,
   currentChannel: string,
   isPlaceholder: boolean,
   isSmall: boolean,
@@ -24,9 +24,9 @@ const LeaveChatPopUpModal = (
     togglePopUpModal,
     publishLeftChannelNotification,
     leaveChannel,
-    otherUser,
-    hasOtherUsers,
-    currentUser,
+    otherSubscriber,
+    hasOtherSubscribers,
+    currentSubscriber,
     currentChannel,
     isPlaceholder,
     isSmall,
@@ -35,21 +35,21 @@ const LeaveChatPopUpModal = (
   const { t } = useTranslation('forms');
   const callLeaveChannel = () => {
     togglePopUpModal();
-    publishLeftChannelNotification(currentUser.name, currentUser.pubnubToken, currentChannel, dayjs().toISOString());
+    publishLeftChannelNotification(currentSubscriber.nickname, currentSubscriber.id, currentChannel, dayjs().toISOString());
     leaveChannel(currentChannel, isPlaceholder);
   };
 
   return (
     <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} id="leaveChat-modal">
-      {hasOtherUsers &&
+      {hasOtherSubscribers &&
         <Text data-testid='leaveChat-confirmText'>
           <Trans ns='forms' i18nKey='leave_chat.confirm_user'>
             {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-            Are you sure you want to end your chat with <strong>{{name: otherUser.name}}</strong>?
+            Are you sure you want to end your chat with <strong>{{name: otherSubscriber.nickname}}</strong>?
           </Trans>
         </Text>
       }
-      {!hasOtherUsers &&
+      {!hasOtherSubscribers &&
         <Text>
           { t('leave_chat.confirm') }
         </Text>

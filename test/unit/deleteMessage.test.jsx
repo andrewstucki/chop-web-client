@@ -3,7 +3,7 @@ import ChatActor from '../../src/io/chat';
 import { mockRequest } from 'graphql-request';
 import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
-import { defaultState } from '../../src/feed/dux';
+import { defaultState } from '../../src/chop/dux';
 import testData from './io/test-data.json';
 import accessToken from './io/access-token.json';
 import { __messageEvent } from 'pubnub';
@@ -29,11 +29,10 @@ describe('Test delete message', () => {
       id: '123456',
       lang: 'en',
       text: 'hi',
-      sender: {
+      subscriber: {
         id: 1234,
         avatar: null,
-        pubnubToken: 'abc123xyz',
-        name: 'Tony Hoare',
+        nickname: 'Tony Hoare',
         role: { label: '' },
         preferences: { textMode: 'COMPACT' },
       },
@@ -44,11 +43,10 @@ describe('Test delete message', () => {
       id: '789012',
       lang: 'en',
       text: 'hey',
-      sender: {
+      subscriber: {
         id: 1234,
-        pubnubToken: '54353',
         avatar: null,
-        name: 'Shaq O.',
+        nickname: 'Shaq O.',
         role: { label: '' },
         preferences: { textMode: 'COMPACT' },
       },
@@ -59,43 +57,48 @@ describe('Test delete message', () => {
   test('Receive delete message notification and delete message', () => {
     const store = {
       ...defaultState,
-      currentUser: {
-        id: 12234,
-        avatar: null,
-        pubnubToken: '54353',
-        pubnubAccessKey: '09876',
-        name: 'Shaq O.',
-        role: {
-          label: '',
-          permissions: [],
-        },
-        preferences: {
-          textMode: 'COMPACT',
-        },
-      },
-      organization: {
-        id: 2,
-        name: 'Life.Church',
-        logoUrl: '',
-        theme: {
-          headerBackgroundColor: '',
-          headerMenuIconColor: '',
+      subscriber: {
+        ...defaultState.subscriber,
+        currentSubscriber: {
+          id: '12234',
+          avatar: null,
+          pubnubAccessKey: '09876',
+          nickname: 'Shaq O.',
+          role: {
+            label: '',
+            permissions: [],
+          },
+          preferences: {
+            textMode: 'COMPACT',
+          },
         },
       },
-      pubnubKeys: {
-        publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
-        subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
-      },
-      channels: {
-        ...defaultState.channels,
-        test: {
-          name: 'test',
-          id: 'test',
-          direct: false,
-          moments: moments,
-          anchorMoments: [],
-          scrollPosition: 0,
-          sawLastMomentAt: 1546896104521,
+      feed: {
+        ...defaultState.feed,
+        organization: {
+          id: 2,
+          name: 'Life.Church',
+          logoUrl: '',
+          theme: {
+            headerBackgroundColor: '',
+            headerMenuIconColor: '',
+          },
+        },
+        pubnubKeys: {
+          publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+          subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+        },
+        channels: {
+          ...defaultState.feed.channels,
+          test: {
+            name: 'test',
+            id: 'test',
+            direct: false,
+            moments: moments,
+            anchorMoments: [],
+            scrollPosition: 0,
+            sawLastMomentAt: 1546896104521,
+          },
         },
       },
     };

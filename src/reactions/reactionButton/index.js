@@ -2,17 +2,17 @@
 import { connect } from 'react-redux';
 import ReactionButton from './reactionButton';
 import { publishReaction } from './dux';
+import { getCurrentSubscriber } from '../../subscriber/dux';
 
-const mapStateToProps = parentState => {
-  const state = parentState.feed;
-  return {
-    currentUser: state.currentUser,
-  };
-};
+const mapStateToProps = state => (
+  {
+    currentSubscriber: getCurrentSubscriber(state),
+  }
+);
 
 const mapDispatchToProps = dispatch => (
   {
-    buttonClick: user => dispatch(publishReaction(user)),
+    buttonClick: subscriber => dispatch(publishReaction(subscriber)),
   }
 );
 

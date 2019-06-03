@@ -27,7 +27,7 @@ const NavbarItem = ({ item, index, handleItemClick }:NavbarItemProps, ref) => {
         isCurrent={item.isCurrent}
       >
         { (item.hasActions || item.hasNewMessages) && <NavbarPip ref={ref} hasActions={item.hasActions} /> }
-        { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} name={item.otherUsersNames[0] || '?'} /> : t(nameKey) }
+        { item.isDirect ? <DirectChatIcon isCurrent={item.isCurrent} nickname={item.otherSubscribersNames[0] || '?'} /> : t(nameKey) }
       </NavbarItemWrapper>
     </Actionable>
   );

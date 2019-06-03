@@ -13,7 +13,6 @@ import type {
 import {
   setPubnubKeys,
   QUERY_CURRENT_EVENT_FAILED,
-  setUser,
   setOrganization,
   setLanguageOptions,
   setEvent,
@@ -28,12 +27,14 @@ import { avatarImageExists } from '../../util';
 import {getLanguageCount} from '../../selectors/languageSelector';
 import {setVideo} from '../../videoFeed/dux';
 import type {ChannelsObjectType} from '../../feed/dux';
-import {convertUser} from './privateChat';
+import {convertSubscriber} from './privateChat';
 import {isOffline} from '../../selectors/eventSelectors';
 import {COMPACT} from '../../textModeToggle/dux';
 import { startTimer } from './sequence';
+import { setSubscriber } from '../../subscriber/dux';
 import { PRIMARY_PANE } from '../../pane/dux';
 import { setPaneToEvent } from '../../pane/content/event/dux';
+import { getPublicChannel } from '../../selectors/channelSelectors';
 import { theme } from '../../styles';
 
 const isTimeInFuture = (seconds: number): boolean => (seconds * 1000) > Date.now();
@@ -43,7 +44,7 @@ const convertChannel = (channels: Array<GraphQLChannelType>): ChannelsObjectType
   channels.forEach(channel => {
     channelsObj[channel.id] = {
       ...channel,
-      participants: channel.participants && channel.participants.length > 0 ? channel.participants.map(convertUser) : [],
+      subscribers: channel.subscribers && channel.subscribers.length > 0 ? channel.subscribers.map(convertSubscriber) : [],
       moments: [],
       anchorMoments: [],
       scrollPosition: 0,
@@ -55,11 +56,13 @@ const convertChannel = (channels: Array<GraphQLChannelType>): ChannelsObjectType
 };
 
 function* currentEvent (): Saga<void> {
-  const languageCount = yield select(state => getLanguageCount(state.feed));
+  const languageCount = yield select(getLanguageCount);
   const needLanguages = languageCount === 0;
   try {
     const result: GraphQLCurrentStateType = yield call([queries, queries.currentState], needLanguages);
     yield* dispatchData(result);
+    const channelId = yield select(getPublicChannel);
+    yield put(setPaneToEvent(PRIMARY_PANE, channelId));
     yield call(startTimer);
   } catch (error) {
     yield put({type: QUERY_CURRENT_EVENT_FAILED, error: error.message});
@@ -69,7 +72,7 @@ function* currentEvent (): Saga<void> {
 
 function* dispatchData (data: GraphQLCurrentStateType): Saga<void> {
   yield* pubnubKeys(data);
-  yield* currentUser(data);
+  yield* currentSubscriber(data);
   yield* organization(data);
   yield* languageOptions(data);
   yield* event(data);
@@ -83,36 +86,33 @@ function* pubnubKeys (data: GraphQLCurrentStateType): Saga<void> {
   }
 }
 
-function* currentUser (data:GraphQLCurrentStateType): Saga<void> {
-  if (data.currentUser) {
-    const { currentUser: { id, name, avatar, pubnubAccessKey, pubnubToken, role: { label = '', permissions = [] }, preferences: { textMode = COMPACT } } } = data;
-    if (pubnubToken === null || pubnubToken === undefined || pubnubToken === '') {
-      throw new Error(`User with id: ${id} does not have a pubnubToken`);
-    }
+function* currentSubscriber (data:GraphQLCurrentStateType): Saga<void> {
+  const { currentSubscriber } = data;
+  if (currentSubscriber) {
     yield put(
-      setUser(
+      setSubscriber(
         {
-          id,
-          name: name || '',
-          avatar,
-          pubnubAccessKey: pubnubAccessKey || '',
-          pubnubToken,
+          userId: currentSubscriber.userId,
+          id: currentSubscriber.id,
+          nickname: currentSubscriber.nickname || '',
+          avatar: currentSubscriber.avatar,
+          pubnubAccessKey: currentSubscriber.pubnubAccessKey || '',
           role: {
-            label,
-            permissions: permissions.map(permission => permission.key),
+            label: currentSubscriber?.role?.label || '',
+            permissions: currentSubscriber?.role?.permissions ? currentSubscriber.role.permissions.map(permission => permission.key) : [],
           },
           preferences: {
-            textMode,
+            textMode: currentSubscriber?.preferences?.textMode || COMPACT,
           },
         }
       )
     );
-    const exists = yield call(avatarImageExists, id.toString());
+    const exists = yield call(avatarImageExists, currentSubscriber.id.toString());
     if (exists) {
       yield put(
         {
           type: 'SET_AVATAR',
-          url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${id}/thumb/photo.jpg`,
+          url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${currentSubscriber.id}/thumb/photo.jpg`,
         }
       );
     }
@@ -142,7 +142,7 @@ export function* event (data: GraphQLCurrentStateType): Saga<void> {
   if (event) {
     yield* eventMain(event);
     yield* sequence(event.sequence);
-    yield* channels(event.feeds);
+    yield* channels(event.feed);
     yield* video(event.video);
   }
 }
@@ -150,7 +150,7 @@ export function* event (data: GraphQLCurrentStateType): Saga<void> {
 export function* eventAt (event: GraphQLEventAtType): Saga<void> {
   if (event) {
     yield* eventMain(event);
-    yield* channels(event.feeds);
+    yield* channels(event.feed);
     yield* video(event.video);
   }
 }
@@ -213,7 +213,7 @@ function* video (video: GraphQLVideoType): Saga<void> {
 function* schedule (data: GraphQLCurrentStateType): Saga<void> {
   const { schedule } = data;
   if (schedule) {
-    const isBetweenEvents = yield select(state => isOffline(state.feed));
+    const isBetweenEvents = yield select(isOffline);
     const futureScheduleEvents = schedule.filter(event => {
       if (event.startTime && event.endTime && event.fetchTime && event.scheduleTime) {
         return isTimeInFuture(event.startTime);

@@ -1,7 +1,6 @@
 // @flow
 import { all, takeEvery, takeLeading } from 'redux-saga/effects';
 import {
-  PUBLISH_MUTE_USER,
   DIRECT_CHAT,
   DIRECT_CHAT_FAILED,
 } from '../moment/message/dux';
@@ -39,11 +38,11 @@ import {
   joinChannel,
 } from './sagas/privateChat';
 import {
-  muteUser,
+  muteSubscriber,
 } from './sagas/moderation';
 import {
-  updateUser,
-} from './sagas/user';
+  updateSubscriber,
+} from './sagas/subscriber';
 import {
   handleDataFetchErrors,
 } from './sagas/errorHandling';
@@ -53,11 +52,14 @@ import {
   setPubnubClient,
   handlePubnubErrors,
 } from './sagas/pubnub';
-import { UPDATE_USER } from '../users/dux';
+import {
+  UPDATE_SUBSCRIBER,
+  PUBLISH_MUTE_SUBSCRIBER,
+} from '../subscriber/dux';
 
 function* rootSaga (): Saga<void> {
   yield all([
-    takeEvery(PUBLISH_MUTE_USER, muteUser),
+    takeEvery(PUBLISH_MUTE_SUBSCRIBER, muteSubscriber),
     takeEvery(LEAVE_CHANNEL, leaveChannel),
     takeEvery(LEAVE_CHANNEL_FAILED, handleDataFetchErrors),
     takeEvery(DIRECT_CHAT, directChat),
@@ -75,13 +77,13 @@ function* rootSaga (): Saga<void> {
     takeEvery(PUBNUB_PUBLISH_FAILED, handlePubnubErrors),
     takeLeading('*', setPubnubClient),
     takeEvery(JOIN_CHANNEL, joinChannel),
-    takeEvery(UPDATE_USER, updateUser),
+    takeEvery(UPDATE_SUBSCRIBER, updateSubscriber),
   ]);
 }
 
 export {
-  muteUser,
-  updateUser,
+  muteSubscriber,
+  updateSubscriber,
   leaveChannel,
   directChat,
   publishAcceptedPrayerRequest,

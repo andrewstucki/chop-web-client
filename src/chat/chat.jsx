@@ -1,7 +1,7 @@
 // @flow
 /* global SyntheticEvent, SyntheticKeyboardEvent */
 import React, { useState } from 'react';
-import type { SharedUserType } from '../users/dux';
+import type { SharedSubscriberType } from '../subscriber/dux';
 import UpArrow from '../icons/upArrow';
 import IconButton from '../components/iconButton';
 import { theme } from '../styles';
@@ -9,25 +9,25 @@ import { Background, Wrapper } from './styles';
 import ChatInput from '../components/chatInput';
 
 type ChatProps = {
-  publishMessage: (channel: string, text: string, user: SharedUserType, language: string) => void,
+  publishMessage: (channel: string, text: string, subscriber: SharedSubscriberType, language: string) => void,
   setChatFocus: (channel: string) => void,
   focused: boolean,
   currentPlaceholder: string,
-  currentUser: SharedUserType,
+  currentSubscriber: SharedSubscriberType,
   currentChannel: string,
   hideReactions: boolean,
   translateLanguage: string,
 };
 
 function Chat (props:ChatProps) {
-  const { publishMessage, setChatFocus, focused, currentPlaceholder, currentUser, currentChannel, hideReactions, translateLanguage } = props;
+  const { publishMessage, setChatFocus, focused, currentPlaceholder, currentSubscriber, currentChannel, hideReactions, translateLanguage } = props;
   const [ message, setMessage ] = useState <string> ('');
 
   const sendMessage = () => {
     publishMessage(
       currentChannel,
       message,
-      currentUser,
+      currentSubscriber,
       translateLanguage,
     );
     setMessage('');

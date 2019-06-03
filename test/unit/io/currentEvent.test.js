@@ -7,9 +7,9 @@ import {
   setLanguageOptions,
   setOrganization,
   setPubnubKeys,
-  setUser,
   setChannels,
 } from '../../../src/feed/dux';
+import { setSubscriber } from '../../../src/subscriber/dux';
 import {
   setSchedule,
 } from '../../../src/schedule/dux';
@@ -37,12 +37,12 @@ describe('Current Event', () => {
           publishKey: 'xyz',
           subscribeKey: 'abc',
         },
-        currentUser: {
-          id: 1234,
-          name: 'John Jonson',
+        currentSubscriber: {
+          userId: 1234,
+          id: '1234',
+          nickname: 'John Jonson',
           avatar: 'http://image.avatar.gif',
           pubnubAccessKey: '0987',
-          pubnubToken: '6543',
           role: {
             label: '',
             permissions: [],
@@ -96,25 +96,24 @@ describe('Current Event', () => {
               },
             ],
           },
-          feeds: [
+          feed: [
             {
               id: '111',
               name: 'Public',
               direct: false,
               type: 'public',
-              participants: [],
+              subscribers: [],
             },
             {
               id: '222',
               name: 'Direct',
               direct: true,
               type: 'direct',
-              participants: [
+              subscribers: [
                 {
-                  id: 123,
-                  pubnubToken: '456',
+                  id: '123',
                   avatar: '',
-                  name: 'Joe',
+                  nickname: 'Joe',
                 },
               ],
             },
@@ -161,9 +160,14 @@ describe('Current Event', () => {
           },
           schedule: [],
           feed: {
+            // because the state isn't updated as the test runs
+            // we have to set some default values here
+            channels: {
+              '111': {
+                name: 'Public',
+              },
+            },
             event: {
-              // because the event defined above doesn't get set
-              // in the context of the test we have to set it here
               id: '888',
             },
             languageOptions: [],
@@ -176,12 +180,12 @@ describe('Current Event', () => {
     expect(mockAvatarImageExists).toBeCalledWith('1234');
     expect(dispatched).toEqual([
       setPubnubKeys('xyz', 'abc'),
-      setUser({
-        id: 1234,
-        name: 'John Jonson',
+      setSubscriber({
+        userId: 1234,
+        id: '1234',
+        nickname: 'John Jonson',
         avatar: 'http://image.avatar.gif',
         pubnubAccessKey: '0987',
-        pubnubToken: '6543',
         role: {
           label: '',
           permissions: [],
@@ -234,7 +238,7 @@ describe('Current Event', () => {
             direct: false,
             placeholder: false,
             type: 'public',
-            participants: [],
+            subscribers: [],
             moments: [],
             anchorMoments: [],
             scrollPosition: 0,
@@ -246,12 +250,11 @@ describe('Current Event', () => {
             direct: true,
             placeholder: false,
             type: 'direct',
-            participants: [
+            subscribers: [
               {
-                id: 123,
-                pubnubToken: '456',
+                id: '123',
                 avatar: '',
-                name: 'Joe',
+                nickname: 'Joe',
                 role: { label: '' },
               },
             ],
@@ -287,6 +290,7 @@ describe('Current Event', () => {
           hostInfo: '',
         },
       ]),
+      setPaneToEvent(PRIMARY_PANE, '111'),
     ]);
   });
 });

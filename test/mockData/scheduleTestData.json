@@ -19,7 +19,7 @@
       "video": null,
       "videoType": null
     },
-    "currentUser": {
+    "currentSubscriber": {
       "id": 1014574,
       "nickname": "Scott H",
       "pubnubToken": null,
@@ -30,7 +30,7 @@
             "key": "event.host_notes.read"
           },
           {
-            "key": "feed.user.mute"
+            "key": "feed.subscriber.mute"
           }
         ]
       }

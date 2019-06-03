@@ -8,9 +8,8 @@ import { setPaneToChat } from '../pane/content/chat/dux';
 import { setPaneToTab } from '../pane/content/tab/dux';
 
 const mapStateToProps = state => {
-  const { feed:feedState } = state;
-  const { navbarIndex } = feedState;
-  const items = getNavbarChannels(feedState);
+  const { navbarIndex } = state.feed;
+  const items = getNavbarChannels(state);
   return {
     items,
     navbarIndex,

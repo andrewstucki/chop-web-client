@@ -5,8 +5,8 @@ import {
   getHostChannelObject as hostChannel,
   getDirectChannels as directChannels,
   getPlaceholderChannels as placeholderChannels,
-  getMutedUsers,
 } from '../selectors/channelSelectors';
+import { getMutedSubscribers } from '../subscriber/dux';
 import { createSelector } from 'reselect';
 import { paneContentSelector } from '../selectors/paneSelectors';
 import { PRIMARY_PANE } from '../pane/dux';
@@ -26,7 +26,7 @@ type NavbarItemType = {
   isCurrent: boolean,
   hasActions: boolean,
   hasNewMessages: boolean,
-  otherUsersNames: Array<string>,
+  otherSubscribersNames: Array<string>,
   isDirect: boolean,
   isPlaceholder: boolean,
   type: typeof EVENT | typeof CHAT | typeof TAB,
@@ -49,12 +49,12 @@ const setNavbarIndex = (index:number):SetNavbarIndexType => (
 
 // Selectors
 
-const getOtherUserNames = (channel, currentUser) => {
-  const { participants } = channel;
-  if (participants && participants.length) {
-    return participants
-      .filter(user => user?.pubnubToken !== currentUser?.pubnubToken)
-      .map(user => user.name);
+const getOtherSubscriberNames = (channel, currentSubscriber) => {
+  const { subscribers } = channel;
+  if (subscribers && subscribers.length) {
+    return subscribers
+      .filter(subscriber => subscriber.id !== currentSubscriber.id)
+      .map(subscriber => subscriber.nickname);
   } else {
     return [];
   }
@@ -67,12 +67,12 @@ const hasAction = channel => channel && channel.moments && channel.moments.filte
     moment.active === true)).length > 0
   : undefined;
 
-const hasNewMessage = (channel, currentUser, mutedUsers) => {
+const hasNewMessage = (channel, currentSubscriber, mutedSubscribers) => {
   if (channel && channel.sawLastMomentAt !== undefined && channel.type !== 'public') {
     return channel.moments.some(moment => {
-      if (moment.sender) {
-        const muted = mutedUsers.some(mutedUser => mutedUser === moment.sender.name);
-        return muted ? false : (moment.timestamp > channel.sawLastMomentAt && moment.sender.id !== currentUser.id);
+      if (moment.subscriber) {
+        const muted = mutedSubscribers.some(mutedSubscriber => mutedSubscriber === moment.subscriber.nickname);
+        return muted ? false : (moment.timestamp > channel.sawLastMomentAt && moment.subscriber.id !== currentSubscriber.id);
       } else {
         return false;
       }
@@ -82,16 +82,16 @@ const hasNewMessage = (channel, currentUser, mutedUsers) => {
   }
 };
 
-const getCurrentUser = state => state.currentUser;
+const getCurrentSubscriber = state => state.subscriber.currentSubscriber;
 
-const createNavChannel = (channel, currentChannel, currentUser, mutedUsers) => (
+const createNavChannel = (channel, currentChannel, currentSubscriber, mutedSubscribers) => (
   {
     name: channel.name,
     id: channel.id,
     isCurrent: currentChannel === channel.id,
     hasActions: hasAction(channel),
-    hasNewMessages: currentChannel === channel.id ? false : hasNewMessage(channel, currentUser, mutedUsers),
-    otherUsersNames: getOtherUserNames(channel, currentUser),
+    hasNewMessages: currentChannel === channel.id ? false : hasNewMessage(channel, currentSubscriber, mutedSubscribers),
+    otherSubscribersNames: getOtherSubscriberNames(channel, currentSubscriber),
     isDirect: channel.direct,
     isPlaceholder: channel.placeholder,
     type: channel.name === 'Public' ? EVENT : CHAT,
@@ -101,39 +101,41 @@ const createNavChannel = (channel, currentChannel, currentUser, mutedUsers) => (
 const getPublicChannel = createSelector(
   state => publicChannel(state) || { name: 'Public', id: 'event', moments: [], direct: false },
   getCurrentChannel,
-  getCurrentUser,
-  getMutedUsers,
+  getCurrentSubscriber, 
+  getMutedSubscribers,  
   createNavChannel
 );
 
 const getHostChannel = createSelector(
   state => hostChannel(state) || { name: 'Host', id: 'host', moments: [], direct: false },
   getCurrentChannel,
-  getCurrentUser,
-  getMutedUsers,
+  getCurrentSubscriber,
+  getMutedSubscribers,
   createNavChannel
 );
 
 const getDirectChannels = createSelector(
   directChannels,
   getCurrentChannel,
-  getCurrentUser,
-  getMutedUsers,
-  (channels, currentChannel, currentUser, mutedUsers) =>
-    Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentUser, mutedUsers))
+  getCurrentSubscriber,
+  getMutedSubscribers,
+  (channels, currentChannel, currentSubscriber, mutedSubscribers) =>
+    Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentSubscriber, mutedSubscribers))
 );
 
 const getPlaceholderChannels = createSelector(
   placeholderChannels,
   getCurrentChannel,
-  getCurrentUser,
-  getMutedUsers,
-  (channels, currentChannel, currentUser, mutedUsers) =>
-    Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentUser, mutedUsers))
+  getCurrentSubscriber,
+  getMutedSubscribers,
+  (channels, currentChannel, currentSubscriber, mutedSubscribers) =>
+    Object.keys(channels).map(id => createNavChannel(channels[id], currentChannel, currentSubscriber, mutedSubscribers))
 );
 
+const local = state => state.feed || state;
+
 const getTabs = createSelector(
-  state => state.tabs,
+  state => local(state).tabs,
   state => paneContentSelector(state, PRIMARY_PANE),
   (tabs, currentPane) =>
     tabs.map(tab => ({
@@ -142,7 +144,7 @@ const getTabs = createSelector(
       isCurrent: currentPane.type === TAB && currentPane.content.type === tab,
       hasActions: false,
       hasNewMessages: false,
-      otherUsersNames: [],
+      otherSubscribersNames: [],
       isDirect: false,
       type: TAB,
       tabType: tab,

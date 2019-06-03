@@ -5,17 +5,14 @@ import ConnectedChat from '../../src/chat';
 import { fireEvent } from 'react-testing-library';
 import { mockDate, renderWithReduxAndTheme } from '../testUtils';
 import { defaultState } from '../../src/feed/dux';
+import { defaultState as defaultChopState } from '../../src/chop/dux';
 
-const otherUser = {
-  id: 12345,
+const otherSubscriber = {
+  id: '12345',
   avatar: null,
-  pubnubToken: '12345',
-  name: 'Billy Bob',
+  nickname: 'Billy Bob',
   role: {
     label: '',
-  },
-  preferences: {
-    textMode: 'COMPACT',
   },
 };
 
@@ -30,7 +27,7 @@ describe('Chat tests', () => {
         enterDetect={function () {}}
         currentPlaceholder=""
         currentChannel="public"
-        currentUser={otherUser}
+        currentSubscriber={otherSubscriber}
         publishMessage={() => {}}
         hideReactions={true}
         translateLanguage='en'
@@ -52,7 +49,7 @@ describe('Chat tests', () => {
         enterDetect={function () {}}
         currentPlaceholder=""
         currentChannel="public"
-        currentUser={otherUser}
+        currentSubscriber={otherSubscriber}
         publishMessage={() => {}}
         hideReactions={true}
         translateLanguage='en'
@@ -77,7 +74,7 @@ describe('Chat tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 0,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -108,7 +105,7 @@ describe('Chat tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 0,
-            participants: [],
+            subscribers: [],
           },
         },
         focusedChannel: 'public',
@@ -130,6 +127,37 @@ describe('Chat tests', () => {
     const initialState = {
       feed: {
         ...defaultState,
+        channels: {
+          public: {
+            id: 'public',
+            name: 'public',
+            type: 'public',
+            direct: false,
+            placeholder: false,
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 0,
+            sawLastMomentAt: 0,
+            subscribers: [],
+          },
+        },
+      },
+      subscriber: {
+        currentSubscriber: {
+          id: '12345',
+          pubnubAccessKey: '67890',
+          avatar: null,
+          nickname: 'Kylo Ren',
+          role: {
+            label: '',
+            permissions: [],
+          },
+          preferences: {
+            textMode: '',
+          },
+        },
+      },
+      user: {
         currentUser: {
           id: 12345,
           pubnubToken: '09876',
@@ -142,20 +170,6 @@ describe('Chat tests', () => {
           },
           preferences: {
             textMode: '',
-          },
-        },
-        channels: {
-          public: {
-            id: 'public',
-            name: 'public',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            moments: [],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 0,
-            participants: [],
           },
         },
       },
@@ -177,11 +191,10 @@ describe('Chat tests', () => {
               isMuted: false,
               lang: 'en',
               messageTrayOpen: false,
-              sender: {
-                id: 12345,
-                pubnubToken: '09876',
+              subscriber: {
+                id: '12345',
                 avatar: null,
-                name: 'Kylo Ren',
+                nickname: 'Kylo Ren',
                 role: {
                   label: '',
                 },
@@ -201,6 +214,37 @@ describe('Chat tests', () => {
     const initialState = {
       feed: {
         ...defaultState,
+        channels: {
+          public: {
+            id: 'public',
+            name: 'public',
+            type: 'public',
+            direct: false,
+            placeholder: false,
+            moments: [],
+            anchorMoments: [],
+            scrollPosition: 0,
+            sawLastMomentAt: 0,
+            subscribers: [],
+          },
+        },
+      },
+      subscriber: {
+        currentSubscriber: {
+          id: 12345,
+          pubnubAccessKey: '67890',
+          avatar: null,
+          nickname: 'Kylo Ren',
+          role: {
+            label: '',
+            permissions: [],
+          },
+          preferences: {
+            textMode: '',
+          },
+        },
+      },
+      user: {
         currentUser: {
           id: 12345,
           pubnubToken: '09876',
@@ -213,20 +257,6 @@ describe('Chat tests', () => {
           },
           preferences: {
             textMode: '',
-          },
-        },
-        channels: {
-          public: {
-            id: 'public',
-            name: 'public',
-            type: 'public',
-            direct: false,
-            placeholder: false,
-            moments: [],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 0,
-            participants: [],
           },
         },
       },
@@ -248,11 +278,10 @@ describe('Chat tests', () => {
               isMuted: false,
               lang: 'en',
               messageTrayOpen: false,
-              sender: {
+              subscriber: {
                 id: 12345,
-                pubnubToken: '09876',
                 avatar: null,
-                name: 'Kylo Ren',
+                nickname: 'Kylo Ren',
                 role: {
                   label: '',
                 },
@@ -269,11 +298,7 @@ describe('Chat tests', () => {
 
   test('pressing key other than enter does not send the message', () => {
     const initialState = {
-      sequence: {
-        serverTime: 0,
-        steps: [],
-      },
-      schedule: [],
+      ...defaultChopState,
       feed: {
         ...defaultState,
         channels: {
@@ -287,7 +312,7 @@ describe('Chat tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 0,
-            participants: [],
+            subscribers: [],
           },
         },
       },

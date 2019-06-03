@@ -1,29 +1,32 @@
-import { getCurrentUserAsSharedUser } from '../../../src/users/dux';
+import { getCurrentSubscriberAsSharedSubscriber } from '../../../src/subscriber/dux';
+import { defaultState } from '../../../src/chop/dux';
 
-describe('getCurrentUserAsSharedUser', () => {
+describe('getCurrentSubscriberAsSharedSubscriber', () => {
   test('It removes the permissions and pubnubAccessKey', () => {
     const state = {
-      currentUser: {
-        id: 12345,
-        pubnubToken: '09876',
-        pubnubAccessKey: '67890',
-        avatar: null,
-        name: 'Joan Jet',
-        role: {
-          label: '',
-          permissions: ['global.admin'],
-        },
-        preferences: {
-          textMode: 'COMPACT',
+      ...defaultState,
+      subscriber: {
+        ...defaultState.subscriber,
+        currentSubscriber: {
+          id: 12345,
+          pubnubAccessKey: '67890',
+          avatar: null,
+          nickname: 'Joan Jet',
+          role: {
+            label: '',
+            permissions: ['global.admin'],
+          },
+          preferences: {
+            textMode: 'COMPACT',
+          },
         },
       },
     };
 
-    expect(getCurrentUserAsSharedUser(state)).toEqual({
+    expect(getCurrentSubscriberAsSharedSubscriber(state)).toEqual({
       id: 12345,
-      pubnubToken: '09876',
       avatar: null,
-      name: 'Joan Jet',
+      nickname: 'Joan Jet',
       role: {
         label: '',
       },

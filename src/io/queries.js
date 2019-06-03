@@ -4,7 +4,7 @@ import { GraphQLClient } from 'graphql-request';
 import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
 import type { URLType } from '../cwc-types';
-import type { UserInputType } from '../users/dux';
+import type { SubscriberInputType } from '../subscriber/dux';
 
 declare var GATEWAY_HOST: string;
 
@@ -44,10 +44,9 @@ export type GraphQLOrganizationType = {
 };
 
 export type GraphQLParticipantsType = {
-  id: GraphQLInt,
-  pubnubToken: GraphQLString,
+  id: string,
   avatar: GraphQLString,
-  name: GraphQLString,
+  nickname: GraphQLString,
 };
 
 export type GraphQLChannelType = {
@@ -55,7 +54,7 @@ export type GraphQLChannelType = {
   name: GraphQLString,
   type: GraphQLString,
   direct: GraphQLBoolean,
-  participants: Array<GraphQLParticipantsType>,
+  subscribers: Array<GraphQLParticipantsType>,
 };
 
 export type GraphQLEventTimeType = {
@@ -100,16 +99,16 @@ export type GraphQlPreferences = {|
   textMode: string,
 |};
 
-export type GraphQLUserType = {
-  currentUser: {
+export type GraphQLSubscriberType = {
+  currentSubscriber: {
+    userId: number, // Only needed to pass to legacy when creating a message
     avatar: GraphQLString,
-    id: number,
-    name: GraphQLString,
+    id: string,
+    nickname: GraphQLString,
     pubnubAccessKey: GraphQLString,
-    pubnubToken: GraphQLString,
     role: GraphQlRole,
     preferences: GraphQlPreferences,
-  }
+  } | null
 };
 
 export type GraphQLPubnubKeys = {
@@ -135,7 +134,7 @@ export type GraphQLEventType = {
   title: GraphQLString,
   videoStartTime: GraphQLInt,
   video: GraphQLVideoType,
-  feeds: Array<GraphQLChannelType>,
+  feed: Array<GraphQLChannelType>,
   enabledFeatures: GraphQLEnabledFeatures,
 };
 
@@ -154,7 +153,7 @@ export type GraphQLEventAtType = {|
   title: GraphQLString,
   videoStartTime: GraphQLInt,
   video: GraphQLVideoType,
-  feeds: Array<GraphQLChannelType>,
+  feed: Array<GraphQLChannelType>,
 |};
 
 export type GraphQLEventAtTimeType = {
@@ -179,7 +178,7 @@ export type GraphQLCurrentStateType =
   GraphQLCurrentEventType &
   GraphQLOrganizationType &
   GraphQLLanguageType &
-  GraphQLUserType &
+  GraphQLSubscriberType &
   GraphQLPubnubKeys &
   GraphQLSchedule;
 
@@ -187,8 +186,8 @@ export type GraphQLAcceptPrayer = {
   acceptPrayer: boolean,
 }
 
-export type GraphQLMuteUserType = {
-  muteUser: boolean,
+export type GraphQLMuteSubscriberType = {
+  muteSubscriber: boolean,
 }
 
 export type GraphQLLeaveChannelType = {
@@ -247,16 +246,15 @@ currentEvent {
     type
     url
   }
-  feeds {
+  feed {
     id
     name
     type
     direct
-    participants: subscribers {
-      id: userId
-      pubnubToken
+    subscribers {
+      id: pubnubToken
       avatar
-      name: nickname
+      nickname
     }
   }
   enabledFeatures {
@@ -282,27 +280,26 @@ query EventAt($time: Timestamp) {
       type
       url
     }
-    feeds {
+    feed {
       id
       name
       direct
       type
-      participants: subscribers {
-        id: userId
-        pubnubToken
+      subscribers {
+        id
         avatar
-        name: nickname
+        nickname
       }
     }
   }
 }`;
 
-const currentUser = `
-currentUser {
+const currentSubscriber = `
+currentSubscriber: currentSubscriber {
+  userId
   id
-  name: nickname
+  nickname
   avatar
-  pubnubToken
   role {
     label
     permissions {
@@ -338,46 +335,46 @@ currentLanguages @include(if: $needLanguages) {
 }`;
 
 const acceptPrayer = `
-mutation AcceptPrayer($feedToken: String!, $requesterPubnubToken: String!, $requesterNickname: String!) {
-  acceptPrayer(feedToken: $feedToken, requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
+mutation AcceptPrayer($channelToken: String!, $requesterPubnubToken: String!, $requesterNickname: String!) {
+  acceptPrayer(channelToken: $channelToken, requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
     id
     name
     type
     direct
-    participants: subscribers {
-      id: userId
-      pubnubToken
+    subscribers {
+      id:pubnubToken
+      userId
       avatar
-      name: nickname
+      nickname
     }
   }
 }
 `;
 
-const muteUser = ` 
-mutation muteUser($feedToken: String!, $nickname: String!) {
-  muteUser(feedToken: $feedToken, nickname: $nickname, clientIp: "0.0.0.0")
+const muteSubscriber = ` 
+mutation muteSubscriber($channelToken: String!, $nickname: String!) {
+  muteSubscriber(channelToken: $channelToken, nickname: $nickname, clientIp: "0.0.0.0")
 }
 `;
 
 const leaveChannel = `
-mutation leaveFeed($feedToken: String!) {
-  leaveFeed(feedToken: $feedToken)
+mutation leaveChannel($channelToken: String!) {
+  leaveChannel(channelToken: $channelToken)
 }
 `;
 
-const createDirectFeed = `
-mutation createDirectFeed($pubnubToken: String!, $nickname: String!) {
-  createDirectFeed(targetPubnubToken: $pubnubToken, targetNickname: $nickname) {
+const createDirectChannel = `
+mutation CreateDirectChannel($pubnubToken: String!, $nickname: String!) {
+  createDirectChannel(targetPubnubToken: $pubnubToken, targetNickname: $nickname) {
     id
     name
     type
     direct
-    participants: subscribers {
-      id: userId
-      pubnubToken
+    subscribers {
+      userId
       avatar
-      name: nickname
+      nickname
+      id:pubnubToken
     }
   }
 }`;
@@ -394,45 +391,29 @@ schedule(endTime: $scheduleEndTime) {
 }`;
 
 const joinChannel = `
-mutation joinFeed($channel: String!, $requesterPubnubToken: String!, $requesterNickname: String!) {
-  joinFeed(feedToken: $channel, requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
+mutation joinFeed($channel: String!, $requesterId: ID!, $requesterNickname: String!) {
+  joinFeed(feedToken: $channel, requesterId: $requesterId, requesterNickname: $requesterNickname) {
     id
     name
     direct
     type
-    participants: subscribers {
-      pubnubToken
+    subscribers {
       avatar
-      name: nickname
+      nickname
     }
   }
 }
 `;
 
-const updateUser = `
-mutation updateUser($id: ID!, $input: UserInput!) {
-  updateUser(id: $id, input: $input) {
-    id
-    name: nickname
-    avatar
-    pubnubToken
-    role {
-      label
-      permissions {
-        key
-      }
-    }
-    preferences {
-      textMode
-    }
-  }
-}
-`;
+const updateSubscriber = `
+mutation updateSubscriber($id: ID!, $input: SubscriberInput!) {
+  updateSubscriber(id: $id, input: $input)
+}`;
 
 const currentState = `
 query CurrentState($needLanguages: Boolean!, $scheduleEndTime: Timestamp) {
   ${currentEvent}
-  ${currentUser}
+  ${currentSubscriber}
   ${currentOrganization}
   ${pubnubKeys}
   ${currentLanguages}
@@ -506,26 +487,25 @@ const queries = {
     }),
 
   acceptPrayer: async (
-    channelId: string,
+    channelToken: string,
     requesterPubnubToken: string,
-
-    requesterName: string
+    requesterNickname: string
   ): Promise<GraphQLAcceptPrayer> =>
     await client.request(acceptPrayer, {
-      feedToken: channelId,
+      channelToken,
       requesterPubnubToken,
-      requesterNickname: requesterName,
+      requesterNickname,
     }),
 
-  muteUser: async (feedToken: string, nickname: string): Promise<GraphQLMuteUserType> =>
-    await client.request(muteUser, {
-      feedToken,
+  muteSubscriber: async (channelToken: string, nickname: string): Promise<GraphQLMuteSubscriberType> =>
+    await client.request(muteSubscriber, {
+      channelToken,
       nickname,
     }),
 
-  updateUser: async (id: string, input: UserInputType) =>
+  updateSubscriber: async (id: string, input: SubscriberInputType) =>
     await client.request(
-      updateUser,
+      updateSubscriber,
       {
         id,
         input,
@@ -533,14 +513,14 @@ const queries = {
     ),
 
   directChat: async (pubnubToken: string, nickname: string): Promise<GraphQLDirectChatType> =>
-    await client.request(createDirectFeed, {
+    await client.request(createDirectChannel, {
       pubnubToken,
       nickname,
     }),
 
-  leaveChannel: async (channelId: string): Promise<GraphQLLeaveChannelType> =>
+  leaveChannel: async (channelToken: string): Promise<GraphQLLeaveChannelType> =>
     await client.request(leaveChannel, {
-      feedToken: channelId,
+      channelToken,
     }),
 
   schedule: async (): Promise<GraphQLSchedule> =>
@@ -558,12 +538,12 @@ const queries = {
       time,
     }),
 
-  joinChannel: async (channel: string, requesterPubnubToken: string, requesterNickname: string) =>
+  joinChannel: async (channel: string, requesterId: string, requesterNickname: string) =>
     await client.request(
       joinChannel,
       {
         channel,
-        requesterPubnubToken,
+        requesterId,
         requesterNickname,
       }
     ),

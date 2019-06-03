@@ -13,8 +13,7 @@ import { mountWithTheme } from '../testUtils';
 
 import AnchorMoment from '../../src/anchorMoment';
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
+import reducer, { defaultState } from '../../src/chop/dux';
 import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -23,9 +22,7 @@ describe('Moment tests', () => {
   test('Moment renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>
@@ -35,9 +32,9 @@ describe('Moment tests', () => {
               type: 'MESSAGE',
               id: '12345',
               text: 'Hello',
-              sender: {
+              subscriber: {
                 id: '54321',
-                name: 'Wilbur Wagner',
+                nickname: 'Wilbur Wagner',
               },
               messageTrayOpen: false,
             }
@@ -51,9 +48,7 @@ describe('Moment tests', () => {
   test('Message renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>
@@ -64,9 +59,9 @@ describe('Moment tests', () => {
               id: '12345',
               lang: 'en',
               text: 'Hello',
-              sender: {
+              subscriber: {
                 id: '54321',
-                name: 'Wilbur Wagner',
+                nickname: 'Wilbur Wagner',
               },
               messageTrayOpen: false,
             }
@@ -80,9 +75,9 @@ describe('Moment tests', () => {
         id: '12345',
         lang: 'en',
         text: 'Hello',
-        sender: {
+        subscriber: {
           id: '54321',
-          name: 'Wilbur Wagner',
+          nickname: 'Wilbur Wagner',
         },
         messageTrayOpen: false,
       }
@@ -123,7 +118,7 @@ describe('Moment tests', () => {
           {
             type: 'NOTIFICATION',
             notificationType: 'JOINED_CHAT',
-            name: 'Billy',
+            nickname: 'Billy',
             timestamp: '4:53pm',
           }
         }
@@ -134,7 +129,7 @@ describe('Moment tests', () => {
         notification: {
           type: 'NOTIFICATION',
           notificationType: 'JOINED_CHAT',
-          name: 'Billy',
+          nickname: 'Billy',
           timestamp: '4:53pm',
         },
       }
@@ -148,7 +143,7 @@ describe('Moment tests', () => {
           {
             type: 'NOTIFICATION',
             notificationType: 'LEFT_CHAT',
-            name: 'Billy',
+            nickname: 'Billy',
             timestamp: '4:53pm',
           }
         }
@@ -159,7 +154,7 @@ describe('Moment tests', () => {
         notification: {
           type: 'NOTIFICATION',
           notificationType: 'LEFT_CHAT',
-          name: 'Billy',
+          nickname: 'Billy',
           timestamp: '4:53pm',
         },
       }
@@ -169,9 +164,7 @@ describe('Moment tests', () => {
   test('Prayer request notification renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>
@@ -180,8 +173,8 @@ describe('Moment tests', () => {
             {
               type: 'ACTIONABLE_NOTIFICATION',
               notificationType: 'PRAYER_REQUEST',
-              user: {
-                name: 'Billy',
+              subscriber: {
+                nickname: 'Billy',
               },
               timestamp: '4:53pm',
               active: true,
@@ -195,8 +188,8 @@ describe('Moment tests', () => {
         notification: {
           type: 'ACTIONABLE_NOTIFICATION',
           notificationType: 'PRAYER_REQUEST',
-          user: {
-            name: 'Billy',
+          subscriber: {
+            nickname: 'Billy',
           },
           timestamp: '4:53pm',
           active: true,
@@ -208,9 +201,7 @@ describe('Moment tests', () => {
   test('Salvation anchor moment renders', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
     const wrapper = mountWithTheme(
       <Provider store={store}>

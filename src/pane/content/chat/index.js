@@ -2,29 +2,28 @@
 import Chat from './chat';
 import { connect } from 'react-redux';
 import { getChannelById } from '../../../selectors/channelSelectors';
-import { getUserCountInChannel } from '../../../selectors/hereNowSelector';
+import { getSubscriberCountInChannel } from '../../../subscriber/dux';
 import {
   togglePopUpModal,
   leaveChatType,
 } from '../../../popUpModal/dux';
-import { getOtherUsers } from '../../../selectors/chatSelectors';
+import { getOtherSubscribers } from '../../../selectors/chatSelectors';
 
 const mapStateToProps = (state, ownProps) => {
   const { channel, hideReactions } = ownProps;
-  const { feed:feedState } = state;
-  const { type = '' } = getChannelById(feedState, channel) || {};
-  const userCount = getUserCountInChannel(feedState, channel) || '';
-  const isDirect = feedState?.channels?.[channel]?.direct;
-  const isPlaceholder = feedState?.channels?.[channel]?.placeholder;
-  const [otherUser] = getOtherUsers(feedState, channel);
-  const { name:otherUsersName } = otherUser || '';
+  const { type = '' } = getChannelById(state, channel) || {};
+  const subscriberCount = getSubscriberCountInChannel(state, channel) || '';
+  const isDirect = state.feed?.channels?.[channel]?.direct;
+  const isPlaceholder = state.feed?.channels?.[channel]?.placeholder;
+  const [otherSubscriber] = getOtherSubscribers(state, channel);
+  const { nickname:otherSubscribersName } = otherSubscriber || '';
 
   return {
     channel,
     type,
-    userCount,
+    subscriberCount,
     isDirect,
-    otherUsersName,
+    otherSubscribersName,
     hideReactions,
     isPlaceholder,
   };
