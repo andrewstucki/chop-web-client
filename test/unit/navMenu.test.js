@@ -1,30 +1,28 @@
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
+import reducer, { defaultState } from '../../src/chop/dux';
 import {toggleNavMenuExpanded, isNavMenuExpanded} from '../../src/navMenu/dux';
 
 describe('NavMenu tests', () => {
   test('toggle expand', () => {
     const store = createStore(
       reducer,
-      {
-        feed: defaultState,
-      }
+      defaultState
     );
 
     store.dispatch(toggleNavMenuExpanded());
 
-    expect(isNavMenuExpanded(store.getState().feed)).toBeFalsy();
+    expect(isNavMenuExpanded(store.getState())).toBeFalsy();
   });
 
   test('toggle expand', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           nav: {
-            ...defaultState.nav,
+            ...defaultState.feed.nav,
             expanded: false,
           },
         },
@@ -33,6 +31,6 @@ describe('NavMenu tests', () => {
 
     store.dispatch(toggleNavMenuExpanded());
 
-    expect(isNavMenuExpanded(store.getState().feed)).toBeTruthy();
+    expect(isNavMenuExpanded(store.getState())).toBeTruthy();
   });
 });

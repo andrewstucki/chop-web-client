@@ -3,15 +3,14 @@ import React from 'react';
 import { renderWithReduxAndTheme, renderWithTheme } from '../testUtils';
 import { MESSAGE } from '../../src/moment';
 import Feed from '../../src/feed/feed';
-import type {PrivateUserType} from '../../src/users/dux';
+import type {PrivateSubscriberType} from '../../src/subscriber/dux';
 
 describe('Feed tests', () => {
-  const user: PrivateUserType = {
-    pubnubToken: '12345',
-    id: 1928374,
+  const subscriber: PrivateSubscriberType = {
+    id: '1928374',
     avatar: null,
     pubnubAccessKey: '098765',
-    name: 'Billy Bob',
+    nickname: 'Billy Bob',
     role: {
       label: '',
       permissions: [],
@@ -26,9 +25,9 @@ describe('Feed tests', () => {
       type: MESSAGE,
       id: 'string',
       text: 'This is a message',
-      sender: {
+      subscriber: {
         id: '12345',
-        name: 'Billy Bob',
+        nickname: 'Billy Bob',
       },
       messageTrayOpen: false,
     },
@@ -45,7 +44,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scroll={{type: 'NO_SCROLL'}}
-        currentUser={user}
+        currentSubscriber={subscriber}
         updateScrollPosition={() => {}}
         channel="default"
         showNewMessageButton={false}
@@ -64,9 +63,9 @@ describe('Feed tests', () => {
         type: MESSAGE,
         id: 'string',
         text: 'This is a message',
-        sender: {
+        subscriber: {
           id: '12345',
-          name: 'Billy Bob',
+          nickname: 'Billy Bob',
         },
         messageTrayOpen: false,
       },
@@ -84,7 +83,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scroll={{type: 'NO_SCROLL'}}
-        currentUser={user}
+        currentSubscriber={subscriber}
         updateScrollPosition={() => {}}
         channel="default"
         showNewMessageButton={false}
@@ -111,7 +110,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scroll={{type: 'NO_SCROLL'}}
-        currentUser={user}
+        currentSubscriber={subscriber}
         updateScrollPosition={() => {}}
         channel="default"
         showNewMessageButton={false}
@@ -137,7 +136,7 @@ describe('Feed tests', () => {
         isPopUpModalVisible={false}
         togglePopUpModal={() => {}}
         scroll={{type: 'NO_SCROLL'}}
-        currentUser={user}
+        currentSubscriber={subscriber}
         updateScrollPosition={() => {}}
         channel="default"
         showNewMessageButton={true}

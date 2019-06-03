@@ -44,7 +44,7 @@ const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClic
       <NavMenuButton disabled={disabled} expanded={expanded}>
         <NavMenuIconWrapper expanded={expanded}>
           { useAvatar &&
-          <DirectChatAvatar isCurrent={selected} name={text}>
+          <DirectChatAvatar isCurrent={selected} nickname={text}>
             {getFirstInitial(text)}
           </DirectChatAvatar>
           }
@@ -118,7 +118,7 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
           {directChannels.length > 0 &&
           <NavMenuBodySection>
             {directChannels.map(channel =>
-              <NavMenuItem key={channel.id} useAvatar={true} text={channel.otherUsersNames[0] || '?'}
+              <NavMenuItem key={channel.id} useAvatar={true} text={channel.otherSubscribersNames[0] || '?'}
                 expanded={expanded} hasActions={channel.hasActions} hasNewMessages={channel.hasNewMessages}
                 selected={channel.isCurrent}
                 onClick={() => setPaneToChat(PRIMARY_PANE, channel.id, channel.isPlaceholder || false,)}/>

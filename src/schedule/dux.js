@@ -23,7 +23,7 @@ export type EventScheduleType = {
   hostInfo: string,
 };
 
-type ScheduleType = {
+export type ScheduleType = {
   items: Array<EventScheduleType>,
   timeZone: string,
 };
@@ -77,6 +77,7 @@ export const defaultState = {
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
 };
 
+// reducer
 export default (
   state: ScheduleType = defaultState,
   action?: ActionType,
@@ -107,7 +108,7 @@ export default (
 };
 
 // selectors
-const local = state => state[ID];
+const local = state => state[ID] || state;
 
 export const getNextEventData = createSelector(
   local,

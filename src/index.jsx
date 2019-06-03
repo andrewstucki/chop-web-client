@@ -32,13 +32,13 @@ import XHR from 'i18next-xhr-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import { setLanguage } from './languageSelector/dux';
+import Converter from './io/converter';
 // $FlowFixMe - why won't this resolve?
 import SilentAudio from '../assets/audio/250-milliseconds-of-silence.mp3';
 
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
 declare var GTM;
-declare var CWC_HOST:string;
 
 if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
@@ -80,6 +80,8 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga);
 
+Converter.config(store.getState);
+
 // Leaving this in the index for now so it can have access to store
 i18n
   .use(XHR)
@@ -100,7 +102,7 @@ i18n
       wait: true,
     },
     backend: {
-      loadPath: `${CWC_HOST}/locales/{{lng}}/{{ns}}.json`,
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
       crossDomain: true,
     },
   }, () => store.dispatch(setLanguage(i18n.language)));

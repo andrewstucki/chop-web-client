@@ -3,40 +3,35 @@ import React from 'react';
 import sinon from 'sinon';
 import { fireEvent } from 'react-testing-library';
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
+import reducer, { defaultState as defaultChopState } from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
 import {
   togglePopUpModal,
   leaveChatType,
-  muteUserType,
+  muteSubscriberType,
 } from '../../src/popUpModal/dux';
 import PopUpModal from '../../src/popUpModal';
 import LeaveChat from '../../src/popUpModal/leaveChat/leaveChat';
 import LeaveChatConnected from '../../src/popUpModal/leaveChat';
-import MuteUser from '../../src/popUpModal/muteUser/muteUser';
-import MuteUserConnected from '../../src/popUpModal/muteUser';
-import { renderWithReduxAndTheme, defaultState as defaultTestState } from '../testUtils';
+import MuteSubscriber from '../../src/popUpModal/muteSubscriber/muteSubscriber';
+import MuteSubscriberConnected from '../../src/popUpModal/muteSubscriber';
+import { renderWithReduxAndTheme } from '../testUtils';
 
 
-const otherUser = {
-  id: 12345,
-  pubnubToken: '12345',
+const otherSubscriber = {
+  id: '12345',
   avatar: null,
-  name: 'Billy Bob',
+  nickname: 'Billy Bob',
   role: {
     label: '',
   },
-  preferences: {
-    textMode: 'COMPACT',
-  },
 };
 
-const currentUser = {
-  id: 12345,
-  pubnubToken: '09876',
-  pubnubAccessToken: '67890',
+const currentSubscriber = {
+  id: '12345',
+  pubnubAccessKey: '67890',
   avatar: null,
-  name: 'Joan Jet',
+  nickname: 'Joan Jet',
   role: {
     label: '',
     permissions: [],
@@ -65,7 +60,7 @@ describe('PopUpModal tests', () => {
     });
   });
 
-  test('Mute user action updates the state', () => {
+  test('Mute subscriber action updates the state', () => {
     const store = createStore(
       reducer,
       {
@@ -75,12 +70,12 @@ describe('PopUpModal tests', () => {
       }
     );
 
-    store.dispatch(togglePopUpModal(muteUserType('Bob')));
+    store.dispatch(togglePopUpModal(muteSubscriberType('Bob')));
 
     expect(store.getState().feed.isPopUpModalVisible).toBeTrue();
     expect(store.getState().feed.popUpModal).toEqual({
-      type: 'MUTE_USER',
-      user: 'Bob',
+      type: 'MUTE_SUBSCRIBER',
+      subscriber: 'Bob',
     });
   });
 
@@ -93,9 +88,9 @@ describe('PopUpModal tests', () => {
         togglePopUpModal={togglePopUpModal}
         leaveChannel={leaveChannel}
         currentChannel="direct"
-        otherUser={otherUser}
-        hasOtherUsers={true}
-        currentUser={currentUser}
+        otherSubscriber={otherSubscriber}
+        hasOtherSubscribers={true}
+        currentSubscriber={currentSubscriber}
         publishLeftChannelNotification={publishLeftChannelNotification}
         isPlaceholder={false}
         isSmall={false}
@@ -112,36 +107,36 @@ describe('PopUpModal tests', () => {
     expect(leaveChannel.calledOnce).toEqual(true);
   });
 
-  test('Mute user actions can be fired and modal displays', () => {
+  test('Mute subscriber actions can be fired and modal displays', () => {
     const togglePopUpModal = sinon.spy();
-    const muteUser = sinon.spy();
-    const publishMuteUserNotification = sinon.spy();
+    const muteSubscriber = sinon.spy();
+    const publishMuteSubscriberNotification = sinon.spy();
     const mutedNotificationBanner = sinon.spy();
     const { getByTestId } = renderWithReduxAndTheme(
-      <MuteUser
+      <MuteSubscriber
         togglePopUpModal={togglePopUpModal}
-        muteUser={muteUser}
-        publishMuteUserNotification={publishMuteUserNotification}
+        muteSubscriber={muteSubscriber}
+        publishMuteSubscriberNotification={publishMuteSubscriberNotification}
         mutedNotificationBanner={mutedNotificationBanner}
-        currentUser={currentUser}
-        user={otherUser.name}
+        currentSubscriber={currentSubscriber.nickname}
+        subscriber={otherSubscriber.nickname}
         hostChannel='host'
-        currentChannel='public'
+        channelId='public'
         isSmall={false}
       />
     );
 
-    expect(getByTestId('muteUser-confirmText').textContent).toEqual(
-      'Are you sure you want to mute Billy Bob?mute_user.all_messages'
+    expect(getByTestId('muteSubscriber-confirmText').textContent).toEqual(
+      'Are you sure you want to mute Billy Bob?mute_subscriber.all_messages'
     );
-    expect(getByTestId('muteUser-allMessages').textContent).toEqual(
-      'mute_user.all_messages'
+    expect(getByTestId('muteSubscriber-allMessages').textContent).toEqual(
+      'mute_subscriber.all_messages'
     );
-    fireEvent.click(getByTestId('muteUser-cancel'));
-    fireEvent.click(getByTestId('muteUser-mute'));
+    fireEvent.click(getByTestId('muteSubscriber-cancel'));
+    fireEvent.click(getByTestId('muteSubscriber-mute'));
     expect(togglePopUpModal.calledTwice).toEqual(true);
-    expect(publishMuteUserNotification.calledOnce).toEqual(true);
-    expect(muteUser.calledOnce).toEqual(true);
+    expect(publishMuteSubscriberNotification.calledOnce).toEqual(true);
+    expect(muteSubscriber.calledOnce).toEqual(true);
     expect(mutedNotificationBanner.calledOnce).toEqual(true);
   });
 
@@ -149,9 +144,9 @@ describe('PopUpModal tests', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
       <PopUpModal />,
       {
-        ...defaultTestState,
+        ...defaultChopState,
         feed: {
-          ...defaultTestState.feed,
+          ...defaultChopState.feed,
           isPopUpModalVisible: true,
           popUpModal: {
             type: 'LEAVE_CHAT',
@@ -166,9 +161,9 @@ describe('PopUpModal tests', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
       <PopUpModal />,
       {
-        ...defaultTestState,
+        ...defaultChopState,
         feed: {
-          ...defaultTestState.feed,
+          ...defaultChopState.feed,
           isPopUpModalVisible: false,
           popUpModal: {
             type: '',
@@ -179,16 +174,16 @@ describe('PopUpModal tests', () => {
     expect(queryByTestId('popUpModal')).toBeFalsy();
   });
 
-  test('Mute user modal displays', () => {
+  test('Mute subscriber modal displays', () => {
     const state = {
       feed: {
         ...defaultState,
         isPopUpModalVisible: true,
         popUpModal: {
-          type: 'MUTE_USER',
-          user: 'Billy Bob',
+          type: 'MUTE_SUBSCRIBER',
+          subscriber: 'Billy Bob',
         },
-        currentUser,
+        currentSubscriber,
         channels: {
           host: {
             id: 'Host',
@@ -201,9 +196,9 @@ describe('PopUpModal tests', () => {
             name: 'direct',
             moments: [],
             anchorMoments: [],
-            participants: [
-              currentUser,
-              otherUser,
+            subscribers: [
+              currentSubscriber,
+              otherSubscriber,
             ],
           },
         },
@@ -211,11 +206,11 @@ describe('PopUpModal tests', () => {
       },
     };
     const { getByTestId } = renderWithReduxAndTheme(
-      <MuteUserConnected
+      <MuteSubscriberConnected
         togglePopUpModal={() => {}}
       />, state
     );
-    expect(getByTestId('muteUser-modal')).toBeTruthy();
+    expect(getByTestId('muteSubscriber-modal')).toBeTruthy();
   });
 
   test('Leave chat modal displays', () => {
@@ -226,7 +221,7 @@ describe('PopUpModal tests', () => {
         popUpModal: {
           type: 'LEAVE_CHAT',
         },
-        currentUser,
+        currentSubscriber,
         channels: {
           host: {
             id: 'Host',
@@ -239,9 +234,9 @@ describe('PopUpModal tests', () => {
             name: 'direct',
             moments: [],
             anchorMoments: [],
-            participants: [
-              currentUser,
-              otherUser,
+            subscribers: [
+              currentSubscriber,
+              otherSubscriber,
             ],
           },
         },

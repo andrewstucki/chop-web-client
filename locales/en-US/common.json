@@ -5,10 +5,10 @@
     "close": "Close",
     "delete_message": "Delete",
     "direct_chat": "Chat",
-    "mute_user": "Mute"
+    "mute_subscriber": "Mute"
   },
   "chat": "Chat",
-  "chat_with": "Chat with {{name}}",
+  "chat_with": "Chat with {{nickname}}",
   "coming_soon": "Coming Soon",
   "feature_coming_soon": "<strong>{{feature}}</strong> is Coming Soon.",
   "give_feedback": "Give feedback",

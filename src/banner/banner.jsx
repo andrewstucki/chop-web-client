@@ -50,9 +50,9 @@ const Banner = (
           <NotificationBanner fullWidth={fullWidth} data-testid='muted-notification-banner'>
             <DismissButton dismissNotification={dismissNotification}/>
             <BannerMessage data-testid='banner-message'>
-              <Trans ns='notifications' i18nKey='user_muted'>
+              <Trans ns='notifications' i18nKey='subscriber_muted'>
                 {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-                <strong>{{name}}</strong> was muted.
+                <strong>{{nickname: banner.message}}</strong> was muted.
               </Trans>
             </BannerMessage>
           </NotificationBanner>

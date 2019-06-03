@@ -1,73 +1,75 @@
 // @flow
-import { createStore, applyMiddleware } from 'redux';
-import actorMiddleware from '../../src/middleware/actor-middleware';
-import reducer from '../../src/chop/dux';
-import { getAvailableForPrayer } from '../../src/selectors/hereNowSelector';
+import { defaultState } from '../../src/chop/dux';
 import { __messageEvent, __presenceEvent, mockHereNow } from 'pubnub';
-import { addChannel, defaultState } from '../../src/feed/dux';
 import Chat from '../../src/io/chat';
+import Converter from '../../src/io/converter';
 jest.mock('pubnub');
 
 describe('Prayer Request Tests', () => {
   const _store = {
     ...defaultState,
-    currentUser: {
-      id: 134,
-      name: 'Kylo Ren',
-      avatar: 'http://someimageons3.com/image/123',
-      role: {
-        label: 'Supreme Leader of the First Order',
-        permissions: ['event.event.manage', 'feed.direct.accept'],
-      },
-      pubnubToken: '123456',
-      pubnubAccessKey: '1533912921585',
-      preferences: {
-        textMode: 'COMPACT',
-      },
-    },
-    event: {
-      id: '320418',
-      eventTimeId: '1920834',
-      startTime: 1529425800000,
-      endTime: 1529425900000,
-      title: 'When Pigs Fly - Week 2',
-      timezone: 'Central',
-      enabledFeatures: {
-        chat: true,
+    subscriber: {
+      ...defaultState.subscriber,
+      currentSubscriber: {
+        id: '134',
+        nickname: 'Kylo Ren',
+        avatar: 'http://someimageons3.com/image/123',
+        role: {
+          label: 'Supreme Leader of the First Order',
+          permissions: ['event.event.manage', 'feed.direct.accept'],
+        },
+        pubnubAccessKey: '1533912921585',
+        preferences: {
+          textMode: 'COMPACT',
+        },
       },
     },
-    organization: {
-      id: 2,
-      name: 'Life.Church',
-      logoUrl: '',
-      theme: {
-        headerBackgroundColor: '',
-        headerMenuIconColor: '',
+    feed: {
+      ...defaultState.feed,
+      event: {
+        id: '320418',
+        eventTimeId: '1920834',
+        startTime: 1529425800000,
+        endTime: 1529425900000,
+        title: 'When Pigs Fly - Week 2',
+        timezone: 'Central',
+        enabledFeatures: {
+          chat: true,
+        },
       },
-    },
-    pubnubKeys: {
-      publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
-      subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
-    },
-    channels: {
-      ...defaultState.channels,
-      '123456': {
-        name: 'public',
-        id: '123456',
-        direct: false,
-        moments: [],
-        anchorMoments: [],
-        scrollPosition: 0,
-        sawLastMomentAt: 1546896104521,
+      organization: {
+        id: 2,
+        name: 'Life.Church',
+        logoUrl: '',
+        theme: {
+          headerBackgroundColor: '',
+          headerMenuIconColor: '',
+        },
       },
-      '789012': {
-        name: 'Host',
-        id: '789012',
-        direct: false,
-        moments: [],
-        anchorMoments: [],
-        scrollPosition: 0,
-        sawLastMomentAt: 1546896104521,
+      pubnubKeys: {
+        publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+        subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+      },
+      channels: {
+        ...defaultState.feed.channels,
+        '123456': {
+          name: 'public',
+          id: '123456',
+          direct: false,
+          moments: [],
+          anchorMoments: [],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
+        },
+        '789012': {
+          name: 'Host',
+          id: '789012',
+          direct: false,
+          moments: [],
+          anchorMoments: [],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
+        },
       },
     },
   };
@@ -75,6 +77,8 @@ describe('Prayer Request Tests', () => {
   const dispatch = jest.fn();
   const getState = jest.fn();
   getState.mockReturnValue(_store);
+
+  Converter.config(getState);
 
   const chat = new Chat(dispatch, getState);
   chat.init();
@@ -119,9 +123,8 @@ describe('Prayer Request Tests', () => {
           type: 'ACTIONABLE_NOTIFICATION',
           notificationType: 'PRAYER_REQUEST',
           id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
-          user: {
-            name: 'JarJar',
-            pubnubToken: 'jarjartoken',
+          subscriber: {
+            nickname: 'JarJar',
           },
           active: true,
           timestamp: expect.stringMatching(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/),
@@ -217,88 +220,5 @@ describe('Prayer Request Tests', () => {
     //     },
     //   }
     // );
-  });
-
-  test('Here Now', () => {
-    const actors = actorMiddleware(Chat);
-    const store = createStore(
-      reducer,
-      {
-        feed: _store,
-      },
-      applyMiddleware(actors)
-    );
-
-    mockHereNow.mockImplementation((config, callback) => {
-      callback(null, {
-        channels: {
-          '123456': {
-            occupants: [
-              {
-                uuid: 'xyz',
-                state: {
-                  available_prayer: false, // eslint-disable-line camelcase
-                },
-              },
-              {
-                uuid: 'abc',
-                state: {
-                  available_prayer: true, // eslint-disable-line camelcase
-                },
-              },
-            ],
-          },
-        },
-      });
-    });
-
-    store.dispatch(
-      {
-        type: 'SET_PUBNUB_KEYS',
-        publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
-        subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
-      }
-    );
-
-    store.dispatch(
-      addChannel(
-        'public',
-        '123456',
-        'public',
-        false,
-        [])
-    );
-
-    expect(getAvailableForPrayer(store.getState().feed)).toEqual(['abc']);
-
-    __presenceEvent(
-      {
-        action: 'join',
-        channel: '123456',
-        state: {
-          available_prayer: true, // eslint-disable-line camelcase
-        },
-        uuid: 'nop',
-      }
-    );
-
-    expect(getAvailableForPrayer(store.getState().feed)).toEqual(['abc','nop']);
-
-    __presenceEvent(
-      {
-        action: 'leave',
-        channel: '123456',
-        state: {
-          available_prayer: true, // eslint-disable-line camelcase
-        },
-        uuid: 'abc',
-      }
-    );
-
-    expect(getAvailableForPrayer(store.getState().feed)).toEqual(['nop']);
-  });
-
-  test('Accept prayer request', () => {
-
   });
 });

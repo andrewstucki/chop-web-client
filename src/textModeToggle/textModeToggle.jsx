@@ -13,16 +13,16 @@ import type { TextModeType } from './dux';
 import Text from '../../assets/Aa.svg';
 
 type TextModeSelectorPropsType = {
-  toggleTextMode: (userId: string, mode: TextModeType) => void,
+  toggleTextMode: (subscriberId: string, mode: TextModeType) => void,
   mode: TextModeType,
-  userId: string,
+  subscriberId: string,
 };
 
 const TextModeSelector = (
   {
     toggleTextMode,
     mode,
-    userId,
+    subscriberId,
   }: TextModeSelectorPropsType
 ) => {
   const checked = mode === COMFORTABLE ? true : false;
@@ -34,7 +34,7 @@ const TextModeSelector = (
           checked={checked}
           id='checkbox'
           onChange={() => (
-            toggleTextMode(userId, mode === COMFORTABLE ? COMPACT : COMFORTABLE)
+            toggleTextMode(subscriberId, mode === COMFORTABLE ? COMPACT : COMFORTABLE)
           )}
         />
         <Toggle htmlFor='checkbox'>

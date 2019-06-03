@@ -1,14 +1,14 @@
 // @flow
 import { createSelector } from 'reselect';
-import { getCurrentUser } from '../users/dux';
+import { getCurrentSubscriber, getMutedSubscribers } from '../subscriber/dux';
 import type {
-  FeedType,
   ChannelsObjectType,
   ChannelType,
 } from '../feed/dux';
+import type { ChopStateType } from '../chop/dux';
 import type {
-  SharedUserType,
-} from '../users/dux';
+  SharedSubscriberType,
+} from '../subscriber/dux';
 import type {
   ChannelIdType,
   LanguageCodeType,
@@ -17,15 +17,16 @@ import type {
 import type { PaneType } from '../pane/dux';
 import type { MomentType } from '../moment/dux';
 
-const getChannels = (state: FeedType): ChannelsObjectType => state.channels;
+const ID = 'feed';
+const local = state => state[ID] || state;
 
-const getChannelById = (state: FeedType, id: ChannelIdType): ChannelType => getChannels(state)[id];
+const getChannels = (state: ChopStateType): ChannelsObjectType => local(state).channels;
 
-const getCurrentLanguage = (state: FeedType): LanguageCodeType => state.currentLanguage;
+const getChannelById = (state: ChopStateType, id: ChannelIdType): ChannelType => getChannels(state)[id];
 
-const getPrimaryPane = (state: FeedType): PaneType => state.panes.primary;
+const getCurrentLanguage = (state: ChopStateType): LanguageCodeType => local(state).currentLanguage;
 
-const getMutedUsers = (state: FeedType):Array<UIDType>  => state.mutedUsers;
+const getPrimaryPane = (state: ChopStateType): PaneType => local(state).panes.primary;
 
 const getSawLastMomentAt = createSelector(
   getChannelById,
@@ -33,7 +34,7 @@ const getSawLastMomentAt = createSelector(
 );
 
 const getChannelIdByNameFactory = (name: string): Function  => (
-  createSelector<FeedType, void, ChannelIdType, ChannelsObjectType>(
+  createSelector<ChopStateType, void, ChannelIdType, ChannelsObjectType>(
     [getChannels],
     channels => {
       if (channels) {
@@ -44,7 +45,7 @@ const getChannelIdByNameFactory = (name: string): Function  => (
 );
 
 const getChannelByNameFactory = (name: string): ChannelType => (
-  createSelector<FeedType, void, ChannelType, ChannelsObjectType, string>(
+  createSelector<ChopStateType, void, ChannelType, ChannelsObjectType, string>(
     getChannels,
     getChannelIdByNameFactory(name),
     (channels, id) => channels[id]
@@ -78,30 +79,30 @@ const getTranslateLanguage = createSelector(
 
 const mutedMoment = (moment: MomentType): boolean => !moment.isMuted;
 
-const removeMutedUsers = (mutedUsers: Array<UIDType>) => (moment: MomentType): boolean => {
-  if (moment.sender) {
-    return !mutedUsers.includes(moment.sender.name);
+const removeMutedSubscribers = (mutedSubscribers: Array<UIDType>) => (moment: MomentType): boolean => {
+  if (moment.subscriber) {
+    return !mutedSubscribers.includes(moment.subscriber.nickname);
   } else {
     return true;
   }
 };
 
-const getHostChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
+const getHostChannelObject = createSelector<ChopStateType, void, ChannelType, ChannelType>(
   [getChannelByNameFactory('HOST')],
   channel => channel
 );
 
-const getHostChannel = createSelector<FeedType, void, string, string>(
+const getHostChannel = createSelector<ChopStateType, void, string, string>(
   getChannelIdByNameFactory('HOST'),
   channel => channel
 );
 
-const getPublicChannelObject = createSelector<FeedType, void, ChannelType, ChannelType>(
+const getPublicChannelObject = createSelector<ChopStateType, void, ChannelType, ChannelType>(
   getChannelByNameFactory('PUBLIC'),
   channel => channel
 );
 
-const getPublicChannel = createSelector<FeedType, void, string, string>(
+const getPublicChannel = createSelector<ChopStateType, void, string, string>(
   getChannelIdByNameFactory('PUBLIC'),
   channel => channel
 );
@@ -159,12 +160,12 @@ const feedAnchorMoments = createSelector(
 const feedContents = createSelector(
   getChannelById,
   getCurrentLanguage,
-  getMutedUsers,
-  (channel, currentLanguage, mutedUsers) => channel && channel.moments ?
+  getMutedSubscribers,
+  (channel, currentLanguage, mutedSubscribers) => channel && channel.moments ?
     channel.moments
       .map(translateMoment(currentLanguage))
       .filter(mutedMoment)
-      .filter(removeMutedUsers(mutedUsers))
+      .filter(removeMutedSubscribers(mutedSubscribers))
     : []
 );
 
@@ -182,13 +183,13 @@ const hasNotSeenLatestMoments = createSelector(
 
 const lastInArray = <I>(array: Array<I>): I => array[array.length - 1];
 
-const isSameUser = (userA: SharedUserType, userB: SharedUserType): boolean => userA.pubnubToken === userB.pubnubToken;
+const isSameSubscriber = (subscriberA: SharedSubscriberType, subscriberB: SharedSubscriberType): boolean => subscriberA.id === subscriberB.id;
 
-const getLastAction = (state: FeedType) => state.lastAction;
+const getLastAction = (state: ChopStateType) => local(state).lastAction;
 
 const getScroll = createSelector(
-  [ getChannelById, getLastAction, getCurrentUser ],
-  (channel, action, currentUser) => {
+  [ getChannelById, getLastAction, getCurrentSubscriber ],
+  (channel, action, currentSubscriber) => {
     if (!channel) {
       return {
         type: 'SCROLL_TO',
@@ -201,9 +202,9 @@ const getScroll = createSelector(
       case 'PUBLISH_MOMENT_TO_CHANNEL': {
         const lastMessage = lastInArray(moments);
         if (lastMessage) {
-          const messageSender = lastMessage.sender;
-          // There is no sender for NOTIFICATION types
-          if (messageSender && isSameUser(messageSender, currentUser)) {
+          const messageSender = lastMessage.subscriber;
+          // There is no subscriber for NOTIFICATION types
+          if (messageSender && isSameSubscriber(messageSender, currentSubscriber)) {
             return {
               type: 'SCROLL_TO',
               position: 0,
@@ -261,7 +262,6 @@ export {
   feedContents,
   feedAnchorMoments,
   getChannelById,
-  getMutedUsers,
   getCurrentTabType,
   getHostChannelObject,
   getPublicChannelObject,

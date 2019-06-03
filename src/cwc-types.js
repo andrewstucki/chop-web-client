@@ -18,7 +18,7 @@ export type ChannelGroupType = null | string;
 
 export type ChannelIdType = string;
 
-export type UserLabelType = null | string;
+export type SubscriberLabelType = null | string;
 
 export type LanguageCodeType = string;
 

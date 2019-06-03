@@ -41,9 +41,8 @@ describe('Chatting', () => {
             messageTrayOpen: false,
             sender: {
               id: 1074240,
-              name: 'Tester Steve',
+              nickname: 'Tester Steve',
               avatar: 'https://s3.amazonaws.com/chop-v3-media/users/avatars/thumb/missing.png',
-              pubnubToken: 'e2a0e2591ec85bf780011426349768f84252361b8c64037eef0cc5c5bbe81017',
               role: {
                 label: '',
               },

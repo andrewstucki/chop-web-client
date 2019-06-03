@@ -5,13 +5,12 @@ import { getFirstInitial } from '../util';
 
 type DirectChatIconProps = {
   isCurrent: boolean,
-  name: string,
+  nickname: string,
 };
 
-const DirectChatIcon = ( { isCurrent, name }:DirectChatIconProps ) => (
-  <DirectChatAvatar isCurrent={isCurrent} name={name}>
-    { getFirstInitial(name) }
+const DirectChatIcon = ( { isCurrent, nickname }:DirectChatIconProps ) => (
+  <DirectChatAvatar isCurrent={isCurrent} nickname={nickname}>
+    { getFirstInitial(nickname) }
   </DirectChatAvatar>
 );
-
 export default React.memo < DirectChatIconProps > (DirectChatIcon);

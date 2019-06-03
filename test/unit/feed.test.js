@@ -4,11 +4,10 @@ import reducer, {
   removeChannel,
   defaultState,
   leaveChannel,
-  setUser,
   setSalvations,
   updateScrollPosition,
 } from '../../src/feed/dux';
-
+import { defaultState as defaultChopState } from '../../src/chop/dux';
 import {
   togglePopUpModal,
 } from '../../src/popUpModal/dux';
@@ -20,7 +19,7 @@ import {
 } from '../../src/selectors/channelSelectors';
 
 import {
-  getOtherUsers,
+  getOtherSubscribers,
 } from '../../src/selectors/chatSelectors';
 
 import {
@@ -54,26 +53,21 @@ import { mockDate } from '../testUtils';
 import { setLanguage } from '../../src/languageSelector/dux';
 
 import { setPrimaryPane } from '../../src/pane/dux';
-import type {PrivateUserType} from '../../src/users/dux';
+import type {PrivateSubscriberType} from '../../src/subscriber/dux';
 
-const otherUser = {
-  id: 12345,
-  pubnubToken: '12345',
+const otherSubscriber = {
+  id: '12345',
   avatar: null,
-  name: 'Billy Bob',
+  nickname: 'Billy Bob',
   role: {
     label: '',
   },
-  preferences: {
-    textMode: 'COMPACT',
-  },
 };
-const currentUser: PrivateUserType = {
-  id: 12345,
-  pubnubToken: '09876',
+const currentSubscriber: PrivateSubscriberType = {
+  id: '09876',
   pubnubAccessKey: '67890',
   avatar: null,
-  name: 'Joan Jet',
+  nickname: 'Joan Jet',
   role: {
     label: '',
     permissions: [],
@@ -163,7 +157,7 @@ describe('Feed tests', () => {
     );
   });
 
-  test('adds a message to current channel from current user', () => {
+  test('adds a message to current channel from current subscriber', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -189,7 +183,7 @@ describe('Feed tests', () => {
             },
           },
         },
-        currentUser: currentUser,
+        currentSubscriber: currentSubscriber,
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -198,18 +192,18 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a message',
-          sender: currentUser,
+          subscriber: currentSubscriber,
           messageTrayOpen: false,
         },
       },
     );
     expect(result.channels.public.moments.length).toEqual(1);
     expect(result.channels.public.moments[0].text).toEqual('this is a message');
-    expect(result.channels.public.moments[0].sender.id).toEqual(12345);
-    expect(result.channels.public.moments[0].sender.name).toEqual('Joan Jet');
+    expect(result.channels.public.moments[0].subscriber.id).toEqual('09876');
+    expect(result.channels.public.moments[0].subscriber.nickname).toEqual('Joan Jet');
   });
 
-  test('adds a message to current channel not public from current user', () => {
+  test('adds a message to current channel not public from current subscriber', () => {
     const result = reducer(
       {
         ...defaultState,
@@ -246,7 +240,7 @@ describe('Feed tests', () => {
             },
           },
         },
-        currentUser: currentUser,
+        currentSubscriber: currentSubscriber,
       },
       {
         type: 'PUBLISH_MOMENT_TO_CHANNEL',
@@ -255,7 +249,7 @@ describe('Feed tests', () => {
           type: 'MESSAGE',
           id: '54321',
           text: 'this is a string',
-          sender: otherUser,
+          subscriber: otherSubscriber,
           messageTrayOpen: false,
         },
       },
@@ -263,8 +257,8 @@ describe('Feed tests', () => {
     expect(result.channels.public.moments.length).toEqual(0);
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].text).toEqual('this is a string');
-    expect(result.channels.host.moments[0].sender.pubnubToken).toEqual('12345');
-    expect(result.channels.host.moments[0].sender.name).toEqual('Billy Bob');
+    expect(result.channels.host.moments[0].subscriber.id).toEqual('12345');
+    expect(result.channels.host.moments[0].subscriber.nickname).toEqual('Billy Bob');
   });
 
   test('receives a message and adds it to the appropriate channel', () => {
@@ -301,7 +295,7 @@ describe('Feed tests', () => {
         type: 'MESSAGE',
         id: '12345',
         text: 'Hello there',
-        sender: {
+        subscriber: {
           id: '',
           name: '',
         },
@@ -350,7 +344,7 @@ describe('Feed tests', () => {
         type: 'ACTIONABLE_NOTIFICATION',
         notificationType: 'PRAYER_REQUEST',
         id: '12345',
-        user: otherUser,
+        subscriber: otherSubscriber,
         timestamp: '4:53pm',
         active: true,
         action: action,
@@ -358,8 +352,8 @@ describe('Feed tests', () => {
     );
     expect(result.channels.host.moments.length).toEqual(1);
     expect(result.channels.host.moments[0].id.length).toEqual(5);
-    expect(result.channels.host.moments[0].user.pubnubToken).toEqual('12345');
-    expect(result.channels.host.moments[0].user.name).toEqual('Billy Bob');
+    expect(result.channels.host.moments[0].subscriber.id).toEqual('12345');
+    expect(result.channels.host.moments[0].subscriber.nickname).toEqual('Billy Bob');
     expect(result.channels.host.moments[0].timestamp).toEqual('4:53pm');
     expect(result.channels.host.moments[0].active).toEqual(true);
     expect(result.channels.host.moments[0].action).toEqual(action);
@@ -382,7 +376,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -402,7 +396,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
           '12345': {
             id: '12345',
@@ -414,7 +408,7 @@ describe('Feed tests', () => {
             placeholder: false,
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -427,7 +421,7 @@ describe('Feed tests', () => {
       {
         ...defaultState,
       },
-      addChannel('direct', '12345', 'direct', true, [otherUser]),
+      addChannel('direct', '12345', 'direct', true, [otherSubscriber]),
     );
     expect(result).toEqual(
       {
@@ -441,8 +435,8 @@ describe('Feed tests', () => {
             moments: [],
             anchorMoments: [],
             name: 'direct',
-            participants: [
-              otherUser,
+            subscribers: [
+              otherSubscriber,
             ],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
@@ -468,7 +462,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       }
@@ -488,7 +482,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -510,7 +504,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -545,29 +539,35 @@ describe('Feed tests', () => {
   test('Feed contents', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          ...defaultState,
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  text: 'I like socks',
+                  subscriber: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
                 },
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
           },
         },
-        currentUser: currentUser,
+        subscriber: {
+          ...defaultChopState.subscriber,
+          currentSubscriber: currentSubscriber,
+        },
       },
       'public',
     );
@@ -577,7 +577,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: 'I like socks',
-          sender: {
+          subscriber: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -590,36 +590,42 @@ describe('Feed tests', () => {
   test('Feed contents not public', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
-          },
-          host: {
-            id: '12345',
-            name: 'host',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          ...defaultState,
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
+            host: {
+              id: '12345',
+              name: 'host',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  text: 'I like socks',
+                  subscriber: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
                 },
-                messageTrayOpen: false,
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+            },
           },
         },
-        currentUser: currentUser,
+        subscriber: {
+          ...defaultChopState.subscriber,
+          currentSubscriber: currentSubscriber,
+        },
       },
       'host',
     );
@@ -629,7 +635,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: 'I like socks',
-          sender: {
+          subscriber: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -640,46 +646,52 @@ describe('Feed tests', () => {
   });
 
   test('feedContents selector works without a channel', () => {
-    expect(feedContentsSelector(defaultState, 'public')).toEqual([]);
+    expect(feedContentsSelector(defaultChopState, 'public')).toEqual([]);
   });
 
   test('feedContents selector returns translations', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  timestamp: '2019/05/29',
+                  text: 'I like socks',
+                  subscriber: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
+                  translations: [
+                    {
+                      languageCode: 'en',
+                      text: 'I like socks',
+                    },
+                    {
+                      languageCode: 'ko',
+                      text: '나는 양말을 좋아한다.',
+                    },
+                  ],
                 },
-                messageTrayOpen: false,
-                translations: [
-                  {
-                    languageCode: 'en',
-                    text: 'I like socks',
-                  },
-                  {
-                    languageCode: 'ko',
-                    text: '나는 양말을 좋아한다.',
-                  },
-                ],
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
           },
+          currentLanguage: 'ko',
         },
-        currentLanguage: 'ko',
-        currentUser: currentUser,
+        subscriber: {
+          ...defaultChopState.subscriber,
+          currentSubscriber: currentSubscriber,
+        },
       },
       'public',
     );
@@ -689,7 +701,8 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: '나는 양말을 좋아한다.',
-          sender: {
+          timestamp: '2019/05/29',
+          subscriber: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -712,40 +725,46 @@ describe('Feed tests', () => {
   test('feedContents selector returns translations with region', () => {
     const result = feedContentsSelector(
       {
-        ...defaultState,
-        channels: {
-          public: {
-            id: '12345',
-            name: 'public',
-            moments: [
-              {
-                type: MESSAGE,
-                id: '12345',
-                text: 'I like socks',
-                sender: {
+        ...defaultChopState,
+        feed: {
+          ...defaultState,
+          channels: {
+            public: {
+              id: '12345',
+              name: 'public',
+              moments: [
+                {
+                  type: MESSAGE,
                   id: '12345',
-                  name: 'Billy Bob',
+                  text: 'I like socks',
+                  subscriber: {
+                    id: '12345',
+                    name: 'Billy Bob',
+                  },
+                  messageTrayOpen: false,
+                  translations: [
+                    {
+                      languageCode: 'en',
+                      text: 'I like socks',
+                    },
+                    {
+                      languageCode: 'ko',
+                      text: '나는 양말을 좋아한다.',
+                    },
+                  ],
                 },
-                messageTrayOpen: false,
-                translations: [
-                  {
-                    languageCode: 'en',
-                    text: 'I like socks',
-                  },
-                  {
-                    languageCode: 'ko',
-                    text: '나는 양말을 좋아한다.',
-                  },
-                ],
-              },
-            ],
-            anchorMoments: [],
-            scrollPosition: 0,
-            sawLastMomentAt: 1546896104521,
+              ],
+              anchorMoments: [],
+              scrollPosition: 0,
+              sawLastMomentAt: 1546896104521,
+            },
           },
+          currentLanguage: 'en-US',
         },
-        currentLanguage: 'en-US',
-        currentUser: currentUser,
+        subscriber: {
+          ...defaultChopState.subscriber,
+          currentSubscriber: currentSubscriber,
+        },
       },
       'public',
     );
@@ -755,7 +774,7 @@ describe('Feed tests', () => {
           type: MESSAGE,
           id: '12345',
           text: 'I like socks',
-          sender: {
+          subscriber: {
             id: '12345',
             name: 'Billy Bob',
           },
@@ -815,15 +834,6 @@ describe('Feed tests', () => {
     );
   });
 
-  test('Accepts a user', () => {
-    const { lastAction, ...result } = reducer(defaultState, setUser(currentUser)); // eslint-disable-line no-unused-vars
-    expect(result).toEqual(
-      {
-        ...defaultState,
-        currentUser: currentUser,
-      },
-    );
-  });
 
   test('Opens only the correct message tray public channel', () => {
     const { lastAction, ...result } = reducer( // eslint-disable-line no-unused-vars
@@ -841,7 +851,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -851,7 +861,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'William',
                 },
@@ -861,7 +871,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
         panes: {
@@ -889,7 +899,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -899,7 +909,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'William',
                 },
@@ -909,7 +919,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
         panes: {
@@ -940,7 +950,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -950,7 +960,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'William',
                 },
@@ -960,7 +970,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
         panes: {
@@ -988,7 +998,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -998,7 +1008,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1008,7 +1018,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
         panes: {
@@ -1039,7 +1049,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1049,7 +1059,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1059,7 +1069,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
         panes: {
@@ -1087,7 +1097,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1097,7 +1107,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '456',
                 text: 'I like rocks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'William',
                 },
@@ -1107,7 +1117,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
         panes: {
@@ -1138,7 +1148,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '123',
                 text: 'I like socks',
-                sender: {
+                subscriber: {
                   id: '12345',
                   name: 'Billy Bob',
                 },
@@ -1148,7 +1158,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                sender: {
+                subscriber: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -1158,7 +1168,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                sender: {
+                subscriber: {
                   id: '18475',
                   name: 'George Costanza',
                 },
@@ -1168,7 +1178,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1189,7 +1199,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                sender: {
+                subscriber: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -1199,7 +1209,7 @@ describe('Feed tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                sender: {
+                subscriber: {
                   id: '18475',
                   name: 'George Costanza',
                 },
@@ -1209,7 +1219,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1231,7 +1241,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1271,7 +1281,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1293,7 +1303,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1331,7 +1341,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1353,7 +1363,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1390,7 +1400,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1411,7 +1421,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1448,7 +1458,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1469,7 +1479,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1508,7 +1518,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1530,7 +1540,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1540,7 +1550,7 @@ describe('Feed tests', () => {
         moment: {
           type: 'ACTIONABLE_NOTIFICATION',
           notificationType: 'PRAYER_REQUEST',
-          user: {
+          subscriber: {
             id: '5893',
             name: 'Boofie',
           },
@@ -1566,7 +1576,7 @@ describe('Feed tests', () => {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: '12345',
-                user: {
+                subscriber: {
                   id: '5893',
                   name: 'Boofie',
                 },
@@ -1577,7 +1587,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1599,7 +1609,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1633,7 +1643,7 @@ describe('Feed tests', () => {
             ],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1661,7 +1671,7 @@ describe('Feed tests', () => {
             ],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1687,7 +1697,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1725,7 +1735,7 @@ describe('Feed tests', () => {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
-                user: {
+                subscriber: {
                   id: 67890,
                   avatar: null,
                   name: 'Burglekutt',
@@ -1738,7 +1748,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1768,7 +1778,7 @@ describe('Feed tests', () => {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
-                user: {
+                subscriber: {
                   id: 67890,
                   avatar: null,
                   name: 'Burglekutt',
@@ -1782,7 +1792,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1805,7 +1815,7 @@ describe('Feed tests', () => {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
-                user: {
+                subscriber: {
                   id: 67890,
                   avatar: null,
                   name: 'Burglekutt',
@@ -1818,7 +1828,7 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -1839,7 +1849,7 @@ describe('Feed tests', () => {
                 type: 'ACTIONABLE_NOTIFICATION',
                 notificationType: 'PRAYER_REQUEST',
                 id: 'moment1',
-                user: {
+                subscriber: {
                   id: 67890,
                   avatar: null,
                   name: 'Burglekutt',
@@ -1852,15 +1862,15 @@ describe('Feed tests', () => {
             anchorMoments: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
     );
   });
 
-  test('getOtherUsers', () => {
-    const result = getOtherUsers(
+  test('getOtherSubscribers', () => {
+    const result = getOtherSubscribers(
       {
         ...defaultState,
         channels: {
@@ -1869,24 +1879,24 @@ describe('Feed tests', () => {
             name: 'Carl',
             moments: [],
             anchorMoments: [],
-            participants: [
+            subscribers: [
               {
-                pubnubToken: currentUser.pubnubToken,
-                name: currentUser.name,
+                id: currentSubscriber.id,
+                nickname: currentSubscriber.nickname,
                 role: {
-                  label: currentUser.role.label,
+                  label: currentSubscriber.role.label,
                 },
               },
-              otherUser,
+              otherSubscriber,
             ],
           },
         },
-        currentUser: currentUser,
+        currentSubscriber: currentSubscriber,
       },
       'direct',
     );
     expect(result).toEqual(
-      [otherUser],
+      [otherSubscriber],
     );
   });
 
@@ -1919,20 +1929,16 @@ describe('Feed tests', () => {
             placeholder: false,
             moments: [],
             anchorMoments: [],
-            participants: [
+            subscribers: [
               {
-                id: 12345,
-                pubnubToken: currentUser.pubnubToken,
-                avatar: currentUser.avatar,
-                name: currentUser.name,
+                id: currentSubscriber.id,
+                avatar: currentSubscriber.avatar,
+                nickname: currentSubscriber.nickname,
                 role: {
-                  label: currentUser.role.label,
-                },
-                preferences: {
-                  textMode: 'COMPACT',
+                  label: currentSubscriber.role.label,
                 },
               },
-              otherUser,
+              otherSubscriber,
             ],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
@@ -1945,7 +1951,7 @@ describe('Feed tests', () => {
             placeholder: false,
             moments: [],
             anchorMoments: [],
-            participants: [],
+            subscribers: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
           },
@@ -1958,7 +1964,7 @@ describe('Feed tests', () => {
             },
           },
         },
-        currentUser: currentUser,
+        currentSubscriber: currentSubscriber,
       },
       leaveChannel('direct'),
     );
@@ -1974,7 +1980,7 @@ describe('Feed tests', () => {
             placeholder: false,
             moments: [],
             anchorMoments: [],
-            participants: [],
+            subscribers: [],
             scrollPosition: 0,
             sawLastMomentAt: 1546896104521,
           },
@@ -1987,7 +1993,7 @@ describe('Feed tests', () => {
             },
           },
         },
-        currentUser: currentUser,
+        currentSubscriber: currentSubscriber,
       },
     );
   });
@@ -2092,7 +2098,7 @@ describe('SideMenu tests', () => {
             anchorMoments: [],
             scrollPosition: -1,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -2112,7 +2118,7 @@ describe('SideMenu tests', () => {
             anchorMoments: [],
             scrollPosition: 31,
             sawLastMomentAt: 1546896104521,
-            participants: [],
+            subscribers: [],
           },
         },
       },
@@ -2173,7 +2179,7 @@ describe('LanguageSelector tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                sender: {
+                subscriber: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -2184,7 +2190,7 @@ describe('LanguageSelector tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                sender: {
+                subscriber: {
                   id: '18475',
                   name: 'George Costanza',
                 },
@@ -2217,7 +2223,7 @@ describe('LanguageSelector tests', () => {
                 type: MESSAGE,
                 id: '189',
                 text: 'Hello Billy Bob',
-                sender: {
+                subscriber: {
                   id: '14543',
                   name: 'Jenny Jane',
                 },
@@ -2228,7 +2234,7 @@ describe('LanguageSelector tests', () => {
                 type: MESSAGE,
                 id: '204',
                 text: 'George is very angry',
-                sender: {
+                subscriber: {
                   id: '18475',
                   name: 'George Costanza',
                 },

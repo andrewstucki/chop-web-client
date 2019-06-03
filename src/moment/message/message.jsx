@@ -2,7 +2,7 @@
 import React from 'react';
 
 import type { MessageType } from './dux';
-import type { SharedUserType } from '../../users/dux';
+import type { SharedSubscriberType } from '../../subscriber/dux';
 import Avatar from '../../avatar';
 
 import MessageTray from '../../components/messageTray';
@@ -22,8 +22,8 @@ type MessagePropsType = {
   toggleMessageTray: (channel: string, id: string) => void,
   deleteMessage: (id: string, channel: string) => void,
   publishDeleteMessage: (id: string) => void,
-  muteUser: (user: string) => void,
-  addPlaceholderChannel: (otherUser: SharedUserType) => string,
+  muteSubscriber: (subscriber: string, currentChannel: string) => void,
+  addPlaceholderChannel: (otherSubscriber: SharedSubscriberType) => string,
   setPaneToChat: (channelId: string) => void,
 };
 
@@ -32,7 +32,7 @@ const Message = (
 ) => {
   const {
     message: {
-      sender,
+      subscriber,
       messageTrayOpen,
       text,
       id:messageId,
@@ -43,7 +43,7 @@ const Message = (
     moderationPermissions,
   } = props;
 
-  const { name: senderName, role: { label: senderLabel } = {} } = sender;
+  const { nickname: subscriberName, role: { label: subscriberLabel } = {} } = subscriber;
   const renderText = linkifyHtml(text, { target: '_blank' });
 
   const toggleMessageTray = () => props.toggleMessageTray(currentChannel, messageId);
@@ -51,12 +51,12 @@ const Message = (
     props.publishDeleteMessage(messageId);
     props.deleteMessage(messageId, currentChannel);
   };
-  const muteUser = () => {
-    props.muteUser(senderName);
+  const muteSubscriber = () => {
+    props.muteSubscriber(subscriberName, currentChannel);
     toggleMessageTray();
   };
   const addPlaceholderChannel = () => {
-    const channelId = props.addPlaceholderChannel(sender);
+    const channelId = props.addPlaceholderChannel(subscriber);
     props.setPaneToChat(channelId);
     toggleMessageTray();
   };
@@ -65,11 +65,11 @@ const Message = (
 
   const MessageBody = () => (
     <>
-      <Avatar user={sender} small={isCompact}/>
+      <Avatar subscriber={subscriber} small={isCompact}/>
       <BodyWrapper>
-        <NameWrapper isCompact={isCompact}>{isCompact ? getFirstWordInName(senderName) : senderName}</NameWrapper>
-        {senderLabel &&
-          <Label text={senderLabel} />
+        <NameWrapper isCompact={isCompact}>{isCompact ? getFirstWordInName(subscriberName) : subscriberName}</NameWrapper>
+        {subscriberLabel &&
+          <Label text={subscriberLabel} />
         }
         <TextWrapper key={messageId} data-node='text' dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} isCompact={isCompact} />
       </BodyWrapper>
@@ -88,7 +88,7 @@ const Message = (
               messageTrayOpen={messageTrayOpen}
               isCompact={isCompact}
               deleteMessage={deleteMessage}
-              muteUser={muteUser}
+              muteSubscriber={muteSubscriber}
               directChat={addPlaceholderChannel}
               chatPermissions={chatPermissions}
               moderationPermissions={moderationPermissions}

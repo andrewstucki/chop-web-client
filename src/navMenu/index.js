@@ -10,17 +10,16 @@ import { toggleNavMenuExpanded, isNavMenuExpanded } from './dux';
 import { getCurrentTabType } from '../selectors/channelSelectors';
 
 const mapStateToProps = state => {
-  const feedState = state.feed;
-  const placeholderChannels = getPlaceholderChannels(feedState);
-  const directChannels = getDirectChannels(feedState);
+  const placeholderChannels = getPlaceholderChannels(state);
+  const directChannels = getDirectChannels(state);
   return {
-    organizationName: feedState.organization.name,
-    publicChannel: getPublicChannel(feedState),
-    hostChannel: getHostChannel(feedState),
+    organizationName: state.feed.organization.name,
+    publicChannel: getPublicChannel(state),
+    hostChannel: getHostChannel(state),
     directChannels: [...directChannels, ...placeholderChannels],
-    currentTabType: getCurrentTabType(feedState),
-    tabs: getTabs(feedState),
-    expanded: isNavMenuExpanded(feedState),
+    currentTabType: getCurrentTabType(state),
+    tabs: getTabs(state),
+    expanded: isNavMenuExpanded(state),
   };
 };
 

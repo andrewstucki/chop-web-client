@@ -7,21 +7,21 @@ import {
   publishDeleteMessage,
 } from './dux';
 import {
-  muteUserType,
+  muteSubscriberType,
   togglePopUpModal,
 } from '../../popUpModal/dux';
 import { addPlaceholderChannel } from '../../feed/dux';
 import { setPaneToChat } from '../../pane/content/chat/dux';
 import { PRIMARY_PANE } from '../../pane/dux';
-import { hasPermissions } from '../../users/dux';
+import { hasPermissions } from '../../subscriber/dux';
 
 const mapStateToProps = (state, ownProps) => {
   const { currentChannel, isCompact } = ownProps;
   return {
     currentChannel,
     isCompact,
-    chatPermissions: hasPermissions(state.feed, ['feed.direct.create']),
-    moderationPermissions: hasPermissions(state.feed, ['feed.subscribers.mute', 'feed.message.delete'], true),
+    chatPermissions: hasPermissions(state, ['feed.direct.create']),
+    moderationPermissions: hasPermissions(state, ['feed.subscribers.mute', 'feed.message.delete'], true),
   };
 };
 
@@ -30,9 +30,9 @@ const mapDispatchToProps = dispatch => (
     toggleMessageTray: (channel, id) => dispatch(toggleMessageTray(channel, id)),
     deleteMessage: (id, channel) => dispatch(deleteMessage(id, channel)),
     publishDeleteMessage: id => dispatch(publishDeleteMessage(id)),
-    muteUser: user => dispatch(togglePopUpModal(muteUserType(user))),
-    addPlaceholderChannel: otherUser => {
-      const addPlaceholderChannelAction = addPlaceholderChannel(otherUser);
+    muteSubscriber: (subscriber, currentChannel) => dispatch(togglePopUpModal(muteSubscriberType(subscriber, currentChannel))),
+    addPlaceholderChannel: otherSubscriber => {
+      const addPlaceholderChannelAction = addPlaceholderChannel(otherSubscriber);
       dispatch(addPlaceholderChannelAction);
       return addPlaceholderChannelAction.channel.id;
     },

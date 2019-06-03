@@ -1,7 +1,7 @@
 // @flow
 import { createUid } from '../util';
 
-import type { FeedType } from '../feed/dux';
+import type { ChopStateType } from '../chop/dux';
 
 // Action Types
 
@@ -60,10 +60,11 @@ const publishSalvation = (channel:string): PublishSalvationType => (
 );
 
 // Selectors
+const local = state => state.feed || state;
 
-const salvationMomentExists = (state:FeedType, eventChannel:string): boolean => {
-  if (state.channels[eventChannel].moments.find(moment => moment.anchorMomentType === SALVATION)
-      || state.channels[eventChannel].anchorMoments.find(anchorMoment => anchorMoment.anchorMomentType === SALVATION)) {
+const salvationMomentExists = (state:ChopStateType, eventChannel:string): boolean => {
+  if (local(state).channels[eventChannel].moments.find(moment => moment.anchorMomentType === SALVATION)
+      || local(state).channels[eventChannel].anchorMoments.find(anchorMoment => anchorMoment.anchorMomentType === SALVATION)) {
     return true;
   }
   return false;

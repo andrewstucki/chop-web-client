@@ -35,9 +35,8 @@ beforeEach(() => {
       type: 'SET_USER',
       user: {
         id: 1022905,
-        name: 'G. Boole',
+        nickname: 'G. Boole',
         avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
-        pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
         role: {
           label: 'Admin',
           permissions: [],
@@ -112,8 +111,7 @@ describe('Feed scrolling', () => {
           text: 'This is a new message',
           sender: {
             id: 1022905,
-            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
-            name: 'G. Boole',
+            nickname: 'G. Boole',
             avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',
@@ -148,8 +146,7 @@ describe('Feed scrolling', () => {
           text: 'This is a new message',
           sender: {
             id: 1022906,
-            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3',
-            name: 'Other User',
+            nickname: 'Other User',
             avatar: null,
             role: {
               label: '',
@@ -184,8 +181,7 @@ describe('Feed scrolling', () => {
           text: 'This is a new message',
           sender: {
             id: 1022905,
-            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
-            name: 'G. Boole',
+            nickname: 'G. Boole',
             avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',
@@ -314,8 +310,7 @@ describe('Feed scrolling with anchor moment', () => {
           text: 'This is a new message',
           sender: {
             id: 1022905,
-            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
-            name: 'G. Boole',
+            nickname: 'G. Boole',
             avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',
@@ -363,8 +358,7 @@ describe('Feed scrolling with anchor moment', () => {
           text: 'This is a new message',
           sender: {
             id: 1022906,
-            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3',
-            name: 'Other User',
+            nickname: 'Other User',
             avatar: null,
             role: {
               label: '',
@@ -412,8 +406,7 @@ describe('Feed scrolling with anchor moment', () => {
           text: 'This is a new message',
           sender: {
             id: 1022905,
-            pubnubToken: 'f2211608e7c78001db3a7674dc4d98194586e491fd0e117709b4d8df607c9a3c',
-            name: 'G. Boole',
+            nickname: 'G. Boole',
             avatar: 'https://chop-v3-media.s3.amazonaws.com/users/avatars/1022905/thumb/photo.jpg',
             role: {
               label: 'Admin',

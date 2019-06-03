@@ -41,7 +41,7 @@ describe('Notification test', () => {
             type: 'NOTIFICATION',
             notificationType: 'JOINED_CHAT',
             id: '12345',
-            name: 'cookietree',
+            nickname: 'cookietree',
             timestamp: '9:33pm',
           }
         }
@@ -64,7 +64,7 @@ describe('Notification test', () => {
             type: 'NOTIFICATION',
             notificationType: 'LEFT_CHANNEL',
             id: '12345',
-            name: 'cookietree',
+            nickname: 'cookietree',
             timestamp: '9:33pm',
           }
         }

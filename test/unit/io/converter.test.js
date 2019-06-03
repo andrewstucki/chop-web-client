@@ -7,27 +7,29 @@ describe('Converter Tests', () => {
     Converter.config(
       () => (
         {
-          event: {
-            id: '320418',
-            eventTimeId: '3908134',
-            startTime: 1548165600,
-            title: 'When Pigs Fly - Week 2',
-          },
-          organization: {
-            id: 2,
-            name: 'Life.Church',
-            logoUrl: '',
-            theme: {
-              headerBackgroundColor: '',
-              headerMenuIconColor: '',
+          feed: {
+            event: {
+              id: '320418',
+              eventTimeId: '3908134',
+              startTime: 1548165600,
+              title: 'When Pigs Fly - Week 2',
             },
-          },
-          channels: {
-            public: {
-              id: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
+            organization: {
+              id: 2,
+              name: 'Life.Church',
+              logoUrl: '',
+              theme: {
+                headerBackgroundColor: '',
+                headerMenuIconColor: '',
+              },
             },
+            channels: {
+              '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7': {
+                id: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
+              },
+            },
+            currentLanguage: 'en',
           },
-          currentLanguage: 'en-US',
         }
       )
     );
@@ -41,18 +43,18 @@ describe('Converter Tests', () => {
           lang: 'en',
           text: 'Hello',
           messageTrayOpen: false,
-          sender: {
-            id: 1234567,
-            name: 'Jackie Chan',
+          subscriber: {
+            userId: 1234567,
+            id: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
+            nickname: 'Jackie Chan',
             avatar: null,
-            pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
             role: {
               label: 'HOST',
             },
           },
           isMuted: false,
         },
-        'public'
+        '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7'
       )
     ).toEqual(
       {
@@ -148,11 +150,10 @@ describe('Converter Tests', () => {
         messageTrayOpen: false,
         isMuted: false,
         translations: [],
-        sender: {
-          id: 1234567,
-          name: 'Jackie Chan',
+        subscriber: {
+          id: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
+          nickname: 'Jackie Chan',
           avatar: '',
-          pubnubToken: 'dabc0a3a-5251-4dc9-b877-78e789b4516e',
           role: {
             label: 'HOST',
           },

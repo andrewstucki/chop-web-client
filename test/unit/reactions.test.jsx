@@ -10,11 +10,10 @@ describe('Reaction tests', () => {
   test('Reaction Button click adds Reaction to state', () => {
     const state = {
       ...defaultState,
-      feed: {
-        ...defaultState.feed,
-        currentUser: {
-          pubnubToken: '123456',
-          name: 'Billy Bob',
+      subscriber: {
+        ...defaultState.subscriber,
+        currentSubscriber: {
+          nickname: 'Billy Bob',
           role: { label: '' },
         },
       },
@@ -34,20 +33,21 @@ describe('Reaction tests', () => {
     const reactionId = expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/);
     const state = {
       ...defaultState,
-      feed: {
-        ...defaultState.feed,
-        currentUser: {
-          pubnubToken: '123456',
-          name: 'Billy Bob',
+      subscriber: {
+        ...defaultState.subscriber,
+        currentSubscriber: {
+          nickname: 'Billy Bob',
           role: { label: '' },
         },
+      },
+      feed: {
+        ...defaultState.feed,
         reactions: [
           {
             type: 'REACTION',
             id: reactionId,
-            user: {
-              pubnubToken: '123456',
-              name: 'Billy Bob',
+            subscriber: {
+              nickname: 'Billy Bob',
               role: { label: '' },
             },
           },
@@ -59,13 +59,8 @@ describe('Reaction tests', () => {
     expect(result).toEqual(
       {
         ...defaultState.feed,
-        currentUser: {
-          pubnubToken: '123456',
-          name: 'Billy Bob',
-          role: { label: '' },
-        },
         reactions: [],
-      },
+      }
     );
   });
 });

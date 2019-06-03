@@ -7,20 +7,15 @@ import { fireEvent } from 'react-testing-library';
 import ActionableNotification from '../../src/moment/actionableNotification/actionableNotification';
 
 const yablby = {
-  id: 12345,
-  pubnubToken: '12345',
+  id: '12345',
   avatar: null,
-  name: 'yablby',
+  nickname: 'yablby',
   role: { label: '' },
-  preferences: {
-    textMode: 'COMPACT',
-  },
 };
 const billBogus = {
-  id: 12345,
-  pubnubToken: '5483',
+  id: '12345',
   avatar: null,
-  name: 'Bill Bogus',
+  nickname: 'Bill Bogus',
   role: { label: '' },
   preferences: {
     textMode: 'COMPACT',
@@ -30,7 +25,7 @@ const hostChannel = {
   id: 'host',
   name: 'Host',
   moments: [],
-  participants: [],
+  subscribers: [],
 };
 
 describe('ActionableNotification tests', () => {
@@ -43,7 +38,7 @@ describe('ActionableNotification tests', () => {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: yablby,
+            subscriber: yablby,
             timestamp: '9:33pm',
             active: true,
             cancelled: false,
@@ -51,7 +46,7 @@ describe('ActionableNotification tests', () => {
           }
         }
         acceptPrayerRequest={acceptPrayerRequest}
-        currentUser={billBogus}
+        currentSubscriber={billBogus}
         hostChannel={hostChannel.id}
         isCompact={true}
       />
@@ -75,7 +70,7 @@ describe('ActionableNotification tests', () => {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: yablby,
+            subscriber: yablby,
             timestamp: '9:33pm',
             active: false,
             cancelled: false,
@@ -84,7 +79,7 @@ describe('ActionableNotification tests', () => {
         }
         acceptPrayerRequest={() => {}}
         publishPrayerNotification={() => {}}
-        currentUser={billBogus}
+        currentSubscriber={billBogus}
         hostChannel={hostChannel.id}
         isCompact={true}
       />
@@ -102,7 +97,7 @@ describe('ActionableNotification tests', () => {
             type: 'ACTIONABLE_NOTIFICATION',
             notificationType: 'PRAYER_REQUEST',
             id: '12345',
-            user: yablby,
+            subscriber: yablby,
             timestamp: '9:33pm',
             active: false,
             cancelled: true,
@@ -110,7 +105,7 @@ describe('ActionableNotification tests', () => {
           }
         }
         acceptPrayerRequest={acceptPrayerRequest}
-        currentUser={billBogus}
+        currentSubscriber={billBogus}
         hostChannel={hostChannel.id}
         isCompact={true}
       />

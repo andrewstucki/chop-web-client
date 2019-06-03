@@ -22,7 +22,7 @@ describe('Remove Channel', () => {
 
 
   test('Remove channel server returned false', async () => {
-    mockLeaveChannel.mockResolvedValue({muteUser: false});
+    mockLeaveChannel.mockResolvedValue({muteSubscriber: false});
     const dispatched = [];
 
     await runSaga({

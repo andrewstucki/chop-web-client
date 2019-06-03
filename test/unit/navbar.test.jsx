@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import sinon from 'sinon';
-import { defaultState } from '../../src/feed/dux';
+import { defaultState } from '../../src/chop/dux';
 import Navbar from '../../src/navbar/navbar';
 import NavbarIndex from '../../src/navbar';
 import { act, fireEvent } from 'react-testing-library';
@@ -9,8 +9,6 @@ import { EVENT } from '../../src/pane/content/event/dux';
 import { CHAT } from '../../src/pane/content/chat/dux';
 import { renderWithTheme, renderWithReduxAndTheme } from '../testUtils';
 import { PRIMARY_PANE } from '../../src/pane/dux';
-import { TAB } from '../../src/pane/content/tab/dux';
-import { HOST_INFO } from '../../src/hostInfo/dux';
 
 describe('Navbar tests', () => {
   test('Navbar renders', () => {
@@ -25,7 +23,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: EVENT,
@@ -36,7 +34,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: CHAT,
@@ -71,7 +69,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: EVENT,
@@ -82,7 +80,8 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: CHAT,
@@ -119,8 +118,8 @@ describe('Navbar tests', () => {
               name: 'Public',
               isCurrent: false,
               hasActions: false,
-              hasNewMessages: false,
-              otherUsersNames: [],
+              hasNewMessages: true,
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: EVENT,
@@ -129,9 +128,9 @@ describe('Navbar tests', () => {
               id: '1346546',
               name: 'Host',
               isCurrent: true,
-              hasActions: true,
+              hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: CHAT,
@@ -150,9 +149,8 @@ describe('Navbar tests', () => {
     expect.assertions(2);
     if (container) {
       const { getByTestId } = container;
-      // $FlowFixMe
-      expect(getByTestId('nav-Host').querySelector('div').className).toStartWith('styles__Pip');
-      expect(getByTestId('nav-Public').querySelector('div')).toBeNull();
+      expect(getByTestId('nav-Public').querySelector('div').className).toStartWith('styles__Pip');
+      expect(getByTestId('nav-Host').querySelector('div')).toBeNull();
     }
   });
 
@@ -162,11 +160,16 @@ describe('Navbar tests', () => {
       container = renderWithReduxAndTheme(
         <NavbarIndex />,
         {
-          feed: {
-            ...defaultState,
-            currentUser: {
+          ...defaultState,
+          subscriber: {
+            ...defaultState.subscriber,
+            currentSubscriber: {
+              ...defaultState.subscriber.currentSubscriber,
               id: '456',
             },
+          },
+          feed: {
+            ...defaultState.feed,
             channels: {
               '123456': {
                 name: 'Public',
@@ -180,7 +183,7 @@ describe('Navbar tests', () => {
                     id: '123',
                     timestamp: 1558537299,
                     text: 'Hi',
-                    sender: {
+                    subscriber: {
                       id: '123',
                     },
                   },
@@ -198,7 +201,7 @@ describe('Navbar tests', () => {
                     id: '123',
                     timestamp: 1558537299,
                     text: 'Hi',
-                    sender: {
+                    subscriber: {
                       id: '123',
                     },
                   },
@@ -231,7 +234,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: EVENT,
@@ -242,7 +245,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: CHAT,
@@ -253,7 +256,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: true,
-              otherUsersNames: ['bob'],
+              otherSubscribersNames: ['bob'],
               isDirect: true,
               isPlaceholder: false,
               type: CHAT,
@@ -279,7 +282,7 @@ describe('Navbar tests', () => {
     }
   });
 
-  test('channels display in the proper order', () => {
+  test('direct chat with subscribers', () => {
     let container = null;
     act(() => {
       container = renderWithTheme(
@@ -291,7 +294,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: EVENT,
@@ -302,7 +305,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: CHAT,
@@ -312,8 +315,8 @@ describe('Navbar tests', () => {
               name: 'direct1',
               isCurrent: false,
               hasActions: false,
-              hasNewMessages: false,
-              otherUsersNames: ['bob'],
+              hasNewMessages: true,
+              otherSubscribersNames: ['bob'],
               isDirect: true,
               isPlaceholder: false,
               type: CHAT,
@@ -324,7 +327,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: ['carl'],
+              otherSubscribersNames: ['carl'],
               isDirect: true,
               isPlaceholder: false,
               type: CHAT,
@@ -365,7 +368,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: EVENT,
@@ -393,85 +396,6 @@ describe('Navbar tests', () => {
 
   test('Clicking chat takes you to the chat', () => {
     let container = null;
-    const setPaneToChat = sinon.spy();
-    act(() => {
-      container = renderWithTheme(
-        <Navbar
-          items={[
-            {
-              id: '321365',
-              name: 'Host',
-              isCurrent: false,
-              hasActions: false,
-              hasNewMessages: false,
-              otherUsersNames: [],
-              isDirect: false,
-              isPlaceholder: false,
-              type: CHAT,
-            },
-          ]}
-          openMenu={() => {}}
-          setPaneToEvent={() => {}}
-          setPaneToChat={setPaneToChat}
-          setPaneToTab={() => {}}
-          setNavbarIndex={() => {}}
-          navbarIndex={0}
-        />
-      );
-    });
-
-    expect.assertions(2);
-    if (container) {
-      const { getByTestId } = container;
-      const buttons = getByTestId('navbar').querySelectorAll('button');
-      fireEvent.click(buttons[0]);
-      expect(setPaneToChat.calledOnce).toBeTrue();
-      expect(setPaneToChat.calledWith(PRIMARY_PANE, '321365')).toBeTrue();
-    }
-  });
-
-  test('Clicking a tab takes you to the tab', () => {
-    let container = null;
-    const setPaneToTab = sinon.spy();
-    act(() => {
-      container = renderWithTheme(
-        <Navbar
-          items={[
-            {
-              id: '321365',
-              name: 'Host Info',
-              isCurrent: false,
-              hasActions: false,
-              hasNewMessages: false,
-              otherUsersNames: [],
-              isDirect: false,
-              isPlaceholder: false,
-              type: TAB,
-              tabType: HOST_INFO,
-            },
-          ]}
-          openMenu={() => {}}
-          setPaneToEvent={() => {}}
-          setPaneToChat={() => {}}
-          setPaneToTab={setPaneToTab}
-          setNavbarIndex={() => {}}
-          navbarIndex={0}
-        />
-      );
-    });
-
-    expect.assertions(2);
-    if (container) {
-      const { getByTestId } = container;
-      const buttons = getByTestId('navbar').querySelectorAll('button');
-      fireEvent.click(buttons[0]);
-      expect(setPaneToTab.calledOnce).toBeTrue();
-      expect(setPaneToTab.calledWith(PRIMARY_PANE, HOST_INFO)).toBeTrue();
-    }
-  });
-
-  test('Updates the navbar index when changing items', () => {
-    let container = null;
     const setNavbarIndex = sinon.spy();
     act(() => {
       container = renderWithTheme(
@@ -483,7 +407,7 @@ describe('Navbar tests', () => {
               isCurrent: true,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: EVENT,
@@ -494,7 +418,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: [],
+              otherSubscribersNames: [],
               isDirect: false,
               isPlaceholder: false,
               type: CHAT,
@@ -505,7 +429,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: ['bob'],
+              otherSubscribersNames: ['bob'],
               isDirect: true,
               isPlaceholder: false,
               type: CHAT,
@@ -516,7 +440,7 @@ describe('Navbar tests', () => {
               isCurrent: false,
               hasActions: false,
               hasNewMessages: false,
-              otherUsersNames: ['carl'],
+              otherSubscribersNames: ['carl'],
               isDirect: true,
               isPlaceholder: false,
               type: CHAT,

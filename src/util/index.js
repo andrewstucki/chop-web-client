@@ -16,7 +16,7 @@ const getFirstWordInName = (name: string): string => (
   name.split(' ', 1)[0] || ''
 );
 
-function avatarImageExists (userId: string): Promise<boolean> {
+function avatarImageExists (subscriberId: string): Promise<boolean> {
   return new Promise(resolve => {
     const image = new Image();
     image.onload = () => {
@@ -25,7 +25,7 @@ function avatarImageExists (userId: string): Promise<boolean> {
     image.onerror = () => {
       resolve(false);
     };
-    image.src = `https://chop-v3-media.s3.amazonaws.com/users/avatars/${userId}/thumb/photo.jpg`;
+    image.src = `https://chop-v3-media.s3.amazonaws.com/users/avatars/${subscriberId}/thumb/photo.jpg`;
   });
 }
 

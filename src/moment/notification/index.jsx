@@ -15,7 +15,7 @@ import type {
 
 import ChatNotification from '../../../assets/chat-notification.svg';
 import EndChatNotification from '../../../assets/end-chat-notification.svg';
-import MuteUserNotificationIcon from '../../../assets/mute-user-notification.svg';
+import MuteSubscriberNotificationIcon from '../../../assets/mute-subscriber-notification.svg';
 import {
   Wrapper,
   Timestamp,
@@ -84,23 +84,23 @@ const PrayerRequestNotification = (
 );
 
 
-type MuteUserNotificationPropsType = {
+type MuteSubscriberNotificationPropsType = {
   host: string,
   guest: string,
   timestamp: string,
   isCompact: boolean,
 };
 
-const MuteUserNotification = (
+const MuteSubscriberNotification = (
   {
     host,
     guest,
     timestamp,
     isCompact,
-  }: MuteUserNotificationPropsType,
+  }: MuteSubscriberNotificationPropsType,
 ) => (
   <Wrapper data-testid={'notification'}>
-    <Icon dangerouslySetInnerHTML={{ __html: MuteUserNotificationIcon }} isCompact={isCompact} data-testid={'notification-icon'}/>
+    <Icon dangerouslySetInnerHTML={{ __html: MuteSubscriberNotificationIcon }} isCompact={isCompact} data-testid={'notification-icon'}/>
     <Text isCompact={isCompact} data-testid={'notification-message'}>
       <div>
         {
@@ -123,14 +123,14 @@ const MuteUserNotification = (
 );
 
 type JoinedChatNotificationPropsType = {
-  name: string,
+  nickname: string,
   timestamp: string,
   isCompact: boolean,
 };
 
 const JoinedChatNotification = (
   {
-    name,
+    nickname,
     timestamp,
     isCompact,
   }: JoinedChatNotificationPropsType,
@@ -142,17 +142,17 @@ const JoinedChatNotification = (
       <Text isCompact={isCompact} data-testid={'notification-message'}>
         <div>
           {
-            name === 'You' ? (
+            nickname === 'You' ? (
               t('joined_chat.notification_you')
             ) : (
               <Trans ns='moments' i18nKey='joined_chat.notification'>
                 {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-                <strong>{{name}}</strong> has joined the chat
+                <strong>{{nickname}}</strong> has joined the chat
               </Trans>
             )
           }
-          {name === 'You' ?
-            <span>{name} have joined the chat</span> : <span></span>
+          {nickname === 'You' ?
+            <span>{nickname} have joined the chat</span> : <span></span>
           }
         </div>
         <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
@@ -162,14 +162,14 @@ const JoinedChatNotification = (
 };
 
 type LeftChannelNotificationPropsType = {
-  name: string,
+  nickname: string,
   timestamp: string,
   isCompact: boolean,
 };
 
 const LeftChannelNotification = (
   {
-    name,
+    nickname,
     timestamp,
     isCompact,
   }: LeftChannelNotificationPropsType,
@@ -180,7 +180,7 @@ const LeftChannelNotification = (
       <div>
         <Trans ns='moments' i18nKey='left_chat.notification'>
           {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-          <strong>{{name}}</strong> has left the chat
+          <strong>{{nickname}}</strong> has left the chat
         </Trans>
       </div>
       <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
@@ -195,11 +195,11 @@ const getNotificationText = (notification, isCompact) => {
     case PRAYER_REQUEST:
       return <PrayerRequestNotification guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
     case MUTE:
-      return <MuteUserNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
+      return <MuteSubscriberNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
     case JOINED_CHAT:
-      return <JoinedChatNotification name={notification.name} timestamp={notification.timestamp} isCompact={isCompact} />;
+      return <JoinedChatNotification nickname={notification.nickname} timestamp={notification.timestamp} isCompact={isCompact} />;
     case LEFT_CHANNEL:
-      return <LeftChannelNotification name={notification.name} timestamp={notification.timestamp} isCompact={isCompact} />;
+      return <LeftChannelNotification nickname={notification.nickname} timestamp={notification.timestamp} isCompact={isCompact} />;
     default:
       return null;
   }

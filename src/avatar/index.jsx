@@ -2,23 +2,23 @@
 import React from 'react';
 import InitialAvatar from './initialAvatar';
 import ImageAvatar from './imageAvatar';
-import type { SharedUserType } from '../users/dux';
+import type { SharedSubscriberType } from '../subscriber/dux';
 
 type AvatarProps = {
-  user: SharedUserType,
+  subscriber: SharedSubscriberType,
   large?: boolean,
   small?: boolean,
   id?: string,
 };
 
-const Avatar = ({user, large = false, small = false, id = ''}:AvatarProps) => {
-  if (user.avatar && user.avatar.indexOf('missing.png') === -1) {
+const Avatar = ({subscriber, large = false, small = false, id = ''}:AvatarProps) => {
+  if (subscriber.avatar && subscriber.avatar.indexOf('missing.png') === -1) {
     return (
-      <ImageAvatar url={user.avatar} large={large} small={small} id={id}/>
+      <ImageAvatar url={subscriber.avatar} large={large} small={small} id={id}/>
     );
   } else {
     return (
-      <InitialAvatar name={user.name} large={large} small={small} id={id}/>
+      <InitialAvatar nickname={subscriber.nickname} large={large} small={small} id={id}/>
     );
   }
 };

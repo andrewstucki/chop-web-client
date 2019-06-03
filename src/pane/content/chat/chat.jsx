@@ -14,11 +14,11 @@ import { useTranslation } from 'react-i18next';
 type ChatPropsType = {
   channel: string,
   type: string,
-  userCount?: number,
+  subscriberCount?: number,
   isDirect: boolean,
   isPlaceholder: boolean,
   leaveChannel: () => void,
-  otherUsersName: string,
+  otherSubscribersName: string,
   hideReactions: boolean,
 };
 
@@ -35,15 +35,15 @@ const Chat = (props:ChatPropsType) => (
 );
 
 const ChatFeed = React.memo < ChatPropsType > (
-  function ChatFeed ({ otherUsersName, isDirect, leaveChannel, type, userCount, channel, isPlaceholder }: ChatPropsType) {
+  function ChatFeed ({ otherSubscribersName, isDirect, leaveChannel, type, subscriberCount, channel, isPlaceholder }: ChatPropsType) {
     const { t } = useTranslation();
     const directChatHeaderData = {
-      otherUsersName,
+      otherSubscribersName,
       leaveChannel,
     };
     const chatHeaderData:ChatHeaderProps = {
       title: `${t(type)} ${t('chat')}`,
-      subtitle: userCount,
+      subtitle: subscriberCount,
     };
 
     return (
@@ -57,7 +57,7 @@ const ChatFeed = React.memo < ChatPropsType > (
             </MediumUp>
         }
         {
-          isPlaceholder ? <ChatPlaceholder otherUsersName={otherUsersName} /> : <Feed key={channel} channel={channel}/>
+          isPlaceholder ? <ChatPlaceholder otherSubscribersName={otherSubscribersName} /> : <Feed key={channel} channel={channel}/>
         }
       </>
     );
@@ -65,24 +65,20 @@ const ChatFeed = React.memo < ChatPropsType > (
 );
 ChatFeed.displayName = 'ChatFeed';
 
-ChatFeed.displayName = 'ChatPlaceholder';
-
 type ChatPlaceholderProps = {
-  otherUsersName: string,
+  otherSubscribersName: string,
 };
 
 const ChatPlaceholder = React.memo < ChatPlaceholderProps > (
-  function ChatPlaceholder ({ otherUsersName }: ChatPlaceholderProps) {
+  function ChatPlaceholder ({ otherSubscribersName }: ChatPlaceholderProps) {
     return (
       <PlaceholderWrapper>
         <CommentOutline />
-        <PlaceholderText>Start chatting with <strong>{otherUsersName}</strong>.</PlaceholderText>
+        <PlaceholderText>Start chatting with <strong>{otherSubscribersName}</strong>.</PlaceholderText>
       </PlaceholderWrapper>
     );
   }
 );
-ChatPlaceholder.displayName = 'ChatPlaceholder';
-
 ChatPlaceholder.displayName = 'ChatPlaceholder';
 
 export default React.memo < ChatPropsType > (Chat);

@@ -9,7 +9,7 @@ const SET_STEP_DATA = 'SEQUENCE_SET_DATA';
 const POP_STEP = 'POP_STEP';
 
 // Flow Types
-type SequenceType = {
+export type SequenceType = {
   serverTime: number,
   steps: Array<SequenceStepType>,
 };
@@ -50,14 +50,14 @@ export const setStepData = (data: GraphQLEventAtTimeType) => ({
 });
 
 // default
-const defaultSequence: SequenceType = {
+export const defaultState: SequenceType = {
   serverTime: 0,
   steps: [],
 };
 
 // reducer
 export default (
-  state: SequenceType = defaultSequence,
+  state: SequenceType = defaultState,
   action?: ActionType
 ): SequenceType => {
   if (action && action.type) {
@@ -86,7 +86,7 @@ export default (
 };
 
 // selectors
-const local = state => state[ID];
+const local = state => state[ID] || state;
 
 const getSteps = state => local(state).steps;
 

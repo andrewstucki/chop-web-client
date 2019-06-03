@@ -14,14 +14,14 @@ const mock = (mockFn: any) => mockFn;
 
 describe('Test Direct Chat', () => {
   const mockDirectChat = mock(queries.directChat);
-  test('Direct Chat user success', async () => {
+  test('Direct Chat subscriber success', async () => {
     mockDate(1553266446136);
     const dispatched = [];
 
     await runSaga({
       dispatch: action => dispatched.push(action),
     }, directChat,
-    {type: DIRECT_CHAT, otherUserPubnubToken: '12345', otherUserNickname: 'James T. Kirk'}).toPromise();
+    {type: DIRECT_CHAT, otherSubscriberId: '12345', otherSubscriberNickname: 'James T. Kirk'}).toPromise();
 
     expect(mockDirectChat).toBeCalledWith('12345', 'James T. Kirk');
     expect(dispatched).toEqual([
@@ -35,19 +35,17 @@ describe('Test Direct Chat', () => {
           name: null,
           anchorMoments: [],
           moments: [],
-          participants: [
+          subscribers: [
             {
               id: '123',
               avatar: null,
-              name: 'Fred',
-              pubnubToken: '4321',
+              nickname: 'Fred',
               role: { label: '' },
             },
             {
               id: '456',
               avatar: null,
-              name: 'Barny',
-              pubnubToken: '5432',
+              nickname: 'Barny',
               role: { label: '' },
             },
           ],
@@ -68,7 +66,7 @@ describe('Test Direct Chat', () => {
     ]);
   });
 
-  test('Direct Chat user failure', async () => {
+  test('Direct Chat subscriber failure', async () => {
     mockDirectChat.mockImplementation(() => {
       throw new Error('Broken');
     });
@@ -77,7 +75,7 @@ describe('Test Direct Chat', () => {
     await runSaga({
       dispatch: action => dispatched.push(action),
     }, directChat,
-    {type: DIRECT_CHAT, otherUserPubnubToken: '12345', otherUserNickname: 'James T. Kirk'}).toPromise();
+    {type: DIRECT_CHAT, otherSubscriberId: '12345', otherSubscriberNickname: 'James T. Kirk'}).toPromise();
 
     expect(mockDirectChat).toBeCalledWith('12345', 'James T. Kirk');
     expect(dispatched).toEqual([

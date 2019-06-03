@@ -4,8 +4,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import Enzyme from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState, addChannel } from '../../src/feed/dux';
+import reducer, { defaultState } from '../../src/chop/dux';
+import { addChannel } from '../../src/feed/dux';
 import { publishMessage } from '../../src/moment/message/dux';
 import ImageAvatar from '../../src/avatar/imageAvatar';
 import InitialAvatar from '../../src/avatar/initialAvatar';
@@ -20,8 +20,9 @@ describe('Test Avatar', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           panes: {
             primary: {
               type: 'CHAT',
@@ -48,15 +49,11 @@ describe('Test Avatar', () => {
 
     store.dispatch(
       publishMessage('public', 'Hello, world.', {
-        id: 12345,
-        name: 'Shine',
+        id: '12345',
+        nickname: 'Shine',
         avatar: 'https://web-assets.life.church/assets/pages/kids/ec-icon-412a05a885c0a86bff7c5ac9abe1d703f9df9889b79c58e85debc32220cf7310.svg',
-        pubnubToken: '123456',
         role: {
           label: 'host',
-        },
-        preferences: {
-          textMode: 'COMPACT',
         },
       }, 'en')
     );
@@ -71,8 +68,9 @@ describe('Test Avatar', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           panes: {
             primary: {
               type: 'CHAT',
@@ -99,15 +97,11 @@ describe('Test Avatar', () => {
 
     store.dispatch(
       publishMessage('public', 'Hello, world.', {
-        id: 12345,
-        name: 'Shine',
+        id: '12345',
+        nickname: 'Shine',
         avatar: null,
-        pubnubToken: '123456',
         role: {
           label: 'host',
-        },
-        preferences: {
-          textMode: 'COMPACT',
         },
       }, 'en')
     );
@@ -115,6 +109,6 @@ describe('Test Avatar', () => {
     wrapper.update();
     const initialAvatar = wrapper.find(InitialAvatar);
     expect(initialAvatar.exists()).toBeTruthy();
-    expect(initialAvatar.prop('name')).toBe('Shine');
+    expect(initialAvatar.prop('nickname')).toBe('Shine');
   });
 });

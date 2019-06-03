@@ -1,7 +1,6 @@
 // @flow
 import { createStore } from 'redux';
-import reducer from '../../src/chop/dux';
-import { defaultState } from '../../src/feed/dux';
+import reducer, { defaultState } from '../../src/chop/dux';
 import { setPaneToTab, TAB } from '../../src/pane/content/tab/dux';
 import { HOST_INFO } from '../../src/hostInfo/dux';
 import { mockDate } from '../testUtils';
@@ -12,8 +11,9 @@ describe('Tab tests', () => {
     const store = createStore(
       reducer,
       {
+        ...defaultState,
         feed: {
-          ...defaultState,
+          ...defaultState.feed,
           panes: {
             primary: {
               type: 'CHAT',
@@ -30,11 +30,11 @@ describe('Tab tests', () => {
       setPaneToTab('primary', HOST_INFO)
     );
 
-    const { lastAction, ...result } = store.getState().feed; // eslint-disable-line no-unused-vars
+    const { lastAction: _lastAction, ...result } = store.getState().feed;
 
     expect(result).toEqual(
       {
-        ...defaultState,
+        ...defaultState.feed,
         channels: {
           Public: {
             sawLastMomentAt: 1546896104521,

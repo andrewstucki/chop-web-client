@@ -8,11 +8,10 @@ import {
 import PopUpModal from './popUpModal';
 
 const mapStateToProps = (state, ownProps) => {
-  const feedState = state.feed;
   const { isSmall = false } = ownProps;
   return {
-    isPopUpModalVisible: feedState.isPopUpModalVisible,
-    modal: feedState.popUpModal,
+    isPopUpModalVisible: state.feed.isPopUpModalVisible,
+    modal: state.feed.popUpModal,
     isSmall,
   };
 };

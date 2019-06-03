@@ -1,5 +1,5 @@
 // @flow
-import type { SharedUserType } from '../../users/dux';
+import type { SharedSubscriberType } from '../../subscriber/dux';
 import { createUid } from '../../util';
 
 const PUBLISH_REACTION = 'PUBLISH_REACTION';
@@ -13,21 +13,21 @@ type PublishReactionActionType = {
 type ReactionType = {
   type: 'REACTION',
   id: string,
-  user?: SharedUserType,
+  subscriber?: SharedSubscriberType,
 };
 
-const publishReaction = (currentUser: SharedUserType): PublishReactionActionType => (
+const publishReaction = (currentSubscriber: SharedSubscriberType): PublishReactionActionType => (
   {
     type: PUBLISH_REACTION,
-    reaction: createReaction(currentUser),
+    reaction: createReaction(currentSubscriber),
   }
 );
 
-const createReaction = (currentUser: SharedUserType): ReactionType => (
+const createReaction = (currentSubscriber: SharedSubscriberType): ReactionType => (
   {
     type: REACTION,
     id: createUid(),
-    user: currentUser,
+    subscriber: currentSubscriber,
   }
 );
 

@@ -9,6 +9,7 @@ import { createStore } from 'redux';
 import reducer from '../../src/chop/dux';
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
 import { defaultState as defaultScheduleState } from '../../src/schedule/dux';
+import { defaultState as defaultSubscriberState } from '../../src/subscriber/dux';
 
 const mockDate = (date:Date | number | string) => {
   const RealDate = Date;
@@ -27,6 +28,7 @@ const mockDate = (date:Date | number | string) => {
 
 const defaultState = {
   feed: defaultFeedState,
+  subscriber: defaultSubscriberState,
   schedule: defaultScheduleState,
   sequence: {
     serverTime: 0,

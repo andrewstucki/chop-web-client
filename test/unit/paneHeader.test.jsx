@@ -31,7 +31,7 @@ describe('Pane Header tests', () => {
       <PaneHeader
         type={DIRECT_CHAT_HEADER}
         data={{
-          otherUsersName: 'user',
+          otherSubscribersName: 'subscriber',
           leaveChannel: () => {},
         }}
       />
@@ -117,19 +117,19 @@ describe('ChatHeader', () => {
 });
 
 describe('DirectChatHeader', () => {
-  test('It renders the other users name', () => {
+  test('It renders the other subscribers name', () => {
     const { getByTestId } = renderWithTheme(
       <PaneHeader
         type={DIRECT_CHAT_HEADER}
         data={{
-          otherUsersName: 'user',
+          otherSubscribersName: 'subscriber',
           leaveChannel: () => {},
         }}
       />
     );
 
-    const otherUsersName = getByTestId('otherUsersName');
-    expect(otherUsersName.textContent).toEqual('user');
+    const otherSubscribersName = getByTestId('otherSubscribersName');
+    expect(otherSubscribersName.textContent).toEqual('subscriber');
   });
 
   test('You can leave the channel', () => {
@@ -138,7 +138,7 @@ describe('DirectChatHeader', () => {
       <PaneHeader
         type={DIRECT_CHAT_HEADER}
         data={{
-          otherUsersName: 'user',
+          otherSubscribersName: 'subscriber',
           leaveChannel,
         }}
       />

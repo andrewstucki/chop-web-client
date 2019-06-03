@@ -5,11 +5,11 @@
     "accept": "Accept"
   },
   "join_chat": {
-    "notification": "<strong>{{name}}</strong> has joined the chat",
+    "notification": "<strong>{{nickname}}</strong> has joined the chat",
     "notification_you": "You have joined the chat"
   },
   "left_chat": {
-    "notification": "<strong>{{name}}</strong> has left the chat"
+    "notification": "<strong>{{nickname}}</strong> has left the chat"
   },
   "mute": {
     "notification": "<strong>{{guest}}</strong> was muted",
@@ -17,7 +17,7 @@
   },
   "prayer": {
     "notification": "<strong>{{host}}</strong> started a live prayer with <strong>{{guest}}</strong>",
-    "request": "<strong>{{name}}</strong> has requested prayer"
+    "request": "<strong>{{nickname}}</strong> has requested prayer"
   },
   "salvation": {
     "text": "I commit my life to Christ.",

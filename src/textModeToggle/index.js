@@ -1,19 +1,16 @@
 // @flow
 import { connect } from 'react-redux';
-import { updateUser, updateTextMode } from '../users/dux';
+import { updateSubscriber, updateTextMode } from '../subscriber/dux';
 import TextModeToggle from './textModeToggle';
 
-const mapStateToProps = state => {
-  const feedState = state.feed;
-  return {
-    mode: feedState.currentUser.preferences.textMode,
-    userId: feedState.currentUser.id,
-  };
-};
+const mapStateToProps = state => ({
+  mode: state.subscriber.currentSubscriber.preferences.textMode,
+  subscriberId: state.subscriber.currentSubscriber.id,
+});
 
 const mapDispatchToProps = dispatch => (
   {
-    toggleTextMode: (userId, mode) => (dispatch(updateUser(userId, updateTextMode(mode)))),
+    toggleTextMode: (subscriberId, mode) => (dispatch(updateSubscriber(subscriberId, updateTextMode(mode)))),
   }
 );
 

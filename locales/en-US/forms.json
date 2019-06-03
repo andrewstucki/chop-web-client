@@ -1,7 +1,7 @@
 {
   "leave_chat": {
     "confirm": "Are you sure you want to end your chat?",
-    "confirm_user": "Are you sure you want to end your chat with <strong>{{name}}</strong>?",
+    "confirm_subscriber": "Are you sure you want to end your chat with <strong>{{nickname}}</strong>?",
     "keep_chatting": "Keep chatting",
     "leave": "Leave"
   },
@@ -11,10 +11,10 @@
     "password": "Password",
     "submit": "Log In"
   },
-  "mute_user": {
+  "mute_subscriber": {
     "all_messages": "All of their messages will be deleted.",
     "cancel": "Cancel",
-    "confirm": "Are you sure you want to mute <strong>{{user}}</strong>?",
+    "confirm": "Are you sure you want to mute <strong>{{subscriber}}</strong>?",
     "mute": "Mute"
   }
 }

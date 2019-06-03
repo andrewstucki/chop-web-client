@@ -14,7 +14,7 @@ type DirectChatHeaderType = {
 };
 
 type DirectChatHeaderProps = {
-  otherUsersName: string,
+  otherSubscribersName: string,
   leaveChannel: () => void,
 };
 
@@ -30,13 +30,13 @@ const Action = styled.button`
   font-weight: 500;
 `;
 
-const DirectChatHeader = ({ otherUsersName, leaveChannel }:DirectChatHeaderProps) => {
+const DirectChatHeader = ({ otherSubscribersName, leaveChannel }:DirectChatHeaderProps) => {
   const { t } = useTranslation();
   return (
     <Wrapper data-testid='directChatHeader'>
       <MediumUp>
-        <Title data-testid='otherUsersName'>
-          {otherUsersName}
+        <Title data-testid='otherSubscribersName'>
+          {otherSubscribersName}
         </Title>
       </MediumUp>
       <Actionable onClick={leaveChannel} keepFocus={false}>

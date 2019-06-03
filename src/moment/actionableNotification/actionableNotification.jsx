@@ -8,14 +8,14 @@ import PopPopMp3 from '../../../assets/audio/pop_pop.mp3';
 // $FlowFixMe - why won't these resolve?
 import PopPopOgg from '../../../assets/audio/pop_pop.ogg';
 import ChatNotification from '../../../assets/chat-notification.svg';
-import type {SharedUserType} from '../../users/dux';
+import type {SharedSubscriberType} from '../../subscriber/dux';
 import { Trans, useTranslation } from 'react-i18next';
 import { Wrapper as NotificationWrapper, Text, Timestamp, Icon } from '../notification/styles';
 import { ActionableWrapper, ActionableContainer, AcceptButton, AcceptedText } from './styles';
 
 type ActionableNotificationPropsType = {
   notification: ActionableNotificationType,
-  acceptPrayerRequest: (prayerChannel: string, hostChannel:string, user: SharedUserType, accepted: boolean) => void,
+  acceptPrayerRequest: (prayerChannel: string, hostChannel:string, subscriber: SharedSubscriberType, accepted: boolean) => void,
   hostChannel: string,
   isCompact: boolean,
 };
@@ -31,7 +31,7 @@ const ActionableNotification = (
   const {
     active,
     cancelled,
-    user,
+    subscriber,
     timestamp,
     prayerChannel,
   } = notification;
@@ -44,7 +44,7 @@ const ActionableNotification = (
   const acceptedText =
     cancelled ? t('actionable.cancelled') : t('actionable.accepted');
 
-  const callAcceptPrayerRequest = () => acceptPrayerRequest(prayerChannel, hostChannel, user, false);
+  const callAcceptPrayerRequest = () => acceptPrayerRequest(prayerChannel, hostChannel, subscriber, false);
 
   return (
     <Wrapper data-testid='actionableNotification' isCompact={isCompact}>
@@ -54,7 +54,7 @@ const ActionableNotification = (
           <div data-testid='actionableNotification-text'>
             <Trans ns='moments' i18nKey='prayer.request'>
               {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-              <strong>{{name: user.name}}</strong> has requested prayer
+              <strong>{{nickname: subscriber.nickname}}</strong> has requested prayer
             </Trans>
           </div>
           <Timestamp data-testid='actionableNotification-timestamp'>{timestamp}</Timestamp>

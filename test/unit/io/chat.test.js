@@ -9,9 +9,9 @@ import Pubnub,
   mockSetState,
 } from 'pubnub';
 import Chat from '../../../src/io/chat';
-import { defaultState, addChannel } from '../../../src/feed/dux';
+import { addChannel } from '../../../src/feed/dux';
+import { defaultState } from '../../../src/chop/dux';
 import { setLanguage } from '../../../src/languageSelector/dux';
-import Converter from '../../../src/io/converter';
 jest.mock('pubnub');
 jest.mock('../../../src/io/converter');
 
@@ -24,63 +24,68 @@ describe('Chat2 Tests', () => {
 
   const store = {
     ...defaultState,
-    currentUser: {
-      id: 134,
-      name: 'Kylo Ren',
-      avatar: 'http://someimageons3.com/image/123',
-      role: {
-        label: 'Supreme Leader of the First Order',
-        permissions: ['event.event.manage'],
-      },
-      pubnubToken: '123456',
-      pubnubAccessKey: '1533912921585',
-      preferences: {
-        textMode: 'COMPACT',
-      },
-    },
-    event: {
-      id: '320418',
-      eventTimeId: '1920834',
-      startTime: 1529425800000,
-      endTime: 1529425900000,
-      title: 'When Pigs Fly - Week 2',
-      timezone: 'Central',
-      enabledFeatures: {
-        chat: true,
-      },
-    },
-    organization: {
-      id: 2,
-      name: 'Life.Church',
-      logoUrl: '',
-      theme: {
-        headerBackgroundColor: '',
-        headerMenuIconColor: '',
-      },
-    },
-    pubnubKeys: {
-      publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
-      subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
-    },
-    channels: {
-      ...defaultState.channels,
-      '123456': {
-        name: 'public',
+    subscriber: {
+      ...defaultState.subscriber,
+      currentSubscriber: {
         id: '123456',
-        direct: false,
-        moments: [],
-        anchorMoments: [],
-        scrollPosition: 0,
-        sawLastMomentAt: 1546896104521,
+        nickname: 'Kylo Ren',
+        avatar: 'http://someimageons3.com/image/123',
+        role: {
+          label: 'Supreme Leader of the First Order',
+          permissions: ['event.event.manage'],
+        },
+        pubnubAccessKey: '1533912921585',
+        preferences: {
+          textMode: 'COMPACT',
+        },
       },
-      '789012': {
-        name: 'Host',
-        id: '789012',
-        direct: false,
-        moments: [],
-        anchorMoments: [],
-        scrollPosition: 0,
-        sawLastMomentAt: 1546896104521,
+    },
+    feed: {
+      ...defaultState.feed,
+      event: {
+        id: '320418',
+        eventTimeId: '1920834',
+        startTime: 1529425800000,
+        endTime: 1529425900000,
+        title: 'When Pigs Fly - Week 2',
+        timezone: 'Central',
+        enabledFeatures: {
+          chat: true,
+        },
+      },
+      organization: {
+        id: 2,
+        name: 'Life.Church',
+        logoUrl: '',
+        theme: {
+          headerBackgroundColor: '',
+          headerMenuIconColor: '',
+        },
+      },
+      pubnubKeys: {
+        publish: 'pub-c-1d485d00-14f5-4078-9ca7-19a6fe6411a7',
+        subscribe: 'sub-c-1dc5ff9a-86b2-11e8-ba2a-d686872c68e7',
+      },
+      channels: {
+        ...defaultState.feed.channels,
+        '123456': {
+          name: 'public',
+          id: '123456',
+          direct: false,
+          moments: [],
+          anchorMoments: [],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
+        },
+        '789012': {
+          name: 'Host',
+          id: '789012',
+          direct: false,
+          moments: [],
+          anchorMoments: [],
+          scrollPosition: 0,
+          sawLastMomentAt: 1546896104521,
+        },
       },
     },
   };
@@ -122,9 +127,6 @@ describe('Chat2 Tests', () => {
     const chat = new Chat(dispatch, getState);
 
     chat.init();
-
-    expect(Converter.config).toHaveBeenCalledTimes(1);
-    expect(Converter.config).toHaveBeenCalledWith(getState);
 
     expect(Pubnub).toHaveBeenCalledTimes(1);
     expect(Pubnub).toHaveBeenCalledWith(
@@ -181,7 +183,6 @@ describe('Chat2 Tests', () => {
       lang: 'en',
       text: 'You kindness leads us to repentance to the heart of God',
       snder: {
-        pubnubToken: '098765',
         name: 'Hillsong Young & Free',
         role: {
           label: '',
@@ -245,7 +246,7 @@ describe('Chat2 Tests', () => {
           lat: 35.6500,
           lon: -97.4214,
           nickname: 'Kylo Ren',
-          userId: null,
+          subscriberId: null,
           language: 'en-US',
         },
       },
@@ -302,7 +303,7 @@ describe('Chat2 Tests', () => {
           lat: 35.6500,
           lon: -97.4214,
           nickname: 'Kylo Ren',
-          userId: null,
+          subscriberId: null,
           language: 'en-US',
         },
       },

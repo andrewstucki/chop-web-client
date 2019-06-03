@@ -21,7 +21,7 @@ const getMountedNavMenu = (expanded?:boolean) => {
           isCurrent: true,
           isDirect: false,
           name: 'Public',
-          otherUsersNames: [],
+          otherSubscribersNames: [],
           type: 'EVENT',
         }
       }
@@ -32,7 +32,7 @@ const getMountedNavMenu = (expanded?:boolean) => {
           isCurrent: false,
           isDirect: false,
           name: 'Host',
-          otherUsersNames: [],
+          otherSubscribersNames: [],
           type: 'CHAT',
         }
       }
@@ -43,7 +43,7 @@ const getMountedNavMenu = (expanded?:boolean) => {
           isCurrent: false,
           isDirect: true,
           name: 'Direct',
-          otherUsersNames: ['Eric Lutz'],
+          otherSubscribersNames: ['Eric Lutz'],
           type: 'CHAT',
         }]}
       setPaneToEvent={() => {}}

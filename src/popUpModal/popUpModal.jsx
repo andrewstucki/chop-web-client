@@ -3,10 +3,10 @@ import * as React from 'react';
 
 import {
   LEAVE_CHAT,
-  MUTE_USER,
+  MUTE_SUBSCRIBER,
 } from './dux';
 import LeaveChatPopUpModal from './leaveChat/';
-import MuteUserPopUpModal from './muteUser/';
+import MuteSubscriberPopUpModal from './muteSubscriber/';
 import type { PopUpModalType } from './dux';
 import { Wrapper, PopUpModalContainer, Header } from './styles';
 import { theme } from '../styles';
@@ -63,11 +63,12 @@ class PopUpModal extends React.Component<PopUpModalPropsType> {
               isSmall={isSmall}
             />
           );
-        case MUTE_USER:
+        case MUTE_SUBSCRIBER:
           return (
-            <MuteUserPopUpModal
+            <MuteSubscriberPopUpModal
               togglePopUpModal={togglePopUpModal}
-              user={modal.user}
+              subscriber={modal.subscriber}
+              channelId={modal.channelId}
               isSmall={isSmall}
             />
           );

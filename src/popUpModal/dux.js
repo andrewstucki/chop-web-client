@@ -2,7 +2,7 @@
 
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const LEAVE_CHAT = 'LEAVE_CHAT';
-const MUTE_USER = 'MUTE_USER';
+const MUTE_SUBSCRIBER = 'MUTE_SUBSCRIBER';
 
 // Flow Type Definitions
 
@@ -13,26 +13,29 @@ type TogglePopUpModalType = {
 
 type LeaveChatType = {
   type: LEAVE_CHAT,
-}
+};
 
-type MuteUserType = {
-  type: MUTE_USER,
-  user: string,
-}
+type MuteSubscriberType = {
+  type: MUTE_SUBSCRIBER,
+  subscriber: string,
+  channelId: string,
+};
 
 type PopUpModalType =
   | LeaveChatType
-  | MuteUserType
+  | MuteSubscriberType
   | {};
 
 // Action Creators
 
-const muteUserType = (
-  user: string
-): MuteUserType => (
+const muteSubscriberType = (
+  subscriber: string,
+  channelId: string,
+): MuteSubscriberType => (
   {
-    type: MUTE_USER,
-    user,
+    type: MUTE_SUBSCRIBER,
+    subscriber,
+    channelId,
   }
 );
 
@@ -58,17 +61,17 @@ export type {
   TogglePopUpModalType,
   PopUpModalType,
   LeaveChatType,
-  MuteUserType,
+  MuteSubscriberType,
 };
 
 export {
   TOGGLE_POP_UP_MODAL,
   LEAVE_CHAT,
-  MUTE_USER,
+  MUTE_SUBSCRIBER,
 };
 
 export {
   togglePopUpModal,
   leaveChatType,
-  muteUserType,
+  muteSubscriberType,
 };

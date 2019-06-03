@@ -17,43 +17,39 @@ const acceptPrayer = jest.fn().mockResolvedValue(
       id: '12345',
       type: 'direct',
       direct: true,
-      participants: [
+      subscribers: [
         {
           id: '123',
           avatar: null,
-          name: 'James T. Kirk',
-          pubnubToken: '67890',
+          nickname: 'James T. Kirk',
         },
         {
           id: '456',
           avatar: null,
-          name: 'Will Brown',
-          pubnubToken: '54320',
+          nickname: 'Will Brown',
         },
       ],
     },
   },
 );
-const muteUser = jest.fn().mockResolvedValue({muteUser: true});
+const muteSubscriber = jest.fn().mockResolvedValue({muteSubscriber: true});
 const leaveChannel = jest.fn().mockResolvedValue({leaveFeed: true});
 const directChat = jest.fn().mockResolvedValue(
   {
-    createDirectFeed: {
+    createDirectChannel: {
       direct: true,
       id: '67890',
       type: 'direct',
       name: null,
-      participants: [
+      subscribers: [
         {
           id: '123',
-          pubnubToken: '4321',
-          name: 'Fred',
+          nickname: 'Fred',
           avatar: null,
         },
         {
           id: '456',
-          pubnubToken: '5432',
-          name: 'Barny',
+          nickname: 'Barny',
           avatar: null,
         },
       ],
@@ -68,17 +64,15 @@ const joinChannel = jest.fn().mockResolvedValue(
       id: '67890',
       type: 'direct',
       name: null,
-      participants: [
+      subscribers: [
         {
           id: '123',
-          pubnubToken: '4321',
-          name: 'Kilo',
+          nickname: 'Kilo',
           avatar: null,
         },
         {
           id: '456',
-          pubnubToken: '5432',
-          name: 'Darth',
+          nickname: 'Darth',
           avatar: null,
         },
       ],
@@ -113,6 +107,24 @@ const sequence = jest.fn().mockResolvedValue(
   }
 );
 
+const updateSubscriber = jest.fn().mockResolvedValue(
+  {
+    updateSubscriber: {
+      id: '128',
+      nickname: 'Joe',
+      avatar: null,
+      pubnubAccessKey: '1234',
+      role: {
+        label: '',
+        permissions: [],
+      },
+      preferences: {
+        textMode: 'COMFORTABLE',
+      },
+    },
+  }
+);
+
 const mockQueries = {
   authenticate: authenticate,
   authenticateByLegacyToken: authenticate,
@@ -120,20 +132,21 @@ const mockQueries = {
   authenticateByRefreshToken: authenticate,
   currentState: currentState,
   acceptPrayer: acceptPrayer,
-  muteUser: muteUser,
+  muteSubscriber: muteSubscriber,
   leaveChannel: leaveChannel,
   directChat: directChat,
   eventAtTime: eventAtTime,
   schedule: getSchedule,
   sequence: sequence,
   joinChannel: joinChannel,
+  updateSubscriber: updateSubscriber,
 };
 
 export {
   authenticate,
   currentState,
   acceptPrayer,
-  muteUser,
+  muteSubscriber,
   leaveChannel,
   directChat,
   eventAtTime,
@@ -141,5 +154,6 @@ export {
   sequence,
   setAccessToken,
   joinChannel,
+  updateSubscriber,
 };
 export default mockQueries;

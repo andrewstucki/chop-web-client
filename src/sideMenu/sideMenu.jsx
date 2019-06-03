@@ -1,6 +1,10 @@
 // @flow
 /* global SyntheticMouseEvent, SyntheticTouchEvent */
 import React, {useCallback} from 'react';
+
+import type {PrivateSubscriberType} from '../subscriber/dux';
+import type {LanguageType} from '../feed/dux';
+
 import LanguageSelector from '../languageSelector';
 import TextModeToggle from '../textModeToggle';
 import GuestExperienceLink from '../icons/guestExperienceLink';
@@ -8,11 +12,10 @@ import FeedbackLink from '../icons/feedbackLink';
 import Exit from '../../assets/exit.svg';
 import Avatar from '../avatar';
 import ReactTouchEvents from 'react-touch-events';
-import type { LanguageType } from '../feed/dux';
+import { admin } from '../subscriber/permissions';
+import {usePermissions} from '../hooks/usePermissions';
+import {privateSubscriberToSharedSubscriber} from '../subscriber/dux';
 import { ExternalLink, LinkIcon, OrganizationTitle, Nickname, EventDescription, EventTitle, Profile, ProfileActions, Menu, Overlay, LogOutButton, LinkWrapper } from './styles';
-import { admin } from '../users/permissions';
-import { usePermissions } from '../hooks/usePermissions';
-import { privateUserToSharedUser, type PrivateUserType } from '../users/dux';
 import { useTranslation } from 'react-i18next';
 
 type SideMenuType = {
@@ -25,7 +28,7 @@ type SideMenuType = {
   organizationName: string,
   eventTitle: string,
   eventDescription: string,
-  currentUser: PrivateUserType,
+  currentSubscriber: PrivateSubscriberType,
   currentLanguage: string,
 };
 
@@ -40,12 +43,12 @@ const SideMenu = (
     organizationName,
     eventTitle,
     eventDescription,
-    currentUser,
+    currentSubscriber,
     currentLanguage,
   }: SideMenuType
 ) => {
   const { t } = useTranslation();
-  const hasAdminLinkPermissions = usePermissions(currentUser, admin);
+  const hasAdminLinkPermissions = usePermissions(currentSubscriber, admin);
   return (
     <>
       <Overlay onClick={close} visible={!isClosed}/>
@@ -63,8 +66,8 @@ const SideMenu = (
           <EventDescription data-testid='event-description'>{eventDescription}</EventDescription>
 
           <Profile>
-            <Avatar user={privateUserToSharedUser(currentUser)} large/>
-            <Nickname>{currentUser.name}</Nickname>
+            <Avatar subscriber={privateSubscriberToSharedSubscriber(currentSubscriber)} large/>
+            <Nickname>{currentSubscriber.nickname}</Nickname>
             <ProfileActions>
               <LogOutButton
                 data-testid='logout'

@@ -3,8 +3,7 @@ import Xlarge from './xlarge';
 import { getHostChannel } from '../../../selectors/channelSelectors';
 
 const mapStateToProps = (state, ownProps) => {
-  const feedState = state.feed;
-  const hostChannel = getHostChannel(feedState);
+  const hostChannel = getHostChannel(state);
   return {
     hasVideo: ownProps.hasVideo,
     hostChannel,
