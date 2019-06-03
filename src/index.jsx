@@ -39,6 +39,7 @@ import SilentAudio from '../assets/audio/250-milliseconds-of-silence.mp3';
 declare var ENV:string;
 declare var ROUTE_BASENAME:string;
 declare var GTM;
+declare var CWC_HOST:string;
 
 if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
@@ -102,7 +103,7 @@ i18n
       wait: true,
     },
     backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
+      loadPath: `${CWC_HOST}/locales/{{lng}}/{{ns}}.json`,
       crossDomain: true,
     },
   }, () => store.dispatch(setLanguage(i18n.language)));
