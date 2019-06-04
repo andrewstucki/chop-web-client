@@ -10,8 +10,8 @@ import {
 const log = message => console.log(message);
 
 function* handleDataFetchErrors (payload: any): Saga<void> {
-  if (payload?.response?.errors) {
-    const { response: { errors } } = payload;
+  if (payload?.error?.response?.errors) {
+    const { response: { errors } } = payload.error;
     yield call(log, 'The graphql response returned errors:');
     for (const err in errors) {
       const { message, extensions, path } = errors[err];

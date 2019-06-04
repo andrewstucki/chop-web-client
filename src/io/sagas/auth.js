@@ -18,7 +18,7 @@ function* authenticateByBasicAuth (action: BasicAuthLoginType): Saga<void> {
     yield put(setAuthentication(accessToken, refreshToken));
     yield put(queryCurrentEvent());
   } catch (error) {
-    yield put({type: BASIC_AUTH_LOGIN_FAILED, error: error.message});
+    yield put({type: BASIC_AUTH_LOGIN_FAILED, error});
     bugsnagClient.notify(error);
   }
 }
@@ -49,7 +49,7 @@ function* authenticateByToken (): Saga<void> {
       }
     }
   } catch (error) {
-    yield put({type: TOKEN_AUTH_LOGIN_FAILED, error: error.message});
+    yield put({type: TOKEN_AUTH_LOGIN_FAILED, error});
     bugsnagClient.notify(error);
   }
 }
