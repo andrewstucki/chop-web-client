@@ -3,7 +3,7 @@ import React from 'react';
 import sinon from 'sinon';
 import LanguageSelector from '../../src/languageSelector';
 import { renderWithTheme } from '../testUtils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
 describe('LanguageSelector tests', () => {
   test('LanguageSelector renders', () => {

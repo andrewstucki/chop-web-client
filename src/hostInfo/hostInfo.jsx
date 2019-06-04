@@ -15,7 +15,7 @@ const HostInfo = ({hostInfo}:HostInfoPropsType) => {
     <>
     {
       isEmpty(hostInfo) ?
-        <NoHostInfo>
+        <NoHostInfo data-testid='hostInfo-empty'>
           <img src={emptyInfo} alt={t('host_info_empty')}/>
           <p>{t('host_info_empty')}</p>
         </NoHostInfo>

@@ -3,12 +3,12 @@ import { currentEvent } from '../../../src/io/sagas/currentEvent';
 import { runSaga } from 'redux-saga';
 import queries from '../../../src/io/queries';
 import {
-  setEvent,
   setLanguageOptions,
   setOrganization,
   setPubnubKeys,
   setChannels,
 } from '../../../src/feed/dux';
+import { setEvent } from '../../../src/event/dux';
 import { setSubscriber } from '../../../src/subscriber/dux';
 import {
   setSchedule,
@@ -125,6 +125,7 @@ describe('Current Event', () => {
           enabledFeatures: {
             chat: true,
           },
+          eventNotes: '<p>Some event notes for <b>YOU</b></p>',
         },
         schedule: [
           {
@@ -167,10 +168,12 @@ describe('Current Event', () => {
                 name: 'Public',
               },
             },
-            event: {
-              id: '888',
-            },
             languageOptions: [],
+          },
+          event: {
+            // because the event defined above doesn't get set
+            // in the context of the test we have to set it here
+            id: '888',
           },
         }
       ),
@@ -212,6 +215,7 @@ describe('Current Event', () => {
         'John talks about the book of John.',
         'Yo!',
         { chat: true },
+        '<p>Some event notes for <b>YOU</b></p>'
       ),
       {
         type: 'SET_SEQUENCE',

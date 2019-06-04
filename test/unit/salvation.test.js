@@ -26,17 +26,6 @@ describe('Salvation Moment Tests', () => {
       },
       feed: {
         ...defaultState.feed,
-        event: {
-          id: '320418',
-          eventTimeId: '1920834',
-          startTime: 1529425800000,
-          endTime: 1529425900000,
-          title: 'When Pigs Fly - Week 2',
-          timezone: 'Central',
-          enabledFeatures: {
-            chat: true,
-          },
-        },
         organization: {
           id: 2,
           name: 'Life.Church',
@@ -62,6 +51,18 @@ describe('Salvation Moment Tests', () => {
             sawLastMomentAt: 1546896104521,
           },
         },
+      },
+      event: {
+        id: '320418',
+        eventTimeId: '1920834',
+        startTime: 1529425800000,
+        endTime: 1529425900000,
+        title: 'When Pigs Fly - Week 2',
+        timezone: 'Central',
+        enabledFeatures: {
+          chat: true,
+        },
+        eventNotes: '',
       },
     };
 
@@ -133,17 +134,6 @@ describe('Salvation Moment Tests', () => {
       },
       feed: {
         ...defaultState.feed,
-        event: {
-          id: '320418',
-          eventTimeId: '1920834',
-          startTime: 1529425800000,
-          endTime: 1529425900000,
-          title: 'When Pigs Fly - Week 2',
-          timezone: 'Central',
-          enabledFeatures: {
-            chat: true,
-          },
-        },
         organization: {
           id: 2,
           name: 'Life.Church',
@@ -176,6 +166,18 @@ describe('Salvation Moment Tests', () => {
           },
         },
         salvations: 3,
+      },
+      event: {
+        id: '320418',
+        eventTimeId: '1920834',
+        startTime: 1529425800000,
+        endTime: 1529425900000,
+        title: 'When Pigs Fly - Week 2',
+        timezone: 'Central',
+        enabledFeatures: {
+          chat: true,
+        },
+        eventNotes: '',
       },
     };
 
@@ -279,6 +281,18 @@ describe('Salvation Moment Tests', () => {
           },
         },
         salvations: 3,
+      },
+      event: {
+        id: '320418',
+        eventTimeId: '1920834',
+        startTime: 1529425800000,
+        endTime: 1529425900000,
+        title: 'When Pigs Fly - Week 2',
+        timezone: 'Central',
+        enabledFeatures: {
+          chat: true,
+        },
+        eventNotes: '',
       },
     };
 

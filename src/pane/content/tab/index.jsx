@@ -1,8 +1,8 @@
 // @flow
-import React from 'react';
+import React, { Suspense } from 'react';
 import { HOST_INFO } from '../../../hostInfo/dux';
 import HostInfo from '../../../hostInfo';
-import { BIBLE, NOTES, type TabType} from './dux';
+import { BIBLE, type TabType} from './dux';
 import { SCHEDULE } from '../../../schedule/dux';
 import PaneHeader from '../../../paneHeader';
 import { TAB_HEADER } from '../../../paneHeader/tabHeader';
@@ -10,6 +10,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ComingSoonWrapper, ComingSoonText } from './styles';
 import Schedule from '../../../schedule';
 import { SCHEDULE_HEADER } from '../../../paneHeader/scheduleHeader';
+import { EVENT_NOTES } from '../../../eventNotes/dux';
+
+// Dynamic Imports
+const EventNotes = React.lazy(() => import('../../../eventNotes'));
 
 type TabPropsType = {
   type: TabType,
@@ -21,8 +25,14 @@ const renderTabContent = type => {
       return <HostInfo />;
     case SCHEDULE:
       return <Schedule />;
+    case EVENT_NOTES: {
+      return (
+        <Suspense fallback=''>
+          <EventNotes/>
+        </Suspense>
+      );
+    }
     case BIBLE:
-    case NOTES:
       return <ComingSoon type={type} />;
     default:
       return null;

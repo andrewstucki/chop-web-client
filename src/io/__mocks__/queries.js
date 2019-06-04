@@ -125,6 +125,10 @@ const updateSubscriber = jest.fn().mockResolvedValue(
   }
 );
 
+const generatePdf = jest.fn().mockResolvedValue({
+  generatePdf: 'https://cloud.google.com/openentwork/pdf1.pdf',
+});
+
 const mockQueries = {
   authenticate: authenticate,
   authenticateByLegacyToken: authenticate,
@@ -140,6 +144,7 @@ const mockQueries = {
   sequence: sequence,
   joinChannel: joinChannel,
   updateSubscriber: updateSubscriber,
+  generatePdf: generatePdf,
 };
 
 export {
@@ -154,6 +159,7 @@ export {
   sequence,
   setAccessToken,
   joinChannel,
+  generatePdf,
   updateSubscriber,
 };
 export default mockQueries;

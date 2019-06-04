@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Small from '../../../src/chop/layouts/small';
-import { act } from 'react-testing-library';
+import { act } from '@testing-library/react';
 import { renderWithReduxAndTheme, simulateWindowResize, defaultState } from '../../testUtils';
 
 describe('Small Layout', () => {

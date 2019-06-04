@@ -2,10 +2,11 @@
 import React from 'react';
 import Chat from '../../src/chat/chat';
 import ConnectedChat from '../../src/chat';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import { mockDate, renderWithReduxAndTheme } from '../testUtils';
-import { defaultState } from '../../src/feed/dux';
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
 import { defaultState as defaultChopState } from '../../src/chop/dux';
+import { defaultState as defaultEventState} from '../../src/event/dux';
 
 const otherSubscriber = {
   id: '12345',
@@ -62,7 +63,7 @@ describe('Chat tests', () => {
   test('focuses the correct channel', () => {
     const initialState = {
       feed: {
-        ...defaultState,
+        ...defaultFeedState,
         channels: {
           public: {
             id: 'public',
@@ -93,7 +94,7 @@ describe('Chat tests', () => {
   test('blurs the correct channel', () => {
     const initialState = {
       feed: {
-        ...defaultState,
+        ...defaultFeedState,
         channels: {
           public: {
             id: 'public',
@@ -126,7 +127,7 @@ describe('Chat tests', () => {
     mockDate(1546896104521);
     const initialState = {
       feed: {
-        ...defaultState,
+        ...defaultFeedState,
         channels: {
           public: {
             id: 'public',
@@ -148,22 +149,6 @@ describe('Chat tests', () => {
           pubnubAccessKey: '67890',
           avatar: null,
           nickname: 'Kylo Ren',
-          role: {
-            label: '',
-            permissions: [],
-          },
-          preferences: {
-            textMode: '',
-          },
-        },
-      },
-      user: {
-        currentUser: {
-          id: 12345,
-          pubnubToken: '09876',
-          pubnubAccessKey: '67890',
-          avatar: null,
-          name: 'Kylo Ren',
           role: {
             label: '',
             permissions: [],
@@ -213,7 +198,7 @@ describe('Chat tests', () => {
     mockDate(1546896104521);
     const initialState = {
       feed: {
-        ...defaultState,
+        ...defaultFeedState,
         channels: {
           public: {
             id: 'public',
@@ -235,22 +220,6 @@ describe('Chat tests', () => {
           pubnubAccessKey: '67890',
           avatar: null,
           nickname: 'Kylo Ren',
-          role: {
-            label: '',
-            permissions: [],
-          },
-          preferences: {
-            textMode: '',
-          },
-        },
-      },
-      user: {
-        currentUser: {
-          id: 12345,
-          pubnubToken: '09876',
-          pubnubAccessKey: '67890',
-          avatar: null,
-          name: 'Kylo Ren',
           role: {
             label: '',
             permissions: [],
@@ -300,7 +269,7 @@ describe('Chat tests', () => {
     const initialState = {
       ...defaultChopState,
       feed: {
-        ...defaultState,
+        ...defaultFeedState,
         channels: {
           public: {
             id: 'public',
@@ -316,6 +285,7 @@ describe('Chat tests', () => {
           },
         },
       },
+      event: defaultEventState,
     };
 
     const { getByTestId, store } = renderWithReduxAndTheme(<ConnectedChat channel='public' />, initialState);

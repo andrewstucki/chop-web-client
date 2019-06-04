@@ -1,4 +1,5 @@
 {
+  "generate_pdf_error": "There was an error generating the PDF.",
   "subscriber_muted": "<strong>{{nickname}}</strong> was muted.",
   "text_mode_updated": "Chat size {{text}}."
 }

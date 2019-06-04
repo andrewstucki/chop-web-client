@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactionsContainer from '../../src/reactions/reactionsContainer';
 import { renderWithReduxAndTheme, defaultState } from '../testUtils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import reducer from '../../src/chop/dux';
 import { removeReaction } from '../../src/feed/dux';
 

@@ -9,10 +9,12 @@ import {
   LEAVE_CHANNEL,
   LEAVE_CHANNEL_FAILED,
   TOKEN_AUTH_LOGIN_FAILED,
-  QUERY_CURRENT_EVENT,
-  QUERY_CURRENT_EVENT_FAILED,
   JOIN_CHANNEL,
 } from '../feed/dux';
+import {
+  QUERY_CURRENT_EVENT,
+  QUERY_CURRENT_EVENT_FAILED,
+} from '../event/dux';
 import {
   QUERY_SCHEDULE_FAILED,
 } from '../schedule/dux';
@@ -52,6 +54,8 @@ import {
   setPubnubClient,
   handlePubnubErrors,
 } from './sagas/pubnub';
+import { GENERATE_PDF } from '../eventNotes/dux';
+import { generatePdf } from './sagas/generatePdf';
 import {
   UPDATE_SUBSCRIBER,
   PUBLISH_MUTE_SUBSCRIBER,
@@ -78,6 +82,7 @@ function* rootSaga (): Saga<void> {
     takeLeading('*', setPubnubClient),
     takeEvery(JOIN_CHANNEL, joinChannel),
     takeEvery(UPDATE_SUBSCRIBER, updateSubscriber),
+    takeEvery(GENERATE_PDF, generatePdf),
   ]);
 }
 
@@ -92,4 +97,5 @@ export {
   rootSaga,
   publishMomentToChannel,
   joinChannel,
+  generatePdf,
 };

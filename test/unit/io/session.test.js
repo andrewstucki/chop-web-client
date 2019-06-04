@@ -2,7 +2,7 @@ import React from 'react';
 import SideMenu from '../../../src/sideMenu';
 import '../../../src/io/location';
 import { renderWithReduxAndTheme } from '../../testUtils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
 jest.mock('../../../src/io/queries');
 jest.mock('../../../src/io/location');

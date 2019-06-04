@@ -2,19 +2,19 @@
 import { SET_PANE_CONTENT } from '../../dux';
 import { HOST_INFO } from '../../../hostInfo/dux';
 import { SCHEDULE } from '../../../schedule/dux';
+import { EVENT_NOTES } from '../../../eventNotes/dux';
 import type { SetPaneType } from '../../dux';
 
 const TAB = 'TAB';
 
 // TODO: Move these constants when the features are actually created.
 const BIBLE = 'BIBLE';
-const NOTES = 'NOTES';
 
 type TabType =
   | typeof HOST_INFO
   | typeof BIBLE
   | typeof SCHEDULE
-  | typeof NOTES;
+  | typeof EVENT_NOTES;
 
 type TabPaneType = {
   type: typeof TAB,
@@ -41,7 +41,6 @@ export {
   SET_PANE_CONTENT,
   TAB,
   BIBLE,
-  NOTES,
 };
 
 export type {

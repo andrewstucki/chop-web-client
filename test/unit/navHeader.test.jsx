@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import NavHeader from '../../src/navHeader/navHeader';
 import ConnectedNavHeader from '../../src/navHeader';
 import { renderWithTheme, renderWithReduxAndTheme } from '../testUtils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
 describe('NavHeader tests', () => {
   test('Component renders', () => {

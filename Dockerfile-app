@@ -8,15 +8,7 @@ COPY config/nginx/nginx.conf /etc/nginx/
 
 WORKDIR /usr/src/app
 
-COPY dist/index.html* /usr/src/app/
-COPY dist/main.* /usr/src/app/
-COPY dist/runtime.* /usr/src/app/
-COPY dist/vendor.* /usr/src/app/
-COPY dist/manifest.* /usr/src/app/
-
-COPY dist/images /usr/src/app/images
-COPY dist/audio /usr/src/app/audio
-COPY dist/locales /usr/src/app/locales
+ADD dist /usr/src/app/
 
 RUN groupadd --gid 1001 cwc && useradd --uid 1001 --gid cwc --shell /bin/bash --create-home cwc && \
 	chown -R cwc:cwc /usr/src/app

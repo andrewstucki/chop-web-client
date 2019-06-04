@@ -136,6 +136,7 @@ export type GraphQLEventType = {
   video: GraphQLVideoType,
   feed: Array<GraphQLChannelType>,
   enabledFeatures: GraphQLEnabledFeatures,
+  eventNotes: GraphQLString,
 };
 
 export type GraphQLCurrentEventType = {
@@ -198,6 +199,10 @@ export type GraphQLDirectChatType = {
   createDirectFeed: GraphQLChannelType,
 }
 
+export type GraphQLGeneratePdfType = {
+  generatePdf: GraphQLString,
+};
+
 const accessToken = `
 mutation AccessToken($type: String!, $email: String, $password: String, $legacyToken: String, $refreshToken: String) {
   authenticate(type: $type, email: $email, password: $password, legacyToken: $legacyToken, refreshToken: $refreshToken) {
@@ -228,6 +233,7 @@ currentEvent {
   speaker
   description
   hostInfo
+  eventNotes
   eventTime {
     id
   }
@@ -252,7 +258,7 @@ currentEvent {
     type
     direct
     subscribers {
-      id: pubnubToken
+      id
       avatar
       nickname
     }
@@ -342,7 +348,7 @@ mutation AcceptPrayer($channelToken: String!, $requesterPubnubToken: String!, $r
     type
     direct
     subscribers {
-      id:pubnubToken
+      id
       userId
       avatar
       nickname
@@ -374,7 +380,7 @@ mutation CreateDirectChannel($pubnubToken: String!, $nickname: String!) {
       userId
       avatar
       nickname
-      id:pubnubToken
+      id
     }
   }
 }`;
@@ -409,6 +415,12 @@ const updateSubscriber = `
 mutation updateSubscriber($id: ID!, $input: SubscriberInput!) {
   updateSubscriber(id: $id, input: $input)
 }`;
+
+const generatePdf = `
+mutation generatePdf($html: String!) {
+  generatePdf(html: $html)
+}
+`;
 
 const currentState = `
 query CurrentState($needLanguages: Boolean!, $scheduleEndTime: Timestamp) {
@@ -545,6 +557,14 @@ const queries = {
         channel,
         requesterId,
         requesterNickname,
+      }
+    ),
+
+  generatePdf: async (html: string) =>
+    await client.request(
+      generatePdf,
+      {
+        html,
       }
     ),
 };

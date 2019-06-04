@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import TimezoneSelector from '../../../src/components/timezoneSelector';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import { renderWithReduxAndTheme } from '../../testUtils';
 import { getScheduleTimeZone } from '../../../src/schedule/dux';
 

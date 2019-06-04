@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import sinon from 'sinon';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import { createStore } from 'redux';
 import reducer, { defaultState as defaultChopState } from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';

@@ -108,8 +108,9 @@ import type {
 import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
 import { HOST_INFO } from '../hostInfo/dux';
-import { BIBLE, NOTES, type TabType} from '../pane/content/tab/dux';
+import { BIBLE, type TabType} from '../pane/content/tab/dux';
 import { SCHEDULE } from '../schedule/dux';
+import { EVENT_NOTES } from '../eventNotes/dux';
 
 // Action Types
 
@@ -120,7 +121,6 @@ const LEAVE_CHANNEL_FAILED = 'LEAVE_CHANNEL_FAILED';
 const LEAVE_CHANNEL = 'LEAVE_CHANNEL';
 const REMOVE_REACTION = 'REMOVE_REACTION';
 const RECEIVE_REACTION = 'RECEIVE_REACTION';
-const SET_EVENT = 'SET_EVENT';
 const SET_ORGANIZATION = 'SET_ORGANIZATION';
 const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
@@ -132,32 +132,12 @@ const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
-const QUERY_CURRENT_EVENT = 'QUERY_CURRENT_EVENT';
-const QUERY_CURRENT_EVENT_FAILED = 'QUERY_CURRENT_EVENT_FAILED';
 const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
 const SET_CHANNELS = 'SET_CHANNELS';
 const JOIN_CHANNEL = 'JOIN_CHANNEL';
 const JOIN_CHANNEL_FAILED = 'JOIN_CHANNEL_FAILED';
 
 // Flow Type Definitions
-
-type EnabledFeaturesType = {
-  chat:boolean,
-};
-
-type EventType = {
-  title: string,
-  id: string,
-  eventTimeId: string,
-  startTime: number,
-  endTime: number,
-  description?: string,
-  hostInfo?: string,
-  speaker?: string,
-  hostInfo?: string,
-  enabledFeatures: EnabledFeaturesType,
-};
-
 type LanguageType = {
   name: string,
   code: string,
@@ -223,13 +203,8 @@ type NavType = {
   expanded: boolean,
 };
 
-type QueryCurrentEventType = {
-  type: typeof QUERY_CURRENT_EVENT,
-}
-
 type FeedType = {
   pubnubKeys: PubnubKeysType,
-  event: EventType,
   organization: OrganizationType,
   channels: ChannelsObjectType,
   isPopUpModalVisible: boolean,
@@ -278,11 +253,6 @@ type SetChannelsType = {
 type LeaveChannelType = {
   type: 'LEAVE_CHANNEL',
   channel: string,
-};
-
-type SetEventType = {
-  type: 'SET_EVENT',
-  event: EventType,
 };
 
 type SetLanguageOptionsType = {
@@ -357,7 +327,6 @@ type FeedActionTypes =
   | PublishReactionActionType
   | RemoveReactionType
   | ReceiveReactionType
-  | SetEventType
   | SetVideoType
   | SetOrganizationType
   | SetPubnubKeysType
@@ -379,12 +348,6 @@ type FeedActionTypes =
   | AddMomentToChannelType
 
 // Action Creators
-const queryCurrentEvent = (): QueryCurrentEventType => (
-  {
-    type: QUERY_CURRENT_EVENT,
-  }
-);
-
 const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
   {
     type: SET_AUTHENTICATION,
@@ -425,25 +388,6 @@ const setPubnubKeys = (publish: string, subscribe: string): SetPubnubKeysType =>
     type: SET_PUBNUB_KEYS,
     publish,
     subscribe,
-  }
-);
-
-const setEvent = (title: string, id: string, eventTimeId: string, startTime: number, endTime: number, videoStartTime: number,
-  speaker: string, description: string, hostInfo: string, enabledFeatures: EnabledFeaturesType ): SetEventType => (
-  {
-    type: SET_EVENT,
-    event: {
-      title,
-      id,
-      eventTimeId,
-      startTime,
-      endTime,
-      videoStartTime,
-      speaker,
-      description,
-      hostInfo,
-      enabledFeatures,
-    },
   }
 );
 
@@ -566,17 +510,6 @@ const defaultState = {
     publish: '',
     subscribe: '',
   },
-  event: {
-    id: '',
-    eventTimeId: '',
-    startTime: 0,
-    endTime: 0,
-    title: '',
-    hostInfo: '',
-    enabledFeatures: {
-      chat: false,
-    },
-  },
   organization: {
     id: 0,
     name: '',
@@ -660,9 +593,9 @@ const defaultState = {
   },
   tabs: [
     HOST_INFO,
+    EVENT_NOTES,
     BIBLE,
     SCHEDULE,
-    NOTES,
   ],
 };
 
@@ -725,11 +658,6 @@ const reducer = (
       return {
         ...state,
         organization: action.organization,
-      };
-    case SET_EVENT :
-      return {
-        ...state,
-        event: action.event,
       };
     case SET_AUTHENTICATION:
       return {
@@ -1168,8 +1096,6 @@ export {
   LEAVE_CHANNEL_SUCCEEDED,
   LEAVE_CHANNEL_FAILED,
   SET_AUTHENTICATION,
-  QUERY_CURRENT_EVENT,
-  QUERY_CURRENT_EVENT_FAILED,
   TOKEN_AUTH_LOGIN_FAILED,
   SET_CHANNELS,
   JOIN_CHANNEL,
@@ -1183,7 +1109,6 @@ export {
   addPlaceholderChannel,
   leaveChannel,
   removeReaction,
-  setEvent,
   setOrganization,
   setLanguageOptions,
   setPubnubKeys,
@@ -1194,7 +1119,6 @@ export {
   setAuthentication,
   removeAuthentication,
   updateScrollPosition,
-  queryCurrentEvent,
   setChannels,
 };
 
@@ -1211,7 +1135,6 @@ export type {
   SetSalvationsType,
   SetNotificationBannerType,
   ChannelsObjectType,
-  QueryCurrentEventType,
   JoinChannelType,
   ChannelTypeType,
 };

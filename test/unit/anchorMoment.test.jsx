@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import sinon from 'sinon';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import { renderWithTheme } from '../testUtils';
 
 import AnchorMoment from '../../src/anchorMoment/anchorMoment';

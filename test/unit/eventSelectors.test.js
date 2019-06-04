@@ -1,18 +1,14 @@
 // @flow
-import { isOffline, isChatEnabled } from '../../src/selectors/eventSelectors';
-import { defaultState } from '../../src/chop/dux';
+import { isOffline, isChatEnabled, defaultState } from '../../src/event/dux';
 
 describe('Offline Selector Tests', () => {
   test('Test online', () => {
     const store = {
-      ...defaultState,
-      feed: {
-        ...defaultState.feed,
-        event: {
-          id: 320418,
-          startTime: 1529425800000,
-          title: 'When Pigs Fly - Week 2',
-        },
+      event: {
+        ...defaultState,
+        id: 320418,
+        startTime: 1529425800000,
+        title: 'When Pigs Fly - Week 2',
       },
     };
     const offline = isOffline(store);
@@ -21,15 +17,7 @@ describe('Offline Selector Tests', () => {
 
   test('Test offline', () => {
     const store = {
-      ...defaultState,
-      feed: {
-        ...defaultState.feed,
-        event: {
-          id: 0,
-          startTime: 0,
-          title: '',
-        },
-      },
+      event: defaultState,
     };
     const offline = isOffline(store);
     expect(offline).toEqual(true);
@@ -37,11 +25,9 @@ describe('Offline Selector Tests', () => {
 
   test('Public chat enabled', () => {
     const store = {
-      ...defaultState,
-      feed: {
-        event: {
-          enabledFeatures: { chat: true },
-        },
+      event: {
+        ...defaultState,
+        enabledFeatures: { chat: true },
       },
     };
     const chatEnabled = isChatEnabled(store);
@@ -50,8 +36,8 @@ describe('Offline Selector Tests', () => {
 
   test('Public chat disabled', () => {
     const store = {
-      ...defaultState,
       event: {
+        ...defaultState,
         enabledFeatures: { chat: null },
       },
     };

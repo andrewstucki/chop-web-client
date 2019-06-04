@@ -3,7 +3,6 @@ import React from 'react';
 import 'jest-styled-components';
 import Tab from '../../src/pane/content/tab';
 import { HOST_INFO } from '../../src/hostInfo/dux';
-import { defaultState } from '../../src/feed/dux';
 import { renderWithReduxAndTheme } from '../testUtils';
 
 describe('Tab tests', () => {
@@ -14,15 +13,12 @@ describe('Tab tests', () => {
         removeTab={() => {}}
       />,
       {
-        feed: {
-          ...defaultState,
-          event: {
-            title: 'Event',
-            id: 123,
-            eventTimeId: 0,
-            startTime: 0,
-            hostInfo: '<p>The information for the hosts.</p>',
-          },
+        event: {
+          title: 'Event',
+          id: 123,
+          eventTimeId: 0,
+          startTime: 0,
+          hostInfo: '<p>The information for the hosts.</p>',
         },
       }
     );
@@ -37,15 +33,12 @@ describe('Tab tests', () => {
         removeTab={() => {}}
       />,
       {
-        feed: {
-          ...defaultState,
-          event: {
-            title: 'Event',
-            id: 123,
-            eventTimeId: 0,
-            startTime: 0,
-            hostInfo: '<p>The information for the hosts.</p>',
-          },
+        event: {
+          title: 'Event',
+          id: 123,
+          eventTimeId: 0,
+          startTime: 0,
+          hostInfo: '<p>The information for the hosts.</p>',
         },
       }
     );

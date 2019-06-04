@@ -27,7 +27,7 @@ Jest -- Our testing framework (we practice TDD)
 https://facebook.github.io/jest/
 
 React Testing Library -- Helps test React UI
-https://github.com/testing-library/react-testing-library
+https://github.com/testing-library/@testing-library/react
 
 sinon -- Creating spies, stubs and mocks for UI testing
 http://sinonjs.org/
