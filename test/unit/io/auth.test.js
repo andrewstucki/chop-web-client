@@ -56,7 +56,7 @@ describe('Test Auth', () => {
     ).toPromise();
 
     expect(mockAuthenticateByBasicAuth).toBeCalledWith('joe@test.com', '12345');
-    expect(dispatched).toEqual([{type: BASIC_AUTH_LOGIN_FAILED, error: 'Broken'}]);
+    expect(dispatched).toEqual([{type: BASIC_AUTH_LOGIN_FAILED, error: new Error('Broken')}]);
   });
 
   test('Auth with access token success', async () => {
@@ -154,6 +154,6 @@ describe('Test Auth', () => {
     authenticateByToken,
     { type: REHYDRATE }).toPromise();
 
-    expect(dispatched).toEqual([{type: TOKEN_AUTH_LOGIN_FAILED, error: 'Broken'}]);
+    expect(dispatched).toEqual([{type: TOKEN_AUTH_LOGIN_FAILED, error: new Error('Broken')}]);
   });
 });
