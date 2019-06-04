@@ -106,7 +106,7 @@ const videoPlayerFactory = createSelector(
   }
 );
 
-const getVideoStartTime = state => local(state).event.videoStartTime;
+const getVideoStartTime = state => local(state).videoStartTime;
 
 const videoStartAtTime = createSelector(
   getVideoStartTime,

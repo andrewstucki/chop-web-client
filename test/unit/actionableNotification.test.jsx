@@ -2,7 +2,7 @@
 import React from 'react';
 import sinon from 'sinon';
 import { renderWithTheme } from '../testUtils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
 import ActionableNotification from '../../src/moment/actionableNotification/actionableNotification';
 

@@ -5,9 +5,9 @@ import { runSaga } from 'redux-saga';
 import { BASIC_AUTH_LOGIN, BASIC_AUTH_LOGIN_FAILED } from '../../../src/login/dux';
 import {
   setAuthentication,
-  queryCurrentEvent,
   TOKEN_AUTH_LOGIN_FAILED,
 } from '../../../src/feed/dux';
+import { queryCurrentEvent } from '../../../src/event/dux';
 import { mockDate } from '../../testUtils';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import {getLegacyToken} from '../../../src/io/legacyToken';

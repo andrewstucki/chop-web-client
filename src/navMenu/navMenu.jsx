@@ -36,6 +36,7 @@ import {DirectChatAvatar} from '../components/styles';
 import Pip from '../components/pip';
 import { useTranslation } from 'react-i18next';
 import { SCHEDULE } from '../schedule/dux';
+import { EVENT_NOTES } from '../eventNotes/dux';
 
 const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false, hasActions, hasNewMessages}) => {
   const { t } = useTranslation();
@@ -140,7 +141,8 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
               onClick={() => setPaneToTab(PRIMARY_PANE, HOST_INFO)}/>
             <NavMenuItem Icon={Calendar} text={t('schedule')} expanded={expanded} selected={currentTabType === SCHEDULE}
               onClick={() => setPaneToTab(PRIMARY_PANE, SCHEDULE)}/>
-            <NavMenuItem Icon={Document} text={t('notes')} expanded={expanded} disabled={true}/>
+            <NavMenuItem Icon={Document} text={t('event_notes')} expanded={expanded} selected={currentTabType === EVENT_NOTES}
+              onClick={() => setPaneToTab(PRIMARY_PANE, EVENT_NOTES)}/>
             <NavMenuItem Icon={Bible} text={t('bible')} expanded={expanded} disabled={true}/>
           </NavMenuBodySection>
         </NavMenuBody>

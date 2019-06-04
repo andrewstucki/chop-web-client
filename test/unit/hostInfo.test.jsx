@@ -1,103 +1,64 @@
 // @flow
 import React from 'react';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
 import HostInfo from '../../src/hostInfo';
-import { Wrapper, NoHostInfo } from '../../src/hostInfo/styles';
-import { createStore } from 'redux';
-import reducer, {defaultState} from '../../src/feed/dux';
-import { Provider } from 'react-redux';
-import { mountWithTheme } from '../testUtils';
-import { defaultState as defaultStateSchedule } from '../../src/schedule/dux';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { renderWithReduxAndTheme } from '../testUtils';
+import { defaultState as defaultEventState } from '../../src/event/dux';
+import { defaultState as defaultFeedState } from '../../src/feed/dux';
+import { defaultState as defaultScheduleState } from '../../src/schedule/dux';
 
 describe('Host Info tests', () => {
   test('Gets it from the event when there is an active event.', () => {
-    const store = createStore(
-      reducer,
+    const state =
       {
-        schedule: defaultStateSchedule,
-        sequence: {
-          serverTime: 0,
-          steps: [],
+        event: {
+          ...defaultEventState,
+          title: 'Event',
+          id: '123',
+          eventTimeId: '0',
+          startTime: 0,
+          hostInfo: '<p>The information for the hosts.</p>',
         },
-        feed: {
-          ...defaultState,
-          event: {
-            title: 'Event',
-            id: '123',
-            eventTimeId: '0',
-            startTime: 0,
-            hostInfo: '<p>The information for the hosts.</p>',
-          },
-        },
-      }
-    );
+      };
 
-    const wrapper = mountWithTheme(
-      <Provider store={store}>
-        <HostInfo />
-      </Provider>
-    );
-    expect(wrapper.find(Wrapper).text()).toEqual('The information for the hosts.');
+    const { getByTestId } = renderWithReduxAndTheme(<HostInfo />, state);
+    expect(getByTestId('hostInfo').textContent).toEqual('The information for the hosts.');
   });
 
   test('Gets it from the schedule when there is not an active event.', () => {
-    const store = createStore(
-      reducer,
-      {
-        schedule: {
-          items: [
-            {
-              id: '1',
-              startTime: 0,
-              endTime: 0,
-              title: 'Next Event',
-              hostInfo: '<p>The information for the hosts.</p>',
-            },
-          ],
-          timeZone: '',
-        },
-        sequence: {
-          serverTime: 0,
-          steps: [],
-        },
-        feed: {
-          ...defaultState,
-        },
-      }
-    );
+    const state = {
+      schedule: {
+        items: [
+          {
+            id: '1',
+            startTime: 0,
+            endTime: 0,
+            title: 'Next Event',
+            hostInfo: '<p>The information for the hosts.</p>',
+          },
+        ],
+        timeZone: '',
+      },
+      event: defaultEventState,
+      feed: defaultFeedState,
+    };
 
-    const wrapper = mountWithTheme(
-      <Provider store={store}>
-        <HostInfo />
-      </Provider>
-    );
-    expect(wrapper.find(Wrapper).text()).toEqual('The information for the hosts.');
+    const { getByTestId } = renderWithReduxAndTheme(<HostInfo />, state);
+    expect(getByTestId('hostInfo').textContent).toEqual('The information for the hosts.');
   });
 
   test('Renders empty state.', () => {
-    const store = createStore(
-      reducer,
-      {
-        feed: defaultState,
-        schedule: defaultStateSchedule,
-        sequence: {
-          serverTime: 0,
-          steps: [],
-        },
-      }
-    );
+    const state = {
+      feed: defaultFeedState,
+      schedule: defaultScheduleState,
+      sequence: {
+        serverTime: 0,
+        steps: [],
+      },
+    };
 
-    const wrapper = mountWithTheme(
-      <Provider store={store}>
-        <HostInfo />
-      </Provider>
-    );
-    expect(wrapper.find(Wrapper).exists()).toBeFalsy();
-    expect(wrapper.find(NoHostInfo).exists()).toBeTruthy();
-    expect(wrapper.find(NoHostInfo).text()).toEqual('host_info_empty');
+    const { getByTestId, queryByTestId } = renderWithReduxAndTheme(<HostInfo />, state);
+    expect(queryByTestId('hostInfo')).toBeFalsy();
+    expect(getByTestId('hostInfo-empty')).toBeTruthy();
+    expect(getByTestId('hostInfo-empty').textContent).toEqual('host_info_empty');
   });
 });

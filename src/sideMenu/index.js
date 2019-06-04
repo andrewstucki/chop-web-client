@@ -7,7 +7,7 @@ import { removeAuthentication } from '../feed/dux';
 
 const mapStateToProps = state => {
   const { name:organizationName } = state.feed.organization;
-  const { title:eventTitle, description:eventDescription } = state.feed.event;
+  const { title:eventTitle, description:eventDescription } = state.event;
 
   return {
     isClosed: state.feed.isSideMenuClosed,

@@ -2,7 +2,7 @@
 import React from 'react';
 import Pane from '../../src/pane';
 import { renderWithReduxAndTheme, defaultState } from '../testUtils';
-import { act } from 'react-testing-library';
+import { act } from '@testing-library/react';
 
 describe('Pane', () => {
   test('It prevents two event panes from rendering on Large', () => {

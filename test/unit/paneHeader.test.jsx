@@ -6,7 +6,7 @@ import PaneHeader from '../../src/paneHeader';
 import { CHAT_HEADER } from '../../src/paneHeader/chatHeader';
 import { TAB_HEADER } from '../../src/paneHeader/tabHeader';
 import { DIRECT_CHAT_HEADER } from '../../src/paneHeader/directChatHeader';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import { SCHEDULE_HEADER } from '../../src/paneHeader/scheduleHeader';
 
 

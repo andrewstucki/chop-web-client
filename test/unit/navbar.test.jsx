@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import { defaultState } from '../../src/chop/dux';
 import Navbar from '../../src/navbar/navbar';
 import NavbarIndex from '../../src/navbar';
-import { act, fireEvent } from 'react-testing-library';
+import { act, fireEvent } from '@testing-library/react';
 import { EVENT } from '../../src/pane/content/event/dux';
 import { CHAT } from '../../src/pane/content/chat/dux';
 import { renderWithTheme, renderWithReduxAndTheme } from '../testUtils';
@@ -174,7 +174,7 @@ describe('Navbar tests', () => {
               '123456': {
                 name: 'Public',
                 type: 'public',
-                direct: false, 
+                direct: false,
                 id: '123456',
                 sawLastMomentAt: 1558450899,
                 moments: [
@@ -192,7 +192,7 @@ describe('Navbar tests', () => {
               '789123': {
                 name: 'Host',
                 type: 'host',
-                direct: false, 
+                direct: false,
                 id: '789123',
                 sawLastMomentAt: 1558533699,
                 moments: [

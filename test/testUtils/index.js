@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { mount } from 'enzyme';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '../../src/styles';
 import { Provider } from 'react-redux';
@@ -10,6 +10,7 @@ import reducer from '../../src/chop/dux';
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
 import { defaultState as defaultScheduleState } from '../../src/schedule/dux';
 import { defaultState as defaultSubscriberState } from '../../src/subscriber/dux';
+import { defaultState as defaultEventState } from '../../src/event/dux';
 
 const mockDate = (date:Date | number | string) => {
   const RealDate = Date;
@@ -30,6 +31,7 @@ const defaultState = {
   feed: defaultFeedState,
   subscriber: defaultSubscriberState,
   schedule: defaultScheduleState,
+  event: defaultEventState,
   sequence: {
     serverTime: 0,
     steps: [],

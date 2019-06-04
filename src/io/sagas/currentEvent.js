@@ -12,12 +12,11 @@ import type {
 } from '../queries';
 import {
   setPubnubKeys,
-  QUERY_CURRENT_EVENT_FAILED,
   setOrganization,
   setLanguageOptions,
-  setEvent,
   setChannels,
 } from '../../feed/dux';
+import { QUERY_CURRENT_EVENT_FAILED, setEvent, isOffline } from '../../event/dux';
 import {
   setSchedule,
   QUERY_SCHEDULE_FAILED,
@@ -28,7 +27,6 @@ import {getLanguageCount} from '../../selectors/languageSelector';
 import {setVideo} from '../../videoFeed/dux';
 import type {ChannelsObjectType} from '../../feed/dux';
 import {convertSubscriber} from './privateChat';
-import {isOffline} from '../../selectors/eventSelectors';
 import {COMPACT} from '../../textModeToggle/dux';
 import { startTimer } from './sequence';
 import { setSubscriber } from '../../subscriber/dux';
@@ -168,6 +166,7 @@ function* eventMain (event: GraphQLEventAtType | GraphQLEventType): Saga<void> {
       event.description || '',
       event.hostInfo || '',
       event.enabledFeatures || { chat: false },
+      event.eventNotes || '',
     )
   );
 }

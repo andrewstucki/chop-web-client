@@ -49,7 +49,7 @@ function Chat (props:ChatProps) {
   const onBlur = () => setChatFocus('');
 
   return (
-    <Background hideReactions={hideReactions}>
+    <Background data-testid='chat' hideReactions={hideReactions}>
       <Wrapper focused={focused}>
         <ChatInput
           id="chat-input"

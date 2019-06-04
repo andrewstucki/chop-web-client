@@ -3,7 +3,7 @@ import React from 'react';
 import { defaultState } from '../../src/chop/dux';
 import Banner from '../../src/banner';
 import { renderWithReduxAndTheme } from '../testUtils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 
 describe('NotificationBanner test', () => {
   test('Notification banner is removed on dismiss', () => {

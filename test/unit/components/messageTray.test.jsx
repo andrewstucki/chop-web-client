@@ -2,7 +2,7 @@
 import React from 'react';
 import sinon from 'sinon';
 import { renderWithReduxAndTheme } from '../../testUtils';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import { defaultState } from '../../../src/chop/dux';
 
 import MessageTray from '../../../src/components/messageTray';

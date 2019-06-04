@@ -5,7 +5,6 @@ import type { Config } from 'dompurify';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 
-
 dayjs.extend(utc);
 
 const getFirstInitial = (name: string): string => (

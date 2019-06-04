@@ -40,19 +40,20 @@ describe('Chat2 Tests', () => {
         },
       },
     },
+    event: {
+      id: '320418',
+      eventTimeId: '1920834',
+      startTime: 1529425800000,
+      endTime: 1529425900000,
+      title: 'When Pigs Fly - Week 2',
+      timezone: 'Central',
+      enabledFeatures: {
+        chat: true,
+      },
+      eventNotes: '',
+    },
     feed: {
       ...defaultState.feed,
-      event: {
-        id: '320418',
-        eventTimeId: '1920834',
-        startTime: 1529425800000,
-        endTime: 1529425900000,
-        title: 'When Pigs Fly - Week 2',
-        timezone: 'Central',
-        enabledFeatures: {
-          chat: true,
-        },
-      },
       organization: {
         id: 2,
         name: 'Life.Church',

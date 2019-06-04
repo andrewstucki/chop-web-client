@@ -63,7 +63,7 @@ const Banner = (
         <BannerWrapper>
           <ErrorBanner fullWidth={fullWidth} data-testid='error-banner'>
             <DismissButton dismissNotification={dismissNotification}/>
-            <BannerMessage data-testid='banner-message'>{banner.message}</BannerMessage>
+            <BannerMessage data-testid='banner-message'>{t(banner.message)}</BannerMessage>
           </ErrorBanner>
         </BannerWrapper>
       );
@@ -72,7 +72,7 @@ const Banner = (
         <BannerWrapper>
           <WarningBanner fullWidth={fullWidth} data-testid='warning-banner'>
             <DismissButton dismissNotification={dismissNotification}/>
-            <BannerMessage data-testid='banner-message'>{banner.message}</BannerMessage>
+            <BannerMessage data-testid='banner-message'>{t(banner.message)}</BannerMessage>
           </WarningBanner>
         </BannerWrapper>
       );

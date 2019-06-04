@@ -24,3 +24,6 @@ sketchy-null
 [untyped]
 <PROJECT_ROOT>/node_modules/redux-persist/lib/integration/react.js.flow
 <PROJECT_ROOT>/node_modules/redux-persist/lib/persistReducer.js.flow
+<PROJECT_ROOT>/node_modules/draft-js/lib/DraftEditorDragHandler.js.flow
+<PROJECT_ROOT>/node_modules/draft-js/lib/DraftEditor.react.js.flow
+<PROJECT_ROOT>/node_modules/draft-js/lib/convertFromHTMLToContentBlocks.js.flow

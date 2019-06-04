@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import { renderWithReduxAndTheme } from '../testUtils';
 
 import SideMenu from '../../src/sideMenu/sideMenu';
-import { fireEvent } from 'react-testing-library';
+import { fireEvent } from '@testing-library/react';
 import type {PrivateSubscriberType} from '../../src/subscriber/dux';
 
 const languageOptions = [

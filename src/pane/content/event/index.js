@@ -1,14 +1,14 @@
 //@flow
 import { connect } from 'react-redux';
 import Event from './event';
-import { isOffline, isChatEnabled } from '../../../selectors/eventSelectors';
+import { isOffline, isChatEnabled } from '../../../event/dux';
 import { getPublicChannel } from '../../../selectors/channelSelectors';
 
 const mapStateToProps = state => {
-  const channel = getPublicChannel(state);
+  const channel = getPublicChannel(state.feed);
   return {
-    isChatEnabled: isChatEnabled(state),
     isOffline: isOffline(state),
+    isChatEnabled: isChatEnabled(state),
     channel,
   };
 };

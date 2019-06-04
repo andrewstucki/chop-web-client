@@ -1,11 +1,11 @@
 //@flow
 import { connect } from 'react-redux';
 import HostInfo from './hostInfo';
-import { isOffline } from '../selectors/eventSelectors';
+import { isOffline } from '../event/dux';
 import { getNextEventData } from '../schedule/dux';
 
 const mapStateToProps = state => {
-  const { hostInfo } = isOffline(state) ? getNextEventData(state) || {} : state.feed.event;
+  const { hostInfo } = isOffline(state) ? getNextEventData(state) || {} : state.event;
 
   return {
     hostInfo,
