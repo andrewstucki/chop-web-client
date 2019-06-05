@@ -101,10 +101,10 @@ const Converter = {
     {
       messageText: message.text,
       language: getTranslateLanguage(_getState()),
-      eventTimeId: _getState().feed.event.eventTimeId,
+      eventTimeId: _getState().event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
-      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().feed.event.startTime), 'second').toString(),
-      eventTitle: _getState().feed.event.title,
+      eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'second').toString(),
+      eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,
       fromNickname: message.subscriber.nickname,
       fromToken: message.subscriber.id,
@@ -115,12 +115,12 @@ const Converter = {
       label: message.subscriber.role.label,
       isVolunteer: true,
       isUser: true,
-      userId: message.subscriber.userId || 0,
+      userId: _getState().subscriber.currentSubscriber.userId || 0,
       organizationId: _getState().feed.organization.id,
       organizationName: _getState().feed.organization.name,
       roomType: 'public',
       channelToken: channelId,
-      eventStartTime: _getState().feed.event.startTime,
+      eventStartTime: _getState().event.startTime,
       platform: 'CWC',
     }
   ),

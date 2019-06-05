@@ -1,19 +1,16 @@
 // @flow
 import Converter from '../../../src/io/converter';
+import { defaultState, type ChopStateType } from '../../../src/chop/dux';
 import { mockDate } from '../../testUtils';
 
 describe('Converter Tests', () => {
   test('CWC to Legacy', () => {
     Converter.config(
-      () => (
+      ():ChopStateType => (
         {
+          ...defaultState,
           feed: {
-            event: {
-              id: '320418',
-              eventTimeId: '3908134',
-              startTime: 1548165600,
-              title: 'When Pigs Fly - Week 2',
-            },
+            ...defaultState.feed,
             organization: {
               id: 2,
               name: 'Life.Church',
@@ -26,9 +23,32 @@ describe('Converter Tests', () => {
             channels: {
               '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7': {
                 id: '6eaeb8f5f1f83018b5979f6254531ea9a46a48c20d3b117f857ba5c5ef10e9c7',
+                name: 'host',
+                type: 'host',
+                direct: false,
+                placeholder: false,
+                moments: [],
+                anchorMoments: [],
+                scrollPosition: 0,
+                sawLastMomentAt: 1546896104521,
+                subscribers: [],
               },
             },
             currentLanguage: 'en',
+          },
+          event: {
+            ...defaultState.event,
+            id: '320418',
+            eventTimeId: '3908134',
+            startTime: 1548165600,
+            title: 'When Pigs Fly - Week 2',
+          },
+          subscriber: {
+            ...defaultState.subscriber,
+            currentSubscriber: {
+              ...defaultState.subscriber.currentSubscriber,
+              userId: 1234567,
+            },
           },
         }
       )
