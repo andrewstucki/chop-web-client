@@ -14,6 +14,7 @@ stages:
   - canary
   - destroy-canary
   - production
+  - lighthouse
 
 cache:
   untracked: true
@@ -35,6 +36,7 @@ compile:app-review:
       - dist/
   except:
     - master
+    - schedules
 
 compile:app-production:
   image: node:lts
@@ -48,6 +50,8 @@ compile:app-production:
       - dist/
   only:
     - master
+  except:
+    - schedules
 
 test:
   stage: test
@@ -62,6 +66,8 @@ test:
     expire_in: 1 day
     paths:
       - coverage/
+  except:
+    - schedules
 
 build:image-review:
   stage: build
@@ -76,6 +82,7 @@ build:image-review:
     - branches
   except:
     - master
+    - schedules
 
 build:image-production:
   stage: build
@@ -88,6 +95,8 @@ build:image-production:
     - compile:app-production
   only:
     - master
+  except:
+    - schedules
 
 review:
   stage: review
@@ -111,6 +120,7 @@ review:
     - branches
   except:
     - master
+    - schedules
 
 cypress:tests-review:
   image: cypress/base:10
@@ -127,6 +137,7 @@ cypress:tests-review:
     - review
   except:
     - master
+    - schedules
 
 stop_review:
   stage: review
@@ -142,6 +153,7 @@ stop_review:
     - branches
   except:
     - master
+    - schedules
 
 code_coverage_report_master:
   stage: coverage
@@ -163,6 +175,8 @@ code_coverage_report_master:
     - ./cc-test-reporter upload-coverage
   only:
     - master
+  except:
+    - schedules
 
 code_coverage_report:
   stage: coverage
@@ -180,6 +194,7 @@ code_coverage_report:
     - ./cc-test-reporter upload-coverage
   except:
     - master
+    - schedules
 
 canary:
   stage: canary
@@ -194,6 +209,8 @@ canary:
   allow_failure: true
   only:
     - master
+  except:
+    - schedules
 
 destroy-canary:
   stage: destroy-canary
@@ -207,6 +224,8 @@ destroy-canary:
     - command destroy-canary
   only:
     - master
+  except:
+    - schedules
 
 production:
   stage: production
@@ -222,3 +241,22 @@ production:
   allow_failure: false
   only:
     - master
+  except:
+    - schedules
+
+lighthouse:
+  stage: lighthouse
+  image: markhobson/node-chrome
+  variables:
+    LIGHTHOUSE_TEST_URL: https://live.life.church/host_mobile
+  before_script:
+    # yarn doesn't exist in this image
+    - npm i -g lighthouse
+  script:
+    - lighthouse --chrome-flags="--headless --no-sandbox" $LIGHTHOUSE_TEST_URL --output html --output-path ./report.html
+  artifacts:
+    paths:
+      - ./report.html
+    expire_in: 1 week
+  only:
+    - schedules
