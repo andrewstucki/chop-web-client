@@ -7,7 +7,7 @@ import { setPaneToTab } from './content/tab/dux';
 import { getHostChannel } from '../selectors/channelSelectors';
 
 const mapStateToProps = (state, ownProps) => {
-  const { navbarIndex, prevNavbarIndex } = state;
+  const { navbarIndex, prevNavbarIndex } = state.feed;
   const { name, isLarge = false, isXlarge = false } = ownProps;
   const pane = paneContentSelector(state, name);
   const hostChannel = getHostChannel(state);
