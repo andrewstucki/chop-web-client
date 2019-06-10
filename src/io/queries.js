@@ -258,7 +258,7 @@ currentEvent {
     type
     direct
     subscribers {
-      id: pubnubToken
+      id
       avatar
       nickname
     }
@@ -348,7 +348,7 @@ mutation AcceptPrayer($channelToken: String!, $requesterPubnubToken: String!, $r
     type
     direct
     subscribers {
-      id:pubnubToken
+      id
       userId
       avatar
       nickname
@@ -380,7 +380,7 @@ mutation CreateDirectChannel($pubnubToken: String!, $nickname: String!) {
       userId
       avatar
       nickname
-      id:pubnubToken
+      id
     }
   }
 }`;
