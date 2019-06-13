@@ -167,7 +167,7 @@ code_coverage_report_master:
     - ./cc-test-reporter before-build
     - yarn install
     - yarn test:coverage
-    - yarn cy:run
+    - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl=https://digerati.churchonline.org/host_mobile
     - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.cy.json cy-coverage/lcov.info
     - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.jest.json coverage/lcov.info
     - ./cc-test-reporter  sum-coverage coverage/codeclimate.*.json -p 2
