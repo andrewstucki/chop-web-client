@@ -30,8 +30,26 @@ Cypress.Commands.add('login', () => {
       {
         type: 'BASIC_AUTH_LOGIN',
         email: 'joe.test@testing.com',
-        password: '123456',
+        password: 'password',
       }
     );
   });
+});
+
+Cypress.Commands.add('getByTestId', id => cy.get(`[data-testid=${id}]`));
+
+Cypress.Commands.add('openSideMenu', () => {
+  cy.getByTestId('navHeader-openMenu').click();
+});
+
+Cypress.Commands.add('closeSideMenu', () => {
+  cy.getByTestId('chop').find('div').first().click({force: true});
+});
+
+Cypress.Commands.add('dissmissNotification', () => {
+  cy.getByTestId('banner-dismiss-button').click();
+});
+
+Cypress.Commands.add('notificationText', text => {
+  cy.getByTestId('banner-message').contains(text);
 });

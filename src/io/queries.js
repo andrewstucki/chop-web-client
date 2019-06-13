@@ -1,5 +1,4 @@
 // @flow
-import dayjs from 'dayjs';
 import { GraphQLClient } from 'graphql-request';
 import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
@@ -386,14 +385,19 @@ mutation CreateDirectChannel($pubnubToken: String!, $nickname: String!) {
 }`;
 
 const schedule = `
-schedule(endTime: $scheduleEndTime) {
-  fetchTime
+schedule(limit: $limit) {
+  id
   startTime
   endTime
-  id
   title
+  fetchTime
   scheduleTime
   hostInfo
+}`;
+
+const scheduleQuery = `
+query Schedule($limit: Int) {
+	${schedule}
 }`;
 
 const joinChannel = `
@@ -423,7 +427,7 @@ mutation generatePdf($html: String!) {
 `;
 
 const currentState = `
-query CurrentState($needLanguages: Boolean!, $scheduleEndTime: Timestamp) {
+query CurrentState($needLanguages: Boolean!, $limit: Int) {
   ${currentEvent}
   ${currentSubscriber}
   ${currentOrganization}
@@ -495,7 +499,7 @@ const queries = {
   ): Promise<GraphQLCurrentStateType> =>
     await client.request(currentState, {
       needLanguages,
-      scheduleEndTime: dayjs().add(1, 'week').endOf('day').unix(),
+      limit: 10,
     }),
 
   acceptPrayer: async (
@@ -536,8 +540,8 @@ const queries = {
     }),
 
   schedule: async (): Promise<GraphQLSchedule> =>
-    await client.request(schedule, {
-      scheduleEndTime: dayjs().add(1, 'week').endOf('day').unix(),
+    await client.request(scheduleQuery, {
+      limit: 10,
     }),
 
   eventAtTime: async (time: number): Promise<GraphQLEventAtTimeType> =>
