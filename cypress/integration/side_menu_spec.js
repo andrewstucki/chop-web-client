@@ -2,7 +2,7 @@ describe('Side Menu -- ', () => {
   beforeEach(() => {
     cy.viewport(375, 812);
     cy.login();
-    cy.getByTestId('navHeader-logo').invoke('attr', 'src').should('contain', 'FREEDOM_CHURCH.png');
+    cy.getByTestId('navHeader-logo', { timeout: 8000 }).invoke('attr', 'src').should('contain', 'FREEDOM_CHURCH.png');
     cy.openSideMenu();
   });
 
