@@ -123,7 +123,7 @@ review:
     - schedules
 
 cypress:tests-review:
-  image: cypress/base:10
+  image: cypress/base:10.15.3
   stage: cypress
   script:
     - CI_ENVIRONMENT_URL=`cat environmentUrl.txt`
@@ -158,7 +158,7 @@ code_coverage_report_master:
   stage: coverage
   allow_failure: true
   cache: {}
-  image: node:lts
+  image: cypress/base:10.15.3
   variables:
     CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
   script:
