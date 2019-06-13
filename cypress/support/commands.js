@@ -36,7 +36,7 @@ Cypress.Commands.add('login', () => {
   });
 });
 
-Cypress.Commands.add('getByTestId', id => cy.get(`[data-testid=${id}]`));
+Cypress.Commands.add('getByTestId', (id, options) => cy.get(`[data-testid=${id}]`, options));
 
 Cypress.Commands.add('openSideMenu', () => {
   cy.getByTestId('navHeader-openMenu').click();
