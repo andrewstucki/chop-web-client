@@ -51,12 +51,10 @@ const ActionableNotification = (
       <ActionableContainer>
         <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'actionableNotification-icon'}/>
         <Text data-testid={'actionableNotification-message'} isCompact={isCompact}>
-          <div data-testid='actionableNotification-text'>
-            <Trans ns='moments' i18nKey='prayer.request'>
-              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-              <strong>{{nickname: subscriber.nickname}}</strong> has requested prayer
-            </Trans>
-          </div>
+          <Trans ns='moments' i18nKey='prayer.request' data-testid='actionableNotification-text'>
+            {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+            <strong>{{nickname: subscriber.nickname}}</strong> has requested prayer
+          </Trans>
           <Timestamp data-testid='actionableNotification-timestamp'>{timestamp}</Timestamp>
         </Text>
         {

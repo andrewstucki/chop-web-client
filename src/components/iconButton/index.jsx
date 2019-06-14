@@ -1,5 +1,4 @@
 // @flow
-/* global SyntheticMouseEvent */
 import * as React from 'react';
 import Actionable from '../Actionable';
 import Button from './styles';
@@ -8,6 +7,8 @@ type IconButtonPropsType = {
   children: React.Node,
   size: number,
   onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  onMouseEnter?: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+  onMouseLeave?: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
   background?: string,
   keepFocus?: boolean,
   disabled?: boolean,
@@ -15,9 +16,24 @@ type IconButtonPropsType = {
   id?: string,
 };
 
-const IconButton = ({ children, size, onClick, background = 'none', keepFocus, disabled, hidden, id }:IconButtonPropsType) => (
+const IconButton = React.forwardRef(({
+  children,
+  size,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  background = 'none',
+  keepFocus,
+  disabled,
+  hidden,
+  id,
+}:IconButtonPropsType, ref) => (
   <Actionable onClick={onClick} keepFocus={keepFocus}>
-    <Button size={size}
+    <Button
+      ref={ref}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      size={size}
       data-testid={id}
       disabled={disabled}
       hidden={hidden}
@@ -26,6 +42,8 @@ const IconButton = ({ children, size, onClick, background = 'none', keepFocus, d
       { children }
     </Button>
   </Actionable>
-);
+));
+
+IconButton.displayName = 'IconButton';
 
 export default React.memo < IconButtonPropsType > (IconButton);

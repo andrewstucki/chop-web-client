@@ -22,6 +22,10 @@ const GlobalStyle = createGlobalStyle`
     -ms-scroll-chaining: none;
   }
   
+  label, div {
+    color: ${props => props.theme.colors.gray100};
+  }
+  
   strong {
     font-weight: bold;
   }
@@ -98,7 +102,7 @@ const ionDesignValues = {
   },
 };
 
-type ThemeType = {
+type ThemeType = {|
   colors: {
     [string]: string,
   },
@@ -119,9 +123,11 @@ type ThemeType = {
     duration: string,
   },
   shadows: {
+    shadow1: string,
     shadow2: string,
+    shadow3: string,
   },
-};
+|};
 
 // Once we get into light/dark mode we will want to look into styled-themeing
 // https://github.com/styled-components/styled-theming
@@ -167,6 +173,7 @@ const theme:ThemeType = {
     duration:   '300ms',
   },
   shadows: {
+    shadow1: '0px 1px 3px rgba(45, 45, 46, 0.25)',
     shadow2: '0 2px 6px rgba(45, 45, 46, 0.25)',
     shadow3: '0px 8px 16px rgba(30, 31, 35, 0.25)',
   },

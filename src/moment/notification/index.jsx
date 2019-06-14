@@ -47,12 +47,10 @@ const PrayerNotification = (
   <Wrapper data-testid={'notification'}>
     <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
     <Text isCompact={isCompact} data-testid={'notification-message'}>
-      <div>
-        <Trans ns='moments' i18nKey='prayer.notification'>
-          {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-          <strong>{{host}}</strong> started a live prayer with <strong>{{guest}}</strong>
-        </Trans>
-      </div>
+      <Trans ns='moments' i18nKey='prayer.notification'>
+        {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+        <strong>{{host}}</strong> started a live prayer with <strong>{{guest}}</strong>
+      </Trans>
       <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>
@@ -102,21 +100,20 @@ const MuteSubscriberNotification = (
   <Wrapper data-testid={'notification'}>
     <Icon dangerouslySetInnerHTML={{ __html: MuteSubscriberNotificationIcon }} isCompact={isCompact} data-testid={'notification-icon'}/>
     <Text isCompact={isCompact} data-testid={'notification-message'}>
-      <div>
-        {
-          host ? (
-            <Trans ns='moments' i18nKey='mute.notification_host'>
-              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-              <strong>{{host}}</strong> muted <strong>{{guest}}</strong>
-            </Trans>
-          ) : (
-            <Trans ns='moments' i18nKey='mute.notification'>
-              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-              <strong>{{guest}}</strong> was muted
-            </Trans>
-          )
-        }
-      </div>
+
+      {
+        host ? (
+          <Trans ns='moments' i18nKey='mute.notification_host'>
+            {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+            <strong>{{host}}</strong> muted <strong>{{guest}}</strong>
+          </Trans>
+        ) : (
+          <Trans ns='moments' i18nKey='mute.notification'>
+            {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+            <strong>{{guest}}</strong> was muted
+          </Trans>
+        )
+      }
       <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>
@@ -140,21 +137,21 @@ const JoinedChatNotification = (
     <Wrapper data-testid={'notification'}>
       <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
       <Text isCompact={isCompact} data-testid={'notification-message'}>
-        <div>
-          {
-            nickname === 'You' ? (
-              t('joined_chat.notification_you')
-            ) : (
-              <Trans ns='moments' i18nKey='joined_chat.notification'>
-                {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-                <strong>{{nickname}}</strong> has joined the chat
-              </Trans>
-            )
-          }
-          {nickname === 'You' ?
-            <span>{nickname} have joined the chat</span> : <span></span>
-          }
-        </div>
+
+        {
+          nickname === 'You' ? (
+            t('joined_chat.notification_you')
+          ) : (
+            <Trans ns='moments' i18nKey='joined_chat.notification'>
+              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+              <strong>{{nickname}}</strong> has joined the chat
+            </Trans>
+          )
+        }
+        {nickname === 'You' ?
+          <span>{nickname} have joined the chat</span> : <span></span>
+        }
+
         <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
       </Text>
     </Wrapper>
@@ -177,12 +174,12 @@ const LeftChannelNotification = (
   <Wrapper data-testid={'notification'}>
     <Icon dangerouslySetInnerHTML={{ __html: EndChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
     <Text isCompact={isCompact} data-testid={'notification-message'}>
-      <div>
-        <Trans ns='moments' i18nKey='left_chat.notification'>
-          {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-          <strong>{{nickname}}</strong> has left the chat
-        </Trans>
-      </div>
+
+      <Trans ns='moments' i18nKey='left_chat.notification'>
+        {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+        <strong>{{nickname}}</strong> has left the chat
+      </Trans>
+
       <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
     </Text>
   </Wrapper>
