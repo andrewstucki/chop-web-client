@@ -103,6 +103,18 @@ const isAndroid = () => !!navigator.userAgent && navigator.userAgent.toLowerCase
 
 const isClient = typeof window === 'object';
 
+export const getOrCreateElement = (id:string):HTMLElement => {
+  let element = document.getElementById(id);
+  if (!element) {
+    element = document.createElement('div');
+    element.setAttribute('id',  id);
+    if (document.body) {
+      document.body.appendChild(element);
+    }
+  }
+  return element;
+};
+
 export {
   getFirstInitial,
   getAvatarColor,

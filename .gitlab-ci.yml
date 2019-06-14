@@ -5,16 +5,15 @@ variables:
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 stages:
-  - compile
   - test
+  - compile
   - build
   - review
   - cypress
-  - coverage
+  - report
   - canary
   - destroy-canary
   - production
-  - lighthouse
 
 cache:
   untracked: true
@@ -24,11 +23,40 @@ cache:
     - dist/
     - cache/Cypress
 
+before_script:
+  - yarn install --pure-lockfile
+
+lint:
+  image: node:lts
+  stage: test
+  dependencies: []
+  script:
+    - yarn lint
+
+flow:
+  image: node:lts
+  stage: test
+  dependencies: []
+  script:
+    - yarn flow check
+    - yarn flow:coverage
+
+test:
+  image: node:lts
+  stage: test
+  dependencies: []
+  script:
+    - yarn test:coverage # Use coverage to generate coverage report
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - coverage/
+
 compile:app-review:
   image: node:lts
   stage: compile
+  dependencies: []
   script:
-    - yarn install --pure-lockfile
     - yarn build --env.WEBPACK_MODE=$REVIEW_WEBPACK_MODE --env.ENV=$REVIEW_ENV --env.GATEWAY_HOST=$REVIEW_GATEWAY_HOST --env.GTM_GTMID=$REVIEW_GTM_GTMID --env.GTM_AUTH=$REVIEW_GTM_AUTH --env.GTM_PREVIEW=$REVIEW_GTM_PREVIEW --env.ROUTE_BASENAME=$REVIEW_ROUTE_BASENAME --env.PUBLIC_PATH=$REVIEW_PUBLIC_PATH --env.CWC_HOST=
   artifacts:
     expire_in: 1 day
@@ -36,44 +64,26 @@ compile:app-review:
       - dist/
   except:
     - master
-    - schedules
 
 compile:app-production:
   image: node:lts
   stage: compile
+  dependencies: []
   script:
-    - yarn install --pure-lockfile
-    - yarn build --env.WEBPACK_MODE=$PRODUCTION_WEBPACK_MODE --env.ENV=$PRODUCTION_ENV --env.GATEWAY_HOST=$PRODUCTION_GATEWAY_HOST --env.GTM_GTMID=$PRODUCTION_GTM_GTMID --env.GTM_AUTH=$PRODUCTION_GTM_AUTH --env.GTM_PREVIEW=$PRODUCTION_GTM_PREVIEW --env.ROUTE_BASENAME=$PRODUCTION_ROUTE_BASENAME --env.PUBLIC_PATH=$PRODUCTION_PUBLIC_PATH --env.CWC_HOST=$PRODUCTION_CWC_HOST
+    - yarn build --env.WEBPACK_MODE=$PRODUCTION_WEBPACK_MODE --env.ENV=$PRODUCTION_ENV --env.BABEL_ENV=$PRODUCTION_ENV --env.GATEWAY_HOST=$PRODUCTION_GATEWAY_HOST --env.GTM_GTMID=$PRODUCTION_GTM_GTMID --env.GTM_AUTH=$PRODUCTION_GTM_AUTH --env.GTM_PREVIEW=$PRODUCTION_GTM_PREVIEW --env.ROUTE_BASENAME=$PRODUCTION_ROUTE_BASENAME --env.PUBLIC_PATH=$PRODUCTION_PUBLIC_PATH --env.CWC_HOST=$PRODUCTION_CWC_HOST
   artifacts:
     expire_in: 1 day
     paths:
       - dist/
   only:
     - master
-  except:
-    - schedules
-
-test:
-  stage: test
-  image: node:lts
-  script:
-    - yarn install --pure-lockfile
-    - yarn lint
-    - yarn flow check
-    - yarn flow:coverage
-    - yarn test:coverage # Use coverage to generate coverage report
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - coverage/
-  except:
-    - schedules
 
 build:image-review:
   stage: build
   cache:
     untracked: false
     policy: pull
+  before_script: []
   script:
     - command build Dockerfile-app
   dependencies:
@@ -82,29 +92,29 @@ build:image-review:
     - branches
   except:
     - master
-    - schedules
 
 build:image-production:
   stage: build
   cache:
     untracked: false
     policy: pull
+  before_script: []
   script:
     - command build Dockerfile-app
   dependencies:
     - compile:app-production
   only:
     - master
-  except:
-    - schedules
 
 review:
   stage: review
+  dependencies: []
   cache:
     untracked: false
     policy: pull
   variables:
     CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+  before_script: []
   script:
     - command deploy
     - echo $CI_ENVIRONMENT_URL > environmentUrl.txt
@@ -120,9 +130,8 @@ review:
     - branches
   except:
     - master
-    - schedules
 
-cypress:tests-review:
+cypress:review:
   image: cypress/base:10.15.3
   stage: cypress
   script:
@@ -136,12 +145,13 @@ cypress:tests-review:
     - review
   except:
     - master
-    - schedules
 
 stop_review:
   stage: review
+  dependencies: []
   variables:
     GIT_STRATEGY: none
+  before_script: []
   script:
     - command destroy app=app-$CI_ENVIRONMENT_SLUG
   environment:
@@ -152,13 +162,14 @@ stop_review:
     - branches
   except:
     - master
-    - schedules
 
 code_coverage_report_master:
-  stage: coverage
+  image: cypress/base:10.15.3
+  stage: report
+  dependencies:
+    - test
   allow_failure: true
   cache: {}
-  image: cypress/base:10.15.3
   variables:
     CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
   script:
@@ -174,13 +185,14 @@ code_coverage_report_master:
     - ./cc-test-reporter upload-coverage
   only:
     - master
-  except:
-    - schedules
 
 code_coverage_report:
-  stage: coverage
-  cache: {}
   image: node:lts
+  stage: report
+  dependencies:
+    - test
+    - cypress:review
+  cache: {}
   variables:
     CC_TEST_REPORTER_ID: 95b2685f3a9425616a05a86a41c0bf0f893c8703a2d19395ac2ea5cdd55a1acd
   script:
@@ -193,12 +205,12 @@ code_coverage_report:
     - ./cc-test-reporter upload-coverage
   except:
     - master
-    - schedules
 
 canary:
   stage: canary
   cache: {}
   dependencies: []
+  before_script: []
   script:
     - command deploy
   environment:
@@ -208,8 +220,6 @@ canary:
   allow_failure: true
   only:
     - master
-  except:
-    - schedules
 
 destroy-canary:
   stage: destroy-canary
@@ -219,18 +229,19 @@ destroy-canary:
   environment:
     name: production
   when: manual
+  before_script: []
   script:
     - command destroy-canary
   only:
     - master
-  except:
-    - schedules
 
 production:
   stage: production
+  dependencies: []
   cache: {}
   variables:
     CI_ENVIRONMENT_URL: http://$KUBE_DOMAIN
+  before_script: []
   script:
     - command deploy
   environment:
@@ -240,22 +251,63 @@ production:
   allow_failure: false
   only:
     - master
-  except:
-    - schedules
 
-lighthouse:
-  stage: lighthouse
+lighthouse:review:
   image: markhobson/node-chrome
+  stage: report
+  dependencies:
+    - review
+  allow_failure: true
   variables:
     LIGHTHOUSE_TEST_URL: https://live.life.church/host_mobile
   before_script:
     # yarn doesn't exist in this image
     - npm i -g lighthouse
   script:
-    - lighthouse --chrome-flags="--headless --no-sandbox" $LIGHTHOUSE_TEST_URL --output html --output-path ./report.html
+    - CI_ENVIRONMENT_URL=`cat environmentUrl.txt`
+    - lighthouse $CI_ENVIRONMENT_URL --chrome-flags="--headless --no-sandbox" --output html --output-path ./report.html
+  artifacts:
+    paths:
+      - ./report.html
+    expire_in: 1 week
+  except:
+    - master
+
+lighthouse:production:
+  image: markhobson/node-chrome
+  stage: report
+  dependencies: []
+  allow_failure: true
+  before_script:
+    # yarn doesn't exist in this image
+    - npm i -g lighthouse
+  script:
+    - lighthouse https://live.life.church/host_mobile --chrome-flags="--headless --no-sandbox" --output html --output-path ./report.html
   artifacts:
     paths:
       - ./report.html
     expire_in: 1 week
   only:
-    - schedules
+    - master
+
+storybook:review:
+  image: node:lts
+  stage: report
+  dependencies: []
+  script:
+    - yarn build-storybook
+    - yarn netlify deploy --dir=storybook-static -m ${CI_COMMIT_REF_SLUG}
+  only:
+    - branches
+  except:
+    - master
+
+storybook:production:
+  image: node:lts
+  stage: report
+  dependencies: []
+  script:
+    - yarn build-storybook
+    - yarn netlify deploy --dir=storybook-static --prod -m ${CI_COMMIT_REF_SLUG}
+  only:
+    - master

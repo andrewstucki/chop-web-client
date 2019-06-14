@@ -1,11 +1,13 @@
 // @flow
-import React, { useRef, useImperativeHandle } from 'react';
+import React, { useRef, useImperativeHandle, type Node } from 'react';
 import { Wrapper, Input, Label } from './styles';
+import Tooltip from '../tooltip';
 
 type InputFieldProps = {
   type: string,
   label: string,
   name: string,
+  tooltipContent?: Node,
   onChange?: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
   onFocus?: (event: SyntheticFocusEvent<HTMLInputElement>) => void,
   onBlur?: (event: SyntheticFocusEvent<HTMLInputElement>) => void,
@@ -18,7 +20,7 @@ type ImperativeHandleType = {
   value: () => string,
 };
 
-function InputField ({ type, label, name, onChange, onFocus, onBlur, value, placeholder, autoComplete }: InputFieldProps, ref) {
+function InputField ({ type, label, name, onChange, onFocus, onBlur, value, placeholder, autoComplete, tooltipContent }: InputFieldProps, ref) {
   const inputRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
@@ -30,8 +32,12 @@ function InputField ({ type, label, name, onChange, onFocus, onBlur, value, plac
 
   return (
     <Wrapper>
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={name}>
+        {label}
+        {tooltipContent && <Tooltip content={tooltipContent} />}
+      </Label>
       <Input
+        id={name}
         ref={inputRef}
         type={type}
         name={name}

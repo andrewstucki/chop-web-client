@@ -23,11 +23,15 @@ const Input = styled.input`
 `;
 
 const Label = styled.label`
-  display: inline-block;
+  display: flex;
   font-weight: 500;
   font-size: 0.85rem;
   width: 100%;
   margin-bottom: 2px;
+  
+  button {
+    margin-left: 4px;
+  }
 `;
 
 export {
