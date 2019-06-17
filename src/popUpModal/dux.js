@@ -1,49 +1,35 @@
+import { LeaveChatType } from './leaveChat/dux';
+import { MuteSubscriberType } from './muteSubscriber/dux';
+import { GuestNicknameType } from './guestNickname/dux';
+import { LoginType } from './login/dux';
+import { ResetPasswordType } from './resetPassword/dux';
+
 // Action Types
 
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
-const LEAVE_CHAT = 'LEAVE_CHAT';
-const MUTE_SUBSCRIBER = 'MUTE_SUBSCRIBER';
+const SET_POP_UP_MODAL = 'SET_POP_UP_MODAL';
 
 // Flow Type Definitions
 
 type TogglePopUpModalType = {
-  type: 'TOGGLE_POP_UP_MODAL',
+  type: TOGGLE_POP_UP_MODAL,
   modal: PopUpModalType,
 };
 
-type LeaveChatType = {
-  type: LEAVE_CHAT,
-};
-
-type MuteSubscriberType = {
-  type: MUTE_SUBSCRIBER,
-  subscriber: string,
-  channelId: string,
+type SetPopUpModalType = {
+  type: SET_POP_UP_MODAL,
+  modal: PopUpModalType,
 };
 
 type PopUpModalType =
   | LeaveChatType
   | MuteSubscriberType
+  | GuestNicknameType
+  | LoginType
+  | ResetPasswordType
   | {};
 
 // Action Creators
-
-const muteSubscriberType = (
-  subscriber: string,
-  channelId: string,
-): MuteSubscriberType => (
-  {
-    type: MUTE_SUBSCRIBER,
-    subscriber,
-    channelId,
-  }
-);
-
-const leaveChatType = (): LeaveChatType => (
-  {
-    type: LEAVE_CHAT,
-  }
-);
 
 const togglePopUpModal = (
   modal: PopUpModalType = {}
@@ -54,24 +40,29 @@ const togglePopUpModal = (
   }
 );
 
+const setPopUpModal = (
+  modal: PopUpModalType = {}
+): SetPopUpModalType => (
+  {
+    type: SET_POP_UP_MODAL,
+    modal,
+  }
+);
 
 // Exports
 
 export type {
   TogglePopUpModalType,
+  SetPopUpModalType,
   PopUpModalType,
-  LeaveChatType,
-  MuteSubscriberType,
 };
 
 export {
   TOGGLE_POP_UP_MODAL,
-  LEAVE_CHAT,
-  MUTE_SUBSCRIBER,
+  SET_POP_UP_MODAL,
 };
 
 export {
   togglePopUpModal,
-  leaveChatType,
-  muteSubscriberType,
+  setPopUpModal,
 };

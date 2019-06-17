@@ -6,6 +6,7 @@ const authenticate = jest.fn().mockResolvedValue(
     authenticate: {
       accessToken: '1234567890',
       refreshToken: '0987654321',
+      errors: [],
     },
   }
 );
@@ -129,11 +130,23 @@ const generatePdf = jest.fn().mockResolvedValue({
   generatePdf: 'https://cloud.google.com/openentwork/pdf1.pdf',
 });
 
+const resetPassword = jest.fn().mockResolvedValue({
+  resetPassword: {
+    success: true,
+    errors: [],
+  },
+});
+
+const requestPasswordReset = jest.fn().mockResolvedValue({
+  requestPasswordReset: true,
+});
+
 const mockQueries = {
   authenticate: authenticate,
   authenticateByLegacyToken: authenticate,
   authenticateByBasicAuth: authenticate,
   authenticateByRefreshToken: authenticate,
+  authenticateByGuestAuth: authenticate,
   currentState: currentState,
   acceptPrayer: acceptPrayer,
   muteSubscriber: muteSubscriber,
@@ -145,6 +158,8 @@ const mockQueries = {
   joinChannel: joinChannel,
   updateSubscriber: updateSubscriber,
   generatePdf: generatePdf,
+  resetPassword: resetPassword,
+  requestPasswordReset: requestPasswordReset,
 };
 
 export {
@@ -161,5 +176,7 @@ export {
   joinChannel,
   generatePdf,
   updateSubscriber,
+  resetPassword,
+  requestPasswordReset,
 };
 export default mockQueries;

@@ -1,7 +1,7 @@
 // @flow
 import Navbar from './navbar';
 import { connect } from 'react-redux';
-
+import { isHost } from '../subscriber/dux';
 import { getNavbarChannels, setNavbarIndex } from './dux';
 import { setPaneToEvent } from '../pane/content/event/dux';
 import { setPaneToChat } from '../pane/content/chat/dux';
@@ -13,6 +13,7 @@ const mapStateToProps = state => {
   return {
     items,
     navbarIndex,
+    host: isHost(state),
   };
 };
 

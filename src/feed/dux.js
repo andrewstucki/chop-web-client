@@ -1,5 +1,16 @@
 // @flow
-import type { ChopStateType } from '../chop/dux';
+import type {
+  AuthenticationType,
+  SetAuthenticationType,
+  RemoveAuthenticationType,
+} from '../auth/dux';
+
+import {
+  SET_AUTHENTICATION,
+  REMOVE_AUTHENTICATION,
+  GUEST_AUTH,
+} from '../auth/dux';
+
 import type {
   ToggleMessageTrayType,
   DeleteMessageType,
@@ -69,6 +80,7 @@ import {
 
 import {
   TOGGLE_POP_UP_MODAL,
+  SET_POP_UP_MODAL,
 } from '../popUpModal/dux';
 
 import type {
@@ -76,12 +88,14 @@ import type {
 } from '../popUpModal/dux';
 
 import type { BannerType } from '../banner/dux';
+import { SET_BANNER, CLEAR_BANNER } from '../banner/dux';
 
 import { SET_LANGUAGE } from '../languageSelector/dux';
 import {
   getPublicChannel,
   getHostChannel,
   getCurrentChannel,
+  getChannelById,
 } from '../selectors/channelSelectors';
 
 import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
@@ -105,6 +119,8 @@ import type {
   SharedSubscriberType,
 } from '../subscriber/dux';
 
+import { BASIC_AUTH_LOGIN_FAILED, REMOVE_LOGIN_ERROR } from '../login/dux';
+
 import { createUid } from '../util';
 import { ADD_MOMENT_TO_CHANNEL } from '../moment/dux';
 import { HOST_INFO } from '../hostInfo/dux';
@@ -125,17 +141,14 @@ const SET_ORGANIZATION = 'SET_ORGANIZATION';
 const SET_PUBNUB_KEYS = 'SET_PUBNUB_KEYS';
 const SET_LANGUAGE_OPTIONS = 'SET_LANGUAGE_OPTIONS';
 const LOAD_HISTORY = 'LOAD_HISTORY';
-const SET_AUTHENTICATION = 'SET_AUTHENTICATION';
-const REMOVE_AUTHENTICATION = 'REMOVE_AUTHENTICATION';
-const CLEAR_NOTIFICATION_BANNER = 'CLEAR_NOTIFICATION_BANNER';
-const SET_NOTIFICATION_BANNER = 'SET_NOTIFICATION_BANNER';
 const SET_SALVATIONS = 'SET_SALVATIONS';
 const UPDATE_SCROLL_POSITION = 'UPDATE_SCROLL_POSITION';
 const SET_SAW_LAST_MOMENT_AT = 'SET_SAW_LAST_MOMENT_AT';
-const TOKEN_AUTH_LOGIN_FAILED = 'TOKEN_AUTH_LOGIN_FAILED';
 const SET_CHANNELS = 'SET_CHANNELS';
 const JOIN_CHANNEL = 'JOIN_CHANNEL';
 const JOIN_CHANNEL_FAILED = 'JOIN_CHANNEL_FAILED';
+const SET_CHANNEL_MESSAGE = 'SET_CHANNEL_MESSAGE';
+const CLEAR_CHANNEL_MESSAGE = 'CLEAR_CHANNEL_MESSAGE';
 
 // Flow Type Definitions
 type LanguageType = {
@@ -188,11 +201,7 @@ type ChannelType = {
   anchorMoments: Array<AnchorMomentType>,
   scrollPosition: number,
   sawLastMomentAt: DateTimeType,
-};
-
-type AuthenticationType = {
-  accessToken: string,
-  refreshToken: string,
+  message?: string,
 };
 
 type ChannelsObjectType = {
@@ -255,6 +264,17 @@ type LeaveChannelType = {
   channel: string,
 };
 
+type SetChannelMessageType = {
+  type: 'SET_CHANNEL_MESSAGE',
+  id: string,
+  message: string,
+};
+
+type ClearChannelMessageType = {
+  type: 'CLEAR_CHANNEL_MESSAGE',
+  id: string,
+};
+
 type SetLanguageOptionsType = {
   type: 'SET_LANGUAGE_OPTIONS',
   languageOptions: Array<LanguageType>,
@@ -275,24 +295,6 @@ type LoadHistoryType = {
 type SetSalvationsType = {
   type: 'SET_SALVATIONS',
   count: number,
-};
-
-type SetAuthenticationType = {
-  type: 'SET_AUTHENTICATION',
-  auth: AuthenticationType,
-};
-
-type RemoveAuthenticationType = {
-  type: 'REMOVE_AUTHENTICATION',
-}
-type ClearNotificationBannerType = {
-  type: 'CLEAR_NOTIFICATION_BANNER',
-};
-
-type SetNotificationBannerType = {
-  type: 'SET_NOTIFICATION_BANNER',
-  message: string,
-  bannerType: string,
 };
 
 type UpdateScrollPositionType = {
@@ -346,23 +348,10 @@ type FeedActionTypes =
   | SetChatFocusType
   | SetChannelsType
   | AddMomentToChannelType
+  | SetChannelMessageType
+  | ClearChannelMessageType;
 
 // Action Creators
-const setAuthentication = (accessToken: string, refreshToken: string): SetAuthenticationType => (
-  {
-    type: SET_AUTHENTICATION,
-    auth: {
-      accessToken,
-      refreshToken,
-    },
-  }
-);
-
-const removeAuthentication = (): RemoveAuthenticationType => (
-  {
-    type: REMOVE_AUTHENTICATION,
-  }
-);
 
 const setLanguageOptions = (languageOptions: Array<LanguageType>): SetLanguageOptionsType => (
   {
@@ -475,6 +464,21 @@ const leaveChannel = (channel: string): LeaveChannelType => (
   }
 );
 
+const setChannelMessage = (id: string, message: string): SetChannelMessageType => (
+  {
+    type: SET_CHANNEL_MESSAGE,
+    id,
+    message,
+  }
+);
+
+const clearChannelMessage = (id: string): ClearChannelMessageType => (
+  {
+    type: CLEAR_CHANNEL_MESSAGE,
+    id,
+  }
+);
+
 const loadHistory = (moments: Array<MomentType>, channel: string): LoadHistoryType => (
   {
     type: LOAD_HISTORY,
@@ -487,12 +491,6 @@ const setSalvations = (count:number): SetSalvationsType => (
   {
     type: SET_SALVATIONS,
     count,
-  }
-);
-
-const clearNotificationBanner = (): ClearNotificationBannerType => (
-  {
-    type: CLEAR_NOTIFICATION_BANNER,
   }
 );
 
@@ -571,10 +569,7 @@ const defaultState = {
     },
   },
   reactions: [],
-  notificationBanner: {
-    message: '',
-    bannerType: '',
-  },
+  notificationBanner: {},
   sequence: {
     steps: [],
   },
@@ -666,7 +661,7 @@ const reducer = (
           accessToken: action.auth.accessToken,
           refreshToken: action.auth.refreshToken,
         },
-        isAuthenticated: true,
+        isAuthenticated: action.authType !== GUEST_AUTH,
       };
     case REMOVE_AUTHENTICATION:
       return {
@@ -759,6 +754,34 @@ const reducer = (
         ...state,
         channels: action.channels,
       };
+    case SET_CHANNEL_MESSAGE: {
+      // $FlowFixMe
+      const channel = getChannelById(state, action.id);
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [channel.id]: {
+            ...channel,
+            message: action.message,
+          },
+        },
+      };
+    }
+    case CLEAR_CHANNEL_MESSAGE: {
+      // $FlowFixMe
+      const channel = getChannelById(state, action.id);
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [channel.id]: {
+            ...channel,
+            message: '',
+          },
+        },
+      };
+    }
     case LOAD_HISTORY:
       if (state.channels[action.channel]) {
         return {
@@ -952,6 +975,34 @@ const reducer = (
         popUpModal: action.modal,
       };
     }
+    case SET_POP_UP_MODAL: {
+      return {
+        ...state,
+        // $FlowFixMe
+        popUpModal: action.modal,
+        isPopUpModalVisible: true,
+      };
+    }
+    case BASIC_AUTH_LOGIN_FAILED: {
+      return {
+        ...state,
+        // $FlowFixMe
+        popUpModal: {
+          ...state.popUpModal,
+          error: true,
+        },
+      };
+    }
+    case REMOVE_LOGIN_ERROR: {
+      return {
+        ...state,
+        // $FlowFixMe
+        popUpModal: {
+          ...state.popUpModal,
+          error: false,
+        },
+      };
+    }
     case SET_CHAT_FOCUS:
       return {
         ...state,
@@ -1017,21 +1068,15 @@ const reducer = (
         ...state,
         errors: [],
       };
-    case SET_NOTIFICATION_BANNER:
+    case SET_BANNER:
       return {
         ...state,
-        notificationBanner: {
-          message: action.message,
-          bannerType: action.bannerType,
-        },
+        notificationBanner: action.banner,
       };
-    case CLEAR_NOTIFICATION_BANNER:
+    case CLEAR_BANNER:
       return {
         ...state,
-        notificationBanner: {
-          message: '',
-          bannerType: '',
-        },
+        notificationBanner: {},
       };
     case UPDATE_SCROLL_POSITION: {
       const { scrollPosition, channel, timestamp } = action;
@@ -1080,11 +1125,13 @@ const reducer = (
 };
 
 // Selectors
-const local = state => state.feed || state;
 
-const getNotificationBanner = (state: ChopStateType): BannerType => (
+const getNotificationBanner = (state: FeedType): BannerType => (
   local(state).notificationBanner
 );
+
+//$FlowFixMe
+const local = state => state.feed || state;
 
 // Exports
 
@@ -1092,11 +1139,8 @@ export {
   ADD_CHANNEL,
   REMOVE_CHANNEL,
   LEAVE_CHANNEL,
-  SET_NOTIFICATION_BANNER,
   LEAVE_CHANNEL_SUCCEEDED,
   LEAVE_CHANNEL_FAILED,
-  SET_AUTHENTICATION,
-  TOKEN_AUTH_LOGIN_FAILED,
   SET_CHANNELS,
   JOIN_CHANNEL,
   JOIN_CHANNEL_FAILED,
@@ -1113,18 +1157,17 @@ export {
   setLanguageOptions,
   setPubnubKeys,
   loadHistory,
-  getNotificationBanner,
-  clearNotificationBanner,
   setSalvations,
-  setAuthentication,
-  removeAuthentication,
   updateScrollPosition,
   setChannels,
+  local,
+  getNotificationBanner,
+  setChannelMessage,
+  clearChannelMessage,
 };
 
 export type {
   AddChannelType,
-  AuthenticationType,
   RemoveChannelType,
   MomentType,
   FeedType,
@@ -1133,7 +1176,6 @@ export type {
   LanguageType,
   OrganizationType,
   SetSalvationsType,
-  SetNotificationBannerType,
   ChannelsObjectType,
   JoinChannelType,
   ChannelTypeType,

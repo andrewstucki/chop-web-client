@@ -147,6 +147,11 @@ const getCurrentChannel = createSelector(
   pane => pane?.content?.channelId || '',
 );
 
+const getPublicChannelMessage = createSelector(
+  getPublicChannelObject,
+  channel => channel?.message || '',
+);
+
 const getCurrentTabType = createSelector(
   getPrimaryPane,
   pane => pane?.content?.type || '',
@@ -243,6 +248,12 @@ const getScroll = createSelector(
           };
         }
       }
+      case 'CLEAR_CHANNEL_MESSAGE': {
+        return {
+          type: 'SCROLL_TO',
+          position: 0,
+        };
+      }
       default:
         return {
           type: 'NO_SCROLL',
@@ -267,4 +278,5 @@ export {
   getPublicChannelObject,
   hasNotSeenLatestMoments,
   getTranslateLanguage,
+  getPublicChannelMessage,
 };

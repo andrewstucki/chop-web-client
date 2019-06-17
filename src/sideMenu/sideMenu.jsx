@@ -12,10 +12,10 @@ import FeedbackLink from '../icons/feedbackLink';
 import Exit from '../../assets/exit.svg';
 import Avatar from '../avatar';
 import ReactTouchEvents from 'react-touch-events';
+import { ExternalLink, LinkIcon, OrganizationTitle, Nickname, EventDescription, EventTitle, Profile, ProfileActions, Menu, Overlay, LogOutButton, LinkWrapper, LoginWrapper, LoginButton, SignUpButton } from './styles';
 import { admin } from '../subscriber/permissions';
 import {usePermissions} from '../hooks/usePermissions';
 import {privateSubscriberToSharedSubscriber} from '../subscriber/dux';
-import { ExternalLink, LinkIcon, OrganizationTitle, Nickname, EventDescription, EventTitle, Profile, ProfileActions, Menu, Overlay, LogOutButton, LinkWrapper } from './styles';
 import { useTranslation } from 'react-i18next';
 
 type SideMenuType = {
@@ -24,12 +24,15 @@ type SideMenuType = {
   isClosed: boolean,
   onSwipe?: (event: SyntheticTouchEvent<HTMLButtonElement>) => void,
   setLanguage: (language: string) => void,
+  login: () => void,
   languageOptions: Array<LanguageType>,
   organizationName: string,
   eventTitle: string,
   eventDescription: string,
   currentSubscriber: PrivateSubscriberType,
   currentLanguage: string,
+  authenticated: boolean,
+  host: boolean,
 };
 
 const SideMenu = (
@@ -45,9 +48,16 @@ const SideMenu = (
     eventDescription,
     currentSubscriber,
     currentLanguage,
+    authenticated,
+    login,
+    host,
   }: SideMenuType
 ) => {
   const { t } = useTranslation();
+  const handleLogin = () => {
+    close();
+    login();
+  };
   const hasAdminLinkPermissions = usePermissions(currentSubscriber, admin);
   return (
     <>
@@ -65,19 +75,28 @@ const SideMenu = (
           <EventTitle data-testid='event-title'>{eventTitle}</EventTitle>
           <EventDescription data-testid='event-description'>{eventDescription}</EventDescription>
 
-          <Profile>
-            <Avatar subscriber={privateSubscriberToSharedSubscriber(currentSubscriber)} large/>
-            <Nickname>{currentSubscriber.nickname}</Nickname>
-            <ProfileActions>
-              <LogOutButton
-                data-testid='logout'
-                onClick={logout}>
-                <LinkIcon
-                  dangerouslySetInnerHTML={{ __html: Exit }}
-                /> { t('log_out') }
-              </LogOutButton>
-            </ProfileActions>
-          </Profile>
+          { authenticated &&
+            <Profile>
+              <Avatar subscriber={privateSubscriberToSharedSubscriber(currentSubscriber)} large/>
+              <Nickname>{currentSubscriber.nickname}</Nickname>
+              <ProfileActions>
+                <LogOutButton
+                  data-testid='logout'
+                  onClick={logout}>
+                  <LinkIcon
+                    dangerouslySetInnerHTML={{ __html: Exit }}
+                  /> { t('log_out') }
+                </LogOutButton>
+              </ProfileActions>
+            </Profile>
+          }
+
+          { !authenticated &&
+            <LoginWrapper>
+              <LoginButton onClick={handleLogin} data-testid="side-menu-login">Log In</LoginButton>
+              <SignUpButton onClick={() => {}}>Sign Up</SignUpButton>
+            </LoginWrapper>
+          }
 
           <div css={`margin-top: auto;`}>
             <LanguageSelector
@@ -89,55 +108,59 @@ const SideMenu = (
 
           <TextModeToggle />
 
-          <hr/>
+          { host &&
+            <>
+              <hr/>
 
-          <LinkWrapper>
-            <ExternalLink
-              data-testid="guest-experience"
-              href={`${window.location.origin.toString()}/guest_experience`}
-            >
-              { t('guest_experience') }
-              <LinkIcon size={16}>
-                <GuestExperienceLink/>
-              </LinkIcon>
-            </ExternalLink>
-
-            { hasAdminLinkPermissions &&
-            <ExternalLink
-              data-testid="admin-link"
-              href={`${window.location.origin.toString()}/admin`}
-            >
-              { t('admin') }
-              <LinkIcon size={14}>
-                <FeedbackLink/>
-              </LinkIcon>
-            </ExternalLink>
-            }
-
-            <ExternalLink
-              data-testid="support"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
-            >
-              { t('support') }
-              <LinkIcon size={14}>
-                <FeedbackLink/>
-              </LinkIcon>
-            </ExternalLink>
-
-            <ExternalLink
-              data-testid="feedback"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://lifechurch.formstack.com/forms/host_feedback_2"
-            >
-              { t('give_feedback') }
-              <LinkIcon size={14}>
-                <FeedbackLink/>
-              </LinkIcon>
-            </ExternalLink>
-          </LinkWrapper>
+              <LinkWrapper>
+                <ExternalLink
+                  data-testid="guest-experience"
+                  href={`${window.location.origin.toString()}/guest_experience`}
+                >
+                  { t('guest_experience') }
+                  <LinkIcon size={16}>
+                    <GuestExperienceLink/>
+                  </LinkIcon>
+                </ExternalLink>
+    
+                { hasAdminLinkPermissions &&
+                <ExternalLink
+                  data-testid="admin-link"
+                  href={`${window.location.origin.toString()}/admin`}
+                >
+                  { t('admin') }
+                  <LinkIcon size={14}>
+                    <FeedbackLink/>
+                  </LinkIcon>
+                </ExternalLink>
+                }
+    
+                <ExternalLink
+                  data-testid="support"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://support.churchonlineplatform.com/en/category/host-mobile-hn92o9"
+                >
+                  { t('support') }
+                  <LinkIcon size={14}>
+                    <FeedbackLink/>
+                  </LinkIcon>
+                </ExternalLink>
+    
+                <ExternalLink
+                  data-testid="feedback"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://lifechurch.formstack.com/forms/host_feedback_2"
+                >
+                  { t('give_feedback') }
+                  <LinkIcon size={14}>
+                    <FeedbackLink/>
+                  </LinkIcon>
+                </ExternalLink>
+              </LinkWrapper>
+            </>
+          }
 
         </Menu>
       </ReactTouchEvents>

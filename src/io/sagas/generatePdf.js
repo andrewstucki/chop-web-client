@@ -4,7 +4,7 @@ import { call, put } from 'redux-saga/effects';
 import queries from '../queries';
 import { type GeneratePdfType } from '../../eventNotes/dux';
 import bugsnagClient from '../../util/bugsnag';
-import { errorNotificationBanner } from '../../banner/dux';
+import { errorBanner } from '../../banner/dux';
 import { isMobileDevice } from '../../util';
 
 function* generatePdf (action: GeneratePdfType): Saga<void> {
@@ -13,11 +13,11 @@ function* generatePdf (action: GeneratePdfType): Saga<void> {
     if (result.generatePdf) {
       openPDF(result.generatePdf);
     } else {
-      yield put(errorNotificationBanner('generate_pdf_error'));
+      yield put(errorBanner('generate_pdf_error'));
       bugsnagClient.notify(new Error('Server returned false for generatePdf.'));
     }
   } catch (error) {
-    yield put(errorNotificationBanner('generate_pdf_error'));
+    yield put(errorBanner('generate_pdf_error'));
     bugsnagClient.notify(error);
   }
 }

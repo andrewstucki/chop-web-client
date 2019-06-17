@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 import { publishMuteSubscriberNotification } from '../../moment/notification/dux';
-import { mutedNotificationBanner } from '../../banner/dux';
+import { mutedBanner } from '../../banner/dux';
 import { publishMuteSubscriber, getCurrentSubscriberAsSharedSubscriber } from '../../subscriber/dux';
 import { getMessageTimestamp } from '../../util';
 import {
@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => (
   {
     muteSubscriber: (channel, nickname) => dispatch(publishMuteSubscriber(channel, nickname)),
     publishMuteSubscriberNotification: (host, guest, channel) => dispatch(publishMuteSubscriberNotification(host, guest, channel, getMessageTimestamp())),
-    mutedNotificationBanner: guestName => dispatch(mutedNotificationBanner(guestName)),
+    mutednBanner: guestName => dispatch(mutedBanner(guestName)),
   }
 );
 

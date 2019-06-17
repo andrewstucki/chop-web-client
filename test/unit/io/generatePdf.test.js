@@ -3,7 +3,7 @@ import queries from '../../../src/io/queries';
 import { generatePdf as generatePdfSaga } from '../../../src/io/saga';
 import { generatePdf as generatePdfAction } from '../../../src/eventNotes/dux';
 import { runSaga } from 'redux-saga';
-import { errorNotificationBanner } from '../../../src/banner/dux';
+import { errorBanner } from '../../../src/banner/dux';
 
 jest.mock('../../../src/io/queries');
 const mock = (mockFn: any) => mockFn;
@@ -35,7 +35,7 @@ describe('Generate PDF', () => {
 
     expect(mockGeneratePdf).toBeCalledWith('<h1>Event Notes</h1><p>Here are my notes.</p>');
     expect(dispatched).toEqual([
-      errorNotificationBanner('generate_pdf_error'),
+      errorBanner('generate_pdf_error'),
     ]);
   });
 });

@@ -3,10 +3,8 @@ import Chat from './chat';
 import { connect } from 'react-redux';
 import { getChannelById } from '../../../selectors/channelSelectors';
 import { getSubscriberCountInChannel } from '../../../subscriber/dux';
-import {
-  togglePopUpModal,
-  leaveChatType,
-} from '../../../popUpModal/dux';
+import { togglePopUpModal } from '../../../popUpModal/dux';
+import { leaveChatType } from '../../../popUpModal/leaveChat/dux';
 import { getOtherSubscribers } from '../../../selectors/chatSelectors';
 
 const mapStateToProps = (state, ownProps) => {

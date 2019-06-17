@@ -81,6 +81,9 @@ describe('SideBar tests', () => {
         eventTitle='Evenet Title'
         organizationName='The Church'
         currentLanguage='en'
+        authenticated={true}
+        login={() => {}}
+        host={true}
       />
     );
     expect(queryByTestId('side-menu')).toBeTruthy();
@@ -107,6 +110,9 @@ describe('SideBar tests', () => {
         eventTitle='Evenet Title'
         organizationName='The Church'
         currentLanguage='en'
+        authenticated={true}
+        login={() => {}}
+        host={true}
       />
     );
     expect(queryByTestId('guest-experience')).toBeTruthy();
@@ -133,6 +139,9 @@ describe('SideBar tests', () => {
         eventTitle='Evenet Title'
         organizationName='The Church'
         currentLanguage='en'
+        authenticated={true}
+        login={() => {}}
+        host={true}
       />
     );
     expect(queryByTestId('feedback')).toBeTruthy();
@@ -161,6 +170,9 @@ describe('SideBar tests', () => {
         eventTitle='Evenet Title'
         organizationName='The Church'
         currentLanguage='en'
+        authenticated={true}
+        login={() => {}}
+        host={true}
       />
     );
     const logout = getByTestId('logout');
@@ -190,6 +202,9 @@ describe('SideBar tests', () => {
         eventTitle='Event Title'
         organizationName='The Church'
         currentLanguage='en'
+        authenticated={true}
+        login={() => {}}
+        host={true}
       />
     );
     expect(queryByTestId('organization-title')).toBeTruthy();
@@ -216,6 +231,9 @@ describe('SideBar tests', () => {
         eventTitle='Event Title'
         organizationName='The Church'
         currentLanguage='en'
+        authenticated={true}
+        login={() => {}}
+        host={true}
       />
     );
     expect(queryByTestId('event-title')).toBeTruthy();
@@ -244,8 +262,51 @@ describe('SideBar tests', () => {
         eventTitle='Event Title'
         organizationName='The Church'
         currentLanguage='en'
+        authenticated={true}
+        login={() => {}}
+        host={true}
       />
     );
     expect(queryByTestId('side-menu-avatar')).toBeTruthy;
+  });
+
+  test('SideBar has login button', () => {
+    const { queryByTestId } = renderWithReduxAndTheme(
+      <SideMenu
+        logout={() => {}}
+        close={() => {}}
+        isClosed={false}
+        languageOptions={languageOptions}
+        setLanguage={() => {}}
+        currentPane={currentPane}
+        hostChannel='host'
+        publicChannel='public'
+        setPaneToChat={() => {}}
+        setPaneToEvent={() => {}}
+        setPaneToTab={() => {}}
+        addTab={() => {}}
+        currentSubscriber={{
+          id: '134',
+          nickname: 'Kylo Ren',
+          avatar: 'http://someimageons3.com/image/123',
+          pubnubAccessKey: '12347893456',
+          role: {
+            label: '',
+            permissions: [],
+          },
+          preferences: {
+            textMode: 'COMPACT',
+          },
+        }}
+        eventDescription='The Description'
+        eventTitle='Event Title'
+        organizationName='The Church'
+        currentLanguage='en'
+        authenticated={false}
+        login={() => {}}
+        host={false}
+      />
+    );
+    expect(queryByTestId('side-menu-login')).toBeTruthy;
   });
 });

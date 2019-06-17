@@ -1,9 +1,14 @@
 // @flow
 import { connect } from 'react-redux';
-import { closeMenu, logout } from './dux';
+import { closeMenu } from './dux';
+import { logout } from '../login/dux';
 import { setLanguage } from '../languageSelector/dux';
 import SideMenu from './sideMenu';
-import { removeAuthentication } from '../feed/dux';
+import { togglePopUpModal } from '../popUpModal/dux';
+import { loginType } from '../popUpModal/login/dux';
+import { clearSubscriber, isHost } from '../subscriber/dux';
+import { loggedOutBanner } from '../banner/dux';
+import { guestAuth } from '../auth/dux';
 
 const mapStateToProps = state => {
   const { name:organizationName } = state.feed.organization;
@@ -17,6 +22,8 @@ const mapStateToProps = state => {
     eventDescription,
     currentSubscriber: state.subscriber.currentSubscriber,
     currentLanguage: state.feed.currentLanguage,
+    authenticated: state.feed.isAuthenticated,
+    host: isHost(state),
   };
 };
 
@@ -24,13 +31,17 @@ const mapDispatchToProps = dispatch => (
   {
     close: () => dispatch(closeMenu()),
     logout: () => {
-      dispatch(removeAuthentication());
+      dispatch(guestAuth());
+      dispatch(clearSubscriber());
+      dispatch(closeMenu());
+      dispatch(loggedOutBanner());
       logout();
     },
     onSwipe: direction => {
       if (direction === 'left') return dispatch(closeMenu());
     },
     setLanguage: language => (dispatch(setLanguage(language))),
+    login: () => dispatch(togglePopUpModal(loginType())),
   }
 );
 

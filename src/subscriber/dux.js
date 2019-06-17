@@ -19,6 +19,9 @@ export const PUBLISH_MUTE_SUBSCRIBER = 'PUBLISH_MUTE_SUBSCRIBER';
 export const MUTE_SUBSCRIBER_FAILED = 'MUTE_SUBSCRIBER_FAILED';
 export const MUTE_SUBSCRIBER_SUCCEEDED = 'MUTE_SUBSCRIBER_SUCCEEDED';
 export const SET_AVATAR = 'SET_AVATAR';
+export const CLEAR_SUBSCRIBER = 'CLEAR_SUBSCRIBER';
+export const PUBLISH_REQUEST_PASSWORD_RESET = 'PUBLISH_REQUEST_PASSWORD_RESET';
+export const PUBLISH_RESET_PASSWORD = 'PUBLISH_RESET_PASSWORD';
 
 // Flow types
 export type SharedSubscriberType = {|
@@ -57,12 +60,17 @@ export type UpdateSubscriberType = {
 };
 
 export type SubscriberInputType = 
- | UpdateSubscriberPreferencesType;
+ | UpdateSubscriberPreferencesType
+ | UpdateSubscriberNicknameType;
 
 export type UpdateSubscriberPreferencesType = {
   preferences: {
     textMode: TextModeType,
   },
+};
+
+export type UpdateSubscriberNicknameType = {
+  nickname: string,
 };
 
 export type UpdateSubscriberSucceededType = {
@@ -122,13 +130,29 @@ type PublishMuteSubscriberType = {
   subscriberName: string,
 };
 
+type ClearSubscriberType = {
+  type: typeof CLEAR_SUBSCRIBER,
+};
+
+export type PublishRequestPasswordResetType = {
+  type: typeof PUBLISH_REQUEST_PASSWORD_RESET,
+  email: string,
+};
+
+export type PublishResetPasswordType = {
+  type: typeof PUBLISH_REQUEST_PASSWORD_RESET,
+  resetToken: string,
+  password: string,
+};
+
 export type SubscriberActionType =
   | SetSubscriber
   | SetHereNow
   | UpdateSubscriberSucceededType
   | RemoveHereNowType
   | AddHereNowType
-  | SetAvatarType;
+  | SetAvatarType
+  | ClearSubscriberType;
 
 // action creators
 export const setHereNow = (channel: string, subscribers: Array<SubscriberState>): SetHereNow => (
@@ -181,6 +205,12 @@ export const publishMuteSubscriber = (channelId:string, subscriberName:string): 
     type: PUBLISH_MUTE_SUBSCRIBER,
     channelId,
     subscriberName,
+  }
+);
+
+export const clearSubscriber = () => (
+  {
+    type: CLEAR_SUBSCRIBER,
   }
 );
 
@@ -275,10 +305,7 @@ export default (
         ...state,
         currentSubscriber: {
           ...state.currentSubscriber,
-          preferences: {
-            ...state.currentSubscriber.preferences,
-            ...action.input.preferences,
-          },
+          ...action.input,
         },
       };
     }
@@ -288,6 +315,14 @@ export default (
         currentSubscriber: {
           ...state.currentSubscriber,
           avatar: action.url,
+        },
+      };
+    }
+    case CLEAR_SUBSCRIBER: {
+      return {
+        ...state,
+        currentSubscriber: {
+          ...defaultState.currentSubscriber,
         },
       };
     }
@@ -343,11 +378,22 @@ export const getTextMode = createSelector<StateType, void, SharedSubscriberType,
   subscriber => subscriber.preferences.textMode
 );
 
+export const isHost = createSelector<StateType, void, SharedSubscriberType, PrivateSubscriberType>(
+  [getCurrentSubscriber],
+  subscriber => subscriber.role.label === 'Host' || subscriber.role.label === 'Admin'
+);
+
 export const updateTextMode = (mode: TextModeType): UpdateSubscriberPreferencesType => (
   {
     preferences: {
       textMode: mode,
     },
+  }
+);
+
+export const updateNickname = (nickname: string): UpdateSubscriberNicknameType => (
+  {
+    nickname,
   }
 );
 
@@ -366,6 +412,25 @@ export const updateSubscriberSucceeded = (input: SubscriberInputType): UpdateSub
   }
 );
 
+export const publishRequestPasswordReset = (
+  email: string
+): PublishRequestPasswordResetType => (
+  {
+    type: PUBLISH_REQUEST_PASSWORD_RESET,
+    email,
+  }
+);
+
+export const publishResetPassword = (
+  resetToken: string,
+  password: string
+): PublishResetPasswordType => (
+  {
+    type: PUBLISH_RESET_PASSWORD,
+    resetToken,
+    password,
+  }
+);
 
 const getHereNow = (state: StateType): HereNowChannels => local(state).hereNow;
 

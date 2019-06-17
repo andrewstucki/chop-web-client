@@ -9,7 +9,7 @@ type MuteSubscriberPropsType = {
   togglePopUpModal: () => void,
   muteSubscriber: (channel: string, nickname: string) => void,
   publishMuteSubscriberNotification: (host: string, guest: string, channel: string) => void,
-  mutedNotificationBanner: (guestName: string) => void,
+  mutedBanner: (guestName: string) => void,
   subscriber: string,
   hostChannel: string,
   channelId: string,
@@ -22,7 +22,7 @@ const MuteSubscriberPopUpModal = (
     togglePopUpModal,
     muteSubscriber,
     publishMuteSubscriberNotification,
-    mutedNotificationBanner,
+    mutedBanner,
     subscriber,
     hostChannel,
     channelId,
@@ -35,7 +35,7 @@ const MuteSubscriberPopUpModal = (
     togglePopUpModal();
     publishMuteSubscriberNotification(currentSubscriber, subscriber, hostChannel);
     muteSubscriber(channelId, subscriber);
-    mutedNotificationBanner(subscriber);
+    mutedBanner(subscriber);
   };
 
   return (
@@ -50,10 +50,10 @@ const MuteSubscriberPopUpModal = (
         </SmallText>
       </Text>
       <ActionContainer>
-        <Button type={REGRESS} onClick={togglePopUpModal} data-testid='muteSubscriber-cancel' >
+        <Button buttonType={REGRESS} onClick={togglePopUpModal} data-testid='muteSubscriber-cancel' >
           { t('mute_subscriber.cancel') }
         </Button>
-        <Button type={DANGER} onClick={callMuteSubscriber} data-testid='muteSubscriber-mute'>
+        <Button buttonType={DANGER} onClick={callMuteSubscriber} data-testid='muteSubscriber-mute'>
           { t('mute_subscriber.mute') }
         </Button>
       </ActionContainer>

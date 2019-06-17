@@ -1,6 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
-import type {AuthenticationType} from '../feed/dux';
+import type {AuthenticationType} from '../auth/dux';
 import type { ChopStateType } from '../chop/dux';
 
 const ID = 'feed';

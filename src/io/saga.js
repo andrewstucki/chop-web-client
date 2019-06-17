@@ -8,9 +8,12 @@ import type {Saga} from 'redux-saga';
 import {
   LEAVE_CHANNEL,
   LEAVE_CHANNEL_FAILED,
-  TOKEN_AUTH_LOGIN_FAILED,
   JOIN_CHANNEL,
 } from '../feed/dux';
+import {
+  TOKEN_AUTH_LOGIN_FAILED,
+  PUBLISH_GUEST_AUTH,
+} from '../auth/dux';
 import {
   QUERY_CURRENT_EVENT,
   QUERY_CURRENT_EVENT_FAILED,
@@ -31,6 +34,7 @@ import { REHYDRATE } from 'redux-persist/lib/constants';
 import { currentEvent } from './sagas/currentEvent';
 import {
   authenticateByBasicAuth,
+  authenticateByGuestAuth,
   authenticateByToken,
 } from './sagas/auth';
 import {
@@ -44,6 +48,8 @@ import {
 } from './sagas/moderation';
 import {
   updateSubscriber,
+  requestPasswordReset,
+  resetPassword,
 } from './sagas/subscriber';
 import {
   handleDataFetchErrors,
@@ -58,6 +64,8 @@ import { GENERATE_PDF } from '../eventNotes/dux';
 import { generatePdf } from './sagas/generatePdf';
 import {
   UPDATE_SUBSCRIBER,
+  PUBLISH_REQUEST_PASSWORD_RESET,
+  PUBLISH_RESET_PASSWORD,
   PUBLISH_MUTE_SUBSCRIBER,
 } from '../subscriber/dux';
 
@@ -83,6 +91,9 @@ function* rootSaga (): Saga<void> {
     takeEvery(JOIN_CHANNEL, joinChannel),
     takeEvery(UPDATE_SUBSCRIBER, updateSubscriber),
     takeEvery(GENERATE_PDF, generatePdf),
+    takeEvery(PUBLISH_REQUEST_PASSWORD_RESET, requestPasswordReset),
+    takeEvery(PUBLISH_RESET_PASSWORD, resetPassword),
+    takeEvery(PUBLISH_GUEST_AUTH, authenticateByGuestAuth),
   ]);
 }
 
@@ -94,8 +105,10 @@ export {
   publishAcceptedPrayerRequest,
   authenticateByBasicAuth,
   authenticateByToken,
+  authenticateByGuestAuth,
   rootSaga,
   publishMomentToChannel,
   joinChannel,
   generatePdf,
+  requestPasswordReset,
 };

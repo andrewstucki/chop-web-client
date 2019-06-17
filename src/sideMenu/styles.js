@@ -143,6 +143,41 @@ const LinkWrapper = styled.div`
   align-items: center;
 `;
 
+const LoginWrapper = styled.div`
+  background-color: ${props => props.theme.colors.gray10};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 2px;
+  margin-bottom: 32px;
+`;
+
+const LoginButton = styled.button`
+  color: ${props => props.theme.colors.primary};
+  border: none;
+  line-height: 20px;
+  font-size: 16px;
+  background-color: ${props => props.theme.colors.gray10};
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const SignUpButton = styled.button`
+  color: ${props => props.theme.colors.white};
+  background-color: ${props => props.theme.colors.primary};
+  border-radius: 20px;
+  outline: none;
+  padding: 10px 24px;
+  border: none;
+  margin: 16px 0px 16px 17px;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
 export {
   ExternalLink,
   LinkIcon,
@@ -156,4 +191,7 @@ export {
   Menu,
   LogOutButton,
   LinkWrapper,
+  LoginWrapper,
+  LoginButton,
+  SignUpButton,
 };

@@ -1,4 +1,5 @@
 {
+  "about": "About",
   "admin": "Admin",
   "bible": "Bible",
   "buttons": {
@@ -11,6 +12,7 @@
   "chat_with": "Chat with {{nickname}}",
   "coming_soon": "Coming Soon",
   "feature_coming_soon": "<strong>{{feature}}</strong> is Coming Soon.",
+  "give": "Give",
   "give_feedback": "Give feedback",
   "guest_experience": "Guest experience",
   "hide_tab": "Hide Tab",
@@ -29,6 +31,7 @@
   "public_chat": "Public Chat",
   "public_chat_disabled": "Public chat has been disabled for this event",
   "schedule": "Schedule",
+  "serve": "Serve",
   "support": "Support",
   "timezone": "Timezone",
   "upcoming_event": "Upcoming Event"

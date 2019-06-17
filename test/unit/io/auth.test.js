@@ -1,17 +1,23 @@
 // @flow
 import queries, { setAccessToken } from '../../../src/io/queries';
-import { authenticateByBasicAuth, authenticateByToken } from '../../../src/io/saga';
+import { authenticateByBasicAuth, authenticateByToken, authenticateByGuestAuth } from '../../../src/io/saga';
 import { runSaga } from 'redux-saga';
 import { BASIC_AUTH_LOGIN, BASIC_AUTH_LOGIN_FAILED } from '../../../src/login/dux';
 import {
   setAuthentication,
   TOKEN_AUTH_LOGIN_FAILED,
-} from '../../../src/feed/dux';
+  REFRESH_TOKEN,
+  BASIC_AUTH,
+  GUEST_AUTH,
+  PUBLISH_GUEST_AUTH,
+} from '../../../src/auth/dux';
 import { queryCurrentEvent } from '../../../src/event/dux';
 import { mockDate } from '../../testUtils';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import {getLegacyToken} from '../../../src/io/legacyToken';
 import { currentEvent } from '../../../src/io/sagas/currentEvent';
+import { loggedInBanner } from '../../../src/banner/dux';
+import { togglePopUpModal } from '../../../src/popUpModal/dux';
 
 jest.mock('../../../src/io/queries');
 jest.mock('../../../src/io/legacyToken');
@@ -23,6 +29,7 @@ describe('Test Auth', () => {
   const mockAuthenticateByRefreshToken = mock(queries.authenticateByRefreshToken);
   const mockAuthenticateByLegacyToken = mock(queries.authenticateByLegacyToken);
   const mockGetLegacyToken = mock(getLegacyToken);
+  const mockAuthenticateByGuestAuth = mock(queries.authenticateByGuestAuth);
   const mockCurrentEvent = mock(currentEvent);
   test('Basic Auth success', async () => {
     mockDate(1553266446136);
@@ -37,9 +44,12 @@ describe('Test Auth', () => {
 
     expect(mockAuthenticateByBasicAuth).toBeCalledWith('joe@test.com', '12345');
     expect(dispatched).toEqual([
-      setAuthentication('1234567890', '0987654321'),
+      setAuthentication('1234567890', '0987654321', BASIC_AUTH),
       queryCurrentEvent(),
+      togglePopUpModal(),
+      loggedInBanner(),
     ]);
+    expect(setAccessToken).toBeCalledWith('1234567890');
   });
 
   test('Basic Auth fail', async () => {
@@ -114,7 +124,7 @@ describe('Test Auth', () => {
     expect(mockAuthenticateByRefreshToken).toBeCalledWith('098765');
     expect(mockCurrentEvent).toHaveBeenCalledTimes(2);
     expect(dispatched).toEqual([
-      setAuthentication('1234567890', '0987654321'),
+      setAuthentication('1234567890', '0987654321', REFRESH_TOKEN),
     ]);
   });
 
@@ -155,5 +165,39 @@ describe('Test Auth', () => {
     { type: REHYDRATE }).toPromise();
 
     expect(dispatched).toEqual([{type: TOKEN_AUTH_LOGIN_FAILED, error: new Error('Broken')}]);
+  });
+
+  test('Guest Auth success', async () => {
+    mockDate(1553266446136);
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+    },
+    authenticateByGuestAuth,
+    { type: PUBLISH_GUEST_AUTH }).toPromise();
+
+    expect(mockAuthenticateByGuestAuth).toBeCalledWith();
+    expect(dispatched).toEqual([
+      setAuthentication('1234567890', '0987654321', GUEST_AUTH),
+    ]);
+    expect(setAccessToken).toBeCalledWith('1234567890');
+    expect(mockCurrentEvent).toHaveBeenCalledTimes(4);
+  });
+
+  test('Guest Auth fail', async () => {
+    mockAuthenticateByGuestAuth.mockImplementation(() => {
+      throw new Error('Broken');
+    });
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+    },
+    authenticateByGuestAuth,
+    { type: PUBLISH_GUEST_AUTH}).toPromise();
+
+    expect(mockAuthenticateByGuestAuth).toBeCalledWith();
+    expect(dispatched).toEqual([]);
   });
 });

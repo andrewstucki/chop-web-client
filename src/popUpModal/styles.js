@@ -21,7 +21,7 @@ type HeaderPropsType = {
 };
 
 type ButtonPropsType = {
-  type: ButtonType,
+  buttonType: ButtonType,
 };
 
 const Wrapper:ComponentType<NoPropsType> = styled.div`
@@ -36,6 +36,7 @@ const Wrapper:ComponentType<NoPropsType> = styled.div`
 `;
 
 const PopUpModalContainer:ComponentType<PopUpModalContainerPropsType> = styled.div`
+  position: relative;
   background-color: ${props => props.theme.colors.background};
   margin: ${props => props.isSmall ? '16px' : '64px 16px'};
   padding: ${props => props.isSmall ? '8px' : '16px'};
@@ -53,15 +54,16 @@ const Header:ComponentType<HeaderPropsType> = styled.div`
   justify-content: ${props => props.hasHeader ? 'space-between' : 'flex-end'};
   line-height: 20px;
   font-size: 20px;
-  color: ${props => props.theme.colors.black};
+  color: ${props => props.theme.colors.gray100};
   padding: 8px;
+  font-weight: bold;
 `;
 
 const Text:ComponentType<NoPropsType> = styled.div`
   line-height: 20px;
   padding: 8px;
   font-size: 16px;
-  color: ${props => props.theme.colors.black};
+  color: ${props => props.theme.colors.gray100};
 `;
 
 const SmallText:ComponentType<NoPropsType> = styled.div`
@@ -69,6 +71,19 @@ const SmallText:ComponentType<NoPropsType> = styled.div`
   font-size: 13.44px;
   padding-top: 4px;
   color: ${props => props.theme.colors.gray50};
+
+  button {
+    color: ${props => props.theme.colors.primary};
+    background-color: ${props => props.theme.colors.white};
+    border: none;
+    font-size: 13.44px;
+    line-height: 17px;
+    padding-left: 4px;
+
+    &:focus {
+      outline: none;
+    }
+  }
 `;
 
 const ActionContainer:ComponentType<NoPropsType> = styled.div`
@@ -81,15 +96,26 @@ const Button:ComponentType<ButtonPropsType> = styled.button`
   border: none;
   padding-left: 8px;
   background-color: ${props => props.theme.colors.background};
+  font-weight: 500;
   color: ${props => {
-    if (props.type === PROGRESS) {
+    if (props.buttonType === PROGRESS) {
       return props.theme.colors.primary;
-    } else if (props.type === DANGER) {
+    } else if (props.buttonType === DANGER) {
       return props.theme.colors.dangerText;
     } else {
       return props.theme.colors.gray50;
     }
   }};
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const DismissButtonWrapper:ComponentType<NoPropsType> = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
 `;
 
 export {
@@ -100,4 +126,5 @@ export {
   SmallText,
   ActionContainer,
   Button,
+  DismissButtonWrapper,
 };

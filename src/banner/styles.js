@@ -1,12 +1,27 @@
 import styled from 'styled-components';
+import type { ComponentType } from 'react';
+import type { NoPropsType } from '../../cwc-types';
 
-const BannerWrapper = styled.div`
+const WARNING = 'WARNING';
+const NOTIFICATION = 'NOTIFICATION';
+const ERROR = 'ERROR';
+
+type BannerType = 
+  | typeof WARNING
+  | typeof NOTIFICATION
+  | typeof ERROR;
+
+type BannerPropsType = {
+  type: BannerType,
+};
+
+const BannerWrapper:ComponentType<NoPropsType> = styled.div`
   display: flex;
   align-self: center;
   flex-direction: column;
 `;
 
-const Banner = styled.div`
+const Banner:ComponentType<BannerPropsType> = styled.div`
   font-size: 16px;
   display: flex;
   flex-direction: row;
@@ -21,21 +36,19 @@ const Banner = styled.div`
   top: ${props => props.fullWidth ? '0' : '4px'};
   border-radius: ${props => props.fullWidth ? '0' : '2px'};
   box-shadow: ${props => props.theme.shadows.shadow2};
-`;
+  background-color: ${props => {
+    if (props.type === WARNING) {
+      return props.theme.colors.warningText;
+    } else if (props.type === ERROR) {
+      return props => props.theme.colors.dangerText;
+    } else {
+      return props.theme.colors.validText;
+    }
+  }};
 
-const WarningBanner = styled(Banner)`
-  color: ${props => props.theme.colors.textColor};
-  background-color: ${props => props.theme.colors.warningText};
-`;
-
-const ErrorBanner = styled(Banner)`
-  color: ${props => props.theme.colors.background};
-  background-color: ${props => props.theme.colors.dangerText};
-`;
-
-const NotificationBanner = styled(Banner)`
-  color: ${props => props.theme.colors.background};
-  background-color: ${props => props.theme.colors.validText};
+  div {
+    color: ${props => props.theme.colors.white};
+  }
 `;
 
 const BannerMessage = styled.div`
@@ -47,8 +60,9 @@ const BannerMessage = styled.div`
 
 export {
   BannerWrapper,
-  WarningBanner,
-  ErrorBanner,
-  NotificationBanner,
+  Banner,
   BannerMessage,
+  WARNING,
+  NOTIFICATION,
+  ERROR,
 };

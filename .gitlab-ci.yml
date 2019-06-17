@@ -134,6 +134,7 @@ review:
 cypress:review:
   image: cypress/base:10.15.3
   stage: cypress
+  allow_failure: true
   script:
     - CI_ENVIRONMENT_URL=`cat environmentUrl.txt`
     - yarn cy:run --record --key $CYPRESS_RECORD_KEY --config baseUrl=$CI_ENVIRONMENT_URL

@@ -14,6 +14,7 @@ type IconButtonPropsType = {
   disabled?: boolean,
   hidden?: boolean,
   id?: string,
+  padding?: string,
 };
 
 const IconButton = React.forwardRef(({
@@ -27,6 +28,7 @@ const IconButton = React.forwardRef(({
   disabled,
   hidden,
   id,
+  padding = '0px',
 }:IconButtonPropsType, ref) => (
   <Actionable onClick={onClick} keepFocus={keepFocus}>
     <Button
@@ -38,6 +40,7 @@ const IconButton = React.forwardRef(({
       disabled={disabled}
       hidden={hidden}
       background={background}
+      padding={padding}
     >
       { children }
     </Button>
