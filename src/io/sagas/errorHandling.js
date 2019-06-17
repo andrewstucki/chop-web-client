@@ -4,7 +4,7 @@ import {addError} from '../../errors/dux';
 import type {Saga} from 'redux-saga';
 import {
   removeAuthentication,
-} from '../../feed/dux';
+} from '../../auth/dux';
 
 // eslint-disable-next-line no-console
 const log = message => console.log(message);

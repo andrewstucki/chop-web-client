@@ -14,7 +14,7 @@ type GraphQLInt = number | null;
 type GraphQLBoolean = boolean | null;
 
 type AuthenticateType = {
-  type: 'LegacyAuth' | 'BasicAuth' | 'Refresh',
+  type: 'LegacyAuth' | 'BasicAuth' | 'Refresh' | 'GuestAuth',
   legacyToken?: string,
   refreshToken?: string,
   email?: string,
@@ -202,11 +202,23 @@ export type GraphQLGeneratePdfType = {
   generatePdf: GraphQLString,
 };
 
+export type GraphQLRequestPasswordResetType = {
+  requestPasswordReset: GraphQLString,
+};
+
+export type GraphQLResetPasswordType = {
+  resetPassword: GraphQLString,
+};
+
 const accessToken = `
 mutation AccessToken($type: String!, $email: String, $password: String, $legacyToken: String, $refreshToken: String) {
   authenticate(type: $type, email: $email, password: $password, legacyToken: $legacyToken, refreshToken: $refreshToken) {
     accessToken
     refreshToken
+    errors {
+      code
+      message
+    }
   }
 }
 `;
@@ -426,6 +438,24 @@ mutation generatePdf($html: String!) {
 }
 `;
 
+const requestPasswordReset = `
+mutation requestPasswordReset($email: String!) {
+  requestPasswordReset(email: $email)
+}
+`;
+
+const resetPassword = `
+mutation resetPassword($resetToken: String!, $password: String!) {
+  resetPassword(resetToken: $resetToken, password: $password) {
+    success
+    errors {
+      code
+      message
+    }
+  }
+}
+`;
+
 const currentState = `
 query CurrentState($needLanguages: Boolean!, $limit: Int) {
   ${currentEvent}
@@ -466,9 +496,6 @@ const queries = {
       email,
       password,
     });
-
-    setAccessToken(data.authenticate.accessToken);
-
     return data;
   },
 
@@ -492,6 +519,11 @@ const queries = {
     await queries.authenticate({
       type: 'Refresh',
       refreshToken,
+    }),
+
+  authenticateByGuestAuth: async (): Promise<GraphQLAuthType> =>
+    await queries.authenticate({
+      type: 'GuestAuth',
     }),
 
   currentState: async (
@@ -569,6 +601,23 @@ const queries = {
       generatePdf,
       {
         html,
+      }
+    ),
+
+  requestPasswordReset: async (email: string) =>
+    await client.request(
+      requestPasswordReset,
+      {
+        email,
+      }
+    ),
+
+  resetPassword: async (resetToken: string, password: string) =>
+    await client.request(
+      resetPassword,
+      {
+        resetToken,
+        password,
       }
     ),
 };

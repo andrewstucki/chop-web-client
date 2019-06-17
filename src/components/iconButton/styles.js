@@ -4,6 +4,7 @@ import styled from 'styled-components';
 type IconButtonPropsType = {
   size: number,
   background: string,
+  padding: string,
 };
 
 const IconButton = styled.button`
@@ -13,9 +14,9 @@ const IconButton = styled.button`
   border: none;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: ${(props:IconButtonPropsType) => props.padding};
   background: ${(props:IconButtonPropsType) => props.background};
-  width: ${(props:IconButtonPropsType) => props.size}px;
+  min-width: ${(props:IconButtonPropsType) => props.size}px;
   height: ${(props:IconButtonPropsType) => props.size}px;
 `;
 

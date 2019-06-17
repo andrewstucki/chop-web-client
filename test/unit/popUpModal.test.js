@@ -5,16 +5,16 @@ import { fireEvent } from '@testing-library/react';
 import { createStore } from 'redux';
 import reducer, { defaultState as defaultChopState } from '../../src/chop/dux';
 import { defaultState } from '../../src/feed/dux';
-import {
-  togglePopUpModal,
-  leaveChatType,
-  muteSubscriberType,
-} from '../../src/popUpModal/dux';
+import { togglePopUpModal } from '../../src/popUpModal/dux';
+import { leaveChatType } from '../../src/popUpModal/leaveChat/dux';
+import { muteSubscriberType } from '../../src/popUpModal/muteSubscriber/dux';
 import PopUpModal from '../../src/popUpModal';
 import LeaveChat from '../../src/popUpModal/leaveChat/leaveChat';
 import LeaveChatConnected from '../../src/popUpModal/leaveChat';
 import MuteSubscriber from '../../src/popUpModal/muteSubscriber/muteSubscriber';
 import MuteSubscriberConnected from '../../src/popUpModal/muteSubscriber';
+import LoginConnected from '../../src/popUpModal/login';
+import GuestNicknameConnected from '../../src/popUpModal/guestNickname';
 import { renderWithReduxAndTheme } from '../testUtils';
 
 
@@ -111,13 +111,13 @@ describe('PopUpModal tests', () => {
     const togglePopUpModal = sinon.spy();
     const muteSubscriber = sinon.spy();
     const publishMuteSubscriberNotification = sinon.spy();
-    const mutedNotificationBanner = sinon.spy();
+    const mutedBanner = sinon.spy();
     const { getByTestId } = renderWithReduxAndTheme(
       <MuteSubscriber
         togglePopUpModal={togglePopUpModal}
         muteSubscriber={muteSubscriber}
         publishMuteSubscriberNotification={publishMuteSubscriberNotification}
-        mutedNotificationBanner={mutedNotificationBanner}
+        mutedBanner={mutedBanner}
         currentSubscriber={currentSubscriber.nickname}
         subscriber={otherSubscriber.nickname}
         hostChannel='host'
@@ -137,7 +137,7 @@ describe('PopUpModal tests', () => {
     expect(togglePopUpModal.calledTwice).toEqual(true);
     expect(publishMuteSubscriberNotification.calledOnce).toEqual(true);
     expect(muteSubscriber.calledOnce).toEqual(true);
-    expect(mutedNotificationBanner.calledOnce).toEqual(true);
+    expect(mutedBanner.calledOnce).toEqual(true);
   });
 
   test('Modal has background', () => {
@@ -249,5 +249,82 @@ describe('PopUpModal tests', () => {
       />, state
     );
     expect(getByTestId('leaveChat-modal')).toBeTruthy();
+  });
+
+  test('Login modal displays', () => {
+    const state = {
+      feed: {
+        ...defaultState,
+        isPopUpModalVisible: true,
+        popUpModal: {
+          type: 'LOGIN',
+        },
+        currentSubscriber,
+        channels: {
+          host: {
+            id: 'Host',
+            name: 'host',
+            moments: [],
+            anchorMoments: [],
+          },
+          '67890': {
+            id: '67890',
+            name: 'direct',
+            moments: [],
+            anchorMoments: [],
+            subscribers: [
+              currentSubscriber,
+              otherSubscriber,
+            ],
+          },
+        },
+        focusedChannel: '67890',
+      },
+    };
+    const { getByTestId } = renderWithReduxAndTheme(
+      <LoginConnected
+        togglePopUpModal={() => {}}
+      />, state
+    );
+    expect(getByTestId('login-modal')).toBeTruthy();
+    expect(getByTestId('login-modal')).toBeTruthy();
+  });
+
+  test('Guest nickname modal displays', () => {
+    const state = {
+      feed: {
+        ...defaultState,
+        isPopUpModalVisible: true,
+        popUpModal: {
+          type: 'GUEST_NICKNAME',
+        },
+        currentSubscriber,
+        channels: {
+          host: {
+            id: 'Host',
+            name: 'host',
+            moments: [],
+            anchorMoments: [],
+          },
+          '67890': {
+            id: '67890',
+            name: 'direct',
+            moments: [],
+            anchorMoments: [],
+            subscribers: [
+              currentSubscriber,
+              otherSubscriber,
+            ],
+          },
+        },
+        focusedChannel: '67890',
+      },
+    };
+    const { getByTestId } = renderWithReduxAndTheme(
+      <GuestNicknameConnected
+        togglePopUpModal={() => {}}
+      />, state
+    );
+    expect(getByTestId('guestNickname-modal')).toBeTruthy();
   });
 });

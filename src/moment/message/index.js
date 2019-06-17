@@ -6,10 +6,8 @@ import {
   deleteMessage,
   publishDeleteMessage,
 } from './dux';
-import {
-  muteSubscriberType,
-  togglePopUpModal,
-} from '../../popUpModal/dux';
+import { togglePopUpModal } from '../../popUpModal/dux';
+import { muteSubscriberType } from '../../popUpModal/muteSubscriber/dux';
 import { addPlaceholderChannel } from '../../feed/dux';
 import { setPaneToChat } from '../../pane/content/chat/dux';
 import { PRIMARY_PANE } from '../../pane/dux';

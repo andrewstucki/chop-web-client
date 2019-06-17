@@ -14,8 +14,8 @@ describe('NotificationBanner test', () => {
         feed: {
           ...defaultState.feed,
           notificationBanner: {
-            message: 'G. Boole',
-            bannerType: 'MUTED_NOTIFICATION',
+            type: 'MUTED',
+            name: 'G. Boole',
           },
         },
       },
@@ -23,10 +23,7 @@ describe('NotificationBanner test', () => {
     expect(getByTestId('muted-notification-banner')).toBeTruthy();
     fireEvent.click(getByTestId('banner-dismiss-button'));
     expect(store.getState().feed.notificationBanner).toEqual(
-      {
-        message: '',
-        bannerType: '',
-      },
+      {},
     );
   });
 
@@ -37,8 +34,8 @@ describe('NotificationBanner test', () => {
         feed: {
           ...defaultState,
           notificationBanner: {
-            message: 'COMPACT',
-            bannerType: 'TEXT_MODE_NOTIFICATION',
+            type: 'TEXT_MODE',
+            mode: 'COMPACT',
           },
         },
       },
@@ -56,8 +53,8 @@ describe('NotificationBanner test', () => {
         feed: {
           ...defaultState,
           notificationBanner: {
-            message: 'There was an error.',
-            bannerType: 'ERROR',
+            type: 'ERROR',
+            error: 'There was an error.',
           },
         },
       },
@@ -75,8 +72,8 @@ describe('NotificationBanner test', () => {
         feed: {
           ...defaultState,
           notificationBanner: {
-            message: 'This is a warning.',
-            bannerType: 'WARNING',
+            type: 'WARNING',
+            warning: 'This is a warning.',
           },
         },
       },

@@ -29,11 +29,6 @@ const openMenu = (): OpenMenuType => (
   }
 );
 
-const logout = (): void => {
-  document.cookie = 'legacy_token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-  global.location.assign(`${global.location.origin}/sessions/sign_out`);
-};
-
 // Exports
 
 export {
@@ -49,5 +44,4 @@ export type {
 export {
   closeMenu,
   openMenu,
-  logout,
 };

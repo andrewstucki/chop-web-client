@@ -2,6 +2,7 @@
 import React from 'react';
 import Chat from '../../src/chat/chat';
 import ConnectedChat from '../../src/chat';
+import sinon from 'sinon';
 import { fireEvent } from '@testing-library/react';
 import { mockDate, renderWithReduxAndTheme } from '../testUtils';
 import { defaultState as defaultFeedState } from '../../src/feed/dux';
@@ -19,6 +20,7 @@ const otherSubscriber = {
 
 describe('Chat tests', () => {
   test('has a InputField and Button', () => {
+    const saveMessage = sinon.spy();
     const { getByTestId } = renderWithReduxAndTheme(
       <Chat
         setChatFocus={function () {}}
@@ -32,12 +34,15 @@ describe('Chat tests', () => {
         publishMessage={() => {}}
         hideReactions={true}
         translateLanguage='en'
+        message=''
+        saveMessage={saveMessage}
+        clearMessage={() => {}}
+        setNickname={() => {}}
       />
     );
 
     fireEvent.change(getByTestId('chat-input'), { target: { value: 'Hello' } });
-    expect(getByTestId('chat-input').value).toEqual('Hello');
-    expect(getByTestId('chat-submit-button')).toBeTruthy();
+    expect(saveMessage.calledOnce).toEqual(true);
   });
 
   test('has a InputField and disabled Button', () => {
@@ -54,10 +59,38 @@ describe('Chat tests', () => {
         publishMessage={() => {}}
         hideReactions={true}
         translateLanguage='en'
+        message=''
+        saveMessage={() => {}}
+        clearMessage={() => {}}
+        setNickname={() => {}}
       />
     );
 
     expect(getByTestId('chat-submit-button')).toHaveProperty('disabled');
+  });
+
+  test('sets the message based on the last message state', () => {
+    const { getByTestId } = renderWithReduxAndTheme(
+      <Chat
+        setChatFocus={function () {}}
+        toggleHideVideo={function () {}}
+        buttonOnClick={function () {}}
+        focused={false}
+        enterDetect={function () {}}
+        currentPlaceholder=""
+        currentChannel="public"
+        currentSubscriber={otherSubscriber}
+        publishMessage={() => {}}
+        hideReactions={true}
+        translateLanguage='en'
+        message='hi'
+        saveMessage={() => {}}
+        clearMessage={() => {}}
+        setNickname={() => {}}
+      />
+    );
+    const chatInput = getByTestId('chat-input');
+    expect(chatInput.value).toBe('hi');
   });
 
   test('focuses the correct channel', () => {
@@ -107,6 +140,7 @@ describe('Chat tests', () => {
             scrollPosition: 0,
             sawLastMomentAt: 0,
             subscribers: [],
+            message: '',
           },
         },
         focusedChannel: 'public',
@@ -170,6 +204,7 @@ describe('Chat tests', () => {
       channels: {
         public: {
           ...initialState.feed.channels.public,
+          message: '',
           moments: [
             {
               id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
@@ -241,6 +276,7 @@ describe('Chat tests', () => {
       channels: {
         public: {
           ...initialState.feed.channels.public,
+          message: '',
           moments: [
             {
               id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
@@ -292,6 +328,23 @@ describe('Chat tests', () => {
     fireEvent.change(getByTestId('chat-input'), { target: { value: 'Hello' } });
     fireEvent.keyPress(getByTestId('chat-input'), { key: 'Space', code: 32, charCode: 32 });
 
-    expect(store.getState()).toEqual(initialState);
+    expect(store.getState()).toEqual({
+      ...initialState,
+      feed: {
+        ...initialState.feed,
+        lastAction: {
+          id: 'public',
+          message: 'Hello',
+          type: 'SET_CHANNEL_MESSAGE',
+        },
+        channels: {
+          ...initialState.feed.channels,
+          public: {
+            ...initialState.feed.channels.public,
+            message: 'Hello',
+          },
+        },
+      },
+    });
   });
 });

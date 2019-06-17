@@ -55,10 +55,10 @@ const LeaveChatPopUpModal = (
         </Text>
       }
       <ActionContainer>
-        <Button type={REGRESS} onClick={togglePopUpModal} data-testid='leaveChat-keepChatting' >
+        <Button buttonType={REGRESS} onClick={togglePopUpModal} data-testid='leaveChat-keepChatting' >
           { t('leave_chat.keep_chatting') }
         </Button>
-        <Button type={PROGRESS} onClick={callLeaveChannel} data-testid='leaveChat-leaveButton' >
+        <Button buttonType={PROGRESS} onClick={callLeaveChannel} data-testid='leaveChat-leaveButton' >
           { t('leave_chat.leave') }
         </Button>
       </ActionContainer>

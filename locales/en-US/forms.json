@@ -9,12 +9,45 @@
     "title": "Log In",
     "email": "Email",
     "password": "Password",
-    "submit": "Log In"
+    "submit": "Log In",
+    "hasAccount": "Already have an account?",
+    "sign_up": "Sign Up",
+    "forgot": "Forgot",
+    "error": "The email or password you entered is incorrect.",
+    "blank_email": "Email cannot be blank.",
+    "blank_password": "Password cannot be blank.",
+    "invalid_email": "Email is invalid."
   },
   "mute_subscriber": {
     "all_messages": "All of their messages will be deleted.",
     "cancel": "Cancel",
     "confirm": "Are you sure you want to mute <strong>{{subscriber}}</strong>?",
     "mute": "Mute"
+  },
+  "guest_nickname": {
+    "title": "Pick a Nickname",
+    "post": "Post",
+    "blank_error": "Nickname cannot be blank.",
+    "unavailable_error": "Nickname already in use.",
+    "nickname": "Nickname",
+    "description": "You will need one to chat."
+  },
+  "request_password_reset": {
+    "title": "Reset Password",
+    "description": "We will send your password reset instructions to your email address.",
+    "send": "Send Instructions",
+    "email": "Email",
+    "blank_email": "Email cannot be blank.",
+    "confirmation": "If the email exists, we've sent the instructions to {{email}}.",
+    "close": "Okay",
+    "invalid_email": "Email is invalid."
+  },
+  "reset_password": {
+    "title": "Choose a New Password",
+    "password": "New Password",
+    "confirm_password": "Confirm new password",
+    "blank_password": "Password cannot be blank.",
+    "save": "Save",
+    "passwords_dont_match": "Passwords don't match."
   }
 }

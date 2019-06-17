@@ -2,6 +2,7 @@
 import  {
   getFirstInitial,
   getMessageTimestamp,
+  validEmail,
 } from '../../src/util';
 
 describe('Util tests', () => {
@@ -24,5 +25,17 @@ describe('Util tests', () => {
     const today = new Date();
     const result = getMessageTimestamp(today.toString());
     expect(result).toMatch(/^(\d{1,2}):(\d{2})(\s*[ap]m?)$/i);
+  });
+
+  test('invalid email', () => {
+    const email = 'joe.com';
+    const result = validEmail(email);
+    expect(result).toEqual(false);
+  });
+
+  test('valid email', () => {
+    const email = 'joe@test.com';
+    const result = validEmail(email);
+    expect(result).toEqual(true);
   });
 });

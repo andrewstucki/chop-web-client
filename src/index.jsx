@@ -12,13 +12,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './io/saga';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
 import Chop from './chop';
-import Login from './login';
 import reducer from './chop/dux';
 import actorMiddleware from './middleware/actor-middleware';
 import ChatActor from './io/chat';
@@ -37,7 +31,6 @@ import Converter from './io/converter';
 import SilentAudio from '../assets/audio/250-milliseconds-of-silence.mp3';
 
 declare var ENV:string;
-declare var ROUTE_BASENAME:string;
 declare var GTM;
 declare var CWC_HOST:string;
 
@@ -123,12 +116,7 @@ if (content) {
                   { /* This helps with autoplaying audio later on in the application */ }
                   <iframe src={SilentAudio} allow='autoplay' id='silentAudio' title='silentAudio' style={{display: 'none'}}></iframe>
                   <GlobalStyle />
-                  <Router basename={ROUTE_BASENAME}>
-                    <Switch>
-                      <Route exact path='/' component={Chop}/>
-                      <Route exact path='/login' component={Login}/>
-                    </Switch>
-                  </Router>
+                  <Chop />
                 </>
             </ThemeProvider>
           </ErrorBoundary>

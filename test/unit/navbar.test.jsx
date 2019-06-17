@@ -46,6 +46,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
+          host={true}
         />
       );
     });
@@ -93,6 +94,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
+          host={true}
         />
       );
     });
@@ -142,6 +144,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
+          host={true}
         />
       );
     });
@@ -166,6 +169,9 @@ describe('Navbar tests', () => {
             currentSubscriber: {
               ...defaultState.subscriber.currentSubscriber,
               id: '456',
+              role: {
+                label: 'Host',
+              },
             },
           },
           feed: {
@@ -268,6 +274,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
+          host={true}
         />
       );
     });
@@ -339,6 +346,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
+          host={true}
         />
       );
     });
@@ -380,6 +388,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
+          host={true}
         />
       );
     });
@@ -452,6 +461,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={setNavbarIndex}
           navbarIndex={0}
+          host={true}
         />
       );
     });

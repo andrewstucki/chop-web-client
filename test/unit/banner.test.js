@@ -1,35 +1,52 @@
-import { mutedNotificationBanner, warningNotificationBanner, errorNotificationBanner, textModeNotificationBanner } from '../../src/banner/dux';
+import { mutedBanner, warningBanner, errorBanner, textModeBanner, loggedInBanner } from '../../src/banner/dux';
 
 describe('Banner Action Creators', () => {
   test('Mute notification', () => {
-    expect(mutedNotificationBanner('guest')).toEqual({
-      bannerType: 'MUTED_NOTIFICATION',
-      message: 'guest',
-      type: 'SET_NOTIFICATION_BANNER',
+    expect(mutedBanner('guest')).toEqual({
+      type: 'SET_BANNER',
+      banner: {
+        type: 'MUTED',
+        name: 'guest',
+      },
     });
   });
 
   test('Warning banner', () => {
-    expect(warningNotificationBanner('warning message')).toEqual({
-      bannerType: 'WARNING',
-      message: 'warning message',
-      type: 'SET_NOTIFICATION_BANNER',
+    expect(warningBanner('warning message')).toEqual({
+      type: 'SET_BANNER',
+      banner: {
+        type: 'WARNING',
+        warning: 'warning message',
+      },
     });
   });
 
   test('Error banner', () => {
-    expect(errorNotificationBanner('error message')).toEqual({
-      bannerType: 'ERROR',
-      message: 'error message',
-      type: 'SET_NOTIFICATION_BANNER',
+    expect(errorBanner('error message')).toEqual({
+      type: 'SET_BANNER',
+      banner: {
+        type: 'ERROR',
+        error: 'error message',
+      },
     });
   });
 
   test('Text mode banner', () => {
-    expect(textModeNotificationBanner('COMPACT')).toEqual({
-      bannerType: 'TEXT_MODE_NOTIFICATION',
-      message: 'COMPACT',
-      type: 'SET_NOTIFICATION_BANNER',
+    expect(textModeBanner('COMPACT')).toEqual({
+      type: 'SET_BANNER',
+      banner: {
+        type: 'TEXT_MODE',
+        mode: 'COMPACT',
+      },
+    });
+  });
+
+  test('logged in banner', () => {
+    expect(loggedInBanner()).toEqual({
+      type: 'SET_BANNER',
+      banner: {
+        type: 'LOGGED_IN',
+      },
     });
   });
 });

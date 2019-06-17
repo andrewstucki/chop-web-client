@@ -24,4 +24,11 @@ describe('Chop', () => {
       });
     expect(document.title).toEqual('live Jedi Academy');
   });
+
+  test('Displays password reset modal', () => {
+    delete global.location;
+    global.location = { search: `?reset_token=123456` };
+    const { queryAllByTestId } = renderWithReduxAndTheme(<ChopContainer/>);
+    expect(queryAllByTestId('resetPassword-modal')).toBeTruthy();
+  });
 });
