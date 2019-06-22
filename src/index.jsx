@@ -54,7 +54,7 @@ const persistConfig = {
   key: 'root',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: ['sequence', 'schedule'],
+  blacklist: ['sequence', 'schedule','subscriber','event'],
   transforms: [
     createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt', 'languageOptions']),
     createExpirationTransform({

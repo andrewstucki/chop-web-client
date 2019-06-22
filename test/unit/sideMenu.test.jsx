@@ -83,7 +83,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={true}
         login={() => {}}
-        host={true}
+        isHost={true}
       />
     );
     expect(queryByTestId('side-menu')).toBeTruthy();
@@ -112,7 +112,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={true}
         login={() => {}}
-        host={true}
+        isHost={true}
       />
     );
     expect(queryByTestId('guest-experience')).toBeTruthy();
@@ -141,7 +141,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={true}
         login={() => {}}
-        host={true}
+        isHost={true}
       />
     );
     expect(queryByTestId('feedback')).toBeTruthy();
@@ -172,7 +172,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={true}
         login={() => {}}
-        host={true}
+        isHost={true}
       />
     );
     const logout = getByTestId('logout');
@@ -204,7 +204,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={true}
         login={() => {}}
-        host={true}
+        isHost={true}
       />
     );
     expect(queryByTestId('organization-title')).toBeTruthy();
@@ -233,7 +233,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={true}
         login={() => {}}
-        host={true}
+        isHost={true}
       />
     );
     expect(queryByTestId('event-title')).toBeTruthy();
@@ -264,7 +264,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={true}
         login={() => {}}
-        host={true}
+        isHost={true}
       />
     );
     expect(queryByTestId('side-menu-avatar')).toBeTruthy;
@@ -304,7 +304,7 @@ describe('SideBar tests', () => {
         currentLanguage='en'
         authenticated={false}
         login={() => {}}
-        host={false}
+        isHost={false}
       />
     );
     expect(queryByTestId('side-menu-login')).toBeTruthy;

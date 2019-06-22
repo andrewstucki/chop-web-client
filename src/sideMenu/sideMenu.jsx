@@ -32,7 +32,7 @@ type SideMenuType = {
   currentSubscriber: PrivateSubscriberType,
   currentLanguage: string,
   authenticated: boolean,
-  host: boolean,
+  isHost: boolean,
 };
 
 const SideMenu = (
@@ -50,7 +50,7 @@ const SideMenu = (
     currentLanguage,
     authenticated,
     login,
-    host,
+    isHost,
   }: SideMenuType
 ) => {
   const { t } = useTranslation();
@@ -108,7 +108,7 @@ const SideMenu = (
 
           <TextModeToggle />
 
-          { host &&
+          { isHost &&
             <>
               <hr/>
 
@@ -122,7 +122,7 @@ const SideMenu = (
                     <GuestExperienceLink/>
                   </LinkIcon>
                 </ExternalLink>
-    
+
                 { hasAdminLinkPermissions &&
                 <ExternalLink
                   data-testid="admin-link"
@@ -134,7 +134,7 @@ const SideMenu = (
                   </LinkIcon>
                 </ExternalLink>
                 }
-    
+
                 <ExternalLink
                   data-testid="support"
                   target="_blank"
@@ -146,7 +146,7 @@ const SideMenu = (
                     <FeedbackLink/>
                   </LinkIcon>
                 </ExternalLink>
-    
+
                 <ExternalLink
                   data-testid="feedback"
                   target="_blank"

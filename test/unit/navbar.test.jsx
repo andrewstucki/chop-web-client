@@ -46,7 +46,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
-          host={true}
+          isHost={true}
         />
       );
     });
@@ -94,7 +94,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
-          host={true}
+          isHost={true}
         />
       );
     });
@@ -144,7 +144,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
-          host={true}
+          isHost={true}
         />
       );
     });
@@ -171,6 +171,9 @@ describe('Navbar tests', () => {
               id: '456',
               role: {
                 label: 'Host',
+                permissions: [
+                  'feed.host.read',
+                ],
               },
             },
           },
@@ -274,7 +277,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
-          host={true}
+          isHost={true}
         />
       );
     });
@@ -346,7 +349,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
-          host={true}
+          isHost={true}
         />
       );
     });
@@ -388,7 +391,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={() => {}}
           navbarIndex={0}
-          host={true}
+          isHost={true}
         />
       );
     });
@@ -461,7 +464,7 @@ describe('Navbar tests', () => {
           setPaneToTab={() => {}}
           setNavbarIndex={setNavbarIndex}
           navbarIndex={0}
-          host={true}
+          isHost={true}
         />
       );
     });

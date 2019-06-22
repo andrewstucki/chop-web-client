@@ -66,8 +66,8 @@ const LoginPopUpModal = (
     } else {
       setValues(
         {
-          ...values, 
-          emailBlank: values.email === '', 
+          ...values,
+          emailBlank: values.email === '',
           emailInvalid: !validEmail(values.email) && values.email !== '',
           passwordBlank: values.password === '',
         }
@@ -100,7 +100,7 @@ const LoginPopUpModal = (
           <ErrorMessage visible={values.passwordBlank}>{ t('login.blank_password') }</ErrorMessage>
         </InputWrapper>
         <ActionContainer>
-          <Button buttonType={REGRESS} type="button" onClick="" data-testid='login-signUp' >
+          <Button buttonType={REGRESS} type="button" onClick={() => {}} data-testid='login-signUp' >
             { t('login.sign_up') }
           </Button>
           <SubmitButton data-testid='login-loginButton' small={isSmall} type="submit" onClick={handleLogin}>

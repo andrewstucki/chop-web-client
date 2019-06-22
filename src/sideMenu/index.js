@@ -6,7 +6,7 @@ import { setLanguage } from '../languageSelector/dux';
 import SideMenu from './sideMenu';
 import { togglePopUpModal } from '../popUpModal/dux';
 import { loginType } from '../popUpModal/login/dux';
-import { clearSubscriber, isHost } from '../subscriber/dux';
+import { clearSubscriber, hasPermissions } from '../subscriber/dux';
 import { loggedOutBanner } from '../banner/dux';
 import { guestAuth } from '../auth/dux';
 
@@ -23,7 +23,7 @@ const mapStateToProps = state => {
     currentSubscriber: state.subscriber.currentSubscriber,
     currentLanguage: state.feed.currentLanguage,
     authenticated: state.feed.isAuthenticated,
-    host: isHost(state),
+    isHost: hasPermissions(state, ['feed.host.read','feed.host.write']),
   };
 };
 

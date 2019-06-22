@@ -14,7 +14,7 @@ import { useScroll } from '../hooks';
 
 type NavbarProps = {
   items: Array<NavbarItemType>,
-  host: boolean,
+  isHost: boolean,
   setPaneToEvent: (name: string, channelId: string) => void,
   setPaneToChat: (name: string, channelId: string) => void,
   setPaneToTab: (name: string, type: TabType) => void,
@@ -22,12 +22,12 @@ type NavbarProps = {
   navbarIndex: number,
 };
 
-const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setNavbarIndex, navbarIndex, host }: NavbarProps) => {
+const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setNavbarIndex, navbarIndex, isHost }: NavbarProps) => {
   const wrapper = useRef<?HTMLElement>();
   const itemWithActions = useRef<?HTMLElement>();
   const itemsHaveActions = items.filter(item => item.hasActions).length > 0;
-  host ? items : items = items.filter(item => item.name !== 'Host' && item.name !== 'HOST_INFO'); // eslint-disable-line no-param-reassign
-  
+  const filteredItems = isHost ? items : items.filter(item => item.name !== 'Host' && item.name !== 'HOST_INFO');
+
   const handleItemClick = (event:SyntheticMouseEvent<HTMLButtonElement>, item: NavbarItemType):void => {
     const { index } = event.currentTarget.dataset;
     const newIndex = parseInt(index);
@@ -84,7 +84,7 @@ const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setN
         </Actionable>
       }
       {
-        items.map((item, index) => (
+        filteredItems.map((item, index) => (
           <NavbarItem
             ref={itemWithActions}
             key={index}

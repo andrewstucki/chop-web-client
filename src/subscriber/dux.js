@@ -59,7 +59,7 @@ export type UpdateSubscriberType = {
   input: SubscriberInputType,
 };
 
-export type SubscriberInputType = 
+export type SubscriberInputType =
  | UpdateSubscriberPreferencesType
  | UpdateSubscriberNicknameType;
 
@@ -376,11 +376,6 @@ export const getCurrentSubscriberAsSharedSubscriber = createSelector<StateType, 
 export const getTextMode = createSelector<StateType, void, SharedSubscriberType, TextModeType>(
   [getCurrentSubscriber],
   subscriber => subscriber.preferences.textMode
-);
-
-export const isHost = createSelector<StateType, void, SharedSubscriberType, PrivateSubscriberType>(
-  [getCurrentSubscriber],
-  subscriber => subscriber.role.label === 'Host' || subscriber.role.label === 'Admin'
 );
 
 export const updateTextMode = (mode: TextModeType): UpdateSubscriberPreferencesType => (
