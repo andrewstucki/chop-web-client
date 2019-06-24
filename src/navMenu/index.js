@@ -8,6 +8,7 @@ import { getDirectChannels, getHostChannel, getPlaceholderChannels, getPublicCha
 import {openMenu} from '../sideMenu/dux';
 import { toggleNavMenuExpanded, isNavMenuExpanded } from './dux';
 import { getCurrentTabType } from '../selectors/channelSelectors';
+import { hasPermissions } from '../subscriber/dux';
 
 const mapStateToProps = state => {
   const placeholderChannels = getPlaceholderChannels(state);
@@ -20,6 +21,7 @@ const mapStateToProps = state => {
     currentTabType: getCurrentTabType(state),
     tabs: getTabs(state),
     expanded: isNavMenuExpanded(state),
+    isHost: hasPermissions(state, ['feed.host.read','feed.host.write']),
   };
 };
 
