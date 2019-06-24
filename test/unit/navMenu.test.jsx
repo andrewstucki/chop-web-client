@@ -9,7 +9,7 @@ import { NavMenuButton, NavMenuHeader, NavMenuBodySection, NavMenuTextWrapper } 
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const getMountedNavMenu = (expanded?:boolean) => {
+const getMountedNavMenu = (expanded:boolean, isHost:boolean) => {
   const _expanded = typeof expanded === 'boolean' ? expanded : true;
   return mountWithTheme(
     <NavMenu
@@ -53,13 +53,14 @@ const getMountedNavMenu = (expanded?:boolean) => {
       expanded={_expanded}
       toggleExpanded={() => {}}
       currentTabType=""
+      isHost={isHost}
     />
   );
 };
 
 describe('NavMenu tests', () => {
   test('NavMenu renders expanded', () => {
-    const wrapper = getMountedNavMenu();
+    const wrapper = getMountedNavMenu(true, true);
     expect(wrapper.exists(NavMenu)).toBeTruthy();
     expect(wrapper.find(NavMenuHeader).text()).toEqual('Church of Awesome!');
     expect(wrapper.find(NavMenuBodySection).length).toBe(2);
@@ -68,12 +69,12 @@ describe('NavMenu tests', () => {
   });
 
   test('NavMenu renders collapsed', () => {
-    const wrapper = getMountedNavMenu(false);
+    const wrapper = getMountedNavMenu(false, false);
     expect(wrapper.exists(NavMenu)).toBeTruthy();
     expect(wrapper.find(NavMenuHeader).text()).not.toEqual('Church of Awesome!');
     expect(wrapper.find(NavMenuBodySection).length).toBe(2);
     expect(wrapper.find(NavMenuBodySection).at(0).find(NavMenuTextWrapper).length).toBe(0);
-    expect(wrapper.find(NavMenuBodySection).at(1).find(NavMenuButton).length).toBe(6);
+    expect(wrapper.find(NavMenuBodySection).at(1).find(NavMenuButton).length).toBe(4);
     expect(wrapper.find(NavMenuBodySection).at(1).find(NavMenuTextWrapper).length).toBe(0);
   });
 });

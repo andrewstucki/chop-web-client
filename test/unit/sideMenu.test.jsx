@@ -4,8 +4,10 @@ import sinon from 'sinon';
 import { renderWithReduxAndTheme } from '../testUtils';
 
 import SideMenu from '../../src/sideMenu/sideMenu';
+import SideMenuIndex from '../../src/sideMenu';
 import { fireEvent } from '@testing-library/react';
 import type {PrivateSubscriberType} from '../../src/subscriber/dux';
+import { defaultState } from '../../src/chop/dux';
 
 const languageOptions = [
   {
@@ -175,7 +177,7 @@ describe('SideBar tests', () => {
         isHost={true}
       />
     );
-    const logout = getByTestId('logout');
+    const logout = getByTestId('side-menu-logout');
     expect(logout).toBeTruthy();
     expect(logout.textContent).toEqual('File log_out');
     fireEvent.click(logout);
@@ -308,5 +310,31 @@ describe('SideBar tests', () => {
       />
     );
     expect(queryByTestId('side-menu-login')).toBeTruthy;
+  });
+
+  test('Login modal displays', () => {
+    const { queryByTestId } = renderWithReduxAndTheme(
+      <SideMenuIndex/>
+    );
+    expect(queryByTestId('side-menu-login')).toBeTruthy;
+    fireEvent.click(queryByTestId('side-menu-login'));
+    expect(queryByTestId('login-modal')).toBeTruthy;
+  });
+
+  test('Logout updates the side menu', () => {
+    const { queryByTestId } = renderWithReduxAndTheme(
+      <SideMenuIndex/>,
+      {
+        ...defaultState,
+        feed: {
+          ...defaultState.feed,
+          isAuthenticated: true,
+        },
+      }
+    );
+    expect(queryByTestId('side-menu-logout')).toBeTruthy;
+    fireEvent.click(queryByTestId('side-menu-logout'));
+    expect(queryByTestId('side-menu-login')).toBeTruthy;
+    expect(queryByTestId('logged-out-notification-banner')).toBeTruthy;
   });
 });

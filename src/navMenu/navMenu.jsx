@@ -31,7 +31,7 @@ import { theme } from '../styles';
 import {PRIMARY_PANE} from '../pane/dux';
 import {HOST_INFO} from '../hostInfo/dux';
 import {getFirstInitial} from '../util';
-import {MediumDown, LargeDown} from '../util/responsive';
+import {MediumDown, LargeDown, MediumUp} from '../util/responsive';
 import {DirectChatAvatar} from '../components/styles';
 import Pip from '../components/pip';
 import { useTranslation } from 'react-i18next';
@@ -100,7 +100,7 @@ const NavMenuMinifyArrow = React.memo(({onClick, expanded}) => (
 
 NavMenuMinifyArrow.displayName = 'NavMenuMinifyArrow';
 
-const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat, hostChannel, setPaneToTab, directChannels, openMenu, expanded, toggleExpanded, currentTabType}) => {
+const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat, hostChannel, setPaneToTab, directChannels, openMenu, expanded, toggleExpanded, currentTabType, isHost}) => {
   const { t } = useTranslation();
   return (
     <Wrapper expanded={expanded}>
@@ -127,18 +127,29 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
           </NavMenuBodySection>
           }
           <NavMenuBodySection>
-            <MediumDown>
-              <NavMenuItem Icon={Chat} text={t('chat')} expanded={expanded} selected={publicChannel.isCurrent}
-                hasActions={publicChannel.hasActions} hasNewMessages={publicChannel.hasNewMessages}
-                onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)}/>
-            </MediumDown>
-            <LargeDown>
-              <NavMenuItem Icon={HostChat} text={t('host_chat')} expanded={expanded} selected={hostChannel.isCurrent}
-                hasActions={hostChannel.hasActions} hasNewMessages={hostChannel.hasNewMessages}
-                onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)}/>
-            </LargeDown>
-            <NavMenuItem Icon={HostInfo} text={t('host_info')} expanded={expanded} selected={currentTabType === HOST_INFO}
-              onClick={() => setPaneToTab(PRIMARY_PANE, HOST_INFO)}/>
+            { !isHost &&
+              <MediumUp>
+                <NavMenuItem Icon={Chat} text={t('chat')} expanded={expanded} selected={publicChannel.isCurrent}
+                  hasActions={publicChannel.hasActions} hasNewMessages={publicChannel.hasNewMessages}
+                  onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)}/>
+              </MediumUp>
+            }
+            { isHost &&
+              <>
+                <MediumDown>
+                  <NavMenuItem Icon={Chat} text={t('chat')} expanded={expanded} selected={publicChannel.isCurrent}
+                    hasActions={publicChannel.hasActions} hasNewMessages={publicChannel.hasNewMessages}
+                    onClick={() => setPaneToEvent(PRIMARY_PANE, publicChannel.id)}/>
+                </MediumDown>
+                <LargeDown>
+                  <NavMenuItem Icon={HostChat} text={t('host_chat')} expanded={expanded} selected={hostChannel.isCurrent}
+                    hasActions={hostChannel.hasActions} hasNewMessages={hostChannel.hasNewMessages}
+                    onClick={() => setPaneToChat(PRIMARY_PANE, hostChannel.id)}/>
+                </LargeDown>
+                <NavMenuItem Icon={HostInfo} text={t('host_info')} expanded={expanded} selected={currentTabType === HOST_INFO}
+                  onClick={() => setPaneToTab(PRIMARY_PANE, HOST_INFO)}/>
+              </>
+            }
             <NavMenuItem Icon={Calendar} text={t('schedule')} expanded={expanded} selected={currentTabType === SCHEDULE}
               onClick={() => setPaneToTab(PRIMARY_PANE, SCHEDULE)}/>
             <NavMenuItem Icon={Document} text={t('event_notes')} expanded={expanded} selected={currentTabType === EVENT_NOTES}

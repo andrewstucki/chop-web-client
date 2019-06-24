@@ -81,7 +81,7 @@ const SideMenu = (
               <Nickname>{currentSubscriber.nickname}</Nickname>
               <ProfileActions>
                 <LogOutButton
-                  data-testid='logout'
+                  data-testid='side-menu-logout'
                   onClick={logout}>
                   <LinkIcon
                     dangerouslySetInnerHTML={{ __html: Exit }}
