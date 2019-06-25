@@ -23,7 +23,9 @@ import type {
   RoomType,
 } from '../cwc-types';
 
+// $FlowFixMe
 dayjs.extend(customParseFormat);
+// $FlowFixMe
 dayjs.extend(utc);
 
 // Flow Type Definitions
@@ -88,8 +90,10 @@ export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMess
 
 let _getState;
 
+// $FlowFixMe
 const timestampToString = (inTimestamp: DateTimeType): DateTimeAsStringType => dayjs.utc(inTimestamp).toISOString();
 
+// $FlowFixMe
 const timestampFromString = (inTimestamp: DateTimeAsStringType): DateTimeType => dayjs.utc(inTimestamp).local().valueOf();
 
 const Converter = {
@@ -103,6 +107,7 @@ const Converter = {
       language: getTranslateLanguage(_getState()),
       eventTimeId: _getState().event.eventTimeId,
       // message timestamp is stored in milliseconds, starTime is stored in seconds
+      // $FlowFixMe
       eventTimeOffset: dayjs(message.timestamp).diff(dayjs.unix(_getState().event.startTime), 'second').toString(),
       eventTitle: _getState().event.title,
       uniqueMessageToken: message.id,

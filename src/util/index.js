@@ -1,10 +1,12 @@
-// @flow strict
+// @flow
 import createDOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
 // $FlowFixMe
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
+import Cookies from 'js-cookie';
 
+// $FlowFixMe
 dayjs.extend(utc);
 
 const getFirstInitial = (name: string): string => (
@@ -117,6 +119,10 @@ export const getOrCreateElement = (id:string):HTMLElement => {
     }
   }
   return element;
+};
+
+export const deleteAllCookies = ():void => {
+  Cookies.remove('legacy_token');
 };
 
 export {

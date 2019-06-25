@@ -1,23 +1,23 @@
-import { LeaveChatType } from './leaveChat/dux';
-import { MuteSubscriberType } from './muteSubscriber/dux';
-import { GuestNicknameType } from './guestNickname/dux';
-import { LoginType } from './login/dux';
-import { ResetPasswordType } from './resetPassword/dux';
+// @flow
+import type { LeaveChatType } from './leaveChat/dux';
+import type { MuteSubscriberType } from './muteSubscriber/dux';
+import type { GuestNicknameType } from './guestNickname/dux';
+import type { LoginType } from './login/dux';
+import type { ResetPasswordType } from './resetPassword/dux';
+import type { ProfileSettingsType } from './profileSettings/dux';
 
 // Action Types
-
 const TOGGLE_POP_UP_MODAL = 'TOGGLE_POP_UP_MODAL';
 const SET_POP_UP_MODAL = 'SET_POP_UP_MODAL';
 
 // Flow Type Definitions
-
 type TogglePopUpModalType = {
-  type: TOGGLE_POP_UP_MODAL,
+  type: typeof TOGGLE_POP_UP_MODAL,
   modal: PopUpModalType,
 };
 
 type SetPopUpModalType = {
-  type: SET_POP_UP_MODAL,
+  type: typeof SET_POP_UP_MODAL,
   modal: PopUpModalType,
 };
 
@@ -27,10 +27,10 @@ type PopUpModalType =
   | GuestNicknameType
   | LoginType
   | ResetPasswordType
+  | ProfileSettingsType
   | {};
 
 // Action Creators
-
 const togglePopUpModal = (
   modal: PopUpModalType = {}
 ): TogglePopUpModalType => (
@@ -50,7 +50,6 @@ const setPopUpModal = (
 );
 
 // Exports
-
 export type {
   TogglePopUpModalType,
   SetPopUpModalType,

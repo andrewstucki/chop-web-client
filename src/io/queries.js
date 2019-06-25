@@ -104,6 +104,10 @@ export type GraphQLSubscriberType = {
     avatar: GraphQLString,
     id: string,
     nickname: GraphQLString,
+    firstName: GraphQLString,
+    lastName: GraphQLString,
+    email: GraphQLString,
+    phoneNumber: GraphQLString,
     pubnubAccessKey: GraphQLString,
     role: GraphQlRole,
     preferences: GraphQlPreferences,
@@ -312,11 +316,15 @@ query EventAt($time: Timestamp) {
 }`;
 
 const currentSubscriber = `
-currentSubscriber: currentSubscriber {
+currentSubscriber {
   userId
   id
   nickname
   avatar
+  firstName
+  lastName
+  email
+  phoneNumber
   role {
     label
     permissions {
@@ -456,6 +464,12 @@ mutation resetPassword($resetToken: String!, $password: String!) {
 }
 `;
 
+const deleteSelf = `
+mutation deleteSelf {
+  deleteSelf
+}
+`;
+
 const currentState = `
 query CurrentState($needLanguages: Boolean!, $limit: Int) {
   ${currentEvent}
@@ -466,17 +480,18 @@ query CurrentState($needLanguages: Boolean!, $limit: Int) {
   ${schedule}
 }`;
 
-let client = new GraphQLClient(GATEWAY_HOST, {
+let client = new GraphQLClient(`${GATEWAY_HOST}/graphql`, {
   headers: {
     'Application-Domain': hostname(),
   },
 });
 
 const setAccessToken = (accessToken: string): void => {
-  client = new GraphQLClient(GATEWAY_HOST, {
+  client = new GraphQLClient(`${GATEWAY_HOST}/graphql`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Application-Domain': hostname(),
+      'apollographql-client-name': 'chop-web-client',
     },
   });
 };
@@ -620,6 +635,9 @@ const queries = {
         password,
       }
     ),
+
+  deleteSelf: async () =>
+    await client.request(deleteSelf),
 };
 
 export default queries;

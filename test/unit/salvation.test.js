@@ -13,6 +13,10 @@ describe('Salvation Moment Tests', () => {
         currentSubscriber: {
           id: '134',
           nickname: 'Kylo Ren',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          email: 'kyloren@thedarkside.com',
+          phoneNumber: '',
           avatar: 'http://someimageons3.com/image/123',
           role: {
             label: 'Supreme Leader of the First Order',
@@ -121,6 +125,10 @@ describe('Salvation Moment Tests', () => {
         currentSubscriber: {
           id: '134',
           nickname: 'Kylo Ren',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          email: 'kyloren@thedarkside.com',
+          phoneNumber: '',
           avatar: 'http://someimageons3.com/image/123',
           role: {
             label: 'Supreme Leader of the First Order',
@@ -225,6 +233,10 @@ describe('Salvation Moment Tests', () => {
         currentSubscriber: {
           id: '134',
           nickname: 'Kylo Ren',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          email: 'kyloren@thedarkside.com',
+          phoneNumber: '',
           avatar: 'http://someimageons3.com/image/123',
           role: {
             label: 'Supreme Leader of the First Order',

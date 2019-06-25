@@ -58,7 +58,8 @@ const Profile = styled.div`
   padding-bottom: 1.5rem;
   margin-bottom: 24px;
   
-  & > div:first-child {
+  & > div:first-child,
+  & > img:first-child {
     margin-top: -2rem;
   }
 `;
@@ -126,14 +127,15 @@ const Menu = styled.div`
   }
 `;
 
-const LogOutButton = styled.button`
+const ActionButton = styled.button`
   background-color: transparent;
   border: none;
   outline: none;
   color: ${props => props.theme.colors.gray50};
+  display: flex;
   
-  ${LinkIcon} {
-    margin-left: 0;
+  svg {
+    margin-right: 4px;
   }
 `;
 
@@ -189,7 +191,7 @@ export {
   ProfileActions,
   Overlay,
   Menu,
-  LogOutButton,
+  ActionButton,
   LinkWrapper,
   LoginWrapper,
   LoginButton,

@@ -5,8 +5,8 @@ variables:
   CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 stages:
-  - test
   - compile
+  - test
   - build
   - review
   - cypress
@@ -190,6 +190,7 @@ code_coverage_report_master:
 code_coverage_report:
   image: node:lts
   stage: report
+  allow_failure: true
   dependencies:
     - test
     - cypress:review

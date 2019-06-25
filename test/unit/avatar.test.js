@@ -50,7 +50,7 @@ describe('Test Avatar', () => {
     store.dispatch(
       publishMessage('public', 'Hello, world.', {
         id: '12345',
-        nickname: 'Shine',
+        nickname: 'Billy Bob',
         avatar: 'https://web-assets.life.church/assets/pages/kids/ec-icon-412a05a885c0a86bff7c5ac9abe1d703f9df9889b79c58e85debc32220cf7310.svg',
         role: {
           label: 'host',
@@ -98,7 +98,7 @@ describe('Test Avatar', () => {
     store.dispatch(
       publishMessage('public', 'Hello, world.', {
         id: '12345',
-        nickname: 'Shine',
+        nickname: 'Billy Bob',
         avatar: null,
         role: {
           label: 'host',
@@ -109,6 +109,6 @@ describe('Test Avatar', () => {
     wrapper.update();
     const initialAvatar = wrapper.find(InitialAvatar);
     expect(initialAvatar.exists()).toBeTruthy();
-    expect(initialAvatar.prop('nickname')).toBe('Shine');
+    expect(initialAvatar.prop('nickname')).toBe('Billy Bob');
   });
 });

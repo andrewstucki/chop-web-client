@@ -1,3 +1,4 @@
+// @flow
 // Action Types
 
 export const RESET_PASSWORD = 'RESET_PASSWORD';
@@ -5,7 +6,7 @@ export const RESET_PASSWORD = 'RESET_PASSWORD';
 // Flow Type Definitions
 
 export type ResetPasswordType = {
-  type: RESET_PASSWORD,
+  type: typeof RESET_PASSWORD,
   resetToken: string,
 };
 

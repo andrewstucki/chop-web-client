@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => (
   {
     muteSubscriber: (channel, nickname) => dispatch(publishMuteSubscriber(channel, nickname)),
     publishMuteSubscriberNotification: (host, guest, channel) => dispatch(publishMuteSubscriberNotification(host, guest, channel, getMessageTimestamp())),
-    mutednBanner: guestName => dispatch(mutedBanner(guestName)),
+    mutedBanner: guestName => dispatch(mutedBanner(guestName)),
   }
 );
 

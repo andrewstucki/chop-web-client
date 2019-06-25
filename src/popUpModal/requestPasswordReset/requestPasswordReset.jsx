@@ -1,11 +1,10 @@
 // @flow
-import React, { useState, useRef } from 'react';
-
+import React, { useState } from 'react';
+import Modal from '../modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { Text, ActionContainer, Button, PROGRESS } from '../styles';
 import { InputField, InputLabel, ErrorMessage, InputWrapper, InputFieldWrapper, SubmitButton } from '../login/styles';
 import { Message } from './styles';
-import { Modal } from '../popUpModal';
 import { validEmail } from '../../util';
 
 type requestPasswordResetPropsType = {
@@ -31,7 +30,6 @@ const RequestPasswordResetPopUpModal = (
   const { t } = useTranslation('forms');
 
   const [values, setValues] = useState < RequestPasswordResetState > ({ email: '', emailBlank: false, emailInvalid: false, sent: false });
-  const emailRef = useRef(null);
 
   const onChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -41,18 +39,12 @@ const RequestPasswordResetPopUpModal = (
   const handleSend = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (values.email !== '' && validEmail(values.email)) {
-      const { current:currentEmail } = emailRef;
-
-      const {
-        email = currentEmail === null ? '' : currentEmail.value(),
-      } = values;
-
-      requestPasswordReset(email);
+      requestPasswordReset(values.email);
       setValues({ ...values, sent: true});
     } else {
       setValues(
         {
-          ...values, 
+          ...values,
           emailBlank: values.email === '',
           emailInvalid: !validEmail(values.email) && values.email !== '',
         }
@@ -83,7 +75,7 @@ const RequestPasswordResetPopUpModal = (
         <form onSubmit={handleSend}>
           <InputWrapper>
             <InputFieldWrapper>
-              <InputField type="text" name="email" id="email" data-testid="requestPasswordReset-emailField" value={values.email} ref={emailRef} onChange={onChange} error={values.emailBlank || values.emailInvalid}/>
+              <InputField type="text" name="email" id="email" data-testid="requestPasswordReset-emailField" value={values.email} onChange={onChange} error={values.emailBlank || values.emailInvalid}/>
               <InputLabel htmlFor="email">{ t('request_password_reset.email') }</InputLabel>
             </InputFieldWrapper>
             <ErrorMessage visible={values.emailBlank}>{ t('request_password_reset.blank_email') }</ErrorMessage>

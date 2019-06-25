@@ -11,6 +11,10 @@ describe('Feed tests', () => {
     avatar: null,
     pubnubAccessKey: '098765',
     nickname: 'Billy Bob',
+    firstName: 'Billy',
+    lastName: 'Bob',
+    email: 'billybob@thorton.com',
+    phoneNumber: '',
     role: {
       label: '',
       permissions: [],
@@ -28,6 +32,10 @@ describe('Feed tests', () => {
       subscriber: {
         id: '12345',
         nickname: 'Billy Bob',
+        firstName: 'Billy',
+        lastName: 'Bob',
+        email: 'billybob@thorton.com',
+        phoneNumber: '',
       },
       messageTrayOpen: false,
     },
@@ -66,11 +74,15 @@ describe('Feed tests', () => {
         subscriber: {
           id: '12345',
           nickname: 'Billy Bob',
+          firstName: 'Billy',
+          lastName: 'Bob',
+          email: 'billybob@thorton.com',
+          phoneNumber: '',
         },
         messageTrayOpen: false,
       },
     ];
-    
+
     const { getByTestId } = renderWithReduxAndTheme(
       <Feed
         offset={0}

@@ -1,4 +1,17 @@
 {
+  "delete_account": {
+    "cancel": "Cancel",
+    "confirm": "Delete Account",
+    "message": "Are you sure you want to delete your account?"
+  },
+  "guest_nickname": {
+    "blank_error": "Nickname cannot be blank.",
+    "description": "You will need one to chat.",
+    "nickname": "Nickname",
+    "post": "Post",
+    "title": "Pick a Nickname",
+    "unavailable_error": "Nickname already in use."
+  },
   "leave_chat": {
     "confirm": "Are you sure you want to end your chat?",
     "confirm_subscriber": "Are you sure you want to end your chat with <strong>{{nickname}}</strong>?",
@@ -6,17 +19,17 @@
     "leave": "Leave"
   },
   "login": {
-    "title": "Log In",
-    "email": "Email",
-    "password": "Password",
-    "submit": "Log In",
-    "hasAccount": "Already have an account?",
-    "sign_up": "Sign Up",
-    "forgot": "Forgot",
-    "error": "The email or password you entered is incorrect.",
     "blank_email": "Email cannot be blank.",
     "blank_password": "Password cannot be blank.",
-    "invalid_email": "Email is invalid."
+    "email": "Email",
+    "error": "The email or password you entered is incorrect.",
+    "forgot": "Forgot",
+    "hasAccount": "Already have an account?",
+    "invalid_email": "Email is invalid.",
+    "password": "Password",
+    "sign_up": "Sign Up",
+    "submit": "Log In",
+    "title": "Log In"
   },
   "mute_subscriber": {
     "all_messages": "All of their messages will be deleted.",
@@ -24,30 +37,41 @@
     "confirm": "Are you sure you want to mute <strong>{{subscriber}}</strong>?",
     "mute": "Mute"
   },
-  "guest_nickname": {
-    "title": "Pick a Nickname",
-    "post": "Post",
-    "blank_error": "Nickname cannot be blank.",
-    "unavailable_error": "Nickname already in use.",
+  "profile": {
+    "delete_account": "Delete Account",
+    "email": "Email",
+    "first_name": "First Name",
+    "last_name": "Last Name",
     "nickname": "Nickname",
-    "description": "You will need one to chat."
+    "password": "Password",
+    "phone_number": "Phone Number",
+    "phone_number_tooltip": "Your phone number is used when setting reminders for events.",
+    "photo_add": "Add photo",
+    "photo_change": "Change photo",
+    "photo_remove": "Remove photo",
+    "save": "Save"
+  },
+  "remove_avatar": {
+    "cancel": "Cancel",
+    "confirm": "Remove photo",
+    "message": "Are you sure you want to remove your current photo?"
   },
   "request_password_reset": {
-    "title": "Reset Password",
-    "description": "We will send your password reset instructions to your email address.",
-    "send": "Send Instructions",
-    "email": "Email",
     "blank_email": "Email cannot be blank.",
-    "confirmation": "If the email exists, we've sent the instructions to {{email}}.",
     "close": "Okay",
-    "invalid_email": "Email is invalid."
+    "confirmation": "If the email exists, we've sent the instructions to {{email}}.",
+    "description": "We will send your password reset instructions to your email address.",
+    "email": "Email",
+    "invalid_email": "Email is invalid.",
+    "send": "Send Instructions",
+    "title": "Reset Password"
   },
   "reset_password": {
-    "title": "Choose a New Password",
-    "password": "New Password",
-    "confirm_password": "Confirm new password",
     "blank_password": "Password cannot be blank.",
+    "confirm_password": "Confirm new password",
+    "password": "New Password",
+    "passwords_dont_match": "Passwords don't match.",
     "save": "Save",
-    "passwords_dont_match": "Passwords don't match."
+    "title": "Choose a New Password"
   }
 }

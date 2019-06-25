@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { listTimeZones } from 'timezone-support/dist/index-2012-2022';
 import { Wrapper, Label, Select } from './styles';
 
+// $FlowFixMe
 dayjs.extend(timeZone);
 
 type TimezoneSelectorProps = {

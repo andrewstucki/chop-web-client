@@ -1,24 +1,21 @@
+// @flow
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
-import type { NoPropsType } from '../../cwc-types';
-
-const WARNING = 'WARNING';
-const NOTIFICATION = 'NOTIFICATION';
-const ERROR = 'ERROR';
-
-type BannerType = 
-  | typeof WARNING
-  | typeof NOTIFICATION
-  | typeof ERROR;
+import type { NoPropsType } from '../cwc-types';
+import { ERROR, WARNING, INFO } from './dux';
 
 type BannerPropsType = {
-  type: BannerType,
+  type:
+    | typeof ERROR
+    | typeof WARNING
+    | typeof INFO
 };
 
 const BannerWrapper:ComponentType<NoPropsType> = styled.div`
   display: flex;
   align-self: center;
   flex-direction: column;
+  width: 100%;
 `;
 
 const Banner:ComponentType<BannerPropsType> = styled.div`
@@ -62,7 +59,4 @@ export {
   BannerWrapper,
   Banner,
   BannerMessage,
-  WARNING,
-  NOTIFICATION,
-  ERROR,
 };

@@ -8,6 +8,7 @@ type NavbarPipProps = {
 };
 
 const NavbarPip = ({ hasActions = false }: NavbarPipProps, ref) => (
+  // $FlowFixMe
   <PipWrapper ref={ref}>
     <Pip hasActions={hasActions}/>
   </PipWrapper>

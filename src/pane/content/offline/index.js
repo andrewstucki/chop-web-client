@@ -9,6 +9,7 @@ const mapStateToProps = state => {
   if (nextEvent) {
     const { title, scheduleTime } = nextEvent;
 
+    // $FlowFixMe
     const unixTime = dayjs.unix(scheduleTime);
     const localTime = unixTime.format('h:mma dddd, MMM. D');
 

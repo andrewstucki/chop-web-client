@@ -12,7 +12,7 @@ import {
   PUBLISH_GUEST_AUTH,
 } from '../../../src/auth/dux';
 import { queryCurrentEvent } from '../../../src/event/dux';
-import { mockDate } from '../../testUtils';
+import { defaultState, mockDate } from '../../testUtils';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import {getLegacyToken} from '../../../src/io/legacyToken';
 import { currentEvent } from '../../../src/io/sagas/currentEvent';
@@ -37,6 +37,7 @@ describe('Test Auth', () => {
 
     await runSaga({
       dispatch: action => dispatched.push(action),
+      getState: () => defaultState,
     },
     authenticateByBasicAuth,
     { type: BASIC_AUTH_LOGIN, email: 'joe@test.com', password: '12345' },

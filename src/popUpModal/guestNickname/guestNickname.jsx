@@ -1,18 +1,17 @@
 // @flow
-import React, { useState, useRef } from 'react';
-
+import React, { useState } from 'react';
+import Modal from '../modal';
+import UpArrow from '../../icons/upArrow';
 import { useTranslation } from 'react-i18next';
 import { SmallText, ActionContainer, Button, REGRESS } from '../styles';
 import { InputField, InputLabel, ErrorMessage, InputWrapper, InputFieldWrapper, MessageWrapper } from '../login/styles';
 import { IconWrapper, SubmitButton } from './styles';
-import { Modal } from '../popUpModal';
-import UpArrow from '../../icons/upArrow';
 import { theme } from '../../styles';
 
 type GuestNicknamePropsType = {
   togglePopUpModal: () => void,
   updateAndPost: (id: string, nickname: string) => void,
-  login: () => void,
+  openLogin: () => void,
   id: string,
   isSmall: boolean,
 };
@@ -27,7 +26,7 @@ const GuestNicknamePopUpModal = (
   {
     togglePopUpModal,
     updateAndPost,
-    login,
+    openLogin,
     id,
     isSmall,
   }: GuestNicknamePropsType
@@ -35,7 +34,6 @@ const GuestNicknamePopUpModal = (
   const { t } = useTranslation('forms');
 
   const [values, setValues] = useState < GuestNicknameState > ({ nickname: '', nicknameBlank: false, nicknameInvalid: false });
-  const nicknameRef = useRef(null);
 
   const onChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -45,23 +43,18 @@ const GuestNicknamePopUpModal = (
   const handlePost = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (values.nickname !== '') {
-      const { current:currentNickname } = nicknameRef;
-
-      const {
-        nickname = currentNickname === null ? '' : currentNickname.value(),
-      } = values;
-
-      updateAndPost(id, nickname);
+      updateAndPost(id, values.nickname);
     } else {
       setValues(
         {
-          ...values, 
+          ...values,
           nicknameBlank: values.nickname === '',
           nicknameInvalid: false,
         }
       );
     }
   };
+
   return (
     <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('guest_nickname.title')} id="guestNickname-modal">
       <MessageWrapper>
@@ -70,14 +63,14 @@ const GuestNicknamePopUpModal = (
       <form onSubmit={handlePost}>
         <InputWrapper>
           <InputFieldWrapper>
-            <InputField type="text" name="nickname" id="nickname" data-testid="guestNickname-nicknameField" value={values.nickname} ref={nicknameRef} onChange={onChange} error={values.nicknameBlank || values.nicknameInvalid}/>
+            <InputField type="text" name="nickname" id="nickname" data-testid="guestNickname-nicknameField" value={values.nickname} onChange={onChange} error={values.nicknameBlank || values.nicknameInvalid} autoFocus/>
             <InputLabel htmlFor="nickname">{ t('guest_nickname.nickname') }</InputLabel>
           </InputFieldWrapper>
           <ErrorMessage visible={values.nicknameBlank}>{ t('guest_nickname.blank_error') }</ErrorMessage>
           <ErrorMessage visible={values.nicknameInvalid}>{ t('guest_nickname.unavailable_error') }</ErrorMessage>
         </InputWrapper>
         <ActionContainer>
-          <Button type='button' buttonType={REGRESS} onClick={login} data-testid='guestNickname-login' >
+          <Button type='button' buttonType={REGRESS} onClick={openLogin} data-testid='guestNickname-login' >
             { t('login.title') }
           </Button>
           <SubmitButton onClick={handlePost} small={isSmall} data-testid='guestNickname-post' >

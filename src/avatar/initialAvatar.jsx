@@ -2,18 +2,17 @@
 import React from 'react';
 import { Icon } from './styles';
 import { getFirstInitial, getAvatarColor } from '../util';
+import type { AvatarSizeType } from './index';
 
 type InitialAvatarProps = {
   nickname: string,
-  large: boolean,
-  small: boolean,
+  size: AvatarSizeType,
   id: string,
 };
 
-const InitialAvatar = ({nickname, large, small, id}:InitialAvatarProps) => (
+const InitialAvatar = ({nickname, size, id}:InitialAvatarProps) => (
   <Icon
-    large={large}
-    small={small}
+    size={size}
     style={{backgroundColor: getAvatarColor(nickname)}}
     data-testid={id}
   >

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, ActionContainer, Text, SmallText, REGRESS, DANGER } from '../styles';
-import { Modal } from '../popUpModal';
+import Modal from '../modal';
 
 type MuteSubscriberPropsType = {
   togglePopUpModal: () => void,

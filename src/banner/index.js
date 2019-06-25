@@ -3,19 +3,20 @@ import { connect } from 'react-redux';
 import Banner from './banner';
 import { clearBanner } from './dux';
 import { getNotificationBanner } from '../feed/dux';
+import { getCurrentSubscriber } from '../subscriber/dux';
 
 const mapStateToProps = (state, ownProps) => {
   const { fullWidth = false } = ownProps;
   return {
     banner: getNotificationBanner(state),
     fullWidth,
-    name: state.subscriber.currentSubscriber.nickname,
+    currentSubscriberNickname: getCurrentSubscriber(state).nickname,
   };
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    dismissNotification: () => dispatch(clearBanner()),
+    dismissBanner: () => dispatch(clearBanner()),
   }
 );
 
