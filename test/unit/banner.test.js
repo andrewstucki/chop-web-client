@@ -1,4 +1,12 @@
-import { mutedBanner, warningBanner, errorBanner, textModeBanner, loggedInBanner } from '../../src/banner/dux';
+// @flow
+import {
+  mutedBanner,
+  warningBanner,
+  errorBanner,
+  textModeBanner,
+  loggedInBanner,
+  infoBanner,
+} from '../../src/banner/dux';
 
 describe('Banner Action Creators', () => {
   test('Mute notification', () => {
@@ -6,27 +14,40 @@ describe('Banner Action Creators', () => {
       type: 'SET_BANNER',
       banner: {
         type: 'MUTED',
-        name: 'guest',
+        key: 'subscriber_muted',
+        variables: {
+          name: 'guest',
+        },
+      },
+    });
+  });
+
+  test('Info banner', () => {
+    expect(infoBanner('info_message')).toEqual({
+      type: 'SET_BANNER',
+      banner: {
+        type: 'INFO',
+        key: 'info_message',
       },
     });
   });
 
   test('Warning banner', () => {
-    expect(warningBanner('warning message')).toEqual({
+    expect(warningBanner('warning_message')).toEqual({
       type: 'SET_BANNER',
       banner: {
         type: 'WARNING',
-        warning: 'warning message',
+        key: 'warning_message',
       },
     });
   });
 
   test('Error banner', () => {
-    expect(errorBanner('error message')).toEqual({
+    expect(errorBanner('error_message')).toEqual({
       type: 'SET_BANNER',
       banner: {
         type: 'ERROR',
-        error: 'error message',
+        key: 'error_message',
       },
     });
   });
@@ -35,8 +56,11 @@ describe('Banner Action Creators', () => {
     expect(textModeBanner('COMPACT')).toEqual({
       type: 'SET_BANNER',
       banner: {
-        type: 'TEXT_MODE',
-        mode: 'COMPACT',
+        type: 'INFO',
+        key: 'text_mode_updated',
+        variables: {
+          mode: 'decreased',
+        },
       },
     });
   });
@@ -46,6 +70,7 @@ describe('Banner Action Creators', () => {
       type: 'SET_BANNER',
       banner: {
         type: 'LOGGED_IN',
+        key: 'logged_in',
       },
     });
   });

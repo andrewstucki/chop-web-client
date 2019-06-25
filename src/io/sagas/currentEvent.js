@@ -94,6 +94,10 @@ function* currentSubscriber (data:GraphQLCurrentStateType): Saga<void> {
           id: currentSubscriber.id,
           nickname: currentSubscriber.nickname || '',
           avatar: currentSubscriber.avatar,
+          firstName: currentSubscriber.firstName || '',
+          lastName: currentSubscriber.lastName || '',
+          email: currentSubscriber.email || '',
+          phoneNumber: currentSubscriber.phoneNumber || '',
           pubnubAccessKey: currentSubscriber.pubnubAccessKey || '',
           role: {
             label: currentSubscriber?.role?.label || '',

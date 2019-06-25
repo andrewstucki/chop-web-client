@@ -74,6 +74,7 @@ const Navbar = ( { items = [], setPaneToEvent, setPaneToChat, setPaneToTab, setN
   const showRightPip = itemWithActions.current && itemWithActions.current.getBoundingClientRect().left > window.innerWidth;
 
   return (
+    // $FlowFixMe
     <NavbarWrapper ref={wrapper} data-testid='navbar'>
       { showLeftIndicator &&
         <Actionable onClick={handleScrollLeft}>

@@ -144,7 +144,7 @@ describe('NavBar tests', () => {
           ...defaultState.subscriber,
           currentSubscriber: subscriber,
         },
-      } 
+      }
     );
 
     expect(publicChannel).toEqual(

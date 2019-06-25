@@ -41,6 +41,10 @@ describe('Current Event', () => {
           userId: 1234,
           id: '1234',
           nickname: 'John Jonson',
+          firstName: 'John',
+          lastName: 'Jonson',
+          email: 'john@jonson.com',
+          phoneNumber: '867-5309',
           avatar: 'http://image.avatar.gif',
           pubnubAccessKey: '0987',
           role: {
@@ -187,6 +191,10 @@ describe('Current Event', () => {
         userId: 1234,
         id: '1234',
         nickname: 'John Jonson',
+        firstName: 'John',
+        lastName: 'Jonson',
+        email: 'john@jonson.com',
+        phoneNumber: '867-5309',
         avatar: 'http://image.avatar.gif',
         pubnubAccessKey: '0987',
         role: {

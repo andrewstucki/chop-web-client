@@ -98,8 +98,6 @@ import {
   getChannelById,
 } from '../selectors/channelSelectors';
 
-import { ADD_ERROR, REMOVE_ERROR, CLEAR_ERRORS } from '../errors/dux';
-import type { ErrorType, AddErrorType, RemoveErrorType } from '../errors/dux';
 import dayjs from 'dayjs';
 
 import { EVENT } from '../pane/content/event/dux';
@@ -227,7 +225,6 @@ type FeedType = {
   languageOptions: Array<LanguageType>,
   reactions: Array<ReactionType>,
   salvations: number,
-  errors: Array<ErrorType>,
   notificationBanner: BannerType,
   sequence: any,
   isAuthenticated: boolean,
@@ -317,7 +314,7 @@ type JoinChannelType = {
   requesterNickname: string,
 };
 
-type FeedActionTypes =
+export type FeedActionTypes =
   | ReceiveMomentType
   | AddChannelType
   | RemoveChannelType
@@ -338,8 +335,6 @@ type FeedActionTypes =
   | SetSalvationsType
   | SetAuthenticationType
   | RemoveAuthenticationType
-  | AddErrorType
-  | RemoveErrorType
   | SetSawLastMomentAt
   | ToggleHideVideoType
   | SetNavbarIndexType
@@ -569,12 +564,15 @@ const defaultState = {
     },
   },
   reactions: [],
-  notificationBanner: {},
+  notificationBanner: {
+    type: '',
+    key: '',
+    variables: {},
+  },
   sequence: {
     steps: [],
   },
   salvations: 0,
-  errors: [],
   auth: {
     accessToken: '',
     refreshToken: '',
@@ -1051,23 +1049,6 @@ const reducer = (
         ...state,
         salvations: action.count,
       };
-    case ADD_ERROR:
-      return {
-        ...state,
-        errors: [...state.errors, action.error],
-      };
-    case REMOVE_ERROR: {
-      const { id } = action;
-      return {
-        ...state,
-        errors: state.errors.filter(error => error.id !== id),
-      };
-    }
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        errors: [],
-      };
     case SET_BANNER:
       return {
         ...state,
@@ -1076,7 +1057,7 @@ const reducer = (
     case CLEAR_BANNER:
       return {
         ...state,
-        notificationBanner: {},
+        notificationBanner: defaultState.notificationBanner,
       };
     case UPDATE_SCROLL_POSITION: {
       const { scrollPosition, channel, timestamp } = action;

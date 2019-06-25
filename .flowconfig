@@ -27,3 +27,4 @@ sketchy-null
 <PROJECT_ROOT>/node_modules/draft-js/lib/DraftEditorDragHandler.js.flow
 <PROJECT_ROOT>/node_modules/draft-js/lib/DraftEditor.react.js.flow
 <PROJECT_ROOT>/node_modules/draft-js/lib/convertFromHTMLToContentBlocks.js.flow
+<PROJECT_ROOT>/node_modules/draft-js/node_modules/fbjs/lib/emptyFunction.js.flow

@@ -28,6 +28,7 @@ const Tooltip = ({ content, placement = 'top' }:TooltipProps) => {
             <IconButton
               id='tooltip-icon'
               size={17}
+              // $FlowFixMe
               ref={referenceRef}
               onMouseEnter={handleSetShowTooltip}
               onMouseLeave={handleSetHideTooltip}
@@ -40,6 +41,7 @@ const Tooltip = ({ content, placement = 'top' }:TooltipProps) => {
         {showTooltip && ReactDOM.createPortal(
           <Popper placement={placement}>
             {({ placement, ref:popperRef, style }) => (
+              // $FlowFixMe
               <PopperWraper ref={popperRef} style={style} data-placement={placement} data-testid='tooltip-content'>
                 { content }
               </PopperWraper>

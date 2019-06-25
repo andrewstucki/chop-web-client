@@ -1,9 +1,15 @@
 {
+  "delete_self_error": "There was an error deleting your account.",
+  "delete_self_success": "Your account has been deleted.",
   "generate_pdf_error": "There was an error generating the PDF.",
-  "subscriber_muted": "<strong>{{nickname}}</strong> was muted.",
-  "text_mode_updated": "Chat size {{mode}}.",
   "logged_in": "Logged in as <strong>{{name}}</strong>",
+  "logged_out": "You have been successfully logged out.",
   "password_reset": "Your password was updated.",
   "password_reset_error": "There was an error resetting your password.",
-  "logged_out": "You have been successfully logged out."
+  "subscriber_muted": "<strong>{{nickname}}</strong> was muted.",
+  "text_mode_updated": "Chat size {{text}}.",
+  "text_mode_updated": "Chat size {{mode}}.",
+  "update_settings_error": "There was an error updating your settings.",
+  "update_settings_success": "Your settings have been updated."
 }
+

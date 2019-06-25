@@ -1,3 +1,4 @@
+// @flow
 // Action Types
 
 export const MUTE_SUBSCRIBER = 'MUTE_SUBSCRIBER';
@@ -5,7 +6,7 @@ export const MUTE_SUBSCRIBER = 'MUTE_SUBSCRIBER';
 // Flow Type Definitions
 
 export type MuteSubscriberType = {
-  type: MUTE_SUBSCRIBER,
+  type: typeof MUTE_SUBSCRIBER,
   subscriber: string,
   channelId: string,
 };

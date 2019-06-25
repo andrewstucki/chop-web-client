@@ -1,3 +1,4 @@
+// @flow
 // Action Types
 
 export const LEAVE_CHAT = 'LEAVE_CHAT';
@@ -5,7 +6,7 @@ export const LEAVE_CHAT = 'LEAVE_CHAT';
 // Flow Type Definitions
 
 export type LeaveChatType = {
-  type: LEAVE_CHAT,
+  type: typeof LEAVE_CHAT,
 };
 
 // Action Creators

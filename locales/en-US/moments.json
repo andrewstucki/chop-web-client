@@ -1,8 +1,8 @@
 {
   "actionable": {
-    "cancelled": "Cancelled",
+    "accept": "Accept",
     "accepted": "Accepted",
-    "accept": "Accept"
+    "cancelled": "Cancelled"
   },
   "join_chat": {
     "notification": "<strong>{{nickname}}</strong> has joined the chat",
@@ -20,8 +20,8 @@
     "request": "<strong>{{nickname}}</strong> has requested prayer"
   },
   "salvation": {
-    "text": "I commit my life to Christ.",
     "hands_raised": "{{count}} hand raised",
-    "hands_raised_plural": "{{count}} hands raised"
+    "hands_raised_plural": "{{count}} hands raised",
+    "text": "I commit my life to Christ."
   }
 }

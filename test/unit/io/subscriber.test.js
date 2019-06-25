@@ -1,27 +1,32 @@
 // @flow
 import queries from '../../../src/io/queries';
-import { 
-  updateSubscriber as updateSubscriberSaga, 
+import {
+  updateSubscriber as updateSubscriberSaga,
   resetPassword as resetPasswordSaga,
   requestPasswordReset as requestPasswordResetSaga,
+  updateGuestNickname as updateGuestNicknameSaga,
+  uploadAvatar as uploadAvatarSaga,
+  deleteSelf as deleteSelfSaga,
 } from '../../../src/io/sagas/subscriber';
 import { runSaga } from 'redux-saga';
 import {
-  UPDATE_SUBSCRIBER_FAILED,
-  updateSubscriberSucceeded,
+  updateSubscriberSuccess,
   updateTextMode,
   updateSubscriber,
   publishResetPassword,
   publishRequestPasswordReset,
-  updateNickname,
+  updateGuestNickname,
+  uploadAvatar,
+  deleteSelf,
 } from '../../../src/subscriber/dux';
 import { COMFORTABLE } from '../../../src/textModeToggle/dux';
-import { textModeBanner, passwordResetBanner, errorBanner } from '../../../src/banner/dux';
+import { textModeBanner, passwordResetBanner, errorBanner, infoBanner } from '../../../src/banner/dux';
 import { setPopUpModal, togglePopUpModal } from '../../../src/popUpModal/dux';
 import { loginType } from '../../../src/popUpModal/login/dux';
 import { clearChannelMessage } from '../../../src/feed/dux';
 import { newTimestamp } from '../../../src/util';
-import { mockDate } from '../../testUtils';
+import { defaultState, mockDate } from '../../testUtils';
+import { resetApp } from '../../../src/chop/dux';
 
 jest.mock('../../../src/io/queries');
 const mock = (mockFn: any) => mockFn;
@@ -30,6 +35,7 @@ describe('Test Update Subscriber', () => {
   const mockUpdateSubscriber = mock(queries.updateSubscriber);
   const mockUpdatePassword = mock(queries.resetPassword);
   const mockRequestPasswordUpdate = mock(queries.requestPasswordReset);
+  const mockDeleteSelf = mock(queries.deleteSelf);
 
   test('Update subscriber preferences success', async () => {
     const dispatched = [];
@@ -41,7 +47,7 @@ describe('Test Update Subscriber', () => {
     expect(mockUpdateSubscriber).toBeCalledWith('12345', {preferences: {textMode: COMFORTABLE}});
     expect(dispatched).toEqual(
       [
-        updateSubscriberSucceeded(
+        updateSubscriberSuccess(
           {
             preferences: {
               textMode: COMFORTABLE,
@@ -53,7 +59,7 @@ describe('Test Update Subscriber', () => {
     );
   });
 
-  test('Update subscriber nickname success', async () => {
+  test('Update guest nickname success', async () => {
     const dispatched = [];
     mockDate(1553807000000);
 
@@ -93,12 +99,12 @@ describe('Test Update Subscriber', () => {
           },
         }
       ),
-    }, updateSubscriberSaga, updateSubscriber('123456', updateNickname('guest'))).toPromise();
+    }, updateGuestNicknameSaga, updateGuestNickname('123456','guest')).toPromise();
 
     expect(mockUpdateSubscriber).toBeCalledWith('123456', {nickname: 'guest'});
     expect(dispatched).toEqual(
       [
-        updateSubscriberSucceeded(
+        updateSubscriberSuccess(
           {
             nickname: 'guest',
           }
@@ -140,7 +146,7 @@ describe('Test Update Subscriber', () => {
 
     expect(dispatched).toEqual(
       [
-        {type: UPDATE_SUBSCRIBER_FAILED, id: '12345', error: 'Server returned false for updateSubscriber: 12345'},
+        errorBanner('update_settings_error'),
       ]
     );
   });
@@ -150,11 +156,11 @@ describe('Test Update Subscriber', () => {
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-    }, updateSubscriberSaga, updateSubscriber('123456', updateNickname('guest6'))).toPromise();
+    }, updateSubscriberSaga, updateSubscriber('123456', { nickname: 'guest6' })).toPromise();
 
     expect(dispatched).toEqual(
       [
-        {type: UPDATE_SUBSCRIBER_FAILED, id: '123456', error: 'Server returned false for updateSubscriber: 123456'},
+        errorBanner('update_settings_error'),
       ]
     );
   });
@@ -205,5 +211,57 @@ describe('Test Update Subscriber', () => {
     expect(dispatched).toEqual(
       []
     );
+  });
+
+  test('Upload avatar success', async () => {
+    // $FlowFixMe - Fetch gets monkey patched in  setupFile.js, how does this
+    fetch.mockResponseOnce('https://google.com/avatars/me/avatar.jpg');
+    mockUpdateSubscriber.mockResolvedValue(true);
+
+    const dispatched = [];
+    const formData = new FormData();
+
+    formData.append('avatar', new File([''], 'avatar.jpg', { type: 'image/jpeg'} ));
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+      getState: () => defaultState,
+    }, uploadAvatarSaga, uploadAvatar('12345', formData)).toPromise();
+
+    expect(dispatched).toEqual([
+      updateSubscriberSuccess({ avatar: 'https://google.com/avatars/me/avatar.jpg' }),
+    ]);
+  });
+
+  test('Delete self success', async () => {
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+      getState: () => defaultState,
+    }, deleteSelfSaga, deleteSelf()).toPromise();
+
+    expect(dispatched).toEqual([
+      resetApp(),
+      infoBanner('delete_self_success'),
+    ]);
+    expect(mockDeleteSelf).toBeCalledTimes(1);
+  });
+
+
+  test('Delete self failed', async () => {
+    mockDeleteSelf.mockReset();
+    mockDeleteSelf.mockResolvedValue({ deleteSelf: false });
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+      getState: () => defaultState,
+    }, deleteSelfSaga, deleteSelf()).toPromise();
+
+    expect(dispatched).toEqual([
+      errorBanner('delete_self_error'),
+    ]);
+    expect(mockDeleteSelf).toBeCalledTimes(1);
   });
 });

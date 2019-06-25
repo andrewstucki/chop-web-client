@@ -25,4 +25,23 @@ describe('InputField', () => {
     wrapper.find('input').simulate('change');
     expect(onInputChange.calledOnce).toEqual(true);
   });
+
+  test('Imperative handle returns the value', () => {
+    const onInputChange = sinon.spy();
+    const ref = React.createRef();
+    mountWithTheme(
+      <InputField
+        ref={ref}
+        type='email'
+        name='email'
+        label='Email'
+        onChange={onInputChange}
+        value='initialValue'
+      />
+    );
+    expect.assertions(1);
+    if (ref.current) {
+      expect (ref.current.value()).toEqual('initialValue');
+    }
+  });
 });

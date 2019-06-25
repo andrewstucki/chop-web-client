@@ -5,6 +5,7 @@ import { renderWithReduxAndTheme, defaultState } from '../testUtils';
 import { fireEvent } from '@testing-library/react';
 import reducer from '../../src/chop/dux';
 import { removeReaction } from '../../src/feed/dux';
+import type { ChopStateType } from '../../src/chop/dux';
 
 describe('Reaction tests', () => {
   test('Reaction Button click adds Reaction to state', () => {
@@ -31,15 +32,8 @@ describe('Reaction tests', () => {
 
   test('Remove Reaction removes a reaction from state', () => {
     const reactionId = expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/);
-    const state = {
+    const state:ChopStateType = {
       ...defaultState,
-      subscriber: {
-        ...defaultState.subscriber,
-        currentSubscriber: {
-          nickname: 'Billy Bob',
-          role: { label: '' },
-        },
-      },
       feed: {
         ...defaultState.feed,
         reactions: [
@@ -47,8 +41,13 @@ describe('Reaction tests', () => {
             type: 'REACTION',
             id: reactionId,
             subscriber: {
-              nickname: 'Billy Bob',
-              role: { label: '' },
+              id: '12345',
+              avatar: null,
+              nickname: 'Kylo Ren',
+              role: {
+                label: '',
+                permissions: [],
+              },
             },
           },
         ],

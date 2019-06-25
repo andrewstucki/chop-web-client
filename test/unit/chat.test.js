@@ -51,6 +51,10 @@ describe('Chat', () => {
                 },
                 {
                   nickname: 'Shaq O.',
+                  firstName: 'Shaq',
+                  lastName: `O' Neil`,
+                  email: 'shaq@size24.com',
+                  phoneNumber: '',
                   role: { label: '' },
                 },
               ],
@@ -85,6 +89,10 @@ describe('Chat', () => {
                 },
                 {
                   nickname: 'Shaq O.',
+                  firstName: 'Shaq',
+                  lastName: `O' Neil`,
+                  email: 'shaq@size24.com',
+                  phoneNumber: '',
                   role: { label: '' },
                 },
               ],

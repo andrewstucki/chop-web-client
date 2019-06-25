@@ -30,7 +30,7 @@ type PopStepType = {
   type: typeof POP_STEP,
 };
 
-type ActionType = SetSequenceType | PopStepType;
+export type ActionType = SetSequenceType | PopStepType;
 
 // Action Creators
 export const setSequence = (sequence: SequenceType): SetSequenceType => ({

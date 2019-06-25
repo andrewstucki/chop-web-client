@@ -16,7 +16,11 @@ import MuteSubscriberConnected from '../../src/popUpModal/muteSubscriber';
 import LoginConnected from '../../src/popUpModal/login';
 import GuestNicknameConnected from '../../src/popUpModal/guestNickname';
 import { renderWithReduxAndTheme } from '../testUtils';
-
+import RemoveAvatarPopUpModal from '../../src/popUpModal/removeAvatar/removeAvatar';
+import DeleteAccountPopUpModal from '../../src/popUpModal/deleteAccount/deleteAccount';
+import ConnectedDeleteAccountPopUpModal from '../../src/popUpModal/deleteAccount';
+import ConnectedRemoveAvatarPopUpModal from '../../src/popUpModal/removeAvatar';
+import { PROFILE_SETTINGS } from '../../src/popUpModal/profileSettings/dux';
 
 const otherSubscriber = {
   id: '12345',
@@ -32,6 +36,10 @@ const currentSubscriber = {
   pubnubAccessKey: '67890',
   avatar: null,
   nickname: 'Joan Jet',
+  firstName: 'Joan',
+  lastName: 'Jet',
+  email: 'joanjet@blackhearts.rock',
+  phoneNumber: '',
   role: {
     label: '',
     permissions: [],
@@ -70,12 +78,13 @@ describe('PopUpModal tests', () => {
       }
     );
 
-    store.dispatch(togglePopUpModal(muteSubscriberType('Bob')));
+    store.dispatch(togglePopUpModal(muteSubscriberType('Bob', 'public')));
 
     expect(store.getState().feed.isPopUpModalVisible).toBeTrue();
     expect(store.getState().feed.popUpModal).toEqual({
       type: 'MUTE_SUBSCRIBER',
       subscriber: 'Bob',
+      channelId: 'public',
     });
   });
 
@@ -105,6 +114,49 @@ describe('PopUpModal tests', () => {
     expect(togglePopUpModal.calledTwice).toEqual(true);
     expect(publishLeftChannelNotification.calledOnce).toEqual(true);
     expect(leaveChannel.calledOnce).toEqual(true);
+  });
+
+  test('Remove avatar actions can be fired and modal displays', () => {
+    const removeAvatar = sinon.spy();
+    const togglePopUpModal = sinon.spy();
+    const { getByTestId } = renderWithReduxAndTheme(
+      <RemoveAvatarPopUpModal
+        currentSubscriberId='12345'
+        removeAvatar={removeAvatar}
+        togglePopUpModal={togglePopUpModal}
+        isSmall={false}
+      />
+    );
+    expect(getByTestId('removeAvatar-confirmText').textContent).toEqual(
+      'remove_avatar.message'
+    );
+    fireEvent.click(getByTestId('removeAvatar-cancel'));
+    expect(togglePopUpModal.calledOnce).toBeTrue();
+    fireEvent.click(getByTestId('removeAvatar-confirm'));
+    expect(removeAvatar.calledOnce).toBeTrue();
+    expect(removeAvatar.calledWith('12345')).toBeTrue();
+  });
+
+  test('Delete account actions can be fired and modal displays', () => {
+    const deleteAccount = sinon.spy();
+    const togglePopUpModal = sinon.spy();
+    const { getByTestId } = renderWithReduxAndTheme(
+      <DeleteAccountPopUpModal
+        currentSubscriberId='12345'
+        deleteAccount={deleteAccount}
+        togglePopUpModal={togglePopUpModal}
+        isSmall={false}
+      />
+    );
+
+    expect(getByTestId('deleteAccount-confirmText').textContent).toEqual(
+      'delete_account.message'
+    );
+
+    fireEvent.click(getByTestId('deleteAccount-cancel'));
+    expect(togglePopUpModal.calledOnce).toBeTrue();
+    fireEvent.click(getByTestId('deleteAccount-confirm'));
+    expect(deleteAccount.calledOnce).toBeTrue();
   });
 
   test('Mute subscriber actions can be fired and modal displays', () => {
@@ -326,5 +378,42 @@ describe('PopUpModal tests', () => {
       />, state
     );
     expect(getByTestId('guestNickname-modal')).toBeTruthy();
+  });
+
+  test('Delete account modal displays', () => {
+    const state = {
+      feed: {
+        ...defaultState,
+        isPopUpModalVisible: true,
+        popUpModal: {
+          type: 'DELETE_ACCOUNT',
+        },
+      },
+    };
+    const { getByTestId, store } = renderWithReduxAndTheme(
+      <ConnectedDeleteAccountPopUpModal/>, state
+    );
+    expect(getByTestId('deleteAccount-modal')).toBeTruthy();
+    fireEvent.click(getByTestId('deleteAccount-confirm'));
+    expect(store.getState().feed.popUpModal).toEqual({});
+  });
+
+  test('Remove avatar modal displays', () => {
+    const state = {
+      feed: {
+        ...defaultState,
+        isPopUpModalVisible: true,
+        popUpModal: {
+          type: 'REMOVE_AVATAR',
+        },
+      },
+    };
+    const { getByTestId, store } = renderWithReduxAndTheme(
+      <ConnectedRemoveAvatarPopUpModal/>, state
+    );
+    expect(getByTestId('removeAvatar-modal')).toBeTruthy();
+    fireEvent.click(getByTestId('removeAvatar-confirm'));
+    expect(store.getState().feed.isPopUpModalVisible).toBeTrue();
+    expect(store.getState().feed.popUpModal).toEqual({ type: PROFILE_SETTINGS });
   });
 });

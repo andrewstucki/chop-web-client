@@ -1,3 +1,4 @@
+// @flow
 // Action Types
 
 export const GUEST_NICKNAME = 'GUEST_NICKNAME';
@@ -5,7 +6,7 @@ export const GUEST_NICKNAME = 'GUEST_NICKNAME';
 // Flow Type Definitions
 
 export type GuestNicknameType = {
-  type: GUEST_NICKNAME,
+  type: typeof GUEST_NICKNAME,
 }
 
 // Action Creators

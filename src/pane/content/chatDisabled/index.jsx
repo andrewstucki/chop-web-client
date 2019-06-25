@@ -8,7 +8,7 @@ const ChatDisabled = () => {
   const { t } = useTranslation();
 
   return (
-    <PublicChatDisabled>
+    <PublicChatDisabled data-testid='chatDisabled'>
       <img src={publicChatBubbles} alt={t('public_chat_disabled')}/>
       <p>{t('public_chat_disabled')}</p>
     </PublicChatDisabled>

@@ -62,10 +62,10 @@ const Message = (
   };
 
   const hasPermissions = chatPermissions || moderationPermissions;
-
+  const avatarSize = isCompact ? 'small' : 'medium';
   const MessageBody = () => (
     <>
-      <Avatar subscriber={subscriber} small={isCompact}/>
+      <Avatar subscriber={subscriber} size={avatarSize} />
       <BodyWrapper>
         <NameWrapper isCompact={isCompact}>{isCompact ? getFirstWordInName(subscriberName) : subscriberName}</NameWrapper>
         {subscriberLabel &&

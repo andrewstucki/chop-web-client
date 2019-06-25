@@ -8,7 +8,7 @@ type ErrorMessagePropsType = {
   visible: boolean,
 };
 
-type InputFieldPropsType = {
+export type InputFieldPropsType = {
   error: boolean,
   buttonPresent?: boolean,
 };

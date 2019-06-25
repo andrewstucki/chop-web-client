@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import { updateSubscriber, updateTextMode } from '../subscriber/dux';
 import TextModeToggle from './textModeToggle';
+import { closeMenu } from '../sideMenu/dux';
 
 const mapStateToProps = state => ({
   mode: state.subscriber.currentSubscriber.preferences.textMode,
@@ -10,7 +11,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   {
-    toggleTextMode: (subscriberId, mode) => (dispatch(updateSubscriber(subscriberId, updateTextMode(mode)))),
+    toggleTextMode: (subscriberId, mode) => {
+      dispatch(updateSubscriber(subscriberId, updateTextMode(mode)));
+      dispatch(closeMenu());
+    },
   }
 );
 

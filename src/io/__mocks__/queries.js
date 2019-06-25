@@ -141,6 +141,10 @@ const requestPasswordReset = jest.fn().mockResolvedValue({
   requestPasswordReset: true,
 });
 
+const deleteSelf = jest.fn().mockResolvedValue({
+  deleteSelf: true,
+});
+
 const mockQueries = {
   authenticate: authenticate,
   authenticateByLegacyToken: authenticate,
@@ -160,6 +164,7 @@ const mockQueries = {
   generatePdf: generatePdf,
   resetPassword: resetPassword,
   requestPasswordReset: requestPasswordReset,
+  deleteSelf: deleteSelf,
 };
 
 export {
@@ -178,5 +183,6 @@ export {
   updateSubscriber,
   resetPassword,
   requestPasswordReset,
+  deleteSelf,
 };
 export default mockQueries;

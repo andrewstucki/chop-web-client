@@ -11,6 +11,7 @@ import { defaultState as defaultFeedState } from '../../src/feed/dux';
 import { defaultState as defaultScheduleState } from '../../src/schedule/dux';
 import { defaultState as defaultSubscriberState } from '../../src/subscriber/dux';
 import { defaultState as defaultEventState } from '../../src/event/dux';
+import type { ChopStateType } from '../../src/chop/dux';
 
 const mockDate = (date:Date | number | string) => {
   const RealDate = Date;
@@ -27,9 +28,34 @@ const mockDate = (date:Date | number | string) => {
   };
 };
 
-const defaultState = {
-  feed: defaultFeedState,
-  subscriber: defaultSubscriberState,
+const defaultState:ChopStateType = {
+  feed: {
+    ...defaultFeedState,
+    auth: {
+      accessToken: '123456',
+      refreshToken: '098765',
+    },
+  },
+  subscriber: {
+    ...defaultSubscriberState,
+    currentSubscriber: {
+      id: '09876',
+      pubnubAccessKey: '67890',
+      avatar: 'https://avatars.com/avatar.png',
+      nickname: 'Joan Jet',
+      firstName: 'Joan',
+      lastName: 'Jet',
+      email: 'joanjet@theblackharts.rock',
+      phoneNumber: '867-5309',
+      role: {
+        label: '',
+        permissions: [],
+      },
+      preferences: {
+        textMode: 'COMPACT',
+      },
+    },
+  },
   schedule: defaultScheduleState,
   event: defaultEventState,
   sequence: {

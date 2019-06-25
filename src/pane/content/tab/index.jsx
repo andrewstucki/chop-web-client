@@ -11,9 +11,7 @@ import { ComingSoonWrapper, ComingSoonText } from './styles';
 import Schedule from '../../../schedule';
 import { SCHEDULE_HEADER } from '../../../paneHeader/scheduleHeader';
 import { EVENT_NOTES } from '../../../eventNotes/dux';
-
-// Dynamic Imports
-const EventNotes = React.lazy(() => import('../../../eventNotes'));
+import EventNotes from '../../../eventNotes';
 
 type TabPropsType = {
   type: TabType,
@@ -57,7 +55,7 @@ const ComingSoon = ({ type }:TabPropsType) => {
   const { t } = useTranslation();
   const feature = t(type.toLowerCase());
   return (
-    <ComingSoonWrapper>
+    <ComingSoonWrapper data-testid='comingSoon'>
       <ComingSoonText>
         <Trans i18nKey='feature_coming_soon'>
           {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}

@@ -43,7 +43,7 @@ type SetScheduleTimeZoneType = {
   timeZone: string,
 };
 
-type ActionType =
+export type ActionType =
   | SetScheduleType
   | PopScheduleType
   | SetScheduleTimeZoneType;
@@ -122,6 +122,7 @@ export const getNextStartTime = createSelector(
 
 export const getScheduleGroupedByDay = createSelector(
   local,
+  // $FlowFixMe
   schedule => groupBy(schedule.items, item => dayjs.unix(item.startTime).format('YYYYMMDD'))
 );
 

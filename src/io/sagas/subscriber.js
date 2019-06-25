@@ -1,40 +1,64 @@
 // @flow
-import type {UpdateSubscriberType, PublishRequestPasswordResetType, PublishResetPasswordType} from '../../subscriber/dux';
+import type {
+  UpdateSubscriberType,
+  PublishRequestPasswordResetType,
+  PublishResetPasswordType,
+  UploadAvatarType,
+} from '../../subscriber/dux';
 import type {Saga} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 import queries from '../queries';
-import {UPDATE_SUBSCRIBER_FAILED, updateSubscriberSucceeded, getCurrentSubscriberAsSharedSubscriber} from '../../subscriber/dux';
-import { textModeBanner, passwordResetBanner, errorBanner } from '../../banner/dux';
-import { setPopUpModal, togglePopUpModal } from '../../popUpModal/dux';
-import { loginType } from '../../popUpModal/login/dux';
+import { errorBanner, infoBanner, passwordResetBanner, textModeBanner } from '../../banner/dux';
 import bugsnagClient from '../../util/bugsnag';
-import { getTranslateLanguage, getCurrentChannel, getPublicChannelMessage } from '../../selectors/channelSelectors';
+import { setPopUpModal, togglePopUpModal } from '../../popUpModal/dux';
+import { getAccessToken } from '../../selectors/authSelectors';
+import { getCurrentSubscriberAsSharedSubscriber, updateSubscriberSuccess, type UpdateGuestNicknameType } from '../../subscriber/dux';
+import { getPublicChannel, getPublicChannelMessage, getTranslateLanguage } from '../../selectors/channelSelectors';
 import { publishMessage } from '../../moment';
 import { clearChannelMessage } from '../../feed/dux';
+import { loginType } from '../../popUpModal/login/dux';
+import { resetApp } from '../../chop/dux';
+
+declare var GATEWAY_HOST: string;
 
 function* updateSubscriber (action: UpdateSubscriberType): Saga<void> {
   try {
     const result = yield call([queries, queries.updateSubscriber], action.id, action.input);
     if (result) {
-      yield put(updateSubscriberSucceeded(action.input));
-      if (action.input.preferences) {
-        // $FlowFixMe
-        yield put (textModeBanner(action.input.preferences?.textMode));
-      } else if (action.input.nickname) {
-        const language = yield select (getTranslateLanguage);
-        const subscriber = yield select (getCurrentSubscriberAsSharedSubscriber);
-        const channel = yield select (getCurrentChannel);
-        const message = yield select (getPublicChannelMessage);
-        yield put (publishMessage(channel, message, subscriber, language));
-        yield put (togglePopUpModal());
-        yield put (clearChannelMessage(channel));
+      yield put (updateSubscriberSuccess(action.input));
+      const { preferences } = action.input;
+      if (preferences && preferences.textMode) {
+        yield put (textModeBanner(preferences.textMode));
+      } else {
+        yield put (infoBanner('update_settings_success'));
       }
     } else {
-      yield put({type: UPDATE_SUBSCRIBER_FAILED, id: action.id, error: `Server returned false for updateSubscriber: ${action.id}`});
-      bugsnagClient.notify(new Error(`Server returned false for updateSubscriber: ${action.id}`));
+      throw new Error(`Server returned false for updateSubscriber: ${action.id}`);
     }
   } catch (error) {
-    yield put({type: UPDATE_SUBSCRIBER_FAILED, name: action.id, error: error.message});
+    yield put (errorBanner('update_settings_error'));
+    bugsnagClient.notify(error);
+  }
+}
+
+function* updateGuestNickname (action: UpdateGuestNicknameType): Saga<void> {
+  try {
+    const { nickname } = action;
+    const result = yield call([queries, queries.updateSubscriber], action.id, { nickname });
+    if (result) {
+      yield put (updateSubscriberSuccess({ nickname }));
+      const language = yield select (getTranslateLanguage);
+      const subscriber = yield select (getCurrentSubscriberAsSharedSubscriber);
+      const channel = yield select (getPublicChannel);
+      const message = yield select (getPublicChannelMessage);
+      yield put (publishMessage(channel, message, subscriber, language));
+      yield put (togglePopUpModal());
+      yield put (clearChannelMessage(channel));
+    } else {
+      throw new Error(`Server returned false for updateSubscriber: ${action.id}`);
+    }
+  } catch (error) {
+    yield put (errorBanner('update_settings_error'));
     bugsnagClient.notify(error);
   }
 }
@@ -61,8 +85,53 @@ function* resetPassword (action: PublishResetPasswordType): Saga<void> {
   }
 }
 
+function* uploadAvatar (action: UploadAvatarType): Saga<void> {
+  try {
+    const accessToken = yield select(getAccessToken);
+    const avatar = yield call(callUploadAvatar, action.formData, accessToken);
+    const result = yield call([queries, queries.updateSubscriber], action.id, { avatar });
+    if (result) {
+      yield put (updateSubscriberSuccess({ avatar }));
+    } else {
+      throw new Error(`Server returned false for updateSubscriber: ${action.id}`);
+    }
+  } catch (error) {
+    yield put (errorBanner('update_settings_error'));
+    bugsnagClient.notify(error);
+  }
+}
+
+const callUploadAvatar = async (formData:FormData, accessToken:string):Promise<string> => {
+  const response = await fetch(`${GATEWAY_HOST}/avatar/upload`, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return await response.text();
+};
+
+function* deleteSelf (): Saga<void> {
+  try {
+    const result = yield call([queries, queries.deleteSelf]);
+    if (result && result.deleteSelf) {
+      yield put (resetApp());
+      yield put (infoBanner('delete_self_success'));
+    } else {
+      throw new Error('Server returned false for deleteSelf');
+    }
+  } catch (error) {
+    yield put (errorBanner('delete_self_error'));
+    bugsnagClient.notify(error);
+  }
+}
+
 export {
   updateSubscriber,
   requestPasswordReset,
   resetPassword,
+  uploadAvatar,
+  updateGuestNickname,
+  deleteSelf,
 };

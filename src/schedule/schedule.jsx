@@ -28,7 +28,7 @@ const Schedule = ({schedule, timeZone }:ScheduleProps) => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-testid='schedule'>
       {
         Object.keys(schedule).map(day => (
           <div key={day}>

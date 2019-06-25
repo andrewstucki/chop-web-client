@@ -3,8 +3,8 @@ import reducer, {
   setSubscriber,
   setAvatar,
   getCurrentSubscriberAvatar,
-  updateSubscriberSucceeded,
   getTextMode,
+  updateSubscriber,
 } from '../../src/subscriber/dux';
 import { COMPACT } from '../../src/textModeToggle/dux';
 
@@ -41,7 +41,7 @@ describe('Subscriber Reducer Tests', () => {
   });
 
   test('Update Subscriber Success', () => {
-    const state = reducer(defaultState, updateSubscriberSucceeded({
+    const state = reducer(defaultState, updateSubscriber(currentSubscriber.id, {
       preferences: {
         textMode: 'COMPACT',
       },

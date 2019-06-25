@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import GuestNickname from './guestNickname';
 import { setPopUpModal } from '../dux';
 import { loginType } from '../login/dux';
-import { updateSubscriber, updateNickname } from '../../subscriber/dux';
+import { updateGuestNickname } from '../../subscriber/dux';
 
 const mapStateToProps = state => ({
   id: state.subscriber.currentSubscriber.id,
@@ -11,8 +11,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   {
-    login: () => dispatch(setPopUpModal(loginType())),
-    updateAndPost: (id, nickname) => dispatch(updateSubscriber(id, updateNickname(nickname))),
+    openLogin: () => dispatch(setPopUpModal(loginType())),
+    updateAndPost: (id, nickname) => dispatch(updateGuestNickname(id, nickname)),
   }
 );
 

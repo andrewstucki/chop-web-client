@@ -29,11 +29,11 @@ describe('Guest nickname modal tests', () => {
     const updateAndPost = sinon.spy();
 
     const { getByTestId } = renderWithReduxAndTheme(
-      <GuestNicknameModal 
-        isSmall={false} 
-        togglePopUpModal={() => {}} 
+      <GuestNicknameModal
+        isSmall={false}
+        togglePopUpModal={() => {}}
         updateAndPost={updateAndPost}
-        login={() => {}}
+        openLogin={() => {}}
         id='123456'
       />
     );

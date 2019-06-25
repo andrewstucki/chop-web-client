@@ -1,5 +1,5 @@
 // @flow
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
 import type { NoPropsType } from '../cwc-types';
 
@@ -7,17 +7,14 @@ export const PROGRESS = 'PROGRESS';
 export const DANGER = 'DANGER';
 export const REGRESS = 'REGRESS';
 
-type ButtonType = 
+type ButtonType =
   | typeof PROGRESS
   | typeof REGRESS
   | typeof DANGER;
 
 type PopUpModalContainerPropsType = {
   isSmall: boolean,
-};
-
-type HeaderPropsType = {
-  hasHeader: boolean,
+  includePadding: boolean,
 };
 
 type ButtonPropsType = {
@@ -39,19 +36,20 @@ const PopUpModalContainer:ComponentType<PopUpModalContainerPropsType> = styled.d
   position: relative;
   background-color: ${props => props.theme.colors.background};
   margin: ${props => props.isSmall ? '16px' : '64px 16px'};
-  padding: ${props => props.isSmall ? '8px' : '16px'};
+  ${props => props.includePadding && css`padding: ${props.isSmall ? '8px' : '16px'};`}
   width: 100%;
   max-width: ${props => props.isSmall ? '400px' : '460px'};
   box-sizing: border-box;
   border-radius: 4px;
-  shadow: ${props => props.theme.shadows.shadow3};
+  box-shadow: ${props => props.theme.shadows.shadow3};
   overflow-y: scroll;
   max-height: ${props => props.isSmall ? 'calc(100% - 32px)' : 'calc(100% - 128px)'};
+  position: relative;
 `;
 
-const Header:ComponentType<HeaderPropsType> = styled.div`
+const Header:ComponentType<NoPropsType> = styled.div`
   display: flex;
-  justify-content: ${props => props.hasHeader ? 'space-between' : 'flex-end'};
+  justify-content: space-between;
   line-height: 20px;
   font-size: 20px;
   color: ${props => props.theme.colors.gray100};

@@ -1,6 +1,5 @@
 // @flow
 import { call, put } from 'redux-saga/effects';
-import {addError} from '../../errors/dux';
 import type {Saga} from 'redux-saga';
 import {
   removeAuthentication,
@@ -17,7 +16,6 @@ function* handleDataFetchErrors (payload: any): Saga<void> {
       const { message, extensions, path } = errors[err];
 
       if (message) {
-        yield put(addError(message));
         yield call(log, ` - ${message}`);
       }
       if (

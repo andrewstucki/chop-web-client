@@ -41,7 +41,7 @@ type UpdateEventNotesType = {
   eventNotes: string,
 };
 
-type ActionType =
+export type ActionType =
   | SetEventType
   | UpdateEventNotesType;
 

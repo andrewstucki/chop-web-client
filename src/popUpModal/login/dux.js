@@ -1,3 +1,4 @@
+// @flow
 // Action Types
 
 export const LOGIN = 'LOGIN';
@@ -5,7 +6,7 @@ export const LOGIN = 'LOGIN';
 // Flow Type Definitions
 
 export type LoginType = {
-  type: LOGIN,
+  type: typeof LOGIN,
   error: boolean,
 }
 

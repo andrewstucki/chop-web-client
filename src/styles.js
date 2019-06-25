@@ -22,9 +22,6 @@ const GlobalStyle = createGlobalStyle`
     -ms-scroll-chaining: none;
   }
   
-  label, div {
-    color: ${props => props.theme.colors.gray100};
-  }
   
   strong {
     font-weight: bold;
@@ -38,8 +35,11 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
   }
   
-  p {
+  input, label, p {
     color: ${props => props.theme.colors.gray100};
+  }
+  
+  p {
     margin: 1rem 0;
   }
   

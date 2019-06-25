@@ -1,22 +1,21 @@
 // @flow
 import React from 'react';
-import { Icon } from './styles';
+import { Image } from './styles';
+import type { AvatarSizeType } from './index';
 
 type ImageAvatarProps = {
   url: string,
-  large: boolean,
-  small: boolean,
+  size: AvatarSizeType,
   id: string,
 };
 
-const ImageAvatar = ({url, large, small, id}:ImageAvatarProps) => (
-  <Icon
-    large={large}
-    small={small}
-    style={{backgroundImage: `url(${url})`, backgroundSize: 'cover'}}
-    id={id}
+const ImageAvatar = ({url, size, id}:ImageAvatarProps) => (
+  <Image
+    size={size}
+    src={url}
+    data-testid={id}
   >
-  </Icon>
+  </Image>
 );
 
 export default React.memo < ImageAvatarProps > (ImageAvatar);

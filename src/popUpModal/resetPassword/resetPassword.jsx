@@ -1,10 +1,10 @@
 // @flow
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { ActionContainer } from '../styles';
 import { InputField, InputLabel, ErrorMessage, InputWrapper, InputFieldWrapper, SubmitButton, MessageWrapper } from '../login/styles';
-import { Modal } from '../popUpModal';
+import Modal from '../modal';
 
 type resetPasswordPropsType = {
   togglePopUpModal: () => void,
@@ -32,7 +32,6 @@ const ResetPasswordPopUpModal = (
   const { t } = useTranslation('forms');
 
   const [values, setValues] = useState < ResetPasswordState > ({ password: '', passwordConfirmation: '', passwordBlank: false, passwordConfirmationBlank: false, match: true });
-  const passwordRef = useRef(null);
 
   const onChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -43,16 +42,11 @@ const ResetPasswordPopUpModal = (
   const handleReset = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (values.password !== '' && values.password === values.passwordConfirmation) {
-      const { current:currentPassword } = passwordRef;
-
-      const {
-        password = currentPassword === null ? '' : currentPassword.value(),
-      } = values;
-      resetPassword(resetToken, password);
+      resetPassword(resetToken, values.password);
     } else {
       setValues(
         {
-          ...values, 
+          ...values,
           passwordBlank: values.password === '',
           passwordConfirmationBlank: values.passwordConfirmation === '',
           match: values.password === '' || values.passwordConfirmation === '' || values.password === values.passwordConfirmation,
@@ -69,7 +63,7 @@ const ResetPasswordPopUpModal = (
       <form onSubmit={handleReset}>
         <InputWrapper>
           <InputFieldWrapper>
-            <InputField type="password" name="password" id="password" data-testid="resetPassword-passwordField" value={values.password} ref={passwordRef} onChange={onChange} error={values.passwordBlank || !values.match}/>
+            <InputField type="password" name="password" id="password" data-testid="resetPassword-passwordField" value={values.password} onChange={onChange} error={values.passwordBlank || !values.match}/>
             <InputLabel htmlFor="password">{ t('reset_password.password') }</InputLabel>
           </InputFieldWrapper>
           <ErrorMessage visible={values.passwordBlank}>{ t('reset_password.blank_password') }</ErrorMessage>

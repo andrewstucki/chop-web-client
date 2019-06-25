@@ -9,13 +9,30 @@ import LanguageSelector from '../languageSelector';
 import TextModeToggle from '../textModeToggle';
 import GuestExperienceLink from '../icons/guestExperienceLink';
 import FeedbackLink from '../icons/feedbackLink';
-import Exit from '../../assets/exit.svg';
+import Exit from '../icons/exit';
+import Cog from '../icons/cog';
 import Avatar from '../avatar';
 import ReactTouchEvents from 'react-touch-events';
-import { ExternalLink, LinkIcon, OrganizationTitle, Nickname, EventDescription, EventTitle, Profile, ProfileActions, Menu, Overlay, LogOutButton, LinkWrapper, LoginWrapper, LoginButton, SignUpButton } from './styles';
 import { admin } from '../subscriber/permissions';
-import {usePermissions} from '../hooks/usePermissions';
-import {privateSubscriberToSharedSubscriber} from '../subscriber/dux';
+import { usePermissions } from '../hooks/usePermissions';
+import { privateSubscriberToSharedSubscriber } from '../subscriber/dux';
+import {
+  ExternalLink,
+  LinkIcon,
+  OrganizationTitle,
+  Nickname,
+  EventDescription,
+  EventTitle,
+  Profile,
+  ProfileActions,
+  Menu,
+  Overlay,
+  ActionButton,
+  LinkWrapper,
+  LoginButton,
+  LoginWrapper,
+  SignUpButton,
+} from './styles';
 import { useTranslation } from 'react-i18next';
 
 type SideMenuType = {
@@ -32,6 +49,7 @@ type SideMenuType = {
   currentSubscriber: PrivateSubscriberType,
   currentLanguage: string,
   authenticated: boolean,
+  openSettingsModal: () => void,
   isHost: boolean,
 };
 
@@ -48,6 +66,7 @@ const SideMenu = (
     eventDescription,
     currentSubscriber,
     currentLanguage,
+    openSettingsModal,
     authenticated,
     login,
     isHost,
@@ -61,7 +80,7 @@ const SideMenu = (
   const hasAdminLinkPermissions = usePermissions(currentSubscriber, admin);
   return (
     <>
-      <Overlay onClick={close} visible={!isClosed}/>
+      <Overlay data-testid='sideMenu-overlay' onClick={close} visible={!isClosed}/>
       <ReactTouchEvents onSwipe={onSwipe}>
         <Menu
           open={!isClosed}
@@ -77,25 +96,34 @@ const SideMenu = (
 
           { authenticated &&
             <Profile>
-              <Avatar subscriber={privateSubscriberToSharedSubscriber(currentSubscriber)} large/>
+              <Avatar subscriber={privateSubscriberToSharedSubscriber(currentSubscriber)} size='large'/>
               <Nickname>{currentSubscriber.nickname}</Nickname>
               <ProfileActions>
-                <LogOutButton
-                  data-testid='side-menu-logout'
+                {/* TODO: Remove this `false` when two way sync is figured out */}
+                {false &&
+                  <ActionButton
+                    data-testid='settings'
+                    onClick={openSettingsModal}
+                  >
+                    <Cog/>
+                    <div>{t('settings')}</div>
+                  </ActionButton>
+                }
+                <ActionButton
+                  data-testid='logout'
                   onClick={logout}>
-                  <LinkIcon
-                    dangerouslySetInnerHTML={{ __html: Exit }}
-                  /> { t('log_out') }
-                </LogOutButton>
+                  <Exit/>
+                  <div>{t('log_out')}</div>
+                </ActionButton>
               </ProfileActions>
             </Profile>
           }
 
           { !authenticated &&
-            <LoginWrapper>
-              <LoginButton onClick={handleLogin} data-testid="side-menu-login">Log In</LoginButton>
-              <SignUpButton onClick={() => {}}>Sign Up</SignUpButton>
-            </LoginWrapper>
+          <LoginWrapper>
+            <LoginButton onClick={handleLogin} data-testid="side-menu-login">Log In</LoginButton>
+            <SignUpButton onClick={() => {}}>Sign Up</SignUpButton>
+          </LoginWrapper>
           }
 
           <div css={`margin-top: auto;`}>

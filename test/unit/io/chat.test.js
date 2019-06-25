@@ -30,6 +30,10 @@ describe('Chat2 Tests', () => {
         id: '123456',
         nickname: 'Kylo Ren',
         avatar: 'http://someimageons3.com/image/123',
+        firstName: 'Kylo',
+        lastName: 'Ren',
+        email: 'kyloren@darkside.com',
+        phoneNumber: '',
         role: {
           label: 'Supreme Leader of the First Order',
           permissions: ['event.event.manage'],

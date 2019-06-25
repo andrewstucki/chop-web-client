@@ -63,11 +63,16 @@ const otherSubscriber = {
     label: '',
   },
 };
+
 const currentSubscriber: PrivateSubscriberType = {
   id: '09876',
   pubnubAccessKey: '67890',
   avatar: null,
   nickname: 'Joan Jet',
+  firstName: 'Joan',
+  lastName: 'Jet',
+  email: 'joanjet@theblackharts.rock',
+  phoneNumber: '867-5309',
   role: {
     label: '',
     permissions: [],

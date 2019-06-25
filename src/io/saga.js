@@ -48,8 +48,11 @@ import {
 } from './sagas/moderation';
 import {
   updateSubscriber,
+  uploadAvatar,
   requestPasswordReset,
   resetPassword,
+  updateGuestNickname,
+  deleteSelf,
 } from './sagas/subscriber';
 import {
   handleDataFetchErrors,
@@ -67,7 +70,9 @@ import {
   PUBLISH_REQUEST_PASSWORD_RESET,
   PUBLISH_RESET_PASSWORD,
   PUBLISH_MUTE_SUBSCRIBER,
+  UPLOAD_AVATAR, UPDATE_GUEST_NICKNAME, DELETE_SELF,
 } from '../subscriber/dux';
+import { RESET_APP } from '../chop/dux';
 
 function* rootSaga (): Saga<void> {
   yield all([
@@ -80,7 +85,7 @@ function* rootSaga (): Saga<void> {
     takeEvery(PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, handleDataFetchErrors),
     takeEvery(BASIC_AUTH_LOGIN, authenticateByBasicAuth),
     takeEvery(BASIC_AUTH_LOGIN_FAILED, handleDataFetchErrors),
-    takeEvery(REHYDRATE, authenticateByToken),
+    takeEvery([REHYDRATE, RESET_APP], authenticateByToken),
     takeEvery(TOKEN_AUTH_LOGIN_FAILED, handleDataFetchErrors),
     takeEvery(QUERY_CURRENT_EVENT, currentEvent),
     takeEvery(QUERY_CURRENT_EVENT_FAILED, handleDataFetchErrors),
@@ -90,10 +95,13 @@ function* rootSaga (): Saga<void> {
     takeLeading('*', setPubnubClient),
     takeEvery(JOIN_CHANNEL, joinChannel),
     takeEvery(UPDATE_SUBSCRIBER, updateSubscriber),
+    takeEvery(UPDATE_GUEST_NICKNAME, updateGuestNickname),
     takeEvery(GENERATE_PDF, generatePdf),
+    takeEvery(UPLOAD_AVATAR, uploadAvatar),
     takeEvery(PUBLISH_REQUEST_PASSWORD_RESET, requestPasswordReset),
     takeEvery(PUBLISH_RESET_PASSWORD, resetPassword),
     takeEvery(PUBLISH_GUEST_AUTH, authenticateByGuestAuth),
+    takeEvery(DELETE_SELF, deleteSelf),
   ]);
 }
 
@@ -110,5 +118,8 @@ export {
   publishMomentToChannel,
   joinChannel,
   generatePdf,
+  uploadAvatar,
   requestPasswordReset,
+  updateGuestNickname,
+  deleteSelf,
 };

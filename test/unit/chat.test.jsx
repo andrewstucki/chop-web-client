@@ -183,6 +183,10 @@ describe('Chat tests', () => {
           pubnubAccessKey: '67890',
           avatar: null,
           nickname: 'Kylo Ren',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          email: 'kyloren@darkside.com',
+          phoneNumber: '',
           role: {
             label: '',
             permissions: [],
@@ -255,6 +259,10 @@ describe('Chat tests', () => {
           pubnubAccessKey: '67890',
           avatar: null,
           nickname: 'Kylo Ren',
+          firstName: 'Kylo',
+          lastName: 'Ren',
+          email: 'kyloren@darkside.com',
+          phoneNumber: '',
           role: {
             label: '',
             permissions: [],

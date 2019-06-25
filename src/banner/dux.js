@@ -1,179 +1,126 @@
 // @flow
 import type { TextModeType } from  '../textModeToggle/dux';
+import { COMPACT } from '../textModeToggle/dux';
 
-const MUTED = 'MUTED';
-const ERROR = 'ERROR';
-const WARNING = 'WARNING';
-const TEXT_MODE = 'TEXT_MODE';
-const LOGGED_IN = 'LOGGED_IN';
-const PASSWORD_RESET = 'PASSWORD_RESET';
-const LOGGED_OUT = 'LOGGED_OUT';
-const SET_BANNER = 'SET_BANNER';
-const CLEAR_BANNER = 'CLEAR_BANNER';
+// Actions
+export const SET_BANNER = 'SET_BANNER';
+export const CLEAR_BANNER = 'CLEAR_BANNER';
 
-// Flow Type Definitions
+// Types
+// NOTE: Use the generic action creators, passing the key when possible. When specific styling needs to be done
+// in the banner, we need to create more specific types (i.e. - MUTED and LOGGED_IN have the { name } bolded).
+export const INFO = 'INFO';
+export const WARNING = 'WARNING';
+export const ERROR = 'ERROR';
+export const MUTED = 'MUTED';
+export const LOGGED_IN = 'LOGGED_IN';
 
-type MutedBannerType = {
-  type: typeof MUTED,
-  name: string,
+export type BannerType = {
+  type: typeof INFO | typeof WARNING | typeof ERROR | typeof MUTED | typeof LOGGED_IN,
+  key: string,
+  variables?: {
+    [string]:string,
+  },
 };
 
-type ErrorBannerType = {
-  type: typeof ERROR,
-  error: string,
-};
-
-type WarningBannerType = {
-  type: typeof WARNING,
-  warning: string,
-};
-
-type TextModeBannerType = {
-  type: typeof TEXT_MODE,
-  mode: TextModeType,
-};
-
-type LoggedInBannerType = {
-  type: typeof LOGGED_IN,
-};
-
-type PasswordResetBannerType = {
-  type: typeof PASSWORD_RESET,
-};
-
-type LoggedOutBannerType = {
-  type: typeof LOGGED_OUT,
-};
-
-type SetBannerType = {
+export type SetBannerType = {
   type: typeof SET_BANNER,
   banner: BannerType,
 };
 
-type ClearBannerType = {
+export type ClearBannerType = {
   type: typeof CLEAR_BANNER,
 };
 
-type BannerType = 
-  | MutedBannerType
-  | ErrorBannerType
-  | WarningBannerType
-  | TextModeBannerType
-  | LoggedInBannerType
-  | PasswordResetBannerType
-  | LoggedOutBannerType
-  | {};
-  
-
 // Action Creators
-
-const mutedBanner = (
-  name: string,
-): SetBannerType => (
+export const infoBanner = (key: string): SetBannerType => (
   {
     type: SET_BANNER,
     banner: {
-      type: MUTED,
-      name,
+      type: INFO,
+      key,
     },
   }
 );
 
-const warningBanner = (
-  warning: string,
-): SetBannerType => (
+export const warningBanner = (key: string): SetBannerType => (
   {
     type: SET_BANNER,
     banner: {
       type: WARNING,
-      warning,
+      key,
     },
   }
 );
 
-const errorBanner = (
-  error: string,
-): SetBannerType => (
+export const errorBanner = (key: string): SetBannerType => (
   {
     type: SET_BANNER,
     banner: {
       type: ERROR,
-      error,
+      key,
     },
   }
 );
 
-const textModeBanner = (
-  mode: TextModeType,
-): SetBannerType => (
+export const mutedBanner = (name: string): SetBannerType => (
   {
     type: SET_BANNER,
     banner: {
-      type: TEXT_MODE,
-      mode,
+      type: MUTED,
+      key: 'subscriber_muted',
+      variables: {
+        name,
+      },
     },
   }
 );
 
-const loggedInBanner = (): SetBannerType => (
+export const textModeBanner = (mode: TextModeType): SetBannerType => (
+  {
+    type: SET_BANNER,
+    banner: {
+      type: INFO,
+      key: 'text_mode_updated',
+      variables: {
+        mode: mode === COMPACT ? 'decreased' : 'increased',
+      },
+    },
+  }
+);
+
+export const loggedInBanner = (): SetBannerType => (
   {
     type: SET_BANNER,
     banner: {
       type: LOGGED_IN,
+      key: 'logged_in',
     },
   }
 );
 
-const passwordResetBanner = (): SetBannerType => (
+export const passwordResetBanner = (): SetBannerType => (
   {
     type: SET_BANNER,
     banner: {
-      type: PASSWORD_RESET,
+      type: INFO,
+      key: 'password_reset',
     },
   }
 );
 
-const loggedOutBanner = (): SetBannerType => (
+export const loggedOutBanner = (): SetBannerType => (
   {
     type: SET_BANNER,
     banner: {
-      type: LOGGED_OUT,
+      type: INFO,
+      key: 'logged_out',
     },
   }
 );
 
-const clearBanner = (): ClearBannerType => (
+export const clearBanner = (): ClearBannerType => (
   {
     type: CLEAR_BANNER,
   }
 );
-
-// Exports
-
-export {
-  mutedBanner,
-  errorBanner,
-  warningBanner,
-  textModeBanner,
-  loggedInBanner,
-  passwordResetBanner,
-  loggedOutBanner,
-  clearBanner,
-};
-
-export type {
-  BannerType,
-  SetBannerType,
-};
-
-export {
-  MUTED,
-  WARNING,
-  ERROR,
-  TEXT_MODE,
-  LOGGED_IN,
-  PASSWORD_RESET,
-  LOGGED_OUT,
-  SET_BANNER,
-  CLEAR_BANNER,
-};

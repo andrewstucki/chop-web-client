@@ -4,7 +4,7 @@ import React from 'react';
 import type { SharedSubscriberType, PrivateSubscriberType } from '../../subscriber/dux';
 import { useTranslation, Trans } from 'react-i18next';
 import { Button, ActionContainer, Text, PROGRESS, REGRESS } from '../styles';
-import { Modal } from '../popUpModal';
+import Modal from '../modal';
 import dayjs from 'dayjs';
 
 type LeaveChatPropsType = {

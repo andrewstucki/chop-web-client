@@ -1,10 +1,9 @@
 // @flow
-import React, { useState, useRef } from 'react';
-
+import React, { useState } from 'react';
+import Modal from '../modal';
 import { useTranslation } from 'react-i18next';
 import { Button, ActionContainer, REGRESS } from '../styles';
 import { SubmitButton, InputField, InputWrapper, InputLabel, InputFieldButton, ErrorMessage, InputFieldWrapper, MessageWrapper } from './styles';
-import { Modal } from '../popUpModal';
 import { validEmail } from '../../util';
 
 type LoginPropsType = {
@@ -36,8 +35,6 @@ const LoginPopUpModal = (
 ) => {
   const { t } = useTranslation('forms');
   const [values, setValues] = useState < LoginState > ({ email: '', password: '', emailBlank: false, passwordBlank: false, emailInvalid: false });
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
 
   const onChange = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
     if (error) {
@@ -54,15 +51,7 @@ const LoginPopUpModal = (
   const handleLogin = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (values.email !== '' && values.password !== '' && validEmail(values.email)) {
-      const { current:currentEmail } = emailRef;
-      const { current:currentPassword } = passwordRef;
-
-      const {
-        email = currentEmail === null ? '' : currentEmail.value(),
-        password = currentPassword === null ? '' : currentPassword.value(),
-      } = values;
-
-      basicAuthLogin(email, password);
+      basicAuthLogin(values.email, values.password);
     } else {
       setValues(
         {
@@ -83,7 +72,7 @@ const LoginPopUpModal = (
       <form onSubmit={handleLogin}>
         <InputWrapper>
           <InputFieldWrapper>
-            <InputField type="text" name="email" id="email" data-testid="login-emailField" value={values.email} ref={emailRef} onChange={onChange} error={values.emailBlank || values.emailInvalid || error}/>
+            <InputField type="text" name="email" id="email" data-testid="login-emailField" value={values.email} onChange={onChange} error={values.emailBlank || values.emailInvalid || error}/>
             <InputLabel htmlFor="email">{ t('login.email') }</InputLabel>
           </InputFieldWrapper>
           <ErrorMessage visible={values.emailBlank}>{ t('login.blank_email') }</ErrorMessage>
@@ -91,11 +80,13 @@ const LoginPopUpModal = (
         </InputWrapper>
         <InputWrapper>
           <InputFieldWrapper>
-            <InputField type="password" name="password" id="password" data-testid="login-passwordField" value={values.password} ref={passwordRef} onChange={onChange} buttonPresent={true} error={values.passwordBlank || error}/>
+            <InputField type="password" name="password" id="password" data-testid="login-passwordField" value={values.password} onChange={onChange} buttonPresent={true} error={values.passwordBlank || error}/>
             <InputLabel htmlFor="password">{ t('login.password') }</InputLabel>
+            {/* TODO: Remove this `false` when two way sync is figured out */}
+            { false &&
             <InputFieldButton buttonType={REGRESS} onClick={resetPassword} data-testid='login-forgotPassword' type="button">
               { t('login.forgot') }
-            </InputFieldButton>
+            </InputFieldButton> }
           </InputFieldWrapper>
           <ErrorMessage visible={values.passwordBlank}>{ t('login.blank_password') }</ErrorMessage>
         </InputWrapper>

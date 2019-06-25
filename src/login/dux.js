@@ -27,17 +27,12 @@ const removeLoginError = (): RemoveLoginErrorType => (
   }
 );
 
-const logout = (): void => {
-  document.cookie = 'legacy_token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-};
-
 export {
   BASIC_AUTH_LOGIN,
   BASIC_AUTH_LOGIN_FAILED,
   REMOVE_LOGIN_ERROR,
   removeLoginError,
   basicAuthLogin,
-  logout,
 };
 
 export type {
