@@ -8,7 +8,7 @@ import { theme } from '../styles';
 
 export type ModalPropsType = {
   togglePopUpModal: () => void,
-  HeaderText?: string,
+  header?: string,
   isSmall: boolean,
   id: string,
   children?: Node,
@@ -22,14 +22,14 @@ const DismissButton = ({togglePopUpModal}) => (
   </IconButton>
 );
 
-const Modal = ({togglePopUpModal, HeaderText =  '', isSmall, id, children, showDismissButton = false, includePadding = true}:ModalPropsType) => {
+const Modal = ({togglePopUpModal, header =  '', isSmall, id, children, showDismissButton = false, includePadding = true}:ModalPropsType) => {
   const modalRef = React.useRef();
   useOnClickOutside(modalRef, () => togglePopUpModal());
   return (
     <Wrapper data-testid='popUpModal'>
       <PopUpModalContainer isSmall={isSmall} data-testid={id} ref={modalRef} includePadding={includePadding}>
-        { HeaderText &&
-        <Header>{HeaderText}</Header>
+        { header &&
+        <Header>{header}</Header>
         }
         { showDismissButton && <DismissButton togglePopUpModal={togglePopUpModal}/> }
         {children}
