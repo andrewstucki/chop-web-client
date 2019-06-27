@@ -158,7 +158,7 @@ class Feed extends React.Component<FeedProps> {
       </li>
     ));
     const anchorMomentListItems = anchorMoments.map(anchorMoment => (
-      <li key={anchorMoment.id}>
+      <li key={anchorMoment.id} css={{ display: 'block' }}>
         <AnchorMoment
           currentChannel={currentChannel}
           anchorMoment={anchorMoment}
