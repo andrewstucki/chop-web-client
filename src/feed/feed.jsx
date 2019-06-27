@@ -146,10 +146,10 @@ class Feed extends React.Component<FeedProps> {
     } = this.props;
 
     const hasAnchorMoments = anchorMoments?.length > 0;
-    const momentLiStyle = { margin: '0 8px' };
+    const momentLiStyle = { margin: '0 8px', display: 'block' };
 
     const momentListItems = moments.reverse().map((moment: MomentType) => (
-      <li key={moment.id || createUid()} style={momentLiStyle}>
+      <li key={moment.id || createUid()} css={momentLiStyle}>
         <Moment
           currentChannel={currentChannel}
           data={moment}
@@ -158,7 +158,7 @@ class Feed extends React.Component<FeedProps> {
       </li>
     ));
     const anchorMomentListItems = anchorMoments.map(anchorMoment => (
-      <li key={anchorMoment.id} css={{ display: 'block' }}>
+      <li key={anchorMoment.id}>
         <AnchorMoment
           currentChannel={currentChannel}
           anchorMoment={anchorMoment}
