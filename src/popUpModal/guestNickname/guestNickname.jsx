@@ -56,7 +56,7 @@ const GuestNicknamePopUpModal = (
   };
 
   return (
-    <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('guest_nickname.title')} id="guestNickname-modal">
+    <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('guest_nickname.title')} showDismissButton={true} id="guestNickname-modal">
       <MessageWrapper>
         <SmallText>{ t('guest_nickname.description') }</SmallText>
       </MessageWrapper>

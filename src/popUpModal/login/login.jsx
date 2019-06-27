@@ -65,7 +65,7 @@ const LoginPopUpModal = (
   };
 
   return (
-    <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('login.title')} id="login-modal">
+    <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('login.title')} showDismissButton={true} id="login-modal">
       <MessageWrapper>
         <ErrorMessage visible={error}>{ t('login.error') }</ErrorMessage>
       </MessageWrapper>

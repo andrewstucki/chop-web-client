@@ -56,7 +56,7 @@ const ResetPasswordPopUpModal = (
   };
 
   return (
-    <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('reset_password.title')} id="resetPassword-modal">
+    <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('reset_password.title')} showDismissButton={true} id="resetPassword-modal">
       <MessageWrapper>
         <ErrorMessage visible={!values.match}>{ t('reset_password.passwords_dont_match') }</ErrorMessage>
       </MessageWrapper>

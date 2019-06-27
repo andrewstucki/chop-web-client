@@ -54,7 +54,7 @@ const RequestPasswordResetPopUpModal = (
 
   if (values.sent) {
     return (
-      <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('request_password_reset.title')} id="requestPasswordReset-modal">
+      <Modal togglePopUpModal={togglePopUpModal} isSmall={isSmall} header={t('request_password_reset.title')} showDismissButton={true} id="requestPasswordReset-modal">
         <Message data-testid="requestPasswordReset-confirmation">
           <Trans ns='forms' i18nKey='request_password_reset.confirmation'>
             {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
