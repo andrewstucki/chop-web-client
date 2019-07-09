@@ -5,6 +5,7 @@ import type { Config } from 'dompurify';
 import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 import Cookies from 'js-cookie';
+import { API } from '../io/API';
 
 // $FlowFixMe
 dayjs.extend(utc);
@@ -123,6 +124,7 @@ export const getOrCreateElement = (id:string):HTMLElement => {
 
 export const deleteAllCookies = ():void => {
   Cookies.remove('legacy_token');
+  API.post('/auth/logout');
 };
 
 export {

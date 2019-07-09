@@ -214,8 +214,8 @@ describe('Test Update Subscriber', () => {
   });
 
   test('Upload avatar success', async () => {
-    // $FlowFixMe - Fetch gets monkey patched in  setupFile.js, how does this
-    fetch.mockResponseOnce('https://google.com/avatars/me/avatar.jpg');
+    // $FlowFixMe - Fetch gets monkey patched in setupFile.js
+    fetch.mockResponseOnce('https://google.com/avatars/me/avatar.jpg', { status: 200, headers: { 'content-type': 'text/plain' }});
     mockUpdateSubscriber.mockResolvedValue(true);
 
     const dispatched = [];
