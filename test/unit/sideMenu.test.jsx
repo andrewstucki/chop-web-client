@@ -1,13 +1,12 @@
 // @flow
 import React from 'react';
 import sinon from 'sinon';
-import { renderWithReduxAndTheme } from '../testUtils';
+import { renderWithReduxAndTheme, defaultState } from '../testUtils';
 
 import SideMenu from '../../src/sideMenu/sideMenu';
 import SideMenuIndex from '../../src/sideMenu';
 import { fireEvent } from '@testing-library/react';
 import type {PrivateSubscriberType} from '../../src/subscriber/dux';
-import { defaultState } from '../../src/chop/dux';
 
 const languageOptions = [
   {
@@ -347,7 +346,30 @@ describe('SideBar tests', () => {
 
   test('Login modal displays', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
-      <SideMenuIndex/>
+      <SideMenuIndex/>,
+      {
+        ...defaultState,
+        subscriber: {
+          ...defaultState.subscriber,
+          currentSubscriber: {
+            id: '',
+            pubnubAccessKey: '',
+            avatar: null,
+            nickname: '',
+            firstName: '',
+            lastName: ``,
+            email: '',
+            phoneNumber: '',
+            role: {
+              label: '',
+              permissions: [],
+            },
+            preferences: {
+              textMode: 'COMPACT',
+            },
+          },
+        },
+      }
     );
     expect(queryByTestId('side-menu-login')).toBeTruthy;
     fireEvent.click(queryByTestId('side-menu-login'));
@@ -356,14 +378,7 @@ describe('SideBar tests', () => {
 
   test('Logout updates the side menu', () => {
     const { queryByTestId } = renderWithReduxAndTheme(
-      <SideMenuIndex/>,
-      {
-        ...defaultState,
-        feed: {
-          ...defaultState.feed,
-          isAuthenticated: true,
-        },
-      }
+      <SideMenuIndex/>
     );
     expect(queryByTestId('logout')).toBeTruthy;
     fireEvent.click(queryByTestId('logout'));
