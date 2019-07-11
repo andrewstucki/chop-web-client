@@ -6,14 +6,14 @@ import { Button, ActionContainer, REGRESS } from '../styles';
 import { SubmitButton, InputField, InputWrapper, InputLabel, InputFieldButton, ErrorMessage, InputFieldWrapper, MessageWrapper } from './styles';
 import { validEmail } from '../../util';
 
-type LoginPropsType = {|
+type LoginPropsType = {
   togglePopUpModal: () => void,
   basicAuthLogin: (email: string, password: string) => void,
   removeLoginError: () => void,
   resetPassword: () => void,
   isSmall: boolean,
   error: boolean,
-|};
+};
 
 type LoginState = {
   email: string,

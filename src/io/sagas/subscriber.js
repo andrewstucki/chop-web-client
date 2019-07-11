@@ -11,13 +11,15 @@ import queries from '../queries';
 import { errorBanner, infoBanner, passwordResetBanner, textModeBanner } from '../../banner/dux';
 import bugsnagClient from '../../util/bugsnag';
 import { setPopUpModal, togglePopUpModal } from '../../popUpModal/dux';
+import { getAccessToken } from '../../selectors/authSelectors';
 import { getCurrentSubscriberAsSharedSubscriber, updateSubscriberSuccess, type UpdateGuestNicknameType } from '../../subscriber/dux';
 import { getPublicChannel, getPublicChannelMessage, getTranslateLanguage } from '../../selectors/channelSelectors';
 import { publishMessage } from '../../moment';
 import { clearChannelMessage } from '../../feed/dux';
 import { loginType } from '../../popUpModal/login/dux';
 import { resetApp } from '../../chop/dux';
-import { API } from '../API';
+
+declare var GATEWAY_HOST: string;
 
 function* updateSubscriber (action: UpdateSubscriberType): Saga<void> {
   try {
@@ -85,8 +87,8 @@ function* resetPassword (action: PublishResetPasswordType): Saga<void> {
 
 function* uploadAvatar (action: UploadAvatarType): Saga<void> {
   try {
-    const { formData } = action;
-    const avatar = yield call([API, API.post], '/avatar/upload', { formData });
+    const accessToken = yield select(getAccessToken);
+    const avatar = yield call(callUploadAvatar, action.formData, accessToken);
     const result = yield call([queries, queries.updateSubscriber], action.id, { avatar });
     if (result) {
       yield put (updateSubscriberSuccess({ avatar }));
@@ -98,6 +100,17 @@ function* uploadAvatar (action: UploadAvatarType): Saga<void> {
     bugsnagClient.notify(error);
   }
 }
+
+const callUploadAvatar = async (formData:FormData, accessToken:string):Promise<string> => {
+  const response = await fetch(`${GATEWAY_HOST}/avatar/upload`, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return await response.text();
+};
 
 function* deleteSelf (): Saga<void> {
   try {

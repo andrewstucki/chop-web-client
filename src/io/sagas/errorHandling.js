@@ -1,6 +1,9 @@
 // @flow
-import { call } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import type {Saga} from 'redux-saga';
+import {
+  removeAuthentication,
+} from '../../auth/dux';
 
 // eslint-disable-next-line no-console
 const log = message => console.log(message);
@@ -10,10 +13,16 @@ function* handleDataFetchErrors (payload: any): Saga<void> {
     const { response: { errors } } = payload.error;
     yield call(log, 'The graphql response returned errors:');
     for (const err in errors) {
-      const { message } = errors[err];
+      const { message, extensions, path } = errors[err];
 
       if (message) {
         yield call(log, ` - ${message}`);
+      }
+      if (
+        extensions && extensions.code === 'UNAUTHORIZED' ||
+        extensions && extensions.code === 'INTERNAL_SERVER_ERROR' && path === 'authenticate'
+      ) {
+        yield put(removeAuthentication());
       }
     }
   } else {

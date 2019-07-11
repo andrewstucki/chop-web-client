@@ -56,7 +56,7 @@ const persistConfig = {
   stateReconciler: autoMergeLevel2,
   blacklist: ['sequence', 'schedule','subscriber','event'],
   transforms: [
-    createWhitelistFilter('feed', ['persistExpiresAt', 'organization', 'languageOptions']),
+    createWhitelistFilter('feed', ['isAuthenticated', 'auth', 'persistExpiresAt', 'languageOptions']),
     createExpirationTransform({
       defaultState,
     }),

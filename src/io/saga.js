@@ -11,6 +11,10 @@ import {
   JOIN_CHANNEL,
 } from '../feed/dux';
 import {
+  TOKEN_AUTH_LOGIN_FAILED,
+  PUBLISH_GUEST_AUTH,
+} from '../auth/dux';
+import {
   QUERY_CURRENT_EVENT,
   QUERY_CURRENT_EVENT_FAILED,
 } from '../event/dux';
@@ -29,11 +33,9 @@ import {
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import { currentEvent } from './sagas/currentEvent';
 import {
-  basicAuth,
-  guestAuth,
-  checkAuth,
-  logout,
-  init,
+  authenticateByBasicAuth,
+  authenticateByGuestAuth,
+  authenticateByToken,
 } from './sagas/auth';
 import {
   leaveChannel,
@@ -68,9 +70,7 @@ import {
   PUBLISH_REQUEST_PASSWORD_RESET,
   PUBLISH_RESET_PASSWORD,
   PUBLISH_MUTE_SUBSCRIBER,
-  UPLOAD_AVATAR,
-  UPDATE_GUEST_NICKNAME,
-  DELETE_SELF,
+  UPLOAD_AVATAR, UPDATE_GUEST_NICKNAME, DELETE_SELF,
 } from '../subscriber/dux';
 import { RESET_APP } from '../chop/dux';
 
@@ -83,10 +83,10 @@ function* rootSaga (): Saga<void> {
     takeEvery(DIRECT_CHAT_FAILED, handleDataFetchErrors),
     takeEvery(PUBLISH_ACCEPTED_PRAYER_REQUEST, publishAcceptedPrayerRequest),
     takeEvery(PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, handleDataFetchErrors),
-    takeEvery(BASIC_AUTH_LOGIN, basicAuth),
+    takeEvery(BASIC_AUTH_LOGIN, authenticateByBasicAuth),
     takeEvery(BASIC_AUTH_LOGIN_FAILED, handleDataFetchErrors),
-    takeEvery(REHYDRATE, init),
-    takeEvery(RESET_APP, logout),
+    takeEvery([REHYDRATE, RESET_APP], authenticateByToken),
+    takeEvery(TOKEN_AUTH_LOGIN_FAILED, handleDataFetchErrors),
     takeEvery(QUERY_CURRENT_EVENT, currentEvent),
     takeEvery(QUERY_CURRENT_EVENT_FAILED, handleDataFetchErrors),
     takeEvery(QUERY_SCHEDULE_FAILED, handleDataFetchErrors),
@@ -100,6 +100,7 @@ function* rootSaga (): Saga<void> {
     takeEvery(UPLOAD_AVATAR, uploadAvatar),
     takeEvery(PUBLISH_REQUEST_PASSWORD_RESET, requestPasswordReset),
     takeEvery(PUBLISH_RESET_PASSWORD, resetPassword),
+    takeEvery(PUBLISH_GUEST_AUTH, authenticateByGuestAuth),
     takeEvery(DELETE_SELF, deleteSelf),
   ]);
 }
@@ -110,9 +111,9 @@ export {
   leaveChannel,
   directChat,
   publishAcceptedPrayerRequest,
-  basicAuth,
-  checkAuth,
-  guestAuth,
+  authenticateByBasicAuth,
+  authenticateByToken,
+  authenticateByGuestAuth,
   rootSaga,
   publishMomentToChannel,
   joinChannel,
@@ -121,6 +122,4 @@ export {
   requestPasswordReset,
   updateGuestNickname,
   deleteSelf,
-  logout,
-  init,
 };

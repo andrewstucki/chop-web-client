@@ -87,6 +87,7 @@ const NavMenuChurchName = styled.div`
   align-items: center;
   color: ${props => props.theme.colors.gray50 };
   font-size: 13.44px;
+  white-space: nowrap;
   font-weight: 500;
 `;
 

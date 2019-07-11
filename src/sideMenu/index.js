@@ -23,7 +23,7 @@ const mapStateToProps = state => {
     eventDescription,
     currentSubscriber: state.subscriber.currentSubscriber,
     currentLanguage: state.feed.currentLanguage,
-    authenticated: state.subscriber.currentSubscriber.email !== '',
+    authenticated: state.feed.isAuthenticated,
     isHost: hasPermissions(state, ['feed.host.read','feed.host.write']),
   };
 };

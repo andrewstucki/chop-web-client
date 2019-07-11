@@ -7,8 +7,9 @@ import { requestPasswordReset } from '../requestPasswordReset/dux';
 
 const mapStateToProps = state => (
   {
+    isAuthenticated: state.feed.isAuthenticated,
     error: state.feed.popUpModal.error,
-  }
+  }  
 );
 
 const mapDispatchToProps = dispatch => (

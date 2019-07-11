@@ -8,7 +8,7 @@ describe('Test GraphQL', () => {
   test('Authenticate', async () => {
     global.location = { hostname: 'digerati.chopdev.com' };
 
-    await queries.currentState(false);
+    await queries.authenticateByBasicAuth('testguy@test.com', '12345');
 
     expect(mockRequest).toHaveBeenCalled();
   });

@@ -1,5 +1,15 @@
 import testData from '../../../test/unit/io/test-data.json';
 
+const setAccessToken = jest.fn();
+const authenticate = jest.fn().mockResolvedValue(
+  {
+    authenticate: {
+      accessToken: '1234567890',
+      refreshToken: '0987654321',
+      errors: [],
+    },
+  }
+);
 const currentState = jest.fn().mockResolvedValue(testData);
 const acceptPrayer = jest.fn().mockResolvedValue(
   {
@@ -136,6 +146,11 @@ const deleteSelf = jest.fn().mockResolvedValue({
 });
 
 const mockQueries = {
+  authenticate: authenticate,
+  authenticateByLegacyToken: authenticate,
+  authenticateByBasicAuth: authenticate,
+  authenticateByRefreshToken: authenticate,
+  authenticateByGuestAuth: authenticate,
   currentState: currentState,
   acceptPrayer: acceptPrayer,
   muteSubscriber: muteSubscriber,
@@ -153,6 +168,7 @@ const mockQueries = {
 };
 
 export {
+  authenticate,
   currentState,
   acceptPrayer,
   muteSubscriber,
@@ -161,6 +177,7 @@ export {
   eventAtTime,
   getSchedule,
   sequence,
+  setAccessToken,
   joinChannel,
   generatePdf,
   updateSubscriber,
