@@ -31,8 +31,8 @@ function* init (): Saga<void> {
     if (legacy_token) {
       const response:AuthResponse = yield call([API, API.post], '/auth/legacy', { legacy_token });
       if (response?.errors?.length === 0) {
-        yield call(currentEvent);
         yield put(loggedInBanner());
+        yield call(currentEvent);
       } else {
         throw new Error(response.errors[0].message);
       }
@@ -49,8 +49,8 @@ function* checkAuth (): Saga<void> {
   try {
     const response:SuccessType = yield call([API, API.get], '/auth/check');
     if (response.success) {
-      yield call(currentEvent);
       yield put(loggedInBanner());
+      yield call(currentEvent);
     } else {
       yield call(guestAuth);
     }
@@ -79,9 +79,9 @@ function* basicAuth (action: BasicAuthLoginType): Saga<void> {
     const { email, password } = action;
     const response:AuthResponse = yield call([API, API.post], '/auth/basic', { email, password });
     if (response?.errors?.length === 0) {
-      yield call(currentEvent);
       yield put(togglePopUpModal());
       yield put(loggedInBanner());
+      yield call(currentEvent);
     } else {
       throw new Error(response.errors[0].message);
     }
