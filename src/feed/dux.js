@@ -1,17 +1,5 @@
 // @flow
 import type {
-  AuthenticationType,
-  SetAuthenticationType,
-  RemoveAuthenticationType,
-} from '../auth/dux';
-
-import {
-  SET_AUTHENTICATION,
-  REMOVE_AUTHENTICATION,
-  GUEST_AUTH,
-} from '../auth/dux';
-
-import type {
   ToggleMessageTrayType,
   DeleteMessageType,
   ToggleCloseTrayButtonType,
@@ -227,8 +215,6 @@ type FeedType = {
   salvations: number,
   notificationBanner: BannerType,
   sequence: any,
-  isAuthenticated: boolean,
-  auth: AuthenticationType,
   panes: {
     [string]: PaneType,
   },
@@ -333,8 +319,6 @@ export type FeedActionTypes =
   | PublishSalvationType
   | ReleaseAnchorMomentType
   | SetSalvationsType
-  | SetAuthenticationType
-  | RemoveAuthenticationType
   | SetSawLastMomentAt
   | ToggleHideVideoType
   | SetNavbarIndexType
@@ -518,7 +502,6 @@ const defaultState = {
   isSideMenuClosed: true,
   isVideoHidden: false,
   isLanguageSelectorVisible: false,
-  isAuthenticated: false,
   isVideoPlaying: false,
   video: {
     type: 'none',
@@ -573,10 +556,6 @@ const defaultState = {
     steps: [],
   },
   salvations: 0,
-  auth: {
-    accessToken: '',
-    refreshToken: '',
-  },
   persistExpiresAt: dayjs().add(1, 'month').format(),
   navbarIndex: 0,
   prevNavbarIndex: undefined,
@@ -651,24 +630,6 @@ const reducer = (
       return {
         ...state,
         organization: action.organization,
-      };
-    case SET_AUTHENTICATION:
-      return {
-        ...state,
-        auth: {
-          accessToken: action.auth.accessToken,
-          refreshToken: action.auth.refreshToken,
-        },
-        isAuthenticated: action.authType !== GUEST_AUTH,
-      };
-    case REMOVE_AUTHENTICATION:
-      return {
-        ...state,
-        auth: {
-          accessToken: '',
-          refreshToken: '',
-        },
-        isAuthenticated: false,
       };
     case RECEIVE_MOMENT: {
     // $FlowFixMe
