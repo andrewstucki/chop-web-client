@@ -1,29 +1,89 @@
 // @flow
-import type {BasicAuthLoginType} from '../../login/dux';
+import  { BASIC_AUTH_LOGIN_FAILED, type BasicAuthLoginType } from '../../login/dux';
 import type {Saga} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
-import queries, {setAccessToken} from '../queries';
-import { queryCurrentEvent } from '../../event/dux';
-import { setAuthentication, BASIC_AUTH_LOGIN_FAILED, BASIC_AUTH, GUEST_AUTH, REFRESH_TOKEN, LEGACY_TOKEN, TOKEN_AUTH_LOGIN_FAILED } from '../../auth/dux';
+import { call, put } from 'redux-saga/effects';
 import bugsnagClient from '../../util/bugsnag';
-import {getAccessToken, getRefreshToken} from '../../selectors/authSelectors';
 import {currentEvent} from './currentEvent';
-import {getLegacyToken} from '../legacyToken';
-import { loggedInBanner } from '../../banner/dux';
+import { errorBanner, loggedInBanner } from '../../banner/dux';
 import { togglePopUpModal } from '../../popUpModal/dux';
+import { API } from '../API';
+import Cookie from 'js-cookie';
 
-function* authenticateByBasicAuth (action: BasicAuthLoginType): Saga<void> {
+type SuccessType = {
+  success:boolean,
+};
+
+type ErrorType = {
+  code: string,
+  message: string,
+  request_id: string,
+};
+
+type AuthResponse = {
+  access_token: string,
+  refresh_token: string,
+  errors: Array<ErrorType>
+};
+
+function* init (): Saga<void> {
   try {
-    const result = yield call([queries, queries.authenticateByBasicAuth], action.email, action.password);
-    if (result.authenticate.errors.length === 0) {
-      const { accessToken, refreshToken } = result.authenticate;
-      setAccessToken(accessToken);
-      yield put(setAuthentication(accessToken, refreshToken, BASIC_AUTH));
-      yield put(queryCurrentEvent());
+    const legacy_token = Cookie.get('legacy_token');
+    if (legacy_token) {
+      const response:AuthResponse = yield call([API, API.post], '/auth/legacy', { legacy_token });
+      if (response?.errors?.length === 0) {
+        yield put(loggedInBanner());
+        yield call(currentEvent);
+      } else {
+        throw new Error(response.errors[0].message);
+      }
+    } else {
+      yield call(checkAuth);
+    }
+  } catch (error) {
+    yield call(guestAuth);
+    bugsnagClient.notify(error);
+  }
+}
+
+function* checkAuth (): Saga<void> {
+  try {
+    const response:SuccessType = yield call([API, API.get], '/auth/check');
+    if (response.success) {
+      yield put(loggedInBanner());
+      yield call(currentEvent);
+    } else {
+      yield call(guestAuth);
+    }
+  } catch (error) {
+    yield call(guestAuth);
+    bugsnagClient.notify(error);
+  }
+}
+
+function* guestAuth (): Saga<void> {
+  try {
+    const response:AuthResponse = yield call([API, API.post], '/auth/guest');
+    if (response?.errors?.length === 0) {
+      yield call(currentEvent);
+    } else {
+      throw new Error(response.errors[0].message);
+    }
+  } catch (error) {
+    yield put(errorBanner('error'));
+    bugsnagClient.notify(error);
+  }
+}
+
+function* basicAuth (action: BasicAuthLoginType): Saga<void> {
+  try {
+    const { email, password } = action;
+    const response:AuthResponse = yield call([API, API.post], '/auth/basic', { email, password });
+    if (response?.errors?.length === 0) {
       yield put(togglePopUpModal());
       yield put(loggedInBanner());
+      yield call(currentEvent);
     } else {
-      yield put({type: BASIC_AUTH_LOGIN_FAILED});
+      throw new Error(response.errors[0].message);
     }
   } catch (error) {
     yield put({type: BASIC_AUTH_LOGIN_FAILED, error});
@@ -31,51 +91,20 @@ function* authenticateByBasicAuth (action: BasicAuthLoginType): Saga<void> {
   }
 }
 
-function* authenticateByGuestAuth (): Saga<void> {
+function* logout (): Saga<void> {
   try {
-    const result = yield call([queries, queries.authenticateByGuestAuth]);
-    const { accessToken, refreshToken } = result.authenticate;
-    setAccessToken(accessToken);
-    yield put(setAuthentication(accessToken, refreshToken, GUEST_AUTH));
-    yield call(currentEvent);
+    yield call([API, API.post], '/auth/logout');
+    yield call(guestAuth);
   } catch (error) {
-    bugsnagClient.notify(error);
-  }
-}
-
-function* authenticateByToken (): Saga<void> {
-  try {
-    const accessToken = yield select(getAccessToken);
-    const legacyToken = getLegacyToken();
-    if (accessToken) {
-      yield call(setAccessToken, accessToken);
-      try {
-        yield call(currentEvent);
-      } catch (_error) {
-        const refresh = yield select(getRefreshToken);
-        if (refresh) {
-          const result = yield call([queries, queries.authenticateByRefreshToken], refresh);
-          const {accessToken, refreshToken} = result.authenticate;
-          yield put(setAuthentication(accessToken, refreshToken, REFRESH_TOKEN));
-          yield call(currentEvent);
-        }
-      }
-    } else if (legacyToken) {
-      const result = yield call([queries, queries.authenticateByLegacyToken], legacyToken);
-      const {accessToken, refreshToken} = result.authenticate;
-      yield put(setAuthentication(accessToken, refreshToken, LEGACY_TOKEN));
-      yield call(currentEvent);
-    } else {
-      yield call(authenticateByGuestAuth);
-    }
-  } catch (error) {
-    yield put({type: TOKEN_AUTH_LOGIN_FAILED, error});
+    yield call(guestAuth);
     bugsnagClient.notify(error);
   }
 }
 
 export {
-  authenticateByBasicAuth,
-  authenticateByToken,
-  authenticateByGuestAuth,
+  init,
+  basicAuth,
+  guestAuth,
+  checkAuth,
+  logout,
 };

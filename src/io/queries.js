@@ -13,21 +13,6 @@ type GraphQLID = string | null;
 type GraphQLInt = number | null;
 type GraphQLBoolean = boolean | null;
 
-type AuthenticateType = {
-  type: 'LegacyAuth' | 'BasicAuth' | 'Refresh' | 'GuestAuth',
-  legacyToken?: string,
-  refreshToken?: string,
-  email?: string,
-  password?: string,
-};
-
-export type GraphQLAuthType = {
-  authenticate: {
-    accessToken: GraphQLString,
-    refreshToken: GraphQLString,
-  }
-}
-
 export type GraphQLThemeType = {
   headerBackgroundColor: GraphQLString,
   headerMenuIconColor: GraphQLString,
@@ -213,19 +198,6 @@ export type GraphQLRequestPasswordResetType = {
 export type GraphQLResetPasswordType = {
   resetPassword: GraphQLString,
 };
-
-const accessToken = `
-mutation AccessToken($type: String!, $email: String, $password: String, $legacyToken: String, $refreshToken: String) {
-  authenticate(type: $type, email: $email, password: $password, legacyToken: $legacyToken, refreshToken: $refreshToken) {
-    accessToken
-    refreshToken
-    errors {
-      code
-      message
-    }
-  }
-}
-`;
 
 const sequence = `
 query Sequence($time: Timestamp) {
@@ -480,67 +452,15 @@ query CurrentState($needLanguages: Boolean!, $limit: Int) {
   ${schedule}
 }`;
 
-let client = new GraphQLClient(`${GATEWAY_HOST}/graphql`, {
+const client = new GraphQLClient(`${GATEWAY_HOST}/graphql`, {
   headers: {
     'Application-Domain': hostname(),
+    'apollographql-client-name': 'chop-web-client',
   },
+  credentials: 'include',
 });
 
-const setAccessToken = (accessToken: string): void => {
-  client = new GraphQLClient(`${GATEWAY_HOST}/graphql`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Application-Domain': hostname(),
-      'apollographql-client-name': 'chop-web-client',
-    },
-  });
-};
-
 const queries = {
-  authenticate: async ({
-    type,
-    legacyToken,
-    refreshToken,
-    email,
-    password,
-  }: AuthenticateType): Promise<void> => {
-    const data = await client.request(accessToken, {
-      type,
-      legacyToken,
-      refreshToken,
-      email,
-      password,
-    });
-    return data;
-  },
-
-  authenticateByLegacyToken: async (legacyToken: string): Promise<GraphQLAuthType> =>
-    await queries.authenticate({
-      type: 'LegacyAuth',
-      legacyToken,
-    }),
-
-  authenticateByBasicAuth: async (
-    email: string,
-    password: string
-  ): Promise<void> =>
-    await queries.authenticate({
-      type: 'BasicAuth',
-      email,
-      password,
-    }),
-
-  authenticateByRefreshToken: async (refreshToken: string): Promise<GraphQLAuthType> =>
-    await queries.authenticate({
-      type: 'Refresh',
-      refreshToken,
-    }),
-
-  authenticateByGuestAuth: async (): Promise<GraphQLAuthType> =>
-    await queries.authenticate({
-      type: 'GuestAuth',
-    }),
-
   currentState: async (
     needLanguages: boolean = true,
   ): Promise<GraphQLCurrentStateType> =>
@@ -641,5 +561,3 @@ const queries = {
 };
 
 export default queries;
-
-export { setAccessToken };

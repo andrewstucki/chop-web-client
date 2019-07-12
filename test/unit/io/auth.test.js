@@ -1,204 +1,202 @@
 // @flow
-import queries, { setAccessToken } from '../../../src/io/queries';
-import { authenticateByBasicAuth, authenticateByToken, authenticateByGuestAuth } from '../../../src/io/saga';
+import { basicAuth, guestAuth, logout, checkAuth, init } from '../../../src/io/saga';
 import { runSaga } from 'redux-saga';
 import { BASIC_AUTH_LOGIN, BASIC_AUTH_LOGIN_FAILED } from '../../../src/login/dux';
-import {
-  setAuthentication,
-  TOKEN_AUTH_LOGIN_FAILED,
-  REFRESH_TOKEN,
-  BASIC_AUTH,
-  GUEST_AUTH,
-  PUBLISH_GUEST_AUTH,
-} from '../../../src/auth/dux';
-import { queryCurrentEvent } from '../../../src/event/dux';
-import { defaultState, mockDate } from '../../testUtils';
-import { REHYDRATE } from 'redux-persist/lib/constants';
-import {getLegacyToken} from '../../../src/io/legacyToken';
+import { defaultState } from '../../testUtils';
 import { currentEvent } from '../../../src/io/sagas/currentEvent';
-import { loggedInBanner } from '../../../src/banner/dux';
+import { errorBanner, loggedInBanner } from '../../../src/banner/dux';
 import { togglePopUpModal } from '../../../src/popUpModal/dux';
 
-jest.mock('../../../src/io/queries');
-jest.mock('../../../src/io/legacyToken');
 jest.mock('../../../src/io/sagas/currentEvent');
 const mock = (mockFn: any) => mockFn;
 
 describe('Test Auth', () => {
-  const mockAuthenticateByBasicAuth = mock(queries.authenticateByBasicAuth);
-  const mockAuthenticateByRefreshToken = mock(queries.authenticateByRefreshToken);
-  const mockAuthenticateByLegacyToken = mock(queries.authenticateByLegacyToken);
-  const mockGetLegacyToken = mock(getLegacyToken);
-  const mockAuthenticateByGuestAuth = mock(queries.authenticateByGuestAuth);
   const mockCurrentEvent = mock(currentEvent);
+
+  beforeEach(() => {
+    mockCurrentEvent.mockReset();
+    document.cookie = '';
+    // $FlowFixMe
+    fetch.resetMocks();
+  });
+
   test('Basic Auth success', async () => {
-    mockDate(1553266446136);
+    // $FlowFixMe
+    fetch.mockResponseOnce('{"access_token": "accesstoken", "refresh_token": "refreshtoken", "errors": [] }', { status: 200, headers: { 'content-type': 'application/json' }});
     const dispatched = [];
 
     await runSaga({
       dispatch: action => dispatched.push(action),
       getState: () => defaultState,
     },
-    authenticateByBasicAuth,
+    basicAuth,
     { type: BASIC_AUTH_LOGIN, email: 'joe@test.com', password: '12345' },
     ).toPromise();
 
-    expect(mockAuthenticateByBasicAuth).toBeCalledWith('joe@test.com', '12345');
     expect(dispatched).toEqual([
-      setAuthentication('1234567890', '0987654321', BASIC_AUTH),
-      queryCurrentEvent(),
       togglePopUpModal(),
       loggedInBanner(),
     ]);
-    expect(setAccessToken).toBeCalledWith('1234567890');
+
+    expect(fetch).toBeCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/basic', {
+      body: JSON.stringify({
+        email: 'joe@test.com',
+        password: '12345',
+      }),
+      credentials: 'include',
+      headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
+      method: 'POST',
+    });
   });
 
   test('Basic Auth fail', async () => {
-    mockAuthenticateByBasicAuth.mockImplementation(() => {
-      throw new Error('Broken');
-    });
+    // $FlowFixMe
+    fetch.mockResponseOnce('{"access_token": "", "refresh_token": "", "errors": [ { "code": "auth-001", "message": "Login Failed" }] }', { status: 200, headers: { 'content-type': 'application/json' }});
     const dispatched = [];
 
     await runSaga({
       dispatch: action => dispatched.push(action),
     },
-    authenticateByBasicAuth,
+    basicAuth,
     { type: BASIC_AUTH_LOGIN, email: 'joe@test.com', password: '12345' },
     ).toPromise();
 
-    expect(mockAuthenticateByBasicAuth).toBeCalledWith('joe@test.com', '12345');
-    expect(dispatched).toEqual([{type: BASIC_AUTH_LOGIN_FAILED, error: new Error('Broken')}]);
-  });
-
-  test('Auth with access token success', async () => {
-    const dispatched = [];
-
-    await runSaga({
-      dispatch: action => dispatched.push(action),
-      getState: () => (
-        {
-          feed: {
-            auth: {
-              accessToken: '123456',
-            },
-          },
-        }
-      ),
-    },
-    authenticateByToken,
-    { type: REHYDRATE }).toPromise();
-
-    expect(setAccessToken).toBeCalledWith('123456');
-    expect(currentEvent).toBeCalled();
-  });
-
-  test('Auth with refresh token success', async () => {
-    mockAuthenticateByRefreshToken.mockResolvedValue(
-      {
-        authenticate: {
-          accessToken: '1234567890',
-          refreshToken: '0987654321',
-        },
-      }
-    ).mockClear();
-    mockCurrentEvent.mockReset().mockImplementationOnce(() => {
-      throw new Error('Skip access token');
-    });
-    const dispatched = [];
-
-    await runSaga({
-      dispatch: action => dispatched.push(action),
-      getState: () => (
-        {
-          feed: {
-            auth: {
-              accessToken: '123456',
-              refreshToken: '098765',
-            },
-          },
-        }
-      ),
-    },
-    authenticateByToken,
-    { type: REHYDRATE }).toPromise();
-
-    expect(mockAuthenticateByRefreshToken).toBeCalledWith('098765');
-    expect(mockCurrentEvent).toHaveBeenCalledTimes(2);
-    expect(dispatched).toEqual([
-      setAuthentication('1234567890', '0987654321', REFRESH_TOKEN),
-    ]);
-  });
-
-  test('Auth with legacy token success', async () => {
-    mockAuthenticateByLegacyToken.mockResolvedValue(
-      {
-        authenticate: {
-          accessToken: '1234567890',
-          refreshToken: '0987654321',
-        },
-      }
-    ).mockClear();
-    mockGetLegacyToken.mockReturnValue('10293847856');
-    const dispatched = [];
-
-    await runSaga({
-      dispatch: action => dispatched.push(action),
-      getState: () => ({}),
-    },
-    authenticateByToken,
-    { type: REHYDRATE }).toPromise();
-
-    expect(mockAuthenticateByLegacyToken).toBeCalledWith('10293847856');
-    expect(currentEvent).toBeCalled();
-  });
-
-  test('Auth by token failed', async () => {
-    mockGetLegacyToken.mockImplementation(() => {
-      throw new Error('Broken');
-    });
-    const dispatched = [];
-
-    await runSaga({
-      dispatch: action => dispatched.push(action),
-      getState: () => ({}),
-    },
-    authenticateByToken,
-    { type: REHYDRATE }).toPromise();
-
-    expect(dispatched).toEqual([{type: TOKEN_AUTH_LOGIN_FAILED, error: new Error('Broken')}]);
+    expect(dispatched).toEqual([{type: BASIC_AUTH_LOGIN_FAILED, error: new Error('Login Failed')}]);
   });
 
   test('Guest Auth success', async () => {
-    mockDate(1553266446136);
+    // $FlowFixMe
+    fetch.mockResponseOnce('{"access_token": "accesstoken", "refresh_token": "refreshtoken", "errors": [] }', { status: 200, headers: { 'content-type': 'application/json' }});
     const dispatched = [];
 
     await runSaga({
       dispatch: action => dispatched.push(action),
+      getState: () => defaultState,
     },
-    authenticateByGuestAuth,
-    { type: PUBLISH_GUEST_AUTH }).toPromise();
+    guestAuth).toPromise();
 
-    expect(mockAuthenticateByGuestAuth).toBeCalledWith();
-    expect(dispatched).toEqual([
-      setAuthentication('1234567890', '0987654321', GUEST_AUTH),
-    ]);
-    expect(setAccessToken).toBeCalledWith('1234567890');
-    expect(mockCurrentEvent).toHaveBeenCalledTimes(4);
+    expect(dispatched).toEqual([]);
+    expect(mockCurrentEvent).toBeCalledTimes(1);
+
+    expect(fetch).toBeCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/guest', {
+      credentials: 'include',
+      headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
+      method: 'POST',
+    });
   });
 
   test('Guest Auth fail', async () => {
-    mockAuthenticateByGuestAuth.mockImplementation(() => {
-      throw new Error('Broken');
-    });
+    // $FlowFixMe
+    fetch.mockResponseOnce('{"access_token": "", "refresh_token": "", "errors": [ { "code": "auth-001", "message": "Login Failed" }] }', { status: 200, headers: { 'content-type': 'application/json' }});
     const dispatched = [];
 
     await runSaga({
       dispatch: action => dispatched.push(action),
     },
-    authenticateByGuestAuth,
-    { type: PUBLISH_GUEST_AUTH}).toPromise();
+    guestAuth).toPromise();
+    expect(dispatched).toEqual([errorBanner('error')]);
+  });
 
-    expect(mockAuthenticateByGuestAuth).toBeCalledWith();
+  test('Auth Check success', async () => {
+    // $FlowFixMe
+    fetch.mockResponseOnce('{ "success": true }', { status: 200, headers: { 'content-type': 'application/json' }});
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+      getState: () => defaultState,
+    },
+    checkAuth).toPromise();
+
+    expect(mockCurrentEvent).toBeCalledTimes(1);
+
+    expect(fetch).toBeCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/check', {
+      credentials: 'include',
+      headers: new Headers({ 'Application-Domain': 'live.life.church', Accept: 'application/json' }),
+      method: 'GET',
+    });
+  });
+
+  test('Logout success', async () => {
+    // $FlowFixMe
+    fetch.mockResponse('{ "success": true, "errors": [] }', { status: 200, headers: { 'content-type': 'application/json' }});
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+    },
+    logout).toPromise();
     expect(dispatched).toEqual([]);
+
+    // Called twice because it guest auths when it fails
+    expect(fetch).toBeCalledTimes(2);
+    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/logout', {
+      credentials: 'include',
+      headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
+      method: 'POST',
+    });
+  });
+
+  test('Init uses legacy token if provided (success)', async () => {
+    document.cookie = 'legacy_token=123456';
+    // $FlowFixMe
+    fetch.mockResponseOnce('{"access_token": "accesstoken", "refresh_token": "refreshtoken", "errors": [] }', { status: 200, headers: { 'content-type': 'application/json' }});
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+    },
+    init).toPromise();
+
+    expect(dispatched).toEqual([
+      loggedInBanner(),
+    ]);
+
+    expect(fetch).toBeCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/legacy', {
+      body: JSON.stringify({ legacy_token: '123456'}),
+      credentials: 'include',
+      headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
+      method: 'POST',
+    });
+  });
+
+  test('Init uses check auth if no legacy_token', async () => {
+    // $FlowFixMe
+    fetch
+      .once('{ "success": true }', { status: 200, headers: { 'content-type': 'application/json' }})
+      .once('{"access_token": "accesstoken", "refresh_token": "refreshtoken", "errors": [] }', { status: 200, headers: { 'content-type': 'application/json' }});
+
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+    },
+    init).toPromise();
+
+    expect(dispatched).toEqual([]);
+    expect(fetch).toBeCalledTimes(2);
+  });
+
+  test('Init uses legacy token if provided (failure)', async () => {
+    document.cookie = 'legacy_token=123456';
+    // $FlowFixMe
+    fetch.mockResponseOnce('{"access_token": "", "refresh_token": "", "errors": [ { "code": "auth-001", "message": "Login Failed" }] }', { status: 200, headers: { 'content-type': 'application/json' }});
+    const dispatched = [];
+
+    await runSaga({
+      dispatch: action => dispatched.push(action),
+    },
+    init).toPromise();
+
+    expect(dispatched).toEqual([
+      errorBanner('error'),
+    ]);
+
+    // Called twice because it guest auths when it fails
+    expect(fetch).toBeCalledTimes(2);
   });
 });

@@ -8,16 +8,6 @@ beforeEach(() => {
   cy.route(/.*\/history\/.*\/channel\/998056925ead69f1f74047e57a8a84622db90754f9776257a80525d84860850c.*/, '@pubnubHistoryJSON').as('pubnubHistoryRoute');
 
   cy.visit('http://0.0.0.0:8080');
-  cy
-    .window()
-    .its('store')
-    .invoke('dispatch', {
-      type: 'SET_AUTHENTICATION',
-      auth: {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDc5ODcxOTMsInVzZXJfaWQiOjU1MCwiaWF0IjoxNTQ3MzgyMzkzfQ.-N90sYwfPVhAf2VgL6V9LwJrwHZBiZ9GxIvNv3v2Z9g',
-        refreshToken: '599d04de-e8cf-4379-b0ab-13e985200138',
-      },
-    });
 
   cy
     .window()
