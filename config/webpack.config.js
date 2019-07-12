@@ -16,8 +16,7 @@ module.exports = env => merge(common, {
         auth: JSON.stringify(env.GTM_AUTH),
         preview: JSON.stringify(env.GTM_PREVIEW)
       },
-      ROUTE_BASENAME: JSON.stringify(env.ROUTE_BASENAME),
-      CWC_HOST: JSON.stringify(env.CWC_HOST)
+      PUBLIC_PATH: JSON.stringify(`${env.PUBLIC_PATH}`)
     }),
     new BugsnagBuildReporterPlugin({
       ...constants.BUGSNAG,

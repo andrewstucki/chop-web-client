@@ -8,7 +8,6 @@ import testData from './io/test-data.json';
 import accessToken from './io/access-token.json';
 import { __messageEvent } from 'pubnub';
 
-jest.mock('../../src/io/location');
 jest.mock('graphql-request');
 jest.mock('../../src/io/queries');
 jest.mock('pubnub');

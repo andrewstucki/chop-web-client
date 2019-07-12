@@ -56,7 +56,7 @@
         "auth": "XXXXXXXXXXXXXXXXXX",
         "preview": "env-X"
       },
-      "CWC_HOST": ""
+      "PUBLIC_PATH": ""
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/",
@@ -180,7 +180,6 @@
     "react-popper": "^1.3.3",
     "react-redux": "^7.1.0",
     "react-responsive": "^7.0.0",
-    "react-router-dom": "^5.0.1",
     "react-spring": "^8.0.25",
     "react-touch-events": "^2.1.0",
     "redux": "^4.0.1",

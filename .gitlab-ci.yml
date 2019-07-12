@@ -26,27 +26,14 @@ cache:
 before_script:
   - yarn install --pure-lockfile
 
-lint:
-  image: node:lts
-  stage: test
-  dependencies: []
-  script:
-    - yarn lint
-
-flow:
-  image: node:lts
-  stage: test
-  dependencies: []
-  script:
-    - yarn flow check
-    - yarn flow:coverage
-
 test:
   image: node:lts
   stage: test
   dependencies: []
   script:
-    - yarn test:coverage # Use coverage to generate coverage report
+    - yarn lint
+    - yarn flow check
+    - yarn test:coverage
   artifacts:
     expire_in: 1 day
     paths:
@@ -56,8 +43,13 @@ compile:app-review:
   image: node:lts
   stage: compile
   dependencies: []
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+  variables:
+    CI_ENVIRONMENT_URL: https://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
-    - yarn build --env.WEBPACK_MODE=$REVIEW_WEBPACK_MODE --env.ENV=$REVIEW_ENV --env.GATEWAY_HOST=$REVIEW_GATEWAY_HOST --env.GTM_GTMID=$REVIEW_GTM_GTMID --env.GTM_AUTH=$REVIEW_GTM_AUTH --env.GTM_PREVIEW=$REVIEW_GTM_PREVIEW --env.ROUTE_BASENAME=$REVIEW_ROUTE_BASENAME --env.PUBLIC_PATH=$REVIEW_PUBLIC_PATH --env.CWC_HOST=
+    - yarn build --env.WEBPACK_MODE=$REVIEW_WEBPACK_MODE --env.ENV=$REVIEW_ENV --env.GATEWAY_HOST=$REVIEW_GATEWAY_HOST --env.GTM_GTMID=$REVIEW_GTM_GTMID --env.GTM_AUTH=$REVIEW_GTM_AUTH --env.GTM_PREVIEW=$REVIEW_GTM_PREVIEW --env.PUBLIC_PATH=$CI_ENVIRONMENT_URL
   artifacts:
     expire_in: 1 day
     paths:
@@ -70,7 +62,7 @@ compile:app-production:
   stage: compile
   dependencies: []
   script:
-    - yarn build --env.WEBPACK_MODE=$PRODUCTION_WEBPACK_MODE --env.ENV=$PRODUCTION_ENV --env.BABEL_ENV=$PRODUCTION_ENV --env.GATEWAY_HOST=$PRODUCTION_GATEWAY_HOST --env.GTM_GTMID=$PRODUCTION_GTM_GTMID --env.GTM_AUTH=$PRODUCTION_GTM_AUTH --env.GTM_PREVIEW=$PRODUCTION_GTM_PREVIEW --env.ROUTE_BASENAME=$PRODUCTION_ROUTE_BASENAME --env.PUBLIC_PATH=$PRODUCTION_PUBLIC_PATH --env.CWC_HOST=$PRODUCTION_CWC_HOST
+    - yarn build --env.WEBPACK_MODE=$PRODUCTION_WEBPACK_MODE --env.ENV=$PRODUCTION_ENV --env.BABEL_ENV=$PRODUCTION_ENV --env.GATEWAY_HOST=$PRODUCTION_GATEWAY_HOST --env.GTM_GTMID=$PRODUCTION_GTM_GTMID --env.GTM_AUTH=$PRODUCTION_GTM_AUTH --env.GTM_PREVIEW=$PRODUCTION_GTM_PREVIEW --env.PUBLIC_PATH=$PRODUCTION_PUBLIC_PATH
   artifacts:
     expire_in: 1 day
     paths:
