@@ -1,6 +1,6 @@
 // @flow
-import {call, put, select} from 'redux-saga/effects';
-import type {Saga} from 'redux-saga';
+import { call, put, select } from 'redux-saga/effects';
+import type { Saga } from 'redux-saga';
 import queries from '../queries';
 import type {
   GraphQLCurrentStateType,
@@ -23,17 +23,29 @@ import {
 } from '../../schedule/dux';
 import bugsnagClient from '../../util/bugsnag';
 import { avatarImageExists } from '../../util';
-import {getLanguageCount} from '../../selectors/languageSelector';
-import {setVideo} from '../../videoFeed/dux';
-import type {ChannelsObjectType} from '../../feed/dux';
-import {convertSubscriber} from './privateChat';
-import {COMPACT} from '../../textModeToggle/dux';
+import { getLanguageCount } from '../../selectors/languageSelector';
+import { setVideo } from '../../videoFeed/dux';
+import type { ChannelsObjectType } from '../../feed/dux';
+import { convertSubscriber } from './privateChat';
+import { COMPACT } from '../../textModeToggle/dux';
 import { startTimer } from './sequence';
 import { setSubscriber } from '../../subscriber/dux';
 import { PRIMARY_PANE } from '../../pane/dux';
 import { setPaneToEvent } from '../../pane/content/event/dux';
 import { getPublicChannel } from '../../selectors/channelSelectors';
 import { theme } from '../../styles';
+import { API } from '../API';
+
+export type GeoWhereLocationType = {|
+  country_code: string,
+  country_name: string,
+  region: string,
+  city: string,
+  latitude: string,
+  longitude: string,
+  ip: string,
+  gdpr: boolean,
+|};
 
 const isTimeInFuture = (seconds: number): boolean => (seconds * 1000) > Date.now();
 
@@ -117,6 +129,23 @@ function* currentSubscriber (data:GraphQLCurrentStateType): Saga<void> {
           url: `https://chop-v3-media.s3.amazonaws.com/users/avatars/${currentSubscriber.id}/thumb/photo.jpg`,
         }
       );
+    }
+    try {
+      const locationData:GeoWhereLocationType = yield call([API, API.get], '/where', 'https://geo.life.church');
+      if (locationData) {
+        yield call([queries, queries.updateSubscriber], currentSubscriber.id, {
+          countryCode: locationData.country_code,
+          countryName: locationData.country_name,
+          region: locationData.region,
+          city: locationData.city,
+          latitude: parseFloat(locationData.latitude),
+          longitude: parseFloat(locationData.longitude),
+          ip: locationData.ip,
+          gdpr: locationData.gdpr,
+        });
+      }
+    } catch (error) {
+      // This is okay, it's non-critical data
     }
   }
 }

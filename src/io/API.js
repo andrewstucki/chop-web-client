@@ -31,14 +31,19 @@ export const API = {
     return Promise.reject(`Oops, we couldn't parse the response.`);
   },
 
-  get (_endpoint:string) {
-    return fetch(this.baseUrl() + _endpoint, {
+  get (_endpoint:string, _baseUrl:string = this.baseUrl()) {
+    const headers = new Headers({
+      Accept: 'application/json',
+    });
+
+    if (_baseUrl === this.baseUrl()) {
+      headers.append('Application-Domain', hostname());
+    }
+
+    return fetch(_baseUrl + _endpoint, {
       method: 'GET',
-      credentials: 'include',
-      headers: new Headers({
-        Accept: 'application/json',
-        'Application-Domain': hostname(),
-      }),
+      credentials: _baseUrl === this.baseUrl() ? 'include' : 'same-origin',
+      headers,
     }).then(this._handleError)
       .then(this._handleContentType)
       .catch(error => {
@@ -46,14 +51,19 @@ export const API = {
       });
   },
 
-  post (_endpoint:string, _body:any) {
-    return fetch(this.baseUrl() + _endpoint, {
+  post (_endpoint:string, _body:any, _baseUrl:string = this.baseUrl()) {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+    });
+
+    if (_baseUrl === this.baseUrl()) {
+      headers.append('Application-Domain', hostname());
+    }
+
+    return fetch(_baseUrl + _endpoint, {
       method: 'POST',
-      credentials: 'include',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        'Application-Domain': hostname(),
-      }),
+      credentials: _baseUrl === this.baseUrl() ? 'include' : 'same-origin',
+      headers,
       body: JSON.stringify(_body),
     }).then(this._handleError)
       .then(this._handleContentType)
