@@ -28,6 +28,11 @@ const mock = (mockFn: any) => mockFn;
 describe('Current Event', () => {
   const mockCurrentState = mock(queries.currentState);
   const mockAvatarImageExists = mock(avatarImageExists);
+  const mockUpdateSubscriber = mock(queries.updateSubscriber);
+
+  // $FlowFixMe
+  fetch.mockResponseOnce('{"country_code": "US", "country_name": "united states", "region": "OK", "city": "edmond", "latitude": "35.647", "longitude": "-97.423", "ip": "127.0.0.1", "gdpr": false }', { status: 200, headers: { 'content-type': 'application/json' }});
+
   test('Loads successfully', async () => {
     mockDate(1553807000000);
     const dispatched = [];
@@ -304,5 +309,17 @@ describe('Current Event', () => {
       ]),
       setPaneToEvent(PRIMARY_PANE, '111'),
     ]);
+
+    expect(mockUpdateSubscriber).toBeCalledTimes(1);
+    expect(mockUpdateSubscriber).toBeCalledWith('1234', {
+      countryCode: 'US',
+      countryName: 'united states',
+      region: 'OK',
+      city: 'edmond',
+      latitude: 35.647,
+      longitude: -97.423,
+      ip: '127.0.0.1',
+      gdpr: false,
+    });
   });
 });

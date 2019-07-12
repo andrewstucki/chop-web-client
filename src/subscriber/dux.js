@@ -52,7 +52,15 @@ export type PrivateSubscriberType = {|
   },
   preferences: {
     textMode?: TextModeType,
-  }
+  },
+  countryCode?: string,
+  countryName?: string,
+  region?: string,
+  city?: string,
+  latitude?: number,
+  longitude?: number,
+  ip?: string,
+  gdpr?: boolean,
 |};
 
 type HereNowChannels = {
@@ -88,6 +96,14 @@ export type SubscriberInputType = {|
   email?: string,
   phoneNumber?: string,
   preferences?: SubscriberPreferencesInputType,
+  countryCode?: string,
+  countryName?: string,
+  region?: string,
+  city?: string,
+  latitude?: number,
+  longitude?: number,
+  ip?: string,
+  gdpr?: boolean,
 |};
 
 export type SetSubscriber = {
