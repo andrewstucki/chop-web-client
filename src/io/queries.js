@@ -4,6 +4,7 @@ import { hostname } from './location';
 import type { VideoTypeType } from '../videoFeed/dux';
 import type { URLType } from '../cwc-types';
 import type { SubscriberInputType } from '../subscriber/dux';
+import Cookie from 'js-cookie';
 
 declare var GATEWAY_HOST: string;
 
@@ -452,10 +453,12 @@ query CurrentState($needLanguages: Boolean!, $limit: Int) {
   ${schedule}
 }`;
 
-const client = new GraphQLClient(`${GATEWAY_HOST}/graphql`, {
+const client = () => new GraphQLClient(`${GATEWAY_HOST}/graphql`, {
   headers: {
     'Application-Domain': hostname(),
     'apollographql-client-name': 'chop-web-client',
+    Authorization: `Bearer ${Cookie.get('access_token')}`,
+    Refresh: `Bearer ${Cookie.get('refresh_token')}`,
   },
   credentials: 'include',
 });
@@ -464,7 +467,7 @@ const queries = {
   currentState: async (
     needLanguages: boolean = true,
   ): Promise<GraphQLCurrentStateType> =>
-    await client.request(currentState, {
+    await client().request(currentState, {
       needLanguages,
       limit: 10,
     }),
@@ -474,20 +477,20 @@ const queries = {
     requesterPubnubToken: string,
     requesterNickname: string
   ): Promise<GraphQLAcceptPrayer> =>
-    await client.request(acceptPrayer, {
+    await client().request(acceptPrayer, {
       channelToken,
       requesterPubnubToken,
       requesterNickname,
     }),
 
   muteSubscriber: async (channelToken: string, nickname: string): Promise<GraphQLMuteSubscriberType> =>
-    await client.request(muteSubscriber, {
+    await client().request(muteSubscriber, {
       channelToken,
       nickname,
     }),
 
   updateSubscriber: async (id: string, input: SubscriberInputType) =>
-    await client.request(
+    await client().request(
       updateSubscriber,
       {
         id,
@@ -496,33 +499,33 @@ const queries = {
     ),
 
   directChat: async (pubnubToken: string, nickname: string): Promise<GraphQLDirectChatType> =>
-    await client.request(createDirectChannel, {
+    await client().request(createDirectChannel, {
       pubnubToken,
       nickname,
     }),
 
   leaveChannel: async (channelToken: string): Promise<GraphQLLeaveChannelType> =>
-    await client.request(leaveChannel, {
+    await client().request(leaveChannel, {
       channelToken,
     }),
 
   schedule: async (): Promise<GraphQLSchedule> =>
-    await client.request(scheduleQuery, {
+    await client().request(scheduleQuery, {
       limit: 10,
     }),
 
   eventAtTime: async (time: number): Promise<GraphQLEventAtTimeType> =>
-    await client.request(eventAt, {
+    await client().request(eventAt, {
       time,
     }),
 
   sequence: async (time: number): Promise<GraphQLSequenceType> =>
-    await client.request(sequence, {
+    await client().request(sequence, {
       time,
     }),
 
   joinChannel: async (channel: string, requesterId: string, requesterNickname: string) =>
-    await client.request(
+    await client().request(
       joinChannel,
       {
         channel,
@@ -532,7 +535,7 @@ const queries = {
     ),
 
   generatePdf: async (html: string) =>
-    await client.request(
+    await client().request(
       generatePdf,
       {
         html,
@@ -540,7 +543,7 @@ const queries = {
     ),
 
   requestPasswordReset: async (email: string) =>
-    await client.request(
+    await client().request(
       requestPasswordReset,
       {
         email,
@@ -548,7 +551,7 @@ const queries = {
     ),
 
   resetPassword: async (resetToken: string, password: string) =>
-    await client.request(
+    await client().request(
       resetPassword,
       {
         resetToken,
@@ -557,7 +560,7 @@ const queries = {
     ),
 
   deleteSelf: async () =>
-    await client.request(deleteSelf),
+    await client().request(deleteSelf),
 };
 
 export default queries;

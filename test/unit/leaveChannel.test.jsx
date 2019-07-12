@@ -9,7 +9,6 @@ import accessToken from './io/access-token.json';
 import { __messageEvent } from 'pubnub';
 import { mockDate } from '../testUtils';
 
-jest.mock('../../src/io/location');
 jest.mock('graphql-request');
 jest.mock('../../src/io/queries');
 jest.mock('pubnub');

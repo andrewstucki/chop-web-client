@@ -1,10 +1,19 @@
 // @flow
 import { hostname } from './location';
 
-declare var GATEWAY_HOST;
+declare var ENV:string;
+declare var GATEWAY_HOST:string;
 
 export const API = {
-  baseUrl: GATEWAY_HOST,
+  baseUrl: () => {
+    // Production and review apps going through legacy need to be proxied through legacy
+    if (ENV === 'production' || ENV === 'review' && global.location.hostname.indexOf('churchonline.us') === -1) {
+      return '';
+    } else {
+      // Local and churchonline.us need to go directly to the gateway.
+      return GATEWAY_HOST;
+    }
+  },
 
   _handleError: (_res:Response) => _res.ok ? _res : Promise.reject(_res.statusText),
 
@@ -23,7 +32,7 @@ export const API = {
   },
 
   get (_endpoint:string) {
-    return fetch(this.baseUrl + _endpoint, {
+    return fetch(this.baseUrl() + _endpoint, {
       method: 'GET',
       credentials: 'include',
       headers: new Headers({
@@ -38,7 +47,7 @@ export const API = {
   },
 
   post (_endpoint:string, _body:any) {
-    return fetch(this.baseUrl + _endpoint, {
+    return fetch(this.baseUrl() + _endpoint, {
       method: 'POST',
       credentials: 'include',
       headers: new Headers({

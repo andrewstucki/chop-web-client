@@ -39,7 +39,7 @@ describe('Test Auth', () => {
     ]);
 
     expect(fetch).toBeCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/basic', {
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/auth/basic'), {
       body: JSON.stringify({
         email: 'joe@test.com',
         password: '12345',
@@ -80,7 +80,7 @@ describe('Test Auth', () => {
     expect(mockCurrentEvent).toBeCalledTimes(1);
 
     expect(fetch).toBeCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/guest', {
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/auth/guest'), {
       credentials: 'include',
       headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
       method: 'POST',
@@ -113,7 +113,7 @@ describe('Test Auth', () => {
     expect(mockCurrentEvent).toBeCalledTimes(1);
 
     expect(fetch).toBeCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/check', {
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/auth/check'), {
       credentials: 'include',
       headers: new Headers({ 'Application-Domain': 'live.life.church', Accept: 'application/json' }),
       method: 'GET',
@@ -133,7 +133,7 @@ describe('Test Auth', () => {
 
     // Called twice because it guest auths when it fails
     expect(fetch).toBeCalledTimes(2);
-    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/logout', {
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/auth/logout'), {
       credentials: 'include',
       headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
       method: 'POST',
@@ -156,7 +156,7 @@ describe('Test Auth', () => {
     ]);
 
     expect(fetch).toBeCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith('https://staging.chopapi.com/auth/legacy', {
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/auth/legacy'), {
       body: JSON.stringify({ legacy_token: '123456'}),
       credentials: 'include',
       headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
