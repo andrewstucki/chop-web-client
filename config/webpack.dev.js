@@ -16,7 +16,8 @@ module.exports = merge(common, {
         auth: JSON.stringify('XXXXXXXXXXXXXXXXXX'),
         preview: JSON.stringify('env-X')
       },
-      PUBLIC_PATH: JSON.stringify('')
+      PUBLIC_PATH: JSON.stringify(''),
+      METRICS_HOST: JSON.stringify('http://metricsengine.io/topics/metrics-ingest/publish')
     }),
     //new BundleAnalyzerPlugin(),
   ],
