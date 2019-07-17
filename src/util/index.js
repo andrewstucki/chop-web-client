@@ -10,6 +10,8 @@ import { API } from '../io/API';
 // $FlowFixMe
 dayjs.extend(utc);
 
+declare var ENV:string;
+
 const getFirstInitial = (name: string): string => (
   name.charAt(0).toUpperCase()
 );
@@ -121,6 +123,8 @@ export const getOrCreateElement = (id:string):HTMLElement => {
   }
   return element;
 };
+
+export const isProduction = () => ENV === 'production';
 
 export const deleteAllCookies = ():void => {
   Cookies.remove('legacy_token');

@@ -3,6 +3,7 @@ import { hostname } from './location';
 
 declare var ENV:string;
 declare var GATEWAY_HOST:string;
+declare var METRICS_HOST:string;
 
 export const API = {
   baseUrl: () => {
@@ -64,6 +65,20 @@ export const API = {
       method: 'POST',
       credentials: _baseUrl === this.baseUrl() ? 'include' : 'same-origin',
       headers,
+      body: JSON.stringify(_body),
+    }).then(this._handleError)
+      .then(this._handleContentType)
+      .catch(error => {
+        throw new Error(error);
+      });
+  },
+
+  metrics (_body: any) {
+    return fetch(METRICS_HOST, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(_body),
     }).then(this._handleError)
       .then(this._handleContentType)

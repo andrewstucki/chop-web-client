@@ -56,7 +56,8 @@
         "auth": "XXXXXXXXXXXXXXXXXX",
         "preview": "env-X"
       },
-      "PUBLIC_PATH": ""
+      "PUBLIC_PATH": "",
+      "METRICS_HOST": "http://metricsengine.io/topics/metrics-ingest/publish"
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/",
