@@ -11,6 +11,7 @@ import { defaultState as defaultFeedState } from '../../src/feed/dux';
 import { defaultState as defaultScheduleState } from '../../src/schedule/dux';
 import { defaultState as defaultSubscriberState } from '../../src/subscriber/dux';
 import { defaultState as defaultEventState } from '../../src/event/dux';
+import { defaultState as defaultUiState } from '../../src/ui/dux';
 import type { ChopStateType } from '../../src/chop/dux';
 
 const mockDate = (date:Date | number | string) => {
@@ -62,6 +63,7 @@ const defaultState:ChopStateType = {
     serverTime: 0,
     steps: [],
   },
+  ui: defaultUiState,
 };
 
 const mountWithTheme = (children:any) => mount(<ThemeProvider theme={theme}>{children}</ThemeProvider>);

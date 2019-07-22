@@ -28,6 +28,7 @@ describe('Sequence Tests', () => {
       id: '',
       speaker: '',
       startTime: 0,
+      scheduleTime: 0,
       title: '',
       videoStartTime: 0,
       video: {

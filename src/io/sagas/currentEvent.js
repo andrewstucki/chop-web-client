@@ -1,5 +1,5 @@
 // @flow
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select, fork } from 'redux-saga/effects';
 import type { Saga } from 'redux-saga';
 import queries from '../queries';
 import type {
@@ -35,6 +35,7 @@ import { setPaneToEvent } from '../../pane/content/event/dux';
 import { getPublicChannel } from '../../selectors/channelSelectors';
 import { theme } from '../../styles';
 import { API } from '../API';
+import { heartbeat } from './metrics';
 
 export type GeoWhereLocationType = {|
   country_code: string,
@@ -73,7 +74,8 @@ function* currentEvent (): Saga<void> {
     yield* dispatchData(result);
     const channelId = yield select(getPublicChannel);
     yield put(setPaneToEvent(PRIMARY_PANE, channelId));
-    yield call(startTimer);
+    yield fork(startTimer);
+    yield fork(heartbeat);
   } catch (error) {
     yield put({type: QUERY_CURRENT_EVENT_FAILED, error: error.message});
     bugsnagClient.notify(error);
@@ -194,6 +196,7 @@ function* eventMain (event: GraphQLEventAtType | GraphQLEventType): Saga<void> {
       event.eventTime.id || '',
       event.startTime || 0,
       event.endTime || 0,
+      event.scheduleTime || 0,
       event.videoStartTime || 0,
       event.speaker || '',
       event.description || '',

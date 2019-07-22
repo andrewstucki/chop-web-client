@@ -16,9 +16,9 @@ import {
 import {avatarImageExists} from '../../../src/util';
 import { mockDate } from '../../testUtils';
 import {setVideo} from '../../../src/videoFeed/dux';
-import { startTimer as _startTimer } from '../../../src/io/sagas/sequence';
 import { PRIMARY_PANE } from '../../../src/pane/dux';
 import { setPaneToEvent } from '../../../src/pane/content/event/dux';
+import { startHeartbeat } from '../../../src/ui/dux';
 
 jest.mock('../../../src/io/sagas/sequence');
 jest.mock('../../../src/io/queries');
@@ -79,6 +79,7 @@ describe('Current Event', () => {
           eventTime: { id: '123' },
           startTime: 456,
           endTime: 789,
+          scheduleTime: 456,
           videoStartTime: 100,
           speaker: 'John',
           description: 'John talks about the book of John.',
@@ -223,6 +224,7 @@ describe('Current Event', () => {
         '123',
         456,
         789,
+        456,
         100,
         'John',
         'John talks about the book of John.',
@@ -308,6 +310,7 @@ describe('Current Event', () => {
         },
       ]),
       setPaneToEvent(PRIMARY_PANE, '111'),
+      startHeartbeat(),
     ]);
 
     expect(mockUpdateSubscriber).toBeCalledTimes(1);
