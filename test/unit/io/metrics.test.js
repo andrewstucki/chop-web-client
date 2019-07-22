@@ -67,62 +67,62 @@ describe('Metrics IO', () => {
     const generator = heartbeat();
     expect(generator.next().value).toEqual(select(isHeartbeatStarted));
     expect(generator.next().value).toEqual(put(startHeartbeat()));
-    expect(generator.next().value).toEqual(call(heartbeatData, 0, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 0));
     // TODO: The value is 'undefined' because we would have to implement something like redux-saga-test-plan to get the actual
     // value of calling the heartbeatData generator from this generator. For now, that is tested separately in the 'HeartbeatData' test.
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(3000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 3, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 3));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(7000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 10, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 10));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(20000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 30, 0));// $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(heartbeatData, 30));// $FlowFixMe
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(30000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
-    expect(generator.next().value).toEqual(call(heartbeatData, 60, 0));
+    expect(generator.next().value).toEqual(call(heartbeatData, 60));
     // $FlowFixMe
-    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_0', undefined));
+    expect(generator.next().value).toEqual(call(send, 'church.life.chop.heartbeat.v1_1', undefined));
     expect(generator.next().value).toEqual(delay(60000));
   });
 
@@ -136,17 +136,8 @@ describe('Metrics IO', () => {
       getState: () => ({
         ...defaultState,
         event: {
-          ...defaultState.event,
           id: '123',
           eventTimeId: '456',
-          startTime: 1530118386000,
-          scheduleTime: 1530118386000,
-        },
-        feed: {
-          ...defaultState.feed,
-          organization: {
-            id: 2,
-          },
         },
       }),
     },

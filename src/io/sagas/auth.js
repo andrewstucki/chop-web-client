@@ -8,6 +8,7 @@ import { errorBanner, loggedInBanner } from '../../banner/dux';
 import { togglePopUpModal } from '../../popUpModal/dux';
 import { API } from '../API';
 import Cookie from 'js-cookie';
+import { loginEvent } from './metrics';
 import { createUid } from '../../util';
 
 type SuccessType = {
@@ -80,6 +81,7 @@ function* basicAuth (action: BasicAuthLoginType): Saga<void> {
     const { email, password } = action;
     const response:AuthResponse = yield call([API, API.post], '/auth/basic', { email, password });
     if (response?.errors?.length === 0) {
+      yield call(loginEvent);
       yield put(togglePopUpModal());
       yield put(loggedInBanner());
       yield call(currentEvent);
