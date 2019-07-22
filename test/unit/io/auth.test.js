@@ -2,7 +2,7 @@
 import { basicAuth, guestAuth, logout, checkAuth, init } from '../../../src/io/saga';
 import { runSaga } from 'redux-saga';
 import { BASIC_AUTH_LOGIN, BASIC_AUTH_LOGIN_FAILED } from '../../../src/login/dux';
-import { defaultState } from '../../testUtils';
+import { defaultState, mockDate } from '../../testUtils';
 import { currentEvent } from '../../../src/io/sagas/currentEvent';
 import { errorBanner, loggedInBanner } from '../../../src/banner/dux';
 import { togglePopUpModal } from '../../../src/popUpModal/dux';
@@ -21,6 +21,13 @@ describe('Test Auth', () => {
   });
 
   test('Basic Auth success', async () => {
+    mockDate('Wed Jun 27 2018 16:53:06 GMT-0000');
+
+    Object.defineProperty(window.document, 'cookie', {
+      writable: true,
+      value: 'SESSIONID=omnomnom',
+    });
+
     // $FlowFixMe
     fetch.mockResponseOnce('{"access_token": "accesstoken", "refresh_token": "refreshtoken", "errors": [] }', { status: 200, headers: { 'content-type': 'application/json' }});
     const dispatched = [];
@@ -38,8 +45,11 @@ describe('Test Auth', () => {
       loggedInBanner(),
     ]);
 
-    expect(fetch).toBeCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('/auth/basic'), {
+    expect(fetch).toBeCalledTimes(2);
+    // $FlowFixMe
+    expect(fetch.mock.calls[0][0]).toEqual(expect.stringContaining('/auth/basic'));
+    // $FlowFixMe
+    expect(fetch.mock.calls[0][1]).toEqual({
       body: JSON.stringify({
         email: 'joe@test.com',
         password: '12345',
@@ -47,6 +57,28 @@ describe('Test Auth', () => {
       credentials: 'include',
       headers: new Headers({ 'Application-Domain': 'live.life.church', 'Content-Type': 'application/json' }),
       method: 'POST',
+    });
+
+    // $FlowFixMe
+    expect(fetch.mock.calls[1][0]).toEqual('http://metricsengine.io/topics/metrics-ingest/publish');
+    // $FlowFixMe
+    expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual({
+      type: 'church.life.chop_staging.login.v1_1',
+      id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
+      source: 'https://live.life.church/',
+      specversion: '0.2',
+      contentType: 'application/json',
+      data: {
+        client: 'CWC',
+        location: 'https://live.life.church/',
+        organization_id: 2,
+        referrer: '',
+        session_id: 'omnomnom',
+        subscriber_id: '09876',
+        timestamp: '2018-06-27T16:53:06.000Z',
+        user_agent: expect.stringContaining('jsdom'),
+      },
+      time: '2018-06-27T16:53:06.000Z',
     });
   });
 
@@ -177,8 +209,8 @@ describe('Test Auth', () => {
     },
     init).toPromise();
 
-    expect(dispatched).toEqual([]);
-    expect(fetch).toBeCalledTimes(2);
+    expect(dispatched).toEqual([loggedInBanner()]);
+    expect(fetch).toBeCalledTimes(1);
   });
 
   test('Init uses legacy token if provided (failure)', async () => {

@@ -17,7 +17,7 @@ module.exports = merge(common, {
         preview: JSON.stringify('env-X')
       },
       PUBLIC_PATH: JSON.stringify(''),
-      METRICS_HOST: JSON.stringify('http://metricsengine.io/topics/metrics-ingest/publish')
+      METRICS_HOST: JSON.stringify('https://staging.metricsengine.io/topics/metrics-ingest/publish')
     }),
     //new BundleAnalyzerPlugin(),
   ],

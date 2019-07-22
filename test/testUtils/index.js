@@ -36,6 +36,15 @@ const defaultState:ChopStateType = {
       accessToken: '123456',
       refreshToken: '098765',
     },
+    organization: {
+      id: 2,
+      name: 'Life.Church',
+      logoUrl: '',
+      theme: {
+        headerBackgroundColor: '',
+        headerMenuIconColor: '',
+      },
+    },
   },
   subscriber: {
     ...defaultSubscriberState,
