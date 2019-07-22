@@ -31,6 +31,7 @@ describe('Test Sequence saga', () => {
       eventTime: {
         id: '',
       },
+      scheduleTime: 0,
       hostInfo: '',
       id: '',
       speaker: '',

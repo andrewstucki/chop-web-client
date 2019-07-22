@@ -114,6 +114,7 @@ export type GraphQLEnabledFeatures = {
 export type GraphQLEventType = {
   description: GraphQLString,
   endTime: GraphQLInt,
+  scheduleTime: GraphQLInt,
   eventTime: GraphQLEventTimeType,
   hostInfo: GraphQLString,
   id: GraphQLString,
@@ -135,6 +136,7 @@ export type GraphQLCurrentEventType = {
 export type GraphQLEventAtType = {|
   description: GraphQLString,
   endTime: GraphQLInt,
+  scheduleTime: GraphQLInt,
   eventTime: GraphQLEventTimeType,
   hostInfo: GraphQLString,
   id: GraphQLString,
@@ -227,6 +229,7 @@ currentEvent {
   }
   startTime
   endTime
+  scheduleTime
   videoStartTime
   sequence {
     serverTime
@@ -269,6 +272,7 @@ query EventAt($time: Timestamp) {
     }
     startTime
     endTime
+    scheduleTime
     videoStartTime
     video {
       type

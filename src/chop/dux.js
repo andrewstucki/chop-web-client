@@ -5,6 +5,7 @@ import schedule, { defaultState as scheduleState, type ScheduleType, type Action
 import sequence, { defaultState as sequenceState, type SequenceType, type ActionType as SequenceActionType } from '../sequence/dux';
 import subscriber, { defaultState as subscriberState, type SubscriberStateType, type SubscriberActionType } from '../subscriber/dux';
 import event, { defaultState as eventState, type EventType, type ActionType as EventActionType } from '../event/dux';
+import ui, { defaultState as uiState, type UIType, type ActionType as UIActionType } from '../ui/dux';
 import { combineReducers } from 'redux';
 
 // Root Reducer
@@ -18,7 +19,8 @@ type RootActionType =
   | ScheduleActionType
   | SequenceActionType
   | SubscriberActionType
-  | EventActionType;
+  | EventActionType
+  | UIActionType;
 
 type ResetAppType = {
   type: typeof RESET_APP,
@@ -37,6 +39,7 @@ export type ChopStateType = {|
   sequence: SequenceType,
   subscriber: SubscriberStateType,
   event: EventType,
+  ui: UIType,
 |};
 
 const appReducer =  combineReducers({
@@ -45,6 +48,7 @@ const appReducer =  combineReducers({
   sequence,
   subscriber,
   event,
+  ui,
 });
 
 const rootReducer = (state:ChopStateType, action:RootActionType) => {
@@ -64,4 +68,5 @@ export const defaultState = {
   sequence: sequenceState,
   subscriber: subscriberState,
   event: eventState,
+  ui: uiState,
 };

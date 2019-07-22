@@ -19,6 +19,7 @@ export type EventType = {
   eventTimeId: string,
   startTime: number,
   endTime: number,
+  scheduleTime: number,
   description?: string,
   hostInfo?: string,
   speaker?: string,
@@ -54,7 +55,7 @@ export const queryCurrentEvent = (): QueryCurrentEventType => (
   }
 );
 
-export const setEvent = (title: string, id: string, eventTimeId: string, startTime: number, endTime: number, videoStartTime: number,
+export const setEvent = (title: string, id: string, eventTimeId: string, startTime: number, endTime: number, scheduleTime: number, videoStartTime: number,
   speaker: string, description: string, hostInfo: string, enabledFeatures: EnabledFeaturesType, eventNotes: string): SetEventType => (
   {
     type: SET_EVENT,
@@ -64,6 +65,7 @@ export const setEvent = (title: string, id: string, eventTimeId: string, startTi
       eventTimeId,
       startTime,
       endTime,
+      scheduleTime,
       videoStartTime,
       speaker,
       description,
@@ -87,6 +89,7 @@ export const defaultState = {
   eventTimeId: '',
   startTime: 0,
   endTime: 0,
+  scheduleTime: 0,
   title: '',
   hostInfo: '',
   enabledFeatures: {
@@ -120,6 +123,11 @@ const local = state => state[ID];
 const currentEventExists = createSelector(
   local,
   event => !!event?.id
+);
+
+export const getCurrentEvent = createSelector(
+  local,
+  local => local,
 );
 
 export const isOffline = createSelector(

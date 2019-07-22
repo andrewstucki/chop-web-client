@@ -8,6 +8,7 @@ import { errorBanner, loggedInBanner } from '../../banner/dux';
 import { togglePopUpModal } from '../../popUpModal/dux';
 import { API } from '../API';
 import Cookie from 'js-cookie';
+import { createUid } from '../../util';
 
 type SuccessType = {
   success:boolean,
@@ -95,6 +96,7 @@ function* logout (): Saga<void> {
   try {
     yield call([API, API.post], '/auth/logout');
     yield call(guestAuth);
+    Cookie.set('SESSIONID', createUid);
   } catch (error) {
     yield call(guestAuth);
     bugsnagClient.notify(error);

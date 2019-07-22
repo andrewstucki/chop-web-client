@@ -29,10 +29,14 @@ import { setLanguage } from './languageSelector/dux';
 import Converter from './io/converter';
 // $FlowFixMe - why won't this resolve?
 import SilentAudio from '../assets/audio/250-milliseconds-of-silence.mp3';
+import Cookie from 'js-cookie';
+import { createUid } from './util';
 
 declare var ENV:string;
 declare var GTM;
 declare var PUBLIC_PATH:string;
+
+Cookie.set('SESSIONID', createUid());
 
 if (ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
@@ -54,7 +58,7 @@ const persistConfig = {
   key: 'root',
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: ['sequence', 'schedule','subscriber','event'],
+  blacklist: ['sequence','schedule','subscriber','event','ui'],
   transforms: [
     createWhitelistFilter('feed', ['persistExpiresAt', 'organization', 'languageOptions']),
     createExpirationTransform({

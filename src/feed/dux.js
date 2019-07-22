@@ -113,6 +113,7 @@ import { HOST_INFO } from '../hostInfo/dux';
 import { BIBLE, type TabType} from '../pane/content/tab/dux';
 import { SCHEDULE } from '../schedule/dux';
 import { EVENT_NOTES } from '../eventNotes/dux';
+import { createSelector } from 'reselect';
 
 // Action Types
 
@@ -1074,6 +1075,11 @@ const getNotificationBanner = (state: FeedType): BannerType => (
 
 //$FlowFixMe
 const local = state => state.feed || state;
+
+export const getCurrentOrganization = createSelector(
+  local,
+  feed => feed.organization,
+);
 
 // Exports
 

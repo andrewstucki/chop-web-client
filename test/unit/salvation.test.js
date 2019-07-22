@@ -61,6 +61,7 @@ describe('Salvation Moment Tests', () => {
         eventTimeId: '1920834',
         startTime: 1529425800000,
         endTime: 1529425900000,
+        scheduleTime: 1529425800000,
         title: 'When Pigs Fly - Week 2',
         timezone: 'Central',
         enabledFeatures: {
@@ -180,6 +181,7 @@ describe('Salvation Moment Tests', () => {
         eventTimeId: '1920834',
         startTime: 1529425800000,
         endTime: 1529425900000,
+        scheduleTime: 1529425800000,
         title: 'When Pigs Fly - Week 2',
         timezone: 'Central',
         enabledFeatures: {
@@ -299,6 +301,7 @@ describe('Salvation Moment Tests', () => {
         eventTimeId: '1920834',
         startTime: 1529425800000,
         endTime: 1529425900000,
+        scheduleTime: 1529425800000,
         title: 'When Pigs Fly - Week 2',
         timezone: 'Central',
         enabledFeatures: {
