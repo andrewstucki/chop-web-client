@@ -14,7 +14,7 @@ import LeaveChatConnected from '../../src/popUpModal/leaveChat';
 import MuteSubscriber from '../../src/popUpModal/muteSubscriber/muteSubscriber';
 import MuteSubscriberConnected from '../../src/popUpModal/muteSubscriber';
 import LoginConnected from '../../src/popUpModal/login';
-import GuestNicknameConnected from '../../src/popUpModal/guestNickname';
+import ChatSetNicknameConnected from '../../src/popUpModal/chatSetNickname';
 import { renderWithReduxAndTheme } from '../testUtils';
 import RemoveAvatarPopUpModal from '../../src/popUpModal/removeAvatar/removeAvatar';
 import DeleteAccountPopUpModal from '../../src/popUpModal/deleteAccount/deleteAccount';
@@ -348,7 +348,7 @@ describe('PopUpModal tests', () => {
         ...defaultState,
         isPopUpModalVisible: true,
         popUpModal: {
-          type: 'GUEST_NICKNAME',
+          type: 'CHAT_SET_NICKNAME',
         },
         currentSubscriber,
         channels: {
@@ -373,11 +373,11 @@ describe('PopUpModal tests', () => {
       },
     };
     const { getByTestId } = renderWithReduxAndTheme(
-      <GuestNicknameConnected
+      <ChatSetNicknameConnected
         togglePopUpModal={() => {}}
       />, state
     );
-    expect(getByTestId('guestNickname-modal')).toBeTruthy();
+    expect(getByTestId('chatSetNickname-modal')).toBeTruthy();
   });
 
   test('Delete account modal displays', () => {

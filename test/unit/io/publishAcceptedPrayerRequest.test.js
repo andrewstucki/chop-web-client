@@ -35,6 +35,15 @@ describe('Test Accept Prayer', () => {
             ],
           },
         },
+        subscriber: {
+          currentSubscriber: {
+            id: '09876',
+            nickname: 'James T. Kirk',
+            role: {
+              label: '',
+            },
+          },
+        },
       }),
     }, publishAcceptedPrayerRequest, {
       type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
@@ -81,6 +90,18 @@ describe('Test Accept Prayer', () => {
         },
       },
       {
+        type: 'PUBLISH_MOMENT_TO_CHANNEL',
+        channel: '12345',
+        moment: {
+          type: 'NOTIFICATION',
+          notificationType: 'JOINED_CHANNEL',
+          id: '09876',
+          nickname: 'James T. Kirk',
+          timestamp: expect.stringMatching(/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/),
+          label: '',
+        },
+      },
+      {
         name: 'primary',
         pane: {
           content: {
@@ -117,6 +138,15 @@ describe('Test Accept Prayer', () => {
                 },
               },
             ],
+          },
+        },
+        subscriber: {
+          currentSubscriber: {
+            id: '09876',
+            nickname: 'James T. Kirk',
+            role: {
+              label: '',
+            },
           },
         },
       }),

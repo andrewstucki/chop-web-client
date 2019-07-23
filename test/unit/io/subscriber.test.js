@@ -99,7 +99,7 @@ describe('Test Update Subscriber', () => {
           },
         }
       ),
-    }, updateGuestNicknameSaga, updateGuestNickname('123456','guest')).toPromise();
+    }, updateGuestNicknameSaga, updateGuestNickname('123456','guest', 'chat')).toPromise();
 
     expect(mockUpdateSubscriber).toBeCalledWith('123456', {nickname: 'guest'});
     expect(dispatched).toEqual(
@@ -109,6 +109,7 @@ describe('Test Update Subscriber', () => {
             nickname: 'guest',
           }
         ),
+        togglePopUpModal(),
         {
           type: 'PUBLISH_MOMENT_TO_CHANNEL',
           channel: '123456',
@@ -130,7 +131,6 @@ describe('Test Update Subscriber', () => {
             isMuted: false,
           },
         },
-        togglePopUpModal(),
         clearChannelMessage('123456'),
       ]
     );

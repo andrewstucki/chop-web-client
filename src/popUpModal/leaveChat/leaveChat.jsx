@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 
 type LeaveChatPropsType = {
   togglePopUpModal: () => void,
-  publishLeftChannelNotification: (nickname: string, id: string, channelName: string, date: string) => void,
+  publishLeftChannelNotification: (nickname: string, id: string, channelName: string, date: string, label: string) => void,
   leaveChannel: (channelId: string, isPlaceholder: boolean) => void,
   otherSubscriber: SharedSubscriberType,
   hasOtherSubscribers: boolean,
@@ -35,7 +35,7 @@ const LeaveChatPopUpModal = (
   const { t } = useTranslation('forms');
   const callLeaveChannel = () => {
     togglePopUpModal();
-    publishLeftChannelNotification(currentSubscriber.nickname, currentSubscriber.id, currentChannel, dayjs().toISOString());
+    publishLeftChannelNotification(currentSubscriber.nickname, currentSubscriber.id, currentChannel, dayjs().toISOString(), currentSubscriber.role?.label || '');
     leaveChannel(currentChannel, isPlaceholder);
   };
 

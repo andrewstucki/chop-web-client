@@ -4,14 +4,6 @@
     "confirm": "Delete Account",
     "message": "Are you sure you want to delete your account?"
   },
-  "guest_nickname": {
-    "blank_error": "Nickname cannot be blank.",
-    "description": "You will need one to chat.",
-    "nickname": "Nickname",
-    "post": "Post",
-    "title": "Pick a Nickname",
-    "unavailable_error": "Nickname already in use."
-  },
   "leave_chat": {
     "confirm": "Are you sure you want to end your chat?",
     "confirm_subscriber": "Are you sure you want to end your chat with <strong>{{nickname}}</strong>?",
@@ -73,5 +65,20 @@
     "passwords_dont_match": "Passwords don't match.",
     "save": "Save",
     "title": "Choose a New Password"
+  },
+  "chat_set_nickname": {
+    "blank_error": "Nickname cannot be blank.",
+    "description": "You will need one to chat.",
+    "nickname": "Nickname",
+    "post": "Post",
+    "title": "Pick a Nickname",
+    "unavailable_error": "Nickname already in use."
+  },
+  "live_prayer_set_nickname": {
+    "title": "Enter a nickname to pray.",
+    "pray": "Pray",
+    "blank_error": "Nickname cannot be blank.",
+    "unavailable_error": "Nickname already in use.",
+    "nickname": "Nickname"
   }
 }

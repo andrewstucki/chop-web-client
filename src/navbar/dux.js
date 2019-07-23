@@ -53,8 +53,8 @@ const getOtherSubscriberNames = (channel, currentSubscriber) => {
   const { subscribers } = channel;
   if (subscribers && subscribers.length) {
     return subscribers
-      .filter(subscriber => subscriber.id !== currentSubscriber.id)
-      .map(subscriber => subscriber.nickname);
+      .filter(subscriber => subscriber?.id !== currentSubscriber?.id && subscriber?.id !== '')
+      .map(subscriber => subscriber?.nickname);
   } else {
     return [];
   }

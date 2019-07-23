@@ -1,7 +1,7 @@
 // @flow
 import type { LeaveChatType } from './leaveChat/dux';
 import type { MuteSubscriberType } from './muteSubscriber/dux';
-import type { GuestNicknameType } from './guestNickname/dux';
+import type { ChatSetNicknameType } from './chatSetNickname/dux';
 import type { LoginType } from './login/dux';
 import type { ResetPasswordType } from './resetPassword/dux';
 import type { ProfileSettingsType } from './profileSettings/dux';
@@ -24,7 +24,7 @@ type SetPopUpModalType = {
 type PopUpModalType =
   | LeaveChatType
   | MuteSubscriberType
-  | GuestNicknameType
+  | ChatSetNicknameType
   | LoginType
   | ResetPasswordType
   | ProfileSettingsType

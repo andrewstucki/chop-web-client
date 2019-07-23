@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import GuestNickname from './guestNickname';
+import ChatSetNickname from './chatSetNickname';
 import { setPopUpModal } from '../dux';
 import { loginType } from '../login/dux';
 import { updateGuestNickname } from '../../subscriber/dux';
@@ -12,13 +12,13 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => (
   {
     openLogin: () => dispatch(setPopUpModal(loginType())),
-    updateAndPost: (id, nickname) => dispatch(updateGuestNickname(id, nickname)),
+    updateAndPost: (id, nickname, action) => dispatch(updateGuestNickname(id, nickname, action)),
   }
 );
 
-const VisibleGuestNickname = connect(
+const VisibleChatSetNickname = connect(
   mapStateToProps,
   mapDispatchToProps
-)(GuestNickname);
+)(ChatSetNickname);
 
-export default VisibleGuestNickname;
+export default VisibleChatSetNickname;

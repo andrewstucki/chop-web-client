@@ -9,7 +9,8 @@ import { CHAT_HEADER, type ChatHeaderProps } from '../../../paneHeader/chatHeade
 import { DIRECT_CHAT_HEADER } from '../../../paneHeader/directChatHeader';
 import { MediumUp } from '../../../util/responsive';
 import { ChatInputs, PlaceholderWrapper, PlaceholderText } from './styles';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+import LivePrayerButton from '../../../components/livePrayerButton';
 
 type ChatPropsType = {
   channel: string,
@@ -20,13 +21,18 @@ type ChatPropsType = {
   leaveChannel: () => void,
   otherSubscribersName: string,
   hideReactions: boolean,
+  pendingPrayer: boolean,
+  isHost: boolean,
 };
 
 const Chat = (props:ChatPropsType) => (
   <>
+    { props.type === 'public' && !props.isHost &&
+      <LivePrayerButton />
+    }
     <ChatFeed {...props} />
     <ChatInputs>
-      <ChatInputBox channel={props.channel} hideReactions={props.hideReactions} />
+      <ChatInputBox channel={props.channel} hideReactions={props.hideReactions} pendingPrayer={props.pendingPrayer}/>
       {!props.hideReactions &&
         <ReactionsContainer/>
       }
@@ -35,7 +41,7 @@ const Chat = (props:ChatPropsType) => (
 );
 
 const ChatFeed = React.memo < ChatPropsType > (
-  function ChatFeed ({ otherSubscribersName, isDirect, leaveChannel, type, subscriberCount, channel, isPlaceholder }: ChatPropsType) {
+  function ChatFeed ({ otherSubscribersName, isDirect, leaveChannel, type, subscriberCount, channel, isPlaceholder, pendingPrayer }: ChatPropsType) {
     const { t } = useTranslation();
     const directChatHeaderData = {
       otherSubscribersName,
@@ -57,7 +63,7 @@ const ChatFeed = React.memo < ChatPropsType > (
             </MediumUp>
         }
         {
-          isPlaceholder ? <ChatPlaceholder otherSubscribersName={otherSubscribersName} /> : <Feed key={channel} channel={channel}/>
+          isPlaceholder || pendingPrayer ? <ChatPlaceholder otherSubscribersName={otherSubscribersName} pendingPrayer={pendingPrayer} /> : <Feed key={channel} channel={channel}/>
         }
       </>
     );
@@ -67,14 +73,27 @@ ChatFeed.displayName = 'ChatFeed';
 
 type ChatPlaceholderProps = {
   otherSubscribersName: string,
+  pendingPrayer: boolean,
 };
 
 const ChatPlaceholder = React.memo < ChatPlaceholderProps > (
-  function ChatPlaceholder ({ otherSubscribersName }: ChatPlaceholderProps) {
+  function ChatPlaceholder ({ otherSubscribersName, pendingPrayer }: ChatPlaceholderProps) {
+    const { t } = useTranslation('common');
     return (
       <PlaceholderWrapper>
         <CommentOutline />
-        <PlaceholderText>Start chatting with <strong>{otherSubscribersName}</strong>.</PlaceholderText>
+        { pendingPrayer ?
+          <PlaceholderText>
+            { t('prayer_pending') }
+          </PlaceholderText> :
+          <PlaceholderText>
+            <Trans i18nKey='channel_pending'>
+              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
+              Start chatting with <strong>{{nickname:otherSubscribersName}}</strong>.
+            </Trans>
+          </PlaceholderText>
+
+        }
       </PlaceholderWrapper>
     );
   }

@@ -8,10 +8,9 @@ import Avatar from '../../avatar';
 import MessageTray from '../../components/messageTray';
 import Actionable from '../../components/Actionable';
 import linkifyHtml from 'linkifyjs/html';
-import { sanitizeString, getFirstWordInName } from '../../util';
-import Label from '../../components/label';
-
-import { MessageWrapper, Wrapper, BodyWrapper, NameWrapper, TextWrapper, ActionableWrapper } from './styles';
+import { sanitizeString } from '../../util';
+import SenderName from '../senderName';
+import { MessageWrapper, Wrapper, BodyWrapper, TextWrapper, ActionableWrapper } from './styles';
 
 type MessagePropsType = {
   message: MessageType,
@@ -53,12 +52,10 @@ const Message = (
   };
   const muteSubscriber = () => {
     props.muteSubscriber(subscriberName, currentChannel);
-    toggleMessageTray();
   };
   const addPlaceholderChannel = () => {
     const channelId = props.addPlaceholderChannel(subscriber);
     props.setPaneToChat(channelId);
-    toggleMessageTray();
   };
 
   const hasPermissions = chatPermissions || moderationPermissions;
@@ -67,10 +64,7 @@ const Message = (
     <>
       <Avatar subscriber={subscriber} size={avatarSize} />
       <BodyWrapper>
-        <NameWrapper isCompact={isCompact}>{isCompact ? getFirstWordInName(subscriberName) : subscriberName}</NameWrapper>
-        {subscriberLabel &&
-          <Label text={subscriberLabel} />
-        }
+        <SenderName isCompact={isCompact} name={subscriberName} label={subscriberLabel}/>
         <TextWrapper key={messageId} data-node='text' dangerouslySetInnerHTML={{ __html: sanitizeString(renderText) }} isCompact={isCompact} />
       </BodyWrapper>
     </>
@@ -79,8 +73,8 @@ const Message = (
   if (hasPermissions) {
     return (
       <Wrapper data-testid='messageContainer' hasPermissions={hasPermissions}>
-        <Actionable onClick={toggleMessageTray} keepFocus={true} tabable={false}>
-          <ActionableWrapper messageTrayOpen={messageTrayOpen} isCompact={isCompact}>
+        <Actionable onClick={toggleMessageTray} keepFocus={true} tabable={false} data-testid='messageContainer-actionable'>
+          <ActionableWrapper messageTrayOpen={messageTrayOpen} isCompact={isCompact} data-testid='message-actionable'>
             <MessageWrapper isCompact={isCompact}>
               <MessageBody />
             </MessageWrapper>

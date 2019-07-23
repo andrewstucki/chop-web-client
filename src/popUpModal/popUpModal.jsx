@@ -8,8 +8,10 @@ import LeaveChatPopUpModal from './leaveChat';
 import { LEAVE_CHAT } from './leaveChat/dux';
 import MuteSubscriberPopUpModal from './muteSubscriber/';
 import { MUTE_SUBSCRIBER } from './muteSubscriber/dux';
-import GuestNicknamePopUpModal from './guestNickname';
-import { GUEST_NICKNAME } from './guestNickname/dux';
+import ChatSetNicknamePopUpModal from './chatSetNickname';
+import { CHAT_SET_NICKNAME } from './chatSetNickname/dux';
+import LivePrayerSetNicknamePopUpModal from './livePrayerSetNickname';
+import { LIVE_PRAYER_SET_NICKNAME } from './livePrayerSetNickname/dux';
 import LogInPopUpModal from './login';
 import { LOGIN } from './login/dux';
 import ResetPasswordPopUpModal from './resetPassword';
@@ -58,9 +60,16 @@ const PopUpModal = ({ isSmall, modal, isPopUpModalVisible, togglePopUpModal }:Po
             isSmall={isSmall}
           />
         );
-      case GUEST_NICKNAME:
+      case CHAT_SET_NICKNAME:
         return (
-          <GuestNicknamePopUpModal
+          <ChatSetNicknamePopUpModal
+            togglePopUpModal={togglePopUpModal}
+            isSmall={isSmall}
+          />
+        );
+      case LIVE_PRAYER_SET_NICKNAME:
+        return (
+          <LivePrayerSetNicknamePopUpModal
             togglePopUpModal={togglePopUpModal}
             isSmall={isSmall}
           />

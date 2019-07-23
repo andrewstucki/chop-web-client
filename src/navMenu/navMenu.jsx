@@ -9,7 +9,6 @@ import {
   NavMenuFooter,
   NavMenuIconWrapper,
   NavMenuTextWrapper,
-  NavMenuCapTextWrapper,
   NavMenuChurchName,
   InnerWrapper,
   Label,
@@ -30,41 +29,31 @@ import Actionable from '../components/Actionable';
 import { theme } from '../styles';
 import {PRIMARY_PANE} from '../pane/dux';
 import {HOST_INFO} from '../hostInfo/dux';
-import {getFirstInitial} from '../util';
 import {MediumDown, LargeDown, MediumUp} from '../util/responsive';
-import {DirectChatAvatar} from '../components/styles';
+import DirectChatIcon from '../navbar/directChatIcon';
 import Pip from '../components/pip';
 import { useTranslation } from 'react-i18next';
 import { SCHEDULE } from '../schedule/dux';
 import { EVENT_NOTES } from '../eventNotes/dux';
 
-const NavMenuItem = React.memo(({Icon, useAvatar, text, selected = false, onClick = null, expanded, disabled = false, hasActions, hasNewMessages}) => {
+const NavMenuItem = React.memo(({Icon, direct = false, text, selected = false, onClick = null, expanded, disabled = false, hasActions, hasNewMessages}) => {
   const { t } = useTranslation();
   return (
     <Actionable onClick={onClick}>
       <NavMenuButton disabled={disabled} expanded={expanded}>
         <NavMenuIconWrapper expanded={expanded}>
-          { useAvatar &&
-          <DirectChatAvatar isCurrent={selected} nickname={text}>
-            {getFirstInitial(text)}
-          </DirectChatAvatar>
-          }
-          { !useAvatar &&
-          <Icon large={!expanded} color={getColor(theme.colors, disabled, selected)} />
+          { direct ?
+            <DirectChatIcon isCurrent={selected} nickname={text}/> :
+            <Icon large={!expanded} color={getColor(theme.colors, disabled, selected)} />
           }
         </NavMenuIconWrapper>
-        {expanded && useAvatar &&
-          <NavMenuTextWrapper selected={selected} disabled={disabled}>
+        { expanded &&
+          <NavMenuTextWrapper selected={selected} disabled={disabled} cap={!direct} >
             {text}
+            { disabled &&
+              <Label>{t('coming_soon')}</Label>
+            }
           </NavMenuTextWrapper>
-        }
-        {expanded &&  !useAvatar &&
-        <NavMenuCapTextWrapper selected={selected} disabled={disabled}>
-          {text}
-          { disabled &&
-            <Label>{t('coming_soon')}</Label>
-          }
-        </NavMenuCapTextWrapper>
         }
         { expanded ?
           (hasActions || hasNewMessages) && <PipWrapper><Pip hasActions={hasActions} theme={theme}/></PipWrapper> :
@@ -119,9 +108,8 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
           {directChannels.length > 0 &&
           <NavMenuBodySection>
             {directChannels.map(channel =>
-              <NavMenuItem key={channel.id} useAvatar={true} text={channel.otherSubscribersNames[0] || '?'}
-                expanded={expanded} hasActions={channel.hasActions} hasNewMessages={channel.hasNewMessages}
-                selected={channel.isCurrent}
+              <NavMenuItem key={channel.id} direct={true} expanded={expanded} selected={channel.isCurrent} text={channel.otherSubscribersNames[0] || channel.name}
+                hasActions={channel.hasActions} hasNewMessages={channel.hasNewMessages}
                 onClick={() => setPaneToChat(PRIMARY_PANE, channel.id, channel.isPlaceholder || false,)}/>
             )}
           </NavMenuBodySection>
@@ -167,4 +155,4 @@ const NavMenu = ({organizationName, setPaneToEvent, publicChannel, setPaneToChat
   );
 };
 
-export default React.memo(NavMenu);
+export default NavMenu;

@@ -136,6 +136,8 @@ const JOIN_CHANNEL = 'JOIN_CHANNEL';
 const JOIN_CHANNEL_FAILED = 'JOIN_CHANNEL_FAILED';
 const SET_CHANNEL_MESSAGE = 'SET_CHANNEL_MESSAGE';
 const CLEAR_CHANNEL_MESSAGE = 'CLEAR_CHANNEL_MESSAGE';
+const ADD_CHANNEL_SUBSCRIBER = 'ADD_CHANNEL_SUBSCRIBER';
+const REMOVE_CHANNEL_SUBSCRIBER = 'REMOVE_CHANNEL_SUBSCRIBER';
 
 // Flow Type Definitions
 type LanguageType = {
@@ -299,6 +301,18 @@ type JoinChannelType = {
   channel: string,
   requesterId: string,
   requesterNickname: string,
+};
+
+type AddChannelSubscriberType = {
+  type: typeof ADD_CHANNEL_SUBSCRIBER,
+  channelId: string,
+  subscriber: SharedSubscriberType,
+};
+
+type RemoveChannelSubscriberType = {
+  type: typeof REMOVE_CHANNEL_SUBSCRIBER,
+  channelId: string,
+  subscriberId: string,
 };
 
 export type FeedActionTypes =
@@ -471,6 +485,22 @@ const setSalvations = (count:number): SetSalvationsType => (
   {
     type: SET_SALVATIONS,
     count,
+  }
+);
+
+const addChannelSubscriber = (channelId:string, subscriber:SharedSubscriberType): AddChannelSubscriberType => (
+  {
+    type: ADD_CHANNEL_SUBSCRIBER,
+    channelId,
+    subscriber,
+  }
+);
+
+const removeChannelSubscriber = (channelId:string, subscriberId:string): RemoveChannelSubscriberType => (
+  {
+    type: REMOVE_CHANNEL_SUBSCRIBER,
+    channelId,
+    subscriberId,
   }
 );
 
@@ -1062,6 +1092,41 @@ const reducer = (
         navbarIndex: action.index,
         prevNavbarIndex: state.navbarIndex,
       };
+    case ADD_CHANNEL_SUBSCRIBER:
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [action.channelId]: {
+            ...state.channels[action.channelId],
+            subscribers: [
+              ...state.channels[action.channelId].subscribers,
+              action.subscriber,
+            ],
+          },
+        },
+      };
+    case REMOVE_CHANNEL_SUBSCRIBER: {
+      if (state.channels[action.channelId]?.subscribers) {
+        const subscribers = state.channels[action.channelId].subscribers.filter(subscriber => subscriber.id !== action.subscriberId);
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            [action.channelId]: {
+              ...state.channels[action.channelId],
+              subscribers: [
+                subscribers,
+              ],
+            },
+          },
+        };
+      } else {
+        return {
+          ...state,
+        };
+      }
+    }
     default:
       return inboundState;
   }
@@ -1112,6 +1177,8 @@ export {
   getNotificationBanner,
   setChannelMessage,
   clearChannelMessage,
+  addChannelSubscriber,
+  removeChannelSubscriber,
 };
 
 export type {

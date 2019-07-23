@@ -43,13 +43,17 @@ const avatarColors = [
   '233,228,91',  '176,221,97',  '127,198,97',  '91,214,154',  '115,226,225',
 ];
 
-const getAvatarColor = (nickname: string, opacity?: number) => {
+const getAvatarColor = (nickname: string, opacity?: number, pending?: boolean) => {
   const op = opacity === undefined ? '1.0' : opacity;
-  const numberDigest = djb2Hash(nickname);
-  const numberOfColors = avatarColors.length;
-  const index = Math.abs(numberDigest % numberOfColors);
-  const color = avatarColors[index];
-  return `rgba(${color}, ${op})`;
+  if (!pending || pending === undefined) {
+    const numberDigest = djb2Hash(nickname);
+    const numberOfColors = avatarColors.length;
+    const index = Math.abs(numberDigest % numberOfColors);
+    const color = avatarColors[index];
+    return `rgba(${color}, ${op})`;
+  } else {
+    return `rgba(64, 64, 65, ${op})`;
+  }  
 };
 
 const djb2Hash = (str: string): number => {

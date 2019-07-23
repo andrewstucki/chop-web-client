@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.span`
+const TextWrapper = styled.span`
   color: white;
   background-color: ${props => props.theme.colors.gray50};
   border-radius: 12px;
@@ -10,4 +10,15 @@ const Wrapper = styled.span`
   padding: 0 5px 0;
 `;
 
-export default Wrapper;
+const LabelWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  bottom: 1px;
+  left: 4px;
+  margin-right: 3px;
+`;
+
+export {
+  TextWrapper,
+  LabelWrapper,
+};

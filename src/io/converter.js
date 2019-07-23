@@ -84,6 +84,7 @@ export type LegcayNewMessageDataType = {
   uniqueMessageToken: UIDType,
   userId: number | null,
   translations?: TranslationListType,
+  label: string,
 }
 
 export type LegacyNewMessageType = LegacyMessageType<'newMessage', LegcayNewMessageDataType>;
@@ -150,11 +151,25 @@ const Converter = {
     {
       messageText: `${moment.nickname} has left the chat`,
       timestamp: Converter.getTimestamp(),
-      userId: moment.user_id,
+      fromToken: moment.id,
       fromNickname: moment.nickname,
       type: 'system',
       roomType: 'public',
       channelToken: channelId,
+      label: moment.label,
+    }
+  ),
+
+  cwcToLegacyJoinChannel:(moment: any, channelId: string) => (
+    {
+      messageText: '',
+      timestamp: Converter.getTimestamp(),
+      fromToken: moment.id,
+      fromNickname: moment.nickname,
+      type: 'joinedChannel',
+      roomType: 'public',
+      channelToken: channelId,
+      label: moment.label,
     }
   ),
 

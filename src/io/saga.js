@@ -40,6 +40,7 @@ import {
   directChat,
   publishAcceptedPrayerRequest,
   joinChannel,
+  requestLivePrayer,
 } from './sagas/privateChat';
 import {
   muteSubscriber,
@@ -72,6 +73,7 @@ import {
   UPDATE_GUEST_NICKNAME,
   DELETE_SELF,
 } from '../subscriber/dux';
+import { REQUEST_LIVE_PRAYER } from '../livePrayer/dux';
 import { RESET_APP } from '../chop/dux';
 
 function* rootSaga (): Saga<void> {
@@ -101,6 +103,7 @@ function* rootSaga (): Saga<void> {
     takeEvery(PUBLISH_REQUEST_PASSWORD_RESET, requestPasswordReset),
     takeEvery(PUBLISH_RESET_PASSWORD, resetPassword),
     takeEvery(DELETE_SELF, deleteSelf),
+    takeEvery(REQUEST_LIVE_PRAYER, requestLivePrayer),
   ]);
 }
 

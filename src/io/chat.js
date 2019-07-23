@@ -6,6 +6,8 @@ import {
   setSalvations,
   SET_CHANNELS,
   joinChannel,
+  addChannelSubscriber,
+  removeChannelSubscriber,
 } from '../feed/dux';
 import {getReactions} from '../reactions/reactionsContainer/dux';
 import {
@@ -15,6 +17,7 @@ import {
   hasPermissions,
   receiveMuteSubscriber,
   getMutedSubscribers,
+  getSharedSubscriber,
 } from '../subscriber/dux';
 import type {
   ReactionType,
@@ -25,6 +28,7 @@ import { receiveMoment } from '../moment/dux';
 import { receiveAcceptedPrayerRequest } from '../moment/actionableNotification/dux';
 import {
   receiveLeftChannelNotification,
+  receiveJoinedChannelNotification,
   receiveMuteSubscriberNotification,
   receivePrayerNotification,
 } from '../moment/notification/dux';
@@ -285,9 +289,11 @@ class Chat {
     messages.map(message => {
       switch (message.entry.action) {
         case 'newMessage': {
-          const {fromNickname, channelToken, timestamp} = message.entry.data;
+          const {fromNickname, channelToken, timestamp, label} = message.entry.data;
           if (message.entry.data.type === 'system') {
-            moments.push(receiveLeftChannelNotification(fromNickname, channelToken, getMessageTimestamp(timestamp)).moment);
+            moments.push(receiveLeftChannelNotification(fromNickname, channelToken, getMessageTimestamp(timestamp), label).moment);
+          } else if (message.entry.data.type === 'joinedChannel') {
+            moments.push(receiveJoinedChannelNotification(fromNickname, channelToken, getMessageTimestamp(timestamp), label).moment);
           } else {
             moments.push(Converter.legacyNewMessageToCwcMessage(message.entry.data));
           }
@@ -372,10 +378,26 @@ class Chat {
     switch (event.message.action) {
       case 'newMessage': {
         const message = event.message.data;
+        const { subscriber: { currentSubscriber: { nickname:currentSubscriberName }}} = this.getState();
         if (message.type === 'system') {
-          this.storeDispatch(
-            receiveLeftChannelNotification(message.fromNickname, message.channelToken, getMessageTimestamp(message.timestamp)),
-          );
+          if (message.fromNickname !== currentSubscriberName) {
+            this.storeDispatch(
+              receiveLeftChannelNotification(message.fromNickname, message.channelToken, getMessageTimestamp(message.timestamp), message.label),
+            );
+            this.storeDispatch(
+              removeChannelSubscriber(message.channelToken, message.fromToken),
+            );
+          }
+        } else if (message.type === 'joinedChannel') {
+          if (message.fromNickname !== currentSubscriberName) {
+            const { fromToken, fromNickname, fromAvatar, label } = message;
+            this.storeDispatch(
+              receiveJoinedChannelNotification(message.fromNickname, message.channelToken, getMessageTimestamp(message.timestamp), message.label),
+            );
+            this.storeDispatch(
+              addChannelSubscriber(message.channelToken, getSharedSubscriber(fromToken, fromNickname, fromAvatar, label)),
+            );
+          }
         } else {
           hasMomentBeenRecieved = Object.keys(channels).find(
             id => channels[id].moments.find(

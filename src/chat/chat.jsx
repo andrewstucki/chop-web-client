@@ -21,10 +21,11 @@ type ChatProps = {
   hideReactions: boolean,
   translateLanguage: string,
   message: string,
+  pendingPrayer: boolean,
 };
 
 function Chat (props:ChatProps) {
-  const { publishMessage, setChatFocus, focused, currentPlaceholder, currentSubscriber, currentChannel, hideReactions, translateLanguage, setNickname, saveMessage, clearMessage, message } = props;
+  const { publishMessage, setChatFocus, focused, currentPlaceholder, currentSubscriber, currentChannel, hideReactions, translateLanguage, setNickname, saveMessage, clearMessage, message, pendingPrayer } = props;
 
   const sendMessage = () => {
     if (currentSubscriber.nickname !== '') {
@@ -67,6 +68,7 @@ function Chat (props:ChatProps) {
           value={message}
           placeholder={currentPlaceholder}
           enterDetect={onKeyPressed}
+          pendingPrayer={pendingPrayer}
         />
 
         <IconButton

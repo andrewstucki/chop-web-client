@@ -34,7 +34,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => (
   {
     leaveChannel: (channelId, isPlaceholder) => isPlaceholder ? dispatch(removeChannel(channelId)) : dispatch(leaveChannel(channelId)),
-    publishLeftChannelNotification: (name, id, channel, date) => (dispatch(publishLeftChannelNotification(name, id, channel, date))),
+    publishLeftChannelNotification: (name, id, channel, date, label) => (dispatch(publishLeftChannelNotification(name, id, channel, date, label))),
   }
 );
 

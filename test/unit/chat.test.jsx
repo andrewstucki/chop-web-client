@@ -38,6 +38,7 @@ describe('Chat tests', () => {
         saveMessage={saveMessage}
         clearMessage={() => {}}
         setNickname={() => {}}
+        pendingPrayer={false}
       />
     );
 
@@ -63,6 +64,7 @@ describe('Chat tests', () => {
         saveMessage={() => {}}
         clearMessage={() => {}}
         setNickname={() => {}}
+        pendingPrayer={false}
       />
     );
 
@@ -87,6 +89,7 @@ describe('Chat tests', () => {
         saveMessage={() => {}}
         clearMessage={() => {}}
         setNickname={() => {}}
+        pendingPrayer={false}
       />
     );
     const chatInput = getByTestId('chat-input');

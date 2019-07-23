@@ -186,6 +186,11 @@ const hasNotSeenLatestMoments = createSelector(
   }
 );
 
+const pendingPrayer = createSelector(
+  getChannelById,
+  channel => channel?.type === 'prayer' && channel?.moments?.length === 0,
+);
+
 const lastInArray = <I>(array: Array<I>): I => array[array.length - 1];
 
 const isSameSubscriber = (subscriberA: SharedSubscriberType, subscriberB: SharedSubscriberType): boolean => subscriberA.id === subscriberB.id;
@@ -279,4 +284,5 @@ export {
   hasNotSeenLatestMoments,
   getTranslateLanguage,
   getPublicChannelMessage,
+  pendingPrayer,
 };

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import LabelWrapper from '../../components/label/styles';
 
 const MessageWrapper = styled.div`
   width: 100%;
@@ -24,14 +23,6 @@ const Wrapper = styled.div`
   align-items: center;
   position: relative;
   padding: ${props => props.hasPermissions ? '0' : '5px 4px 5px'};
-  
-  ${LabelWrapper} {
-    display: inline-block;
-    position: relative;
-    bottom: 1px;
-    left: 4px;
-    margin-right: 3px;
-  }
 
   div {
     -webkit-tap-highlight-color: transparent;

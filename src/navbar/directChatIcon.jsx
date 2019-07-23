@@ -2,6 +2,7 @@
 import React from 'react';
 import { DirectChatAvatar } from '../components/styles';
 import { getFirstInitial } from '../util';
+import Icon from '../icons/chat';
 
 type DirectChatIconProps = {
   isCurrent: boolean,
@@ -9,8 +10,16 @@ type DirectChatIconProps = {
 };
 
 const DirectChatIcon = ( { isCurrent, nickname }:DirectChatIconProps ) => (
-  <DirectChatAvatar isCurrent={isCurrent} nickname={nickname}>
-    { getFirstInitial(nickname) }
-  </DirectChatAvatar>
+  <>
+    { nickname === 'Direct' || nickname === 'Prayer' ?
+      <DirectChatAvatar isCurrent={isCurrent} nickname={nickname} pending={true}>
+        <Icon size={12} color={'#FFFFFF'} large={false}/>
+      </DirectChatAvatar> :
+      <DirectChatAvatar isCurrent={isCurrent} nickname={nickname}>
+        { getFirstInitial(nickname) }
+      </DirectChatAvatar>
+    }
+  </>
+  
 );
 export default React.memo < DirectChatIconProps > (DirectChatIcon);

@@ -28,9 +28,8 @@ const getOtherSubscribers = createSelector(
   getChannelById,
   getCurrentSubscriber,
   (channel, currentSubscriber) => channel && channel.subscribers ?
-    channel.subscribers
-      .filter(subscriber => subscriber.id !== currentSubscriber.id)
-    : []
+    channel.subscribers.filter(subscriber => 
+      subscriber?.id !== currentSubscriber?.id && subscriber?.id !== '') : []
 );
 
 const hasOtherSubscribers = createSelector(
@@ -50,8 +49,13 @@ const getPlaceholder = createSelector(
     switch (channelType) {
       case HOST:
         return i18n.t('chat_with', { nickname: 'hosts'});
-      case DIRECT:
-        return `${i18n.t('chat_with')}${otherSubscriberNames.join(', ').replace(/,\\s([^,]*)$/, ' and $1')}`;
+      case DIRECT: {
+        if (otherSubscriberNames.length === 0) {
+          return i18n.t('chat');
+        } else {
+          return `${i18n.t('chat_with')}${otherSubscriberNames.join(', ').replace(/,\\s([^,]*)$/, ' and $1')}`;
+        }
+      }
       case PUBLIC:
       default:
         return i18n.t('chat');
