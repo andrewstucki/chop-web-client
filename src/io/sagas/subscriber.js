@@ -17,6 +17,7 @@ import { publishMessage } from '../../moment';
 import { clearChannelMessage } from '../../feed/dux';
 import { loginType } from '../../popUpModal/login/dux';
 import { resetApp } from '../../chop/dux';
+import { requestLivePrayer } from '../../livePrayer/dux';
 import { API } from '../API';
 
 function* updateSubscriber (action: UpdateSubscriberType): Saga<void> {
@@ -45,13 +46,17 @@ function* updateGuestNickname (action: UpdateGuestNicknameType): Saga<void> {
     const result = yield call([queries, queries.updateSubscriber], action.id, { nickname });
     if (result) {
       yield put (updateSubscriberSuccess({ nickname }));
-      const language = yield select (getTranslateLanguage);
-      const subscriber = yield select (getCurrentSubscriberAsSharedSubscriber);
-      const channel = yield select (getPublicChannel);
-      const message = yield select (getPublicChannelMessage);
-      yield put (publishMessage(channel, message, subscriber, language));
       yield put (togglePopUpModal());
-      yield put (clearChannelMessage(channel));
+      const subscriber = yield select (getCurrentSubscriberAsSharedSubscriber);
+      if (action.action === 'chat') {
+        const language = yield select (getTranslateLanguage);
+        const channel = yield select (getPublicChannel);
+        const message = yield select (getPublicChannelMessage);
+        yield put (publishMessage(channel, message, subscriber, language));
+        yield put (clearChannelMessage(channel));
+      } else if (action.action === 'prayer') {
+        yield put(requestLivePrayer(subscriber.id, subscriber.nickname));
+      }
     } else {
       throw new Error(`Server returned false for updateSubscriber: ${action.id}`);
     }

@@ -75,10 +75,7 @@ const NavMenuTextWrapper = styled.div`
   font-size: 13.44px;
   font-weight: 500;
   text-align: left;
-`;
-
-const NavMenuCapTextWrapper = styled(NavMenuTextWrapper)`
-  text-transform: uppercase;
+  text-transform: ${props => props.cap ? 'uppercase' : 'none'};
 `;
 
 const NavMenuChurchName = styled.div`
@@ -148,7 +145,6 @@ export {
   NavMenuFooter,
   NavMenuIconWrapper,
   NavMenuTextWrapper,
-  NavMenuCapTextWrapper,
   NavMenuChurchName,
   Label,
   getColor,

@@ -17,7 +17,7 @@ import Chat from './chat';
 import { getCurrentSubscriberAsSharedSubscriber } from '../subscriber/dux';
 
 import { togglePopUpModal } from '../popUpModal/dux';
-import { guestNicknameType } from '../popUpModal/guestNickname/dux';
+import { chatSetNicknameType } from '../popUpModal/chatSetNickname/dux';
 
 import { setChannelMessage, clearChannelMessage } from '../feed/dux';
 
@@ -40,7 +40,7 @@ const mapDispatchToProps = dispatch => (
     publishMessage: (channel, text, subscriber, language) => dispatch(
       publishMessage(channel, text, subscriber, language)
     ),
-    setNickname: () => dispatch(togglePopUpModal(guestNicknameType())),
+    setNickname: () => dispatch(togglePopUpModal(chatSetNicknameType())),
     saveMessage: (id, message) => dispatch(setChannelMessage(id, message)),
     clearMessage: id => dispatch(clearChannelMessage(id)),
   }

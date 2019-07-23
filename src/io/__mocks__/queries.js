@@ -24,7 +24,7 @@ const acceptPrayer = jest.fn().mockResolvedValue(
   },
 );
 const muteSubscriber = jest.fn().mockResolvedValue({muteSubscriber: true});
-const leaveChannel = jest.fn().mockResolvedValue({leaveFeed: true});
+const leaveChannel = jest.fn().mockResolvedValue({leaveChannel: true});
 const directChat = jest.fn().mockResolvedValue(
   {
     createDirectChannel: {
@@ -50,7 +50,7 @@ const directChat = jest.fn().mockResolvedValue(
 
 const joinChannel = jest.fn().mockResolvedValue(
   {
-    joinFeed: {
+    joinChannel: {
       direct: true,
       id: '67890',
       type: 'direct',
@@ -131,8 +131,29 @@ const requestPasswordReset = jest.fn().mockResolvedValue({
   requestPasswordReset: true,
 });
 
+const requestLivePrayer = jest.fn().mockResolvedValue({
+  requestLivePrayer: {
+    id: '123456',
+    name: 'Prayer',
+    type: 'prayer',
+  },
+});
+
 const deleteSelf = jest.fn().mockResolvedValue({
   deleteSelf: true,
+});
+
+const channel = jest.fn().mockResolvedValue({
+  channel: {
+    subscriber: {
+      avatar: null,
+      nickname: 'guest', 
+      id: '123abc',
+      role: {
+        label: '',
+      },
+    },
+  },
 });
 
 const mockQueries = {
@@ -150,6 +171,8 @@ const mockQueries = {
   resetPassword: resetPassword,
   requestPasswordReset: requestPasswordReset,
   deleteSelf: deleteSelf,
+  requestLivePrayer: requestLivePrayer,
+  channel: channel,
 };
 
 export {
@@ -166,6 +189,8 @@ export {
   updateSubscriber,
   resetPassword,
   requestPasswordReset,
+  requestLivePrayer,
   deleteSelf,
+  channel,
 };
 export default mockQueries;

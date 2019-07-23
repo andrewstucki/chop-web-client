@@ -1,8 +1,8 @@
 // @flow
 import Chat from './chat';
 import { connect } from 'react-redux';
-import { getChannelById } from '../../../selectors/channelSelectors';
-import { getSubscriberCountInChannel } from '../../../subscriber/dux';
+import { getChannelById, pendingPrayer } from '../../../selectors/channelSelectors';
+import { getSubscriberCountInChannel, hasPermissions } from '../../../subscriber/dux';
 import { togglePopUpModal } from '../../../popUpModal/dux';
 import { leaveChatType } from '../../../popUpModal/leaveChat/dux';
 import { getOtherSubscribers } from '../../../selectors/chatSelectors';
@@ -22,8 +22,10 @@ const mapStateToProps = (state, ownProps) => {
     subscriberCount,
     isDirect,
     otherSubscribersName,
-    hideReactions,
+    hideReactions: hideReactions || type === 'prayer',
     isPlaceholder,
+    pendingPrayer: pendingPrayer(state, channel),
+    isHost: hasPermissions(state, ['feed.host.read','feed.host.write']),
   };
 };
 

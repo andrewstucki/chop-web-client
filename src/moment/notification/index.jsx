@@ -5,7 +5,7 @@ import {
   PRAYER,
   PRAYER_REQUEST,
   MUTE,
-  JOINED_CHAT,
+  JOINED_CHANNEL,
   LEFT_CHANNEL,
 } from './dux';
 
@@ -21,8 +21,10 @@ import {
   Timestamp,
   Text,
   Icon,
+  MessageWrapper,
 } from './styles';
 import { Trans, useTranslation } from 'react-i18next';
+import SenderName from '../senderName';
 
 type NotificationPropsType = {
   notification: NotificationType,
@@ -119,39 +121,28 @@ const MuteSubscriberNotification = (
   </Wrapper>
 );
 
-type JoinedChatNotificationPropsType = {
+type JoinedChannelNotificationPropsType = {
   nickname: string,
   timestamp: string,
   isCompact: boolean,
+  label: string,
 };
 
-const JoinedChatNotification = (
+const JoinedChannelNotification = (
   {
     nickname,
     timestamp,
     isCompact,
-  }: JoinedChatNotificationPropsType,
+    label,
+  }: JoinedChannelNotificationPropsType,
 ) => {
   const { t } = useTranslation('moments');
   return (
     <Wrapper data-testid={'notification'}>
       <Icon dangerouslySetInnerHTML={{ __html: ChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
       <Text isCompact={isCompact} data-testid={'notification-message'}>
-
-        {
-          nickname === 'You' ? (
-            t('joined_chat.notification_you')
-          ) : (
-            <Trans ns='moments' i18nKey='joined_chat.notification'>
-              {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-              <strong>{{nickname}}</strong> has joined the chat
-            </Trans>
-          )
-        }
-        {nickname === 'You' ?
-          <span>{nickname} have joined the chat</span> : <span></span>
-        }
-
+        <SenderName isCompact={isCompact} name={nickname} label={label}/>
+        <MessageWrapper>{ t('joined_chat.notification') }</MessageWrapper>
         <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
       </Text>
     </Wrapper>
@@ -162,6 +153,7 @@ type LeftChannelNotificationPropsType = {
   nickname: string,
   timestamp: string,
   isCompact: boolean,
+  label: string,
 };
 
 const LeftChannelNotification = (
@@ -169,21 +161,21 @@ const LeftChannelNotification = (
     nickname,
     timestamp,
     isCompact,
+    label,
   }: LeftChannelNotificationPropsType,
-) => (
-  <Wrapper data-testid={'notification'}>
-    <Icon dangerouslySetInnerHTML={{ __html: EndChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
-    <Text isCompact={isCompact} data-testid={'notification-message'}>
-
-      <Trans ns='moments' i18nKey='left_chat.notification'>
-        {/* $FlowFixMe - TODO: Figure out how to make this i18n syntax work with Flow. */}
-        <strong>{{nickname}}</strong> has left the chat
-      </Trans>
-
-      <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
-    </Text>
-  </Wrapper>
-);
+) => {
+  const { t } = useTranslation('moments');
+  return (
+    <Wrapper data-testid={'notification'}>
+      <Icon dangerouslySetInnerHTML={{ __html: EndChatNotification }} isCompact={isCompact} data-testid={'notification-icon'}/>
+      <Text isCompact={isCompact} data-testid={'notification-message'}>
+        <SenderName isCompact={isCompact} name={nickname} label={label}/>
+        <MessageWrapper>{ t('left_chat.notification') }</MessageWrapper>
+        <Timestamp data-testid={'notification-timestamp'}>{timestamp}</Timestamp>
+      </Text>
+    </Wrapper>
+  );
+};
 
 const getNotificationText = (notification, isCompact) => {
   switch (notification.notificationType) {
@@ -193,10 +185,10 @@ const getNotificationText = (notification, isCompact) => {
       return <PrayerRequestNotification guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
     case MUTE:
       return <MuteSubscriberNotification host={notification.host} guest={notification.guest} timestamp={notification.timestamp} isCompact={isCompact} />;
-    case JOINED_CHAT:
-      return <JoinedChatNotification nickname={notification.nickname} timestamp={notification.timestamp} isCompact={isCompact} />;
+    case JOINED_CHANNEL:
+      return <JoinedChannelNotification nickname={notification.nickname} timestamp={notification.timestamp} label={notification.label || ''} isCompact={isCompact} />;
     case LEFT_CHANNEL:
-      return <LeftChannelNotification nickname={notification.nickname} timestamp={notification.timestamp} isCompact={isCompact} />;
+      return <LeftChannelNotification nickname={notification.nickname} timestamp={notification.timestamp} label={notification.label || ''} isCompact={isCompact} />;
     default:
       return null;
   }

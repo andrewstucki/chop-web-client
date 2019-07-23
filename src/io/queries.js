@@ -202,6 +202,10 @@ export type GraphQLResetPasswordType = {
   resetPassword: GraphQLString,
 };
 
+export type GraphQLRequestLivePrayerType = {
+  requestLivePrayer: GraphQLString,
+};
+
 const sequence = `
 query Sequence($time: Timestamp) {
   eventAt(time: $time) {
@@ -398,8 +402,8 @@ query Schedule($limit: Int) {
 }`;
 
 const joinChannel = `
-mutation joinFeed($channel: String!, $requesterId: ID!, $requesterNickname: String!) {
-  joinFeed(feedToken: $channel, requesterId: $requesterId, requesterNickname: $requesterNickname) {
+mutation joinChannel($channelToken: String!, $requesterPubnubToken: String!, $requesterNickname: String!) {
+  joinChannel(channelToken: $channelToken, requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
     id
     name
     direct
@@ -407,6 +411,10 @@ mutation joinFeed($channel: String!, $requesterId: ID!, $requesterNickname: Stri
     subscribers {
       avatar
       nickname
+      id
+      role {
+        label
+      }
     }
   }
 }
@@ -436,6 +444,25 @@ mutation resetPassword($resetToken: String!, $password: String!) {
     errors {
       code
       message
+    }
+  }
+}
+`;
+
+const requestLivePrayer = `
+mutation requestLivePrayer($requesterPubnubToken: String!, $requesterNickname: String!) {
+  requestLivePrayer(requesterPubnubToken: $requesterPubnubToken, requesterNickname: $requesterNickname) {
+    id
+    name
+    direct
+    type
+    subscribers {
+      avatar
+      nickname
+      id
+      role {
+        label
+      }
     }
   }
 }
@@ -528,12 +555,12 @@ const queries = {
       time,
     }),
 
-  joinChannel: async (channel: string, requesterId: string, requesterNickname: string) =>
+  joinChannel: async (channelToken: string, requesterPubnubToken: string, requesterNickname: string) =>
     await client().request(
       joinChannel,
       {
-        channel,
-        requesterId,
+        channelToken,
+        requesterPubnubToken,
         requesterNickname,
       }
     ),
@@ -560,6 +587,15 @@ const queries = {
       {
         resetToken,
         password,
+      }
+    ),
+
+  requestLivePrayer: async (requesterPubnubToken: string, requesterNickname: string) =>
+    await client().request(
+      requestLivePrayer,
+      {
+        requesterPubnubToken,
+        requesterNickname,
       }
     ),
 

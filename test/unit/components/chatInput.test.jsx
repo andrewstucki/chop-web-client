@@ -20,6 +20,7 @@ describe('ChatInput', () => {
         value='message'
         placeholder='Chat'
         enterDetect={() => {}}
+        pendingPrayer={false}
       />
     );
 

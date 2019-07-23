@@ -77,6 +77,8 @@ function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void
         publishSystemMessage(action.moment, publishChannel);
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
         publishLeaveChannel(action.moment, publishChannel);
+      } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'JOINED_CHANNEL') {
+        publishJoinedChannel(action.moment, publishChannel);
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'MUTE') {
         publishMuteSubscriber(action.moment, publishChannel);
       } else {
@@ -113,6 +115,19 @@ const publishLeaveChannel = (moment: MomentType, channelId: string) => (
         action: 'newMessage',
         channel: channelId,
         data: Converter.cwcToLegacyLeaveChannel(moment, channelId),
+      },
+    }
+  )
+);
+
+const publishJoinedChannel = (moment: MomentType, channelId: string) => (
+  PubnubClient.publish(
+    {
+      channel: channelId,
+      message: {
+        action: 'newMessage',
+        channel: channelId,
+        data: Converter.cwcToLegacyJoinChannel(moment, channelId),
       },
     }
   )

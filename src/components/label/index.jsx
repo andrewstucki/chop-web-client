@@ -1,12 +1,12 @@
 import React from 'react';
-import Wrapper from './styles';
+import { TextWrapper } from './styles';
 
 type LabelPropsType = {
   text: string,
 };
 
 const Label = ({ text }:LabelPropsType) => (
-  <Wrapper>{text}</Wrapper>
+  <TextWrapper>{text}</TextWrapper>
 );
 
 export default React.memo(Label);

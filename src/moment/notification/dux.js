@@ -8,7 +8,7 @@ import type { SharedSubscriberType } from '../../subscriber/dux';
 
 const NOTIFICATION = 'NOTIFICATION';
 const LEFT_CHANNEL = 'LEFT_CHANNEL';
-const JOINED_CHAT = 'JOINED_CHAT';
+const JOINED_CHANNEL = 'JOINED_CHANNEL';
 const PRAYER = 'PRAYER';
 const PRAYER_REQUEST = 'PRAYER_REQUEST';
 const MUTE = 'MUTE';
@@ -18,29 +18,31 @@ const MUTE = 'MUTE';
 type NotificationType =
   | PrayerNotificationType
   | PrayerRequestNotificationType
-  | JoinedChatNotificationType
+  | JoinedChannelNotificationType
   | LeftChannelNotificationType
   | MuteSubscriberNotificationType;
 
 type LeftChannelNotificationType = {
-  type: 'NOTIFICATION',
-  notificationType: 'LEFT_CHANNEL',
+  type: typeof NOTIFICATION,
+  notificationType: typeof LEFT_CHANNEL,
   id: string,
   nickname: string,
   timestamp: string,
+  label: string,
 };
 
-type JoinedChatNotificationType = {
-  type: 'NOTIFICATION',
-  notificationType: 'JOINED_CHAT',
+type JoinedChannelNotificationType = {
+  type: typeof NOTIFICATION,
+  notificationType: typeof JOINED_CHANNEL,
   id: string,
   nickname: string,
   timestamp: string,
+  label: string,
 };
 
 type PrayerNotificationType = {
-  type: 'NOTIFICATION',
-  notificationType: 'PRAYER',
+  type: typeof NOTIFICATION,
+  notificationType: typeof PRAYER,
   id: string,
   host: string,
   guest: string,
@@ -56,8 +58,8 @@ type PrayerRequestNotificationType = {
 };
 
 type MuteSubscriberNotificationType = {
-  type: 'NOTIFICATION',
-  notificationType: 'MUTE',
+  type: typeof NOTIFICATION,
+  notificationType: typeof MUTE,
   id: string,
   host: string,
   guest: string,
@@ -108,6 +110,7 @@ const publishLeftChannelNotification = (
   id: string,
   channel: string,
   timestamp: string,
+  label: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
@@ -118,6 +121,7 @@ const publishLeftChannelNotification = (
       id,
       nickname,
       timestamp,
+      label,
     },
   }
 );
@@ -126,6 +130,7 @@ const receiveLeftChannelNotification = (
   nickname: string,
   channel: string,
   timestamp: string,
+  label: string,
 ): ReceiveMomentType => (
   {
     type: RECEIVE_MOMENT,
@@ -136,40 +141,48 @@ const receiveLeftChannelNotification = (
       id: createUid(),
       nickname,
       timestamp,
+      label,
     },
   }
 );
 
-const publishJoinedChatNotification = (
-  name: string,
+const publishJoinedChannelNotification = (
+  nickname: string,
+  id: string,
   channel: string,
+  timestamp: string,
+  label: string,
 ): PublishMomentToChannelType => (
   {
     type: PUBLISH_MOMENT_TO_CHANNEL,
     channel,
     moment: {
       type: NOTIFICATION,
-      notificationType: JOINED_CHAT,
-      id: createUid(),
-      name,
+      notificationType: JOINED_CHANNEL,
+      id,
+      nickname,
       timestamp: getMessageTimestamp(),
+      label,
     },
   }
 );
 
-const receiveJoinedChatNotification = (
-  name: string,
+const receiveJoinedChannelNotification = (
+  nickname: string,
   channel: string,
+  timestamp: string,
+  label: string,
 ): ReceiveMomentType => (
   {
     type: RECEIVE_MOMENT,
     channel,
     moment: {
       type: NOTIFICATION,
-      notificationType: JOINED_CHAT,
+      notificationType: JOINED_CHANNEL,
       id: createUid(),
-      name,
-      timestamp: getMessageTimestamp(),
+      nickname,
+      timestamp: timestamp,
+      label,
     },
   }
 );
@@ -219,15 +232,15 @@ const receiveMuteSubscriberNotification = (
 export type {
   NotificationType,
   LeftChannelNotificationType,
-  JoinedChatNotificationType,
+  JoinedChannelNotificationType,
   MuteSubscriberNotificationType,
   PrayerNotificationType,
   PrayerRequestNotificationType,
 };
 
 export {
-  publishJoinedChatNotification,
-  receiveJoinedChatNotification,
+  publishJoinedChannelNotification,
+  receiveJoinedChannelNotification,
   publishMuteSubscriberNotification,
   receiveMuteSubscriberNotification,
   publishLeftChannelNotification,
@@ -240,7 +253,7 @@ export {
   PRAYER,
   PRAYER_REQUEST,
   MUTE,
-  JOINED_CHAT,
+  JOINED_CHANNEL,
   LEFT_CHANNEL,
   NOTIFICATION,
 };

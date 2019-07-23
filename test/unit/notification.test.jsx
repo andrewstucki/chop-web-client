@@ -39,10 +39,11 @@ describe('Notification test', () => {
         notification={
           {
             type: 'NOTIFICATION',
-            notificationType: 'JOINED_CHAT',
+            notificationType: 'JOINED_CHANNEL',
             id: '12345',
             nickname: 'cookietree',
             timestamp: '9:33pm',
+            label: '',
           }
         }
         isCompact={true}
@@ -51,7 +52,7 @@ describe('Notification test', () => {
     expect(queryByTestId('notification')).toBeTruthy();
     expect(queryByTestId('notification-icon')).toBeTruthy();
     expect(queryByTestId('notification-message').textContent).toEqual(
-      'cookietree has joined the chat9:33pm'
+      'cookietreejoined_chat.notification9:33pm'
     );
     expect(queryByTestId('notification-timestamp').textContent).toEqual('9:33pm');
   });
@@ -66,6 +67,7 @@ describe('Notification test', () => {
             id: '12345',
             nickname: 'cookietree',
             timestamp: '9:33pm',
+            label: '',
           }
         }
         isCompact={true}
@@ -74,7 +76,7 @@ describe('Notification test', () => {
     expect(queryByTestId('notification')).toBeTruthy();
     expect(queryByTestId('notification-icon')).toBeTruthy();
     expect(queryByTestId('notification-message').textContent).toEqual(
-      'cookietree has left the chat9:33pm'
+      'cookietreeleft_chat.notification9:33pm'
     );
     expect(queryByTestId('notification-timestamp').textContent).toEqual('9:33pm');
   });

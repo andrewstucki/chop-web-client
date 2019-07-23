@@ -82,6 +82,7 @@ export type UpdateGuestNicknameType = {|
   type: typeof UPDATE_GUEST_NICKNAME,
   id: string,
   nickname: string,
+  action: string,
 |};
 
 export type SubscriberPreferencesInputType = {|
@@ -277,11 +278,12 @@ export const updateSubscriberSuccess = (input: SubscriberInputType): UpdateSubsc
   }
 );
 
-export const updateGuestNickname = (id: string, nickname: string): UpdateGuestNicknameType => (
+export const updateGuestNickname = (id: string, nickname: string, action: string): UpdateGuestNicknameType => (
   {
     type: UPDATE_GUEST_NICKNAME,
     id,
     nickname,
+    action,
   }
 );
 
@@ -308,6 +310,22 @@ export const publishResetPassword = (
     type: PUBLISH_RESET_PASSWORD,
     resetToken,
     password,
+  }
+);
+
+export const getSharedSubscriber = (
+  id: string,
+  nickname: string,
+  avatar: string,
+  label: string,
+): SharedSubscriberType => (
+  {
+    id,
+    nickname,
+    avatar,
+    role: {
+      label,
+    },
   }
 );
 

@@ -32,8 +32,8 @@ const renderPaneContent = (pane:PaneType, hideReactions:boolean) => {
   switch (type) {
     case EVENT:
       return <Event />;
-    case CHAT:
-    // $FlowFixMe
+    case CHAT: 
+      // $FlowFixMe
       return <Chat key={content.channelId} channel={content.channelId} hideReactions={hideReactions} />;
     case TAB:
     // $FlowFixMe

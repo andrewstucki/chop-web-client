@@ -122,7 +122,7 @@ describe('Test leave channel', () => {
       }
     );
 
-    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledTimes(2);
     expect(dispatch.mock.calls[0][0]).toEqual(
       {
         channel: 'test',

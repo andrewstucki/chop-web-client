@@ -29,9 +29,14 @@ const Icon = styled.span`
   }
 `;
 
+const MessageWrapper = styled.span`
+  margin-left: 8px;
+`;
+
 export {
   Wrapper,
   Timestamp,
   Text,
   Icon,
+  MessageWrapper,
 };

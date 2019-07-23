@@ -13,7 +13,9 @@ import {
   NOTIFICATION,
   PRAYER,
   LEFT_CHANNEL,
+  JOINED_CHANNEL,
   publishLeftChannelNotification,
+  publishJoinedChannelNotification,
   receivePrayerNotification,
 } from './notification/dux';
 
@@ -50,6 +52,7 @@ export {
   publishAcceptedPrayerRequest,
   receiveAcceptedPrayerRequest,
   publishLeftChannelNotification,
+  publishJoinedChannelNotification,
   receivePrayerNotification,
 };
 
@@ -64,6 +67,7 @@ export {
   PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED,
   RECEIVE_ACCEPTED_PRAYER_REQUEST,
   LEFT_CHANNEL,
+  JOINED_CHANNEL,
 };
 
 export type {

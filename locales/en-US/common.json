@@ -35,5 +35,7 @@
   "settings": "Settings",
   "support": "Support",
   "timezone": "Timezone",
-  "upcoming_event": "Upcoming Event"
+  "upcoming_event": "Upcoming Event",
+  "prayer_pending": "Someone will be with you shortly.",
+  "channel_pending": "Start chatting with <strong>{{nickname}}</strong>."
 }

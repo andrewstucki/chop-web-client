@@ -1317,7 +1317,7 @@ describe('Feed tests', () => {
         channel: 'public',
         moment: {
           type: 'NOTIFICATION',
-          notificationType: 'JOINED_CHAT',
+          notificationType: 'JOINED_CHANNEL',
           id: '12345',
           name: 'Boofie',
           timestamp: '4:53pm',
@@ -1337,7 +1337,7 @@ describe('Feed tests', () => {
             moments: [
               {
                 type: 'NOTIFICATION',
-                notificationType: 'JOINED_CHAT',
+                notificationType: 'JOINED_CHANNEL',
                 id: '12345',
                 name: 'Boofie',
                 timestamp: '4:53pm',
@@ -1377,7 +1377,7 @@ describe('Feed tests', () => {
         channel: 'host',
         moment: {
           type: 'NOTIFICATION',
-          notificationType: 'JOINED_CHAT',
+          notificationType: 'JOINED_CHANNEL',
           id: '12345',
           name: 'Boofie',
           timestamp: '4:53pm',
@@ -1396,7 +1396,7 @@ describe('Feed tests', () => {
             moments: [
               {
                 type: 'NOTIFICATION',
-                notificationType: 'JOINED_CHAT',
+                notificationType: 'JOINED_CHANNEL',
                 id: '12345',
                 name: 'Boofie',
                 timestamp: '4:53pm',

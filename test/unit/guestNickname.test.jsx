@@ -3,7 +3,7 @@ import React from 'react';
 import { fireEvent } from '@testing-library/react';
 import sinon from 'sinon';
 import Modal from '../../src/popUpModal';
-import GuestNicknameModal from '../../src/popUpModal/guestNickname/guestNickname';
+import ChatSetNicknameModal from '../../src/popUpModal/chatSetNickname/chatSetNickname';
 import { renderWithReduxAndTheme, defaultState } from '../testUtils';
 
 describe('Guest nickname modal tests', () => {
@@ -13,7 +13,7 @@ describe('Guest nickname modal tests', () => {
         ...defaultState,
         isPopUpModalVisible: true,
         popUpModal: {
-          type: 'GUEST_NICKNAME',
+          type: 'CHAT_SET_NICKNAME',
         },
       },
     };
@@ -22,14 +22,14 @@ describe('Guest nickname modal tests', () => {
       state
     );
 
-    expect(getByTestId('guestNickname-modal')).toBeTruthy();
+    expect(getByTestId('chatSetNickname-modal')).toBeTruthy();
   });
 
   test('Guest nickname modal sends message', () => {
     const updateAndPost = sinon.spy();
 
     const { getByTestId } = renderWithReduxAndTheme(
-      <GuestNicknameModal
+      <ChatSetNicknameModal
         isSmall={false}
         togglePopUpModal={() => {}}
         updateAndPost={updateAndPost}
@@ -38,16 +38,16 @@ describe('Guest nickname modal tests', () => {
       />
     );
 
-    expect(getByTestId('guestNickname-modal')).toBeTruthy();
+    expect(getByTestId('chatSetNickname-modal')).toBeTruthy();
 
-    fireEvent.click(getByTestId('guestNickname-post'));
+    fireEvent.click(getByTestId('chatSetNickname-post'));
     expect(updateAndPost.calledOnce).toEqual(false);
 
-    const nicknameInput = getByTestId('guestNickname-nicknameField');
+    const nicknameInput = getByTestId('chatSetNickname-nicknameField');
     fireEvent.change(nicknameInput, { target: { value: 'guest' } });
     expect(nicknameInput.value).toBe('guest');
 
-    fireEvent.click(getByTestId('guestNickname-post'));
+    fireEvent.click(getByTestId('chatSetNickname-post'));
     expect(updateAndPost.calledOnce).toEqual(true);
   });
 });

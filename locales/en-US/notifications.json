@@ -8,7 +8,6 @@
   "password_reset": "Your password was updated.",
   "password_reset_error": "There was an error resetting your password.",
   "subscriber_muted": "<strong>{{nickname}}</strong> was muted.",
-  "text_mode_updated": "Chat size {{text}}.",
   "text_mode_updated": "Chat size {{mode}}.",
   "update_settings_error": "There was an error updating your settings.",
   "update_settings_success": "Your settings have been updated."

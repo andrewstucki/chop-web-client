@@ -3,6 +3,9 @@ import {getAvatarColor} from '../util';
 
 
 const DirectChatAvatar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
   height: 20px;
   width: 20px;
@@ -10,7 +13,7 @@ const DirectChatAvatar = styled.div`
   color: ${props => props.theme.colors.alternateTextColor};
   text-align: center;
   line-height: 20px;
-  background-color: ${ props =>  getAvatarColor(props.nickname, props.isCurrent ? 1.0 : 0.5) };
+  background-color: ${ props =>  getAvatarColor(props.nickname, props.isCurrent ? 1.0 : 0.5, props.pending) };
 `;
 
 export {
