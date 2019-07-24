@@ -215,6 +215,7 @@ describe('Chat tests', () => {
           moments: [
             {
               id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
+              sessionId: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
               isMuted: false,
               lang: 'en',
               messageTrayOpen: false,
@@ -291,6 +292,7 @@ describe('Chat tests', () => {
           moments: [
             {
               id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
+              sessionId: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
               isMuted: false,
               lang: 'en',
               messageTrayOpen: false,

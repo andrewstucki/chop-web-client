@@ -27,6 +27,7 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            sessionId: 'abc123',
             timestamp: 1546570485391,
             lang: 'en',
             text: 'Go to https://live.life.church young man!<script>sinister script</script>',
@@ -59,6 +60,7 @@ describe('Message', () => {
           {
             type: MESSAGE,
             id: '1234',
+            sessionId: 'abc123',
             timestamp: 1546570485391,
             lang: 'en',
             text: 'Go west young man!',

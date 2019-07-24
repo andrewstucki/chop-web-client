@@ -1,4 +1,5 @@
 // @flow
+import Cookies from 'js-cookie';
 import { type SharedSubscriberType } from '../../subscriber/dux';
 import type { PublishMomentToChannelType } from '../dux';
 import { PUBLISH_MOMENT_TO_CHANNEL } from '../dux';
@@ -26,6 +27,7 @@ type SenderType = System | SharedSubscriberType;
 
 type BaseMomentType<T: MomentNameType, S: SenderType> = {
   id: UIDType,
+  sessionId: UIDType | null,
   timestamp: DateTimeType,
   subscriber: S,
   type: T,
@@ -71,6 +73,7 @@ const newMessage = (
   {
     type: MESSAGE,
     id: createUid(),
+    sessionId: Cookies.get('SESSIONID'),
     timestamp: newTimestamp(),
     lang,
     text,
