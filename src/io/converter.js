@@ -83,6 +83,7 @@ export type LegcayNewMessageDataType = {
   timestamp: DateTimeAsStringType,
   uniqueMessageToken: UIDType,
   userId: number | null,
+  sessionId: UIDType | null,
   translations?: TranslationListType,
   label: string,
 }
@@ -122,6 +123,7 @@ const Converter = {
       isVolunteer: true,
       isUser: true,
       userId: _getState().subscriber.currentSubscriber.userId || 0,
+      sessionId: message.sessionId,
       organizationId: _getState().feed.organization.id,
       organizationName: _getState().feed.organization.name,
       roomType: 'public',
@@ -187,6 +189,7 @@ const Converter = {
     {
       type: 'MESSAGE',
       id: message.uniqueMessageToken,
+      sessionId: message.sessionId,
       timestamp: timestampFromString(message.timestamp),
       lang: message.language,
       text: message.messageText,

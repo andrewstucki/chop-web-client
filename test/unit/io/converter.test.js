@@ -59,6 +59,7 @@ describe('Converter Tests', () => {
         {
           type: 'MESSAGE',
           id: '80299c76-b08f-4700-b660-df8691969042',
+          sessionId: 'abc123',
           timestamp: 1548173995604,
           lang: 'en',
           text: 'Hello',
@@ -94,6 +95,7 @@ describe('Converter Tests', () => {
         isVolunteer: true,
         isUser: true,
         userId: 1234567,
+        sessionId: 'abc123',
         organizationId: 2,
         organizationName: 'Life.Church',
         platform: 'CWC',
@@ -153,6 +155,7 @@ describe('Converter Tests', () => {
           isUser: true,
           isMuted: false,
           userId: 1234567,
+          sessionId: 'abc123',
           organizationId: 2,
           organizationName: 'Life.Church',
           roomType: 'public',
@@ -164,6 +167,7 @@ describe('Converter Tests', () => {
       {
         type: 'MESSAGE',
         id: '80299c76-b08f-4700-b660-df8691969042',
+        sessionId: 'abc123',
         timestamp: 1529424696000,
         lang: 'en',
         text: 'Hello',
