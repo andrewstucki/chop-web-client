@@ -34,7 +34,16 @@ describe('Test Auth', () => {
 
     await runSaga({
       dispatch: action => dispatched.push(action),
-      getState: () => defaultState,
+      getState: () => ({
+        ...defaultState,
+        event: {
+          ...defaultState.event,
+          id: '123456',
+          scheduleTime: 1563829500,
+          startTime: 1563829500,
+          eventTimeId: '789123',
+        },
+      }),
     },
     basicAuth,
     { type: BASIC_AUTH_LOGIN, email: 'joe@test.com', password: '12345' },
@@ -63,7 +72,7 @@ describe('Test Auth', () => {
     expect(fetch.mock.calls[1][0]).toEqual('http://metricsengine.io/topics/metrics-ingest/publish');
     // $FlowFixMe
     expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual({
-      type: 'church.life.chop_staging.login.v1_1',
+      type: 'church.life.chop_staging.login.v1_2',
       id: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
       source: 'https://live.life.church/',
       specversion: '0.2',
@@ -77,6 +86,10 @@ describe('Test Auth', () => {
         subscriber_id: '09876',
         timestamp: '2018-06-27T16:53:06.000Z',
         user_agent: expect.stringContaining('jsdom'),
+        event_id: '123456',
+        event_schedule_time: '2018-06-27T16:53:06.000Z',
+        event_start_time: '2018-06-27T16:53:06.000Z',
+        event_time_id: '789123',
       },
       time: '2018-06-27T16:53:06.000Z',
     });
