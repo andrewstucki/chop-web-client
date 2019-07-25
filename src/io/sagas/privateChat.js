@@ -14,6 +14,7 @@ import type { SharedSubscriberType } from '../../subscriber/dux';
 import { getCurrentSubscriber } from '../../subscriber/dux';
 import type { RequestLivePrayerType } from '../../livePrayer/dux';
 import { publishJoinedChannelNotification } from '../../moment/notification/dux';
+import { prayerAcceptedEvent, prayerRequestedEvent } from './metrics';
 import dayjs from 'dayjs';
 
 export const convertSubscriber = (subscriber: GraphQLParticipantsType):SharedSubscriberType => {
@@ -68,6 +69,7 @@ function* publishAcceptedPrayerRequest (action: PublishAcceptedPrayerRequestType
     yield put(addChannel(channelName, channelId, type, direct, subscribers.map(convertSubscriber)));
     yield put(publishJoinedChannelNotification(currentSubscriber.nickname, currentSubscriber.id, channelId, dayjs().toISOString(), currentSubscriber.role.label));
     yield put(setPrimaryPane(CHAT, channelId));
+    yield call(prayerAcceptedEvent, channelId);
   } catch (error) {
     yield put({type: PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, error: error.message});
     bugsnagClient.notify(error);
@@ -92,6 +94,7 @@ function* requestLivePrayer (action: RequestLivePrayerType): Saga<void> {
     const { id, type, name, subscribers, direct } = result.requestLivePrayer;
     yield put(addChannel(name, id, type, direct, subscribers.map(convertSubscriber)));
     yield put(setPrimaryPane(CHAT, id));
+    yield call(prayerRequestedEvent, id);
     return id;
   } catch (error) {
     bugsnagClient.notify(error);

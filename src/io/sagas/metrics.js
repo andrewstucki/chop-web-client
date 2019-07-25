@@ -15,7 +15,9 @@ import type { OrganizationType } from '../../feed/dux';
 
 // Event Types
 const HEARTBEAT_EVENT = 'church.life.chop.heartbeat.v1_1';
-const LOGIN_EVENT = 'church.life.chop.login.v1_1';
+const LOGIN_EVENT = 'church.life.chop.login.v1_2';
+const PRAYER_REQUESTED_EVENT = 'church.life.chop.prayer_requested.v1_2';
+const PRAYER_ACCEPTED_EVENT = 'church.life.chop.prayer_accepted.v1_2';
 
 type MetricsEventType =
   | typeof HEARTBEAT_EVENT
@@ -31,21 +33,26 @@ type BaseDataType = {
   user_agent: string,
   location: string,
   client: 'CWC',
-};
-
-type HeartbeatData = {
   event_id: string,
   event_time_id: string,
   event_start_time: string,
   event_schedule_time: string,
+};
+
+type HeartbeatData = {
   interval: number,
 } & BaseDataType;
 
 type LoginData = BaseDataType;
 
+type PrayerRequestData = {
+  channel_token: string,
+} & BaseDataType;
+
 type MetricsData =
   | HeartbeatData
-  | LoginData;
+  | LoginData
+  | PrayerRequestData;
 
 type MetricsSchema = {
   type: MetricsEventType,
@@ -86,6 +93,7 @@ function* getBaseData (): Saga<BaseDataType> {
   const sessionId:string = Cookie.get('SESSIONID');
   const organization:OrganizationType = yield select (getCurrentOrganization);
   const subscriber:SharedSubscriberType = yield select (getCurrentSubscriberAsSharedSubscriber);
+  const event = yield select (getCurrentEvent);
 
   return {
     timestamp: dayjs().subtract(timeDifference, 'ms').toISOString(),
@@ -96,6 +104,12 @@ function* getBaseData (): Saga<BaseDataType> {
     user_agent: navigator.userAgent,
     location: window.location.href,
     client: 'CWC',
+    event_id: event.id,
+    event_time_id: event.eventTimeId,
+    // $FlowFixMe
+    event_start_time: dayjs.unix(event.startTime).toISOString(),
+    // $FlowFixMe
+    event_schedule_time: dayjs.unix(event.scheduleTime).toISOString(),
   };
 }
 
@@ -145,17 +159,18 @@ function* heartbeat (): Saga<void> {
 }
 
 function* heartbeatData (interval:number):Saga<HeartbeatData> {
-  const event = yield select (getCurrentEvent);
   const baseData = yield call(getBaseData);
   return {
     ...baseData,
-    event_id: event.id,
-    event_time_id: event.eventTimeId,
-    // $FlowFixMe
-    event_start_time: dayjs.unix(event.startTime).toISOString(),
-    // $FlowFixMe
-    event_schedule_time: dayjs.unix(event.scheduleTime).toISOString(),
     interval,
+  };
+}
+
+function* prayerRequestData (channelId:string):Saga<PrayerRequestData> {
+  const baseData = yield call(getBaseData);
+  return {
+    ...baseData,
+    channel_token: channelId,
   };
 }
 
@@ -168,9 +183,30 @@ function* loginEvent ():Saga<void> {
   }
 }
 
+function* prayerRequestedEvent (channelId:string):Saga<void> {
+  try {
+    const data = yield call(prayerRequestData, channelId);
+    yield call(send, PRAYER_REQUESTED_EVENT, data);
+  } catch (error) {
+    bugsnagClient.notify(error);
+  }
+}
+
+function* prayerAcceptedEvent (channelId:string):Saga<void> {
+  try {
+    const data = yield call(prayerRequestData, channelId);
+    yield call(send, PRAYER_ACCEPTED_EVENT, data);
+  } catch (error) {
+    bugsnagClient.notify(error);
+  }
+}
+
 export {
   send,
   heartbeat,
   heartbeatData,
+  prayerRequestData,
   loginEvent,
+  prayerRequestedEvent,
+  prayerAcceptedEvent,
 };

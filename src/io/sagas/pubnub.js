@@ -73,9 +73,7 @@ function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void
     }
 
     if (publishChannel) {
-      if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'PRAYER') {
-        publishSystemMessage(action.moment, publishChannel);
-      } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
+      if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'LEFT_CHANNEL') {
         publishLeaveChannel(action.moment, publishChannel);
       } else if (action.moment.type === 'NOTIFICATION' && action.moment.notificationType === 'JOINED_CHANNEL') {
         publishJoinedChannel(action.moment, publishChannel);
@@ -93,19 +91,6 @@ function* publishMomentToChannel (action: PublishMomentToChannelType): Saga<void
 function* handlePubnubErrors (action: PubnubPublishFailedType): Saga<void> {
   yield call([bugsnagClient, bugsnagClient.notify], action.error);
 }
-
-const publishSystemMessage = (moment:MomentType, channelId: string) => (
-  PubnubClient.publish(
-    {
-      channel: channelId,
-      message: {
-        action: 'systemMessage',
-        channel: channelId,
-        data: Converter.cwcToLegacySystemMessage(moment),
-      },
-    }
-  )
-);
 
 const publishLeaveChannel = (moment: MomentType, channelId: string) => (
   PubnubClient.publish(

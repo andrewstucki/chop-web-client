@@ -1,10 +1,16 @@
 // @flow
+import { testSaga } from 'redux-saga-test-plan';
+import { runSaga } from 'redux-saga';
 import queries from '../../../src/io/queries';
 import { publishAcceptedPrayerRequest } from '../../../src/io/saga';
-import { runSaga } from 'redux-saga';
 import {PUBLISH_ACCEPTED_PRAYER_REQUEST, PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED} from '../../../src/moment';
-import {ADD_CHANNEL} from '../../../src/feed/dux';
+import {ADD_CHANNEL, addChannel} from '../../../src/feed/dux';
 import {mockDate} from '../../testUtils';
+import { getCurrentSubscriber } from '../../../src/subscriber/dux';
+import { publishJoinedChannelNotification } from '../../../src/moment/notification/dux';
+import { setPrimaryPane } from '../../../src/pane/dux';
+import { prayerAcceptedEvent } from '../../../src/io/sagas/metrics';
+import dayjs from 'dayjs';
 
 jest.mock('../../../src/io/queries');
 const mock = (mockFn: any) => mockFn;
@@ -14,6 +20,11 @@ describe('Test Accept Prayer', () => {
   test('Accept Prayer success', async () => {
     mockDate(1553266446136);
     const dispatched = [];
+
+    Object.defineProperty(window.document, 'cookie', {
+      writable: true,
+      value: 'SESSIONID=omnomnom',
+    });
 
     await runSaga({
       dispatch: action => dispatched.push(action),
@@ -44,6 +55,12 @@ describe('Test Accept Prayer', () => {
             },
           },
         },
+        event: {
+          id: '123456',
+          scheduleTime: 1563829500,
+          startTime: 1563829500,
+          eventTimeId: '789123',
+        },
       }),
     }, publishAcceptedPrayerRequest, {
       type: PUBLISH_ACCEPTED_PRAYER_REQUEST,
@@ -60,6 +77,7 @@ describe('Test Accept Prayer', () => {
     }).toPromise();
 
     expect(mockAcceptPrayer).toBeCalledWith('12345', '09876', 'James T. Kirk');
+
     expect(dispatched).toEqual([
       {
         type: ADD_CHANNEL,
@@ -166,5 +184,67 @@ describe('Test Accept Prayer', () => {
 
     expect(mockAcceptPrayer).toBeCalledWith('12345', '09876', 'James T. Kirk');
     expect(dispatched).toEqual([{type: PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, error: 'Broken'}]);
+  });
+
+  test('Accept prayer fires action in the correct order', async () => {
+    mockDate(1553266446136);
+    const action = {
+      type: 'PUBLISH_ACCEPTED_PRAYER_REQUEST',
+      prayerChannel: '123abc',
+      hostChannel: '456def',
+      subscriberRequestingPrayer: {
+        userId: 1,
+        id: '123-abc-456',
+        nickname: 'guest',
+        avatar: null,
+        role: {
+          label: '',
+        },
+      },
+      cancelled: false,
+    };
+
+    testSaga(publishAcceptedPrayerRequest, action)
+      .next()
+      .select(getCurrentSubscriber)
+      .next({
+        nickname: 'tester joe',
+        id: '654-abc-321',
+        role: {
+          label: 'Host',
+        },
+      })
+      .call([queries, queries.acceptPrayer], action.prayerChannel, action.subscriberRequestingPrayer.id, action.subscriberRequestingPrayer.nickname)
+      .next({
+        acceptPrayer: {
+          name: 'Prayer',
+          id: '123abc',
+          type: 'prayer',
+          direct: true,
+          subscribers: [
+            {
+              id: '654-abc-321',
+              userId: 2,
+              avatar: null,
+              nickname: 'tester joe',
+            },
+            {
+              id: '123-abc-456',
+              userId: 1,
+              avatar: null,
+              nickname: 'guest',
+            },
+          ],
+        },
+      })
+      .put(addChannel('Prayer', '123abc', 'prayer', true, [{id: '654-abc-321', nickname: 'tester joe', avatar: null, role: {label: ''}}, {id: '123-abc-456', nickname: 'guest', avatar: null, role: {label: ''}}]))
+      .next()
+      .put(publishJoinedChannelNotification('tester joe', '654-abc-321', '123abc', dayjs().toISOString(), 'Host'))
+      .next()
+      .put(setPrimaryPane('CHAT', '123abc'))
+      .next()
+      .call(prayerAcceptedEvent, action.prayerChannel)
+      .next()
+      .isDone();
   });
 });
