@@ -2,7 +2,7 @@
 import { runSaga } from 'redux-saga';
 import { select, call, put, delay } from 'redux-saga/effects';
 import { defaultState, mockDate } from '../../testUtils';
-import { send, heartbeat, heartbeatData, prayerRequestData } from '../../../src/io/sagas/metrics';
+import { send, heartbeat, heartbeatData, prayerRequestData, directChatData } from '../../../src/io/sagas/metrics';
 import { isHeartbeatStarted, startHeartbeat } from '../../../src/ui/dux';
 
 describe('Metrics IO', () => {
@@ -188,6 +188,44 @@ describe('Metrics IO', () => {
       event_schedule_time: '2018-06-27T16:53:06.000Z',
       event_time_id: '456',
       channel_token: '123abc',
+      location: 'https://live.life.church/',
+      organization_id: 2,
+      referrer: '',
+      session_id: 'omnomnom',
+      subscriber_id: '09876',
+      timestamp: '2018-06-27T16:53:06.000Z',
+      user_agent: expect.stringContaining('jsdom'),
+    });
+  });
+
+  test('DirectChatData', async () => {
+    Object.defineProperty(window.document, 'cookie', {
+      writable: true,
+      value: 'SESSIONID=omnomnom',
+    });
+
+    const result = await runSaga({
+      getState: () => ({
+        ...defaultState,
+        event: {
+          id: '123',
+          eventTimeId: '456',
+        },
+      }),
+    },
+    directChatData,
+    '123abc',
+    '456def'
+    ).toPromise();
+
+    expect(result).toEqual({
+      client: 'CWC',
+      event_id: '123',
+      event_start_time: '2018-06-27T16:53:06.000Z',
+      event_schedule_time: '2018-06-27T16:53:06.000Z',
+      event_time_id: '456',
+      channel_token: '123abc',
+      target_subscriber_id: '456def',
       location: 'https://live.life.church/',
       organization_id: 2,
       referrer: '',
