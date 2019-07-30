@@ -186,8 +186,7 @@ describe('Test Accept Prayer', () => {
     expect(dispatched).toEqual([{type: PUBLISH_ACCEPTED_PRAYER_REQUEST_FAILED, error: 'Broken'}]);
   });
 
-  test('Accept prayer fires action in the correct order', async () => {
-    mockDate(1553266446136);
+  test('Accept prayer fires actions in the correct order', async () => {
     const action = {
       type: 'PUBLISH_ACCEPTED_PRAYER_REQUEST',
       prayerChannel: '123abc',

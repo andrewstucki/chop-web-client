@@ -14,7 +14,7 @@ import type { SharedSubscriberType } from '../../subscriber/dux';
 import { getCurrentSubscriber } from '../../subscriber/dux';
 import type { RequestLivePrayerType } from '../../livePrayer/dux';
 import { publishJoinedChannelNotification } from '../../moment/notification/dux';
-import { prayerAcceptedEvent, prayerRequestedEvent } from './metrics';
+import { prayerAcceptedEvent, prayerRequestedEvent, directChatEvent } from './metrics';
 import dayjs from 'dayjs';
 
 export const convertSubscriber = (subscriber: GraphQLParticipantsType):SharedSubscriberType => {
@@ -52,6 +52,7 @@ function* directChat (action: PublishDirectChatType): Saga<void> {
     const { name, id, direct, type, subscribers } = result.createDirectChannel;
     yield put(addChannel(name, id, type, direct, subscribers.map(convertSubscriber)));
     yield put(setPrimaryPane(CHAT, id));
+    yield call(directChatEvent, id, action.otherSubscriberId);
     return id;
   } catch (error) {
     yield put({type: DIRECT_CHAT_FAILED, error: error.message});

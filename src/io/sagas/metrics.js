@@ -18,6 +18,7 @@ const HEARTBEAT_EVENT = 'church.life.chop.heartbeat.v1_1';
 const LOGIN_EVENT = 'church.life.chop.login.v1_2';
 const PRAYER_REQUESTED_EVENT = 'church.life.chop.prayer_requested.v1_2';
 const PRAYER_ACCEPTED_EVENT = 'church.life.chop.prayer_accepted.v1_2';
+const DIRECT_CHAT_EVENT = 'church.life.chop.direct_chat_initiated.v1_0';
 
 type MetricsEventType =
   | typeof HEARTBEAT_EVENT
@@ -49,10 +50,16 @@ type PrayerRequestData = {
   channel_token: string,
 } & BaseDataType;
 
+type DirectChatData = {
+  channel_token: string,
+  target_subscriber_id: string,
+} & BaseDataType;
+
 type MetricsData =
   | HeartbeatData
   | LoginData
-  | PrayerRequestData;
+  | PrayerRequestData
+  | DirectChatData;
 
 type MetricsSchema = {
   type: MetricsEventType,
@@ -174,6 +181,15 @@ function* prayerRequestData (channelId:string):Saga<PrayerRequestData> {
   };
 }
 
+function* directChatData (channelId:string, targetSubscriberId:string):Saga<DirectChatData> {
+  const baseData = yield call(getBaseData);
+  return {
+    ...baseData,
+    channel_token: channelId,
+    target_subscriber_id: targetSubscriberId,
+  };
+}
+
 function* loginEvent ():Saga<void> {
   try {
     const baseData = yield call(getBaseData);
@@ -201,12 +217,23 @@ function* prayerAcceptedEvent (channelId:string):Saga<void> {
   }
 }
 
+function* directChatEvent (channelId:string, targetSubscriberId:string):Saga<void> {
+  try {
+    const data = yield call(directChatData, channelId, targetSubscriberId);
+    yield call(send, DIRECT_CHAT_EVENT, data);
+  } catch (error) {
+    bugsnagClient.notify(error);
+  }
+}
+
 export {
   send,
   heartbeat,
   heartbeatData,
   prayerRequestData,
+  directChatData,
   loginEvent,
   prayerRequestedEvent,
   prayerAcceptedEvent,
+  directChatEvent,
 };
