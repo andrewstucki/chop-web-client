@@ -10,7 +10,10 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 
 module.exports = {
-  entry: './src/index.jsx',
+  entry: [
+    './src/lib/instana.js',
+    './src/index.jsx',
+  ],
   module: {
     rules: [
       {
@@ -18,7 +21,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            exclude: /node_modules/,
+            exclude: /(node_modules|src\/lib)/,
             plugins: ['lodash']
           },
         },
