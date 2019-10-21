@@ -6,7 +6,7 @@ metadata:
   namespace: $KUBE_NAMESPACE
   annotations:
     kubernetes.io/ingress.global-static-ip-name: staging-cwc
-    ingress.gcp.kubernetes.io/pre-shared-cert: 'star-churchonline-us'
+    ingress.gcp.kubernetes.io/pre-shared-cert: 'star-churchonline-us-cert'
     kubernetes.io/ingress.class: gce
   labels:
     app: app-$CI_ENVIRONMENT_SLUG
